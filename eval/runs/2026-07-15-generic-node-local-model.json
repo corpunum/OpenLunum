@@ -1,0 +1,283 @@
+{
+  "generatedAt": "2026-07-15T17:38:27.815Z",
+  "workArea": "integrations/generic-node",
+  "model": "granite3.3:2b",
+  "runtime": {
+    "node": "v22.22.2",
+    "ollama": "ollama version is 0.24.0",
+    "host": "http://127.0.0.1:11434",
+    "model": "granite3.3:2b"
+  },
+  "summary": {
+    "total": 9,
+    "passed": 7,
+    "failed": 2,
+    "errors": 0
+  },
+  "cases": [
+    {
+      "id": "pref_concise",
+      "label": "preference",
+      "role": "user",
+      "content": "The user prefers concise answers.",
+      "category": "preference",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Does the user prefer concise answers? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "concise_answers"
+              }
+            },
+            "negated": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "route_bug_fixed",
+      "label": "deployment_fact",
+      "role": "user",
+      "content": "The API returned error 500 after deployment and the agent fixed the route bug.",
+      "category": "benchmark_result",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Was the route bug fixed? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "benchmark_result",
+        "clauses": [
+          {
+            "predicate": "fix",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "agent"
+              },
+              "target": {
+                "type": "concept",
+                "id": "route_bug"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "evidence": "error 500 after deployment"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "no_delete_without_confirmation",
+      "label": "safety_constraint",
+      "role": "system",
+      "content": "The model should not delete files without confirmation.",
+      "category": "safety_constraint",
+      "risk": "high",
+      "confidence": 1,
+      "question": "Should the model delete files without confirmation? Reply only YES or NO.",
+      "expected": "NO",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "safety_constraint",
+        "clauses": [
+          {
+            "predicate": "delete",
+            "roles": {
+              "actor": {
+                "type": "actor",
+                "id": "model"
+              },
+              "target": {
+                "type": "concept",
+                "id": "files"
+              }
+            },
+            "negated": true,
+            "modality": "must"
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "pref_concise",
+      "caseLabel": "preference",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 46,
+      "evalCount": 2,
+      "selectedTokens": 9,
+      "naturalTokens": 9,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "pref_concise",
+      "caseLabel": "preference",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 45,
+      "evalCount": 2,
+      "selectedTokens": 8,
+      "naturalTokens": 9,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 0.8888888888888888,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "pref_concise",
+      "caseLabel": "preference",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 45,
+      "evalCount": 2,
+      "selectedTokens": 8,
+      "naturalTokens": 9,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 0.8888888888888888,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "route_bug_fixed",
+      "caseLabel": "deployment_fact",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 56,
+      "evalCount": 2,
+      "selectedTokens": 20,
+      "naturalTokens": 20,
+      "lunumTokens": 6,
+      "mixedTokens": 6,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "route_bug_fixed",
+      "caseLabel": "deployment_fact",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "NO",
+      "pass": false,
+      "rawResponse": "NO",
+      "promptEvalCount": 44,
+      "evalCount": 2,
+      "selectedTokens": 6,
+      "naturalTokens": 20,
+      "lunumTokens": 6,
+      "mixedTokens": 6,
+      "selectedRatio": 0.3,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "route_bug_fixed",
+      "caseLabel": "deployment_fact",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "NO",
+      "pass": false,
+      "rawResponse": "NO",
+      "promptEvalCount": 44,
+      "evalCount": 2,
+      "selectedTokens": 6,
+      "naturalTokens": 20,
+      "lunumTokens": 6,
+      "mixedTokens": 6,
+      "selectedRatio": 0.3,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "no_delete_without_confirmation",
+      "caseLabel": "safety_constraint",
+      "mode": "natural",
+      "expected": "NO",
+      "actual": "NO",
+      "pass": true,
+      "rawResponse": "NO",
+      "promptEvalCount": 49,
+      "evalCount": 2,
+      "selectedTokens": 14,
+      "naturalTokens": 14,
+      "lunumTokens": 8,
+      "mixedTokens": 14,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "no_delete_without_confirmation",
+      "caseLabel": "safety_constraint",
+      "mode": "mixed",
+      "expected": "NO",
+      "actual": "NO",
+      "pass": true,
+      "rawResponse": "NO",
+      "promptEvalCount": 49,
+      "evalCount": 2,
+      "selectedTokens": 14,
+      "naturalTokens": 14,
+      "lunumTokens": 8,
+      "mixedTokens": 14,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "no_delete_without_confirmation",
+      "caseLabel": "safety_constraint",
+      "mode": "lunum",
+      "expected": "NO",
+      "actual": "NO",
+      "pass": true,
+      "rawResponse": "NO",
+      "promptEvalCount": 46,
+      "evalCount": 2,
+      "selectedTokens": 8,
+      "naturalTokens": 14,
+      "lunumTokens": 8,
+      "mixedTokens": 14,
+      "selectedRatio": 0.5714285714285714,
+      "eligible": false,
+      "error": null
+    }
+  ]
+}

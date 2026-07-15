@@ -22,3 +22,10 @@ const context = compileContext([{
 ```
 
 The product stores the record, owns authorization, and decides when to serve mixed context.
+
+## Evidence
+
+A bounded local-model smoke test for this reference path is preserved in
+[`../../eval/runs/2026-07-15-generic-node-local-model.md`](../../eval/runs/2026-07-15-generic-node-local-model.md)
+with raw JSON at
+[`../../eval/runs/2026-07-15-generic-node-local-model.json`](../../eval/runs/2026-07-15-generic-node-local-model.json).
