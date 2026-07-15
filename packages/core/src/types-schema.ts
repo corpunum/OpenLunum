@@ -63,3 +63,17 @@ export interface RendererProfileSchema {
   testedModels?: string[];
   limitations?: string[];
 }
+
+export interface ReportValidationSchema {
+  schema: "openlunum-experiment/0.1";
+  id: string;
+  area: string;
+  task: "parse" | "realize" | "render" | "context" | "retrieval" | "integration" | "conformance" | "infrastructure";
+  hypothesis: string;
+  baselineCommit: string;
+  dataset: {     path: string,     sha256: string };
+  modelProfile: string;
+  limits: {     maxItems: number,     maxAttemptsPerItem: number,     maxModelCalls: number };
+  gates: {     minimumFeatureRecall: number,     minimumExactRate: number,     requireProtectedLiteralCoverage: boolean };
+  outputDirectory: string;
+}

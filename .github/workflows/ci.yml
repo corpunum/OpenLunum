@@ -46,3 +46,23 @@ jobs:
       - run: pnpm build
       - run: node scripts/schema-to-ts.cjs --dry-run
       - run: npx tsc --noEmit --skipLibCheck packages/core/src/types-schema-conformance.ts
+
+  report-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Run report validation on smoke test output
+        run: node scripts/validate-report.cjs reports/experiments/smoke-test --repo-root . || true
+      - name: Run report validation tests
+        run: node --test packages/eval/dist/test/report-validation.test.js
