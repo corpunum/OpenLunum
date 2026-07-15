@@ -11,8 +11,6 @@
     "task",
     "hypothesis",
     "baselineCommit",
-    "dataset",
-    "modelProfile",
     "limits",
     "gates",
     "outputDirectory"
@@ -42,8 +40,17 @@
         "parse",
         "realize",
         "render",
-        "context"
+        "context",
+        "retrieval",
+        "integration",
+        "conformance",
+        "infrastructure"
       ]
+    },
+    "deterministic": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true, the task does not require a model profile and runs as a pure computation"
     },
     "hypothesis": {
       "type": "string",
@@ -70,7 +77,8 @@
       }
     },
     "modelProfile": {
-      "type": "string"
+      "type": "string",
+      "description": "Relative path to model profile. Required unless deterministic is true."
     },
     "targetLanguage": {
       "type": "string"
