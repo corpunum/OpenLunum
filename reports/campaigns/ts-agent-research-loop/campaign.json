@@ -22,8 +22,10 @@
   "active-prs": ["1", "2", "3", "4"],
   "phase": "zero",
   "phase-zero-progress": {
-    "6.3-schema-drift": "merged-pr-5",
-    "6.4-protected-evaluator": "active",
-    "6.5-report-validation": "pending"
+    "6.3-schema-drift": "done-pr-5",
+    "6.4-protected-evaluator": "done-pr-5",
+    "6.5-report-validation": "active",
+    "6.1-task-coverage": "pending",
+    "6.2-render-context": "pending"
   }
 }
