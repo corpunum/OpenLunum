@@ -1,0 +1,481 @@
+{
+  "generatedAt": "2026-07-15T18:05:47.138Z",
+  "workArea": "integrations/pi",
+  "model": "qwen2.5-coder:1.5b",
+  "runtime": {
+    "node": "v22.22.2",
+    "ollama": "ollama version is 0.24.0",
+    "host": "http://127.0.0.1:11434",
+    "model": "qwen2.5-coder:1.5b"
+  },
+  "summary": {
+    "total": 15,
+    "passed": 12,
+    "failed": 3,
+    "errors": 0
+  },
+  "cases": [
+    {
+      "id": "pi_task_context",
+      "label": "task_context",
+      "role": "agent",
+      "content": "The agent is writing a TypeScript function to parse JSON arrays from user input.",
+      "category": "task_context",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Is the agent writing a function to parse JSON arrays? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "task_context",
+        "clauses": [
+          {
+            "predicate": "write",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "agent"
+              },
+              "target": {
+                "type": "concept",
+                "id": "json_parser_function"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "language": "TypeScript"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "pi_sandbox_constraint",
+      "label": "sandbox_constraint",
+      "role": "system",
+      "content": "The agent runs in a sandboxed environment and must not access the host filesystem outside /tmp.",
+      "category": "safety_constraint",
+      "risk": "high",
+      "confidence": 1,
+      "question": "Can the agent access files outside /tmp? Reply only YES or NO.",
+      "expected": "NO",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "safety_constraint",
+        "clauses": [
+          {
+            "predicate": "access",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "agent"
+              },
+              "target": {
+                "type": "concept",
+                "id": "host_filesystem"
+              }
+            },
+            "negated": true,
+            "modality": "must",
+            "annotations": {
+              "exception": "/tmp"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "pi_user_extension",
+      "label": "user_extension",
+      "role": "user",
+      "content": "The user has a custom Pi extension that logs all tool invocations to a local file.",
+      "category": "preference",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Does the user have an extension that logs tool invocations? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "have",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "tool_log_extension"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "detail": "logs tool invocations to local file"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "pi_memory_retention",
+      "label": "memory_retention",
+      "role": "system",
+      "content": "Lunum memory records should persist across sessions but not beyond the user workspace directory.",
+      "category": "policy",
+      "risk": "medium",
+      "confidence": 0.9,
+      "question": "Do Lunum records persist across sessions? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "policy",
+        "clauses": [
+          {
+            "predicate": "persist",
+            "roles": {
+              "subject": {
+                "type": "concept",
+                "id": "lunum_records"
+              },
+              "target": {
+                "type": "concept",
+                "id": "cross_session"
+              }
+            },
+            "negated": false,
+            "modality": "should"
+          },
+          {
+            "predicate": "persist",
+            "roles": {
+              "subject": {
+                "type": "concept",
+                "id": "lunum_records"
+              },
+              "target": {
+                "type": "concept",
+                "id": "beyond_workspace"
+              }
+            },
+            "negated": true,
+            "modality": "must"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pi_concurrent_tools",
+      "label": "concurrent_tools",
+      "role": "agent",
+      "content": "The agent executed two read_file tools in parallel on unrelated files.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did the agent run file reads concurrently? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "execute",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "agent"
+              },
+              "target": {
+                "type": "concept",
+                "id": "read_file"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "concurrency": "parallel",
+              "count": 2
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "pi_task_context",
+      "caseLabel": "task_context",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 41,
+      "evalCount": 2,
+      "selectedTokens": 20,
+      "naturalTokens": 20,
+      "lunumTokens": 9,
+      "mixedTokens": 20,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_task_context",
+      "caseLabel": "task_context",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 41,
+      "evalCount": 2,
+      "selectedTokens": 20,
+      "naturalTokens": 20,
+      "lunumTokens": 9,
+      "mixedTokens": 20,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_task_context",
+      "caseLabel": "task_context",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 41,
+      "evalCount": 2,
+      "selectedTokens": 9,
+      "naturalTokens": 20,
+      "lunumTokens": 9,
+      "mixedTokens": 20,
+      "selectedRatio": 0.45,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_sandbox_constraint",
+      "caseLabel": "sandbox_constraint",
+      "mode": "natural",
+      "expected": "NO",
+      "actual": "NO",
+      "pass": true,
+      "rawResponse": "NO",
+      "promptEvalCount": 58,
+      "evalCount": 2,
+      "selectedTokens": 24,
+      "naturalTokens": 24,
+      "lunumTokens": 10,
+      "mixedTokens": 24,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_sandbox_constraint",
+      "caseLabel": "sandbox_constraint",
+      "mode": "mixed",
+      "expected": "NO",
+      "actual": "NO",
+      "pass": true,
+      "rawResponse": "NO",
+      "promptEvalCount": 58,
+      "evalCount": 2,
+      "selectedTokens": 24,
+      "naturalTokens": 24,
+      "lunumTokens": 10,
+      "mixedTokens": 24,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_sandbox_constraint",
+      "caseLabel": "sandbox_constraint",
+      "mode": "lunum",
+      "expected": "NO",
+      "actual": "NO",
+      "pass": true,
+      "rawResponse": "NO",
+      "promptEvalCount": 47,
+      "evalCount": 2,
+      "selectedTokens": 10,
+      "naturalTokens": 24,
+      "lunumTokens": 10,
+      "mixedTokens": 24,
+      "selectedRatio": 0.4166666666666667,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_user_extension",
+      "caseLabel": "user_extension",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 60,
+      "evalCount": 2,
+      "selectedTokens": 21,
+      "naturalTokens": 21,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "pi_user_extension",
+      "caseLabel": "user_extension",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 49,
+      "evalCount": 2,
+      "selectedTokens": 8,
+      "naturalTokens": 21,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 0.38095238095238093,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "pi_user_extension",
+      "caseLabel": "user_extension",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 49,
+      "evalCount": 2,
+      "selectedTokens": 8,
+      "naturalTokens": 21,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 0.38095238095238093,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "pi_memory_retention",
+      "caseLabel": "memory_retention",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 55,
+      "evalCount": 2,
+      "selectedTokens": 24,
+      "naturalTokens": 24,
+      "lunumTokens": 24,
+      "mixedTokens": 24,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_memory_retention",
+      "caseLabel": "memory_retention",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 55,
+      "evalCount": 2,
+      "selectedTokens": 24,
+      "naturalTokens": 24,
+      "lunumTokens": 24,
+      "mixedTokens": 24,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_memory_retention",
+      "caseLabel": "memory_retention",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": 55,
+      "evalCount": 2,
+      "selectedTokens": 24,
+      "naturalTokens": 24,
+      "lunumTokens": 24,
+      "mixedTokens": 24,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "pi_concurrent_tools",
+      "caseLabel": "concurrent_tools",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "NO",
+      "pass": false,
+      "rawResponse": "NO",
+      "promptEvalCount": 38,
+      "evalCount": 2,
+      "selectedTokens": 18,
+      "naturalTokens": 18,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "pi_concurrent_tools",
+      "caseLabel": "concurrent_tools",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "NO",
+      "pass": false,
+      "rawResponse": "NO",
+      "promptEvalCount": 38,
+      "evalCount": 2,
+      "selectedTokens": 7,
+      "naturalTokens": 18,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 0.3888888888888889,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "pi_concurrent_tools",
+      "caseLabel": "concurrent_tools",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "NO",
+      "pass": false,
+      "rawResponse": "NO",
+      "promptEvalCount": 38,
+      "evalCount": 2,
+      "selectedTokens": 7,
+      "naturalTokens": 18,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 0.3888888888888889,
+      "eligible": true,
+      "error": null
+    }
+  ]
+}

@@ -12,3 +12,12 @@ Pi runs with the launching user's permissions unless separately sandboxed. A Lun
 
 Official project:
 - https://github.com/earendil-works/pi
+
+## Evidence
+
+A bounded local-model smoke test for this integration profile is preserved in
+[`../../eval/runs/2026-07-15-pi-local-model.md`](../../eval/runs/2026-07-15-pi-local-model.md)
+with raw JSON at
+[`../../eval/runs/2026-07-15-pi-local-model.json`](../../eval/runs/2026-07-15-pi-local-model.json).
+
+Summary: 12/15 passed (80%) using `qwen2.5-coder:1.5b`. No transport errors. 3 consistent failures on `pi_concurrent_tools`.
