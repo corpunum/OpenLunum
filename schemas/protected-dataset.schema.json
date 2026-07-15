@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/protected-dataset/0.1",
+  "title": "OpenLunum protected dataset manifest 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "path",
+    "sha256",
+    "version",
+    "access",
+    "evaluatorInstructionsPath",
+    "license"
+  ],
+  "properties": {
+    "schema": {
+      "const": "openlunum-protected-dataset/0.1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "minLength": 3
+    },
+    "path": {
+      "type": "string",
+      "description": "Relative path to the protected dataset file"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hash of the dataset file"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of this dataset"
+    },
+    "items": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of items in the dataset"
+    },
+    "languages": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 2 },
+      "minItems": 1
+    },
+    "access": {
+      "type": "string",
+      "enum": ["evaluator-only", "maintainer-only", "review-on-demand"],
+      "description": "Who can access the protected data"
+    },
+    "evaluatorInstructionsPath": {
+      "type": "string",
+      "description": "Relative path to the evaluator instructions file"
+    },
+    "license": {
+      "type": "string",
+      "description": "Dataset license identifier"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "provenance": {
+      "type": "string",
+      "description": "Source of the dataset"
+    },
+    "warning": {
+      "type": "string",
+      "description": "Optional warning for agents"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

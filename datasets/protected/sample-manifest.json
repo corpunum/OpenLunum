@@ -1,0 +1,15 @@
+{
+  "schema": "openlunum-protected-dataset/0.1",
+  "id": "multilingual-holdout-v1",
+  "path": "datasets/protected/multilingual-holdout-v1.jsonl",
+  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "version": "1.0.0",
+  "items": 30,
+  "languages": ["en", "el", "es", "id"],
+  "access": "evaluator-only",
+  "evaluatorInstructionsPath": "datasets/protected/evaluator-instructions-template.md",
+  "license": "CC-BY-SA-4.0",
+  "created": "2026-07-15T23:00:00Z",
+  "provenance": "OpenLunum development corpus",
+  "warning": "This is a sample manifest. Replace with real dataset when holdout data is available."
+}

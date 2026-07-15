@@ -22,8 +22,8 @@
 ## Phase Zero checklist
 | Item | Status |
 |---|---|
-| 6.1 Experiment task coverage | in-progress |
+| 6.1 Experiment task coverage | pending |
 | 6.2 Render and context runners | pending |
-| 6.3 Schema-to-TypeScript drift | **next task** |
-| 6.4 Protected evaluator interface | pending |
+| 6.3 Schema-to-TypeScript drift | ✅ **MERGED** (PR #5) |
+| 6.4 Protected evaluator interface | **next task** |
 | 6.5 Report validation | pending |

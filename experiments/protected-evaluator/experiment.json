@@ -1,0 +1,33 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "protected-evaluator",
+  "area": "infrastructure",
+  "task": "infrastructure",
+  "hypothesis": "Adding a versioned protected dataset manifest system with hash validation will prevent workers from optimizing against protected holdout data and ensure evaluator isolation.",
+  "baseline-commit": "798688a",
+  "dataset": {
+    "id": "protected-manifests",
+    "type": "deterministic"
+  },
+  "model-profile": null,
+  "target-metrics": {
+    "manifest-validation-rate": "1.0",
+    "worker-isolation": "enforced-by-schema",
+    "hash-matching": "1.0"
+  },
+  "hard-gates": [
+    "manifest-schema-validates",
+    "worker-cannot-create-visible-protected",
+    "evaluator-can-read-protected",
+    "hash-matches-dataset-content"
+  ],
+  "budget": {
+    "max-attempts": 10,
+    "timeout-seconds": 600
+  },
+  "output-location": "reports/experiments/protected-evaluator",
+  "stopping-conditions": [
+    "All hard gates pass",
+    "Budget exhausted"
+  ]
+}
