@@ -1,0 +1,34 @@
+{
+  "schema": "lunum-sem/0.1-draft",
+  "world": "tool",
+  "kind": "tool_event",
+  "clauses": [
+    {
+      "predicate": "error",
+      "roles": {
+        "subject": {
+          "type": "service",
+          "id": "api"
+        },
+        "value": 500,
+        "time": {
+          "type": "relative_time",
+          "id": "after_deploy"
+        }
+      }
+    },
+    {
+      "predicate": "fix",
+      "roles": {
+        "agent": {
+          "type": "actor",
+          "id": "agent"
+        },
+        "theme": {
+          "type": "defect",
+          "id": "route_bug"
+        }
+      }
+    }
+  ]
+}

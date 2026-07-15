@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lunum 2.7 Memory Record",
+  "type": "object",
+  "required": ["id","text","category","risk","confidence"],
+  "properties": {
+    "id":{"type":"string"},
+    "text":{"type":"string"},
+    "lunum_sem_json":{"type":["object","null"]},
+    "lunum_fp":{"type":["string","null"]},
+    "lunum_code":{"type":["string","null"]},
+    "category":{"type":"string"},
+    "risk":{"enum":["low","medium","high","unknown"]},
+    "confidence":{"type":"number","minimum":0,"maximum":1},
+    "lunum_context_eligible":{"type":"boolean"}
+  }
+}

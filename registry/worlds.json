@@ -1,0 +1,35 @@
+{
+  "version": "0.1-draft",
+  "worlds": [
+    {
+      "id": "real",
+      "marker": "R",
+      "description": "Real or asserted factual world"
+    },
+    {
+      "id": "fiction",
+      "marker": "F",
+      "description": "Fictional or story world"
+    },
+    {
+      "id": "tool",
+      "marker": "T",
+      "description": "Tool, system, or agent operations"
+    },
+    {
+      "id": "dream",
+      "marker": "D",
+      "description": "Dream world"
+    },
+    {
+      "id": "belief",
+      "marker": "B",
+      "description": "Belief, perception, or attributed mental world"
+    },
+    {
+      "id": "metaphor",
+      "marker": "M",
+      "description": "Metaphorical or symbolic world"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@corpunum/lunum",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Lunum-I semantic canonicalization, fingerprints, rendering, policies, and context compilation.",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

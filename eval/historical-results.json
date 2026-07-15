@@ -1,0 +1,129 @@
+{
+  "ledgerVersion": "0.1",
+  "generatedFrom": "Initial complete handover, received 2026-07-15",
+  "results": [
+    {
+      "line": "Lunum-1/v0.2",
+      "metric": "prompt_size_ratio",
+      "value": 5.78,
+      "direction": "higher_is_worse",
+      "environment": "archival",
+      "status": "documented_failure"
+    },
+    {
+      "line": "2.3",
+      "metric": "safe_min_ratio",
+      "value": 0.847,
+      "environment": "local SuperGemma tokenizer",
+      "status": "historical_user_result",
+      "approximate": true
+    },
+    {
+      "line": "2.3",
+      "metric": "short_min_ratio",
+      "value": 0.829,
+      "environment": "local SuperGemma tokenizer",
+      "status": "historical_user_result",
+      "approximate": true
+    },
+    {
+      "line": "2.4",
+      "metric": "tight_code_ratio",
+      "value": 0.776,
+      "environment": "local SuperGemma tokenizer",
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.4",
+      "metric": "validator",
+      "passed": 30,
+      "total": 30,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.5",
+      "metric": "tight_ratio",
+      "value": 0.7244,
+      "examples": 30,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.5",
+      "metric": "tight_wins",
+      "passed": 29,
+      "total": 30,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.5.1",
+      "metric": "strict_validator",
+      "passed": 90,
+      "total": 90,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.5.4",
+      "metric": "context_ratio",
+      "value": 0.7434,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.5.4",
+      "metric": "full_prompt_ratio",
+      "value": 0.9195,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.5.4",
+      "metric": "quality_delta_default",
+      "value": 0.0,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.5.4",
+      "metric": "quality_delta_completion",
+      "value": 0.05,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.6",
+      "metric": "exact_context_tokens",
+      "natural": 270,
+      "lunum": 207,
+      "mixed": 217,
+      "environment": "local SuperGemma",
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.6",
+      "metric": "qa_default",
+      "natural": 1.0,
+      "lunum": 1.0,
+      "mixed": 1.0,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.6",
+      "metric": "qa_completion",
+      "natural": 1.0,
+      "lunum": 0.9,
+      "mixed": 1.0,
+      "status": "historical_user_result"
+    },
+    {
+      "line": "2.7",
+      "metric": "rough_context_tokens",
+      "natural": 137,
+      "lunum": 98,
+      "mixed": 103,
+      "status": "portable_static"
+    },
+    {
+      "line": "2.7",
+      "metric": "rough_ratio",
+      "lunum": 0.7153284671532847,
+      "mixed": 0.7518248175182481,
+      "status": "portable_static"
+    }
+  ]
+}

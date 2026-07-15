@@ -1,0 +1,41 @@
+{
+  "version": "2.7",
+  "feature_flags": {
+    "LUNUM_MEMORY_CANONICALIZATION": true,
+    "LUNUM_RETRIEVAL_FP_BOOST": true,
+    "LUNUM_MEMORY_CONTEXT": false,
+    "LUNUM_CONTEXT_MODE": "shadow_mixed"
+  },
+  "eligibility": {
+    "min_confidence": 0.9,
+    "allowed_categories": [
+      "preference",
+      "simple_fact",
+      "tool_event",
+      "project_state",
+      "retrieval_rule",
+      "system_fact"
+    ],
+    "blocked_categories": [
+      "conditional_instruction",
+      "safety_constraint",
+      "safety_event",
+      "exact_quote",
+      "code",
+      "command",
+      "file_path",
+      "legal",
+      "emotional_nuance"
+    ],
+    "allowed_risk": [
+      "low"
+    ],
+    "always_keep_original_text": true
+  },
+  "gates": {
+    "mixed_context_ratio_lte": 0.9,
+    "mixed_score_delta_gte": -0.05,
+    "shadow_sessions_min": 100,
+    "failure_rate_lte": 0.03
+  }
+}

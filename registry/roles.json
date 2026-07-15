@@ -1,0 +1,22 @@
+{
+  "version": "0.1-draft",
+  "preferredRenderOrder": [
+    "agent",
+    "experiencer",
+    "subject",
+    "actor",
+    "recipient",
+    "object",
+    "theme",
+    "patient",
+    "target",
+    "source",
+    "destination",
+    "location",
+    "time",
+    "manner",
+    "value",
+    "reason",
+    "evidence"
+  ]
+}

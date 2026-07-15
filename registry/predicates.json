@@ -1,0 +1,29 @@
+{
+  "version": "0.1-draft",
+  "status": "seed-not-closed",
+  "predicates": [
+    "prefer",
+    "want",
+    "give",
+    "return",
+    "hide",
+    "leave",
+    "call",
+    "error",
+    "fix",
+    "delete",
+    "work",
+    "rank",
+    "fail",
+    "cache",
+    "canonicalize",
+    "guard",
+    "store",
+    "plan",
+    "execute",
+    "observe",
+    "believe",
+    "report",
+    "verify"
+  ]
+}

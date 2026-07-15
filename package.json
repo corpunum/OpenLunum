@@ -1,0 +1,22 @@
+{
+  "name": "openlunum-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OpenLunum workspace: Lunum-I semantic interlingua, tokenizer-aware renderers, evaluation, and adoption references.",
+  "type": "module",
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "node --test packages/core/test/*.test.mjs integrations/openunum/*.test.mjs",
+    "test:core": "node --test packages/core/test/*.test.mjs",
+    "test:openunum": "node --test integrations/openunum/*.test.mjs",
+    "eval:historical": "node eval/scripts/summarize-history.mjs",
+    "eval:static": "node eval/scripts/run-static.mjs",
+    "check": "node --check packages/core/src/index.mjs && node --check packages/cli/src/cli.mjs && npm test"
+  }
+}

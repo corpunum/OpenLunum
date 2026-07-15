@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-04-24T12:38:18.595Z",
+  "version": "2.7",
+  "memory_count": 12,
+  "contexts": {
+    "natural": {
+      "mode": "natural",
+      "text": "Memory:\n- The user prefers concise answers.\n- The user wants detailed explanations for architecture topics.\n- The API returned error 500 after deployment and the agent fixed the route bug.\n- The model should not delete files without confirmation.\n- The user works on OpenUnum with a local SuperGemma model.\n- The retriever should rank exact fingerprints above embedding matches.\n- The browser tool failed because the URL timed out.\n- The agent cached the summary before the next session.\n- The system canonicalizes memories in four languages into one fingerprint.\n- If the river rises, Mira should leave the bridge and call Theo.\n- The guardrail blocked unsafe shell execution.\n- The system stores the original text with the Lunum fingerprint.",
+      "rough_tokens": 137
+    },
+    "lunum": {
+      "mode": "lunum",
+      "text": "Memory:\n- R prefer user concise answers\n- R want user detailed architecture\n- T error api 500 after deploy ; fix route bug\n- T not delete files without confirmation\n- R work user openunum local supergemma\n- T rank exact fingerprints above embeddings\n- T fail browser tool because url timeout\n- T cache summary before next session\n- T canon memories four languages one fingerprint\n- R if river rise then leave mira bridge ; call theo should\n- T guard guardrail blocked unsafe shell execution\n- T store original text with lunum fingerprint",
+      "rough_tokens": 98
+    },
+    "mixed": {
+      "mode": "mixed",
+      "text": "Memory:\n- R prefer user concise answers\n- R want user detailed architecture\n- T error api 500 after deploy ; fix route bug\n- The model should not delete files without confirmation.\n- R work user openunum local supergemma\n- T rank exact fingerprints above embeddings\n- T fail browser tool because url timeout\n- T cache summary before next session\n- T canon memories four languages one fingerprint\n- If the river rises, Mira should leave the bridge and call Theo.\n- The guardrail blocked unsafe shell execution.\n- T store original text with lunum fingerprint",
+      "rough_tokens": 103
+    }
+  },
+  "ratios": {
+    "lunum": 0.7153284671532847,
+    "mixed": 0.7518248175182481
+  },
+  "eligibility": [
+    {"id":"m001","category":"preference","risk":"low","confidence":0.98,"eligible":true,"chosen_mode":"lunum"},
+    {"id":"m002","category":"preference","risk":"low","confidence":0.95,"eligible":true,"chosen_mode":"lunum"},
+    {"id":"m003","category":"tool_event","risk":"low","confidence":0.96,"eligible":true,"chosen_mode":"lunum"},
+    {"id":"m004","category":"safety_constraint","risk":"medium","confidence":0.97,"eligible":false,"chosen_mode":"natural"},
+    {"id":"m005","category":"project_state","risk":"low","confidence":0.93,"eligible":true,"chosen_mode":"lunum"},
+    {"id":"m006","category":"retrieval_rule","risk":"low","confidence":0.94,"eligible":true,"chosen_mode":"lunum"},
+    {"id":"m007","category":"tool_event","risk":"low","confidence":0.92,"eligible":true,"chosen_mode":"lunum"},
+    {"id":"m008","category":"tool_event","risk":"low","confidence":0.93,"eligible":true,"chosen_mode":"lunum"},
+    {"id":"m009","category":"system_fact","risk":"low","confidence":0.95,"eligible":true,"chosen_mode":"lunum"},
+    {"id":"m010","category":"conditional_instruction","risk":"medium","confidence":0.91,"eligible":false,"chosen_mode":"natural"},
+    {"id":"m011","category":"safety_event","risk":"medium","confidence":0.87,"eligible":false,"chosen_mode":"natural"},
+    {"id":"m012","category":"system_fact","risk":"low","confidence":0.92,"eligible":true,"chosen_mode":"lunum"}
+  ]
+}

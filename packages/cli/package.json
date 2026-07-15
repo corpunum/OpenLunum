@@ -1,0 +1,15 @@
+{
+  "name": "@corpunum/lunum-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "lunum": "./src/cli.mjs"
+  },
+  "dependencies": {
+    "@corpunum/lunum": "workspace:*"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

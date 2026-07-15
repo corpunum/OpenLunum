@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-04-24T12:38:18.670Z",
+  "version": "2.7",
+  "server": null,
+  "memory_count": 12,
+  "query_count": 5,
+  "context_tokens": {"natural":137,"lunum":98,"mixed":103},
+  "token_kind": "rough",
+  "context_ratios": {"lunum":0.7153284671532847,"mixed":0.7518248175182481},
+  "gates_static": {"mixed_ratio_ok":true},
+  "note": "No server provided; rough token counts only."
+}

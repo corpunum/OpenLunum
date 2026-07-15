@@ -1,0 +1,27 @@
+{
+  "version": "0.1-draft",
+  "compactEligibleByDefault": [
+    "preference",
+    "simple_fact",
+    "tool_event",
+    "project_state",
+    "retrieval_rule",
+    "system_fact",
+    "benchmark_result"
+  ],
+  "naturalFallbackByDefault": [
+    "conditional_instruction",
+    "safety_constraint",
+    "safety_event",
+    "exact_quote",
+    "code",
+    "command",
+    "file_path",
+    "url",
+    "legal_text",
+    "medical_text",
+    "social_nuance",
+    "ambiguous",
+    "complex_modality"
+  ]
+}

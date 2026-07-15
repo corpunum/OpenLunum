@@ -1,0 +1,21 @@
+{
+  "schema": "lunum-sem/0.1-draft",
+  "world": "real",
+  "kind": "preference",
+  "clauses": [
+    {
+      "predicate": "prefer",
+      "negated": false,
+      "roles": {
+        "experiencer": {
+          "type": "actor",
+          "id": "user"
+        },
+        "theme": {
+          "type": "concept",
+          "id": "concise_answers"
+        }
+      }
+    }
+  ]
+}

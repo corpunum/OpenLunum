@@ -1,0 +1,5 @@
+{"id": "q001", "question": "What answer style does the user prefer?", "target_ids": ["m001"], "acceptable": ["concise", "concise answers"]}
+{"id": "q002", "question": "What happened after deployment?", "target_ids": ["m003"], "acceptable": ["api 500", "error 500", "route bug fixed"]}
+{"id": "q003", "question": "Can the model delete files without confirmation?", "target_ids": ["m004"], "acceptable": ["no", "not without confirmation"]}
+{"id": "q004", "question": "What local model does the user work with?", "target_ids": ["m005"], "acceptable": ["supergemma"]}
+{"id": "q005", "question": "What should Mira do if the river rises?", "target_ids": ["m010"], "acceptable": ["leave bridge call theo", "leave the bridge and call theo"]}

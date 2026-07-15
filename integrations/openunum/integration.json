@@ -1,0 +1,22 @@
+{
+  "product": "OpenUnum",
+  "repository": "corpunum/openunum",
+  "sourceCommit": "18c11d8dc7aaf145366760ab949519065f4a735c",
+  "inspectedAt": "2026-07-15",
+  "runtime": "node>=22",
+  "moduleSystem": "esm",
+  "packageManager": "pnpm",
+  "preferredIntegration": "library+adapter",
+  "currentModule": "src/memory/lunum.mjs",
+  "compatibilityExports": [
+    "deriveLunumSidecar",
+    "compileLunumShadowContext"
+  ],
+  "storageFields": [
+    "lunum_code",
+    "lunum_sem_json",
+    "lunum_fp",
+    "lunum_meta_json"
+  ],
+  "status": "verified-current-state-reference-plan"
+}

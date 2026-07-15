@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-04-24T12:38:18.686Z",
+  "compile_stdout": "{\n  \"ratios\": {\n    \"lunum\": 0.7153284671532847,\n    \"mixed\": 0.7518248175182481\n  },\n  \"tokens\": {\n    \"natural\": 137,\n    \"lunum\": 98,\n    \"mixed\": 103\n  }\n}\n",
+  "shadow_stdout": "{\n  \"lunum\": 0.7153284671532847,\n  \"mixed\": 0.7518248175182481\n}\n",
+  "assertions": [
+    {"name":"mixed ratio <= 0.90","pass":true,"value":0.7518248175182481},
+    {"name":"lunum ratio <= 0.85","pass":true,"value":0.7153284671532847},
+    {"name":"at least one natural fallback in mixed","pass":true,"value":3},
+    {"name":"at least one Lunum eligible memory","pass":true,"value":9}
+  ],
+  "pass": true
+}
