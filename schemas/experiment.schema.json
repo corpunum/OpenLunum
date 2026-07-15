@@ -40,7 +40,11 @@
         "parse",
         "realize",
         "render",
-        "context"
+        "context",
+        "retrieval",
+        "integration",
+        "conformance",
+        "infrastructure"
       ]
     },
     "hypothesis": {

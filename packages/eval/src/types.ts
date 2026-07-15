@@ -1,7 +1,7 @@
 import type { LunumSem } from '@corpunum/lunum';
 
 export type WorkArea = 'semantic-contract' | 'multilingual-parse' | 'realization' | 'rendering' | 'context' | 'retrieval' | 'integration' | 'infrastructure';
-export type ExperimentTask = 'parse' | 'realize' | 'render' | 'context';
+export type ExperimentTask = 'parse' | 'realize' | 'render' | 'context' | 'retrieval' | 'integration' | 'conformance' | 'infrastructure';
 
 export interface ModelProfile {
   schema: 'openlunum-model-profile/0.1';
@@ -54,6 +54,17 @@ export interface ItemResult {
   featurePrecision?: number;
   protectedLiteralCoverage?: number;
   missingFeatures?: string[];
+  result?: Record<string, unknown>;
   error?: string;
   latencyMs: number;
+}
+
+export interface ExperimentItem {
+  id: string;
+  goldSem?: Record<string, unknown>;
+  protectedLiterals?: string[];
+  targetLanguage?: string;
+  sourceText?: string;
+  sourceLanguage?: string;
+  [key: string]: unknown;
 }
