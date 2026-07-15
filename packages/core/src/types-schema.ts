@@ -79,3 +79,19 @@ export interface RendererProfileSchema {
   testedModels?: string[];
   limitations?: string[];
 }
+
+export interface ReportValidationSchema {
+  schema: "openlunum-report-validation/0.1";
+  experimentId: string;
+  workArea: string;
+  baselineCommit: string;
+  candidateCommit: string;
+  dataset: {     id: string,     sha256: string,     items: number };
+  modelProfile: string;
+  summary: {     total: number,     passed: number,     failed: number,     errors: number };
+  caseCount: number;
+  cases?: unknown[];
+  validationRules: {     name: string,     check: string,     critical: boolean }[];
+  generatedAt?: string;
+  metadata?: Record<string, unknown>;
+}

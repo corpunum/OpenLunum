@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/report-validation/0.1",
+  "title": "OpenLunum report validation manifest 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "experimentId",
+    "workArea",
+    "baselineCommit",
+    "candidateCommit",
+    "dataset",
+    "modelProfile",
+    "summary",
+    "caseCount",
+    "validationRules"
+  ],
+  "properties": {
+    "schema": {
+      "const": "openlunum-report-validation/0.1"
+    },
+    "experimentId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "workArea": {
+      "type": "string"
+    },
+    "baselineCommit": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{7,40}$"
+    },
+    "candidateCommit": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{7,40}$"
+    },
+    "dataset": {
+      "type": "object",
+      "required": ["id", "sha256", "items"],
+      "properties": {
+        "id": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "items": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "modelProfile": {
+      "type": "string",
+      "description": "Relative path to model profile file"
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total", "passed", "failed", "errors"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "errors": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "caseCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 0
+    },
+    "validationRules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "check", "critical"],
+        "properties": {
+          "name": { "type": "string" },
+          "check": { "type": "string" },
+          "critical": { "type": "boolean" }
+        }
+      }
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

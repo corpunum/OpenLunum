@@ -1,0 +1,26 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "report-validation",
+  "area": "infrastructure",
+  "task": "infrastructure",
+  "hypothesis": "Adding report validation will ensure experiment reports are internally consistent, reproducible, and not manually altered.",
+  "baseline-commit": "ca623ec",
+  "dataset": { "id": "report-structure", "type": "deterministic" },
+  "model-profile": null,
+  "target-metrics": {
+    "commit-existence-check": "1.0",
+    "hash-matching": "1.0",
+    "profile-completeness": "1.0",
+    "count-consistency": "1.0",
+    "metric-recomputability": "1.0",
+    "manual-alteration-detection": ">0.99"
+  },
+  "hard-gates": [
+    "all-validated-reports-pass",
+    "negative-fixtures-fail",
+    "ci-integration"
+  ],
+  "budget": { "max-attempts": 10, "timeout-seconds": 600 },
+  "output-location": "reports/experiments/report-validation",
+  "stopping-conditions": ["All hard gates pass", "Budget exhausted"]
+}
