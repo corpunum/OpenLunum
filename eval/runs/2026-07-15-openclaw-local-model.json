@@ -1,0 +1,458 @@
+{
+  "generatedAt": "2026-07-15T18:55:31.805Z",
+  "workArea": "openclaw",
+  "model": "openai/qwen3.6-35b-a3b",
+  "runtime": {
+    "node": "v22.22.2",
+    "host": "http://127.0.0.1:8080",
+    "model": "openai/qwen3.6-35b-a3b",
+    "api": "llama.cpp OpenAI-compatible"
+  },
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "errors": 0
+  },
+  "cases": [
+    {
+      "id": "oc_plugin_arch",
+      "label": "plugin_architecture",
+      "role": "system",
+      "content": "OpenClaw uses a plugin-based architecture where each capability is loaded as an independent npm package.",
+      "category": "architecture",
+      "risk": "low",
+      "confidence": 0.95,
+      "question": "Does OpenClaw use plugins for capabilities? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "architecture",
+        "clauses": [
+          {
+            "predicate": "use",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "openclaw"
+              },
+              "target": {
+                "type": "concept",
+                "id": "plugin_packages"
+              }
+            },
+            "negated": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "oc_config_schema",
+      "label": "config_schema",
+      "role": "system",
+      "content": "OpenClaw validates all user configurations against a JSON Schema before loading any plugins.",
+      "category": "safety_constraint",
+      "risk": "medium",
+      "confidence": 0.9,
+      "question": "Does OpenClaw validate config against JSON Schema? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "safety_constraint",
+        "clauses": [
+          {
+            "predicate": "validate",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "openclaw"
+              },
+              "target": {
+                "type": "concept",
+                "id": "config_schema"
+              }
+            },
+            "negated": false,
+            "modality": "always"
+          }
+        ]
+      }
+    },
+    {
+      "id": "oc_event_bus",
+      "label": "event_bus",
+      "role": "agent",
+      "content": "OpenClaw dispatched a file_change event through its internal event bus when the user saved a config file.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did OpenClaw dispatch an event when a file changed? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "dispatch",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "openclaw"
+              },
+              "target": {
+                "type": "concept",
+                "id": "file_change_event"
+              }
+            },
+            "negated": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "oc_sandbox",
+      "label": "sandbox_isolation",
+      "role": "system",
+      "content": "OpenClaw runs plugins in isolated child processes with configurable resource limits (CPU, memory, network).",
+      "category": "safety_constraint",
+      "risk": "high",
+      "confidence": 0.95,
+      "question": "Does OpenClaw sandbox plugins in isolated processes? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "safety_constraint",
+        "clauses": [
+          {
+            "predicate": "sandbox",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "openclaw"
+              },
+              "target": {
+                "type": "concept",
+                "id": "child_process"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "resource_limits": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "oc_hot_reload",
+      "label": "hot_reload",
+      "role": "agent",
+      "content": "OpenClaw automatically reloaded the auth plugin after detecting a version change in its npm package.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did OpenClaw hot-reload a plugin after a version change? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "reload",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "openclaw"
+              },
+              "target": {
+                "type": "concept",
+                "id": "auth_plugin"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "trigger": "version_change"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "oc_plugin_arch",
+      "caseLabel": "plugin_architecture",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 26,
+      "naturalTokens": 26,
+      "lunumTokens": 8,
+      "mixedTokens": 26,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_plugin_arch",
+      "caseLabel": "plugin_architecture",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 26,
+      "naturalTokens": 26,
+      "lunumTokens": 8,
+      "mixedTokens": 26,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_plugin_arch",
+      "caseLabel": "plugin_architecture",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - User says: \"T use openclaw plugin_packages\" (likely a typo for \"Does OpenClaw use plugin_packages?\")\n   - User asks: \"Does OpenClaw use plugins for capabilities? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify the entity:** \"OpenClaw\" (likely refers to a specific software/project, possibly related to AI, plugins, or a specific framework. Could be \"OpenClaw\" from a known repo or a fictional/test entity. I need to rely on general knowledge or the prompt's context if any. Wait, the prompt says \"T use openclaw plugin_packages\". This looks like a truncated question. \"Does OpenClaw use plugins for capabilities?\" is the actual question.)\n   - Let's search my knowledge for \"OpenClaw\". It might be a specific tool. Actually, \"OpenClaw\" isn't a widely known major framework. Could it be a typo for \"OpenClaw\" in a specific context? Or maybe it's a test question.\n   - Wait, \"OpenCl",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 26,
+      "lunumTokens": 8,
+      "mixedTokens": 26,
+      "selectedRatio": 0.3076923076923077,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_config_schema",
+      "caseLabel": "config_schema",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 23,
+      "naturalTokens": 23,
+      "lunumTokens": 10,
+      "mixedTokens": 23,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_config_schema",
+      "caseLabel": "config_schema",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 23,
+      "naturalTokens": 23,
+      "lunumTokens": 10,
+      "mixedTokens": 23,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_config_schema",
+      "caseLabel": "config_schema",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 10,
+      "naturalTokens": 23,
+      "lunumTokens": 10,
+      "mixedTokens": 23,
+      "selectedRatio": 0.43478260869565216,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_event_bus",
+      "caseLabel": "event_bus",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 27,
+      "naturalTokens": 27,
+      "lunumTokens": 10,
+      "mixedTokens": 10,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "oc_event_bus",
+      "caseLabel": "event_bus",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 10,
+      "naturalTokens": 27,
+      "lunumTokens": 10,
+      "mixedTokens": 10,
+      "selectedRatio": 0.37037037037037035,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "oc_event_bus",
+      "caseLabel": "event_bus",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 10,
+      "naturalTokens": 27,
+      "lunumTokens": 10,
+      "mixedTokens": 10,
+      "selectedRatio": 0.37037037037037035,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "oc_sandbox",
+      "caseLabel": "sandbox_isolation",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 27,
+      "naturalTokens": 27,
+      "lunumTokens": 8,
+      "mixedTokens": 27,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_sandbox",
+      "caseLabel": "sandbox_isolation",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 27,
+      "naturalTokens": 27,
+      "lunumTokens": 8,
+      "mixedTokens": 27,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_sandbox",
+      "caseLabel": "sandbox_isolation",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Query: \"Does OpenClaw sandbox plugins in isolated processes?\"\n    *   Constraint: \"Reply only YES or NO.\"\n    *   Context provided in prompt: \"T sandbox openclaw child_process\" (This looks like a hint or a tag, likely pointing to `child_process` being used for sandboxing).\n\n2.  **Information Retrieval (Internal Knowledge about OpenClaw):**\n    *   *What is OpenClaw?* It's an AI agent framework (often associated with the \"OpenClaw\" project, sometimes linked to specific implementations like the one by `openclaw` or similar AI tooling).\n    *   *How does it handle plugins?* Many modern AI agent frameworks (like LangChain, AutoGen, or specific sandboxed implementations) use isolated processes for plugins to prevent a crashing or malicious plugin from taking down the main host.\n    *   *Specifics of OpenClaw:* OpenClaw typically uses `child_process` (Node.js) or similar mechanisms to spawn isolated processes for plugins to ensure stability and security. The prompt hint \"T sandbox openclaw child_process\" strongly suggests the answer is related",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 27,
+      "lunumTokens": 8,
+      "mixedTokens": 27,
+      "selectedRatio": 0.2962962962962963,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_hot_reload",
+      "caseLabel": "hot_reload",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the input:**\n    *   Context: \"OpenClaw automatically reloaded the auth plugin after detecting a version change in its npm package.\"\n    *   Question: \"Did OpenClaw hot-reload a plugin after a version change?\"\n    *   Constraint: \"Reply only YES or NO.\"\n\n2.  **Evaluate the context against the question:**\n    *   Context states: OpenClaw *automatically reloaded* the auth plugin after detecting a version change.\n    *   Question asks: Did it *hot-reload* a plugin after a version change?\n    *   \"Automatically reloaded\" in this context implies a hot-reload (dynamic reloading without a full restart, which is standard for plugin systems detecting version changes). The context explicitly confirms the action happened.\n\n3.  **Formulate the answer:**\n    *   YES.\n\n4.  **Check constraints:**\n    *   Only YES or NO? Yes.\n    *   No explanation? Yes.\n\n5.  **Final Output Generation:** YES. \n    *Self-Correction/Refinement during thought:* Does \"automatically reloaded\" strictly mean \"hot-reload",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 25,
+      "naturalTokens": 25,
+      "lunumTokens": 8,
+      "mixedTokens": 25,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_hot_reload",
+      "caseLabel": "hot_reload",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the input:**\n    *   Context: \"OpenClaw automatically reloaded the auth plugin after detecting a version change in its npm package.\"\n    *   Question: \"Did OpenClaw hot-reload a plugin after a version change?\"\n    *   Constraint: \"Reply only YES or NO.\"\n\n2.  **Evaluate the context against the question:**\n    *   Context states: OpenClaw *automatically reloaded* the auth plugin after detecting a version change.\n    *   Question asks: Did it *hot-reload* a plugin after a version change?\n    *   \"Automatically reloaded\" in this context implies a hot-reload (dynamic reloading without a full restart, which is standard for plugin systems detecting version changes). The context explicitly confirms the action happened.\n\n3.  **Formulate the answer:**\n    *   YES.\n\n4.  **Check constraints:**\n    *   Only YES or NO? Yes.\n    *   No explanation? Yes.\n\n5.  **Final Output Generation:** YES. \n    *Self-Correction/Refinement during thought:* Does \"automatically reloaded\" strictly mean \"hot-reload",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 25,
+      "naturalTokens": 25,
+      "lunumTokens": 8,
+      "mixedTokens": 25,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "oc_hot_reload",
+      "caseLabel": "hot_reload",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User asks: \"Did OpenClaw hot-reload a plugin after a version change? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify Key Entities/Concepts:**\n   - \"OpenClaw\" (likely a software/project name)\n   - \"hot-reload a plugin after a version change\"\n   - Need to verify if this specific behavior is documented or known for OpenClaw.\n\n3.  **Search/Recall Knowledge about OpenClaw:**\n   - I need to check if \"OpenClaw\" is a known project with plugin hot-reloading capabilities after version changes.\n   - \"OpenClaw\" might refer to a specific framework, CLI tool, or game mod loader. Could it be related to \"Claw\" or \"OpenClaw\" in the context of AI agents, VS Code extensions, or something else?\n   - Let's think about known projects: \"OpenClaw\" isn't a widely known mainstream project. It might be a niche tool or a fictional/example name from a specific context.\n",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 25,
+      "lunumTokens": 8,
+      "mixedTokens": 25,
+      "selectedRatio": 0.32,
+      "eligible": false,
+      "error": null
+    }
+  ]
+}

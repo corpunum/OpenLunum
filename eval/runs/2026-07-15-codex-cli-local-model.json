@@ -1,0 +1,455 @@
+{
+  "generatedAt": "2026-07-15T18:52:37.324Z",
+  "workArea": "codex-cli",
+  "model": "openai/qwen3.6-35b-a3b",
+  "runtime": {
+    "node": "v22.22.2",
+    "host": "http://127.0.0.1:8080",
+    "model": "openai/qwen3.6-35b-a3b",
+    "api": "llama.cpp OpenAI-compatible"
+  },
+  "summary": {
+    "total": 15,
+    "passed": 14,
+    "failed": 1,
+    "errors": 0
+  },
+  "cases": [
+    {
+      "id": "ccode_codebase",
+      "label": "codebase_index",
+      "role": "system",
+      "content": "Codex CLI indexes the entire codebase for semantic search to help the agent navigate large projects.",
+      "category": "capability",
+      "risk": "low",
+      "confidence": 0.95,
+      "question": "Does Codex CLI index the codebase for search? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "capability",
+        "clauses": [
+          {
+            "predicate": "index",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "codex_cli"
+              },
+              "target": {
+                "type": "concept",
+                "id": "codebase"
+              }
+            },
+            "negated": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "ccode_edit_scope",
+      "label": "edit_scope",
+      "role": "agent",
+      "content": "Codex CLI can only edit files that are within the currently tracked git repository.",
+      "category": "safety_constraint",
+      "risk": "medium",
+      "confidence": 0.9,
+      "question": "Is Codex limited to editing files inside the git repo? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "safety_constraint",
+        "clauses": [
+          {
+            "predicate": "limit",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "codex_cli"
+              },
+              "target": {
+                "type": "concept",
+                "id": "git_repo"
+              }
+            },
+            "negated": false,
+            "modality": "only"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ccode_diff_review",
+      "label": "diff_review",
+      "role": "agent",
+      "content": "Codex CLI presents a diff preview to the user before applying changes to files.",
+      "category": "preference",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Does Codex show diffs before applying changes? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "show",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "codex_cli"
+              },
+              "target": {
+                "type": "concept",
+                "id": "diff_preview"
+              }
+            },
+            "negated": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "ccode_batch_files",
+      "label": "batch_files",
+      "role": "agent",
+      "content": "Codex CLI edited 3 files in a single batch operation: config.yaml, main.ts, and types.ts.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did Codex CLI edit 3 files in one batch? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "edit",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "codex_cli"
+              },
+              "target": {
+                "type": "concept",
+                "id": "multi_file_batch"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "count": 3
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ccode_explain",
+      "label": "explain",
+      "role": "user",
+      "content": "The user asked Codex CLI to explain the authentication flow in the codebase.",
+      "category": "task_context",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did the user ask for an explanation of the auth flow? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "task_context",
+        "clauses": [
+          {
+            "predicate": "ask",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "target": {
+                "type": "concept",
+                "id": "auth_flow_explanation"
+              }
+            },
+            "negated": false
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "ccode_codebase",
+      "caseLabel": "codebase_index",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - Statement: \"Codex CLI indexes the entire codebase for semantic search to help the agent navigate large projects.\"\n   - Question: \"Does Codex CLI index the codebase for search?\"\n   - Constraint: \"Reply only YES or NO.\"\n\n2.  **Evaluate the statement/question based on knowledge about Codex CLI:**\n   - Does Codex CLI (Anthropic's CLI for Claude) index the codebase for semantic search?\n   - Yes, Codex CLI uses semantic search (often via embeddings) to help navigate and understand large codebases. It indexes the codebase to provide context and search capabilities.\n   - The prompt itself states it as a fact, and asks a direct yes/no question based on it.\n   - Answer should be YES.\n\n3.  **Format the output:**\n   - Constraint: \"Reply only YES or NO.\"\n   - Output: YES\n\nCheck: Does it match the constraint? Yes.\nProceed. \nOutput: YES. \nSelf-Correction/Verification during thought: \nWait, let's verify if Codex CLI actually does this. Yes, `@code` and semantic search",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 25,
+      "naturalTokens": 25,
+      "lunumTokens": 7,
+      "mixedTokens": 25,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ccode_codebase",
+      "caseLabel": "codebase_index",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - Statement: \"Codex CLI indexes the entire codebase for semantic search to help the agent navigate large projects.\"\n   - Question: \"Does Codex CLI index the codebase for search?\"\n   - Constraint: \"Reply only YES or NO.\"\n\n2.  **Evaluate the statement/question based on knowledge about Codex CLI:**\n   - Does Codex CLI index the codebase? Yes, it uses semantic search/indexing to help navigate and understand large codebases. This is a known feature of the Codex CLI (often leveraging tools like `ripgrep` for text search and vector embeddings/indexing for semantic search, or similar mechanisms depending on the specific version/update, but generally yes, it indexes/searches the codebase).\n   - The prompt itself states it as a fact in the first line, then asks a direct question based on it.\n   - Answer should be YES.\n\n3.  **Format output:**\n   - Constraint: \"Reply only YES or NO.\"\n   - Output: YES\n\nCheck: Does it match the constraint? Yes.\nProceed. \nOutput: YES. \nSelf-Correction/Verification during thought",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 25,
+      "naturalTokens": 25,
+      "lunumTokens": 7,
+      "mixedTokens": 25,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ccode_codebase",
+      "caseLabel": "codebase_index",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "THINKING",
+      "pass": false,
+      "rawResponse": "Thinking Process:\n\n1.  **Identify the core question:** Does Codex CLI index the codebase for search?\n2.  **Recall/Search knowledge about Codex CLI:**\n   - What is Codex CLI? It's a command-line interface for OpenAI's Codex (or the newer \"o1\" / \"ChatGPT\" CLI).\n   - How does it handle codebase context? Historically, Codex CLI (and similar tools like `gpt-cli` or OpenAI's official `codex-cli`) uses techniques to index or summarize the codebase to provide context to the LLM.\n   - Specifically, OpenAI's official `@openai/codex` CLI (released around late 2024/early 2025) uses a codebase indexing feature. It runs `rg` (ripgrep) or similar tools to index files, or uses a dedicated indexing step to build a searchable index of the codebase to inject relevant context into prompts.\n   - Let's verify: OpenAI's Codex CLI documentation states it indexes the codebase to provide better context. It uses a local index to quickly find relevant code snippets when the user asks questions or makes edits.",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 7,
+      "naturalTokens": 25,
+      "lunumTokens": 7,
+      "mixedTokens": 25,
+      "selectedRatio": 0.28,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ccode_edit_scope",
+      "caseLabel": "edit_scope",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - Statement: \"Codex CLI can only edit files that are within the currently tracked git repository.\"\n   - Question: \"Is Codex limited to editing files inside the git repo? Reply only YES or NO.\"\n\n2.  **Identify the core subject:** Codex CLI (OpenAI's command-line interface for the Codex model).\n\n3.  **Determine the factual accuracy:**\n   - Does Codex CLI *only* edit files within the currently tracked git repository?\n   - Codex CLI operates on the current working directory and its subdirectories. It doesn't strictly require a git repository, though it often uses git status/context. It can edit files outside the git repo if the working directory is set appropriately, or it can be pointed to a directory. Actually, let's verify how Codex CLI works.\n   - Codex CLI (like `openai-codex` or the newer `codex` CLI) reads the current directory. It can edit files in the current directory and subdirectories. It is not strictly limited to *only* files tracked by git. It can create new files, edit untracked files, and files",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 21,
+      "naturalTokens": 21,
+      "lunumTokens": 8,
+      "mixedTokens": 21,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ccode_edit_scope",
+      "caseLabel": "edit_scope",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - Statement: \"Codex CLI can only edit files that are within the currently tracked git repository.\"\n   - Question: \"Is Codex limited to editing files inside the git repo? Reply only YES or NO.\"\n\n2.  **Identify the core subject:** Codex CLI (OpenAI's command-line interface for the Codex model).\n\n3.  **Determine the factual accuracy:**\n   - Does Codex CLI *only* edit files within the currently tracked git repository?\n   - Codex CLI operates on the current working directory and its subdirectories. It doesn't strictly require a git repository, though it often uses git status/context. It can edit files outside the git repo if the working directory is set appropriately, or it can be pointed to a directory. Actually, Codex CLI reads the current directory and can modify files within it. It is not strictly limited to *only* files tracked by git. It can create new files, edit untracked files, etc.\n   - Wait, let's verify Codex CLI's exact behavior. Codex CLI (the terminal agent) works on the current directory. It can edit any file in the",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 21,
+      "naturalTokens": 21,
+      "lunumTokens": 8,
+      "mixedTokens": 21,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ccode_edit_scope",
+      "caseLabel": "edit_scope",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n1.  **Analyze the user's input:** \"Is Codex limited to editing files inside the git repo? Reply only YES or NO.\"\n2.  **Identify the core question:** Does `codex_cli` (OpenAI's Codex CLI) only edit files within the current git repository?\n3.  **Recall/Search knowledge about `codex_cli`:**\n   - OpenAI released `codex_cli` (a terminal-based interface for Codex).\n   - By default, it operates within the current directory.\n   - Does it have a flag to restrict to the git repo? Or does it naturally stay within the git repo? Actually, `codex_cli` has a `--sandbox` or works within the current directory. Wait, let's verify.\n   - Actually, `codex_cli` by default operates in the current working directory. It can be given a path. There's no strict limitation to *only* the git repo, but it typically works within the provided directory.\n   - Wait, the prompt says \"T only limit codex_cli git_repo\". This looks like a truncated or specific query. Maybe it's asking if `codex_cli` is limited to",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 21,
+      "lunumTokens": 8,
+      "mixedTokens": 21,
+      "selectedRatio": 0.38095238095238093,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ccode_diff_review",
+      "caseLabel": "diff_review",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 20,
+      "naturalTokens": 20,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ccode_diff_review",
+      "caseLabel": "diff_review",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze User Input:**\n   - User asks: \"Does Codex show diffs before applying changes? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify Key Entity & Feature:**\n   - Entity: Codex (specifically `codex_cli` or the GitHub Copilot Codex agent in VS Code / CLI).\n   - Feature: Showing diffs before applying changes.\n   - Question: Does it show diffs before applying changes?\n\n3.  **Verify Fact:**\n   - Does the Codex CLI (or VS Code extension) show a diff preview before applying changes?\n   - Yes, when Codex generates changes to files, it typically presents a diff preview in the terminal/IDE, allowing the user to accept or reject the changes before they are applied. This is a standard feature of the Codex agent in both CLI and VS Code.\n   - Specifically, `codex` CLI shows diffs in the terminal. The VS Code extension also shows diffs.\n   - Therefore, the answer is YES.\n\n4.  **Format Output:**\n   - Constraint: \"Reply only YES or NO",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 20,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 0.4,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ccode_diff_review",
+      "caseLabel": "diff_review",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze User Input:**\n   - User asks: \"Does Codex show diffs before applying changes? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify Key Entity & Feature:**\n   - Entity: Codex (specifically `codex_cli` or the GitHub Copilot Codex agent in VS Code / CLI).\n   - Feature: Showing diffs before applying changes.\n   - Context: The Codex CLI agent (and VS Code extension) typically shows a diff preview before applying changes to files, allowing the user to accept or reject them.\n\n3.  **Verify Fact:**\n   - Does the Codex CLI (`codex`) show diffs before applying? Yes, it generates a diff and prompts the user to review/accept/reject before writing to disk.\n   - The prompt specifically says \"R show codex_cli diff_preview\" which might be a reference to a flag or just a shorthand, but the core question is \"Does Codex show diffs before applying changes?\"\n   - Answer is YES.\n\n4.  **Format Output:**\n   - Constraint: \"Reply only YES or NO",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 20,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 0.4,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ccode_batch_files",
+      "caseLabel": "batch_files",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 23,
+      "naturalTokens": 23,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ccode_batch_files",
+      "caseLabel": "batch_files",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: \"R edit codex_cli multi_file_batch\" (This looks like a query or a tag, but the actual question is in the second prompt).\n    *   Question: \"Did Codex CLI edit 3 files in one batch? Reply only YES or NO.\"\n    *   Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify the Core Entity/Action:**\n    *   Entity: Codex CLI (OpenAI's Codex command-line interface).\n    *   Action: Editing files in a batch.\n    *   Specific detail: \"3 files in one batch\".\n\n3.  **Knowledge Retrieval (Internal Knowledge about Codex CLI):**\n    *   How does `codex` (the CLI) work regarding file editing?\n    *   Usually, LLMs/Codex operate on a context window. When asked to edit multiple files, does it do it in one go (batch) or sequentially?\n    *   Wait, is this referring to a specific feature or a known limitation/capability of the *Codex CLI* (specifically the new `",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 23,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 0.391304347826087,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ccode_batch_files",
+      "caseLabel": "batch_files",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: \"R edit codex_cli multi_file_batch\" (This looks like a query or a tag, but the actual question is in the second prompt).\n    *   Question: \"Did Codex CLI edit 3 files in one batch? Reply only YES or NO.\"\n    *   Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify the Core Entity & Action:**\n    *   Entity: Codex CLI (OpenAI's Codex command-line interface).\n    *   Action: Editing files in a batch.\n    *   Specific detail: \"3 files in one batch\".\n\n3.  **Knowledge Retrieval (Internal Knowledge about Codex CLI):**\n    *   How does `codex` (the CLI) work regarding file editing?\n    *   Usually, when you ask Codex to edit files, it generates a patch or a set of edits.\n    *   Does it support multi-file edits in a single prompt/response? Yes, Codex can handle multiple files.\n    *   Is there a specific known limitation or feature about \"3 files in one batch\"?\n",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 23,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 0.391304347826087,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ccode_explain",
+      "caseLabel": "explain",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 19,
+      "naturalTokens": 19,
+      "lunumTokens": 8,
+      "mixedTokens": 19,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ccode_explain",
+      "caseLabel": "explain",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 19,
+      "naturalTokens": 19,
+      "lunumTokens": 8,
+      "mixedTokens": 19,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ccode_explain",
+      "caseLabel": "explain",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 19,
+      "lunumTokens": 8,
+      "mixedTokens": 19,
+      "selectedRatio": 0.42105263157894735,
+      "eligible": false,
+      "error": null
+    }
+  ]
+}

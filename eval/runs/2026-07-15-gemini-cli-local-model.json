@@ -1,0 +1,463 @@
+{
+  "generatedAt": "2026-07-15T18:54:07.105Z",
+  "workArea": "gemini-cli",
+  "model": "openai/qwen3.6-35b-a3b",
+  "runtime": {
+    "node": "v22.22.2",
+    "host": "http://127.0.0.1:8080",
+    "model": "openai/qwen3.6-35b-a3b",
+    "api": "llama.cpp OpenAI-compatible"
+  },
+  "summary": {
+    "total": 15,
+    "passed": 14,
+    "failed": 1,
+    "errors": 0
+  },
+  "cases": [
+    {
+      "id": "gcli_google_kg",
+      "label": "google_knowledge",
+      "role": "system",
+      "content": "Gemini CLI can leverage Google Knowledge Graph data to augment its responses with real-world facts.",
+      "category": "capability",
+      "risk": "low",
+      "confidence": 0.95,
+      "question": "Can Gemini CLI use Google Knowledge Graph? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "capability",
+        "clauses": [
+          {
+            "predicate": "use",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "gemini_cli"
+              },
+              "target": {
+                "type": "concept",
+                "id": "google_knowledge"
+              }
+            },
+            "negated": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "gcli_project_context",
+      "label": "project_context",
+      "role": "agent",
+      "content": "Gemini CLI loaded the .gemini directory from the user project to maintain project-specific instructions.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did Gemini CLI read project instructions from .gemini? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "read",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "gemini_cli"
+              },
+              "target": {
+                "type": "concept",
+                "id": "gemini_instructions"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "path": ".gemini"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "gcli_code_search",
+      "label": "code_search",
+      "role": "agent",
+      "content": "Gemini CLI searched across 500 TypeScript files to find where a specific API function was defined.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did Gemini CLI search across many files for an API function? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "search",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "gemini_cli"
+              },
+              "target": {
+                "type": "concept",
+                "id": "api_function_def"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "files_scanned": 500
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "gcli_multimodal",
+      "label": "multimodal",
+      "role": "user",
+      "content": "The user attached a screenshot of a bug to Gemini CLI showing a UI layout issue.",
+      "category": "task_context",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did the user send a screenshot to Gemini CLI? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "task_context",
+        "clauses": [
+          {
+            "predicate": "send",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "target": {
+                "type": "concept",
+                "id": "bug_screenshot"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "modality": "image"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "gcli_gcloud",
+      "label": "gcloud_integration",
+      "role": "agent",
+      "content": "Gemini CLI ran gcloud deploy to push a new version of the app to Google Cloud Run.",
+      "category": "tool_event",
+      "risk": "medium",
+      "confidence": 1,
+      "question": "Did Gemini CLI deploy to Google Cloud? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "deploy",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "gemini_cli"
+              },
+              "target": {
+                "type": "concept",
+                "id": "google_cloud_run"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "tool": "gcloud"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "gcli_google_kg",
+      "caseLabel": "google_knowledge",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - Statement: \"Gemini CLI can leverage Google Knowledge Graph data to augment its responses with real-world facts.\"\n   - Question: \"Can Gemini CLI use Google Knowledge Graph? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Verify the fact:**\n   - Does Gemini CLI use Google Knowledge Graph?\n   - Gemini models (including those in Gemini CLI) are connected to Google's ecosystem and can access real-time information, including the Knowledge Graph, to provide accurate, up-to-date facts. Google's documentation and feature lists for Gemini CLI mention access to Google's search and knowledge graph for real-time data augmentation.\n   - Therefore, the answer is YES.\n\n3.  **Format the output:**\n   - Constraint: \"Reply only YES or NO.\"\n   - Output: YES\n\n4.  **Final Check:**\n   - Does it match the constraint? Yes.\n   - Is it factually correct? Yes.\n   - Proceed. \n   - Output: YES. \n   - Self-Correction/Refinement during thought: I will just output \"",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 25,
+      "naturalTokens": 25,
+      "lunumTokens": 9,
+      "mixedTokens": 25,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "gcli_google_kg",
+      "caseLabel": "google_knowledge",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - Statement: \"Gemini CLI can leverage Google Knowledge Graph data to augment its responses with real-world facts.\"\n   - Question: \"Can Gemini CLI use Google Knowledge Graph? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Verify the fact:**\n   - Does Gemini CLI use Google Knowledge Graph?\n   - Gemini models (including those in Gemini CLI) are connected to Google's ecosystem and can access real-time information, including the Knowledge Graph, to provide accurate, up-to-date facts. This is a standard capability of Google's Gemini models when connected to the internet/search.\n   - Therefore, the answer is YES.\n\n3.  **Format the output:**\n   - Constraint: \"Reply only YES or NO.\"\n   - Output: YES\n\n4.  **Final Check:**\n   - Does it match the constraint? Yes.\n   - Is it factually correct? Yes.\n   - Proceed. \n   - Output: YES. \n   - Self-Correction/Refinement during thought: The prompt says \"Reply only YES or NO.\" I will",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 25,
+      "naturalTokens": 25,
+      "lunumTokens": 9,
+      "mixedTokens": 25,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "gcli_google_kg",
+      "caseLabel": "google_knowledge",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Target: Gemini CLI (gemini_cli).\n    *   Feature: Google Knowledge Graph.\n    *   Question: Can Gemini CLI use Google Knowledge Graph?\n    *   Constraint: Reply only YES or NO.\n\n2.  **Information Retrieval (Internal Knowledge):**\n    *   What is Gemini CLI? It's a command-line interface for interacting with Google's Gemini models.\n    *   Does it have access to Google's Knowledge Graph? Gemini models (especially through Google's search integration or specific APIs) often leverage Google's vast knowledge base, including the Knowledge Graph, to provide factual, up-to-date information. The `gemini_cli` tool typically has search capabilities or can be configured to use Google's search/Knowledge Graph data to ground its responses.\n    *   Specifically, Google's documentation for Gemini CLI mentions features like \"Google Search\" which pulls from the Knowledge Graph.\n    *   Therefore, the answer is YES.\n\n3.  **Format Output:**\n    *   Constraint: \"Reply only YES or NO.\"\n    *   Output: YES.\n\n4.  **Final Verification:**\n    *   Does Gemini CLI",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 25,
+      "lunumTokens": 9,
+      "mixedTokens": 25,
+      "selectedRatio": 0.36,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "gcli_project_context",
+      "caseLabel": "project_context",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 26,
+      "naturalTokens": 26,
+      "lunumTokens": 10,
+      "mixedTokens": 10,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "gcli_project_context",
+      "caseLabel": "project_context",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 10,
+      "naturalTokens": 26,
+      "lunumTokens": 10,
+      "mixedTokens": 10,
+      "selectedRatio": 0.38461538461538464,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "gcli_project_context",
+      "caseLabel": "project_context",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 10,
+      "naturalTokens": 26,
+      "lunumTokens": 10,
+      "mixedTokens": 10,
+      "selectedRatio": 0.38461538461538464,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "gcli_code_search",
+      "caseLabel": "code_search",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n    *   Context: \"Gemini CLI searched across 500 TypeScript files to find where a specific API function was defined.\"\n    *   Question: \"Did Gemini CLI search across many files for an API function?\"\n    *   Constraint: \"Reply only YES or NO.\"\n\n2.  **Evaluate the question against the context:**\n    *   Context states: searched across 500 TypeScript files.\n    *   Question asks: Did it search across *many* files?\n    *   500 files qualifies as \"many\".\n    *   Therefore, the answer is YES.\n\n3.  **Format the output:**\n    *   Constraint: \"Reply only YES or NO.\"\n    *   Output: YES.\n\n4.  **Final Check:** Does the output strictly follow the constraint? Yes. Is it accurate based on the context? Yes.\n    *   Output: YES. \n    *   Proceed. \n    *   *Self-Correction/Verification during thought*: The prompt says \"Gemini CLI searched across 500 TypeScript files...\". 500 is many. So YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 25,
+      "naturalTokens": 25,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "gcli_code_search",
+      "caseLabel": "code_search",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: \"R search gemini_cli api_function_def\" (This looks like a command or a query context).\n    *   Question: \"Did Gemini CLI search across many files for an API function?\"\n    *   Constraint: \"Reply only YES or NO.\"\n\n2.  **Analyze the Context/Command:**\n    *   \"R search\" usually implies a recursive search or a search across the codebase.\n    *   \"gemini_cli\" is the target/tool.\n    *   \"api_function_def\" is the pattern/term being searched.\n    *   The question asks if it searched *across many files*. \"R search\" (recursive search) inherently implies searching across multiple files/directories, not just a single file.\n\n3.  **Determine the Answer:**\n    *   Since \"R search\" denotes a recursive search across the project/codebase, the answer to \"Did it search across many files?\" is YES.\n\n4.  **Format the Output:**\n    *   Constraint: \"Reply only YES or NO.\"\n    *   Output: YES.\n\n5.  **Final Verification",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 25,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 0.36,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "gcli_code_search",
+      "caseLabel": "code_search",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: \"R search gemini_cli api_function_def\" (This looks like a command or a query context).\n    *   Question: \"Did Gemini CLI search across many files for an API function?\"\n    *   Constraint: \"Reply only YES or NO.\"\n\n2.  **Analyze the Context/Command:**\n    *   \"R search\" usually implies a recursive search or a search across the codebase.\n    *   \"gemini_cli\" is the target/tool.\n    *   \"api_function_def\" is the pattern/term being searched.\n    *   The question asks if it searched *across many files*. \"R search\" (recursive search) inherently implies searching across multiple files/directories, not just a single file.\n\n3.  **Determine the Answer:**\n    *   Since \"R search\" denotes a recursive search across the project/codebase, the answer to \"Did it search across many files?\" is YES.\n\n4.  **Format the Output:**\n    *   Constraint: \"Reply only YES or NO.\"\n    *   Output: YES.\n\n5.  **Final Verification",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 25,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 0.36,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "gcli_multimodal",
+      "caseLabel": "multimodal",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 20,
+      "naturalTokens": 20,
+      "lunumTokens": 7,
+      "mixedTokens": 20,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "gcli_multimodal",
+      "caseLabel": "multimodal",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 20,
+      "naturalTokens": 20,
+      "lunumTokens": 7,
+      "mixedTokens": 20,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "gcli_multimodal",
+      "caseLabel": "multimodal",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 7,
+      "naturalTokens": 20,
+      "lunumTokens": 7,
+      "mixedTokens": 20,
+      "selectedRatio": 0.35,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "gcli_gcloud",
+      "caseLabel": "gcloud_integration",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 21,
+      "naturalTokens": 21,
+      "lunumTokens": 9,
+      "mixedTokens": 21,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "gcli_gcloud",
+      "caseLabel": "gcloud_integration",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 21,
+      "naturalTokens": 21,
+      "lunumTokens": 9,
+      "mixedTokens": 21,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "gcli_gcloud",
+      "caseLabel": "gcloud_integration",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "NO",
+      "pass": false,
+      "rawResponse": "Thinking Process:\n\n1.  **Identify the core entity and action:** The user is asking about \"Gemini CLI\" and whether it \"deployed to Google Cloud\".\n2.  **Analyze the query:** \"Did Gemini CLI deploy to Google Cloud?\"\n3.  **Knowledge retrieval (internal):**\n    *   What is Gemini CLI? It's a command-line interface for interacting with Google's Gemini models (like `gemini-cli` or `gcloud` extensions, or specifically the new `gemini` CLI tool announced/released by Google).\n    *   Did it *deploy* to Google Cloud? Usually, CLI tools are installed locally (via npm, brew, etc.) to interact with Google Cloud or Gemini APIs. They don't typically \"deploy to Google Cloud\" in the sense of being a cloud service themselves, unless it's a specific cloud-run deployment of a CLI wrapper, but generally, the answer is NO. It's a local tool.\n    *   Wait, is there a specific recent event? \"gemini_cli google_cloud_run\". Maybe the user is asking if a specific deployment happened.\n    *   Let's check recent news (as of mid-2024/2025",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 21,
+      "lunumTokens": 9,
+      "mixedTokens": 21,
+      "selectedRatio": 0.42857142857142855,
+      "eligible": false,
+      "error": null
+    }
+  ]
+}

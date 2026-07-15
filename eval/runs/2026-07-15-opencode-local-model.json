@@ -1,0 +1,466 @@
+{
+  "generatedAt": "2026-07-15T18:56:59.295Z",
+  "workArea": "opencode",
+  "model": "openai/qwen3.6-35b-a3b",
+  "runtime": {
+    "node": "v22.22.2",
+    "host": "http://127.0.0.1:8080",
+    "model": "openai/qwen3.6-35b-a3b",
+    "api": "llama.cpp OpenAI-compatible"
+  },
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "errors": 0
+  },
+  "cases": [
+    {
+      "id": "ocd_project_mode",
+      "label": "project_mode",
+      "role": "system",
+      "content": "OpenCode operates in project mode where it reads .opencode/config for per-project settings.",
+      "category": "architecture",
+      "risk": "low",
+      "confidence": 0.95,
+      "question": "Does OpenCode read per-project configuration? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "architecture",
+        "clauses": [
+          {
+            "predicate": "read",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "opencode"
+              },
+              "target": {
+                "type": "concept",
+                "id": "project_config"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "path": ".opencode/config"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ocd_shell_integration",
+      "label": "shell_integration",
+      "role": "agent",
+      "content": "OpenCode integrated with the terminal shell to run make build and capture the output inline.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did OpenCode run a build command in the terminal? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "run",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "opencode"
+              },
+              "target": {
+                "type": "concept",
+                "id": "build_command"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "command": "make build"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ocd_web_fetch",
+      "label": "web_fetch",
+      "role": "agent",
+      "content": "OpenCode fetched documentation from the React official website to help answer a user question about hooks.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did OpenCode fetch web documentation? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "fetch",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "opencode"
+              },
+              "target": {
+                "type": "concept",
+                "id": "react_docs"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "url": "react.dev"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ocd_edit_suggestions",
+      "label": "edit_suggestions",
+      "role": "agent",
+      "content": "OpenCode suggested 3 edits to fix TypeScript errors in the user codebase.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did OpenCode suggest edits to fix TypeScript errors? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "suggest",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "opencode"
+              },
+              "target": {
+                "type": "concept",
+                "id": "typescript_fixes"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "count": 3
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ocd_session_save",
+      "label": "session_save",
+      "role": "system",
+      "content": "OpenCode saves conversation history to a local SQLite database for session persistence.",
+      "category": "memory",
+      "risk": "low",
+      "confidence": 0.9,
+      "question": "Does OpenCode save conversations locally for persistence? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "memory",
+        "clauses": [
+          {
+            "predicate": "save",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "opencode"
+              },
+              "target": {
+                "type": "concept",
+                "id": "conversation_history"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "storage": "SQLite"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "ocd_project_mode",
+      "caseLabel": "project_mode",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 23,
+      "naturalTokens": 23,
+      "lunumTokens": 8,
+      "mixedTokens": 23,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ocd_project_mode",
+      "caseLabel": "project_mode",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 23,
+      "naturalTokens": 23,
+      "lunumTokens": 8,
+      "mixedTokens": 23,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ocd_project_mode",
+      "caseLabel": "project_mode",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User asks: \"Does OpenCode read per-project configuration?\"\n   - Constraint: \"Reply only YES or NO.\"\n   - Context from system prompt: \"T read opencode project_config\" (likely a typo/fragment meaning \"Does OpenCode read opencode project_config?\")\n\n2.  **Identify Key Entity & Feature:**\n   - Entity: OpenCode (an AI-powered code editor/IDE, likely referring to the open-source project \"OpenCode\" or similar, but more likely refers to \"OpenCode\" as a tool that reads configuration files like `opencode.json` or similar per-project configs)\n   - Feature: Per-project configuration reading\n\n3.  **Verify Fact (Internal Knowledge):**\n   - OpenCode (opencode-ai/opencode) is an AI code editor. It typically reads configuration from files like `opencode.json` or `.opencode.json` in the project root or user home.\n   - Many modern AI coding tools (like Cursor, Continue, OpenCode) support per-project configuration.\n   - Specifically, OpenCode reads `opencode.json` for project-specific settings.\n   - Therefore",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 23,
+      "lunumTokens": 8,
+      "mixedTokens": 23,
+      "selectedRatio": 0.34782608695652173,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ocd_shell_integration",
+      "caseLabel": "shell_integration",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 23,
+      "naturalTokens": 23,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_shell_integration",
+      "caseLabel": "shell_integration",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: \"R run opencode build_command\" (User prompt)\n    *   Follow-up: \"Did OpenCode run a build command in the terminal? Reply only YES or NO.\"\n    *   Constraint: Answer *only* with YES or NO. Do not explain.\n\n2.  **Analyze the Context/Information:**\n    *   The user provided a single line of text: \"R run opencode build_command\".\n    *   This looks like a log entry, a command output, or a status message from a tool named \"OpenCode\".\n    *   \"R\" might stand for \"Run\" or \"Result\" or just a prefix.\n    *   \"run opencode build_command\" strongly implies that the action \"build_command\" was executed by \"opencode\".\n    *   Therefore, OpenCode *did* run a build command.\n\n3.  **Formulate Output:**\n    *   Constraint: \"Reply only YES or NO.\"\n    *   Answer: YES.\n\n4.  **Final Check:**\n    *   Does \"R run opencode build_command\" indicate a build command was",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 7,
+      "naturalTokens": 23,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 0.30434782608695654,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_shell_integration",
+      "caseLabel": "shell_integration",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: \"R run opencode build_command\" (User prompt)\n    *   Follow-up: \"Did OpenCode run a build command in the terminal? Reply only YES or NO.\"\n    *   Constraint: Answer *only* with YES or NO. Do not explain.\n\n2.  **Analyze the Context/Information:**\n    *   The user provided a single line of text: \"R run opencode build_command\".\n    *   This looks like a log entry, a command output, or a status message from a tool named \"OpenCode\".\n    *   \"R\" might stand for \"Run\" or \"Result\" or just a prefix.\n    *   \"run opencode build_command\" strongly implies that the action \"build_command\" was executed by \"opencode\".\n    *   Therefore, OpenCode *did* run a build command.\n\n3.  **Formulate Output:**\n    *   Constraint: \"Reply only YES or NO.\"\n    *   Answer: YES.\n\n4.  **Final Check:**\n    *   Does \"R run opencode build_command\" indicate a build command was",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 7,
+      "naturalTokens": 23,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 0.30434782608695654,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_web_fetch",
+      "caseLabel": "web_fetch",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 27,
+      "naturalTokens": 27,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_web_fetch",
+      "caseLabel": "web_fetch",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User says: \"R fetch opencode react_docs\" (likely a typo/command fragment)\n   - Then asks: \"Did OpenCode fetch web documentation? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify Key Entities/Concepts:**\n   - \"OpenCode\" - Could refer to a specific tool, project, or AI agent.\n   - \"fetch web documentation\" - The action in question.\n   - \"react_docs\" - Likely refers to React documentation.\n   - The prompt seems to be testing knowledge about a specific tool named \"OpenCode\" and whether it fetched web documentation (specifically React docs).\n\n3.  **Search/Verify Knowledge (Internal):**\n   - I need to recall if there's a known tool/project called \"OpenCode\" that fetches web documentation, particularly React docs.\n   - \"OpenCode\" might refer to \"OpenCode AI\" or a specific coding assistant.\n   - Alternatively, it could be a reference to a specific benchmark, paper, or demo where \"OpenCode\" fetched React docs",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 7,
+      "naturalTokens": 27,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 0.25925925925925924,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_web_fetch",
+      "caseLabel": "web_fetch",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User says: \"R fetch opencode react_docs\" (likely a typo/command fragment)\n   - Then asks: \"Did OpenCode fetch web documentation? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify Key Entities/Concepts:**\n   - \"OpenCode\" - Could refer to a specific tool, project, or AI agent.\n   - \"fetch web documentation\" - The action in question.\n   - \"react_docs\" - Likely refers to React documentation.\n   - The prompt seems to be testing knowledge about a specific tool named \"OpenCode\" and whether it fetched web documentation (specifically React docs).\n\n3.  **Search/Verify Knowledge (Internal):**\n   - I need to recall if there's a known tool/project called \"OpenCode\" that fetches web documentation, particularly React docs.\n   - \"OpenCode\" might refer to \"OpenCode AI\" or a specific coding assistant.\n   - Alternatively, it could be a reference to a specific benchmark, paper, or demo where \"OpenCode\" fetched React docs",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 7,
+      "naturalTokens": 27,
+      "lunumTokens": 7,
+      "mixedTokens": 7,
+      "selectedRatio": 0.25925925925925924,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_edit_suggestions",
+      "caseLabel": "edit_suggestions",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 19,
+      "naturalTokens": 19,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_edit_suggestions",
+      "caseLabel": "edit_suggestions",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - User says: \"R suggest opencode typescript_fixes\" (This looks like a prompt or a query about a specific tool/context, possibly \"OpenCode\" suggesting TypeScript fixes).\n   - Then the user clarifies: \"Did OpenCode suggest edits to fix TypeScript errors? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify the core question:** Did OpenCode suggest edits to fix TypeScript errors?\n   - I need to determine if this is a factual question about a specific event, a general capability, or based on provided context. Since there's no provided context, I should assume it's asking about the general capability of \"OpenCode\" (likely referring to an AI coding assistant or a specific tool named OpenCode) or it's a direct question expecting a \"YES\" based on typical AI behavior or a known feature.\n   - Wait, \"OpenCode\" might refer to a specific AI tool or plugin. Many AI coding assistants (like GitHub Copilot, Cursor, etc.) suggest TypeScript fixes. If \"OpenCode\" is a specific tool, it likely does",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 19,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 0.47368421052631576,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_edit_suggestions",
+      "caseLabel": "edit_suggestions",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking process:\n\n1.  **Analyze the user's input:**\n   - User says: \"R suggest opencode typescript_fixes\" (This looks like a prompt or a query about a specific tool/context, possibly \"OpenCode\" suggesting TypeScript fixes).\n   - Then clarifies: \"Did OpenCode suggest edits to fix TypeScript errors? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify the core question:** Did OpenCode suggest edits to fix TypeScript errors?\n   - I need to determine if this is a factual question about a specific event, a general capability, or based on provided context. Since there's no provided context, I should assume it's asking about the general capability of \"OpenCode\" (likely referring to an AI coding assistant or a specific tool named OpenCode) or it's a direct yes/no question based on common knowledge or a specific dataset.\n   - Wait, \"OpenCode\" might refer to a specific AI tool or feature. Actually, \"OpenCode\" could be a typo for \"OpenAI\" or a specific GitHub Copilot/VS Code extension. But the prompt says \"opencode typescript_fixes",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 19,
+      "lunumTokens": 9,
+      "mixedTokens": 9,
+      "selectedRatio": 0.47368421052631576,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "ocd_session_save",
+      "caseLabel": "session_save",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the user's input:**\n   - User asks: \"Does OpenCode save conversations locally for persistence? Reply only YES or NO.\"\n   - Context provided in the system prompt: \"OpenCode saves conversation history to a local SQLite database for session persistence.\"\n\n2.  **Evaluate the context against the question:**\n   - Context explicitly states: \"OpenCode saves conversation history to a local SQLite database for session persistence.\"\n   - Question asks: \"Does OpenCode save conversations locally for persistence?\"\n   - The answer is clearly YES based on the provided context.\n\n3.  **Format the output:**\n   - Constraint: \"Reply only YES or NO.\"\n   - Output: YES\n\n4.  **Final Check:**\n   - Does it match the constraint? Yes.\n   - Is it accurate based on context? Yes.\n   - Output matches exactly.✅\n   - Proceed. \n   - Output: YES\n   - (Self-Correction/Verification during thought) The prompt says \"OpenCode saves conversation history to a local SQLite database for session persistence.\" This directly answers the question. The constraint is strict: \"Reply only YES or NO.\" I will output exactly",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 22,
+      "naturalTokens": 22,
+      "lunumTokens": 9,
+      "mixedTokens": 22,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ocd_session_save",
+      "caseLabel": "session_save",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the user's input:**\n   - User asks: \"Does OpenCode save conversations locally for persistence? Reply only YES or NO.\"\n   - Context provided in the system prompt: \"OpenCode saves conversation history to a local SQLite database for session persistence.\"\n\n2.  **Evaluate the context against the question:**\n   - Context explicitly states: \"OpenCode saves conversation history to a local SQLite database for session persistence.\"\n   - Question asks: \"Does OpenCode save conversations locally for persistence?\"\n   - The answer is clearly YES based on the provided context.\n\n3.  **Format the output:**\n   - Constraint: \"Reply only YES or NO.\"\n   - Output: YES\n\n4.  **Final Check:**\n   - Does it match the constraint? Yes.\n   - Is it accurate based on context? Yes.\n   - Output matches exactly.✅\n   - Proceed. \n   - Output: YES\n   - (Self-Correction/Verification during thought) The prompt says \"OpenCode saves conversation history to a local SQLite database for session persistence.\" This directly answers the question. The constraint is strict: \"Reply only YES or NO.\" I will output exactly",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 22,
+      "naturalTokens": 22,
+      "lunumTokens": 9,
+      "mixedTokens": 22,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "ocd_session_save",
+      "caseLabel": "session_save",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   User asks: \"Does OpenCode save conversations locally for persistence?\"\n    *   Constraint: \"Reply only YES or NO.\"\n\n2.  **Identify the Subject:** \"OpenCode\" (likely referring to the AI coding assistant tool, often associated with OpenCode.ai or similar projects, or perhaps a specific feature in a tool named OpenCode). Let's verify what \"OpenCode\" refers to in the context of AI coding assistants.\n    *   *Self-Correction/Verification:* \"OpenCode\" is an AI coding assistant (often a VS Code extension or standalone tool) that uses LLMs. Does it save conversation history locally?\n    *   Many AI coding assistants (like Cursor, Copilot, OpenCode) save conversation history locally to provide context and persistence across sessions.\n    *   Let's check specific documentation or common knowledge about \"OpenCode\" (opencode-ai/opencode).\n    *   OpenCode (by opencode-ai) typically stores conversation history in a local SQLite database or similar local storage mechanism to maintain context.\n    *   Therefore, the answer is YES.\n\n3.  **Format the Output",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 22,
+      "lunumTokens": 9,
+      "mixedTokens": 22,
+      "selectedRatio": 0.4090909090909091,
+      "eligible": false,
+      "error": null
+    }
+  ]
+}

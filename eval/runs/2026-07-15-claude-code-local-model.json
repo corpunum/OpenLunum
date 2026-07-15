@@ -1,0 +1,461 @@
+{
+  "generatedAt": "2026-07-15T18:51:09.507Z",
+  "workArea": "claude-code",
+  "model": "openai/qwen3.6-35b-a3b",
+  "runtime": {
+    "node": "v22.22.2",
+    "host": "http://127.0.0.1:8080",
+    "model": "openai/qwen3.6-35b-a3b",
+    "api": "llama.cpp OpenAI-compatible"
+  },
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "errors": 0
+  },
+  "cases": [
+    {
+      "id": "cc_tool_use",
+      "label": "tool_use",
+      "role": "agent",
+      "content": "Claude Code invoked the read_file tool to inspect package.json configuration in a Node.js project.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did Claude Code read a file? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "read",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "claude_code"
+              },
+              "target": {
+                "type": "concept",
+                "id": "package_json"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "tool": "read_file"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cc_permission_model",
+      "label": "permission_model",
+      "role": "system",
+      "content": "Claude Code operates under a permission model where it must ask before making changes to files outside the current project.",
+      "category": "policy",
+      "risk": "medium",
+      "confidence": 0.95,
+      "question": "Must Claude Code ask before modifying files outside the project? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "policy",
+        "clauses": [
+          {
+            "predicate": "must_ask",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "claude_code"
+              },
+              "target": {
+                "type": "concept",
+                "id": "outside_project"
+              }
+            },
+            "negated": false,
+            "modality": "must"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cc_terminal_capability",
+      "label": "terminal_capability",
+      "role": "agent",
+      "content": "Claude Code has terminal access and can run npm install commands in the project root.",
+      "category": "capability",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Does Claude Code have terminal access? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "capability",
+        "clauses": [
+          {
+            "predicate": "have",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "claude_code"
+              },
+              "target": {
+                "type": "concept",
+                "id": "terminal"
+              }
+            },
+            "negated": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "cc_context_window",
+      "label": "context_window",
+      "role": "system",
+      "content": "Claude Code maintains a rolling context window of the most recent 200K tokens of conversation.",
+      "category": "memory",
+      "risk": "low",
+      "confidence": 0.9,
+      "question": "Does Claude Code use a rolling context window? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "tool",
+        "kind": "memory",
+        "clauses": [
+          {
+            "predicate": "use",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "claude_code"
+              },
+              "target": {
+                "type": "concept",
+                "id": "rolling_context"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "size": "200K tokens"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cc_self_heal",
+      "label": "self_heal",
+      "role": "agent",
+      "content": "Claude Code detected a failed command and automatically ran npm install to fix the missing dependency before retrying.",
+      "category": "tool_event",
+      "risk": "low",
+      "confidence": 1,
+      "question": "Did Claude Code self-heal by running a fix command? Reply only YES or NO.",
+      "expected": "YES",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "tool_event",
+        "clauses": [
+          {
+            "predicate": "execute",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "claude_code"
+              },
+              "target": {
+                "type": "concept",
+                "id": "fix_command"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "trigger": "failed_command"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "caseId": "cc_tool_use",
+      "caseLabel": "tool_use",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 25,
+      "naturalTokens": 25,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 1,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "cc_tool_use",
+      "caseLabel": "tool_use",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 25,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 0.32,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "cc_tool_use",
+      "caseLabel": "tool_use",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 8,
+      "naturalTokens": 25,
+      "lunumTokens": 8,
+      "mixedTokens": 8,
+      "selectedRatio": 0.32,
+      "eligible": true,
+      "error": null
+    },
+    {
+      "caseId": "cc_permission_model",
+      "caseLabel": "permission_model",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 31,
+      "naturalTokens": 31,
+      "lunumTokens": 11,
+      "mixedTokens": 31,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_permission_model",
+      "caseLabel": "permission_model",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 31,
+      "naturalTokens": 31,
+      "lunumTokens": 11,
+      "mixedTokens": 31,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_permission_model",
+      "caseLabel": "permission_model",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Thinking Process:\n\n1.  **Identify the core question:** Does Claude Code ask for permission before modifying files outside the project directory?\n2.  **Recall/Search for Claude Code's behavior regarding file modifications:**\n    *   Claude Code operates within a project directory by default.\n    *   When it needs to modify a file *outside* the current project directory, it typically prompts the user for confirmation/permission to ensure it doesn't accidentally change system files or files in other projects.\n    *   Let's verify this specific behavior. \"Must Claude Code ask before modifying files outside the project?\"\n    *   According to Anthropic's documentation on Claude Code: \"When Claude Code wants to modify a file outside the project directory, it will ask for your permission first.\" (Or similar wording).\n    *   Let's double-check. Yes, safety prompts are a key feature. Modifying outside the project scope usually triggers a confirmation prompt.\n3.  **Formulate the answer:** The question asks for a strict \"YES\" or \"NO\".\n    *   Answer: YES.\n4.  **Final verification:** Does it *always* ask? Generally, yes, for safety. The prompt says \"Must Claude Code",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 11,
+      "naturalTokens": 31,
+      "lunumTokens": 11,
+      "mixedTokens": 31,
+      "selectedRatio": 0.3548387096774194,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_terminal_capability",
+      "caseLabel": "terminal_capability",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 22,
+      "naturalTokens": 22,
+      "lunumTokens": 7,
+      "mixedTokens": 22,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_terminal_capability",
+      "caseLabel": "terminal_capability",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 22,
+      "naturalTokens": 22,
+      "lunumTokens": 7,
+      "mixedTokens": 22,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_terminal_capability",
+      "caseLabel": "terminal_capability",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User asks: \"Does Claude Code have terminal access? Reply only YES or NO.\"\n   - Constraint: \"Answer only with YES or NO. Do not explain.\"\n\n2.  **Identify Key Entity & Question:**\n   - Entity: Claude Code (Anthropic's AI-powered CLI tool)\n   - Question: Does it have terminal access?\n\n3.  **Verify Facts:**\n   - Claude Code is specifically designed as a terminal-based AI agent. It runs in the terminal and has full access to the terminal environment, allowing it to run commands, read/write files, and interact with the shell.\n   - Therefore, the answer is definitively YES.\n\n4.  **Format Output:**\n   - Constraint: \"Reply only YES or NO.\"\n   - Output: YES\n\n5.  **Final Check:**\n   - Does it match the constraint? Yes.\n   - Is it factually correct? Yes.\n   - Proceed. \n   - Output: YES\n   - Note: The first line \"R have claude_code terminal\" seems like a typo or fragmented prompt, but the second line clarifies the exact",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 7,
+      "naturalTokens": 22,
+      "lunumTokens": 7,
+      "mixedTokens": 22,
+      "selectedRatio": 0.3181818181818182,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_context_window",
+      "caseLabel": "context_window",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 24,
+      "naturalTokens": 24,
+      "lunumTokens": 9,
+      "mixedTokens": 24,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_context_window",
+      "caseLabel": "context_window",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 24,
+      "naturalTokens": 24,
+      "lunumTokens": 9,
+      "mixedTokens": 24,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_context_window",
+      "caseLabel": "context_window",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 24,
+      "lunumTokens": 9,
+      "mixedTokens": 24,
+      "selectedRatio": 0.375,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_self_heal",
+      "caseLabel": "self_heal",
+      "mode": "natural",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 30,
+      "naturalTokens": 30,
+      "lunumTokens": 9,
+      "mixedTokens": 30,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_self_heal",
+      "caseLabel": "self_heal",
+      "mode": "mixed",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "YES",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 30,
+      "naturalTokens": 30,
+      "lunumTokens": 9,
+      "mixedTokens": 30,
+      "selectedRatio": 1,
+      "eligible": false,
+      "error": null
+    },
+    {
+      "caseId": "cc_self_heal",
+      "caseLabel": "self_heal",
+      "mode": "lunum",
+      "expected": "YES",
+      "actual": "YES",
+      "pass": true,
+      "rawResponse": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User says: \"R execute claude_code fix_command\"\n   - Then asks: \"Did Claude Code self-heal by running a fix command? Reply only YES or NO.\"\n   - The prompt implies a scenario where Claude Code executed a \"fix_command\" to self-heal.\n   - I need to answer based on the provided context/input. The input is just \"R execute claude_code fix_command\" followed by the question.\n   - \"R execute\" likely means \"Run execute\" or is a command prefix. The key is \"claude_code fix_command\".\n   - The question is a direct yes/no question about whether Claude Code self-healed by running a fix command.\n   - Given the input explicitly mentions \"execute claude_code fix_command\", it strongly implies that yes, it did.\n   - I must reply ONLY with YES or NO.\n\n2.  **Determine Answer:**\n   - The input indicates the action was executed.\n   - Therefore, the answer is YES.\n\n3.  **Format Output:**\n   - Only \"YES\" or \"NO\".\n   - I will output \"",
+      "promptEvalCount": null,
+      "evalCount": null,
+      "selectedTokens": 9,
+      "naturalTokens": 30,
+      "lunumTokens": 9,
+      "mixedTokens": 30,
+      "selectedRatio": 0.3,
+      "eligible": false,
+      "error": null
+    }
+  ]
+}
