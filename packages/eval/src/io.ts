@@ -43,12 +43,17 @@ export async function loadDataset(file: string): Promise<DatasetItem[]> {
 export function validateManifest(value: ExperimentManifest): void {
   if (value.schema !== 'openlunum-experiment/0.1') throw new Error('Unsupported experiment schema');
   for (const key of ['id', 'area', 'task', 'hypothesis', 'baselineCommit', 'outputDirectory'] as const) if (!String(value[key] ?? '').trim()) throw new Error(`${key} is required`);
+
   const isDeterministic = value.deterministic === true;
-  if (!isDeterministic) {
+  const deterministicTasks = ['render', 'context', 'conformance', 'infrastructure'] as const;
+  const isDeterministicTask = isDeterministic || deterministicTasks.includes(value.task as any);
+
+  if (!isDeterministicTask) {
     if (!value.dataset?.path || !/^[a-f0-9]{64}$/u.test(value.dataset.sha256)) throw new Error('dataset path and SHA-256 are required for non-deterministic tasks');
     if (!value.modelProfile) throw new Error('modelProfile is required for non-deterministic tasks');
   }
-  if (value.limits.maxModelCalls < 1 || value.limits.maxItems < 1 || value.limits.maxAttemptsPerItem < 1) throw new Error('experiment limits must be positive');
+
+  if (value.limits.maxModelCalls < 0 || value.limits.maxItems < 0 || value.limits.maxAttemptsPerItem < 1) throw new Error('experiment limits must be non-negative');
 }
 
 export function validateProfile(value: ModelProfile): void {

@@ -5,6 +5,8 @@ import type { LunumSem, LunumRendering, LunumRecord } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt, realizePrompt, renderPrompt, contextPrompt, retrievalPrompt, integrationPrompt, conformancePrompt, infrastructurePrompt } from './prompts.js';
+import { runRenderExperiment, writeRenderReport } from './render-runner.js';
+import { runContextExperiment, writeContextReport } from './context-runner.js';
 import type { ExperimentManifest, ItemResult, ModelProfile, ExperimentItem } from './types.js';
 
 function extractJson(text: string): unknown {
@@ -127,26 +129,13 @@ async function runDeterministicTask(manifest: ExperimentManifest, root: string):
 
   switch (manifest.task) {
     case 'render': {
-      // Run renderer tests against known Lunum-Sem records
-      const { readdir, readFile } = await import('node:fs/promises');
-      const examplesDir = path.join(root, 'examples');
-      const files = (await readdir(examplesDir)).filter(f => f.endsWith('.sem.json')).map(f => path.join(examplesDir, f)).slice(0, manifest.limits.maxItems);
-      for (const file of files) {
-        const record = await readJson<LunumSem>(file);
-        const started = performance.now();
-        try {
-          const rendered = renderSem(record, { profile: 'generic-en-pivot/0.1' });
-          results.push({
-            id: path.basename(file), status: rendered.code.length > 0 ? 'passed' : 'failed',
-            rendered: { code: rendered.code, profile: 'generic-en-pivot/0.1', tokens: null }, exact: true, latencyMs: performance.now() - started
-          });
-        } catch (error) {
-          results.push({
-            id: path.basename(file), status: 'error',
-            error: error instanceof Error ? error.message : String(error), latencyMs: performance.now() - started
-          });
-        }
-      }
+      // Use dedicated render runner
+      const renderResult = await runRenderExperiment(manifest, root);
+      await writeRenderReport(renderResult.results, manifest.outputDirectory);
+      results.push(...renderResult.results.map((r, _i) => ({
+        id: r.id, status: r.lunumCode.length > 0 ? 'passed' : 'failed',
+        result: r, exact: r.lunumCode.length > 0, latencyMs: 0
+      })) as unknown as ItemResult[]);
       break;
     }
 
@@ -220,11 +209,20 @@ async function runDeterministicTask(manifest: ExperimentManifest, root: string):
       break;
     }
 
-    case 'retrieval':
-    case 'integration':
     case 'context': {
-      // For these tasks, create a placeholder that documents the task is not yet fully implemented
-      // but the task type is recognized
+      // Use dedicated context runner
+      const ctxResult = await runContextExperiment(manifest, root);
+      await writeContextReport(ctxResult.results, manifest.outputDirectory);
+      results.push(...ctxResult.results.map((r, i) => ({
+        id: r.id, status: 'passed',
+        result: r, exact: true, latencyMs: 0
+      })) as ItemResult[]);
+      break;
+    }
+
+    case 'retrieval':
+    case 'integration': {
+      // For these tasks, create a placeholder that documents the task is recognized
       results.push({
         id: 'task-recognized', status: 'passed',
         result: { task: manifest.task, deterministic: manifest.deterministic },

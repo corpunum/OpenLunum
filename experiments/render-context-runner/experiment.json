@@ -1,0 +1,15 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "render-context-runner",
+  "area": "infrastructure",
+  "task": "infrastructure",
+  "deterministic": true,
+  "hypothesis": "Adding executable render and context runners with exact tokenizer counts will enable reproducible measurement of Lunum-Code token savings and context compilation quality.",
+  "baselineCommit": "ca623ec",
+  "dataset": { "id": "examples", "type": "deterministic" },
+  "model-profile": null,
+  "limits": { "maxItems": 10, "maxAttemptsPerItem": 1, "maxModelCalls": 0 },
+  "gates": { "minimumExactRate": 0.9, "minimumFeatureRecall": 0.95, "requireProtectedLiteralCoverage": false },
+  "outputDirectory": "reports/experiments/render-context-runner",
+  "stopping-conditions": ["All hard gates pass", "Budget exhausted"]
+}
