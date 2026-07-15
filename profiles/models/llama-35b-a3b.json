@@ -1,0 +1,18 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "llama-35b-a3b",
+  "provider": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:40259/v1",
+  "model": "openai/qwen3.6-35b-a3b",
+  "temperature": 0,
+  "seed": 42,
+  "timeoutMs": 300000,
+  "metadata": {
+    "purpose": "Primary worker model: Qwen3.6-35B-A3B uncensored MTP Q6_K, 35.5B params, sleeping llama.cpp instance",
+    "model_family": "qwen3.6",
+    "quantization": "Q6_K",
+    "context_size": 262144,
+    "server_build": "llama.cpp MTP draft mode",
+    "hardware": "GPU n-gpu-layers 999"
+  }
+}

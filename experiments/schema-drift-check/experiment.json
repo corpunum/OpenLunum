@@ -1,0 +1,38 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "schema-drift-check",
+  "area": "repository-reliability",
+  "task": "infrastructure",
+  "hypothesis": "Adding a schema-to-TypeScript drift checker will prevent silent type mismatches between JSON Schema definitions and the TypeScript reference implementation, reducing maintenance bugs.",
+  "baseline-commit": "ca623ec",
+  "dataset": {
+    "id": "schemas",
+    "hash": "computed-at-runtime",
+    "type": "deterministic"
+  },
+  "model-profile": null,
+  "target-metrics": {
+    "drift-detection-rate": "1.0",
+    "false-positive-rate": "<0.05",
+    "ci-integration": "passes-on-clean",
+    "fixtures-positive": ">=3",
+    "fixtures-negative": ">=3"
+  },
+  "hard-gates": [
+    "generated-types-must-compile",
+    "positive-fixtures-must-pass",
+    "negative-fixtures-must-fail",
+    "migration-docs-required"
+  ],
+  "budget": {
+    "max-attempts": 10,
+    "timeout-seconds": 600,
+    "wall-clock-limit": 3600
+  },
+  "output-location": "reports/experiments/schema-drift-check",
+  "stopping-conditions": [
+    "All hard gates pass on first attempt",
+    "Budget exhausted with no viable path",
+    "Schema change requires orchestrator approval"
+  ]
+}

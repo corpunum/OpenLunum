@@ -1,0 +1,24 @@
+{
+  "campaign-id": "ts-agent-research-loop",
+  "base-branch": "agent/typescript-agent-research-loop",
+  "base-commit": "ca623ec",
+  "started-at": "2026-07-15T22:35:00Z",
+  "status": "active",
+  "coordinator": "orchestrator",
+  "models": {
+    "worker": "openai/qwen3.6-35b-a3b",
+    "worker-profile": "profiles/models/llama-35b-a3b.json",
+    "evaluator": "qwen2.5-coder:1.5b",
+    "evaluator-profile": "ollama-qwen2.5-coder"
+  },
+  "datasets": {
+    "dev": "datasets/dev/multilingual-core-v1.jsonl",
+    "dev-hash": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "concurrency": {
+    "max-active-impl-prs": 3,
+    "max-per-area": 1
+  },
+  "active-prs": ["1", "2", "3", "4"],
+  "phase": "zero"
+}

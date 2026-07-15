@@ -1,0 +1,4 @@
+{"ts":"2026-07-15T22:35:00Z","decision":"campaign-start","base":"ca623ec","phase":"zero"}
+{"ts":"2026-07-15T22:35:00Z","decision":"model-selected","worker":"qwen3.6-35b-a3b","evaluator":"qwen2.5-coder:1.5b"}
+{"ts":"2026-07-15T22:35:00Z","decision":"baseline-verified","result":"pass","tests":"10/10","smoke":"16 items"}
+{"ts":"2026-07-15T22:35:00Z","decision":"first-task","area":"repository-reliability","item":"schema-to-typescript-drift"}
