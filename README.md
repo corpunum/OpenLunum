@@ -21,6 +21,102 @@ Lunum-Code — model/tokenizer-specific compact rendering
 Natural fallback whenever compact representation is unsafe
 ```
 
+## Agent assignment: start here
+
+A coding or research agent can begin from this README alone. It must then read the linked project instructions before changing code or publishing claims.
+
+### Copy-paste instruction for a worker agent
+
+```text
+Clone https://github.com/corpunum/OpenLunum and read README.md completely.
+
+Follow the “Agent assignment: start here” section exactly. Read every required linked document before selecting work. Bootstrap and verify the repository, choose exactly one unclaimed work area, establish a baseline, create a bounded experiment, use the configured local model, preserve all failures and raw evidence, and propose changes only when the declared metric improves without breaking hard gates.
+
+Do not edit protected evaluation data together with implementation. Do not merge your own proposal. Do not claim language, model, tokenizer, safety, or production support without the required reproducible evidence. Push an agent/... branch and open a draft pull request containing the experiment manifest, dataset hash, model profile, baseline, candidate results, failures, reproduction command, and limitations.
+
+Stop and report instead of guessing when a semantic decision requires human or stronger-model judgment, when the experiment budget is exhausted, or when hard gates repeatedly fail.
+```
+
+### Required reading
+
+Read these files in order:
+
+1. [`START_HERE.md`](START_HERE.md)
+2. [`AGENTS.md`](AGENTS.md)
+3. [`WORK_QUEUE.md`](WORK_QUEUE.md)
+4. [`docs/AGENT_OPERATING_MODEL.md`](docs/AGENT_OPERATING_MODEL.md)
+5. [`docs/EXPERIMENT_PROTOCOL.md`](docs/EXPERIMENT_PROTOCOL.md)
+6. [`docs/EVALUATION_PROTOCOL.md`](docs/EVALUATION_PROTOCOL.md)
+7. [`docs/DATASET_POLICY.md`](docs/DATASET_POLICY.md)
+8. [`docs/LOCAL_MODEL_WORKERS.md`](docs/LOCAL_MODEL_WORKERS.md)
+9. [`docs/MULTILINGUAL_MODEL.md`](docs/MULTILINGUAL_MODEL.md)
+
+### Mandatory bootstrap
+
+```bash
+corepack enable
+pnpm install --frozen-lockfile
+pnpm verify
+pnpm agent:status
+```
+
+Do not begin an experiment while the baseline verification is failing.
+
+### Worker loop
+
+1. Select **one** unclaimed area from `WORK_QUEUE.md`.
+2. State a falsifiable hypothesis and the metric expected to improve.
+3. Create an experiment manifest with the baseline commit, dataset hash, model profile, budgets, hard gates, and reproduction command.
+4. Run the unchanged baseline before modifying code, prompts, schemas, renderers, or policy.
+5. Iterate only within the declared item, retry, model-call, and attempt budgets.
+6. Keep raw outputs, per-item scores, failed examples, exclusions, and environment metadata.
+7. Run the candidate against the same development data and then the permitted evaluation suite.
+8. Run `pnpm verify` before committing.
+9. Push an `agent/<worker>/<area>/<experiment>` branch and open a **draft** pull request.
+10. Do not merge the proposal or promote its claims yourself.
+
+### Hard rules
+
+- Lunum-Sem is language-neutral meaning; the initial English-like code is only the `generic-en-pivot/0.1` renderer.
+- Natural source text, language, provenance, protected literals, exact evidence, and failure cases must be retained.
+- Fewer characters are not accepted as fewer tokens.
+- A worker may not change implementation and protected evaluation data in the same pull request.
+- A surface heuristic may not be labeled canonical semantics or become eligible for compact context.
+- Negation, conditions, entities, quantities, time, modality, provenance, and safety constraints are hard semantic gates.
+- A model cannot be the only judge of its own output.
+- Small local models are experiment workers, not final semantic, safety, release, or merge authorities.
+
+### Minimum acceptable pull request evidence
+
+Every experiment proposal must include:
+
+- experiment ID and selected work area;
+- hypothesis and stopping conditions;
+- baseline commit;
+- dataset ID, version, count, and SHA-256 hash;
+- exact model, tokenizer when applicable, endpoint type, generation settings, and seed when supported;
+- baseline and candidate metrics;
+- raw per-item outputs or reproducible references;
+- all observed failures and limitations;
+- exact reproduction commands;
+- `pnpm verify` result;
+- a clear statement of what the results do **not** prove.
+
+### Stop and escalate when
+
+- the declared budget is exhausted;
+- hard semantic or safety gates repeatedly fail;
+- results oscillate without a clear non-dominated improvement;
+- required data, tokenizer access, or model metadata is missing;
+- a schema, fingerprint migration, protected-dataset, safety-policy, or support-level decision is required;
+- the result depends on subjective meaning judgment that cannot be decided mechanically.
+
+A stronger model or human orchestrator should review the evidence, compare competing proposals, request independent evaluation, and decide whether implementation or merging is justified.
+
+## Agent-driven development
+
+The repository supports bounded local-model experiments through an OpenAI-compatible endpoint, hashes datasets and profiles, generates per-item failure reports, and requires stronger-model or human orchestration before semantic or safety-sensitive changes merge.
+
 ## Why this repository exists
 
 Lunum began as an independent language and memory experiment, then a reduced shadow implementation was embedded in OpenUnum. OpenLunum restores the correct ownership boundary:
@@ -65,10 +161,13 @@ These figures are not presented as universal model results. See [Evidence and ac
 ## Quick start
 
 ```bash
-pnpm install
-pnpm test
-node packages/cli/src/cli.mjs inspect --text "The user prefers concise answers."
-node packages/cli/src/cli.mjs encode --sem examples/preference.sem.json
+corepack enable
+pnpm install --frozen-lockfile
+pnpm verify
+pnpm agent:status
+pnpm --filter @corpunum/lunum-cli build
+node packages/cli/dist/src/cli.js inspect --text "The user prefers concise answers."
+node packages/cli/dist/src/cli.js encode --sem examples/preference.sem.json
 ```
 
 Example semantic record:
@@ -131,15 +230,17 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 ## Repository map
 
 ```text
-packages/core/           reference library and OpenUnum-compatible surface
-packages/cli/            inspect/encode/compile command line
-schemas/                 machine-readable contracts
-registry/                worlds, roles, categories, predicates
-integrations/openunum/   verified-current-state reference and adoption plan
-integrations/*/           design/reference profiles for other products
-eval/                    metrics, fixtures, gates, and historical ledger
-research/archive/        complete initial handover and prior experiments
-docs/                    vision, architecture, language, security, versioning
+packages/core/            strict TypeScript reference library
+packages/cli/             inspect/encode/compile command line
+packages/eval/            local-model experiment runner and reports
+packages/adapter-openunum/ OpenUnum compatibility package
+schemas/                  machine-readable contracts
+registry/                 worlds, roles, categories, predicates
+integrations/openunum/    verified-current-state reference and adoption plan
+integrations/*/            design/reference profiles for other products
+eval/                     metrics, fixtures, gates, and historical ledger
+research/archive/         complete initial handover and prior experiments
+docs/                     vision, architecture, language, security, versioning
 ```
 
 ## Honest status

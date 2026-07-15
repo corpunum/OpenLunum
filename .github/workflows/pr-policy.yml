@@ -1,0 +1,32 @@
+name: pr-policy
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  protected-data-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Prevent implementation and protected-data co-editing
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          files="$(git diff --name-only "$base" "$head")"
+          code_changed=false
+          protected_changed=false
+          if grep -Eq '^(packages|schemas|registry)/' <<<"$files"; then code_changed=true; fi
+          protected_files="$(grep -E '^datasets/protected/' <<<"$files" | grep -v '^datasets/protected/README.md$' || true)"
+          if [[ -n "$protected_files" ]]; then protected_changed=true; fi
+          if [[ "$code_changed" == true && "$protected_changed" == true ]]; then
+            echo 'Implementation/schema changes and protected dataset contents must be separate pull requests.' >&2
+            echo "$protected_files" >&2
+            exit 1
+          fi

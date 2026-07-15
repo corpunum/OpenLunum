@@ -1,17 +1,12 @@
 # Evaluation
 
-Lunum evaluation must cover more than compression.
+The active evaluation implementation lives in `packages/eval/`. Historical results remain in `eval/historical-results.json`; they are not treated as reproduced by the current harness.
 
-## Required dimensions
+```bash
+pnpm eval:smoke
+pnpm model:doctor -- --profile profiles/models/my-model.json
+pnpm experiment:create -- --id <id> --area multilingual-parse --task parse
+pnpm experiment:run -- --manifest experiments/<id>/experiment.json
+```
 
-- exact tokenizer counts;
-- context-only and full-prompt ratios;
-- semantic retention, including entities, negation, quantities, modality, time, conditions, and conjunctions;
-- downstream task/QA quality;
-- natural fallback rate;
-- collisions and false equivalence;
-- latency and compute overhead;
-- safety failures;
-- renderer/model/version reproducibility.
-
-`historical-results.json` records prior evidence without upgrading historical claims to freshly reproduced results.
+See `docs/EXPERIMENT_PROTOCOL.md`, `docs/EVALUATION_PROTOCOL.md`, and `docs/LOCAL_MODEL_WORKERS.md`.

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/model-profile/0.1",
+  "title": "OpenLunum model profile 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "provider",
+    "baseUrl",
+    "model",
+    "temperature",
+    "timeoutMs"
+  ],
+  "properties": {
+    "schema": {
+      "const": "openlunum-model-profile/0.1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "const": "openai-compatible"
+    },
+    "baseUrl": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "apiKeyEnv": {
+      "type": "string"
+    },
+    "temperature": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 2
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "timeoutMs": {
+      "type": "integer",
+      "minimum": 1000
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

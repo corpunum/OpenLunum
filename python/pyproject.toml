@@ -1,0 +1,9 @@
+[project]
+name = "openlunum-research"
+version = "0.1.0"
+description = "Optional corpus, tokenizer, statistics, and model research utilities for OpenLunum"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

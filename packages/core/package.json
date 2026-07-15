@@ -1,13 +1,27 @@
 {
   "name": "@corpunum/lunum",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Lunum-I semantic canonicalization, fingerprints, rendering, policies, and context compilation.",
+  "description": "Lunum-I typed semantic contracts, canonicalization, fingerprints, rendering, policy, and context compilation.",
   "exports": {
-    ".": "./src/index.mjs"
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "engines": {
     "node": ">=22"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm build && node --test dist/test/*.test.js",
+    "test:unit": "node --test dist/test/*.test.js"
   }
 }

@@ -3,7 +3,7 @@
 **Repository:** OpenLunum  
 **Technology:** Lunum  
 **Specification line:** Lunum-I (Lunum Interlingua)  
-**Workspace version:** 0.1.0  
+**Workspace version:** 0.2.0  
 **Maturity:** pre-1.0 research-to-reference implementation
 
 ## Current capabilities
@@ -14,9 +14,11 @@
 - Preserves Unicode in raw-text inspection and uses a separate non-semantic surface fingerprint (`lsf:`).
 - Compiles natural, full-Lunum, mixed, and shadow-mixed context from annotated records.
 - Falls back to natural text for unvalidated, ambiguous, or elevated-risk content.
-- Exposes an OpenUnum-compatible sidecar shape and contract tests.
+- Exposes a typed OpenUnum-compatible package and contract tests.
 - Preserves the complete initial research handover and machine-readable metric history.
 - Documents multiple product-adoption modes without claiming unverified support.
+- Provides bounded local OpenAI-compatible parse/realization experiments with dataset hashes, raw failures, and generated reports.
+- Provides a worker/evaluator/orchestrator operating model for autonomous local agents.
 
 ## Current maturity by component
 
@@ -27,9 +29,9 @@
 | Exact semantic fingerprint | Reference implementation | Versioned exact identity, not fuzzy equivalence |
 | Reference renderer | Prototype | Conservative and testable; not tokenizer-optimized |
 | Mixed-context compiler | Prototype | Policy skeleton with natural fallback |
-| Raw multilingual parser | Not implemented | Raw text is not promoted to canonical semantics |
-| Tokenizer profile selection | Planned | Historical evidence exists; current automation does not |
-| OpenUnum adapter | Reference contract | Matches present sidecar shape; live adoption still requires product work |
+| Raw multilingual parser | Experiment harness | Local models can be evaluated; no production parser is approved |
+| Tokenizer profile selection | Planned | Historical evidence exists; exact tokenizer adapters remain work |
+| OpenUnum adapter | Typed reference contract | Matches present sidecar shape; live adoption still requires product work |
 | Other product profiles | Design | Based on documented extension surfaces, not verified runtime support |
 | Public package stability | Not stable | APIs may change before 1.0 |
 

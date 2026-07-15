@@ -1,0 +1,87 @@
+export type Risk = 'low' | 'medium' | 'high' | 'unknown';
+export type Primitive = string | number | boolean | null;
+
+export interface LunumTermObject {
+  type: string;
+  id?: string;
+  value?: unknown;
+  language?: string;
+  ref?: string;
+  [key: string]: unknown;
+}
+
+export type LunumTerm = Primitive | LunumTermObject | LunumTerm[];
+
+export interface LunumClause {
+  predicate: string;
+  roles: Record<string, LunumTerm>;
+  negated?: boolean;
+  modality?: string | null;
+  time?: LunumTerm;
+  conditions?: LunumClause[];
+  consequences?: LunumClause[];
+  annotations?: Record<string, unknown>;
+}
+
+export interface LunumSem {
+  schema: string;
+  world: string;
+  kind: string;
+  clauses: LunumClause[];
+  references?: LunumTermObject[];
+  provenance?: Record<string, unknown>;
+  annotations?: Record<string, unknown>;
+}
+
+export interface ValidationResult {
+  ok: boolean;
+  errors: string[];
+}
+
+export interface EligibilityDecision {
+  eligible: boolean;
+  category: string;
+  risk: Risk;
+  confidence: number;
+  reasons: string[];
+}
+
+export interface LunumRendering {
+  code: string;
+  profile: string;
+  tokens: number | null;
+  tokenCounter?: string;
+}
+
+export interface LunumRecord {
+  recordVersion: string;
+  source: {
+    text: string;
+    language: string | null;
+    role: string | null;
+    ref: string | null;
+  };
+  sem: LunumSem;
+  fingerprint: string;
+  renderings: Record<string, LunumRendering>;
+  policy: EligibilityDecision;
+  meta: Record<string, unknown>;
+}
+
+export interface LunumSidecar {
+  lunumCode: string | null;
+  lunumSem: LunumSem | null;
+  lunumFp: string | null;
+  lunumMeta: Record<string, unknown> & { eligible: boolean };
+}
+
+export interface ContextMessage {
+  role?: string;
+  content?: string;
+  source?: { text?: string };
+  record?: Partial<LunumRecord>;
+  lunumCode?: string | null;
+  lunum_code?: string | null;
+  lunumMeta?: Partial<EligibilityDecision>;
+  lunum_meta?: Partial<EligibilityDecision>;
+}
