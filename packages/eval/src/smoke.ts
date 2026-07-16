@@ -27,7 +27,7 @@ export async function runSmoke(root?: string): Promise<{ items: number; groups: 
   await writeJson(path.join(outputDir, 'manifest.snapshot.json'), {
     schema: 'openlunum-experiment/0.1', id: 'smoke-test', area: 'infrastructure', task: 'infrastructure',
     deterministic: true, hypothesis: 'Smoke test validates dataset integrity',
-    baselineCommit: 'c826e67f80b28d6e761cd33adf4f6708c563009c', outputDirectory: 'reports/experiments/smoke-test',
+    baselineCommit: '23259dbcb73af1d8c43885e95678ecfb68b08736', outputDirectory: 'reports/experiments/smoke-test',
     limits: { maxItems: 100, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumExactRate: 1, minimumFeatureRecall: 1, requireProtectedLiteralCoverage: false }
   });
