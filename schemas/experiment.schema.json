@@ -11,8 +11,6 @@
     "task",
     "hypothesis",
     "baselineCommit",
-    "dataset",
-    "modelProfile",
     "limits",
     "gates",
     "outputDirectory"
@@ -55,22 +53,23 @@
     },
     "dataset": {
       "type": "object",
-      "required": [
-        "path",
-        "sha256"
-      ],
+      "description": "Dataset path and hash for model-based tasks",
       "properties": {
         "path": {
           "type": "string"
         },
         "sha256": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{64}$"
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
     },
     "modelProfile": {
-      "type": "string"
+      "type": "string",
+      "description": "Path to model profile JSON for model-based tasks"
     },
     "targetLanguage": {
       "type": "string"
@@ -122,6 +121,10 @@
     },
     "outputDirectory": {
       "type": "string"
+    },
+    "deterministic": {
+      "type": "boolean",
+      "description": "If true, skip model/dataset requirements and run deterministic task"
     }
   }
 }

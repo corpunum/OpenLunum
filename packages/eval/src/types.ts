@@ -23,8 +23,8 @@ export interface ExperimentManifest {
   task: ExperimentTask;
   hypothesis: string;
   baselineCommit: string;
-  dataset: { path: string; sha256: string };
-  modelProfile: string;
+  dataset?: { path: string; sha256: string };
+  modelProfile?: string;
   targetLanguage?: string;
   limits: { maxItems: number; maxAttemptsPerItem: number; maxModelCalls: number };
   gates: { minimumFeatureRecall: number; minimumExactRate: number; requireProtectedLiteralCoverage: boolean };
