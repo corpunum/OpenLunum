@@ -225,6 +225,8 @@ function main() {
       model: environment?.modelProfile?.model
     });
     const hash = crypto.createHash('sha256').update(integrityData).digest('hex');
+    overallPass = false;
+    overallPass = false;
     results.push({ pass: false, name: 'Report integrity (logged) - no expected hash (fail-closed)', detail: `hash: ${hash.substring(0,16)}... (no expected hash provided)` });
   }
 

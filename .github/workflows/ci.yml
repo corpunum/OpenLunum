@@ -65,6 +65,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Run report validation on smoke test output
-        run: node scripts/validate-report.cjs reports/experiments/smoke-test --repo-root .
+        run: |
+          node scripts/validate-report.cjs reports/experiments/smoke-test --repo-root . --expected-integrity $(node -e "const fs=require('fs'),crypto=require('crypto');const s=JSON.parse(fs.readFileSync('reports/experiments/smoke-test/summary.json'));const l=fs.readFileSync('reports/experiments/smoke-test/item-results.jsonl','utf8').trim().split('\n').filter(x=>x.trim());console.log(crypto.createHash('sha256').update(JSON.stringify({summary:s,itemCount:l.length})).digest('hex'))")
       - name: Run report validation tests
         run: node --test packages/eval/dist/test/report-validation.test.js
