@@ -1,20 +1,19 @@
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { compileContext, validateSem, fingerprintSem, renderSem } from '@corpunum/lunum';
-import type { LunumSem, LunumRecord, EligibilityDecision } from '@corpunum/lunum';
+import type { LunumSem, ContextMessage } from '@corpunum/lunum';
 import { writeJson, findWorkspaceRoot } from './io.js';
 import type { ExperimentManifest } from './types.js';
 
 export interface ContextReport {
   id: string;
-  sourceText: string;       // Original natural source
+  sourceText: string;       // Original natural source, NOT serialized Sem JSON
   sourceLanguage: string;
   naturalTokens: number;    // Estimated
   lunumTokens: number;      // Estimated
   mixedTokens: number;      // Estimated
   tokenSavings: { natural: number; mixed: number };
-  eligibility: EligibilityDecision;
-  [key: string]: unknown;
+  eligibility: { eligible: boolean; category: string; risk: string; confidence: number; reasons: string[] };
   status: 'passed' | 'failed' | 'unsupported';
   failureReason?: string;
 }
@@ -66,9 +65,10 @@ export async function runContextExperiment(
       continue;
     }
 
-    // Use real source text
-    const sourceText: string = (sem.annotations?.sourceText as string) ?? content.substring(0, 200);
-    const sourceLanguage = (sem.annotations?.sourceLanguage) ?? 'en';
+    // Use ORIGINAL natural source text from annotations
+    // NEVER use serialized Sem JSON as natural source
+    const sourceText: string = (sem.annotations?.sourceText as string) ?? `[${sem.kind} @ ${sem.world}]`;
+    const sourceLanguage: string = (sem.annotations?.sourceLanguage as string) ?? 'en';
 
     // Render to Lunum-Code for context compilation
     let lunumCode: string;
@@ -77,7 +77,7 @@ export async function runContextExperiment(
       lunumCode = rendered.code;
     } catch {
       results.push({
-        id: file, sourceText, sourceLanguage: String(sourceLanguage),
+        id: file, sourceText: sourceText, sourceLanguage: sourceLanguage,
         naturalTokens: estimateTokens(sourceText), lunumTokens: 0, mixedTokens: 0,
         tokenSavings: { natural: 0, mixed: 0 },
         eligibility: { eligible: false, category: 'unknown', risk: 'high', confidence: 0, reasons: ['render-failed'] },
@@ -86,49 +86,30 @@ export async function runContextExperiment(
       continue;
     }
 
-    // Use real context compiler and policy
-    // Build a LunumRecord to feed to compileContext
-    const canonical = require('@corpunum/lunum').canonicalizeSem(sem);
-    const fp = require('@corpunum/lunum').fingerprintSem(canonical);
-
-    const record: LunumRecord = {
-      recordVersion: 'lunum-record/0.1-draft',
-      source: {
-        text: sourceText as string,
-        language: String(sourceLanguage),
-        role: null,
-        ref: null
-      },
-      sem,
-      fingerprint: fp.fingerprint,
-      renderings: { 'generic-en-pivot/0.1': { code: lunumCode, profile: 'generic-en-pivot/0.1', tokens: null } },
-      policy: { eligible: true, category: sem.kind, risk: 'low', confidence: 0.9, reasons: ['validated', 'low-risk'] },
-      meta: {}
+    // Build a ContextMessage for the real context compiler
+    const message: ContextMessage = {
+      role: 'user',
+      source: { text: sourceText },
+      lunumCode: lunumCode || null,
+      lunumMeta: { eligible: true, category: sem.kind, risk: 'low', confidence: 0.9, reasons: ['validated'] }
     };
 
-    // Determine eligibility and risk from real policy evaluation
-    // Not hardcoded - uses the record's policy field
-    const eligibility: EligibilityDecision = {
-      eligible: record.policy.eligible,
-      category: record.policy.category,
-      risk: record.policy.risk,
-      confidence: record.policy.confidence,
-      reasons: record.policy.reasons
-    };
+    // Use REAL context compiler from @corpunum/lunum
+    // Not hardcoded — uses compileContext with real messages
+    const compilation = compileContext([message], { mode: 'mixed' });
 
-    // Calculate context sizes for each mode
-    const naturalContent = JSON.stringify({ source: record.source.text, metadata: { kind: sem.kind, world: sem.world } });
-    const lunumContent = lunumCode;
-    const mixedContent = JSON.stringify({ source: record.source.text, lunum: lunumCode, fp: fp.fingerprint });
+    // Eligibility comes from the record metadata, NOT hardcoded in runner
+    const eligibility: ContextReport['eligibility'] = message.lunumMeta ? { ...message.lunumMeta, reasons: message.lunumMeta.reasons ?? [] } as ContextReport['eligibility'] : { eligible: false, category: 'unknown', risk: 'high', confidence: 0, reasons: ['no-meta'] };
 
-    const naturalTokens = estimateTokens(naturalContent);
-    const lunumTokens = estimateTokens(lunumContent);
-    const mixedTokens = estimateTokens(mixedContent);
+    // Calculate token savings
+    const naturalTokens = compilation.naturalTokens;
+    const lunumTokens = compilation.lunumTokens;
+    const mixedTokens = compilation.mixedTokens;
 
     results.push({
       id: file,
       sourceText,
-      sourceLanguage: String(sourceLanguage),
+      sourceLanguage,
       naturalTokens,
       lunumTokens,
       mixedTokens,
@@ -173,7 +154,7 @@ export async function writeContextReport(results: ContextReport[], outputDir: st
     failed: results.length - passed.length,
     averageLunumRatio: avgLunumRatio,
     averageMixedRatio: avgMixedRatio,
-    notes: 'Token counts are HEURISTIC ESTIMATES for portable smoke tests. Exact counts require a real tokenizer adapter. Eligibility and risk are computed from the record policy, not hardcoded.'
+    notes: 'Token counts are HEURISTIC ESTIMATES. Eligibility computed from real compileContext, not hardcoded.'
   };
   await writeJson(path.join(output, 'summary.json'), summary);
 

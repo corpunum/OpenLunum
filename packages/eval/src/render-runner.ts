@@ -1,13 +1,13 @@
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { renderSem, canonicalizeSem, fingerprintSem, validateSem, compileContext } from '@corpunum/lunum';
-import type { LunumSem, RenderResult, LunumRecord } from '@corpunum/lunum';
+import { renderSem, canonicalizeSem, fingerprintSem, validateSem } from '@corpunum/lunum';
+import type { LunumSem, RenderResult } from '@corpunum/lunum';
 import { writeJson, findWorkspaceRoot } from './io.js';
 import type { ExperimentManifest } from './types.js';
 
 export interface RenderReport {
   id: string;
-  sourceText: string;       // Original natural source text
+  sourceText: string;       // Original natural source text (NOT serialized Sem JSON)
   sourceLanguage: string;
   lunumSem: string;
   lunumCode: string;
@@ -27,8 +27,6 @@ export interface RenderReport {
  * Exact counts require a real tokenizer adapter.
  */
 function estimateTokens(text: string, tokenizer: string = 'generic'): number {
-  // Rough heuristic: ~4 characters per token for English text
-  // This is labeled as estimate, not exact count
   return Math.max(1, Math.ceil(text.length / 4));
 }
 
@@ -72,10 +70,10 @@ export async function runRenderExperiment(
       continue;
     }
 
-    // Use original source text if available (from goldSem annotations or metadata)
-    // Otherwise use the file content as the source
-    const sourceText = sem.annotations?.sourceText ?? content.substring(0, 200);
-    const sourceLanguage = (sem.annotations?.sourceLanguage) ?? 'en';
+    // Use ORIGINAL natural source text from annotations
+    // NEVER use serialized Sem JSON as natural source
+    const sourceText: string = (sem.annotations?.sourceText as string) ?? `[${sem.kind} @ ${sem.world}]`;
+    const sourceLanguage: string = (sem.annotations?.sourceLanguage as string) ?? 'en';
 
     // Render to Lunum-Code
     let rendered: RenderResult;
@@ -83,9 +81,9 @@ export async function runRenderExperiment(
       rendered = renderSem(sem, { profile: 'generic-en-pivot/0.1' });
     } catch (error) {
       results.push({
-        id: file, sourceText: String(sourceText), sourceLanguage: String(sourceLanguage),
+        id: file, sourceText: sourceText, sourceLanguage: sourceLanguage,
         lunumSem: JSON.stringify(sem), lunumCode: '', profile: 'generic-en-pivot/0.1',
-        naturalTokens: estimateTokens(sourceText as string), lunumTokens: 0, ratio: 0,
+        naturalTokens: estimateTokens(sourceText), lunumTokens: 0, ratio: 0,
         fingerprint: '', canonical: '', status: 'failed',
         failureReason: `Render failed: ${error instanceof Error ? error.message : String(error)}`
       });
@@ -93,7 +91,7 @@ export async function runRenderExperiment(
     }
 
     // Calculate token estimates (HEURISTIC, not exact)
-    const naturalTokens = estimateTokens(String(sourceText), 'generic');
+    const naturalTokens = estimateTokens(sourceText, 'generic');
     const lunumTokens = estimateTokens(rendered.code, 'generic');
     const ratio = naturalTokens > 0 ? lunumTokens / naturalTokens : 0;
 
@@ -103,15 +101,15 @@ export async function runRenderExperiment(
 
     results.push({
       id: file,
-      sourceText: String(sourceText),
-      sourceLanguage: String(sourceLanguage),
+      sourceText: sourceText,
+      sourceLanguage: sourceLanguage,
       lunumSem: JSON.stringify(sem).substring(0, 200),
       lunumCode: rendered.code,
       profile: rendered.profile,
       naturalTokens,
       lunumTokens,
       ratio,
-      fingerprint: String(fp),
+      fingerprint: typeof fp === 'string' ? fp : String(fp),
       canonical: JSON.stringify(canonical),
       status: rendered.code.length > 0 ? 'passed' : 'failed'
     });
