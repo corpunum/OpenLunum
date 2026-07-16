@@ -25,6 +25,8 @@ import type {
 // ── Helper: two-way structural assignability ──────────────────────
 // T two-way assignable to U iff T extends U AND U extends T.
 // If either direction fails, result is never (which errors on const assignment).
+// TwoWay checks verify that public SDK types and generated schema types
+// (or expected schema-derived shapes) are structurally compatible.
 type TwoWay<T, U> = T extends U ? (U extends T ? true : false) : false;
 
 // ══════════════════════════════════════════════════════════════════
@@ -50,9 +52,10 @@ const _assertSemSchemaConst: _SemSchemaConst = true;
 // LunumRecord ↔ LunumRecordSchema: real TwoWay check
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: fingerprint must be string on both sides
+// Two-way: public LunumRecord.fingerprint and generated LunumRecordSchema.fingerprint
+// must both be string — structural compatibility on the shared field.
 type _TwoWayRecordFingerprint = TwoWay<
-  { fingerprint: string },
+  Pick<LunumRecord, 'fingerprint'>,
   Pick<LunumRecordSchema, 'fingerprint'>
 >;
 const _assertRecordFingerprintTwoWay: _TwoWayRecordFingerprint = true;
@@ -72,10 +75,12 @@ type _TwoWayRecordSource = TwoWay<
 const _assertRecordSourceTwoWay: _TwoWayRecordSource = true;
 
 // ══════════════════════════════════════════════════════════════════
-// LunumRendering: real TwoWay check
+// LunumRendering: TwoWay against expected schema-derived shape
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: code, profile, tokens must match (use Pick to exclude tokenCounter)
+// Two-way: public LunumRendering.code/profile/tokens must match the
+// expected shape derived from the rendering schema. This ensures the
+// public API contract matches what the schema expects.
 type _TwoWayRendering = TwoWay<
   Pick<LunumRendering, 'code' | 'profile' | 'tokens'>,
   { code: string; profile: string; tokens: number | null }
@@ -83,10 +88,12 @@ type _TwoWayRendering = TwoWay<
 const _assertRenderingTwoWay: _TwoWayRendering = true;
 
 // ══════════════════════════════════════════════════════════════════
-// EligibilityDecision: real TwoWay check (public vs generated)
+// EligibilityDecision: TwoWay against expected schema-derived shape
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: public EligibilityDecision and generated schema must agree on required fields
+// Two-way: public EligibilityDecision must match the expected shape
+// derived from the protected-dataset schema. This ensures the public
+// API contract matches what the schema expects for eligibility.
 type _TwoWayEligibility = TwoWay<
   Pick<EligibilityDecision, 'eligible' | 'category' | 'risk' | 'confidence' | 'reasons'>,
   { eligible: boolean; category: string; risk: Risk; confidence: number; reasons: string[] }
@@ -94,10 +101,12 @@ type _TwoWayEligibility = TwoWay<
 const _assertEligibilityTwoWay: _TwoWayEligibility = true;
 
 // ══════════════════════════════════════════════════════════════════
-// Clause: generated type must be structurally compatible
+// Clause: generated type TwoWay against expected schema shape
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: predicate (string) and roles (Record) must be compatible
+// Two-way: generated Clause type must match the expected shape derived
+// from the lunum-sem schema. Clause is generated, so this check ensures
+// the generated contract matches what the schema specifies.
 type _TwoWayClause = TwoWay<
   Pick<Clause, 'predicate' | 'roles'>,
   { predicate: string; roles: Record<string, unknown> }
