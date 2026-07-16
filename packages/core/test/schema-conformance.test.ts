@@ -339,12 +339,12 @@ test('negative compile fixture: tsc produces exactly one TS2322', async () => {
   // TypeScript exits with 1 on diagnostics
   assert.strictEqual(result.status, 1, `tsc exit code must be 1, got ${result.status}`);
 
-  // Collect every diagnostic line
+  // Collect every diagnostic line across all files
   const output = String(result.stdout || '') + String(result.stderr || '');
   const diagnosticLines = output
     .split('\n')
     .map(l => l.trim())
-    .filter(l => /^.*negative-compile-fixture\.ts\(\d+,\d+\): error TS\d+:/.test(l));
+    .filter(l => /error TS[0-9]+:/.test(l));
 
   // Must have exactly one diagnostic
   assert.strictEqual(diagnosticLines.length, 1, `Expected exactly 1 diagnostic, got ${diagnosticLines.length}: ${diagnosticLines.join(' | ')}`);
