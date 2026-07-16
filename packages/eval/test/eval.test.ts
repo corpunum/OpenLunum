@@ -289,11 +289,16 @@ test('behavioral: full pipeline passes eligible and ineligible reports', async (
     const { results } = await runContextExperiment(manifest, temp);
     assert.equal(results.length, 2);
 
-    const sorted = results.sort((a, b) => a.id.localeCompare(b.id));
-    const first = sorted[0]!;
-    const second = sorted[1]!;
-    assert.deepStrictEqual(first.status, 'passed');
-    assert.deepStrictEqual(second.status, 'passed');
+    const eligibleReport = results.find(r => r.id === 'eligible-preference.sem.json');
+    const ineligibleReport = results.find(r => r.id === 'ineligible-conditional.sem.json');
+    assert.ok(eligibleReport, 'eligible-preference.sem.json should exist in results');
+    assert.ok(ineligibleReport, 'ineligible-conditional.sem.json should exist in results');
+    assert.strictEqual(eligibleReport?.eligibility.eligible, true, 'eligible-preference should be eligible');
+    assert.strictEqual(eligibleReport?.status, 'passed', 'eligible-preference status should be passed');
+    assert.strictEqual(eligibleReport?.failureReason, undefined, 'eligible-preference should have no failureReason');
+    assert.strictEqual(ineligibleReport?.eligibility.eligible, false, 'ineligible-conditional should not be eligible');
+    assert.strictEqual(ineligibleReport?.status, 'passed', 'ineligible-conditional status should be passed');
+    assert.strictEqual(ineligibleReport?.failureReason, undefined, 'ineligible-conditional should have no failureReason');
 
     await writeContextReport(results, path.join(temp, 'reports'));
     const summaryRaw = await readFile(path.join(temp, 'reports', 'summary.json'), 'utf8');
