@@ -40,26 +40,47 @@ export function evaluateContextSelection(
   const lunum = compilation.lunumMessages;
 
   if (!mixed || mixed.length === 0) {
-    return { status: 'failed', failureReason: 'Missing mixed output' };
+    return { status: 'failed', failureReason: 'missing-mixed' };
+  }
+
+  const expectedMessages = eligible ? lunum : natural;
+  if (!expectedMessages || expectedMessages.length === 0) {
+    return {
+      status: 'failed',
+      failureReason: eligible ? 'missing-lunum' : 'missing-natural'
+    };
   }
 
   const mixedLen = mixed.length;
-  let i: number;
-  for (i = 0; i < mixedLen; i++) {
-    const entry = mixed[i];
-    if (!entry) {
+  const expectedLen = expectedMessages.length;
+
+  if (mixedLen !== expectedLen) {
+    return {
+      status: 'failed',
+      failureReason: mixedLen < expectedLen ? 'mixed-shorter' : 'mixed-longer'
+    };
+  }
+
+  for (let i = 0; i < expectedLen; i++) {
+    const exp = expectedMessages[i];
+    const act = mixed[i];
+    if (!exp || !act) {
       return {
         status: 'failed',
         failureReason: eligible
-          ? `eligible mixed[${i}] is missing`
-          : `ineligible mixed[${i}] is missing`
+          ? `missing-lunum[${i}]`
+          : `missing-natural[${i}]`
       };
     }
-    const expected = eligible
-      ? lunum![i]?.content
-      : natural![i]?.content;
-    const actual = entry.content;
-    if (expected === undefined || actual !== expected) {
+    if (act.role !== exp.role) {
+      return {
+        status: 'failed',
+        failureReason: eligible
+          ? `eligible mixed[${i}] role mismatch`
+          : `ineligible mixed[${i}] role mismatch`
+      };
+    }
+    if (act.content !== exp.content) {
       return {
         status: 'failed',
         failureReason: eligible
@@ -84,7 +105,9 @@ export async function runContextExperiment(
   root: string
 ): Promise<{ results: ContextReport[]; output: string }> {
   const examplesDir = path.join(root, 'examples');
-  const semFiles = (await readdir(examplesDir)).filter(f => f.endsWith('.sem.json'));
+  const semFiles = (await readdir(examplesDir))
+    .filter(f => f.endsWith('.sem.json'))
+    .sort();
 
   const results: ContextReport[] = [];
 

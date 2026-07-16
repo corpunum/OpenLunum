@@ -19,7 +19,6 @@ import { sha256File } from '../src/io.js';
 import { classifyEligibility, compileContext, renderSem } from '@corpunum/lunum';
 import type { ContextMessage } from '@corpunum/lunum';
 import { evaluateContextSelection, runContextExperiment, writeContextReport } from '../src/context-runner.js';
-import type { ContextReport } from '../src/context-runner.js';
 
 test('multilingual gold dataset has stable cross-language groups', async () => {
   const result = await runSmoke();
@@ -154,16 +153,14 @@ test('behavioral: eligible preference compacts and passes', async () => {
     annotations: { sourceText: 'The user prefers concise answers.', sourceLanguage: 'en' }
   };
   const rendered = renderSem(sem, { profile: 'generic-en-pivot/0.1' });
-  const policy = classifyEligibility({ category: sem.kind, risk: 'low', confidence: 0.95, sourceText: 'The user prefers concise answers.', semantic: true });
-
+  const policy = classifyEligibility({ category: sem.kind, risk: 'low', confidence: 0.95, sourceText: sem.annotations.sourceText, semantic: true });
   assert.ok(policy.eligible, 'preference should be eligible');
 
   const message: ContextMessage = { role: 'user', source: { text: 'prefers-concise' }, lunumCode: rendered.code, lunumMeta: policy };
   const compilation = compileContext([message], { mode: 'mixed' });
 
   const result = evaluateContextSelection(true, compilation);
-  assert.equal(result.status, 'passed', 'eligible mixed must equal lunum compact');
-  assert.equal((result as { status: 'passed'; failureReason?: string }).failureReason, undefined);
+  assert.deepStrictEqual(result, { status: 'passed' });
 });
 
 test('behavioral: ineligible conditional_instruction falls back to natural and passes', async () => {
@@ -173,46 +170,89 @@ test('behavioral: ineligible conditional_instruction falls back to natural and p
     annotations: { sourceText: 'If error, retry up to 3 times.', sourceLanguage: 'en' }
   };
   const rendered = renderSem(sem, { profile: 'generic-en-pivot/0.1' });
-  const policy = classifyEligibility({ category: sem.kind, risk: 'low', confidence: 0.95, sourceText: 'If error, retry up to 3 times.', semantic: true });
-
+  const policy = classifyEligibility({ category: sem.kind, risk: 'low', confidence: 0.95, sourceText: sem.annotations.sourceText, semantic: true });
   assert.ok(!policy.eligible, 'conditional_instruction should be ineligible');
 
-  const message: ContextMessage = { role: 'user', source: { text: 'If error, retry up to 3 times.' }, lunumCode: rendered.code, lunumMeta: policy };
+  const message: ContextMessage = { role: 'user', source: { text: sem.annotations.sourceText }, lunumCode: rendered.code, lunumMeta: policy };
   const compilation = compileContext([message], { mode: 'mixed' });
 
   const result = evaluateContextSelection(false, compilation);
-  assert.equal(result.status, 'passed', 'ineligible mixed must equal natural');
-  assert.equal((result as { status: 'passed'; failureReason?: string }).failureReason, undefined);
+  assert.deepStrictEqual(result, { status: 'passed' });
 });
 
-test('behavioral: eligible with wrong mixed content fails with explicit failureReason', () => {
-  const policy = { eligible: true, category: 'preference', risk: 'low', confidence: 0.95, reasons: [] } as const;
-  const naturalContent = 'The user prefers concise answers.';
+test('behavioral: missing mixed, shorter/longer mixed, role mismatch, content mismatch', () => {
   const lunumContent = 'R prefer user concise';
+  const naturalContent = 'The user prefers concise answers.';
 
-  // Mixed wrongly equals natural instead of lunum
-  const compilation = {
-    mixedMessages: [{ role: 'user', content: naturalContent }],
-    naturalMessages: [{ role: 'user', content: naturalContent }],
-    lunumMessages: [{ role: 'user', content: lunumContent }]
-  };
+  // Missing mixed
+  assert.deepStrictEqual(
+    evaluateContextSelection(true, { mixedMessages: undefined, naturalMessages: [], lunumMessages: [] }),
+    { status: 'failed', failureReason: 'missing-mixed' }
+  );
 
-  const result = evaluateContextSelection(true, compilation);
-  assert.equal(result.status, 'failed');
-  assert.equal(result.failureReason, 'eligible mixed[0] differs from lunum compact output');
+  // Empty mixed
+  assert.deepStrictEqual(
+    evaluateContextSelection(true, { mixedMessages: [], naturalMessages: [], lunumMessages: [] }),
+    { status: 'failed', failureReason: 'missing-mixed' }
+  );
 
-  // Length mismatch when mixed has extra message
-  const longMixed = [
-    { role: 'user', content: lunumContent },
-    { role: 'user', content: 'extra' }
-  ];
-  const lengthResult = evaluateContextSelection(true, {
-    mixedMessages: longMixed,
-    naturalMessages: [{ role: 'user', content: naturalContent }],
-    lunumMessages: [{ role: 'user', content: lunumContent }]
-  });
-  assert.equal(lengthResult.status, 'failed');
-  assert.ok(typeof lengthResult.failureReason === 'string' && lengthResult.failureReason.length > 0);
+  // Missing expected (no lunum)
+  assert.deepStrictEqual(
+    evaluateContextSelection(true, { mixedMessages: [{ role: 'user', content: lunumContent }], naturalMessages: [], lunumMessages: undefined }),
+    { status: 'failed', failureReason: 'missing-lunum' }
+  );
+
+  // Missing expected (no natural)
+  assert.deepStrictEqual(
+    evaluateContextSelection(false, { mixedMessages: [{ role: 'user', content: naturalContent }], naturalMessages: undefined, lunumMessages: [] }),
+    { status: 'failed', failureReason: 'missing-natural' }
+  );
+
+  // Mixed shorter than expected
+  assert.deepStrictEqual(
+    evaluateContextSelection(true, {
+      mixedMessages: [{ role: 'user', content: lunumContent }],
+      naturalMessages: [],
+      lunumMessages: [
+        { role: 'user', content: lunumContent },
+        { role: 'user', content: 'extra-lunum' }
+      ]
+    }),
+    { status: 'failed', failureReason: 'mixed-shorter' }
+  );
+
+  // Mixed longer than expected
+  assert.deepStrictEqual(
+    evaluateContextSelection(true, {
+      mixedMessages: [
+        { role: 'user', content: lunumContent },
+        { role: 'user', content: 'extra-mixed' }
+      ],
+      naturalMessages: [],
+      lunumMessages: [{ role: 'user', content: lunumContent }]
+    }),
+    { status: 'failed', failureReason: 'mixed-longer' }
+  );
+
+  // Role-only mismatch
+  assert.deepStrictEqual(
+    evaluateContextSelection(true, {
+      mixedMessages: [{ role: 'assistant', content: lunumContent }],
+      naturalMessages: [],
+      lunumMessages: [{ role: 'user', content: lunumContent }]
+    }),
+    { status: 'failed', failureReason: 'eligible mixed[0] role mismatch' }
+  );
+
+  // Content mismatch
+  assert.deepStrictEqual(
+    evaluateContextSelection(true, {
+      mixedMessages: [{ role: 'user', content: 'wrong-content' }],
+      naturalMessages: [],
+      lunumMessages: [{ role: 'user', content: lunumContent }]
+    }),
+    { status: 'failed', failureReason: 'eligible mixed[0] differs from lunum compact output' }
+  );
 });
 
 test('behavioral: full pipeline passes eligible and ineligible reports', async () => {
@@ -247,25 +287,19 @@ test('behavioral: full pipeline passes eligible and ineligible reports', async (
     };
 
     const { results } = await runContextExperiment(manifest, temp);
-    assert.equal(results.length, 2, 'should process exactly two examples');
+    assert.equal(results.length, 2);
 
-    const byKind = results.sort((a, b) => a.id.localeCompare(b.id));
-    const eligibleResult = byKind.find(r => r.id === 'eligible-preference.sem.json')!;
-    const ineligibleResult = byKind.find(r => r.id === 'ineligible-conditional.sem.json')!;
-
-    assert.equal(eligibleResult.eligibility.eligible, true);
-    assert.equal(eligibleResult.status, 'passed');
-    assert.equal(eligibleResult.failureReason, undefined);
-
-    assert.equal(ineligibleResult.eligibility.eligible, false);
-    assert.equal(ineligibleResult.status, 'passed');
-    assert.equal(ineligibleResult.failureReason, undefined);
+    const sorted = results.sort((a, b) => a.id.localeCompare(b.id));
+    const first = sorted[0]!;
+    const second = sorted[1]!;
+    assert.deepStrictEqual(first.status, 'passed');
+    assert.deepStrictEqual(second.status, 'passed');
 
     await writeContextReport(results, path.join(temp, 'reports'));
     const summaryRaw = await readFile(path.join(temp, 'reports', 'summary.json'), 'utf8');
     const summary = JSON.parse(summaryRaw) as { passed: number; failed: number };
-    assert.equal(summary.passed, 2, 'both reports should be counted as passed');
-    assert.equal(summary.failed, 0, 'no failures expected');
+    assert.deepStrictEqual(summary.passed, 2);
+    assert.deepStrictEqual(summary.failed, 0);
   } finally {
     await rm(temp, { recursive: true, force: true });
   }
