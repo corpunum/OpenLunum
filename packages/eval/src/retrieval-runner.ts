@@ -28,7 +28,7 @@ export async function runRetrievalExperiment(manifest: RetrievalManifest, root: 
   }
 
   // Validate k at the manifest level
-  const k = manifest.retrievalConfig.k || 3;
+  const k = manifest.retrievalConfig.k ?? 3;
   if (k <= 0) {
     throw new Error(`Invalid k value: ${k}`);
   }
@@ -80,7 +80,7 @@ export async function runRetrievalExperiment(manifest: RetrievalManifest, root: 
     }
     
     // Validate k
-    const k = manifest.retrievalConfig.k || 3;
+    const k = manifest.retrievalConfig.k ?? 3;
     if (k <= 0) {
       throw new Error(`Invalid k value: ${k}. k must be positive`);
     }
