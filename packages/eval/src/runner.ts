@@ -186,16 +186,44 @@ async function runDeterministicTask(manifest: ExperimentManifest, root: string, 
       break;
     }
 
-    case 'retrieval':
-    case 'integration': {
-      // These tasks are not yet implemented — report unsupported, not passed
-      results.push({
-        id: manifest.task, status: 'error', rawOutput: '',
-        error: `Task ${manifest.task} is not yet implemented (unsupported)`,
-        exact: false, latencyMs: 0
-      });
+    // Commented out for compilation purposes
+    /*
+    case 'retrieval': {
+      // Use dedicated retrieval runner
+      const output = await runRetrievalExperiment(manifestPath);
+      // Read the generated results
+      const resultsFile = path.join(output, 'item-results.jsonl');
+      const resultsContent = await import('node:fs/promises').then(fs => fs.readFile(resultsFile, 'utf-8'));
+      const lines = resultsContent.trim().split('\n');
+      for (const line of lines) {
+        if (line) {
+          try {
+            const result = JSON.parse(line);
+            results.push(result);
+          } catch {}
+        }
+      }
       break;
     }
+
+    case 'integration': {
+      // Use dedicated integration runner
+      const output = await runIntegrationExperiment(manifestPath);
+      // Read the generated results
+      const resultsFile = path.join(output, 'item-results.jsonl');
+      const resultsContent = await import('node:fs/promises').then(fs => fs.readFile(resultsFile, 'utf-8'));
+      const lines = resultsContent.trim().split('\n');
+      for (const line of lines) {
+        if (line) {
+          try {
+            const result = JSON.parse(line);
+            results.push(result);
+          } catch {}
+        }
+      }
+      break;
+    }
+    */
 
     default:
       throw new Error(`Deterministic task not yet implemented: ${manifest.task}`);
