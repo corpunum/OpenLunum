@@ -7,7 +7,7 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 - [x] Strict TypeScript reference implementation.
 - [x] Reproducible pnpm lockfile and CI.
 - [x] Agent onboarding, experiment protocol, and local-model runner.
-- [ ] Add schema-to-TypeScript drift checking.
+- [x] Add schema-to-TypeScript drift checking.
 - [ ] Add release provenance and signed artifacts.
 
 ## P1 — semantic contract
