@@ -21,6 +21,7 @@ export interface ExperimentManifest {
   id: string;
   area: WorkArea;
   task: ExperimentTask;
+  deterministic?: boolean;
   hypothesis: string;
   baselineCommit: string;
   dataset?: { path: string; sha256: string };

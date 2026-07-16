@@ -26,11 +26,11 @@ export async function runExperiment(manifestPath: string): Promise<string> {
   const root = await findWorkspaceRoot();
   const manifest = await readJson<ExperimentManifest>(manifestPath);
   validateManifest(manifest);
-  const datasetPath = path.isAbsolute(manifest.dataset.path) ? manifest.dataset.path : path.join(root, manifest.dataset.path);
-  const modelProfilePath = path.isAbsolute(manifest.modelProfile) ? manifest.modelProfile : path.join(root, manifest.modelProfile);
+  const datasetPath = manifest.dataset?.path ?? path.join(root, 'datasets/default.json');
+  const modelProfilePath = manifest.modelProfile ?? path.join(root, 'profiles/models/default.json');
   const outputRoot = path.isAbsolute(manifest.outputDirectory) ? manifest.outputDirectory : path.join(root, manifest.outputDirectory);
   const actualHash = await sha256File(datasetPath);
-  if (actualHash !== manifest.dataset.sha256) throw new Error(`Dataset hash mismatch: expected ${manifest.dataset.sha256}, got ${actualHash}`);
+  if (actualHash !== (manifest.dataset?.sha256 ?? '')) throw new Error(`Dataset hash mismatch: expected ${manifest.dataset?.sha256 ?? ""}, got ${actualHash}`);
   const profile = await readJson<ModelProfile>(modelProfilePath);
   validateProfile(profile);
   const model = new OpenAICompatibleModel(profile);
