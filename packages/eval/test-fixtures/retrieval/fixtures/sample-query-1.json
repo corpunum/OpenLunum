@@ -1,0 +1,9 @@
+{
+  "queryId": "sample-query-1",
+  "query": "What is the capital of France?",
+  "candidates": ["paris", "london", "berlin", "madrid", "rome"],
+  "expectedRelevant": ["paris"],
+  "rankedResults": ["paris", "london", "berlin"],
+  "mode": "exact",
+  "falseEquivalenceIds": ["france", "french"]
+}

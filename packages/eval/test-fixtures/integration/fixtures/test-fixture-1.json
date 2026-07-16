@@ -1,0 +1,8 @@
+{
+  "fixtureId": "test-fixture-1",
+  "integrationId": "test-registry",
+  "environmentRequirements": {},
+  "input": {
+    "testData": "some test input"
+  }
+}

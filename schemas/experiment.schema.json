@@ -129,6 +129,33 @@
     "deterministic": {
       "type": "boolean",
       "description": "If true, skip model/dataset requirements and run deterministic task"
+    },
+    "retrievalConfig": {
+      "type": "object",
+      "description": "Configuration for retrieval tasks",
+      "properties": {
+        "k": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["exact", "near-semantic"]
+        }
+      }
+    },
+    "integrationConfig": {
+      "type": "object",
+      "description": "Configuration for integration tasks",
+      "properties": {
+        "selectedIntegration": {
+          "type": "string"
+        },
+        "fixtureId": {
+          "type": "string"
+        }
+      },
+      "required": ["selectedIntegration", "fixtureId"]
     }
   }
 }

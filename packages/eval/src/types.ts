@@ -55,7 +55,7 @@ export interface ItemResult {
   protectedLiteralCoverage?: number;
   missingFeatures?: string[];
   result?: Record<string, unknown>;
-  error?: string;
+  error?: string | undefined;
   latencyMs: number;
   queryId?: string;
   candidateIds?: string[];
@@ -70,6 +70,12 @@ export interface ItemResult {
   resultStatus?: 'success' | 'failed' | 'error';
   artifacts?: Record<string, unknown>;
   failureReason?: string;
+  reciprocalRank?: number;
+  meanReciprocalRank?: number;
+  falsePositives?: string[];
+  falseNegatives?: string[];
+  hasFalseEquivalence?: boolean;
+  isNearSemantic?: boolean;
 }
 
 export interface ExperimentItem {

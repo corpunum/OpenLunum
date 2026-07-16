@@ -15,6 +15,8 @@ export interface ExperimentSchema {
   gates: {     minimumFeatureRecall: number,     minimumExactRate: number,     requireProtectedLiteralCoverage: boolean };
   outputDirectory: string;
   deterministic?: boolean;
+  retrievalConfig?: {     k?: number,     mode?: "exact" | "near-semantic" };
+  integrationConfig?: {     selectedIntegration: string,     fixtureId: string };
 }
 
 export interface LunumRecordSchema {

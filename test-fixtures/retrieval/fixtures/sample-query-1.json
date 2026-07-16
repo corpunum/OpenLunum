@@ -1,0 +1,8 @@
+{
+  "id": "sample-query-1",
+  "query": "test query",
+  "expectedRelevant": ["item1", "item2"],
+  "candidates": ["item1", "item2", "item3"],
+  "mode": "exact",
+  "rankedResults": ["item1", "item2", "item3"]
+}

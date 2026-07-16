@@ -1,0 +1,8 @@
+{
+  "fixtureId": "test-fixture-1",
+  "status": "success",
+  "message": "Integration test fixture",
+  "environmentRequirements": {
+    "test": "value"
+  }
+}
