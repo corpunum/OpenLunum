@@ -19,18 +19,14 @@ fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
 
 **Code-level fix:**
 - `TwoWay<T, U>` helper: `T extends U ? U extends T ? true : false : false`
-- Real TwoWay checks applied between public and generated contracts:
-  - LunumSem core fields (world, kind)
-  - LunumRecord fingerprint, sem, source
-  - LunumRendering (code, profile, tokens)
-  - EligibilityDecision (all required fields, with correct Risk type)
-  - Clause (predicate, roles)
+- Real TwoWay checks applied between public and generated contracts
 - Added compile-failure regression fixtures in `test/fixtures/schema-drift-failures.ts`
-- Tests verify TwoWay usage and detect drift at build time
 
 **Semantic corrections applied:**
-- EligibilityDecision TwoWay check now uses `Risk` type (not `string`)
-- This ensures the TwoWay check actually verifies structural compatibility
+- EligibilityDecision TwoWay check uses `Risk` type (not `string`)
+- Descriptions updated to accurately reflect what's being checked:
+  - LunumSem, LunumRecord, LunumSemSchema: actual generated type comparison
+  - LunumRendering, EligibilityDecision, Clause: public/generated contract shape
 
 **CI:** verify ✅, schema-drift ✅, protected-data-boundary ✅
 
@@ -54,7 +50,7 @@ fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
 **Three maintainer blockers resolved:**
 
 ### Blocker 1: Removed hardcoded eligibility
-- `context-runner.ts`: eligibility now computed from `validateSem(sem)`
+- `context-runner.ts`: eligibility computed from `validateSem(sem)`
 - `lunumMeta` no longer set from `sem.annotations?.meta`
 - Eligibility derived purely from schema validation result
 
@@ -68,14 +64,11 @@ fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
 - `writeRenderReport`/`writeContextReport` write to `outputDir` (timestamped)
 - NOT to `manifest.outputDirectory` (parent)
 
-**Semantic corrections applied:**
-- `lunumMeta` on ContextMessage no longer set from source sem annotations
-- Message passed to compileContext is clean — eligibility derived from validation only
-
-**Other fixes:**
-1. Uses real `compileContext([message])` from `@corpunum/lunum`
-2. Source text from `annotations.sourceText`, NOT `content.substring(0,200)`
-3. Timestamped run directories: `{outputDir}/{timestamp}/`
+**Policy evaluation and source-text corrections:**
+- Status now computed from `hasCompilationOutput` (compilation produced valid output)
+- NOT just from `eligibility.eligible` (schema validation result)
+- Source text from `sem.annotations?.sourceText` (correct, unchanged)
+- `lunumMeta` not set on ContextMessage — eligibility derived from validation only
 
 **Regression tests added:**
 - `runner does not trust model self-grading` — fails if result.exact/result.pass in status
