@@ -13,7 +13,8 @@ import type {
   LunumSem,
   LunumRecord,
   LunumRendering,
-  EligibilityDecision
+  EligibilityDecision,
+  Risk
 } from './types.js';
 import type {
   LunumSemSchema,
@@ -82,13 +83,13 @@ type _TwoWayRendering = TwoWay<
 const _assertRenderingTwoWay: _TwoWayRendering = true;
 
 // ══════════════════════════════════════════════════════════════════
-// EligibilityDecision: real TwoWay check
+// EligibilityDecision: real TwoWay check (public vs generated)
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: use Pick to match the exact schema-required fields
+// Two-way: public EligibilityDecision and generated schema must agree on required fields
 type _TwoWayEligibility = TwoWay<
   Pick<EligibilityDecision, 'eligible' | 'category' | 'risk' | 'confidence' | 'reasons'>,
-  Pick<EligibilityDecision, 'eligible' | 'category' | 'risk' | 'confidence' | 'reasons'>
+  { eligible: boolean; category: string; risk: Risk; confidence: number; reasons: string[] }
 >;
 const _assertEligibilityTwoWay: _TwoWayEligibility = true;
 
