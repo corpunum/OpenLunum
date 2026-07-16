@@ -53,13 +53,15 @@ while true; do
 
   log "Starting Pi run → $logfile"
 
-  # Ensure we're on main and up to date
+  # Reset to main before each run to avoid stale branch state
   cd "$WORKDIR"
   git fetch origin main 2>>"$logfile" || true
-  current_branch=$(git branch --show-current)
-  if [[ "$current_branch" == "main" ]]; then
-    git pull --ff-only origin main 2>>"$logfile" || true
-  fi
+  git checkout main 2>>"$logfile" || true
+  git pull --ff-only origin main 2>>"$logfile" || true
+
+  # Clean stale dist/ artifacts from previous branch switches
+  find "$WORKDIR/packages" -name dist -type d -exec rm -rf {} + 2>/dev/null || true
+  pnpm build >>"$logfile" 2>&1 || true
 
   # Run Pi with the campaign prompt, non-interactive
   set +e

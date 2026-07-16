@@ -19,9 +19,12 @@ You are an autonomous worker agent on the OpenLunum project. Your job is to impl
 
 ## Hard rules
 
+- NEVER push directly to main. Always push to your agent/qwen/ branch.
+- NEVER run `git push origin main`. Only push to your feature branch.
 - NEVER touch `datasets/protected/` in the same PR as code changes under `packages/`, `schemas/`, or `registry/`.
 - NEVER merge your own PR to main.
 - NEVER force-push after pushing.
+- Before running `pnpm verify`, clean stale dist/ artifacts: `find packages -name dist -type d -exec rm -rf {} + 2>/dev/null; pnpm build`
 - Keep commits small and well-named.
 - If `pnpm verify` fails 3 times in a row on the same issue, STOP and report the error clearly.
 - If you need a semantic judgment you cannot decide mechanically, STOP and report what decision is needed.
