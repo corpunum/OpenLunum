@@ -66,6 +66,7 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      - run: pnpm eval:smoke
       - name: Run report validation on smoke test output
         run: |
           node scripts/validate-report.cjs reports/experiments/smoke-test --repo-root . --expected-integrity $(node -e "const fs=require('fs'),crypto=require('crypto');const s=JSON.parse(fs.readFileSync('reports/experiments/smoke-test/summary.json'));const l=fs.readFileSync('reports/experiments/smoke-test/item-results.jsonl','utf8').trim().split('\n').filter(x=>x.trim());console.log(crypto.createHash('sha256').update(JSON.stringify({summary:s,itemCount:l.length})).digest('hex'))")
