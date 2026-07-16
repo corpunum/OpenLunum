@@ -22,7 +22,7 @@ OpenUnum chat/memory runtime
           ↓
 src/memory/lunum-adapter.mjs
           ↓
-@corpunum/lunum (pinned release)
+@corpunum/lunum plus @corpunum/lunum-openunum (pinned release)
 ```
 
 OpenUnum keeps ownership of database migrations, context budgets, retrieval, feature flags, safety, UI, and rollout. The adapter maps those decisions to Lunum APIs.

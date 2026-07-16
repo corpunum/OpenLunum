@@ -1,0 +1,13 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "local-example",
+  "provider": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:8080/v1",
+  "model": "replace-with-server-model-id",
+  "temperature": 0,
+  "seed": 42,
+  "timeoutMs": 120000,
+  "metadata": {
+    "purpose": "Copy this file and record model family, exact checkpoint, quantization, chat template, server build, context size, and hardware."
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/renderer-profile/0.1",
+  "title": "Lunum renderer profile 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "semSchema",
+    "purpose",
+    "status",
+    "tokenStrategy"
+  ],
+  "properties": {
+    "schema": {
+      "const": "openlunum-renderer-profile/0.1"
+    },
+    "id": {
+      "type": "string"
+    },
+    "semSchema": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "design",
+        "experimental",
+        "prototype",
+        "verified"
+      ]
+    },
+    "tokenStrategy": {
+      "type": "string"
+    },
+    "testedModels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

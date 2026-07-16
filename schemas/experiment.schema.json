@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/experiment/0.1",
+  "title": "OpenLunum experiment 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "area",
+    "task",
+    "hypothesis",
+    "baselineCommit",
+    "limits",
+    "gates",
+    "outputDirectory"
+  ],
+  "properties": {
+    "schema": {
+      "const": "openlunum-experiment/0.1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]+$"
+    },
+    "area": {
+      "enum": [
+        "semantic-contract",
+        "multilingual-parse",
+        "realization",
+        "rendering",
+        "context",
+        "retrieval",
+        "integration",
+        "infrastructure"
+      ]
+    },
+    "task": {
+      "enum": [
+        "parse",
+        "realize",
+        "render",
+        "context",
+        "retrieval",
+        "integration",
+        "conformance",
+        "infrastructure"
+      ]
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 10
+    },
+    "baselineCommit": {
+      "type": "string",
+      "minLength": 3
+    },
+    "dataset": {
+      "type": "object",
+      "description": "Dataset path and hash for model-based tasks",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    },
+    "modelProfile": {
+      "type": "string",
+      "description": "Path to model profile JSON for model-based tasks"
+    },
+    "targetLanguage": {
+      "type": "string"
+    },
+    "limits": {
+      "type": "object",
+      "required": [
+        "maxItems",
+        "maxAttemptsPerItem",
+        "maxModelCalls"
+      ],
+      "properties": {
+        "maxItems": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxAttemptsPerItem": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxModelCalls": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "required": [
+        "minimumFeatureRecall",
+        "minimumExactRate",
+        "requireProtectedLiteralCoverage"
+      ],
+      "properties": {
+        "minimumFeatureRecall": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "minimumExactRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "requireProtectedLiteralCoverage": {
+          "type": "boolean"
+        }
+      }
+    },
+    "outputDirectory": {
+      "type": "string"
+    },
+    "deterministic": {
+      "type": "boolean",
+      "description": "If true, skip model/dataset requirements and run deterministic task"
+    },
+    "retrievalConfig": {
+      "type": "object",
+      "description": "Configuration for retrieval tasks",
+      "properties": {
+        "k": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["exact", "near-semantic"]
+        }
+      }
+    },
+    "integrationConfig": {
+      "type": "object",
+      "description": "Configuration for integration tasks",
+      "properties": {
+        "selectedIntegration": {
+          "type": "string"
+        },
+        "fixtureId": {
+          "type": "string"
+        }
+      },
+      "required": ["selectedIntegration", "fixtureId"]
+    }
+  }
+}

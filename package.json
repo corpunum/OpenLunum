@@ -1,22 +1,28 @@
 {
   "name": "openlunum-workspace",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "OpenLunum workspace: Lunum-I semantic interlingua, tokenizer-aware renderers, evaluation, and adoption references.",
+  "description": "OpenLunum: language-neutral semantics, model-aware rendering, local-model evaluation, and product adoption contracts.",
   "type": "module",
   "packageManager": "pnpm@10.13.1",
   "engines": {
     "node": ">=22"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "test": "node --test packages/core/test/*.test.mjs integrations/openunum/*.test.mjs",
-    "test:core": "node --test packages/core/test/*.test.mjs",
-    "test:openunum": "node --test integrations/openunum/*.test.mjs",
-    "eval:historical": "node eval/scripts/summarize-history.mjs",
-    "eval:static": "node eval/scripts/run-static.mjs",
-    "check": "node --check packages/core/src/index.mjs && node --check packages/cli/src/cli.mjs && npm test"
+    "clean": "pnpm -r clean",
+    "build": "pnpm -r --sort build",
+    "typecheck": "pnpm build && pnpm -r --sort typecheck",
+    "test": "pnpm build && pnpm -r --sort test:unit",
+    "eval:smoke": "pnpm --filter @corpunum/lunum-eval eval:smoke",
+    "verify": "pnpm typecheck && pnpm test && pnpm eval:smoke",
+    "agent:status": "pnpm --filter @corpunum/lunum-eval agent:status",
+    "model:doctor": "pnpm --filter @corpunum/lunum-eval model:doctor",
+    "experiment:create": "pnpm --filter @corpunum/lunum-eval experiment:create",
+    "experiment:run": "pnpm --filter @corpunum/lunum-eval experiment:run",
+    "report:generate": "pnpm --filter @corpunum/lunum-eval report:generate"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.1",
+    "typescript": "7.0.2"
   }
 }

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/report-validation/0.1",
+  "title": "OpenLunum report validation manifest 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "id", "area", "task", "hypothesis",
+    "baselineCommit", "dataset", "modelProfile",
+    "limits", "gates", "outputDirectory"
+  ],
+  "properties": {
+    "schema": { "const": "openlunum-experiment/0.1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$" },
+    "area": { "type": "string" },
+    "task": { "enum": ["parse", "realize", "render", "context", "retrieval", "integration", "conformance", "infrastructure"] },
+    "hypothesis": { "type": "string", "minLength": 10 },
+    "baselineCommit": { "type": "string", "minLength": 3 },
+    "dataset": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "modelProfile": { "type": "string" },
+    "limits": {
+      "type": "object",
+      "required": ["maxItems", "maxAttemptsPerItem", "maxModelCalls"],
+      "properties": {
+        "maxItems": { "type": "integer", "minimum": 1 },
+        "maxAttemptsPerItem": { "type": "integer", "minimum": 1 },
+        "maxModelCalls": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "required": ["minimumFeatureRecall", "minimumExactRate", "requireProtectedLiteralCoverage"],
+      "properties": {
+        "minimumFeatureRecall": { "type": "number", "minimum": 0, "maximum": 1 },
+        "minimumExactRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "requireProtectedLiteralCoverage": { "type": "boolean" }
+      }
+    },
+    "outputDirectory": { "type": "string" }
+  }
+}

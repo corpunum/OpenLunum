@@ -25,9 +25,10 @@ A hash of surface text or telegraph code is not a semantic fingerprint and must 
 Renderers convert canonical semantics to model-facing text. They are profile-specific:
 
 ```text
-safe/generic/0.1
-short/supergemma/<tokenizer-version>
-tight/qwen/<tokenizer-version>
+generic-en-pivot/0.1
+safe/<model-profile>/<tokenizer-version>
+short/<model-profile>/<tokenizer-version>
+tight/<model-profile>/<tokenizer-version>
 ```
 
 Profiles record exact tokenizer counts, model comprehension tests, prompt scaffolding, and known failures.
@@ -51,3 +52,14 @@ Never:
 ```text
 @corpunum/lunum → product internals
 ```
+
+## Parsing and realization
+
+Parsing and realization are separate model-profile operations:
+
+```text
+source language -> parser profile -> Lunum-Sem
+Lunum-Sem -> realizer profile -> target language
+```
+
+The same semantic record may have many model renderings and many human-language realizations. Neither changes semantic identity.

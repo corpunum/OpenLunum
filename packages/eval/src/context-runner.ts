@@ -1,0 +1,286 @@
+import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
+import path from 'node:path';
+import { compileContext, classifyEligibility, validateSem, fingerprintSem, renderSem } from '@corpunum/lunum';
+import type { LunumSem, ContextMessage } from '@corpunum/lunum';
+import { writeJson, findWorkspaceRoot } from './io.js';
+import type { ExperimentManifest } from './types.js';
+
+export interface ContextReport {
+  id: string;
+  sourceText: string;       // Original natural source, NOT serialized Sem JSON
+  sourceLanguage: string;
+  naturalTokens: number;    // Estimated
+  lunumTokens: number;      // Estimated
+  mixedTokens: number;      // Estimated
+  tokenSavings: { natural: number; mixed: number };
+  eligibility: { eligible: boolean; category: string; risk: string; confidence: number; reasons: string[] };
+  status: 'passed' | 'failed' | 'unsupported';
+  failureReason?: string;
+}
+
+/**
+ * Pure evaluation: compare mixed output against expected source
+ * (lunum compact when eligible, natural when not).
+ * Returns a discriminated union — no side effects.
+ */
+export type SelectionResult =
+  | { status: 'passed' }
+  | { status: 'failed'; failureReason: string };
+
+export function evaluateContextSelection(
+  eligible: boolean,
+  compilation: {
+    mixedMessages: ContextMessage[] | undefined;
+    naturalMessages: ContextMessage[] | undefined;
+    lunumMessages: ContextMessage[] | undefined;
+  }
+): SelectionResult {
+  const mixed = compilation.mixedMessages;
+  const natural = compilation.naturalMessages;
+  const lunum = compilation.lunumMessages;
+
+  if (!mixed || mixed.length === 0) {
+    return { status: 'failed', failureReason: 'missing-mixed' };
+  }
+
+  const expectedMessages = eligible ? lunum : natural;
+  if (!expectedMessages || expectedMessages.length === 0) {
+    return {
+      status: 'failed',
+      failureReason: eligible ? 'missing-lunum' : 'missing-natural'
+    };
+  }
+
+  const mixedLen = mixed.length;
+  const expectedLen = expectedMessages.length;
+
+  if (mixedLen !== expectedLen) {
+    return {
+      status: 'failed',
+      failureReason: mixedLen < expectedLen ? 'mixed-shorter' : 'mixed-longer'
+    };
+  }
+
+  for (let i = 0; i < expectedLen; i++) {
+    const exp = expectedMessages[i];
+    const act = mixed[i];
+    if (!exp || !act) {
+      return {
+        status: 'failed',
+        failureReason: eligible
+          ? `missing-lunum[${i}]`
+          : `missing-natural[${i}]`
+      };
+    }
+    if (act.role !== exp.role) {
+      return {
+        status: 'failed',
+        failureReason: eligible
+          ? `eligible mixed[${i}] role mismatch`
+          : `ineligible mixed[${i}] role mismatch`
+      };
+    }
+    if (act.content !== exp.content) {
+      return {
+        status: 'failed',
+        failureReason: eligible
+          ? `eligible mixed[${i}] differs from lunum compact output`
+          : `ineligible mixed[${i}] differs from natural output`
+      };
+    }
+  }
+
+  return { status: 'passed' };
+}
+
+/**
+ * Estimate tokens from text length (HEURISTIC ESTIMATES).
+ */
+function estimateTokens(text: string, tokenizer: string = 'generic'): number {
+  return Math.max(1, Math.ceil(text.length / 4));
+}
+
+export async function runContextExperiment(
+  manifest: ExperimentManifest,
+  root: string
+): Promise<{ results: ContextReport[]; output: string }> {
+  const examplesDir = path.join(root, 'examples');
+  const semFiles = (await readdir(examplesDir))
+    .filter(f => f.endsWith('.sem.json'))
+    .sort();
+
+  const results: ContextReport[] = [];
+
+  for (const file of semFiles.slice(0, manifest.limits.maxItems)) {
+    const filePath = path.join(examplesDir, file);
+    const content = await readFile(filePath, 'utf-8');
+    let sem: LunumSem;
+
+    try {
+      sem = JSON.parse(content) as LunumSem;
+    } catch {
+      results.push({
+        id: file, sourceText: '', sourceLanguage: 'unknown',
+        naturalTokens: 0, lunumTokens: 0, mixedTokens: 0,
+        tokenSavings: { natural: 0, mixed: 0 },
+        eligibility: { eligible: false, category: 'unknown', risk: 'high', confidence: 0, reasons: ['parse-error'] },
+        status: 'failed', failureReason: 'Failed to parse JSON'
+      });
+      continue;
+    }
+
+    // Validate schema
+    const validation = validateSem(sem);
+    if (!validation.ok) {
+      results.push({
+        id: file, sourceText: '', sourceLanguage: 'unknown',
+        naturalTokens: 0, lunumTokens: 0, mixedTokens: 0,
+        tokenSavings: { natural: 0, mixed: 0 },
+        eligibility: { eligible: false, category: 'unknown', risk: 'high', confidence: 0, reasons: ['schema-invalid'] },
+        status: 'failed', failureReason: `Schema validation failed: ${validation.errors.join('; ')}`
+      });
+      continue;
+    }
+
+    // Use ORIGINAL natural source text from annotations
+    // NEVER use serialized Sem JSON as natural source
+    // BLOCK if natural source is missing — context requires natural text
+    const rawSourceText = sem.annotations?.sourceText as string | undefined;
+    if (!rawSourceText || rawSourceText.trim().length === 0) {
+      results.push({
+        id: file, sourceText: '', sourceLanguage: 'unknown',
+        naturalTokens: 0, lunumTokens: 0, mixedTokens: 0,
+        tokenSavings: { natural: 0, mixed: 0 },
+        eligibility: { eligible: false, category: 'no-source', risk: 'high', confidence: 0, reasons: ['missing-natural-source'] },
+        status: 'failed', failureReason: 'Missing natural source text — context requires natural text'
+      });
+      continue;
+    }
+    const sourceText: string = rawSourceText;
+    const sourceLanguage: string = (sem.annotations?.sourceLanguage as string) ?? 'en';
+
+    // Render to Lunum-Code for context compilation
+    let lunumCode: string;
+    try {
+      const rendered = renderSem(sem, { profile: 'generic-en-pivot/0.1' });
+      lunumCode = rendered.code;
+    } catch {
+      results.push({
+        id: file, sourceText: sourceText, sourceLanguage: sourceLanguage,
+        naturalTokens: estimateTokens(sourceText), lunumTokens: 0, mixedTokens: 0,
+        tokenSavings: { natural: 0, mixed: 0 },
+        eligibility: { eligible: false, category: 'unknown', risk: 'high', confidence: 0, reasons: ['render-failed'] },
+        status: 'failed', failureReason: 'Render failed'
+      });
+      continue;
+    }
+
+    // Compute policy via classifyEligibility, then pass it to compileContext
+    const policy = classifyEligibility({
+      category: sem.kind,
+      risk: 'low',
+      confidence: 0.95,
+      sourceText,
+      semantic: true
+    });
+
+    // Build ContextMessage with policy passed via lunumMeta
+    const message: ContextMessage = {
+      role: 'user',
+      source: { text: sourceText },
+      lunumCode: lunumCode || null,
+      lunumMeta: policy
+    };
+
+    // Use REAL context compiler from @corpunum/lunum with mixed mode
+    const compilation = compileContext([message], { mode: 'mixed' });
+
+    // Eligibility comes from classifyEligibility (policy), NOT from validateSem
+    const eligibility: ContextReport['eligibility'] = policy;
+
+    // Calculate token savings from REAL compilation result
+    const naturalTokens = compilation.naturalTokens;
+    const lunumTokens = compilation.lunumTokens;
+    const mixedTokens = compilation.mixedTokens;
+
+    // Policy-aware evaluation via pure helper
+    const selection = evaluateContextSelection(policy.eligible, compilation);
+
+    // Build report with optional failureReason only on failure
+    const base: Omit<ContextReport, 'failureReason'> = {
+      id: file,
+      sourceText,
+      sourceLanguage,
+      naturalTokens,
+      lunumTokens,
+      mixedTokens,
+      tokenSavings: {
+        natural: naturalTokens > 0 ? (1 - lunumTokens / naturalTokens) : 0,
+        mixed: naturalTokens > 0 ? (1 - mixedTokens / naturalTokens) : 0
+      },
+      eligibility,
+      status: selection.status as ContextReport['status']
+    };
+    if (selection.status === 'failed') {
+      results.push({ ...base, failureReason: selection.failureReason });
+    } else {
+      results.push(base);
+    }
+  }
+
+  return { results, output: 'reports/experiments/render-context-runner' };
+}
+
+export async function writeContextReport(results: ContextReport[], outputDir: string): Promise<void> {
+  const root = await findWorkspaceRoot();
+  const output = path.isAbsolute(outputDir) ? outputDir : path.join(root, outputDir);
+  await mkdir(output, { recursive: true });
+
+  // Write JSONL
+  const jsonlPath = path.join(output, 'context-results.jsonl');
+  let jsonlContent = '';
+  for (const r of results) {
+    jsonlContent += JSON.stringify(r) + '\n';
+  }
+  await writeFile(jsonlPath, jsonlContent, 'utf8');
+
+  // Summary
+  const passed = results.filter(r => r.status === 'passed');
+  const avgLunumRatio = passed.length > 0
+    ? passed.reduce((sum, r) => sum + r.tokenSavings.natural, 0) / passed.length
+    : 0;
+  const avgMixedRatio = passed.length > 0
+    ? passed.reduce((sum, r) => sum + r.tokenSavings.mixed, 0) / passed.length
+    : 0;
+
+  const summary = {
+    task: 'context',
+    items: results.length,
+    passed: passed.length,
+    failed: results.length - passed.length,
+    averageLunumRatio: avgLunumRatio,
+    averageMixedRatio: avgMixedRatio,
+    notes: 'Token counts are HEURISTIC ESTIMATES. Eligibility computed from classifyEligibility(policy), passed via lunumMeta to compileContext.'
+  };
+  await writeJson(path.join(output, 'summary.json'), summary);
+
+  // Markdown report
+  const markdown = `# Context Runner Report
+
+## Summary
+
+- Items: ${results.length}
+- Passed: ${passed.length}
+- Failed: ${results.length - passed.length}
+- Average Lunum savings (estimate): ${(avgLunumRatio * 100).toFixed(1)}%
+- Average Mixed savings (estimate): ${(avgMixedRatio * 100).toFixed(1)}%
+- Note: Token counts are HEURISTIC ESTIMATES
+
+## Per-item results
+
+| ID | Status | NaturalTokens | LunumTokens | MixedTokens | Eligible | Risk | Confidence |
+|---|---|---:|---:|---:|---|---|---|
+${results.map(r => `| ${r.id} | ${r.status} | ${r.naturalTokens} | ${r.lunumTokens} | ${r.mixedTokens} | ${r.eligibility.eligible} | ${r.eligibility.risk} | ${r.eligibility.confidence} |`).join('\n')}
+`;
+  await writeFile(path.join(output, 'report.md'), markdown, 'utf8');
+}

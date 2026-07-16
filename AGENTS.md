@@ -1,25 +1,44 @@
-# Instructions for coding agents
+# Instructions for coding and research agents
 
-OpenLunum is the source of truth for Lunum. Treat evidence, compatibility, and semantic safety as product requirements.
+Read `START_HERE.md` before making changes. Then read the area-specific documents it links.
+
+## Mandatory bootstrap
+
+```bash
+corepack enable
+pnpm install --frozen-lockfile
+pnpm verify
+pnpm agent:status
+```
 
 ## Architecture boundaries
 
-- `packages/core` must not import anything from `integrations/`.
-- Product-specific field names and persistence assumptions belong in adapters.
-- Never claim a surface-text heuristic is language-independent semantics.
-- Never remove natural source text or exact evidence from fixtures or examples.
-- Fingerprint changes require a schema/canonicalization version change and migration note.
-- Renderer changes require tokenizer and comprehension measurements.
+- `Lunum-Sem` is language-neutral structured meaning.
+- English-like Lunum-Code is an initial renderer profile, not canonical semantics.
+- `packages/core` must not import product integrations or model providers.
+- Product-specific persistence and runtime decisions belong in adapters.
+- Natural source text, language, provenance, and protected literals must be retained.
+- A heuristic surface record must never be marked semantic or eligible for compact context.
+- Fingerprint or canonicalization changes require a new version, golden vectors, and migration notes.
 
-## Change procedure
+## Work protocol
 
-1. Identify whether the change affects semantics, canonicalization, fingerprinting, rendering, policy, or an integration.
-2. Update the relevant schema or registry before implementation where applicable.
-3. Add conformance and regression tests.
-4. Record evidence and limitations honestly.
-5. For integration changes, update the tested product version and status.
-6. Run `pnpm test` and `pnpm eval:static`.
+1. Select one area from `WORK_QUEUE.md`.
+2. Create or adopt an experiment manifest.
+3. Record baseline commit, dataset hash, model/tokenizer profile, limits, and hypothesis.
+4. Change implementation or prompts; do not simultaneously alter protected evaluation data.
+5. Run the declared development suite and publish all failed cases.
+6. Run `pnpm verify` before pushing.
+7. Push an `agent/...` branch and open a PR using the repository template.
+
+## Agent authority
+
+Worker agents may experiment, run local models, create reports, commit, push branches, and open PRs. They may not autonomously merge changes to semantics, fingerprints, protected datasets, safety policy, or releases.
+
+## Stop conditions
+
+Stop and request orchestration when budgets are exhausted, hard gates repeatedly fail, results oscillate, required data is missing, or a semantic judgment cannot be decided mechanically.
 
 ## OpenUnum
 
-Read `integrations/openunum/AGENTS.md` before proposing OpenUnum changes. OpenUnum consumes Lunum; do not move OpenUnum runtime logic into the core package.
+Read `integrations/openunum/AGENTS.md` before touching its adapter or contract. OpenUnum consumes Lunum; OpenLunum never imports OpenUnum runtime code.

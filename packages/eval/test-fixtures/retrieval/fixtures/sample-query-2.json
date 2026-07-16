@@ -1,0 +1,8 @@
+{
+  "queryId": "sample-query-2",
+  "query": "Who wrote the novel 'Pride and Prejudice'?",
+  "candidates": ["jane-austen", "charles-dickens", "william-shakespeare", "mark-twain"],
+  "expectedRelevant": ["jane-austen"],
+  "rankedResults": ["jane-austen", "william-shakespeare", "charles-dickens"],
+  "mode": "exact"
+}

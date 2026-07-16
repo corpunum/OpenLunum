@@ -1,0 +1,14 @@
+{
+  "schema": "openlunum-renderer-profile/0.1",
+  "id": "generic-en-pivot/0.1",
+  "semSchema": "lunum-sem/0.1-draft",
+  "purpose": "Readable compact model-facing baseline using English-like protocol symbols.",
+  "status": "experimental",
+  "tokenStrategy": "Measure separately on each target tokenizer.",
+  "testedModels": [],
+  "limitations": [
+    "Not universal",
+    "Only one reference syntax is implemented",
+    "No current exact tokenizer evidence in this repository version"
+  ]
+}

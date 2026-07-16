@@ -1,0 +1,22 @@
+{
+  "name": "@corpunum/lunum-eval",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@corpunum/lunum": "workspace:*"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm build && node --test dist/test/*.test.js",
+    "eval:smoke": "pnpm build && node dist/src/cli.js smoke",
+    "agent:status": "pnpm build && node dist/src/cli.js status",
+    "model:doctor": "pnpm build && node dist/src/cli.js doctor",
+    "experiment:create": "pnpm build && node dist/src/cli.js create",
+    "experiment:run": "pnpm build && node dist/src/cli.js run",
+    "report:generate": "pnpm build && node dist/src/cli.js report",
+    "test:unit": "node --test dist/test/*.test.js"
+  }
+}

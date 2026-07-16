@@ -1,11 +1,13 @@
 # Roadmap
 
-## Milestone 0 — repository foundation (current)
+## Milestone 0 — repository foundation (completed in 0.2)
 
 - Preserve complete research handover and provenance.
 - Establish Lunum-I naming, architecture, draft schemas, and evidence ledger.
 - Provide a dependency-oriented OpenUnum adoption profile.
 - Ship a conservative reference core and CLI with tests.
+- Migrate active code to strict TypeScript and add reproducible CI.
+- Add local-model experiment manifests, reporting, and agent governance.
 
 ## Milestone 1 — semantic contract
 

@@ -1,19 +1,74 @@
 name: ci
+
 on:
   push:
+    branches: [main, "agent/**"]
   pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openlunum-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
         with:
           version: 10.13.1
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile=false
-      - run: pnpm test
-      - run: pnpm eval:static
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm verify
+
+  schema-drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: node scripts/schema-to-ts.cjs --dry-run
+      - run: npx tsc --noEmit --skipLibCheck packages/core/src/types-schema-conformance.ts
+
+  report-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm eval:smoke
+      - name: Run report validation on smoke test output
+        run: |
+          node scripts/validate-report.cjs reports/experiments/smoke-test --repo-root . --expected-integrity $(node -e "const fs=require('fs'),crypto=require('crypto');const s=JSON.parse(fs.readFileSync('reports/experiments/smoke-test/summary.json'));const l=fs.readFileSync('reports/experiments/smoke-test/item-results.jsonl','utf8').trim().split('\n').filter(x=>x.trim());console.log(crypto.createHash('sha256').update(JSON.stringify({summary:s,itemCount:l.length})).digest('hex'))")
+      - name: Run report validation tests
+        run: node --test packages/eval/dist/test/report-validation.test.js
