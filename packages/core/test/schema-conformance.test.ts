@@ -270,33 +270,67 @@ test('conformance checks include two-way assignability', async () => {
   // Verify the conformance file uses TwoWay in actual type checks (not just definition)
   const fs = await import('node:fs');
   const conformanceSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'core', 'src', 'types-schema-conformance.ts'), 'utf-8');
-  
+
   // Must define the TwoWay helper
   assert.ok(conformanceSrc.includes('type TwoWay<T, U>'), 'Must define TwoWay<T, U> helper');
-  
-  // Must use TwoWay in at least 2 actual type checks (not just in the definition)
+
+  // Must use TwoWay in at least 3 actual type checks (not just in the definition)
   const twoWayUses = (conformanceSrc.match(/TwoWay</g) || []).length;
   assert.ok(twoWayUses >= 3, `Must use TwoWay in checks (found ${twoWayUses}, need >= 3)`);
-  
+
   // Must have two-way checks (both directions)
   assert.ok(conformanceSrc.includes('T extends U'), 'Must check T extends U');
   assert.ok(conformanceSrc.includes('U extends T'), 'Must check U extends T');
-  
+
   // Must export checks to prevent tree-shaking
   assert.ok(conformanceSrc.includes('export const schemaConformanceChecks'), 'Must export conformance checks');
 });
 
-test('schema drift compile fixtures exist and compile', async () => {
-  // Verify the compile-time regression fixtures exist
+test('negative compile fixture: tsc produces TS2322 with intentional mutation', async () => {
+  // Run tsc on the negative fixture to prove it fails with the expected error
+  const { spawnSync } = await import('node:child_process');
   const fs = await import('node:fs');
-  const fixturePath = path.join(WORKSPACE_ROOT, 'packages', 'core', 'test', 'fixtures', 'schema-drift-failures.ts');
-  assert.ok(fs.existsSync(fixturePath), 'Compile fixtures must exist');
-  
-  const fixtureSrc = fs.readFileSync(fixturePath, 'utf-8');
-  // Fixtures must check all major type pairs
-  assert.ok(fixtureSrc.includes('LunumSem'), 'Fixtures must check LunumSem');
-  assert.ok(fixtureSrc.includes('LunumRecord'), 'Fixtures must check LunumRecord');
-  assert.ok(fixtureSrc.includes('LunumSemSchema'), 'Fixtures must check LunumSemSchema');
-  assert.ok(fixtureSrc.includes('LunumRecordSchema'), 'Fixtures must check LunumRecordSchema');
-  assert.ok(fixtureSrc.includes('EligibilityDecision'), 'Fixtures must check EligibilityDecision');
+
+  const fixturePath = path.join(WORKSPACE_ROOT, 'packages', 'core', 'test', 'fixtures', 'negative-compile-fixture.ts');
+  const fixtureBasename = 'negative-compile-fixture.ts';
+
+  // Fixture file must exist
+  assert.ok(fs.existsSync(fixturePath), `Fixture must exist: ${fixtureBasename}`);
+
+  // Run tsc with explicit args (no shell interpolation)
+  const tscPath = path.join(WORKSPACE_ROOT, 'node_modules', '.bin', 'tsc');
+  const result = spawnSync(
+    tscPath,
+    [
+      '--noEmit',
+      '--strict',
+      '--target', 'ES2023',
+      '--module', 'NodeNext',
+      '--moduleResolution', 'NodeNext',
+      '--esModuleInterop',
+      '--skipLibCheck',
+      fixturePath
+    ],
+    {
+      cwd: WORKSPACE_ROOT,
+      timeout: 30_000,
+      encoding: 'utf8'
+    }
+  );
+
+  // Must have nonzero exit status (intentional compile failure)
+  assert.notStrictEqual(result.status, null, 'tsc must exit');
+  assert.ok(result.status !== 0, `tsc must fail (intentional TS2322), exit code: ${result.status}`);
+
+  // Capture combined stdout+stderr
+  const output = String(result.stdout || '') + String(result.stderr || '');
+
+  // Must mention the exact fixture filename
+  assert.ok(output.includes(fixtureBasename), `Output must mention ${fixtureBasename}`);
+
+  // Must contain the TS2322 diagnostic code
+  assert.ok(output.includes('TS2322'), `Output must contain TS2322, got: ${output}`);
+
+  // Must contain the expected boolean false assignment (the const assignment to true)
+  assert.ok(output.includes('true'), `Output must reference the 'true' assignment on the marked line`);
 });
