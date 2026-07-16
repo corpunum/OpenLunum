@@ -57,6 +57,19 @@ export interface ItemResult {
   result?: Record<string, unknown>;
   error?: string;
   latencyMs: number;
+  queryId?: string;
+  candidateIds?: string[];
+  expectedRelevantIds?: string[];
+  rankedResultIds?: string[];
+  mode?: 'exact' | 'near-semantic';
+  integrationId?: string;
+  integrationVersion?: string;
+  entrypointType?: 'in-process' | 'executable';
+  fixtureId?: string;
+  environmentRequirements?: Record<string, unknown>;
+  resultStatus?: 'success' | 'failed' | 'error';
+  artifacts?: Record<string, unknown>;
+  failureReason?: string;
 }
 
 export interface ExperimentItem {
