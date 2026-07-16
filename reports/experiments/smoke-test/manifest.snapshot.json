@@ -5,7 +5,7 @@
   "task": "infrastructure",
   "deterministic": true,
   "hypothesis": "Smoke test validates dataset integrity",
-  "baselineCommit": "23259dbcb73af1d8c43885e95678ecfb68b08736",
+  "baselineCommit": "c826e67f80b28d6e761cd33adf4f6708c563009c",
   "outputDirectory": "reports/experiments/smoke-test",
   "limits": {
     "maxItems": 100,
