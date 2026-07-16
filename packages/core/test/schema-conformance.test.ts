@@ -259,19 +259,44 @@ test('experiment schema has required fields', async () => {
 // Tests that verify the compile-time checks actually catch regressions
 test('schema-to-ts regeneration is required when schema changes', async () => {
   const { execSync } = await import('node:child_process');
-  const root = process.cwd();
   // The schema-to-ts script should detect no drift with current types
-  const output = execSync(`node ${path.join(root, '..', '..', 'scripts', 'schema-to-ts.cjs')} --dry-run`, {
-    cwd: root, encoding: 'utf8'
+  const output = execSync(`node ${path.join(WORKSPACE_ROOT, 'scripts', 'schema-to-ts.cjs')} --dry-run`, {
+    cwd: WORKSPACE_ROOT, encoding: 'utf8'
   });
   assert.ok(output.includes('OK') || output.includes('No drift'), 'Schema must not drift from types-schema.ts');
 });
 
 test('conformance checks include two-way assignability', async () => {
-  // Verify the conformance file has TwoWay type checks
+  // Verify the conformance file uses TwoWay in actual type checks (not just definition)
   const fs = await import('node:fs');
   const conformanceSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'core', 'src', 'types-schema-conformance.ts'), 'utf-8');
-  assert.ok(conformanceSrc.includes('TwoWay<'), 'Must use TwoWay assignability checks');
+  
+  // Must define the TwoWay helper
+  assert.ok(conformanceSrc.includes('type TwoWay<T, U>'), 'Must define TwoWay<T, U> helper');
+  
+  // Must use TwoWay in at least 2 actual type checks (not just in the definition)
+  const twoWayUses = (conformanceSrc.match(/TwoWay</g) || []).length;
+  assert.ok(twoWayUses >= 3, `Must use TwoWay in checks (found ${twoWayUses}, need >= 3)`);
+  
+  // Must have two-way checks (both directions)
   assert.ok(conformanceSrc.includes('T extends U'), 'Must check T extends U');
   assert.ok(conformanceSrc.includes('U extends T'), 'Must check U extends T');
+  
+  // Must export checks to prevent tree-shaking
+  assert.ok(conformanceSrc.includes('export const schemaConformanceChecks'), 'Must export conformance checks');
+});
+
+test('schema drift compile fixtures exist and compile', async () => {
+  // Verify the compile-time regression fixtures exist
+  const fs = await import('node:fs');
+  const fixturePath = path.join(WORKSPACE_ROOT, 'packages', 'core', 'test', 'fixtures', 'schema-drift-failures.ts');
+  assert.ok(fs.existsSync(fixturePath), 'Compile fixtures must exist');
+  
+  const fixtureSrc = fs.readFileSync(fixturePath, 'utf-8');
+  // Fixtures must check all major type pairs
+  assert.ok(fixtureSrc.includes('LunumSem'), 'Fixtures must check LunumSem');
+  assert.ok(fixtureSrc.includes('LunumRecord'), 'Fixtures must check LunumRecord');
+  assert.ok(fixtureSrc.includes('LunumSemSchema'), 'Fixtures must check LunumSemSchema');
+  assert.ok(fixtureSrc.includes('LunumRecordSchema'), 'Fixtures must check LunumRecordSchema');
+  assert.ok(fixtureSrc.includes('EligibilityDecision'), 'Fixtures must check EligibilityDecision');
 });
