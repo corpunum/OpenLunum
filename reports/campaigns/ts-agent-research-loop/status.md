@@ -1,84 +1,49 @@
-# Campaign Status — Phase Zero COMPLETE
+# Campaign Status — Phase Zero/Section 6 NOT Complete
 
-## PRs GREEN
-
-| PR | Title | Branch | CI Status |
-|---|---|---|---|
-| **#8** | feat(infra): schema-to-TypeScript drift checking | `fix-pr5` | ✅ **GREEN** |
-| **#9** | feat(infra): report validation | `fix-pr6` | ✅ **GREEN** |
-| **#10** | feat(eval): render and context runners | `render-context` | ✅ **GREEN** |
-
-## Rebase Chain
-```
-fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
-```
+**As of 2026-07-16:** campaign base `agent/typescript-agent-research-loop` at ca623ec; Phase 7 paused; all PRs still draft and unmerged.
 
 ---
 
-## PR #8 — Schema Drift (Two-Way Assignability) ✅
+## PR #8 — Schema Drift (Two-Way Assignability) — Draft, CI Green
 
-**Code-level fix:**
-- `TwoWay<T, U>` helper: `T extends U ? U extends T ? true : false : false`
-- Real TwoWay checks applied between public and generated contracts
-
-**Semantic correction applied:**
-- _TwoWayRecordFingerprint: now compares Pick<LunumRecord, 'fingerprint'>
-  against Pick<LunumRecordSchema, 'fingerprint'> (both actual types)
-- _TwoWayRendering/_TwoWayEligibility/_TwoWayClause: descriptions updated
-  to clarify these compare against expected schema-derived shapes
-- Header comment updated to clarify TwoWay purpose
-
-**CI:** verify ✅, schema-drift ✅, protected-data-boundary ✅
+**Commit:** `fix-pr5` 80e36a2 (ca623ec base)
+**CI:** green on original head; implementation and evidence ready.
+**What it proves:**
+- Actual public/generated projections are ONLY LunumSem world/kind plus generated schema literal, LunumRecord fingerprint, nested sem world/kind, and source.text
+- Positive compile fixture proves accepted projections compile
+- Isolated negative fixture mutates generated LunumSemSchema.world and requires exactly one TS2322
+**Does NOT prove:** full schema/public equivalence across all LunumSem types.
 
 ---
 
-## PR #9 — Report Validation (Fail-Closed) ✅
+## PR #9 — Report Validation (Fail-Closed) — Draft, Locally Verified
 
-**Code-level fixes:**
-- Removed `|| true` from CI
-- Added `fetch-depth: 0` to verify and report-validation jobs
-- Integrity check fails closed (no expected hash = fail)
-- Smoke test output created by `eval:smoke` step
-- Updated baseline commit to valid repo commit (23259db)
-
-**CI:** verify ✅, schema-drift ✅, report-validation ✅, protected-data-boundary ✅
+**Commit:** `fix-pr6` 8f49255 — LOCAL reconciliation candidate, not yet remote fix-pr6
+**Counts (local):** core20 adapter2 cli1 eval14 · smoke16/4
+**Hash:** 6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873
+**What it does:** fail-closed integrity check, `fetch-depth: 0`, smoke output via `eval:smoke`, expected-hash-on-missing = fail.
 
 ---
 
-## PR #10 — Render/Context Runners (Real Compiler) ✅
+## PR #10 — Render/Context Runners — Draft, Remote CI Green
 
-**Policy evaluation correction:**
-- Uses `classifyEligibility({ category, risk, confidence, sourceText, semantic })` 
-  to compute policy from sem
-- Passes policy via `lunumMeta` to `compileContext([message], { mode: 'mixed' })`
-- `compileContext` uses `message.meta.eligible === true` to select mixed output
-
-**Source-text behavior:**
-- BLOCKS if natural source text is missing (context requires natural text)
-- Uses `sem.annotations?.sourceText` as natural source (NOT serialized JSON)
-
-**Mixed-message output testing:**
-- Status computed from `hasMixedOutput && mixedDiffersFromNatural`
-- Verifies mixed mode actually produces different output than natural mode
-
-**Other fixes:**
-- Status from `hasOutput + resultIsValid`, not model `result.status`
-- Reports written to timestamped `outputDir`, not parent `manifest.outputDirectory`
-
-**CI:** verify ✅, schema-drift ✅, report-validation ✅, protected-data-boundary ✅
+**Commit:** `render-context` 0975ec6
+**CI:** green on original head.
+**What it proves:**
+- Actual eligible preference compaction
+- Actual ineligible conditional_instruction natural fallback
+- Missing natural source FAILS and is not fallback
+**Does NOT yet contain:** reconciled PR9 head.
 
 ---
 
-## Test Coverage
+## Phase Status
 
-```
-core: 19 pass, 0 fail
-adapter-openunum: 2 pass, 0 fail
-cli: 1 pass, 0 fail
-eval: 20 pass, 0 fail
-TOTAL: 42 pass, 0 fail
-```
+- **Phase Zero/Section 6:** NOT complete on campaign base — PRs remain unmerged.
+- **Phase 7:** Paused, awaiting merge order.
 
-## Next Step
+## Next Actions
 
-Awaiting maintainer merge of PRs #8 → #9 → #10. Phase 7 work-area execution begins after merge.
+1. Publish/review PR #9 reconciliation
+2. Reconcile PR #10 onto PR #9
+3. Await authorized maintainer merge order: #8 → #9 → #10
