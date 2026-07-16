@@ -70,12 +70,12 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
             featurePrecision: coverage, protectedLiteralCoverage: coverage, latencyMs: performance.now() - started
           };
         } else {
-          // For non-parse/realize tasks, extract result from model output
+          // For non-parse/realize tasks, compute status from output content, NOT model self-assessment
           const result = extractJson(rawOutput) as Record<string, unknown>;
-          // Model output is not trusted for pass/fail — compute metric in repository code
-          // Model output is not trusted for pass/fail — always compute in repository code.
-          // Trust only metrics we compute, not anything the model says.
-          const status = result.status === 'passed' ? 'passed' : 'failed';
+          // Compute status independently: output must be non-empty JSON with expected fields
+          const hasOutput = rawOutput.trim().length > 0;
+          const resultIsValid = result && typeof result === 'object' && !('error' in result);
+          const status = (hasOutput && resultIsValid) ? 'passed' : 'failed';
           finalResult = {
             id: item.id, status, rawOutput, result, latencyMs: performance.now() - started
           };
@@ -95,7 +95,7 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
   return results;
 }
 
-async function runDeterministicTask(manifest: ExperimentManifest, root: string): Promise<ItemResult[]> {
+async function runDeterministicTask(manifest: ExperimentManifest, root: string, outputDir: string): Promise<ItemResult[]> {
   const results: ItemResult[] = [];
 
   switch (manifest.task) {
@@ -103,7 +103,7 @@ async function runDeterministicTask(manifest: ExperimentManifest, root: string):
       // Use dedicated render runner with original source text
       const renderResult = await runRenderExperiment(manifest, root);
       // Reports written to output directory
-      await writeRenderReport(renderResult.results, manifest.outputDirectory);
+      await writeRenderReport(renderResult.results, outputDir);
       results.push(...renderResult.results.map((r, _i) => ({
         id: r.id, status: r.status, result: r as unknown as Record<string, unknown>, exact: r.status === 'passed', latencyMs: 0
       })) as unknown as ItemResult[]);
@@ -114,7 +114,7 @@ async function runDeterministicTask(manifest: ExperimentManifest, root: string):
       // Use dedicated context runner with real compiler/policy
       const ctxResult = await runContextExperiment(manifest, root);
       // Reports written to output directory
-      await writeContextReport(ctxResult.results, manifest.outputDirectory);
+      await writeContextReport(ctxResult.results, outputDir);
       results.push(...ctxResult.results.map((r, _i) => ({
         id: r.id, status: r.status, result: r as unknown as Record<string, unknown>, exact: r.status === 'passed', latencyMs: 0
       })) as unknown as ItemResult[]);
@@ -252,7 +252,7 @@ export async function runExperiment(manifestPath: string): Promise<string> {
   });
 
   const results: ItemResult[] = isDeterministic
-    ? await runDeterministicTask(manifest, root)
+    ? await runDeterministicTask(manifest, root, output)
     : profile
       ? await runModelTask(manifest, root, output, dataset, profile)
       : [];

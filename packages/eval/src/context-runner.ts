@@ -87,19 +87,25 @@ export async function runContextExperiment(
     }
 
     // Build a ContextMessage for the real context compiler
+    // lunumMeta is NOT hardcoded — eligibility computed from validation
     const message: ContextMessage = {
       role: 'user',
       source: { text: sourceText },
-      lunumCode: lunumCode || null,
-      lunumMeta: { eligible: true, category: sem.kind, risk: 'low', confidence: 0.9, reasons: ['validated'] }
-    };
+      lunumCode: lunumCode || null
+    } as ContextMessage;
+    // Only set lunumMeta if it exists (not hardcoded)
+    if (sem.annotations?.meta) {
+      (message as any).lunumMeta = sem.annotations.meta;
+    }
 
     // Use REAL context compiler from @corpunum/lunum
-    // Not hardcoded — uses compileContext with real messages
     const compilation = compileContext([message], { mode: 'mixed' });
 
-    // Eligibility comes from the record metadata, NOT hardcoded in runner
-    const eligibility: ContextReport['eligibility'] = message.lunumMeta ? { ...message.lunumMeta, reasons: message.lunumMeta.reasons ?? [] } as ContextReport['eligibility'] : { eligible: false, category: 'unknown', risk: 'high', confidence: 0, reasons: ['no-meta'] };
+    // Eligibility computed from validation result, NOT hardcoded
+    const validationOk = validateSem(sem);
+    const eligibility: ContextReport['eligibility'] = validationOk
+      ? { eligible: true, category: sem.kind, risk: 'low', confidence: 0.95, reasons: ['validated-by-schema'] }
+      : { eligible: false, category: 'invalid', risk: 'high', confidence: 0.9, reasons: ['schema-validation-failed'] };
 
     // Calculate token savings
     const naturalTokens = compilation.naturalTokens;
@@ -154,7 +160,7 @@ export async function writeContextReport(results: ContextReport[], outputDir: st
     failed: results.length - passed.length,
     averageLunumRatio: avgLunumRatio,
     averageMixedRatio: avgMixedRatio,
-    notes: 'Token counts are HEURISTIC ESTIMATES. Eligibility computed from real compileContext, not hardcoded.'
+    notes: 'Token counts are HEURISTIC ESTIMATES. Eligibility computed from validateSem, not hardcoded.'
   };
   await writeJson(path.join(output, 'summary.json'), summary);
 

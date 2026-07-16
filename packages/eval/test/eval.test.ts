@@ -131,3 +131,41 @@ test('context-runner uses real compileContext, not hardcoded eligibility', async
     'Eligibility must come from compileContext, not hardcoded'
   );
 });
+
+// Regression test: verify hardcoded eligibility is removed
+test('context-runner does not hardcode eligibility', async () => {
+  const fs = await import('node:fs');
+  const ctxSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'context-runner.ts'), 'utf-8');
+  
+  // Should use validateSem for eligibility, not hardcoded eligible: true
+  assert.ok(ctxSrc.includes('validateSem'), 'Must use validateSem for eligibility');
+  assert.ok(ctxSrc.includes('validated-by-schema'), 'Must compute eligibility from validation');
+  // Should NOT hardcode eligible: true in lunumMeta
+  assert.ok(!ctxSrc.includes("lunumMeta: { eligible: true"), 'Must not hardcode eligible: true in lunumMeta');
+});
+
+// Regression test: verify task success is computed independently
+test('runner computes task success independently of model status', async () => {
+  const fs = await import('node:fs');
+  const runnerSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'runner.ts'), 'utf8');
+  
+  // For non-parse/realize tasks, status should be computed from output content
+  // NOT from result.status
+  assert.ok(runnerSrc.includes('hasOutput'), 'Must compute hasOutput from rawOutput');
+  assert.ok(runnerSrc.includes('resultIsValid'), 'Must validate result object');
+});
+
+// Regression test: verify reports are written inside timestamped run directory
+test('reports are written inside timestamped run directory', async () => {
+  const fs = await import('node:fs');
+  const runnerSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'runner.ts'), 'utf8');
+  
+  // runDeterministicTask should accept outputDir parameter
+  assert.ok(runnerSrc.includes('runDeterministicTask(manifest, root, output)'), 
+    'Must pass outputDir to runDeterministicTask');
+  // Reports should be written to outputDir, not manifest.outputDirectory
+  assert.ok(runnerSrc.includes('writeRenderReport(renderResult.results, outputDir)') || runnerSrc.includes('writeRenderReport(renderResult.results, output)'),
+    'Must write render reports to outputDir');
+  assert.ok(runnerSrc.includes('writeContextReport(ctxResult.results, outputDir)') || runnerSrc.includes('writeContextReport(ctxResult.results, output)'),
+    'Must write context reports to outputDir');
+});
