@@ -87,21 +87,17 @@ export async function runContextExperiment(
     }
 
     // Build a ContextMessage for the real context compiler
-    // lunumMeta is NOT hardcoded — eligibility computed from validation
+    // lunumMeta is NOT set from source sem annotations — eligibility comes from validation
     const message: ContextMessage = {
       role: 'user',
       source: { text: sourceText },
       lunumCode: lunumCode || null
     } as ContextMessage;
-    // Only set lunumMeta if it exists (not hardcoded)
-    if (sem.annotations?.meta) {
-      (message as any).lunumMeta = sem.annotations.meta;
-    }
 
     // Use REAL context compiler from @corpunum/lunum
     const compilation = compileContext([message], { mode: 'mixed' });
 
-    // Eligibility computed from validation result, NOT hardcoded
+    // Eligibility computed from validation result, NOT from source sem annotations
     const validationOk = validateSem(sem);
     const eligibility: ContextReport['eligibility'] = validationOk
       ? { eligible: true, category: sem.kind, risk: 'low', confidence: 0.95, reasons: ['validated-by-schema'] }
