@@ -1,9 +1,12 @@
-export * from './types.js';
-export * from './constants.js';
-export * from './canonicalize.js';
-export * from './fingerprint.js';
-export * from './render.js';
-export * from './policy.js';
-export * from './derive.js';
-export * from './context.js';
-export * from './compare.js';
+export { 
+  createReleaseManifest,
+  calculateFileChecksum,
+  extractFileName,
+  getGitCommitHash,
+  signReleaseManifest,
+  verifyReleaseManifestSignature
+} from './release-provenance.js';
+export type { 
+  ReleaseManifest,
+  ReleaseArtifact 
+} from './release-provenance.js';
