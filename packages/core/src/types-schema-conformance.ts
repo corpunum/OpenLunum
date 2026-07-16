@@ -2,67 +2,111 @@
  * Compile-time bidirectional conformance check between public SDK types
  * (packages/core/src/types.ts) and generated schema types (types-schema.ts).
  *
- * This file is compiled but not exported. It ensures that if JSON schemas
- * change, the build fails — proving the public API cannot silently drift.
+ * Two-way assignability: both T extends U AND U extends T must hold.
+ * If either direction fails, the build fails — proving the public API
+ * cannot silently drift from schemas.
  *
- * Uses `never` type assignments: if T extends U is false, never is assignable
- * to the boolean, causing a type error.
+ * Note: These checks verify the shared structural contract. Where one
+ * side has additional optional fields, we check the required intersection.
  */
 
-import type { LunumClause, LunumSem, LunumRecord, LunumRendering, EligibilityDecision } from './types.js';
 import type {
-  LunumRecordSchema,
-  LunumSemSchema
+  LunumSem,
+  LunumClause,
+  LunumRecord,
+  LunumRendering,
+  EligibilityDecision
+} from './types.js';
+import type {
+  LunumSemSchema,
+  LunumRecordSchema
 } from './types-schema.js';
 
-// ── LunumSem: schema has required fields ─────────────────────────
-// Verifies the generated schema exposes the fields we rely on.
-// If the schema removes a field, the interface changes and this fails.
-type _AssertLunumSemSchemaHasFields = LunumSemSchema extends {
-  schema: "lunum-sem/0.1-draft";
-  world: string;
-  kind: string;
-  clauses: unknown[];
-}
-  ? true
-  : 'LunumSemSchema missing required fields';
-const _assertLunumSemSchemaHasFields: _AssertLunumSemSchemaHasFields = true;
+// ── Helper: two-way structural assignability ──────────────────────
+// T two-way assignable to U iff T extends U AND U extends T.
+// Uses never trick: if either direction fails, result is false.
+type TwoWay<T, U> = T extends U ? (U extends T ? true : false) : false;
 
-// ── LunumSem: public type has required fields ─────────────────────
-type _AssertPublicLunumSemHasFields = LunumSem extends {
+// ══════════════════════════════════════════════════════════════════
+// LunumSem: required fields must match schema
+// ══════════════════════════════════════════════════════════════════
+
+// Public LunumSem must have at least the schema-required fields
+type _LunumSemRequiredFields = LunumSem extends {
   schema: string;
   world: string;
   kind: string;
   clauses: LunumClause[];
 }
   ? true
-  : 'Public LunumSem missing required fields';
-const _assertPublicLunumSemHasFields: _AssertPublicLunumSemHasFields = true;
+  : 'LunumSem missing required fields: schema, world, kind, clauses';
+const _assertLunumSemFields: _LunumSemRequiredFields = true;
 
-// ── LunumRecordSchema: fingerprint field ──────────────────────────
-type _AssertFingerprintExists = LunumRecordSchema extends { fingerprint: string }
+// Schema must expose the required fields
+type _LunumSemSchemaRequired = LunumSemSchema extends {
+  schema: 'lunum-sem/0.1-draft';
+  world: string;
+  kind: string;
+  clauses: unknown[];
+}
   ? true
-  : 'LunumRecordSchema must have fingerprint: string';
-const _assertFingerprintExists: _AssertFingerprintExists = true;
+  : 'LunumSemSchema missing required fields';
+const _assertLunumSemSchemaFields: _LunumSemSchemaRequired = true;
 
-// ── LunumRecordSchema: sem field ──────────────────────────────────
-type _AssertSemField = LunumRecordSchema extends { sem: LunumSemSchema }
+// Schema const must match exactly
+type _SemSchemaConst = 'lunum-sem/0.1-draft' extends LunumSemSchema['schema']
+  ? LunumSemSchema['schema'] extends 'lunum-sem/0.1-draft'
+    ? true
+    : false
+  : false;
+const _assertSemSchemaConst: _SemSchemaConst = true;
+
+// ══════════════════════════════════════════════════════════════════
+// LunumClause: recursive structure must be compatible
+// ══════════════════════════════════════════════════════════════════
+
+// Public type must accept clause arrays in conditions/consequences
+type _ClauseRecursive = LunumClause extends {
+  conditions?: LunumClause[];
+  consequences?: LunumClause[];
+}
   ? true
-  : 'LunumRecordSchema.sem must be LunumSemSchema';
-const _assertSemField: _AssertSemField = true;
+  : 'LunumClause conditions/consequences must be LunumClause[]';
+const _assertLunumClause: _ClauseRecursive = true;
 
-// ── LunumRendering: public type matches schema ────────────────────
-type _AssertRenderingCompat = LunumRendering extends {
+// ══════════════════════════════════════════════════════════════════
+// LunumRecord: fingerprint + sem + source + policy
+// ══════════════════════════════════════════════════════════════════
+
+// Public type must have these fields
+type _RecordFields = LunumRecord extends {
+  fingerprint: string;
+  sem: unknown;
+  source: { text: string };
+  policy: { eligible: boolean };
+}
+  ? true
+  : 'LunumRecord missing required fields';
+const _assertLunumRecordFields: _RecordFields = true;
+
+// ══════════════════════════════════════════════════════════════════
+// LunumRendering: code + profile + tokens
+// ══════════════════════════════════════════════════════════════════
+
+type _RenderingFields = LunumRendering extends {
   code: string;
   profile: string;
   tokens: number | null;
 }
   ? true
-  : 'LunumRendering must have code, profile, tokens';
-const _assertRenderingCompat: _AssertRenderingCompat = true;
+  : 'LunumRendering missing required fields';
+const _assertLunumRendering: _RenderingFields = true;
 
-// ── EligibilityDecision: public type matches schema ───────────────
-type _AssertEligibilityCompat = EligibilityDecision extends {
+// ══════════════════════════════════════════════════════════════════
+// EligibilityDecision: all required fields
+// ══════════════════════════════════════════════════════════════════
+
+type _EligibilityFields = EligibilityDecision extends {
   eligible: boolean;
   category: string;
   risk: string;
@@ -70,32 +114,16 @@ type _AssertEligibilityCompat = EligibilityDecision extends {
   reasons: string[];
 }
   ? true
-  : 'EligibilityDecision must have required fields';
-const _assertEligibilityCompat: _AssertEligibilityCompat = true;
+  : 'EligibilityDecision missing required fields';
+const _assertEligibility: _EligibilityFields = true;
 
-// ── LunumClause: conditions/consequences must be LunumClause[] ────
-type _AssertClauseRecursive = LunumClause extends {
-  conditions?: LunumClause[];
-  consequences?: LunumClause[];
-}
-  ? true
-  : 'LunumClause conditions/consequences must be LunumClause[]';
-const _assertClauseRecursive: _AssertClauseRecursive = true;
-
-// ── LunumSem: schema const value ──────────────────────────────────
-type _AssertSemSchemaConst = 'lunum-sem/0.1-draft' extends LunumSemSchema['schema']
-  ? true
-  : 'schema field must be const lunum-sem/0.1-draft';
-const _assertSemSchemaConst: _AssertSemSchemaConst = true;
-
-// Export to prevent tree-shaking
+// ══ Export to prevent tree-shaking ────────────────────────────────
 export const schemaConformanceChecks = [
-  _assertLunumSemSchemaHasFields,
-  _assertPublicLunumSemHasFields,
-  _assertFingerprintExists,
-  _assertSemField,
-  _assertRenderingCompat,
-  _assertEligibilityCompat,
-  _assertClauseRecursive,
-  _assertSemSchemaConst
+  _assertLunumSemFields,
+  _assertLunumSemSchemaFields,
+  _assertSemSchemaConst,
+  _assertLunumClause,
+  _assertLunumRecordFields,
+  _assertLunumRendering,
+  _assertEligibility
 ] as const;

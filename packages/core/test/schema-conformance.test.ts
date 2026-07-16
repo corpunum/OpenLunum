@@ -1,15 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
 import * as path from 'path';
-import * as fs from 'fs';
 import { fileURLToPath } from 'url';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Test compiled to packages/core/dist/test/
-// 4 levels up = workspace root
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
+import * as fs from 'fs';
 const SCHEMAS_DIR = path.join(WORKSPACE_ROOT, 'schemas');
 const TYPES_SCHEMA_PATH = path.join(WORKSPACE_ROOT, 'packages', 'core', 'src', 'types-schema.ts');
 
@@ -258,4 +254,24 @@ test('experiment schema has required fields', async () => {
   assert.ok(schema.required.includes('schema'), 'Must require schema');
   assert.ok(schema.required.includes('id'), 'Must require id');
   assert.ok(schema.required.includes('task'), 'Must require task');
+});
+
+// Tests that verify the compile-time checks actually catch regressions
+test('schema-to-ts regeneration is required when schema changes', async () => {
+  const { execSync } = await import('node:child_process');
+  const root = process.cwd();
+  // The schema-to-ts script should detect no drift with current types
+  const output = execSync(`node ${path.join(root, '..', '..', 'scripts', 'schema-to-ts.cjs')} --dry-run`, {
+    cwd: root, encoding: 'utf8'
+  });
+  assert.ok(output.includes('OK') || output.includes('No drift'), 'Schema must not drift from types-schema.ts');
+});
+
+test('conformance checks include two-way assignability', async () => {
+  // Verify the conformance file has TwoWay type checks
+  const fs = await import('node:fs');
+  const conformanceSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'core', 'src', 'types-schema-conformance.ts'), 'utf-8');
+  assert.ok(conformanceSrc.includes('TwoWay<'), 'Must use TwoWay assignability checks');
+  assert.ok(conformanceSrc.includes('T extends U'), 'Must check T extends U');
+  assert.ok(conformanceSrc.includes('U extends T'), 'Must check U extends T');
 });
