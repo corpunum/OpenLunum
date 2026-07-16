@@ -1,0 +1,25 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "release-provenance",
+  "area": "repository-reliability",
+  "task": "infrastructure",
+  "deterministic": true,
+  "hypothesis": "Implement release provenance infrastructure including documentation, signing scripts, and verification tools to ensure artifact traceability and integrity.",
+  "baselineCommit": "a9486307125a147ee6d2e6af2d71b72c9a3e7e1a",
+  "dataset": {
+    "path": "datasets/dev/empty.jsonl",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "modelProfile": null,
+  "limits": {
+    "maxItems": 1,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 1
+  },
+  "gates": {
+    "minimumFeatureRecall": 1.0,
+    "minimumExactRate": 1.0,
+    "requireProtectedLiteralCoverage": true
+  },
+  "outputDirectory": "reports/experiments/release-provenance"
+}

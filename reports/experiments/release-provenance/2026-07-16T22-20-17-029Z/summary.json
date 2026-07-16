@@ -1,0 +1,14 @@
+{
+  "experimentId": "release-provenance",
+  "runId": "2026-07-16T22-20-17-029Z",
+  "task": "infrastructure",
+  "deterministic": true,
+  "items": 1,
+  "calls": 0,
+  "passed": 1,
+  "failed": 0,
+  "exactRate": 1,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "gatesPassed": true
+}
