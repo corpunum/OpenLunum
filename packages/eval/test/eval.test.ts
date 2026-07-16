@@ -137,9 +137,9 @@ test('context-runner does not hardcode eligibility', async () => {
   const fs = await import('node:fs');
   const ctxSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'context-runner.ts'), 'utf-8');
   
-  // Should use validateSem for eligibility, not hardcoded eligible: true
-  assert.ok(ctxSrc.includes('validateSem'), 'Must use validateSem for eligibility');
-  assert.ok(ctxSrc.includes('validated-by-schema'), 'Must compute eligibility from validation');
+  // Should use classifyEligibility for policy, not hardcoded eligible: true
+  assert.ok(ctxSrc.includes('classifyEligibility'), 'Must use classifyEligibility for policy');
+  assert.ok(ctxSrc.includes('lunumMeta: policy'), 'Must pass policy via lunumMeta to compileContext');
   // Should NOT hardcode eligible: true in lunumMeta
   assert.ok(!ctxSrc.includes("lunumMeta: { eligible: true"), 'Must not hardcode eligible: true in lunumMeta');
 });

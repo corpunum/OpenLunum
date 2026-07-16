@@ -1,6 +1,6 @@
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { compileContext, validateSem, fingerprintSem, renderSem } from '@corpunum/lunum';
+import { compileContext, classifyEligibility, validateSem, fingerprintSem, renderSem } from '@corpunum/lunum';
 import type { LunumSem, ContextMessage } from '@corpunum/lunum';
 import { writeJson, findWorkspaceRoot } from './io.js';
 import type { ExperimentManifest } from './types.js';
@@ -67,7 +67,19 @@ export async function runContextExperiment(
 
     // Use ORIGINAL natural source text from annotations
     // NEVER use serialized Sem JSON as natural source
-    const sourceText: string = (sem.annotations?.sourceText as string) ?? `[${sem.kind} @ ${sem.world}]`;
+    // BLOCK if natural source is missing — context requires natural text
+    const rawSourceText = sem.annotations?.sourceText as string | undefined;
+    if (!rawSourceText || rawSourceText.trim().length === 0) {
+      results.push({
+        id: file, sourceText: '', sourceLanguage: 'unknown',
+        naturalTokens: 0, lunumTokens: 0, mixedTokens: 0,
+        tokenSavings: { natural: 0, mixed: 0 },
+        eligibility: { eligible: false, category: 'no-source', risk: 'high', confidence: 0, reasons: ['missing-natural-source'] },
+        status: 'failed', failureReason: 'Missing natural source text — context requires natural text'
+      });
+      continue;
+    }
+    const sourceText: string = rawSourceText;
     const sourceLanguage: string = (sem.annotations?.sourceLanguage as string) ?? 'en';
 
     // Render to Lunum-Code for context compilation
@@ -86,32 +98,41 @@ export async function runContextExperiment(
       continue;
     }
 
-    // Build a ContextMessage for the real context compiler
-    // lunumMeta is NOT set from source sem annotations — eligibility comes from validation
+    // Compute policy via classifyEligibility, then pass it to compileContext
+    const policy = classifyEligibility({
+      category: sem.kind,
+      risk: 'low',
+      confidence: 0.95,
+      sourceText,
+      semantic: true
+    });
+
+    // Build ContextMessage with policy passed via lunumMeta
     const message: ContextMessage = {
       role: 'user',
       source: { text: sourceText },
-      lunumCode: lunumCode || null
-    } as ContextMessage;
+      lunumCode: lunumCode || null,
+      lunumMeta: policy
+    };
 
-    // Use REAL context compiler from @corpunum/lunum
+    // Use REAL context compiler from @corpunum/lunum with mixed mode
     const compilation = compileContext([message], { mode: 'mixed' });
 
-    // Eligibility computed from validation result, NOT from source sem annotations
-    const validationOk = validateSem(sem);
-    const eligibility: ContextReport['eligibility'] = validationOk
-      ? { eligible: true, category: sem.kind, risk: 'low', confidence: 0.95, reasons: ['validated-by-schema'] }
-      : { eligible: false, category: 'invalid', risk: 'high', confidence: 0.9, reasons: ['schema-validation-failed'] };
+    // Eligibility comes from classifyEligibility (policy), NOT from validateSem
+    const eligibility: ContextReport['eligibility'] = policy;
 
     // Calculate token savings from REAL compilation result
     const naturalTokens = compilation.naturalTokens;
     const lunumTokens = compilation.lunumTokens;
     const mixedTokens = compilation.mixedTokens;
 
-    // Status computed from compilation success, NOT just from eligibility
-    // The context runner succeeds if compilation produced valid output
-    const hasCompilationOutput = compilation.selectedMessages && compilation.selectedMessages.length > 0;
-    const status = hasCompilationOutput ? 'passed' : 'failed';
+    // Status computed from actual mixed-message output
+    // The context runner succeeds if mixed mode produced different output than natural
+    const hasMixedOutput = compilation.mixedMessages && compilation.mixedMessages.length > 0;
+    const mixedDiffersFromNatural = compilation.mixedMessages && compilation.naturalMessages
+      ? compilation.mixedMessages.some((m, i) => m.content !== compilation.naturalMessages[i]?.content)
+      : false;
+    const status = hasMixedOutput && mixedDiffersFromNatural ? 'passed' : 'failed';
 
     results.push({
       id: file,
@@ -161,7 +182,7 @@ export async function writeContextReport(results: ContextReport[], outputDir: st
     failed: results.length - passed.length,
     averageLunumRatio: avgLunumRatio,
     averageMixedRatio: avgMixedRatio,
-    notes: 'Token counts are HEURISTIC ESTIMATES. Eligibility computed from validateSem, not hardcoded.'
+    notes: 'Token counts are HEURISTIC ESTIMATES. Eligibility computed from classifyEligibility(policy), passed via lunumMeta to compileContext.'
   };
   await writeJson(path.join(output, 'summary.json'), summary);
 
