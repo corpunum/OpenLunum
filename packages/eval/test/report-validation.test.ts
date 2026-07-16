@@ -51,7 +51,8 @@ test('valid report bundle passes validation', async () => {
   const dir = path.join('/tmp', `validate-test-${Date.now()}`);
   try {
     createValidReport(dir);
-    const result = runValidation(dir);
+    const expectedHash = '92025b866e1837d013bd651977ff299f73ec8a980e395e949bf9c877cea5a80d';
+    const result = runValidation(dir, ['--expected-integrity', expectedHash]);
     assert.ok(result.success, `Valid report should pass: ${result.stdout}`);
   } finally {
     try { await rm(dir, { recursive: true, force: true }); } catch {}
@@ -176,4 +177,15 @@ test('validation script exists and is executable', async () => {
 test('report-validation schema exists', async () => {
   const schemaPath = path.join(WORKSPACE_ROOT, 'schemas', 'report-validation.schema.json');
   assert.ok(fs.existsSync(schemaPath), 'report-validation.schema.json must exist');
+});
+
+test('integrity hash mismatch detected', async () => {
+  const dir = path.join('/tmp', `validate-test-${Date.now()}`);
+  try {
+    createValidReport(dir);
+    const result = runValidation(dir, ['--expected-integrity', '0000000000000000000000000000000000000000000000000000000000000000']);
+    assert.ok(!result.success, 'Wrong integrity hash should fail');
+  } finally {
+    try { await rm(dir, { recursive: true, force: true }); } catch {}
+  }
 });
