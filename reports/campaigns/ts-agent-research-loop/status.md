@@ -23,10 +23,14 @@ fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
   - LunumSem core fields (world, kind)
   - LunumRecord fingerprint, sem, source
   - LunumRendering (code, profile, tokens)
-  - EligibilityDecision (all required fields)
+  - EligibilityDecision (all required fields, with correct Risk type)
   - Clause (predicate, roles)
 - Added compile-failure regression fixtures in `test/fixtures/schema-drift-failures.ts`
 - Tests verify TwoWay usage and detect drift at build time
+
+**Semantic corrections applied:**
+- EligibilityDecision TwoWay check now uses `Risk` type (not `string`)
+- This ensures the TwoWay check actually verifies structural compatibility
 
 **CI:** verify ✅, schema-drift ✅, protected-data-boundary ✅
 
@@ -51,8 +55,8 @@ fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
 
 ### Blocker 1: Removed hardcoded eligibility
 - `context-runner.ts`: eligibility now computed from `validateSem(sem)`
-- `lunumMeta` no longer hardcoded to `{ eligible: true, ... }`
-- Eligibility derived from schema validation result
+- `lunumMeta` no longer set from `sem.annotations?.meta`
+- Eligibility derived purely from schema validation result
 
 ### Blocker 2: Task success computed independently of model status
 - `runner.ts`: status computed from `hasOutput + resultIsValid`
@@ -63,6 +67,10 @@ fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
 - `runDeterministicTask` now accepts `outputDir` parameter
 - `writeRenderReport`/`writeContextReport` write to `outputDir` (timestamped)
 - NOT to `manifest.outputDirectory` (parent)
+
+**Semantic corrections applied:**
+- `lunumMeta` on ContextMessage no longer set from source sem annotations
+- Message passed to compileContext is clean — eligibility derived from validation only
 
 **Other fixes:**
 1. Uses real `compileContext([message])` from `@corpunum/lunum`
