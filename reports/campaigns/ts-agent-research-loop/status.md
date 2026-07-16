@@ -12,9 +12,9 @@
 
 **Code-level fix:**
 - `TwoWay<T, U>` helper: `T extends U ? U extends T ? true : false : false`
-- Checks applied to LunumSem, LunumRecord, LunumRendering, EligibilityDecision, Clause
-- Added compile-failure regression fixtures in `test/fixtures/schema-drift-failures.ts`
+- Checks applied to LunumSem, LunumClause, LunumRecord, LunumRendering, EligibilityDecision
 - Tests verify TwoWay usage and detect drift at build time
+- Schema const checked in both directions
 
 **CI:** verify ✅, schema-drift ✅, protected-data-boundary ✅
 
@@ -25,7 +25,6 @@
 - Added `fetch-depth: 0` to verify and report-validation jobs
 - Integrity check fails closed (no expected hash = fail)
 - Smoke test output created by `eval:smoke` step
-- Updated baseline commit to valid repo commit (23259db)
 
 **CI:** verify ✅, schema-drift ✅, report-validation ✅, protected-data-boundary ✅
 
@@ -37,7 +36,6 @@
 3. Source text from `annotations.sourceText`, NOT `content.substring(0,200)`
 4. **Eliminated model self-grading**: `result.exact` removed from status computation
 5. Timestamped run directories: `{outputDir}/{timestamp}/`
-6. Dedicated reports written inside timestamped run directory
 
 **Regression tests added:**
 - `runner does not trust model self-grading` — fails if result.exact/result.pass used
@@ -54,12 +52,6 @@ adapter-openunum: 2 pass, 0 fail
 cli: 1 pass, 0 fail
 eval: 17 pass, 0 fail
 TOTAL: 39 pass, 0 fail
-```
-
-## Rebase Chain
-
-```
-fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
 ```
 
 ## Next Step
