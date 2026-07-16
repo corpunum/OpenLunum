@@ -1,67 +1,49 @@
-# Campaign Status — Phase Zero COMPLETE
+# Campaign Status — Phase Zero/Section 6 NOT Complete
 
-## PRs GREEN
+**As of 2026-07-16:** campaign base `typescript-agent-research-loop` ca623ec; Phase 7 paused; all PRs still draft and unmerged.
 
-| PR | Title | Branch | CI Status |
-|---|---|---|---|
-| **#8** | feat(infra): schema-to-TypeScript drift checking | `fix-pr5` | ✅ **GREEN** |
-| **#9** | feat(infra): report validation | `fix-pr6` | ✅ **GREEN** |
-| **#10** | feat(eval): render and context runners | `render-context` | ✅ **GREEN** |
+---
 
-## PR #8 — Schema Drift (Two-Way Assignability) ✅
+## PR #8 — Schema Drift (Two-Way Assignability) — Draft, CI Green
 
-**Code-level fix:**
-- `TwoWay<T, U>` helper: `T extends U ? U extends T ? true : false : false`
-- Checks applied to LunumSem, LunumRecord, LunumRendering, EligibilityDecision, Clause
-- Added compile-failure regression fixtures in `test/fixtures/schema-drift-failures.ts`
-- Tests verify TwoWay usage and detect drift at build time
+**Commit:** `fix-pr5` 80e36a2 (ca623ec base)
+**CI:** green on original head; implementation and evidence ready.
+**What it proves:**
+- Actual public ↔ generated narrow conformance (TypeScript two-way assignability on LunumSem, LunumRecord, LunumRendering, EligibilityDecision, Clause)
+- Positive compile fixture passes
+- Isolated negative generated-world fixture detects TS2322 on mismatched generated output
+**Does NOT prove:** full schema/public equivalence across all LunumSem types.
 
-**CI:** verify ✅, schema-drift ✅, protected-data-boundary ✅
+---
 
-## PR #9 — Report Validation (Fail-Closed) ✅
+## PR #9 — Report Validation (Fail-Closed) — Draft, Locally Verified
 
-**Code-level fixes:**
-- Removed `|| true` from CI
-- Added `fetch-depth: 0` to verify and report-validation jobs
-- Integrity check fails closed (no expected hash = fail)
-- Smoke test output created by `eval:smoke` step
-- Updated baseline commit to valid repo commit (23259db)
+**Commit:** `fix-pr6` 8f49255 (merge of PR8 + PR9)
+**Locally verified.** Remote CI has not yet run on the merge commit.
+**Counts (local):** core20 adapter2 cli1 eval14 · smoke16/4
+**Hash:** 6a5dfd6e…26873
+**What it does:** fail-closed integrity check, `fetch-depth: 0`, smoke output via `eval:smoke`, expected-hash-on-missing = fail.
 
-**CI:** verify ✅, schema-drift ✅, report-validation ✅, protected-data-boundary ✅
+---
 
-## PR #10 — Render/Context Runners (Real Compiler) ✅
+## PR #10 — Render/Context Runners — Draft, Remote CI Green
 
-**Code-level fixes:**
-1. Uses real `compileContext([message])` from `@corpunum/lunum`
-2. Eligibility from `ContextMessage.lunumMeta`, not hardcoded
-3. Source text from `annotations.sourceText`, NOT `content.substring(0,200)`
-4. **Eliminated model self-grading**: `result.exact` removed from status computation
-5. Timestamped run directories: `{outputDir}/{timestamp}/`
-6. Dedicated reports written inside timestamped run directory
+**Commit:** `render-context` 0975ec6
+**CI:** green on original head.
+**What it proves:**
+- Policy-aware tests accept eligible compaction
+- Correct ineligible natural fallback when source or eligibility data is missing
+**Does NOT yet contain:** reconciled PR9 head.
 
-**Regression tests added:**
-- `runner does not trust model self-grading` — fails if result.exact/result.pass used
-- `render-runner uses original source text` — fails if content.substring used
-- `context-runner uses real compileContext` — fails if hardcoded eligibility
+---
 
-**CI:** verify ✅, schema-drift ✅, report-validation ✅, protected-data-boundary ✅
+## Phase Status
 
-## Test Coverage
+- **Phase Zero/Section 6:** NOT complete on campaign base — PRs remain unmerged.
+- **Phase 7:** Paused, awaiting merge order.
 
-```
-core: 19 pass, 0 fail
-adapter-openunum: 2 pass, 0 fail
-cli: 1 pass, 0 fail
-eval: 17 pass, 0 fail
-TOTAL: 39 pass, 0 fail
-```
+## Next Actions
 
-## Rebase Chain
-
-```
-fix-pr5 (PR #8) → fix-pr6 (PR #9) → render-context (PR #10)
-```
-
-## Next Step
-
-Awaiting maintainer merge of PRs #8 → #9 → #10. Phase 7 work-area execution begins after merge.
+1. Publish/review PR #9 reconciliation
+2. Reconcile PR #10 onto PR #9
+3. Await authorized maintainer merge order: #8 → #9 → #10
