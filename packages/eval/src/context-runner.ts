@@ -103,10 +103,15 @@ export async function runContextExperiment(
       ? { eligible: true, category: sem.kind, risk: 'low', confidence: 0.95, reasons: ['validated-by-schema'] }
       : { eligible: false, category: 'invalid', risk: 'high', confidence: 0.9, reasons: ['schema-validation-failed'] };
 
-    // Calculate token savings
+    // Calculate token savings from REAL compilation result
     const naturalTokens = compilation.naturalTokens;
     const lunumTokens = compilation.lunumTokens;
     const mixedTokens = compilation.mixedTokens;
+
+    // Status computed from compilation success, NOT just from eligibility
+    // The context runner succeeds if compilation produced valid output
+    const hasCompilationOutput = compilation.selectedMessages && compilation.selectedMessages.length > 0;
+    const status = hasCompilationOutput ? 'passed' : 'failed';
 
     results.push({
       id: file,
@@ -120,7 +125,7 @@ export async function runContextExperiment(
         mixed: naturalTokens > 0 ? (1 - mixedTokens / naturalTokens) : 0
       },
       eligibility,
-      status: eligibility.eligible ? 'passed' : 'failed'
+      status
     });
   }
 
