@@ -19,6 +19,60 @@ export interface ContextReport {
 }
 
 /**
+ * Pure evaluation: compare mixed output against expected source
+ * (lunum compact when eligible, natural when not).
+ * Returns a discriminated union — no side effects.
+ */
+export type SelectionResult =
+  | { status: 'passed' }
+  | { status: 'failed'; failureReason: string };
+
+export function evaluateContextSelection(
+  eligible: boolean,
+  compilation: {
+    mixedMessages: ContextMessage[] | undefined;
+    naturalMessages: ContextMessage[] | undefined;
+    lunumMessages: ContextMessage[] | undefined;
+  }
+): SelectionResult {
+  const mixed = compilation.mixedMessages;
+  const natural = compilation.naturalMessages;
+  const lunum = compilation.lunumMessages;
+
+  if (!mixed || mixed.length === 0) {
+    return { status: 'failed', failureReason: 'Missing mixed output' };
+  }
+
+  const mixedLen = mixed.length;
+  let i: number;
+  for (i = 0; i < mixedLen; i++) {
+    const entry = mixed[i];
+    if (!entry) {
+      return {
+        status: 'failed',
+        failureReason: eligible
+          ? `eligible mixed[${i}] is missing`
+          : `ineligible mixed[${i}] is missing`
+      };
+    }
+    const expected = eligible
+      ? lunum![i]?.content
+      : natural![i]?.content;
+    const actual = entry.content;
+    if (expected === undefined || actual !== expected) {
+      return {
+        status: 'failed',
+        failureReason: eligible
+          ? `eligible mixed[${i}] differs from lunum compact output`
+          : `ineligible mixed[${i}] differs from natural output`
+      };
+    }
+  }
+
+  return { status: 'passed' };
+}
+
+/**
  * Estimate tokens from text length (HEURISTIC ESTIMATES).
  */
 function estimateTokens(text: string, tokenizer: string = 'generic'): number {
@@ -126,15 +180,11 @@ export async function runContextExperiment(
     const lunumTokens = compilation.lunumTokens;
     const mixedTokens = compilation.mixedTokens;
 
-    // Status computed from actual mixed-message output
-    // The context runner succeeds if mixed mode produced different output than natural
-    const hasMixedOutput = compilation.mixedMessages && compilation.mixedMessages.length > 0;
-    const mixedDiffersFromNatural = compilation.mixedMessages && compilation.naturalMessages
-      ? compilation.mixedMessages.some((m, i) => m.content !== compilation.naturalMessages[i]?.content)
-      : false;
-    const status = hasMixedOutput && mixedDiffersFromNatural ? 'passed' : 'failed';
+    // Policy-aware evaluation via pure helper
+    const selection = evaluateContextSelection(policy.eligible, compilation);
 
-    results.push({
+    // Build report with optional failureReason only on failure
+    const base: Omit<ContextReport, 'failureReason'> = {
       id: file,
       sourceText,
       sourceLanguage,
@@ -146,8 +196,13 @@ export async function runContextExperiment(
         mixed: naturalTokens > 0 ? (1 - mixedTokens / naturalTokens) : 0
       },
       eligibility,
-      status
-    });
+      status: selection.status as ContextReport['status']
+    };
+    if (selection.status === 'failed') {
+      results.push({ ...base, failureReason: selection.failureReason });
+    } else {
+      results.push(base);
+    }
   }
 
   return { results, output: 'reports/experiments/render-context-runner' };

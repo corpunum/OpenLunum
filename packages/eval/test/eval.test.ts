@@ -10,6 +10,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
+import { createServer } from 'node:http';
+import { mkdtemp, readFile, rm, writeFile, mkdir } from 'node:fs/promises';
+import os from 'node:os';
+import { once } from 'node:events';
+import { runExperiment } from '../src/runner.js';
+import { sha256File } from '../src/io.js';
+import { classifyEligibility, compileContext, renderSem } from '@corpunum/lunum';
+import type { ContextMessage } from '@corpunum/lunum';
+import { evaluateContextSelection, runContextExperiment, writeContextReport } from '../src/context-runner.js';
+import type { ContextReport } from '../src/context-runner.js';
+
 test('multilingual gold dataset has stable cross-language groups', async () => {
   const result = await runSmoke();
   assert.ok(result.items >= 12);
@@ -26,14 +37,6 @@ test('experiment manifest enforces dataset hashes and budgets', () => {
   };
   assert.doesNotThrow(() => validateManifest(manifest));
 });
-
-
-import { createServer } from 'node:http';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
-import os from 'node:os';
-import { once } from 'node:events';
-import { runExperiment } from '../src/runner.js';
-import { sha256File } from '../src/io.js';
 
 test('local OpenAI-compatible runner records a passing parse experiment', async () => {
   const sem = {
@@ -116,34 +119,6 @@ test('render-runner uses original source text, not serialized Sem JSON', async (
   );
 });
 
-test('context-runner uses real compileContext, not hardcoded eligibility', async () => {
-  const fs = await import('node:fs');
-  const ctxSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'context-runner.ts'), 'utf-8');
-  
-  // Must use compileContext from @corpunum/lunum
-  assert.ok(
-    ctxSrc.includes('compileContext'),
-    'Must use compileContext from @corpunum/lunum'
-  );
-  // Must NOT hardcode eligibility
-  assert.ok(
-    !ctxSrc.includes("eligible: true") || ctxSrc.includes('compileContext'),
-    'Eligibility must come from compileContext, not hardcoded'
-  );
-});
-
-// Regression test: verify hardcoded eligibility is removed
-test('context-runner does not hardcode eligibility', async () => {
-  const fs = await import('node:fs');
-  const ctxSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'context-runner.ts'), 'utf-8');
-  
-  // Should use classifyEligibility for policy, not hardcoded eligible: true
-  assert.ok(ctxSrc.includes('classifyEligibility'), 'Must use classifyEligibility for policy');
-  assert.ok(ctxSrc.includes('lunumMeta: policy'), 'Must pass policy via lunumMeta to compileContext');
-  // Should NOT hardcode eligible: true in lunumMeta
-  assert.ok(!ctxSrc.includes("lunumMeta: { eligible: true"), 'Must not hardcode eligible: true in lunumMeta');
-});
-
 // Regression test: verify task success is computed independently
 test('runner computes task success independently of model status', async () => {
   const fs = await import('node:fs');
@@ -168,4 +143,130 @@ test('reports are written inside timestamped run directory', async () => {
     'Must write render reports to outputDir');
   assert.ok(runnerSrc.includes('writeContextReport(ctxResult.results, outputDir)') || runnerSrc.includes('writeContextReport(ctxResult.results, output)'),
     'Must write context reports to outputDir');
+});
+
+// ---- Behavioral tests: evaluateContextSelection ----
+
+test('behavioral: eligible preference compacts and passes', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise' } }, negated: false }],
+    annotations: { sourceText: 'The user prefers concise answers.', sourceLanguage: 'en' }
+  };
+  const rendered = renderSem(sem, { profile: 'generic-en-pivot/0.1' });
+  const policy = classifyEligibility({ category: sem.kind, risk: 'low', confidence: 0.95, sourceText: 'The user prefers concise answers.', semantic: true });
+
+  assert.ok(policy.eligible, 'preference should be eligible');
+
+  const message: ContextMessage = { role: 'user', source: { text: 'prefers-concise' }, lunumCode: rendered.code, lunumMeta: policy };
+  const compilation = compileContext([message], { mode: 'mixed' });
+
+  const result = evaluateContextSelection(true, compilation);
+  assert.equal(result.status, 'passed', 'eligible mixed must equal lunum compact');
+  assert.equal((result as { status: 'passed'; failureReason?: string }).failureReason, undefined);
+});
+
+test('behavioral: ineligible conditional_instruction falls back to natural and passes', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'conditional_instruction',
+    clauses: [{ predicate: 'require', roles: { agent: { type: 'actor', id: 'a' }, theme: { type: 'action', id: 'retry' } }, conditions: [] }],
+    annotations: { sourceText: 'If error, retry up to 3 times.', sourceLanguage: 'en' }
+  };
+  const rendered = renderSem(sem, { profile: 'generic-en-pivot/0.1' });
+  const policy = classifyEligibility({ category: sem.kind, risk: 'low', confidence: 0.95, sourceText: 'If error, retry up to 3 times.', semantic: true });
+
+  assert.ok(!policy.eligible, 'conditional_instruction should be ineligible');
+
+  const message: ContextMessage = { role: 'user', source: { text: 'If error, retry up to 3 times.' }, lunumCode: rendered.code, lunumMeta: policy };
+  const compilation = compileContext([message], { mode: 'mixed' });
+
+  const result = evaluateContextSelection(false, compilation);
+  assert.equal(result.status, 'passed', 'ineligible mixed must equal natural');
+  assert.equal((result as { status: 'passed'; failureReason?: string }).failureReason, undefined);
+});
+
+test('behavioral: eligible with wrong mixed content fails with explicit failureReason', () => {
+  const policy = { eligible: true, category: 'preference', risk: 'low', confidence: 0.95, reasons: [] } as const;
+  const naturalContent = 'The user prefers concise answers.';
+  const lunumContent = 'R prefer user concise';
+
+  // Mixed wrongly equals natural instead of lunum
+  const compilation = {
+    mixedMessages: [{ role: 'user', content: naturalContent }],
+    naturalMessages: [{ role: 'user', content: naturalContent }],
+    lunumMessages: [{ role: 'user', content: lunumContent }]
+  };
+
+  const result = evaluateContextSelection(true, compilation);
+  assert.equal(result.status, 'failed');
+  assert.equal(result.failureReason, 'eligible mixed[0] differs from lunum compact output');
+
+  // Length mismatch when mixed has extra message
+  const longMixed = [
+    { role: 'user', content: lunumContent },
+    { role: 'user', content: 'extra' }
+  ];
+  const lengthResult = evaluateContextSelection(true, {
+    mixedMessages: longMixed,
+    naturalMessages: [{ role: 'user', content: naturalContent }],
+    lunumMessages: [{ role: 'user', content: lunumContent }]
+  });
+  assert.equal(lengthResult.status, 'failed');
+  assert.ok(typeof lengthResult.failureReason === 'string' && lengthResult.failureReason.length > 0);
+});
+
+test('behavioral: full pipeline passes eligible and ineligible reports', async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'pr10-integration-'));
+  try {
+    const examplesDir = path.join(temp, 'examples');
+    await mkdir(examplesDir, { recursive: true });
+
+    // Eligible preference
+    const eligible = {
+      schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+      clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise' } }, negated: false }],
+      annotations: { sourceText: 'The user prefers concise answers.', sourceLanguage: 'en' }
+    };
+    await writeFile(path.join(examplesDir, 'eligible-preference.sem.json'), JSON.stringify(eligible), 'utf8');
+
+    // Ineligible conditional_instruction
+    const ineligible = {
+      schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'conditional_instruction',
+      clauses: [{ predicate: 'require', roles: { agent: { type: 'actor', id: 'a' }, theme: { type: 'action', id: 'b' } }, conditions: [] }],
+      annotations: { sourceText: 'If error, retry up to 3 times.', sourceLanguage: 'en' }
+    };
+    await writeFile(path.join(examplesDir, 'ineligible-conditional.sem.json'), JSON.stringify(ineligible), 'utf8');
+
+    const manifest: ExperimentManifest = {
+      schema: 'openlunum-experiment/0.1', id: 'pr10-integration', area: 'context', task: 'context', hypothesis: 'both eligibility modes pass',
+      baselineCommit: 'e9c6fd0',
+      dataset: { path: '', sha256: '0'.repeat(64) }, modelProfile: 'test',
+      limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+      gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false },
+      outputDirectory: temp
+    };
+
+    const { results } = await runContextExperiment(manifest, temp);
+    assert.equal(results.length, 2, 'should process exactly two examples');
+
+    const byKind = results.sort((a, b) => a.id.localeCompare(b.id));
+    const eligibleResult = byKind.find(r => r.id === 'eligible-preference.sem.json')!;
+    const ineligibleResult = byKind.find(r => r.id === 'ineligible-conditional.sem.json')!;
+
+    assert.equal(eligibleResult.eligibility.eligible, true);
+    assert.equal(eligibleResult.status, 'passed');
+    assert.equal(eligibleResult.failureReason, undefined);
+
+    assert.equal(ineligibleResult.eligibility.eligible, false);
+    assert.equal(ineligibleResult.status, 'passed');
+    assert.equal(ineligibleResult.failureReason, undefined);
+
+    await writeContextReport(results, path.join(temp, 'reports'));
+    const summaryRaw = await readFile(path.join(temp, 'reports', 'summary.json'), 'utf8');
+    const summary = JSON.parse(summaryRaw) as { passed: number; failed: number };
+    assert.equal(summary.passed, 2, 'both reports should be counted as passed');
+    assert.equal(summary.failed, 0, 'no failures expected');
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
 });
