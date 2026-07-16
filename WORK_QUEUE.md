@@ -12,7 +12,7 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 ## P1 — semantic contract
 
-- [ ] Define semantic identity projection: decide which annotations/provenance affect fingerprints.
+- [x] Define semantic identity projection: decide which annotations/provenance affect fingerprints.
 - [ ] Expand typed time, quantity, uncertainty, reference, and modality structures.
 - [ ] Add canonical conformance vectors and property tests.
 - [ ] Version and document fingerprint migration from 0.1.
