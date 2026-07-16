@@ -19,6 +19,7 @@ This document describes the schema-to-TypeScript drift checking system in OpenLu
 | `packages/core/src/types-schema.ts` | Auto-generated types (commit to repo) |
 | `packages/core/src/types-schema-conformance.ts` | Compile-time two-way checks (actual public ↔ actual generated) |
 | `packages/core/test/schema-conformance.test.ts` | Runtime + compile-time conformance tests |
+| `packages/core/test/fixtures/positive-compile-fixture.ts` | Positive compile fixture (TwoWay on same projections) |
 | `packages/core/test/fixtures/negative-compile-fixture.ts` | Negative compile fixture (excluded from build) |
 | `.github/workflows/ci.yml` | CI drift check job |
 | `docs/schema-drift-migration.md` | This document |
@@ -33,7 +34,9 @@ Run `node scripts/schema-to-ts.cjs --dry-run` to check whether `types-schema.ts`
 
 `types-schema-conformance.ts` proves that selected shared fields on public SDK types (`LunumSem`, `LunumRecord`) are structurally compatible with the corresponding generated schema types (`LunumSemSchema`, `LunumRecordSchema`). The check uses `TwoWay<T, U>` which requires both `T extends U` and `U extends T`.
 
-The negative compile fixture (`test/fixtures/negative-compile-fixture.ts`) deliberately mutates an actual generated contract (`Omit<LunumSemSchema, 'world'>` + `world: number`) and asserts it against the public type. Running `tsc` on this fixture must produce a single intentional TS2322 diagnostic, proving the compile-time mechanism detects incompatibilities.
+The negative compile fixture (`test/fixtures/negative-compile-fixture.ts`) deliberately mutates an actual generated contract (`Omit<LunumSemSchema, 'world'>` + `world: number`) and asserts it against the public type. Running `tsc` on this fixture must produce exactly one intentional TS2322 diagnostic.
+
+The positive compile fixture (`test/fixtures/positive-compile-fixture.ts`) uses the same `TwoWay` helper and checks the same five projections. It must compile without error, proving the same assertions that are in `types-schema-conformance.ts` are valid.
 
 ## Compile-time checks performed
 

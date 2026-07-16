@@ -266,38 +266,17 @@ test('schema-to-ts regeneration is required when schema changes', async () => {
   assert.ok(output.includes('OK') || output.includes('No drift'), 'Schema must not drift from types-schema.ts');
 });
 
-test('conformance checks include two-way assignability', async () => {
-  // Verify the conformance file uses TwoWay in actual type checks (not just definition)
-  const fs = await import('node:fs');
-  const conformanceSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'core', 'src', 'types-schema-conformance.ts'), 'utf-8');
-
-  // Must define the TwoWay helper
-  assert.ok(conformanceSrc.includes('type TwoWay<T, U>'), 'Must define TwoWay<T, U> helper');
-
-  // Must use TwoWay in at least 3 actual type checks (not just in the definition)
-  const twoWayUses = (conformanceSrc.match(/TwoWay</g) || []).length;
-  assert.ok(twoWayUses >= 3, `Must use TwoWay in checks (found ${twoWayUses}, need >= 3)`);
-
-  // Must have two-way checks (both directions)
-  assert.ok(conformanceSrc.includes('T extends U'), 'Must check T extends U');
-  assert.ok(conformanceSrc.includes('U extends T'), 'Must check U extends T');
-
-  // Must export checks to prevent tree-shaking
-  assert.ok(conformanceSrc.includes('export const schemaConformanceChecks'), 'Must export conformance checks');
-});
-
-test('negative compile fixture: tsc produces TS2322 with intentional mutation', async () => {
-  // Run tsc on the negative fixture to prove it fails with the expected error
+test('positive compile fixture: TwoWay checks on actual public/generated types compile', async () => {
+  // Compile-time proof that the same TwoWay projections in
+  // types-schema-conformance.ts compile without error.
   const { spawnSync } = await import('node:child_process');
   const fs = await import('node:fs');
 
-  const fixturePath = path.join(WORKSPACE_ROOT, 'packages', 'core', 'test', 'fixtures', 'negative-compile-fixture.ts');
-  const fixtureBasename = 'negative-compile-fixture.ts';
+  const fixturePath = path.join(WORKSPACE_ROOT, 'packages', 'core', 'test', 'fixtures', 'positive-compile-fixture.ts');
+  const fixtureBasename = 'positive-compile-fixture.ts';
 
-  // Fixture file must exist
   assert.ok(fs.existsSync(fixturePath), `Fixture must exist: ${fixtureBasename}`);
 
-  // Run tsc with explicit args (no shell interpolation)
   const tscPath = path.join(WORKSPACE_ROOT, 'node_modules', '.bin', 'tsc');
   const result = spawnSync(
     tscPath,
@@ -318,19 +297,62 @@ test('negative compile fixture: tsc produces TS2322 with intentional mutation', 
     }
   );
 
-  // Must have nonzero exit status (intentional compile failure)
   assert.notStrictEqual(result.status, null, 'tsc must exit');
-  assert.ok(result.status !== 0, `tsc must fail (intentional TS2322), exit code: ${result.status}`);
+  assert.strictEqual(result.status, 0, `tsc must succeed for positive fixture, got ${result.status}`);
+});
 
-  // Capture combined stdout+stderr
+test('negative compile fixture: tsc produces exactly one TS2322', async () => {
+  // Run tsc on the negative fixture and assert the exact diagnostic.
+  // Unrelated errors must NOT exist — this prevents false positives.
+  const { spawnSync } = await import('node:child_process');
+  const fs = await import('node:fs');
+
+  const fixturePath = path.join(WORKSPACE_ROOT, 'packages', 'core', 'test', 'fixtures', 'negative-compile-fixture.ts');
+  const fixtureBasename = 'negative-compile-fixture.ts';
+
+  assert.ok(fs.existsSync(fixturePath), `Fixture must exist: ${fixtureBasename}`);
+
+  const tscPath = path.join(WORKSPACE_ROOT, 'node_modules', '.bin', 'tsc');
+  const result = spawnSync(
+    tscPath,
+    [
+      '--noEmit',
+      '--strict',
+      '--target', 'ES2023',
+      '--module', 'NodeNext',
+      '--moduleResolution', 'NodeNext',
+      '--esModuleInterop',
+      '--skipLibCheck',
+      fixturePath
+    ],
+    {
+      cwd: WORKSPACE_ROOT,
+      timeout: 30_000,
+      encoding: 'utf8'
+    }
+  );
+
+  // No transport/error from spawn itself
+  assert.strictEqual(result.error, undefined, `spawnSync error: ${result.error}`);
+  assert.strictEqual(result.signal, null, `spawn signal: ${result.signal}`);
+
+  // TypeScript exits with 1 on diagnostics
+  assert.strictEqual(result.status, 1, `tsc exit code must be 1, got ${result.status}`);
+
+  // Collect every diagnostic line
   const output = String(result.stdout || '') + String(result.stderr || '');
+  const diagnosticLines = output
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => /^.*negative-compile-fixture\.ts\(\d+,\d+\): error TS\d+:/.test(l));
 
-  // Must mention the exact fixture filename
-  assert.ok(output.includes(fixtureBasename), `Output must mention ${fixtureBasename}`);
+  // Must have exactly one diagnostic
+  assert.strictEqual(diagnosticLines.length, 1, `Expected exactly 1 diagnostic, got ${diagnosticLines.length}: ${diagnosticLines.join(' | ')}`);
 
-  // Must contain the TS2322 diagnostic code
-  assert.ok(output.includes('TS2322'), `Output must contain TS2322, got: ${output}`);
-
-  // Must contain the expected boolean false assignment (the const assignment to true)
-  assert.ok(output.includes('true'), `Output must reference the 'true' assignment on the marked line`);
+  // The sole diagnostic must match
+  const sole = diagnosticLines[0]!;
+  assert.ok(
+    /^.*negative-compile-fixture\.ts\(\d+,7\): error TS2322: Type 'true' is not assignable to type 'false'\.?$/.test(sole),
+    `Unexpected diagnostic: ${sole}`
+  );
 });

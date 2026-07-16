@@ -20,7 +20,6 @@ type TwoWay<T, U> = T extends U ? (U extends T ? true : false) : false;
 
 // Mutate generated contract: replace world: string with world: number
 type _MutatedSem = Omit<LunumSemSchemaType, 'world'> & {
-  // Line 30: intentional TS2322 — world is number, Pick<LunumSem,'world'> expects string
   world: number;
 };
 
