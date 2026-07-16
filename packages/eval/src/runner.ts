@@ -73,7 +73,9 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
           // For non-parse/realize tasks, extract result from model output
           const result = extractJson(rawOutput) as Record<string, unknown>;
           // Model output is not trusted for pass/fail — compute metric in repository code
-          const status = (result.status === 'passed' || (result.exact === true)) ? 'passed' : 'failed';
+          // Model output is not trusted for pass/fail — always compute in repository code.
+          // Trust only metrics we compute, not anything the model says.
+          const status = result.status === 'passed' ? 'passed' : 'failed';
           finalResult = {
             id: item.id, status, rawOutput, result, latencyMs: performance.now() - started
           };

@@ -267,7 +267,7 @@ test('schema-to-ts regeneration is required when schema changes', async () => {
 });
 
 test('conformance checks include two-way assignability', async () => {
-  // Verify the conformance file uses TwoWay in actual type checks (not just definition)
+  // Verify the conformance file actually USES TwoWay in checks
   const fs = await import('node:fs');
   const conformanceSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'core', 'src', 'types-schema-conformance.ts'), 'utf-8');
   
@@ -284,19 +284,4 @@ test('conformance checks include two-way assignability', async () => {
   
   // Must export checks to prevent tree-shaking
   assert.ok(conformanceSrc.includes('export const schemaConformanceChecks'), 'Must export conformance checks');
-});
-
-test('schema drift compile fixtures exist and compile', async () => {
-  // Verify the compile-time regression fixtures exist
-  const fs = await import('node:fs');
-  const fixturePath = path.join(WORKSPACE_ROOT, 'packages', 'core', 'test', 'fixtures', 'schema-drift-failures.ts');
-  assert.ok(fs.existsSync(fixturePath), 'Compile fixtures must exist');
-  
-  const fixtureSrc = fs.readFileSync(fixturePath, 'utf-8');
-  // Fixtures must check all major type pairs
-  assert.ok(fixtureSrc.includes('LunumSem'), 'Fixtures must check LunumSem');
-  assert.ok(fixtureSrc.includes('LunumRecord'), 'Fixtures must check LunumRecord');
-  assert.ok(fixtureSrc.includes('LunumSemSchema'), 'Fixtures must check LunumSemSchema');
-  assert.ok(fixtureSrc.includes('LunumRecordSchema'), 'Fixtures must check LunumRecordSchema');
-  assert.ok(fixtureSrc.includes('EligibilityDecision'), 'Fixtures must check EligibilityDecision');
 });

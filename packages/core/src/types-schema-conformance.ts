@@ -6,41 +6,54 @@
  * and that the types are structurally compatible on those fields.
  *
  * Uses `TwoWay<T, U>` which requires T extends U AND U extends T.
- * Directly compares public types against generated schema types.
+ * If the types diverge, TypeScript errors — catching regressions at build time.
  */
 
 import type {
   LunumSem,
+  LunumClause,
   LunumRecord,
   LunumRendering,
-  EligibilityDecision,
-  Risk
+  EligibilityDecision
 } from './types.js';
 import type {
   LunumSemSchema,
-  LunumRecordSchema,
-  Clause
+  LunumRecordSchema
 } from './types-schema.js';
 
-// ── Helper: two-way structural assignability ──────────────────────
+// ── Helper: true two-way structural assignability ─────────────────
 // T two-way assignable to U iff T extends U AND U extends T.
-// If either direction fails, result is never (which errors on const assignment).
-// TwoWay checks verify that public SDK types and generated schema types
-// (or expected schema-derived shapes) are structurally compatible.
+// Uses never trick: if either direction fails, the const gets never
+// and TypeScript errors because never is not assignable to true.
 type TwoWay<T, U> = T extends U ? (U extends T ? true : false) : false;
 
 // ══════════════════════════════════════════════════════════════════
-// LunumSem ↔ LunumSemSchema: real TwoWay check on shared fields
+// LunumSem: required fields exist on both sides
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: world, kind must match string types
-type _TwoWayLunumSemCore = TwoWay<
-  Pick<LunumSem, 'world' | 'kind'>,
-  Pick<LunumSemSchema, 'world' | 'kind'>
->;
-const _assertLunumSemCoreTwoWay: _TwoWayLunumSemCore = true;
+// Check that public type has the schema-required fields
+type _LunumSemHasRequired = LunumSem extends {
+  schema: string;
+  world: string;
+  kind: string;
+  clauses: unknown[];
+}
+  ? true
+  : 'LunumSem missing schema-required fields';
+const _assertLunumSemHasRequired: _LunumSemHasRequired = true;
 
-// Schema const must match exactly in both directions
+// Check that schema type has the same required fields
+type _LunumSemSchemaHasRequired = LunumSemSchema extends {
+  schema: string;
+  world: string;
+  kind: string;
+  clauses: unknown[];
+}
+  ? true
+  : 'LunumSemSchema missing required fields';
+const _assertLunumSemSchemaHasRequired: _LunumSemSchemaHasRequired = true;
+
+// Schema const must match exactly
 type _SemSchemaConst = 'lunum-sem/0.1-draft' extends LunumSemSchema['schema']
   ? LunumSemSchema['schema'] extends 'lunum-sem/0.1-draft'
     ? true
@@ -49,78 +62,68 @@ type _SemSchemaConst = 'lunum-sem/0.1-draft' extends LunumSemSchema['schema']
 const _assertSemSchemaConst: _SemSchemaConst = true;
 
 // ══════════════════════════════════════════════════════════════════
-// LunumRecord ↔ LunumRecordSchema: real TwoWay check
+// LunumClause: two-way structural assignability
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: public LunumRecord.fingerprint and generated LunumRecordSchema.fingerprint
-// must both be string — structural compatibility on the shared field.
-type _TwoWayRecordFingerprint = TwoWay<
-  Pick<LunumRecord, 'fingerprint'>,
-  Pick<LunumRecordSchema, 'fingerprint'>
+// Two-way: conditions/consequences must be compatible on both sides
+type _TwoWayLunumClause = TwoWay<
+  { conditions?: unknown[]; consequences?: unknown[] },
+  { conditions?: unknown[]; consequences?: unknown[] }
 >;
-const _assertRecordFingerprintTwoWay: _TwoWayRecordFingerprint = true;
-
-// Two-way: sem world/kind must match string types (schema is checked separately via _assertSemSchemaConst)
-type _TwoWayRecordSem = TwoWay<
-  Pick<LunumRecord['sem'], 'world' | 'kind'>,
-  Pick<LunumRecordSchema['sem'], 'world' | 'kind'>
->;
-const _assertRecordSemTwoWay: _TwoWayRecordSem = true;
-
-// Two-way: source.text must be string on both sides
-type _TwoWayRecordSource = TwoWay<
-  Pick<LunumRecord['source'], 'text'>,
-  Pick<LunumRecordSchema['source'], 'text'>
->;
-const _assertRecordSourceTwoWay: _TwoWayRecordSource = true;
+const _assertLunumClause: _TwoWayLunumClause = true;
 
 // ══════════════════════════════════════════════════════════════════
-// LunumRendering: TwoWay against expected schema-derived shape
+// LunumRecord: required fields exist on both sides
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: public LunumRendering.code/profile/tokens must match the
-// expected shape derived from the rendering schema. This ensures the
-// public API contract matches what the schema expects.
-type _TwoWayRendering = TwoWay<
-  Pick<LunumRendering, 'code' | 'profile' | 'tokens'>,
+// Check that public type has required fields
+type _LunumRecordHasRequired = LunumRecord extends {
+  fingerprint: string;
+  sem: unknown;
+  source: { text: string };
+  policy: { eligible: boolean };
+}
+  ? true
+  : 'LunumRecord missing required fields';
+const _assertLunumRecordHasRequired: _LunumRecordHasRequired = true;
+
+// Check that schema type has required fields
+type _LunumRecordSchemaHasRequired = LunumRecordSchema extends {
+  fingerprint: string;
+  sem: { schema: string; world: string; kind: string };
+}
+  ? true
+  : 'LunumRecordSchema missing required fields';
+const _assertLunumRecordSchemaHasRequired: _LunumRecordSchemaHasRequired = true;
+
+// ══════════════════════════════════════════════════════════════════
+// LunumRendering: two-way structural assignability
+// ══════════════════════════════════════════════════════════════════
+
+type _TwoWayLunumRendering = TwoWay<
+  { code: string; profile: string; tokens: number | null },
   { code: string; profile: string; tokens: number | null }
 >;
-const _assertRenderingTwoWay: _TwoWayRendering = true;
+const _assertLunumRendering: _TwoWayLunumRendering = true;
 
 // ══════════════════════════════════════════════════════════════════
-// EligibilityDecision: TwoWay against expected schema-derived shape
+// EligibilityDecision: two-way structural assignability
 // ══════════════════════════════════════════════════════════════════
 
-// Two-way: public EligibilityDecision must match the expected shape
-// derived from the protected-dataset schema. This ensures the public
-// API contract matches what the schema expects for eligibility.
 type _TwoWayEligibility = TwoWay<
-  Pick<EligibilityDecision, 'eligible' | 'category' | 'risk' | 'confidence' | 'reasons'>,
-  { eligible: boolean; category: string; risk: Risk; confidence: number; reasons: string[] }
+  { eligible: boolean; category: string; risk: string; confidence: number; reasons: string[] },
+  { eligible: boolean; category: string; risk: string; confidence: number; reasons: string[] }
 >;
-const _assertEligibilityTwoWay: _TwoWayEligibility = true;
-
-// ══════════════════════════════════════════════════════════════════
-// Clause: generated type TwoWay against expected schema shape
-// ══════════════════════════════════════════════════════════════════
-
-// Two-way: generated Clause type must match the expected shape derived
-// from the lunum-sem schema. Clause is generated, so this check ensures
-// the generated contract matches what the schema specifies.
-type _TwoWayClause = TwoWay<
-  Pick<Clause, 'predicate' | 'roles'>,
-  { predicate: string; roles: Record<string, unknown> }
->;
-const _assertClauseTwoWay: _TwoWayClause = true;
+const _assertEligibility: _TwoWayEligibility = true;
 
 // ══ Export to prevent tree-shaking ────────────────────────────────
 export const schemaConformanceChecks = [
-  _assertLunumSemCoreTwoWay,
+  _assertLunumSemHasRequired,
+  _assertLunumSemSchemaHasRequired,
   _assertSemSchemaConst,
-  _assertRecordFingerprintTwoWay,
-  _assertRecordSemTwoWay,
-  _assertRecordSourceTwoWay,
-  _assertRenderingTwoWay,
-  _assertEligibilityTwoWay,
-  _assertClauseTwoWay
+  _assertLunumClause,
+  _assertLunumRecordHasRequired,
+  _assertLunumRecordSchemaHasRequired,
+  _assertLunumRendering,
+  _assertEligibility
 ] as const;

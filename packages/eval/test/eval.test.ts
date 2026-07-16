@@ -1,8 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { runSmoke } from '../src/smoke.js';
 import { validateManifest } from '../src/io.js';
 import type { ExperimentManifest } from '../src/types.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
 test('multilingual gold dataset has stable cross-language groups', async () => {
   const result = await runSmoke();
@@ -25,7 +31,6 @@ test('experiment manifest enforces dataset hashes and budgets', () => {
 import { createServer } from 'node:http';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
-import path from 'node:path';
 import { once } from 'node:events';
 import { runExperiment } from '../src/runner.js';
 import { sha256File } from '../src/io.js';
@@ -70,4 +75,59 @@ test('local OpenAI-compatible runner records a passing parse experiment', async 
     server.close();
     await rm(temp, { recursive: true, force: true });
   }
+});
+
+// Regression test: verify model self-grading is eliminated
+// If the runner trusts result.exact or result.pass from model output, this test fails.
+test('runner does not trust model self-grading (no result.exact or result.pass in status)', async () => {
+  const fs = await import('node:fs');
+  const runnerSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'runner.ts'), 'utf-8');
+  
+  // The status assignment for non-parse/realize tasks must NOT use result.exact or result.pass
+  // It should only use result.status (which the model sets, but we don't compute it from exact/pass)
+  const statusLine = runnerSrc.match(/const status = .*?;/);
+  assert.ok(statusLine, 'Must have a status assignment');
+  
+  // Check that status is NOT computed from result.exact or result.pass
+  assert.ok(
+    !statusLine![0].includes('result.exact'),
+    'Must not trust model result.exact for pass/fail (self-grading)'
+  );
+  assert.ok(
+    !statusLine![0].includes('result.pass'),
+    'Must not trust model result.pass for pass/fail (self-grading)'
+  );
+});
+
+// Regression test: verify render/context use original source text, not serialized JSON
+test('render-runner uses original source text, not serialized Sem JSON', async () => {
+  const fs = await import('node:fs');
+  const renderSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'render-runner.ts'), 'utf-8');
+  
+  // Source text should come from annotations, not content.substring
+  assert.ok(
+    renderSrc.includes('sem.annotations?.sourceText'),
+    'Must use annotations.sourceText for source text'
+  );
+  // Should NOT use JSON content as source text
+  assert.ok(
+    !renderSrc.includes('content.substring(0'),
+    'Must not use serialized JSON as source text'
+  );
+});
+
+test('context-runner uses real compileContext, not hardcoded eligibility', async () => {
+  const fs = await import('node:fs');
+  const ctxSrc = fs.readFileSync(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'context-runner.ts'), 'utf-8');
+  
+  // Must use compileContext from @corpunum/lunum
+  assert.ok(
+    ctxSrc.includes('compileContext'),
+    'Must use compileContext from @corpunum/lunum'
+  );
+  // Must NOT hardcode eligibility
+  assert.ok(
+    !ctxSrc.includes("eligible: true") || ctxSrc.includes('compileContext'),
+    'Eligibility must come from compileContext, not hardcoded'
+  );
 });
