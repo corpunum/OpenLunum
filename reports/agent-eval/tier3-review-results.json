@@ -187,5 +187,11 @@
       }
     ],
     "score": "16/17"
+  },
+  {
+    "model": "openai/qwopus3.6-27b-v2",
+    "at": "2026-07-17T16:38:00.000Z",
+    "score": "15/17",
+    "note": "Q4_K_M quant; per-case detail in qwopus-eval2.log (results-file write lost in a race; score from run log)"
   }
 ]
