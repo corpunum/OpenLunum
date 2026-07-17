@@ -140,10 +140,24 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 
 - A draft `Lunum-Sem` schema and deterministic canonicalization/fingerprint library.
 - A conservative reference renderer and mixed-context compiler.
+- Safe, short, and tight renderer profiles without changing semantics.
+- Tokenizer measurement framework with llama.cpp-compatible counting.
+- Full-prompt quality gates for local-model evaluation.
+- Near-semantic fingerprint design separate from exact identity.
+- Expanded typed structures: time, quantity, uncertainty, reference, and modality.
+- Canonical conformance vectors and property tests.
+- Multilingual realization (English, Greek, Spanish, Indonesian) with protected-literal and independent semantic scoring.
+- Round-trip self-consistency as a secondary metric.
+- Abstention/clarification outputs for low-confidence parses.
+- Context quality measurement framework and policy datasets.
+- Multilingual retrieval and false-equivalence tests.
+- An MCP (Model Context Protocol) reference server with parse, realize, fingerprint, retrieve, and validate tools.
+- Conformance reports for hook/plugin/CLI integration paths.
 - An OpenUnum compatibility adapter preserving its current sidecar return shape.
 - Historical research and measured results from Lunum 1 through 2.7.
 - Integration profiles for OpenUnum, Claude Code, Codex CLI, Gemini CLI/Antigravity transition, OpenCode, Pi, OpenClaw, and generic Node agents.
 - Contract and safety-oriented tests.
+- Architecture decision records in `docs/decisions/`.
 
 ## Evidence snapshot
 
@@ -233,6 +247,7 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 packages/core/            strict TypeScript reference library
 packages/cli/             inspect/encode/compile command line
 packages/eval/            local-model experiment runner and reports
+packages/mcp/             MCP (Model Context Protocol) reference server
 packages/adapter-openunum/ OpenUnum compatibility package
 schemas/                  machine-readable contracts
 registry/                 worlds, roles, categories, predicates
@@ -241,6 +256,7 @@ integrations/*/            design/reference profiles for other products
 eval/                     metrics, fixtures, gates, and historical ledger
 research/archive/         complete initial handover and prior experiments
 docs/                     vision, architecture, language, security, versioning
+docs/decisions/           architecture decision records (ADRs)
 ```
 
 ## Honest status
