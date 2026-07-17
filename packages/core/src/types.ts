@@ -23,6 +23,24 @@ export interface LunumClause {
   annotations?: Record<string, unknown>;
 }
 
+// Extended types for time, quantity, uncertainty, reference, modality
+export interface ExtendedLunumClause {
+  predicate: string;
+  roles: Record<string, LunumTerm>;
+  negated?: boolean;
+  modality?: string | null;
+  time?: LunumTerm;
+  conditions?: LunumClause[];
+  consequences?: LunumClause[];
+  annotations?: Record<string, unknown>;
+  // Extended fields
+  timeTyped?: unknown;
+  modalityTyped?: unknown;
+  quantity?: unknown;
+  uncertainty?: unknown;
+  reference?: unknown;
+}
+
 export interface LunumSem {
   schema: string;
   world: string;
