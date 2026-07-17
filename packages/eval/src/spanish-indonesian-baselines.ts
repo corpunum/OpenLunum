@@ -77,7 +77,7 @@ export interface SpanishParseRule {
   /** Predicate to extract */
   predicate: string;
   /** Role mapping */
-  roleMap: Record<string, string>;
+  roleMap: Record<string, RegExp>;
   /** Confidence */
   confidence: number;
 }
@@ -96,8 +96,8 @@ export const spanishParseRules: SpanishParseRule[] = [
     pattern: /\b(?:dónde|cuándo|cómo|quién|qué|por qué|cuánto)\b/i,
     predicate: 'question',
     roleMap: {
-      questionWord: /(^(?:dónde|cuándo|cómo|quién|qué|por qué|cuánto))/i,
-      subject: /(?:dónde|cuándo|cómo|quién|qué|por qué|cuánto)\s+(.+)$/
+      questionWord: /((?:dónde|cuándo|cómo|quién|qué|por qué|cuánto))/i,
+      subject: /(?:dónde|cuándo|cómo|quién|qué|por qué|cuánto)\s+(.+)$/i
     },
     confidence: 0.9
   },
@@ -128,7 +128,7 @@ export interface IndonesianParseRule {
   /** Predicate to extract */
   predicate: string;
   /** Role mapping */
-  roleMap: Record<string, string>;
+  roleMap: Record<string, RegExp>;
   /** Confidence */
   confidence: number;
 }
@@ -147,8 +147,8 @@ export const indonesianParseRules: IndonesianParseRule[] = [
     pattern: /\b(?:apa|siapa|di mana|kapan|bagaimana|mengapa|berapa)\b/i,
     predicate: 'question',
     roleMap: {
-      questionWord: /^(?:apa|siapa|di mana|kapan|bagaimana|mengapa|berapa)/i,
-      subject: /^(?:apa|siapa|di mana|kapan|bagaimana|mengapa|berapa)\s+(.+)$/
+      questionWord: /((?:apa|siapa|di mana|kapan|bagaimana|mengapa|berapa))/i,
+      subject: /(?:apa|siapa|di mana|kapan|bagaimana|mengapa|berapa)\s+(.+)$/i
     },
     confidence: 0.9
   },
@@ -202,9 +202,9 @@ export class BaselineParser {
         
         clauses.push({
           predicate: rule.predicate,
-          roles,
+          roles: roles,
           negated: rule.predicate === 'negation'
-        });
+        } as LunumClause);
       }
     }
     
@@ -231,9 +231,9 @@ export class BaselineParser {
         
         clauses.push({
           predicate: rule.predicate,
-          roles,
+          roles: roles,
           negated: rule.predicate === 'negation'
-        });
+        } as LunumClause);
       }
     }
     
