@@ -92,7 +92,9 @@ test('RealizationEngine extracts protected literals', () => {
 test('SUPPORTED_REALIZATION_LANGUAGES contains en and el', () => {
   assert.ok(SUPPORTED_REALIZATION_LANGUAGES.has('en'));
   assert.ok(SUPPORTED_REALIZATION_LANGUAGES.has('el'));
-  assert.strictEqual(SUPPORTED_REALIZATION_LANGUAGES.size, 2);
+  assert.ok(SUPPORTED_REALIZATION_LANGUAGES.has('es'));
+  assert.ok(SUPPORTED_REALIZATION_LANGUAGES.has('id'));
+  assert.strictEqual(SUPPORTED_REALIZATION_LANGUAGES.size, 4);
 });
 
 test('RealizationEngine handles unsupported language', () => {
@@ -103,7 +105,7 @@ test('RealizationEngine handles unsupported language', () => {
   ]);
 
   assert.throws(
-    () => engine.realize(record, 'es' as RealizationLanguage),
+    () => engine.realize(record, 'fr' as RealizationLanguage),
     /Realization not supported for language/
   );
 });
