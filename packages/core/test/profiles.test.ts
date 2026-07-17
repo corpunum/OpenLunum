@@ -15,7 +15,7 @@ const createMockRecord = (text: string, fingerprint: string) => ({
     provenance: { source: 'test' }
   },
   fingerprint,
-  renderings: { en: { code: 'test', tokens: 10 } },
+  renderings: { en: { code: 'test', tokens: 10, profile: 'test' } as any },
   policy: { eligible: true, category: 'test', risk: 'low' as const, confidence: 0.9, reasons: [] },
   meta: {}
 });

@@ -5,7 +5,7 @@
  * while preserving semantic meaning and accuracy.
  */
 
-import type { LunumSem, LunumRecord } from './types.js';
+import type { LunumSem, LunumRecord, LunumClause, LunumRendering } from './types.js';
 
 // ── Profile Type ───────────────────────────────────────────────────
 
@@ -162,13 +162,13 @@ export class ProfileGenerator {
    */
   private shortenClauses(clauses: LunumClause[], config: Required<ProfileConfig>): LunumClause[] {
     return clauses.map(clause => {
-      const shortened: LunumClause = {
+      const shortened = {
         predicate: clause.predicate,
         roles: {},
         negated: clause.negated,
         conditions: clause.conditions,
         consequences: clause.consequences
-      };
+      } as LunumClause;
 
       // Shorten roles based on profile type
       for (const [role, value] of Object.entries(clause.roles ?? {})) {
