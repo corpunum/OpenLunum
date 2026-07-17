@@ -2,17 +2,17 @@
  * Lunum-Sem to natural language realization engine
  * 
  * This module provides functionality for realizing Lunum-Semantic content
- * to natural language in English and Greek while preserving protected literals
- * and semantic identity.
+ * to natural language in English, Greek, Spanish, and Indonesian while 
+ * preserving protected literals and semantic identity.
  */
 
-import type { LunumRecord, LunumSem, LunumClause, Risk } from '@corpunum/lunum';
+import type { LunumRecord, LunumSem, LunumClause } from '@corpunum/lunum';
 
 // ── Language Support ────────────────────────────────────────────────
 
-export type RealizationLanguage = 'en' | 'el';
+export type RealizationLanguage = 'en' | 'el' | 'es' | 'id';
 
-export const SUPPORTED_REALIZATION_LANGUAGES: Set<RealizationLanguage> = new Set(['en', 'el']);
+export const SUPPORTED_REALIZATION_LANGUAGES: Set<RealizationLanguage> = new Set(['en', 'el', 'es', 'id']);
 
 // ── Protected Literals ──────────────────────────────────────────────
 
@@ -51,6 +51,17 @@ export interface RealizationResult {
   };
 }
 
+// ── Realization Rule ────────────────────────────────────────────────
+
+export interface RealizationRule {
+  /** Predicate to match */
+  predicate: string;
+  /** Text template with placeholders */
+  template: string;
+  /** Target language */
+  language: RealizationLanguage;
+}
+
 // ── Realization Engine ──────────────────────────────────────────────
 
 export class RealizationEngine {
@@ -69,64 +80,44 @@ export class RealizationEngine {
   private initializeRules(): void {
     // English rules
     const enRules: RealizationRule[] = [
-      {
-        predicate: 'greeting',
-        template: 'Greetings{subject}',
-        language: 'en'
-      },
-      {
-        predicate: 'statement',
-        template: '{subject} {verb} {object}',
-        language: 'en'
-      },
-      {
-        predicate: 'question',
-        template: 'Is {subject} {predicate}?',
-        language: 'en'
-      },
-      {
-        predicate: 'location',
-        template: '{subject} is located at {location}',
-        language: 'en'
-      },
-      {
-        predicate: 'action',
-        template: '{subject} {verb}s {object}',
-        language: 'en'
-      }
+      { predicate: 'greeting', template: 'Greetings{subject}', language: 'en' },
+      { predicate: 'statement', template: '{subject} {verb} {object}', language: 'en' },
+      { predicate: 'question', template: 'Is {subject} {predicate}?', language: 'en' },
+      { predicate: 'location', template: '{subject} is located at {location}', language: 'en' },
+      { predicate: 'action', template: '{subject} {verb}s {object}', language: 'en' }
     ];
 
     // Greek rules
     const elRules: RealizationRule[] = [
-      {
-        predicate: 'greeting',
-        template: 'Γειά σου{subject}',
-        language: 'el'
-      },
-      {
-        predicate: 'statement',
-        template: '{subject} {verb} {object}',
-        language: 'el'
-      },
-      {
-        predicate: 'question',
-        template: 'Είναι {subject} {predicate};',
-        language: 'el'
-      },
-      {
-        predicate: 'location',
-        template: '{subject} βρίσκεται στο {location}',
-        language: 'el'
-      },
-      {
-        predicate: 'action',
-        template: '{subject} {verb} {object}',
-        language: 'el'
-      }
+      { predicate: 'greeting', template: 'Γειά σου{subject}', language: 'el' },
+      { predicate: 'statement', template: '{subject} {verb} {object}', language: 'el' },
+      { predicate: 'question', template: 'Είναι {subject} {predicate};', language: 'el' },
+      { predicate: 'location', template: '{subject} βρίσκεται στο {location}', language: 'el' },
+      { predicate: 'action', template: '{subject} {verb} {object}', language: 'el' }
+    ];
+
+    // Spanish rules
+    const esRules: RealizationRule[] = [
+      { predicate: 'greeting', template: 'Saludos{subject}', language: 'es' },
+      { predicate: 'statement', template: '{subject} {verb} {object}', language: 'es' },
+      { predicate: 'question', template: '¿Es {subject} {predicate}?', language: 'es' },
+      { predicate: 'location', template: '{subject} está ubicado en {location}', language: 'es' },
+      { predicate: 'action', template: '{subject} {verb} {object}', language: 'es' }
+    ];
+
+    // Indonesian rules
+    const idRules: RealizationRule[] = [
+      { predicate: 'greeting', template: 'Salam{subject}', language: 'id' },
+      { predicate: 'statement', template: '{subject} {verb} {object}', language: 'id' },
+      { predicate: 'question', template: 'Apakah {subject} {predicate}?', language: 'id' },
+      { predicate: 'location', template: '{subject} terletak di {location}', language: 'id' },
+      { predicate: 'action', template: '{subject} {verb} {object}', language: 'id' }
     ];
 
     this.realizationRules.set('en', enRules);
     this.realizationRules.set('el', elRules);
+    this.realizationRules.set('es', esRules);
+    this.realizationRules.set('id', idRules);
   }
 
   /**
@@ -243,9 +234,6 @@ export class RealizationEngine {
    * Check if text appears to be a protected literal
    */
   private isProtectedLiteral(text: string, language: RealizationLanguage): boolean {
-    // Simple heuristics for demonstration
-    // In production, would use NER or other techniques
-    
     if (text.length <= 2) return false;
     
     // Capitalized words might be proper nouns
@@ -255,6 +243,11 @@ export class RealizationEngine {
     
     // Greek capital letters
     if (language === 'el' && /[Α-ΩΪΫ]/.test(text[0] ?? '') && text.length > 2) {
+      return true;
+    }
+
+    // Spanish and Indonesian: check for capitalization
+    if ((language === 'es' || language === 'id') && text[0] && text[0] === text[0].toUpperCase() && text.length > 2) {
       return true;
     }
 
@@ -270,7 +263,7 @@ export class RealizationEngine {
    * Classify the type of protected literal
    */
   private classifyLiteralType(text: string): ProtectedLiteral['type'] {
-    if (/^[A-Z][a-z]+ [A-Z][a-z]+/.test(text)) {
+    if (/^[A-Z][a-z]+ [A-Z][a-z]+$/.test(text)) {
       return 'name'; // Looks like a person or place name
     }
     if (/^[A-Z][a-z]+$/.test(text)) {
@@ -335,17 +328,6 @@ export class RealizationEngine {
       supportedLanguages: Array.from(this.realizationRules.keys())
     };
   }
-}
-
-// ── Interface for Realization Rule ──────────────────────────────────
-
-export interface RealizationRule {
-  /** Predicate to match */
-  predicate: string;
-  /** Text template with placeholders */
-  template: string;
-  /** Target language */
-  language: RealizationLanguage;
 }
 
 // ── Export ──────────────────────────────────────────────────────────
