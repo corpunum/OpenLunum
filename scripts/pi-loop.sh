@@ -58,10 +58,22 @@ while true; do
   cd "$WORKDIR"
   git fetch origin main 2>>"$logfile" || true
   git checkout main 2>>"$logfile" || true
-  git pull --ff-only origin main 2>>"$logfile" || true
+  git reset --hard origin/main 2>>"$logfile" || true
 
-  # Clean stale dist/ artifacts from previous branch switches
-  find "$WORKDIR/packages" -name dist -type d -exec rm -rf {} + 2>/dev/null || true
+  # Remove stale compiled files that lack source counterparts
+  for pkg in packages/core packages/eval packages/cli packages/adapter-openunum; do
+    if [[ -d "$WORKDIR/$pkg/dist" ]]; then
+      for f in "$WORKDIR/$pkg"/dist/test/*.test.js "$WORKDIR/$pkg"/dist/src/*.js; do
+        [[ -f "$f" ]] || continue
+        base=$(basename "$f" .js)
+        dir=$(basename "$(dirname "$f")")
+        src="$WORKDIR/$pkg/$dir/${base}.ts"
+        if [[ ! -f "$src" ]]; then
+          rm -f "${f%.js}".*
+        fi
+      done
+    fi
+  done
   pnpm build >>"$logfile" 2>&1 || true
 
   # Run Pi with the campaign prompt, non-interactive (with timeout)
