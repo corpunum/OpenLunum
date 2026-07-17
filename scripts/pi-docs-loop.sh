@@ -20,6 +20,7 @@ LOGDIR="$REPO/reports/pi-docs"
 STATUS_LOG="$LOGDIR/docs-status.log"
 STAMP="$LOGDIR/last-docs-sha"
 DOCS_MODEL="${DOCS_MODEL:-openai/qwen3.6-35b-a3b}"
+DOCS_PROVIDER="${DOCS_PROVIDER:-local-llama}"
 CHECK_SECONDS=600
 PI_TIMEOUT=1800
 
@@ -57,7 +58,7 @@ while true; do
   fi
 
   (cd "$WT" && timeout "$PI_TIMEOUT" pi --print --no-session \
-    --provider local-llama --model "$DOCS_MODEL" --thinking high \
+    --provider "$DOCS_PROVIDER" --model "$DOCS_MODEL" --thinking high \
     "You are the documentation maintainer for OpenLunum. You are on branch agent/docs/sync-${head:0:8} in $WT.
 
 Commits merged to main since the last documentation pass:
