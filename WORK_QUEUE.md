@@ -40,7 +40,7 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 ## P2 — context and retrieval
 
-- [ ] Build category/risk/confidence policy datasets.
+- [x] Build category/risk/confidence policy datasets.
 - [ ] Measure natural vs Lunum vs mixed context downstream quality.
 - [x] Add multilingual retrieval and false-equivalence tests.
 - [ ] Design near-semantic fingerprints separately from exact identity.
