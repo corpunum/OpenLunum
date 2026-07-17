@@ -14,7 +14,7 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 - [x] Define semantic identity projection: decide which annotations/provenance affect fingerprints.
 - [ ] Expand typed time, quantity, uncertainty, reference, and modality structures.
-- [ ] Add canonical conformance vectors and property tests.
+- [x] Add canonical conformance vectors and property tests.
 - [x] Version and document fingerprint migration from 0.1.
 
 ## P1 — multilingual parsing
@@ -22,7 +22,7 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 - [x] Establish English and Greek parse baselines on `multilingual-core-v1`.
 - [x] Add Spanish and Indonesian baselines.
 - [x] Build error taxonomy for entity, role, negation, condition, quantity, time, and ambiguity failures.
-- [ ] Add explicit abstention/clarification outputs for low-confidence parses.
+- [x] Add explicit abstention/clarification outputs for low-confidence parses.
 
 ## P1 — realization
 
