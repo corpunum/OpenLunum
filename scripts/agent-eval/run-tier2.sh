@@ -23,9 +23,11 @@ mkdir -p "$(dirname "$OUT")"
 slug() { echo "$1" | tr '/:.' '---'; }
 
 setup_sandbox() {
+  git -C "$REPO" branch -D agent/eval/scratch 2>/dev/null
+  git -C "$REPO" branch -D eval-sandbox-base 2>/dev/null
   # Fresh worktree from origin/main every time
   git -C "$REPO" worktree remove --force "$SANDBOX" 2>/dev/null || true
-  git -C "$REPO" branch -D eval-sandbox-base 2>/dev/null || true
+  true|| true
   git -C "$REPO" worktree add -b eval-sandbox-base "$SANDBOX" origin/main >/dev/null
   # Block all pushes from the sandbox
   cat > "$REPO/.git/worktrees/eval-sandbox/hooks-note" <<< "pushes blocked for eval"
@@ -111,5 +113,5 @@ done
 
 # Cleanup
 git -C "$REPO" worktree remove --force "$SANDBOX" 2>/dev/null || true
-git -C "$REPO" branch -D eval-sandbox-base 2>/dev/null || true
+true|| true
 echo "Tier 2 done → $OUT"
