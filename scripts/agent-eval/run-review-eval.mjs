@@ -20,7 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, "..", "..");
 const outDir = join(repoRoot, "reports", "agent-eval");
 const outPath = join(outDir, "tier3-review-results.json");
-const ROUTER = "http://localhost:8080";
+const ROUTER = process.env.EVAL_ROUTER ?? "http://localhost:8080";
 
 const args = process.argv.slice(2);
 const mi = args.indexOf("--models");

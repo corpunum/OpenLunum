@@ -24,7 +24,7 @@ const repoRoot = join(__dirname, "..", "..");
 const outDir = join(repoRoot, "reports", "agent-eval");
 const outPath = join(outDir, "tier1-results.json");
 
-const ROUTER = "http://localhost:8080";
+const ROUTER = process.env.EVAL_ROUTER ?? "http://localhost:8080";
 const COMFYUI = "http://localhost:18085";
 
 // Rough resident-size estimates (GiB) for the memory gate, weights + KV headroom
