@@ -22,7 +22,7 @@ export interface ExperimentSchema {
 export interface LunumRecordSchema {
   recordVersion: "lunum-record/0.1-draft";
   source: {     text: string,     language?: string | null,     role?: string | null,     ref?: string | null };
-  sem: {     schema: "lunum-sem/0.1-draft",     world: string,     kind: string,     clauses: Clause[],     references?: Record<string, unknown>[],     provenance?: Record<string, unknown>,     annotations?: Record<string, unknown> };
+  sem: {     schema: "lunum-sem/0.1-draft",     world: string,     kind: string,     clauses: Clause[],     references?: Reference[],     provenance?: Record<string, unknown>,     annotations?: Record<string, unknown> };
   fingerprint: string;
   renderings: Record<string, unknown>;
   policy: {     eligible: boolean,     risk: "low" | "medium" | "high" | "unknown",     confidence: number,     reasons?: string[] };
@@ -34,13 +34,18 @@ export interface LunumSemSchema {
   world: string;
   kind: string;
   clauses: Clause[];
-  references?: Record<string, unknown>[];
+  references?: Reference[];
   provenance?: Record<string, unknown>;
   annotations?: Record<string, unknown>;
 }
 
 export type Term = Record<string, unknown>;
-export type Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: string | null,     time?: unknown,     conditions?: Clause[],     consequences?: Clause[],     annotations?: Record<string, unknown> };
+export type Reference = {     id: string,     type?: string,     value?: unknown,     language?: string,     ref?: string };
+export type Quantity = {     value: number,     unit: string,     precision?: number,     uncertainty?: number };
+export type Time = {     type: "instant" | "duration" | "period",     value?: unknown,     precision?: "exact" | "approximate" | "estimated",     timezone?: string };
+export type Uncertainty = {     level: number,     type?: "probabilistic" | "fuzzy" | "ambiguous",     confidence?: number };
+export type Modality = {     type: "epistemic" | "deontic" | "alethic",     value?: string,     strength?: number };
+export type Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: {     type: "epistemic" | "deontic" | "alethic",     value?: string,     strength?: number },     time?: {     type: "instant" | "duration" | "period",     value?: unknown,     precision?: "exact" | "approximate" | "estimated",     timezone?: string },     quantity?: {     value: number,     unit: string,     precision?: number,     uncertainty?: number },     uncertainty?: {     level: number,     type?: "probabilistic" | "fuzzy" | "ambiguous",     confidence?: number },     conditions?: Clause[],     consequences?: Clause[],     annotations?: Record<string, unknown> };
 
 export interface ModelProfileSchema {
   schema: "openlunum-model-profile/0.1";

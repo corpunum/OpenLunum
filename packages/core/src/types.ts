@@ -1,6 +1,40 @@
 export type Risk = 'low' | 'medium' | 'high' | 'unknown';
 export type Primitive = string | number | boolean | null;
 
+export interface Reference {
+  id: string;
+  type?: string;
+  value?: unknown;
+  language?: string;
+  ref?: string;
+}
+
+export interface Quantity {
+  value: number;
+  unit: string;
+  precision?: number;
+  uncertainty?: number;
+}
+
+export interface Time {
+  type: 'instant' | 'duration' | 'period';
+  value?: unknown;
+  precision?: 'exact' | 'approximate' | 'estimated';
+  timezone?: string;
+}
+
+export interface Uncertainty {
+  level: number;
+  type?: 'probabilistic' | 'fuzzy' | 'ambiguous';
+  confidence?: number;
+}
+
+export interface Modality {
+  type: 'epistemic' | 'deontic' | 'alethic';
+  value?: string;
+  strength?: number;
+}
+
 export interface LunumTermObject {
   type: string;
   id?: string;
@@ -10,14 +44,16 @@ export interface LunumTermObject {
   [key: string]: unknown;
 }
 
-export type LunumTerm = Primitive | LunumTermObject | LunumTerm[];
+export type LunumTerm = Primitive | LunumTermObject | LunumTerm[] | Quantity | Time | Uncertainty | Modality;
 
 export interface LunumClause {
   predicate: string;
   roles: Record<string, LunumTerm>;
   negated?: boolean;
-  modality?: string | null;
-  time?: LunumTerm;
+  modality?: Modality | null;
+  time?: Time;
+  quantity?: Quantity;
+  uncertainty?: Uncertainty;
   conditions?: LunumClause[];
   consequences?: LunumClause[];
   annotations?: Record<string, unknown>;
@@ -28,7 +64,7 @@ export interface LunumSem {
   world: string;
   kind: string;
   clauses: LunumClause[];
-  references?: LunumTermObject[];
+  references?: Reference[];
   provenance?: Record<string, unknown>;
   annotations?: Record<string, unknown>;
 }

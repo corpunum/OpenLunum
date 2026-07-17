@@ -10,12 +10,41 @@
     "world":{"type":"string","minLength":1},
     "kind":{"type":"string","minLength":1},
     "clauses":{"type":"array","minItems":1,"items":{"$ref":"#/$defs/clause"}},
-    "references":{"type":"array","items":{"type":"object"}},
+    "references":{"type":"array","items":{"$ref":"#/$defs/reference"}},
     "provenance":{"type":"object"},
     "annotations":{"type":"object"}
   },
   "$defs":{
     "term":{"oneOf":[{"type":"string"},{"type":"number"},{"type":"boolean"},{"type":"object","additionalProperties":true,"required":["type"],"properties":{"type":{"type":"string"},"id":{"type":"string"},"value":{},"language":{"type":"string"},"ref":{"type":"string"}}}]},
-    "clause":{"type":"object","additionalProperties":false,"required":["predicate","roles"],"properties":{"predicate":{"type":"string","minLength":1},"roles":{"type":"object","additionalProperties":{"$ref":"#/$defs/term"}},"negated":{"type":"boolean","default":false},"modality":{"type":["string","null"]},"time":{},"conditions":{"type":"array","items":{"$ref":"#/$defs/clause"}},"consequences":{"type":"array","items":{"$ref":"#/$defs/clause"}},"annotations":{"type":"object"}}}
+    "reference":{"type":"object","additionalProperties":true,"required":["id"],"properties":{
+      "id":{"type":"string"},
+      "type":{"type":"string"},
+      "value":{},
+      "language":{"type":"string"},
+      "ref":{"type":"string"}
+    }},
+    "quantity":{"type":"object","additionalProperties":true,"required":["value","unit"],"properties":{
+      "value":{"type":"number"},
+      "unit":{"type":"string"},
+      "precision":{"type":"number"},
+      "uncertainty":{"type":"number"}
+    }},
+    "time":{"type":"object","additionalProperties":true,"required":["type"],"properties":{
+      "type":{"type":"string","enum":["instant","duration","period"]},
+      "value":{},
+      "precision":{"type":"string","enum":["exact","approximate","estimated"]},
+      "timezone":{"type":"string"}
+    }},
+    "uncertainty":{"type":"object","additionalProperties":true,"required":["level"],"properties":{
+      "level":{"type":"number","minimum":0,"maximum":1},
+      "type":{"type":"string","enum":["probabilistic","fuzzy","ambiguous"]},
+      "confidence":{"type":"number","minimum":0,"maximum":1}
+    }},
+    "modality":{"type":"object","additionalProperties":true,"required":["type"],"properties":{
+      "type":{"type":"string","enum":["epistemic","deontic","alethic"]},
+      "value":{"type":"string"},
+      "strength":{"type":"number","minimum":0,"maximum":1}
+    }},
+    "clause":{"type":"object","additionalProperties":false,"required":["predicate","roles"],"properties":{"predicate":{"type":"string","minLength":1},"roles":{"type":"object","additionalProperties":{"$ref":"#/$defs/term"}},"negated":{"type":"boolean","default":false},"modality":{"$ref":"#/$defs/modality"},"time":{"$ref":"#/$defs/time"},"quantity":{"$ref":"#/$defs/quantity"},"uncertainty":{"$ref":"#/$defs/uncertainty"},"conditions":{"type":"array","items":{"$ref":"#/$defs/clause"}},"consequences":{"type":"array","items":{"$ref":"#/$defs/clause"}},"annotations":{"type":"object"}}}
   }
 }
