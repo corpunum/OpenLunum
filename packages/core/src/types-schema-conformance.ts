@@ -71,3 +71,10 @@ export const schemaConformanceChecks = [
   _assertRecordSemTwoWay,
   _assertRecordSourceTwoWay
 ] as const;
+
+// Import conformance tests
+import { conformanceTests } from './schema-conformance.js';
+export const allConformanceTests = [
+  ...schemaConformanceChecks,
+  ...conformanceTests
+] as const;
