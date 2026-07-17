@@ -114,12 +114,13 @@ $diff_excerpt" 2>>"$STATUS_LOG")
     reason="verify fails on this branch (reviewer verdict overridden mechanically). $reason"
   fi
 
+  # gh pr edit is broken by a projectCards GraphQL deprecation — use REST
   if [[ "$verdict" == "READY_FOR_MERGE" ]]; then
-    gh pr edit "$pr" --repo corpunum/OpenLunum --add-label ready-for-merge --remove-label needs-work 2>/dev/null || \
-      gh pr edit "$pr" --repo corpunum/OpenLunum --add-label ready-for-merge 2>/dev/null || true
+    gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=ready-for-merge" >/dev/null 2>&1 || true
+    gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/needs-work" >/dev/null 2>&1 || true
   else
-    gh pr edit "$pr" --repo corpunum/OpenLunum --add-label needs-work --remove-label ready-for-merge 2>/dev/null || \
-      gh pr edit "$pr" --repo corpunum/OpenLunum --add-label needs-work 2>/dev/null || true
+    gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=needs-work" >/dev/null 2>&1 || true
+    gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
   fi
   gh pr comment "$pr" --repo corpunum/OpenLunum \
     --body "REVIEW ${sha}: ${verdict} — ${reason} _(local reviewer: ${REVIEW_MODEL}; same-machine role-separated review, not fully independent)_" >/dev/null 2>&1 || true
