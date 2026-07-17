@@ -1,6 +1,7 @@
 ## Since 0.2.1 (Documentation Sync)
 
-### Added — Infrastructure & Tooling
+
+### Added — Infrastructure & Tooling (0.2.0)
 - **Core Library:** Strict TypeScript reference library providing semantic contracts and canonicalization.
 - **CLI:** Tools for inspecting, encoding, and compiling Lunum records.
 - **MCP Prototype:** Reference server implementation for Model Context Protocol tooling.
