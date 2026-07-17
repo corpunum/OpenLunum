@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
+# NOTE: no `set -e` — the loop must survive verify failures and non-zero exits
 
 # Pi autonomous campaign loop for OpenLunum
 # Usage: ./scripts/pi-loop.sh [worktree-path]
@@ -102,21 +103,22 @@ while true; do
   if [[ $pi_exit -eq 124 ]]; then
     log "Pi run TIMED OUT after ${PI_TIMEOUT_SECONDS}s — killing and continuing"
   fi
-  set -e
+
+  # Reset to main and clean before verify (Pi may have switched branches)
+  cd "$WORKDIR"
+  git checkout main 2>/dev/null || true
+  git reset --hard origin/main 2>/dev/null || true
 
   # Verify after each run
-  cd "$WORKDIR"
-  set +e
-  verify_output=$(pnpm verify 2>&1)
-  verify_exit=$?
+  verify_output=$(pnpm verify 2>&1) || true
+  verify_exit=${PIPESTATUS[0]:-$?}
   echo "$verify_output" >> "$logfile"
-  set -e
 
   if [[ $verify_exit -eq 0 ]]; then
     failure_count=0
     log "Loop succeeded — verify passed (pi exit: $pi_exit)"
   else
-    ((failure_count++))
+    failure_count=$((failure_count + 1))
     last_error=$(echo "$verify_output" | grep -E '(FAIL|Error|error|fail)' | tail -5)
     log "Loop FAILED (count: $failure_count/$MAX_CONSECUTIVE_FAILURES, pi exit: $pi_exit)"
 
