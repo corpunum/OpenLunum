@@ -31,7 +31,10 @@ setup_sandbox() {
   cat > "$REPO/.git/worktrees/eval-sandbox/hooks-note" <<< "pushes blocked for eval"
   git -C "$SANDBOX" config core.hooksPath /dev/null 2>/dev/null || true
   cat > "$SANDBOX/.git-no-push" <<< "1"
-  git -C "$SANDBOX" remote set-url --push origin http://invalid.localhost/blocked
+  # NOTE: remote config is SHARED between worktrees — never use `remote set-url`
+  # here (it broke the main repo's push URL once). Use worktree-scoped config:
+  git -C "$SANDBOX" config extensions.worktreeConfig true
+  git -C "$SANDBOX" config --worktree remote.origin.pushurl http://invalid.localhost/blocked
   # Deps: pnpm workspace node_modules are at repo root; sandbox needs its own install
   (cd "$SANDBOX" && pnpm install --frozen-lockfile >/dev/null 2>&1)
 }
