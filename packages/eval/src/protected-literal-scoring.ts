@@ -9,6 +9,17 @@ import type { LunumRecord, LunumSem, LunumClause } from '@corpunum/lunum';
 
 // ── Protected Literal ───────────────────────────────────────────────
 
+export interface ProtectedLiteralRule {
+  /** Pattern to match */
+  pattern: RegExp;
+  /** Literal type */
+  type: LiteralType;
+  /** Confidence score */
+  confidence: number;
+  /** Language code */
+  language: string;
+}
+
 export interface ProtectedLiteral {
   /** The literal text */
   text: string;
@@ -278,12 +289,17 @@ export class SemanticScorer {
     const protectedLiteralPreservation = this.scoreProtectedLiteralPreservation(protectedLiterals, record);
 
     // Calculate overall score (weighted average)
-    const overall = 
+    let overall = 
       completeness * 0.3 +
       consistency * 0.25 +
       predicateClarity * 0.2 +
       roleCoverage * 0.15 +
       protectedLiteralPreservation * this.options.protectedLiteralWeight;
+
+    // If no clauses and no literals, score should be 0
+    if (clauses.length === 0 && protectedLiterals.length === 0) {
+      overall = 0;
+    }
 
     // Generate warnings
     const warnings: string[] = [];
@@ -336,6 +352,7 @@ export class SemanticScorer {
    * Score consistency across clauses
    */
   private scoreConsistency(clauses: LunumClause[]): number {
+    if (clauses.length === 0) return 0;
     if (clauses.length <= 1) return 1;
 
     // Check for consistent predicate patterns
