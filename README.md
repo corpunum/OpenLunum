@@ -244,11 +244,11 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 ## Repository map
 
 ```text
-packages/core/            strict TypeScript reference library
-packages/cli/             inspect/encode/compile command line
-packages/eval/            local-model experiment runner and reports
-packages/mcp/            MCP (Model Context Protocol) prototype reference server and tooling
-packages/adapter-openunum/ OpenUnum compatibility package
+packages/core/            Core library providing strict TypeScript reference semantics and canonicalization.
+packages/cli/             Command line interface for inspection, encoding, and compilation.
+packages/eval/            Local-model experiment runner, metrics, and failure reports.
+packages/mcp/            Prototype reference server and tooling for Model Context Protocol (MCP).
+packages/adapter-openunum/ OpenUnum compatibility adapter package.
 schemas/                  machine-readable contracts
 registry/                 worlds, roles, categories, predicates
 integrations/openunum/    verified-current-state reference and adoption plan
