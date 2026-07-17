@@ -2,7 +2,10 @@
  * MCP (Model Context Protocol) types for Lunum integration
  */
 
-import type { LunumRecord, LunumSem, Risk } from '@corpunum/lunum';
+// Local type definitions for MCP reference implementation
+export type LunumRecord = Record<string, unknown>;
+export type LunumSem = Record<string, unknown>;
+export type Risk = 'low' | 'medium' | 'high' | 'unknown';
 
 // ── MCP Server Options ──────────────────────────────────────────────
 
@@ -62,9 +65,9 @@ export interface LunumContextItem {
   /** When added */
   timestamp: number;
   /** Source of the content */
-  source?: string;
+  source?: string | undefined;
   /** Metadata */
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, unknown> | undefined;
 }
 
 export interface ContextQueryOptions {

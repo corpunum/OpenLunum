@@ -4,8 +4,7 @@
  * Provides storage and retrieval of semantic context items with filtering and search capabilities.
  */
 
-import type { LunumRecord, Risk } from '@corpunum/lunum';
-import type { LunumContextItem, ContextQueryOptions, ContextStats } from './types.js';
+import type { LunumContextItem, ContextQueryOptions, ContextStats, Risk } from './types.js';
 
 export class LunumContextManager {
   private items: Map<string, LunumContextItem>;
@@ -19,8 +18,8 @@ export class LunumContextManager {
   /**
    * Add a semantic record to context
    */
-  add(record: LunumRecord, options: { source?: string; metadata?: Record<string, unknown> } = {}): string {
-    const id = record.fingerprint || crypto.randomUUID();
+  add(record: Record<string, unknown>, options: { source?: string; metadata?: Record<string, unknown> } = {}): string {
+    const id = (record as { fingerprint?: string }).fingerprint || crypto.randomUUID();
     
     if (this.items.size >= this.maxItems) {
       // Remove oldest item
@@ -30,13 +29,14 @@ export class LunumContextManager {
       }
     }
 
-    this.items.set(id, {
+    const item: LunumContextItem = {
       id,
       record,
       timestamp: Date.now(),
-      source: options.source,
-      metadata: options.metadata
-    });
+      source: options.source !== undefined ? options.source : undefined,
+      metadata: options.metadata !== undefined ? options.metadata : undefined
+    };
+    this.items.set(id, item);
 
     return id;
   }
@@ -56,18 +56,27 @@ export class LunumContextManager {
 
     // Apply risk filter
     if (options.riskFilter && options.riskFilter !== 'all') {
-      results = results.filter(item => item.record.policy.risk === options.riskFilter);
+      results = results.filter(item => {
+        const policy = item.record.policy as { risk?: string };
+        return policy?.risk === options.riskFilter;
+      });
     }
 
     // Apply search query
     if (options.searchQuery) {
       const query = options.searchQuery.toLowerCase();
-      results = results.filter(item => 
-        item.record.source.text.toLowerCase().includes(query) ||
-        item.record.sem.clauses.some(clause => 
-          clause.predicate.toLowerCase().includes(query)
-        )
-      );
+      results = results.filter(item => {
+        const sourceText = (item.record.source as { text?: string })?.text ?? '';
+        const hasMatch = sourceText.toLowerCase().includes(query);
+        
+        if (!hasMatch) {
+          const clauses = (item.record.sem as { clauses?: Array<{ predicate?: string }> })?.clauses ?? [];
+          hasMatch || clauses.some((clause: { predicate?: string }) => 
+            clause.predicate?.toLowerCase().includes(query) ?? false
+          );
+        }
+        return hasMatch;
+      });
     }
 
     // Apply limit
@@ -85,9 +94,11 @@ export class LunumContextManager {
     const categoryDistribution: Record<string, number> = {};
 
     for (const item of items) {
-      riskDistribution[item.record.policy.risk] = (riskDistribution[item.record.policy.risk] || 0) + 1;
+      const policy = item.record.policy as { risk?: string; category?: string };
+      const risk = policy?.risk ?? 'unknown';
+      const category = policy?.category ?? 'unknown';
       
-      const category = item.record.policy.category || 'unknown';
+      riskDistribution[risk] = (riskDistribution[risk] || 0) + 1;
       categoryDistribution[category] = (categoryDistribution[category] || 0) + 1;
     }
 

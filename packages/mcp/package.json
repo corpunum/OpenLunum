@@ -11,7 +11,7 @@
     "start": "node dist/src/server.js",
     "dev": "tsx src/server.ts"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@corpunum/lunum": "0.2.0"
   },
   "devDependencies": {

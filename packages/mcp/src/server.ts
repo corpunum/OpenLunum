@@ -5,10 +5,23 @@
  * AI agents to interact with Lunum semantic content.
  */
 
-import type { McpServer, McpTool, McpResource, McpPrompt } from '@modelcontextprotocol/sdk/types.js';
-import type { LunumMcpServerOptions, LunumToolDefinition } from './types.js';
+import type { LunumMcpServerOptions, LunumToolDefinition, LunumContextItem } from './types.js';
 import { lunumTools } from './tools.js';
 import { LunumContextManager } from './context.js';
+
+// ── MCP Server Interfaces ───────────────────────────────────────────
+
+export interface McpServer {
+  name: string;
+  version: string;
+  tools: Array<{
+    name: string;
+    description: string;
+    inputSchema: Record<string, unknown>;
+  }>;
+  resources: Array<Record<string, unknown>>;
+  prompts: Array<Record<string, unknown>>;
+}
 
 // ── Server Implementation ───────────────────────────────────────────
 
