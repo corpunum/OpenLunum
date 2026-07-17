@@ -5,23 +5,29 @@ set -uo pipefail
 # Pi autonomous campaign loop for OpenLunum
 # Usage: ./scripts/pi-loop.sh [worktree-path]
 #
-# Runs Pi in non-interactive mode with the campaign prompt, checks pnpm verify
-# after each run, and writes a STUCK flag after MAX_CONSECUTIVE_FAILURES.
+# Runs Pi in non-interactive mode with the campaign prompt. After each run:
+#   1. verifies Pi's branch (quality signal)
+#   2. auto-opens a draft PR for any agent branch that lacks one
+#   3. resets to main and verifies main (infrastructure signal)
+# Writes a STUCK flag after MAX_CONSECUTIVE_FAILURES or on abnormal exit.
 # A watcher daemon (Claude scheduled routine) monitors the STUCK flag.
 
 WORKDIR="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
 LOGDIR="$WORKDIR/reports/pi-loop"
 STUCK_FILE="$LOGDIR/STUCK"
 STATUS_LOG="$LOGDIR/loop-status.log"
+CLAIMS_FILE="$LOGDIR/claims.txt"
 MAX_CONSECUTIVE_FAILURES=3
 COOLDOWN_SECONDS=30
 PI_TIMEOUT_SECONDS=1800  # 30 min max per Pi run
+PI_MODEL="${PI_MODEL:-openai/qwen3-coder-30b-a3b}"
 
 TASK_PROMPT_FILE="$WORKDIR/scripts/pi-task-prompt.md"
 
 mkdir -p "$LOGDIR"
 
 failure_count=0
+clean_exit=0
 
 log() {
   echo "[$(date -Iseconds)] $*" | tee -a "$STATUS_LOG"
@@ -41,27 +47,18 @@ STUCK_EOF
   log "STUCK flag written to $STUCK_FILE"
 }
 
-# Clean any stale STUCK flag on startup
-if [[ -f "$STUCK_FILE" ]]; then
-  log "Clearing stale STUCK flag from previous run"
-  rm -f "$STUCK_FILE"
-fi
+# Trap: any exit that is not marked clean writes a STUCK file so the
+# watcher catches loop-script crashes, not just 3-strike failures.
+on_exit() {
+  if [[ "$clean_exit" != "1" && ! -f "$STUCK_FILE" ]]; then
+    write_stuck "${logfile:-none}" "loop script exited abnormally (trap EXIT)"
+  fi
+}
+trap on_exit EXIT
 
-log "Pi loop starting in $WORKDIR"
-
-while true; do
-  timestamp=$(date +%Y%m%dT%H%M%S)
-  logfile="$LOGDIR/loop-$timestamp.log"
-
-  log "Starting Pi run → $logfile"
-
-  # Reset to main before each run to avoid stale branch state
-  cd "$WORKDIR"
-  git fetch origin main 2>>"$logfile" || true
-  git checkout main 2>>"$logfile" || true
-  git reset --hard origin/main 2>>"$logfile" || true
-
-  # Remove stale compiled files that lack source counterparts
+clean_stale_dist() {
+  # Remove compiled files that lack source counterparts
+  local pkg f base dir src
   for pkg in packages/core packages/eval packages/cli packages/adapter-openunum; do
     if [[ -d "$WORKDIR/$pkg/dist" ]]; then
       for f in "$WORKDIR/$pkg"/dist/test/*.test.js "$WORKDIR/$pkg"/dist/src/*.js; do
@@ -75,56 +72,122 @@ while true; do
       done
     fi
   done
+}
+
+generate_claims() {
+  # List existing agent branches so Pi does not duplicate work
+  {
+    echo "TASKS ALREADY CLAIMED — existing agent branches (do NOT work on these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):"
+    git -C "$WORKDIR" branch -r --list 'origin/agent/*' --format='- %(refname:short)' 2>/dev/null | sed 's|origin/||'
+    git -C "$WORKDIR" branch --list 'agent/*' --format='- %(refname:short)' 2>/dev/null
+  } | sort -u > "$CLAIMS_FILE"
+}
+
+auto_open_prs() {
+  # For any local agent branch ahead of main with no open PR: push + draft PR
+  local branch ahead pr_count
+  for branch in $(git -C "$WORKDIR" for-each-ref --sort=-committerdate refs/heads/agent/ --format='%(refname:short)' --count=5 2>/dev/null); do
+    ahead=$(git -C "$WORKDIR" rev-list --count "origin/main..$branch" 2>/dev/null || echo 0)
+    [[ "$ahead" -gt 0 ]] || continue
+    pr_count=$(gh pr list --repo corpunum/OpenLunum --head "$branch" --state open --json number --jq 'length' 2>/dev/null || echo error)
+    if [[ "$pr_count" == "0" ]]; then
+      git -C "$WORKDIR" push -u origin "$branch" 2>/dev/null || true
+      if gh pr create --repo corpunum/OpenLunum --draft --head "$branch" \
+          --title "agent: $(git -C "$WORKDIR" log -1 --format=%s "$branch")" \
+          --body "Auto-opened by pi-loop for branch \`$branch\` ($ahead commits ahead of main). Verify status: see loop log." 2>/dev/null; then
+        log "auto-PR opened for $branch ($ahead commits)"
+      fi
+    fi
+  done
+}
+
+# Clean any stale STUCK flag on startup
+if [[ -f "$STUCK_FILE" ]]; then
+  log "Clearing stale STUCK flag from previous run"
+  rm -f "$STUCK_FILE"
+fi
+
+log "Pi loop starting in $WORKDIR (model: $PI_MODEL)"
+
+while true; do
+  timestamp=$(date +%Y%m%dT%H%M%S)
+  logfile="$LOGDIR/loop-$timestamp.log"
+
+  log "Starting Pi run → $logfile"
+
+  # Reset to main before each run to avoid stale branch state
+  cd "$WORKDIR"
+  git fetch origin main 2>>"$logfile" || true
+  git checkout main 2>>"$logfile" || true
+  git reset --hard origin/main 2>>"$logfile" || true
+
+  clean_stale_dist
   pnpm build >>"$logfile" 2>&1 || true
 
-  # Run Pi with the campaign prompt, non-interactive (with timeout)
-  set +e
-  if [[ -f "$TASK_PROMPT_FILE" ]]; then
-    timeout "$PI_TIMEOUT_SECONDS" pi --print \
-      --provider local-llama \
-      --model openai/qwen3-coder-30b-a3b \
-      --thinking high \
-      --append-system-prompt "@$WORKDIR/AGENTS.md" \
-      --append-system-prompt "@$WORKDIR/WORK_QUEUE.md" \
-      --append-system-prompt "@$TASK_PROMPT_FILE" \
-      "Continue the OpenLunum campaign. You are in $WORKDIR. Follow the task prompt instructions exactly." \
-      2>&1 | tee "$logfile"
-  else
-    timeout "$PI_TIMEOUT_SECONDS" pi --print \
-      --provider local-llama \
-      --model openai/qwen3-coder-30b-a3b \
-      --thinking high \
-      --append-system-prompt "@$WORKDIR/AGENTS.md" \
-      --append-system-prompt "@$WORKDIR/WORK_QUEUE.md" \
-      "Continue the OpenLunum campaign. Run pnpm verify first. Pick the highest-priority unchecked item from WORK_QUEUE.md. Create an agent/qwen/<area>/<name> branch. Follow AGENTS.md protocol exactly. Push your branch and open a draft PR when done. Report status at the end." \
-      2>&1 | tee "$logfile"
-  fi
-  pi_exit=$?
+  generate_claims
+
+  # Run Pi with the campaign prompt, non-interactive (with timeout).
+  # Daily session id gives Pi within-day memory of what it already did.
+  session_id="openlunum-campaign-$(date +%Y%m%d)"
+  timeout "$PI_TIMEOUT_SECONDS" pi --print \
+    --provider local-llama \
+    --model "$PI_MODEL" \
+    --thinking high \
+    --session-id "$session_id" \
+    --append-system-prompt "@$WORKDIR/AGENTS.md" \
+    --append-system-prompt "@$WORKDIR/WORK_QUEUE.md" \
+    --append-system-prompt "@$TASK_PROMPT_FILE" \
+    --append-system-prompt "@$CLAIMS_FILE" \
+    "Continue the OpenLunum campaign. You are in $WORKDIR. Follow the task prompt instructions exactly. Do not work on tasks listed in the claims file." \
+    2>&1 | tee "$logfile"
+  pi_exit=${PIPESTATUS[0]}
   if [[ $pi_exit -eq 124 ]]; then
     log "Pi run TIMED OUT after ${PI_TIMEOUT_SECONDS}s — killing and continuing"
   fi
 
-  # Reset to main and clean before verify (Pi may have switched branches)
   cd "$WORKDIR"
+
+  # --- Branch verify: quality signal on Pi's actual work ---
+  pi_branch=$(git branch --show-current 2>/dev/null || echo main)
+  branch_verify="skipped"
+  if [[ "$pi_branch" == agent/* ]]; then
+    clean_stale_dist
+    if pnpm verify >>"$logfile" 2>&1; then
+      branch_verify="pass"
+    else
+      branch_verify="fail"
+    fi
+    log "branch-verify: $branch_verify $pi_branch"
+  fi
+
+  # Auto-open draft PRs for agent branches without one
+  auto_open_prs
+
+  # --- Main verify: infrastructure signal ---
   git checkout main 2>/dev/null || true
   git reset --hard origin/main 2>/dev/null || true
+  clean_stale_dist
 
-  # Verify after each run
   verify_output=$(pnpm verify 2>&1) || true
-  verify_exit=${PIPESTATUS[0]:-$?}
+  if echo "$verify_output" | grep -qE 'ELIFECYCLE|ERR_PNPM|Failed'; then
+    verify_exit=1
+  else
+    verify_exit=0
+  fi
   echo "$verify_output" >> "$logfile"
 
-  if [[ $verify_exit -eq 0 ]]; then
+  if [[ $verify_exit -eq 0 && "$branch_verify" != "fail" ]]; then
     failure_count=0
-    log "Loop succeeded — verify passed (pi exit: $pi_exit)"
+    log "Loop succeeded — main verify passed, branch-verify=$branch_verify (pi exit: $pi_exit)"
   else
     failure_count=$((failure_count + 1))
     last_error=$(echo "$verify_output" | grep -E '(FAIL|Error|error|fail)' | tail -5)
-    log "Loop FAILED (count: $failure_count/$MAX_CONSECUTIVE_FAILURES, pi exit: $pi_exit)"
+    log "Loop FAILED (main-verify: $verify_exit, branch-verify: $branch_verify, count: $failure_count/$MAX_CONSECUTIVE_FAILURES, pi exit: $pi_exit)"
 
     if (( failure_count >= MAX_CONSECUTIVE_FAILURES )); then
       log "STOPPED after $MAX_CONSECUTIVE_FAILURES consecutive failures"
       write_stuck "$logfile" "$last_error"
+      clean_exit=1  # STUCK already written; don't double-write in trap
       exit 1
     fi
   fi
