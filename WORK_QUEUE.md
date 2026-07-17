@@ -15,13 +15,13 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 - [x] Define semantic identity projection: decide which annotations/provenance affect fingerprints.
 - [ ] Expand typed time, quantity, uncertainty, reference, and modality structures.
 - [ ] Add canonical conformance vectors and property tests.
-- [ ] Version and document fingerprint migration from 0.1.
+- [x] Version and document fingerprint migration from 0.1.
 
 ## P1 — multilingual parsing
 
 - [ ] Establish English and Greek parse baselines on `multilingual-core-v1`.
 - [ ] Add Spanish and Indonesian baselines.
-- [ ] Build error taxonomy for entity, role, negation, condition, quantity, time, and ambiguity failures.
+- [x] Build error taxonomy for entity, role, negation, condition, quantity, time, and ambiguity failures.
 - [ ] Add explicit abstention/clarification outputs for low-confidence parses.
 
 ## P1 — realization
@@ -42,13 +42,13 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 - [ ] Build category/risk/confidence policy datasets.
 - [ ] Measure natural vs Lunum vs mixed context downstream quality.
-- [ ] Add multilingual retrieval and false-equivalence tests.
+- [x] Add multilingual retrieval and false-equivalence tests.
 - [ ] Design near-semantic fingerprints separately from exact identity.
 
 ## P2 — adoption
 
 - [ ] Package and verify the OpenUnum adapter in shadow mode.
-- [ ] Add MCP/local service reference implementation.
+- [x] Add MCP/local service reference implementation.
 - [ ] Add conformance reports for hook/plugin/CLI integrations.
 
 ## Claiming work
