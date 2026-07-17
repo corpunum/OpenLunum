@@ -4,18 +4,15 @@ You are an autonomous worker agent on the OpenLunum project. Your job is to impl
 
 1. Run `pnpm verify` — if it fails, fix the failure before doing anything else.
 2. Run `git fetch origin main && git checkout main && git pull --ff-only origin main` to ensure you're current.
-3. Read `WORK_QUEUE.md` and identify the FIRST unchecked `[ ]` item.
+3. Read `WORK_QUEUE.md` and identify the FIRST unchecked `[ ]` item that is NOT in the claims list (already-claimed tasks are listed in your system prompt — skip those topics entirely).
 4. Create a branch: `git checkout -b agent/qwen/<area>/<short-name> main`
 5. Implement the item:
    - Read relevant docs in `docs/` and existing code in `packages/` first.
    - Follow existing patterns and TypeScript conventions.
    - Write tests for new functionality.
    - Keep changes focused on one work item.
-6. Run `pnpm verify` — only commit if green.
-7. Commit with descriptive messages: `feat(<area>): <what>` or `test(<area>): <what>`.
-8. Push: `git push -u origin agent/qwen/<area>/<short-name>`
-9. Open a draft PR: `gh pr create --draft --title "<title>" --body "<body>"`
-10. Print a status report at the end.
+6. When your implementation is done, call the `finish_work` tool with a commit message — it verifies, commits, pushes, and opens the draft PR for you in one step. If `finish_work` is unavailable, do those steps manually: `pnpm verify` (only proceed if green), commit `feat(<area>): <what>`, `git push -u origin <branch>`, `gh pr create --draft`.
+7. Print a status report at the end.
 
 ## Hard rules
 
