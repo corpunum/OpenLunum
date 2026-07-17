@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 set -uo pipefail
+# Singleton guard: exit if another instance of this loop is already running
+if [[ $(pgrep -fc "$(basename "$0")") -gt 1 ]]; then
+  echo "another $(basename "$0") instance is running — exiting" >&2
+  exit 0
+fi
 # OpenLunum documentation maintenance loop.
 #
 # Runs only when main has advanced since the last docs pass (docs follow
