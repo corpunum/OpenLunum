@@ -10,7 +10,7 @@ import type { Risk, EligibilityDecision } from './types.js';
 // ── Category Definitions ────────────────────────────────────────────
 
 /** Eligible categories that can be processed directly */
-export const ELIGIBLE_CATEGORIES = new Set([
+export const ELIGIBLE_CATEGORIES: Set<string> = new Set([
   'preference',
   'simple_fact',
   'tool_event',
@@ -18,10 +18,10 @@ export const ELIGIBLE_CATEGORIES = new Set([
   'retrieval_rule',
   'system_fact',
   'benchmark_result'
-] as const);
+]);
 
 /** Natural-only categories that require special handling */
-export const NATURAL_ONLY_CATEGORIES = new Set([
+export const NATURAL_ONLY_CATEGORIES: Set<string> = new Set([
   'conditional_instruction',
   'safety_constraint',
   'safety_event',
@@ -35,13 +35,13 @@ export const NATURAL_ONLY_CATEGORIES = new Set([
   'social_nuance',
   'ambiguous',
   'complex_modality'
-] as const);
+]);
 
 /** All known categories */
-export const ALL_CATEGORIES = new Set([
+export const ALL_CATEGORIES: Set<string> = new Set([
   ...ELIGIBLE_CATEGORIES,
   ...NATURAL_ONLY_CATEGORIES
-] as const);
+]);
 
 // ── Risk Level Definitions ──────────────────────────────────────────
 
@@ -224,9 +224,9 @@ export interface PolicyClassificationInput {
   /** Confidence score (0-1) */
   confidence: number;
   /** Source text (optional) */
-  sourceText?: string;
+  sourceText?: string | undefined;
   /** Whether content has validated semantics */
-  semantic?: boolean;
+  semantic?: boolean | undefined;
 }
 
 /**
@@ -255,13 +255,14 @@ export function classifyContent(input: PolicyClassificationInput): EligibilityDe
   }
 
   // Check category eligibility
-  if (!ALL_CATEGORIES.has(category)) {
-    if (NATURAL_ONLY_CATEGORIES.has(category)) {
+  const catStr = category;
+  if (!ALL_CATEGORIES.has(catStr as string)) {
+    if (NATURAL_ONLY_CATEGORIES.has(catStr as string)) {
       reasons.push(`natural_only_category_${category}`);
     } else {
       reasons.push(`category_not_in_taxonomy_${category}`);
     }
-  } else if (!ELIGIBLE_CATEGORIES.has(category)) {
+  } else if (!ELIGIBLE_CATEGORIES.has(catStr as string)) {
     reasons.push(`natural_only_category_${category}`);
   }
 
@@ -297,18 +298,18 @@ export function classifyByCategory(
   sourceText?: string,
   semantic?: boolean
 ): EligibilityDecision {
-  const metadata = CATEGORY_METADATA[category];
+  const metadata = CATEGORY_METADATA[category as keyof typeof CATEGORY_METADATA];
   const risk: RiskLevel = metadata?.typicalRisk ?? 'unknown';
-  const source = sourceText !== undefined ? sourceText : undefined;
-  const sem = semantic !== undefined ? semantic : undefined;
 
-  return classifyContent({
+  const input: PolicyClassificationInput = {
     category,
     risk,
     confidence,
-    sourceText: source,
-    semantic: sem
-  });
+    sourceText: sourceText,
+    semantic: semantic
+  };
+
+  return classifyContent(input);
 }
 
 /**
@@ -319,9 +320,9 @@ export function classifyByCategory(
  */
 export function getCategoriesByType(type: 'eligible' | 'natural_only'): string[] {
   if (type === 'eligible') {
-    return Array.from(ELIGIBLE_CATEGORIES);
+    return Array.from(ELIGIBLE_CATEGORIES) as string[];
   }
-  return Array.from(NATURAL_ONLY_CATEGORIES);
+  return Array.from(NATURAL_ONLY_CATEGORIES) as string[];
 }
 
 /**
@@ -341,7 +342,7 @@ export function getCategoryMetadata(category: string): CategoryMetadata | undefi
  * @returns True if category is valid
  */
 export function isValidCategory(category: string): boolean {
-  return ALL_CATEGORIES.has(category as string);
+  return ALL_CATEGORIES.has(category);
 }
 
 /**
@@ -378,8 +379,10 @@ export function generatePolicyStats(
   const categoryDistribution: Record<string, number> = {};
 
   for (const c of classifications) {
-    riskDistribution[c.risk] = (riskDistribution[c.risk] || 0) + 1;
-    categoryDistribution[c.category] = (categoryDistribution[c.category] || 0) + 1;
+    const riskLevel = c.risk as RiskLevel;
+    const cat = c.category as string;
+    riskDistribution[riskLevel] = (riskDistribution[riskLevel] || 0) + 1;
+    categoryDistribution[cat] = (categoryDistribution[cat] || 0) + 1;
   }
 
   const avgConfidence = classifications.reduce((sum, c) => sum + c.confidence, 0) / classifications.length;
