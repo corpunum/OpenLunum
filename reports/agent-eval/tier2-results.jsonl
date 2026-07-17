@@ -1,0 +1,8 @@
+{"model":"openai/qwen3-coder-30b-a3b","task":"a-protocol","score":4,"branch":"agent/eval/scratch","file_ok":1,"commit_ok":1,"main_ok":1,"at":"2026-07-17T10:16:49+03:00"}
+{"model":"openai/qwen3-coder-30b-a3b","task":"b-edit-precision","score":1,"branch":"eval-sandbox-base","commit_ok":0,"main_ok":0,"at":"2026-07-17T10:16:58+03:00"}
+{"model":"openai/qwen3.6-40b-code","task":"a-protocol","score":4,"branch":"agent/eval/scratch","file_ok":1,"commit_ok":1,"main_ok":1,"at":"2026-07-17T10:21:33+03:00"}
+{"model":"openai/qwen3.6-40b-code","task":"b-edit-precision","score":3,"branch":"agent/eval/scratch","commit_ok":1,"main_ok":0,"at":"2026-07-17T10:25:31+03:00"}
+{"model":"supergemma4-e4b","task":"a-protocol","score":4,"branch":"agent/eval/scratch","file_ok":1,"commit_ok":1,"main_ok":1,"at":"2026-07-17T10:27:14+03:00"}
+{"model":"supergemma4-e4b","task":"b-edit-precision","score":3,"branch":"agent/eval/scratch","commit_ok":1,"main_ok":0,"at":"2026-07-17T10:28:21+03:00"}
+{"model":"openai/qwen3.6-35b-a3b","task":"a-protocol","score":4,"branch":"agent/eval/scratch","file_ok":1,"commit_ok":1,"main_ok":1,"at":"2026-07-17T10:31:31+03:00"}
+{"model":"openai/qwen3.6-35b-a3b","task":"b-edit-precision","score":3,"branch":"agent/eval/scratch","commit_ok":1,"main_ok":0,"at":"2026-07-17T10:32:22+03:00"}

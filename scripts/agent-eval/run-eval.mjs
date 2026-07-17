@@ -45,7 +45,7 @@ function argVal(name, dflt) {
 }
 const models = argVal("--models", "openai/qwen3-coder-30b-a3b").split(",").map((s) => s.trim());
 const skipGates = args.includes("--skip-gates");
-const maxTokens = Number(argVal("--max-tokens", "1024"));
+const maxTokens = Number(argVal("--max-tokens", "4096"));
 
 const { tasks } = JSON.parse(readFileSync(join(__dirname, "tasks", "tier1-tasks.json"), "utf8"));
 
@@ -93,7 +93,10 @@ async function chat(model, system, prompt, timeoutMs = 300_000) {
   });
   if (!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0, 300)}`);
   const data = await r.json();
-  const text = data.choices?.[0]?.message?.content ?? "";
+  const msg = data.choices?.[0]?.message ?? {};
+  // Reasoning models may put everything in reasoning_content and leave content
+  // empty (thinking consumed the budget). Fall back so we score their answer.
+  const text = (msg.content && msg.content.trim()) ? msg.content : (msg.reasoning_content ?? "");
   return { text, latencyMs: Date.now() - t0, usage: data.usage ?? null };
 }
 
@@ -171,6 +174,22 @@ for (const model of models) {
   console.log(`>>> ${model}: ${run.passRate}`);
   allResults.push(run);
   writeFileSync(outPath, JSON.stringify(allResults, null, 2));
+
+  // Explicitly unload the candidate to keep GTT memory safe for the next one
+  // (leave the Pi default model alone if it happens to be the candidate)
+  if (model !== "openai/qwen3-coder-30b-a3b") {
+    try {
+      await fetch(`${ROUTER}/models/unload`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model }),
+        signal: AbortSignal.timeout(30_000),
+      });
+      console.log(`unloaded ${model}; gtt-used now: ${gttUsedGiB().toFixed(1)} GiB`);
+    } catch (e) {
+      console.error(`unload failed for ${model}: ${e.message}`);
+    }
+  }
 }
 
 console.log(`\nresults written to ${outPath}`);
