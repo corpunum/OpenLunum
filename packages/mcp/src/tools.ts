@@ -6,6 +6,7 @@
  */
 
 import type { LunumToolDefinition, McpToolResponse } from './types.js';
+import { InputValidator, createMcpError, mcpErrorToResponse, McpErrorCode } from './errors.js';
 
 // ── Parse Tool ──────────────────────────────────────────────────────
 
@@ -34,6 +35,16 @@ export const parseTool: LunumToolDefinition = {
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
+      const validation = InputValidator.validate(input, {
+        text: { required: true, type: 'string', minLength: 1, maxLength: 10000 },
+        language: { type: 'string', enum: ['en', 'el', 'es', 'id', 'zh', 'ar', 'fr', 'de', 'ja', 'ko'] },
+        world: { type: 'string', enum: ['real', 'fiction', 'tool', 'dream', 'belief', 'metaphor'] }
+      });
+      if (!validation.ok) {
+        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Parse tool input validation failed', { validationErrors: validation.errors });
+        return mcpErrorToResponse(error);
+      }
+
       const text = input.text as string;
       const language = (input.language as string) ?? 'en';
       const world = (input.world as string) ?? 'real';
@@ -89,6 +100,15 @@ export const realizeTool: LunumToolDefinition = {
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
+      const validation = InputValidator.validate(input, {
+        sem: { required: true, type: 'object' },
+        targetLanguage: { type: 'string', enum: ['en', 'el', 'es', 'id', 'zh', 'ar', 'fr', 'de', 'ja', 'ko'] }
+      });
+      if (!validation.ok) {
+        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Realize tool input validation failed', { validationErrors: validation.errors });
+        return mcpErrorToResponse(error);
+      }
+
       const sem = input.sem as object;
       const targetLanguage = (input.targetLanguage as string) ?? 'en';
 
@@ -137,9 +157,19 @@ export const fingerprintTool: LunumToolDefinition = {
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
+      const validation = InputValidator.validate(input, {
+        sem: { type: 'object' },
+        fingerprint: { type: 'string' },
+        length: { type: 'number', min: 16, max: 64 }
+      });
+      if (!validation.ok) {
+        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Fingerprint tool input validation failed', { validationErrors: validation.errors });
+        return mcpErrorToResponse(error);
+      }
+
       const sem = input.sem as object | undefined;
       const fingerprint = input.fingerprint as string | undefined;
-      const length = (input.length as number) ?? 32;
+      const length = typeof input.length === 'number' ? input.length : 32;
 
       // Placeholder: In real implementation, would use Lunum fingerprint function
       const result = {
@@ -185,9 +215,19 @@ export const retrieveTool: LunumToolDefinition = {
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
+      const validation = InputValidator.validate(input, {
+        fingerprint: { type: 'string' },
+        query: { type: 'string', maxLength: 1000 },
+        maxResults: { type: 'number', min: 1, max: 100 }
+      });
+      if (!validation.ok) {
+        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Retrieve tool input validation failed', { validationErrors: validation.errors });
+        return mcpErrorToResponse(error);
+      }
+
       const fingerprint = input.fingerprint as string | undefined;
       const query = input.query as string | undefined;
-      const maxResults = (input.maxResults as number) ?? 10;
+      const maxResults = typeof input.maxResults === 'number' ? input.maxResults : 10;
 
       const result = {
         success: true,
@@ -235,6 +275,15 @@ export const validateTool: LunumToolDefinition = {
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
+      const validation = InputValidator.validate(input, {
+        sem: { required: true, type: 'object' },
+        schema: { type: 'string', enum: ['lunum-sem/0.1-draft', 'lunum-sem/0.2'] }
+      });
+      if (!validation.ok) {
+        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Validate tool input validation failed', { validationErrors: validation.errors });
+        return mcpErrorToResponse(error);
+      }
+
       const sem = input.sem as object;
       const schema = (input.schema as string) ?? 'lunum-sem/0.1-draft';
 
