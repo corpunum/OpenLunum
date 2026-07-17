@@ -208,11 +208,19 @@ export interface TypedModality {
 
 // ── Integration with LunumClause ───────────────────────────────────
 
-export interface ExtendedLunumClause extends Omit<LunumClause, 'time' | 'modality'> {
+export interface ExtendedLunumClause {
+  predicate: string;
+  roles: Record<string, unknown>;
+  negated?: boolean;
+  modality?: string | null;
+  time?: unknown;
+  conditions?: ExtendedLunumClause[];
+  consequences?: ExtendedLunumClause[];
+  annotations?: Record<string, unknown>;
   /** Extended time structure */
-  time?: TypedTime;
+  timeTyped?: TypedTime;
   /** Extended modality structure */
-  modality?: TypedModality;
+  modalityTyped?: TypedModality;
   /** Quantity information */
   quantity?: TypedQuantity;
   /** Uncertainty information */
