@@ -1,0 +1,197 @@
+[
+  {
+    "model": "supergemma4-e4b",
+    "at": "2026-07-17T11:57:36.754Z",
+    "cases": [
+      {
+        "pr": 19,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": true,
+        "pts": 3,
+        "snippet": "VERDICT: NEEDS_WORK\nREASON: The build failed with a TS2307 error because the module './schema-conformance.js' could not be found in the packages/core/src directory."
+      },
+      {
+        "pr": 22,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": false,
+        "pts": 2,
+        "snippet": "VERDICT: NEEDS_WORK\nREASON: The `verify` command failed with multiple TypeScript errors in `packages/core`."
+      },
+      {
+        "pr": 23,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": "*   Project: OpenLunum.\n    *   PR #23.\n    *   Verify result: `pnpm verify: all green. core 42 pass / 0 fail (15 new policy-classifier tests)`.\n    *   Diff: A new file `datasets/dev/policy/sample-policy-dataset.jsonl` is being added.\n    *   The di"
+      },
+      {
+        "pr": 24,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": false,
+        "reasonOk": null,
+        "pts": 0,
+        "snippet": "s_e_r_v_e_r_c_o_d_e_r_e_v_i_e_w_e_r_p_r_e_s_e_n_t_a_t_i_o_n_f_o_r_m_a_t_t_e_r_s_e_r_v_e_r_c_o_d_e_r_e_v_i_e_w_e_r_p_r_e_s_e_n_t_a_t_i_o_n_f_o_r_m_a_t_t_e_r_s_e_r_v_e_r_c_o_d_e_r_e_v_i_e_w_e_r_p_r_e_s_e_n_t_a_t_i_o_n_f_o_o_r_m_a_t_t_e_r_s_e_r_v_e_r_c_"
+      },
+      {
+        "pr": 25,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": false,
+        "reasonOk": null,
+        "pts": 0,
+        "snippet": "*   PR #25.\n    *   Verify result: `pnpm verify: all green. eval 33 pass / 0 fail (7 new retrieval tests)`.\n    *   Diff:\n        *   `docs/MULTILINGUAL_RETRIEVAL.md`: A new documentation file describing the system.\n        *   `experiments/multiling"
+      },
+      {
+        "pr": 18,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": "VERDICT: READY_FOR_MERGE\nREASON: The PR consists entirely of docs/experiment scaffolding with green verify results."
+      },
+      {
+        "pr": 33,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": false,
+        "pts": 2,
+        "snippet": "VERDICT: NEEDS_WORK\nREASON: The new semantic-contract type structures in `typed-structures.ts` lack corresponding tests."
+      }
+    ],
+    "score": "11/17"
+  },
+  {
+    "model": "openai/superqwen-agentworld-35b-a3b",
+    "at": "2026-07-17T12:01:59.062Z",
+    "cases": [
+      {
+        "pr": 19,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": true,
+        "pts": 3,
+        "snippet": "\n\nVERDICT: NEEDS_WORK\nREASON: The build fails with a compile error due to a broken import for './schema-conformance.js' in packages/core/src/types-schema-conformance.ts."
+      },
+      {
+        "pr": 22,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": true,
+        "pts": 3,
+        "snippet": "\n\nVERDICT: NEEDS_WORK\nREASON: The verify step failed with TypeScript build errors including a type-only import violation for 'LunumRecord' and type assignment issues."
+      },
+      {
+        "pr": 23,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": "\n\nVERDICT: READY_FOR_MERGE\nREASON: Verify passed with all green and the change consists of experiment scaffolding (a sample policy dataset) which is mergeable."
+      },
+      {
+        "pr": 24,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": "<think>\nThinking Process:\n\n1.  **Analyze the Request:**\n    *   Role: Strict code reviewer for the OpenLunum project.\n    *   Rules:\n        *   PR is `READY_FOR_MERGE` only if `verify` passes AND the change is sound and complete.\n        *   Semanti"
+      },
+      {
+        "pr": 25,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": "\n\nVERDICT: READY_FOR_MERGE\nREASON: The PR consists only of documentation and experiment scaffolding with a passing verify, which meets the merge criteria."
+      },
+      {
+        "pr": 18,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": "\n\nVERDICT: READY_FOR_MERGE\nREASON: The PR consists only of docs and experiment scaffolding with a green verify, which is mergeable per the rules."
+      },
+      {
+        "pr": 33,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": false,
+        "pts": 2,
+        "snippet": "\n\nVERDICT: NEEDS_WORK\nREASON: The PR adds new semantic-contract type structures in typed-structures.ts but provides zero test files, which is required for semantic-contract changes."
+      }
+    ],
+    "score": "16/17"
+  },
+  {
+    "model": "openai/qwen3.6-40b-code",
+    "at": "2026-07-17T12:06:36.369Z",
+    "cases": [
+      {
+        "pr": 19,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": true,
+        "pts": 3,
+        "snippet": " VERDICT: NEEDS_WORK\nREASON: Build fails with TS2307 error — the import of './schema-conformance.js' in types-schema-conformance.ts references a non-existent module."
+      },
+      {
+        "pr": 22,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": true,
+        "pts": 3,
+        "snippet": " VERDICT: NEEDS_WORK\nREASON: Verify failed with TypeScript compilation errors (TS1484 type-only import, TS2345 fixture assignment, TS2532 possibly undefined) in packages/core"
+      },
+      {
+        "pr": 23,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": " VERDICT: READY_FOR_MERGE\nREASON: PR adds a policy classification dataset with 15 new tests, all verify checks pass, and no semantic-contract code is modified."
+      },
+      {
+        "pr": 24,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": " VERDICT: READY_FOR_MERGE\nREASON: New MCP package and experiment scaffolding with passing verify and 5/0 tests, no core semantic contract modifications."
+      },
+      {
+        "pr": 25,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": " VERDICT: READY_FOR_MERGE\nREASON: Docs and experiment scaffolding with green verify and no semantic-contract code changes."
+      },
+      {
+        "pr": 18,
+        "expected": "READY_FOR_MERGE",
+        "verdictOk": true,
+        "reasonOk": null,
+        "pts": 2,
+        "snippet": " VERDICT: READY_FOR_MERGE\nREASON: Experiment scaffolding with green verify and no code changes is mergeable per project rules."
+      },
+      {
+        "pr": 33,
+        "expected": "NEEDS_WORK",
+        "verdictOk": true,
+        "reasonOk": false,
+        "pts": 2,
+        "snippet": " VERDICT: NEEDS_WORK\nREASON: Semantic-contract type structures added (typed-structures.ts, 266 lines) with zero test files, violating the requirement that semantic-contract changes must include tests."
+      }
+    ],
+    "score": "16/17"
+  },
+  {
+    "model": "openai/qwopus3.6-27b-v2",
+    "at": "2026-07-17T16:38:00.000Z",
+    "score": "15/17",
+    "note": "Q4_K_M quant; per-case detail in qwopus-eval2.log (results-file write lost in a race; score from run log)"
+  }
+]

@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 set -uo pipefail
+# Singleton guard: flock held for process lifetime; second instances exit
+exec 9>"/tmp/openlunum-$(basename "$0").lock"
+if ! flock -n 9; then
+  echo "another $(basename "$0") instance holds the lock — exiting" >&2
+  exit 0
+fi
 # NOTE: no `set -e` — the loop must survive verify failures and non-zero exits
 
 # Pi autonomous campaign loop for OpenLunum
@@ -129,7 +135,7 @@ while true; do
 
   # Run Pi with the campaign prompt, non-interactive (with timeout).
   # Daily session id gives Pi within-day memory of what it already did.
-  session_id="openlunum-campaign-$(date +%Y%m%d)"
+  session_id="openlunum-campaign-$(date +%Y%m%d%H)"
   timeout "$PI_TIMEOUT_SECONDS" pi --print \
     --provider local-llama \
     --model "$PI_MODEL" \

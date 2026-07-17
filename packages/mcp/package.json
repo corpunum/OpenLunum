@@ -12,14 +12,14 @@
     "test:unit": "node --test dist/test/*.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "peerDependencies": {
-    "@corpunum/lunum": "0.2.0"
-  },
   "devDependencies": {
     "typescript": "^5.5.0",
     "@types/node": "^20.0.0"
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "@corpunum/lunum": "workspace:*"
   }
 }
