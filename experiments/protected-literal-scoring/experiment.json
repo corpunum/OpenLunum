@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "protected-literal-scoring",
+  "area": "realization",
+  "task": "realize",
+  "hypothesis": "Adding protected-literal detection and independent semantic scoring will improve realization quality by ensuring important terms are preserved and semantic meaning is accurately evaluated.",
+  "baselineCommit": "e17b95f3d8d0f523c37fbb35c2d90397739a3d72",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "modelProfile": "profiles/models/local-openai-compatible.example.json",
+  "limits": {
+    "maxItems": 16,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 16
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": true
+  },
+  "outputDirectory": "reports/experiments/protected-literal-scoring"
+}
