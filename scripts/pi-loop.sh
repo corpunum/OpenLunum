@@ -87,6 +87,7 @@ auto_open_prs() {
   # For any local agent branch ahead of main with no open PR: push + draft PR
   local branch ahead pr_count
   for branch in $(git -C "$WORKDIR" for-each-ref --sort=-committerdate refs/heads/agent/ --format='%(refname:short)' --count=5 2>/dev/null); do
+    case "$branch" in agent/eval/*) continue ;; esac  # eval sandbox branches are never real work
     ahead=$(git -C "$WORKDIR" rev-list --count "origin/main..$branch" 2>/dev/null || echo 0)
     [[ "$ahead" -gt 0 ]] || continue
     pr_count=$(gh pr list --repo corpunum/OpenLunum --head "$branch" --state open --json number --jq 'length' 2>/dev/null || echo error)
