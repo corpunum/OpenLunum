@@ -135,7 +135,7 @@ while true; do
 
   # Run Pi with the campaign prompt, non-interactive (with timeout).
   # Daily session id gives Pi within-day memory of what it already did.
-  session_id="openlunum-campaign-$(date +%Y%m%d)"
+  session_id="openlunum-campaign-$(date +%Y%m%d%H)"
   timeout "$PI_TIMEOUT_SECONDS" pi --print \
     --provider local-llama \
     --model "$PI_MODEL" \
