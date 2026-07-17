@@ -1,3 +1,4 @@
+- agent/adoption/mcp-reference-impl
 - agent/coding-agent/semantic-contract/expand-semantic-structures
 - agent/context/policy-datasets
 - agent/corpunum/semantic-contract/expand-typed-structures
