@@ -52,7 +52,7 @@
 ### Changed
 
 - `fix(mcp)`: use workspace protocol for `@corpunum/lunum` and update lockfile.
-- Various TypeScript type-error fixes across packages.
+- fix(agent-eval): delete persistent scratch branch in tier2 sandbox setup — second models in a batch inherited the first model's completed work
 
 ### Known limitations
 
