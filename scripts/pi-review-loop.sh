@@ -72,6 +72,8 @@ while true; do
 
   # Mechanical part: checkout + verify
   git -C "$WT" fetch origin "$branch" main >/dev/null 2>&1
+  git -C "$WT" checkout -- . >/dev/null 2>&1 || true   # discard generated-file noise
+  git -C "$WT" clean -fd >/dev/null 2>&1 || true
   git -C "$WT" checkout --detach "$sha" >/dev/null 2>&1 || { log "checkout failed for #$pr"; sleep 60; continue; }
   clean_stale_dist
   (cd "$WT" && pnpm install --no-frozen-lockfile >/dev/null 2>&1)
