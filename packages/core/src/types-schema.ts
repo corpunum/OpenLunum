@@ -22,7 +22,7 @@ export interface ExperimentSchema {
 export interface LunumRecordSchema {
   recordVersion: "lunum-record/0.1-draft";
   source: {     text: string,     language?: string | null,     role?: string | null,     ref?: string | null };
-  sem: {     schema: "lunum-sem/0.1-draft",     world: string,     kind: string,     clauses: Clause[],     references?: Record<string, unknown>[],     provenance?: Record<string, unknown>,     annotations?: Record<string, unknown> };
+  sem: {     schema: "lunum-sem/0.1-draft",     world: string,     kind: string,     clauses: Clause[],     references?: Reference[],     provenance?: Record<string, unknown>,     annotations?: Record<string, unknown> };
   fingerprint: string;
   renderings: Record<string, unknown>;
   policy: {     eligible: boolean,     risk: "low" | "medium" | "high" | "unknown",     confidence: number,     reasons?: string[] };
@@ -34,13 +34,18 @@ export interface LunumSemSchema {
   world: string;
   kind: string;
   clauses: Clause[];
-  references?: Record<string, unknown>[];
+  references?: Reference[];
   provenance?: Record<string, unknown>;
   annotations?: Record<string, unknown>;
 }
 
 export type Term = Record<string, unknown>;
-export type Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: string | null,     time?: unknown,     conditions?: Clause[],     consequences?: Clause[],     annotations?: Record<string, unknown> };
+export type Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: {     type?: "epistemic" | "deontic" | "alethic" | "temporal",     value?: "necessity" | "possibility" | "permission" | "obligation" | "prohibition" | "ability" },     time?: {     type?: "instant" | "duration" | "interval",     value?: unknown,     unit?: string,     precision?: "exact" | "approximate" | "estimated" },     quantity?: {     value?: number,     unit?: string,     precision?: "exact" | "approximate" | "estimated" | "range",     range?: {     min?: number,     max?: number } },     uncertainty?: {     level?: "high" | "medium" | "low" | "none",     type?: "epistemic" | "alethic" | "statistical",     confidence?: number },     conditions?: Clause[],     consequences?: Clause[],     annotations?: Record<string, unknown> };
+export type Time = {     type?: "instant" | "duration" | "interval",     value?: unknown,     unit?: string,     precision?: "exact" | "approximate" | "estimated" };
+export type Modality = {     type?: "epistemic" | "deontic" | "alethic" | "temporal",     value?: "necessity" | "possibility" | "permission" | "obligation" | "prohibition" | "ability" };
+export type Quantity = {     value?: number,     unit?: string,     precision?: "exact" | "approximate" | "estimated" | "range",     range?: {     min?: number,     max?: number } };
+export type Uncertainty = {     level?: "high" | "medium" | "low" | "none",     type?: "epistemic" | "alethic" | "statistical",     confidence?: number };
+export type Reference = {     id?: string,     type?: "document" | "section" | "paragraph" | "sentence" | "entity" | "external",     value?: unknown,     url?: string };
 
 export interface ModelProfileSchema {
   schema: "openlunum-model-profile/0.1";

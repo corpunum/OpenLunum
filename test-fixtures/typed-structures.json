@@ -1,0 +1,118 @@
+[
+  {
+    "name": "time-structured-example",
+    "description": "Example with time structure",
+    "record": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "test-world",
+      "kind": "test-kind",
+      "clauses": [
+        {
+          "predicate": "scheduled-meeting",
+          "roles": {
+            "attendee": "person1",
+            "location": "conference-room"
+          },
+          "time": {
+            "type": "instant",
+            "value": "2024-07-17T10:00:00Z",
+            "unit": "datetime",
+            "precision": "exact"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "quantity-structured-example",
+    "description": "Example with quantity structure",
+    "record": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "test-world",
+      "kind": "test-kind",
+      "clauses": [
+        {
+          "predicate": "purchase",
+          "roles": {
+            "item": "laptop",
+            "quantity": "quantity1"
+          },
+          "quantity": {
+            "value": 2,
+            "unit": "pieces",
+            "precision": "exact"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "uncertainty-structured-example",
+    "description": "Example with uncertainty structure",
+    "record": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "test-world",
+      "kind": "test-kind",
+      "clauses": [
+        {
+          "predicate": "estimate",
+          "roles": {
+            "value": "cost-estimate"
+          },
+          "uncertainty": {
+            "level": "high",
+            "type": "statistical",
+            "confidence": 0.75
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "modality-structured-example",
+    "description": "Example with modality structure",
+    "record": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "test-world",
+      "kind": "test-kind",
+      "clauses": [
+        {
+          "predicate": "requirement",
+          "roles": {
+            "action": "submit-report"
+          },
+          "modality": {
+            "type": "deontic",
+            "value": "obligation"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "reference-structured-example",
+    "description": "Example with reference structure",
+    "record": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "test-world",
+      "kind": "test-kind",
+      "clauses": [
+        {
+          "predicate": "cites",
+          "roles": {
+            "document": "reference1",
+            "content": "specific-statement"
+          }
+        }
+      ],
+      "references": [
+        {
+          "id": "reference1",
+          "type": "document",
+          "value": "Official Guidelines Document",
+          "url": "https://example.com/guidelines"
+        }
+      ]
+    }
+  }
+]

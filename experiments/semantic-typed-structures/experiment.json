@@ -1,0 +1,18 @@
+{
+  "id": "semantic-typed-structures",
+  "area": "semantic contract",
+  "task": "schema expansion",
+  "description": "Expand Lunum-Sem schema with typed time, quantity, uncertainty, reference, and modality structures",
+  "budget": {
+    "maxItems": 100,
+    "maxAttempts": 3,
+    "maxModelCalls": 1000
+  },
+  "dataset": {
+    "name": "lunum-sem-schema-expansion",
+    "version": "0.1"
+  },
+  "schema": {
+    "path": "schemas/lunum-sem.schema.json"
+  }
+}
