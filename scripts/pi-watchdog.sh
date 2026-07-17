@@ -48,6 +48,11 @@ restart_loop() {
 
 alive() { pgrep -f 'pi-loop\.sh' >/dev/null 2>&1; }
 
+# Nightly window (or manual maintenance) pause: do nothing while PAUSED exists
+if [[ -f "$LOGDIR/PAUSED" ]]; then
+  exit 0
+fi
+
 if [[ -f "$STUCK" ]]; then
   if grep -q 'exited abnormally' "$STUCK" 2>/dev/null; then
     log "STUCK from abnormal exit — auto-restarting"
