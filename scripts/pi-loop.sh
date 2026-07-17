@@ -14,6 +14,7 @@ STUCK_FILE="$LOGDIR/STUCK"
 STATUS_LOG="$LOGDIR/loop-status.log"
 MAX_CONSECUTIVE_FAILURES=3
 COOLDOWN_SECONDS=30
+PI_TIMEOUT_SECONDS=1800  # 30 min max per Pi run
 
 TASK_PROMPT_FILE="$WORKDIR/scripts/pi-task-prompt.md"
 
@@ -63,10 +64,10 @@ while true; do
   find "$WORKDIR/packages" -name dist -type d -exec rm -rf {} + 2>/dev/null || true
   pnpm build >>"$logfile" 2>&1 || true
 
-  # Run Pi with the campaign prompt, non-interactive
+  # Run Pi with the campaign prompt, non-interactive (with timeout)
   set +e
   if [[ -f "$TASK_PROMPT_FILE" ]]; then
-    pi --print \
+    timeout "$PI_TIMEOUT_SECONDS" pi --print \
       --provider local-llama \
       --model openai/qwen3-coder-30b-a3b \
       --thinking high \
@@ -76,7 +77,7 @@ while true; do
       "Continue the OpenLunum campaign. You are in $WORKDIR. Follow the task prompt instructions exactly." \
       2>&1 | tee "$logfile"
   else
-    pi --print \
+    timeout "$PI_TIMEOUT_SECONDS" pi --print \
       --provider local-llama \
       --model openai/qwen3-coder-30b-a3b \
       --thinking high \
@@ -86,6 +87,9 @@ while true; do
       2>&1 | tee "$logfile"
   fi
   pi_exit=$?
+  if [[ $pi_exit -eq 124 ]]; then
+    log "Pi run TIMED OUT after ${PI_TIMEOUT_SECONDS}s — killing and continuing"
+  fi
   set -e
 
   # Verify after each run
