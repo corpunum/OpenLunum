@@ -52,8 +52,8 @@ alive() { pgrep -f 'pi-loop\.sh' >/dev/null 2>&1; }
 # Log CPU/GPU temps every run; halt all loops at sustained >= HALT_TEMP,
 # auto-resume at <= RESUME_TEMP. Strix Halo steers clocks at ~98C by
 # design — the halt targets sustained pinning, giving real cool-downs.
-HALT_TEMP="${HALT_TEMP:-99}"
-RESUME_TEMP="${RESUME_TEMP:-85}"
+HALT_TEMP="${HALT_TEMP:-101}"
+RESUME_TEMP="${RESUME_TEMP:-88}"
 THERMAL_FLAG="$LOGDIR/THERMAL_HALT"
 TEMP_LOG="$LOGDIR/temps.csv"
 
