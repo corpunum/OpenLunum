@@ -28,6 +28,7 @@
 - Preserves the complete initial research handover and machine-readable metric history.
 - Documents multiple product-adoption modes without claiming unverified support.
 - Provides bounded local OpenAI-compatible parse/realization experiments with dataset hashes, raw failures, and generated reports.
+- The automated reviewer loop is hardened with 60s timeouts on GitHub calls, preventing hung calls from stalling the process.
 - Provides a worker/evaluator/orchestrator operating model for autonomous local agents.
 - Maintains architecture decision records in `docs/decisions/`.
 

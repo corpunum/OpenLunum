@@ -47,6 +47,7 @@
 - Pi-watchdog for mechanical loop babysitting.
 - PR-fixing mode in Pi task prompt.
 - Docs maintenance loop for post-merge documentation sync.
+- fix(infra): 60s timeouts on all gh calls in reviewer loop
 
 ### Changed
 
