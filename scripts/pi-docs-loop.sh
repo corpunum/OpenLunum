@@ -44,6 +44,17 @@ while true; do
     continue
   fi
 
+  # Damp feedback churn: skip when everything new is docs-only work
+  if [[ "$last" != "none" ]]; then
+    nondocs=$(git -C "$WT" log --oneline "$last..$head" | grep -vciE '(^[0-9a-f]+ docs|agent/docs|Merge pull request .* from corpunum/agent/docs)' || true)
+    if [[ "$nondocs" == "0" ]]; then
+      echo "$head" > "$STAMP"
+      log "only docs commits since last pass — skipping (stamped ${head:0:8})"
+      sleep "$CHECK_SECONDS"
+      continue
+    fi
+  fi
+
   log "main advanced ($last → ${head:0:8}) — docs pass starting"
   git -C "$WT" checkout -- . >/dev/null 2>&1 || true
   git -C "$WT" clean -fd >/dev/null 2>&1 || true
