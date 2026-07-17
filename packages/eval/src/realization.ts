@@ -47,7 +47,7 @@ export interface RealizationResult {
   metadata: {
     clausesProcessed: number;
     protectedLiteralsPreserved: number;
-    warnings?: string[];
+    warnings?: string[] | undefined;
   };
 }
 
@@ -190,17 +190,17 @@ export class RealizationEngine {
         protectedLiteralsPreserved: protectedLiterals.length,
         warnings: warnings.length > 0 ? warnings : undefined
       }
-    };
+    } as RealizationResult;
   }
 
   /**
    * Realize a single clause
    */
-  private realizeClause(clause: LunumClause, rules: RealizationRule[], language: RealizationLanguage): string {
+  private realizeClause(clause: LunumClause, rules: RealizationRule[], language: RealizationLanguage): string | null {
     // Find matching rule
     const rule = rules.find(r => r.predicate === clause.predicate);
     if (!rule) {
-      return `[${clause.predicate}]`;
+      return null;
     }
 
     // Fill template with roles
@@ -246,13 +246,15 @@ export class RealizationEngine {
     // Simple heuristics for demonstration
     // In production, would use NER or other techniques
     
+    if (text.length <= 2) return false;
+    
     // Capitalized words might be proper nouns
-    if (language === 'en' && text[0] === text[0].toUpperCase() && text.length > 2) {
+    if (language === 'en' && text[0] && text[0] === text[0].toUpperCase() && text.length > 2) {
       return true;
     }
     
     // Greek capital letters
-    if (language === 'el' && /[Α-ΩΪΫ]/.test(text[0]) && text.length > 2) {
+    if (language === 'el' && /[Α-ΩΪΫ]/.test(text[0] ?? '') && text.length > 2) {
       return true;
     }
 
@@ -270,6 +272,9 @@ export class RealizationEngine {
   private classifyLiteralType(text: string): ProtectedLiteral['type'] {
     if (/^[A-Z][a-z]+ [A-Z][a-z]+/.test(text)) {
       return 'name'; // Looks like a person or place name
+    }
+    if (/^[A-Z][a-z]+$/.test(text)) {
+      return 'name'; // Single capitalized word, likely a name
     }
     if (/^v\d/.test(text)) {
       return 'term'; // Looks like a version number
