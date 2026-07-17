@@ -6,7 +6,7 @@
  */
 
 import type { LunumSem, LunumClause, LunumRecord } from './types.js';
-import { canonicalize } from './canonicalize.js';
+import { stableStringify } from './canonicalize.js';
 
 // ── Conformance Vector Type ────────────────────────────────────────
 
@@ -35,7 +35,7 @@ export interface PropertyTest {
   /** Test result */
   passed: boolean;
   /** Error message if failed */
-  error?: string;
+  error?: string | undefined;
 }
 
 // ── Conformance Vector Generator ───────────────────────────────────
@@ -51,7 +51,7 @@ export class ConformanceVectorGenerator {
    * Generate conformance vector for semantic representation
    */
   generateVector(sem: LunumSem): ConformanceVector {
-    const canonical = canonicalize(sem);
+    const canonical = stableStringify(sem);
     const dimensions = this.extractDimensions(sem);
     const hash = this.hashVector(dimensions);
     
@@ -259,6 +259,8 @@ export class PropertyTestRunner {
     // Test each clause
     for (let i = 0; i < sem.clauses.length; i++) {
       const clause = sem.clauses[i];
+      if (!clause) continue;
+      
       const hasPredicate = typeof clause.predicate === 'string' && clause.predicate.length > 0;
       
       if (!hasPredicate) {
@@ -279,6 +281,8 @@ export class PropertyTestRunner {
   private testRoleTypes(sem: LunumSem): void {
     for (let i = 0; i < sem.clauses.length; i++) {
       const clause = sem.clauses[i];
+      if (!clause) continue;
+      
       const roles = clause.roles;
       const passed = typeof roles === 'object' && roles !== null;
       
@@ -298,6 +302,8 @@ export class PropertyTestRunner {
   private testNegationTypes(sem: LunumSem): void {
     for (let i = 0; i < sem.clauses.length; i++) {
       const clause = sem.clauses[i];
+      if (!clause) continue;
+      
       const passed = clause.negated === undefined || typeof clause.negated === 'boolean';
       
       this.tests.push({
@@ -316,6 +322,8 @@ export class PropertyTestRunner {
   private testTimeTypes(sem: LunumSem): void {
     for (let i = 0; i < sem.clauses.length; i++) {
       const clause = sem.clauses[i];
+      if (!clause) continue;
+      
       const passed = clause.time === undefined || typeof clause.time === 'object' || typeof clause.time === 'string';
       
       this.tests.push({
@@ -334,6 +342,8 @@ export class PropertyTestRunner {
   private testModalityTypes(sem: LunumSem): void {
     for (let i = 0; i < sem.clauses.length; i++) {
       const clause = sem.clauses[i];
+      if (!clause) continue;
+      
       const passed = clause.modality === undefined || typeof clause.modality === 'string';
       
       this.tests.push({
