@@ -1,5 +1,6 @@
 - agent/adoption/mcp-reference-impl
 - agent/coding-agent/semantic-contract/expand-semantic-structures
+- agent/context/multilingual-retrieval
 - agent/context/policy-datasets
 - agent/corpunum/semantic-contract/expand-typed-structures
 - agent/eval/scratch
@@ -34,6 +35,10 @@
 - agent/qwen/semantic-contract/expand-typed-structures-v6
 - agent/qwen/semantic-contract/identity-projection
 - agent/qwen/semantic-contract/semantic-conformance-vectors
+- agent/realization/protected-literal-scoring
+- agent/realization/realization-en-el
+- agent/realization/roundtrip-consistency
+- agent/realization/spanish-indonesian-realization
 - agent/renderers/tokenizer-measurement
 - agent/semantic-contract/fingerprint-migration
 - agent/semantic-contract/semantic-conformance-vectors

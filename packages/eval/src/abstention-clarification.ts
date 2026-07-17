@@ -31,9 +31,9 @@ export interface AbstentionResult {
   /** Overall confidence score (0-1) */
   confidenceScore: number;
   /** Reason for abstention if applicable */
-  abstentionReason?: string;
+  abstentionReason?: string | undefined;
   /** Clarification request if applicable */
-  clarification?: ClarificationRequest;
+  clarification?: ClarificationRequest | undefined;
   /** Metadata */
   metadata: {
     clausesEvaluated: number;
@@ -50,7 +50,7 @@ export interface ClarificationRequest {
   /** Question or request for clarification */
   question: string;
   /** Options if applicable */
-  options?: string[];
+  options?: string[] | undefined;
   /** Context for the clarification */
   context: string;
 }
@@ -65,8 +65,8 @@ export interface ParseResult {
     level: ConfidenceLevel;
     score: number;
     shouldAbstain: boolean;
-    abstentionReason?: string;
-    clarification?: ClarificationRequest;
+    abstentionReason?: string | undefined;
+    clarification?: ClarificationRequest | undefined;
   };
   /** Warnings */
   warnings: string[];
@@ -201,7 +201,7 @@ export class AbstentionClarificationEngine {
    */
   private isAmbiguous(clause: LunumClause): boolean {
     // Multiple conditions can indicate ambiguity
-    if (clause.conditions?.length > 2) {
+    if (clause.conditions && clause.conditions.length > 2) {
       return true;
     }
 
@@ -267,10 +267,10 @@ export class AbstentionClarificationEngine {
   private generateClarificationRequest(
     clauses: LunumClause[],
     ambiguousCount: number
-  ): ClarificationRequest {
+  ): ClarificationRequest | undefined {
     // Find the most ambiguous clause
-    let mostAmbiguous = clauses[0];
-    let maxAmbiguity = 0;
+    let mostAmbiguous: LunumClause | undefined;
+    let maxAmbiguity = 1.0;
 
     for (const clause of clauses) {
       if (this.isAmbiguous(clause)) {
@@ -281,6 +281,8 @@ export class AbstentionClarificationEngine {
         }
       }
     }
+
+    if (!mostAmbiguous) return undefined;
 
     return {
       type: 'ambiguity',
@@ -296,7 +298,7 @@ export class AbstentionClarificationEngine {
   private generateClarificationOptions(clause: LunumClause): string[] | undefined {
     const options: string[] = [];
     
-    if (clause.conditions?.length > 0) {
+    if (clause.conditions && clause.conditions.length > 0) {
       options.push('Reduce conditions');
       options.push('Clarify condition relationships');
     }
@@ -318,13 +320,14 @@ export class AbstentionClarificationEngine {
   ): ParseResult {
     const abstention = this.evaluateConfidence(
       {
+        recordVersion: 'lunum-record/0.1-draft',
         fingerprint: 'temp',
         source: { text: '', language: '', role: null, ref: null },
         sem: { schema: '', world: '', kind: '', clauses: [] },
         renderings: {},
-        policy: { eligible: true, category: '', risk: 'low', confidence: 0, reasons: [] },
+        policy: { eligible: true, category: '', risk: 'low' as const, confidence: 0, reasons: [] },
         meta: {}
-      } as LunumRecord,
+      } as unknown as LunumRecord,
       clauses,
       parseConfidence
     );
