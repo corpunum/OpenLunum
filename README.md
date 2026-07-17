@@ -138,7 +138,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 
 ## What exists today
 
-- A draft `Lunum-Sem` schema and deterministic canonicalization/fingerprint library.
+- A strict reference implementation for Lunum-Sem, providing semantic contracts and deterministic canonicalization/fingerprint library.
 - A conservative reference renderer and mixed-context compiler.
 - Safe, short, and tight renderer profiles without changing semantics.
 - Tokenizer measurement framework with llama.cpp-compatible counting.
