@@ -19,37 +19,37 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 ## P1 — multilingual parsing
 
-- [ ] Establish English and Greek parse baselines on `multilingual-core-v1`.
-- [ ] Add Spanish and Indonesian baselines.
+- [x] Establish English and Greek parse baselines on `multilingual-core-v1`.
+- [x] Add Spanish and Indonesian baselines.
 - [x] Build error taxonomy for entity, role, negation, condition, quantity, time, and ambiguity failures.
 - [ ] Add explicit abstention/clarification outputs for low-confidence parses.
 
 ## P1 — realization
 
-- [ ] Implement Lunum-Sem -> English and Greek realization experiments.
-- [ ] Add protected-literal and independent semantic scoring.
-- [ ] Add round-trip self-consistency as a secondary metric only.
-- [ ] Add Spanish and Indonesian after English/Greek gates are credible.
+- [x] Implement Lunum-Sem -> English and Greek realization experiments.
+- [x] Add protected-literal and independent semantic scoring.
+- [x] Add round-trip self-consistency as a secondary metric only.
+- [x] Add Spanish and Indonesian after English/Greek gates are credible.
 
 ## P2 — renderers and tokenizer profiles
 
-- [ ] Measure `generic-en-pivot/0.1` with exact target tokenizers.
-- [ ] Implement safe, short, and tight profiles without changing semantics.
-- [ ] Add llama.cpp-compatible tokenizer counting.
-- [ ] Add full-prompt quality gates for local models.
+- [x] Measure `generic-en-pivot/0.1` with exact target tokenizers.
+- [x] Implement safe, short, and tight profiles without changing semantics.
+- [x] Add llama.cpp-compatible tokenizer counting.
+- [x] Add full-prompt quality gates for local models.
 
 ## P2 — context and retrieval
 
-- [ ] Build category/risk/confidence policy datasets.
-- [ ] Measure natural vs Lunum vs mixed context downstream quality.
-- [ ] Add multilingual retrieval and false-equivalence tests.
-- [ ] Design near-semantic fingerprints separately from exact identity.
+- [x] Build category/risk/confidence policy datasets.
+- [x] Measure natural vs Lunum vs mixed context downstream quality.
+- [x] Add multilingual retrieval and false-equivalence tests.
+- [x] Design near-semantic fingerprints separately from exact identity.
 
 ## P2 — adoption
 
-- [ ] Package and verify the OpenUnum adapter in shadow mode.
-- [ ] Add MCP/local service reference implementation.
-- [ ] Add conformance reports for hook/plugin/CLI integrations.
+- [x] Package and verify the OpenUnum adapter in shadow mode.
+- [x] Add MCP/local service reference implementation.
+- [x] Add conformance reports for hook/plugin/CLI integrations.
 
 ## Claiming work
 

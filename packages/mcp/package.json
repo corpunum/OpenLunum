@@ -7,12 +7,10 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "node --test dist/test/*.test.js",
     "start": "node dist/src/server.js",
-    "dev": "tsx src/server.ts"
-  },
-  "peerDependencies": {
-    "@corpunum/lunum": "0.2.0"
+    "dev": "tsx src/server.ts",
+    "test:unit": "node --test dist/test/*.test.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "typescript": "^5.5.0",
@@ -20,5 +18,8 @@
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "@corpunum/lunum": "workspace:*"
   }
 }

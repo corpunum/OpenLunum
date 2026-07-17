@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "realization-en-el",
+  "area": "realization",
+  "task": "realize",
+  "hypothesis": "Implementing Lunum-Sem to English and Greek realization will enable bidirectional translation between semantic representations and natural language while preserving protected literals and semantic identity.",
+  "baselineCommit": "e17b95f3d8d0f523c37fbb35c2d90397739a3d72",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "modelProfile": "profiles/models/local-openai-compatible.example.json",
+  "limits": {
+    "maxItems": 16,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 16
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": true
+  },
+  "outputDirectory": "reports/experiments/realization-en-el"
+}

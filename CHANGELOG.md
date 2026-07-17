@@ -1,5 +1,65 @@
 # Changelog
 
+## Since 0.2.0
+
+### Added — semantic contract
+
+- Expanded typed structures: time, quantity, uncertainty, reference, and modality.
+- Canonical conformance vectors and property tests.
+- Near-semantic fingerprint design separate from exact identity.
+
+### Added — renderer and tokenizer
+
+- Tokenizer measurement framework for `generic-en-pivot/0.1`.
+- Safe, short, and tight renderer profiles without changing semantics.
+- llama.cpp-compatible tokenizer counting.
+- Full-prompt quality gates for local-model evaluation.
+
+### Added — realization
+
+- Lunum-Sem → English and Greek realization.
+- Protected-literal and independent semantic scoring.
+- Round-trip self-consistency as a secondary metric.
+- Spanish and Indonesian realization after English/Greek gates.
+
+### Added — multilingual parsing
+
+- English and Greek parse baselines on `multilingual-core-v1`.
+- Spanish and Indonesian baseline fixtures.
+- Abstention and clarification outputs for low-confidence parses.
+- Error taxonomy for entity, role, negation, condition, quantity, time, and ambiguity failures.
+
+### Added — context and retrieval
+
+- Context quality measurement framework.
+- Category/risk/confidence policy datasets.
+- Multilingual retrieval and false-equivalence tests.
+
+### Added — adoption
+
+- MCP (Model Context Protocol) reference implementation server with parse, realize, fingerprint, retrieve, and validate tools.
+- Conformance reports for hook/plugin/CLI integration paths.
+- OpenUnum adapter shadow-mode experiment.
+
+### Added — infrastructure
+
+- Local PR reviewer with Tier 3 benchmark and review loop.
+- Pi-watchdog for mechanical loop babysitting.
+- PR-fixing mode in Pi task prompt.
+- Docs maintenance loop for post-merge documentation sync.
+
+### Changed
+
+- `fix(mcp)`: use workspace protocol for `@corpunum/lunum` and update lockfile.
+- Various TypeScript type-error fixes across packages.
+
+### Known limitations
+
+- The MCP reference server uses placeholder handlers for parse/realize/fingerprint/retrieve/validate; production integration with `@corpunum/lunum` core is pending.
+- Multilingual realization measures protected-literal coverage; independent semantic judgment remains required.
+- Tokenizer profiles are measured but not yet optimized per-target.
+- Near-semantic fingerprints are designed but not yet implemented.
+
 ## 0.2.0 — 2026-07-15
 
 ### Added

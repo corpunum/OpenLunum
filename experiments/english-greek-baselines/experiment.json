@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "english-greek-baselines",
+  "area": "multilingual-parse",
+  "task": "integration",
+  "hypothesis": "English and Greek parse baselines will provide consistent semantic parsing for these languages with high accuracy.",
+  "baselineCommit": "c6864c9e75efb5d7348774012ca21b524595701d",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "modelProfile": "profiles/models/local-openai-compatible.example.json",
+  "limits": {
+    "maxItems": 16,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 16
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": true
+  },
+  "outputDirectory": "reports/experiments/english-greek-baselines"
+}
