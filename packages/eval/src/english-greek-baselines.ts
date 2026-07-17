@@ -134,16 +134,16 @@ export interface GreekParseRule {
 
 export const greekParseRules: GreekParseRule[] = [
   {
-    pattern: /\b(?:είναι|είναι|είμαι|είσαι|είναι|είμαστε|είστε|ήσαν|ήσουν|ήταν|ήμαστε|ήσασταν)\b/i,
+    pattern: /(είναι|είμαι|είσαι|ήταν|ήμουν|ήσουν)/i,
     predicate: 'statement',
     roleMap: {
-      subject: /^(?:\s*)([A-ZΑ-Ω][α-ω]+)(?:\s+(?:είναι|είμαι|είσαι|ήταν))/,
-      object: /^(?:είναι|είμαι|είσαι|ήταν)\s+(.+)$/
+      subject: /([Α-ΩΑ-Ω][α-ω]+)(?:\s+(?:είναι|είμαι|είσαι|ήταν))/,
+      object: /^(?:είναι|είμαι|είσαι|ήταν)\s+(.+)$/i
     },
     confidence: 0.85
   },
   {
-    pattern: /\b(?:τι|πού|πότε|ποιος|γιατί|πώς)\b/i,
+    pattern: /(τι|πού|πότε|ποιος|γιατί|πώς)/i,
     predicate: 'question',
     roleMap: {
       questionWord: /((?:τι|πού|πότε|ποιος|γιατί|πώς))/i,
@@ -152,18 +152,18 @@ export const greekParseRules: GreekParseRule[] = [
     confidence: 0.9
   },
   {
-    pattern: /\b(?:σε|σε|από|με|για|χωρίς|πάνω)\b/i,
+    pattern: /(σε|από|με|για|χωρίς|πάνω)/i,
     predicate: 'location',
     roleMap: {
-      location: /(?:σε|από|με|για|χωρίς|πάνω)\s+(.+)$/
+      location: /(?:σε|από|με|για|χωρίς|πάνω)\s+(.+)$/i
     },
     confidence: 0.8
   },
   {
-    pattern: /\b(?:όχι|δεν|κανένας|κανένα|ποτέ|τίποτα)\b/i,
+    pattern: /(όχι|δεν|κανένας|κανένα|ποτέ|τίποτα)/i,
     predicate: 'negation',
     roleMap: {
-      negation: /\b(?:όχι|δεν|κανένας|κανένα|ποτέ|τίποτα)\b/i
+      negation: /(?:όχι|δεν|κανένας|κανένα|ποτέ|τίποτα)/i
     },
     confidence: 0.85
   }
