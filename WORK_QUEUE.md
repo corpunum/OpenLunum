@@ -42,13 +42,13 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 - [ ] Build category/risk/confidence policy datasets.
 - [ ] Measure natural vs Lunum vs mixed context downstream quality.
-- [ ] Add multilingual retrieval and false-equivalence tests.
+- [x] Add multilingual retrieval and false-equivalence tests.
 - [ ] Design near-semantic fingerprints separately from exact identity.
 
 ## P2 — adoption
 
 - [ ] Package and verify the OpenUnum adapter in shadow mode.
-- [ ] Add MCP/local service reference implementation.
+- [x] Add MCP/local service reference implementation.
 - [ ] Add conformance reports for hook/plugin/CLI integrations.
 
 ## Claiming work
