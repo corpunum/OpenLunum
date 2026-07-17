@@ -65,7 +65,11 @@ gh label create adversarial-finding --repo corpunum/OpenLunum --color 5319e7 \
   --description "Found by the nightly adversarial tester" 2>/dev/null || true
 
 recent=$(git -C "$WT" log --oneline -15 origin/main | head -15)
-targets=$(git -C "$WT" diff --name-only HEAD~10...HEAD 2>/dev/null | grep -E '^packages/.*\.ts$' | grep -v test | head -12)
+# Targets: implementation files changed since the LAST nightly pass (stamp),
+# falling back to the last 40 commits on the first run.
+TESTED_STAMP="$LOGDIR/last-tested-sha"
+since=$(cat "$TESTED_STAMP" 2>/dev/null || echo "HEAD~40")
+targets=$(git -C "$WT" diff --name-only "$since...HEAD" 2>/dev/null | grep -E '^packages/.*\.ts$' | grep -v test | head -12)
 
 if [[ $(time_left) -gt 600 && -n "$targets" ]]; then
   log "tester pass: targets = $(echo "$targets" | tr '\n' ' ')"
@@ -88,6 +92,7 @@ For EACH target file that contains semantic logic:
 Summarize findings at the end." \
     2>&1 | tee "$LOGDIR/tester-$stamp.log") || true
   log "tester pass done ($(gh issue list --repo corpunum/OpenLunum --label adversarial-finding --state open --json number --jq 'length' 2>/dev/null || echo '?') open findings)"
+  git -C "$WT" rev-parse HEAD > "$TESTED_STAMP"
 else
   log "skipping tester pass (no targets or budget low)"
 fi
