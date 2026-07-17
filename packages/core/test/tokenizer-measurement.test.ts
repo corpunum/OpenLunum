@@ -41,10 +41,12 @@ test('TokenizerMeasurementFramework measures with exact tokenizer', () => {
   });
   
   const measurement = framework.measure(record, tokenizer);
+  const result = measurement.results[0];
   
   assert.strictEqual(measurement.averageTokens, 3);
-  assert.ok(measurement.results[0].tokenList);
-  assert.strictEqual(measurement.results[0].tokenList!.length, 3);
+  assert.ok(result);
+  assert.ok(result.tokenList);
+  assert.strictEqual(result.tokenList!.length, 3);
 });
 
 test('TokenizerMeasurementFramework measures batch', () => {

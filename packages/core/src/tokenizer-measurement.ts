@@ -11,7 +11,7 @@ import type { LunumRecord } from './types.js';
 
 export interface TokenizerConfig {
   /** Tokenizer name */
-  name: string;
+  name?: string;
   /** Tokenizer version */
   version?: string;
   /** Maximum tokens per record */
