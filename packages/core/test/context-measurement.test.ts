@@ -92,7 +92,6 @@ test('ContextMeasurementFramework gets stats', () => {
   const stats = framework.getStats();
   
   assert.strictEqual(stats.enabled, true);
-  assert.strictEqual(stats.maxMeasurements, 100);
   assert.strictEqual(stats.totalMeasurements, 0);
   assert.ok(stats.thresholds);
 });

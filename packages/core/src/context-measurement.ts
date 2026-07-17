@@ -12,7 +12,7 @@ import { compileContext, type ContextMode } from './context.js';
 
 export interface ContextMeasurementConfig {
   /** Enable measurement mode */
-  enabled: boolean;
+  enabled?: boolean;
   /** Maximum number of measurements to keep */
   maxMeasurements?: number;
   /** Whether to compare contexts */
@@ -52,7 +52,7 @@ export interface ContextMeasurement {
   /** Context messages */
   messages: ContextMessage[];
   /** Record if available */
-  record?: LunumRecord;
+  record?: LunumRecord | undefined;
   /** Comparison result */
   comparison?: {
     /** Natural context quality */
@@ -63,7 +63,7 @@ export interface ContextMeasurement {
     mixedQuality: QualityMetrics;
     /** Best performing context */
     best: ContextMode;
-  };
+  } | undefined;
   /** Timestamp */
   timestamp: number;
 }
