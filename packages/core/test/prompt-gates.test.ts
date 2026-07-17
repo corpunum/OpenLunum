@@ -29,7 +29,7 @@ test('PromptQualityGates validates prompt', () => {
 });
 
 test('PromptQualityGates rejects prompt exceeding token limit', () => {
-  const gates = new PromptQualityGates({ maxTokens: 10 });
+  const gates = new PromptQualityGates({ maxTokens: 5 });
   
   const record = createMockRecord('Hello world this is a long text', 'test-fp');
   const result = gates.validate(record);

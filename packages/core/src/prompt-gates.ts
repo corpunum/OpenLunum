@@ -28,11 +28,11 @@ export interface PromptGateResult {
   /** Token count */
   tokens: number;
   /** Semantic preservation score */
-  semanticPreservation?: number;
+  semanticPreservation?: number | undefined;
   /** Errors if any gate failed */
-  errors?: string[];
+  errors?: string[] | undefined;
   /** Warnings if any */
-  warnings?: string[];
+  warnings?: string[] | undefined;
 }
 
 // ── Prompt Quality Gates ───────────────────────────────────────────
