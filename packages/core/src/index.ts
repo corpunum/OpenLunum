@@ -7,3 +7,4 @@ export * from './policy.js';
 export * from './derive.js';
 export * from './context.js';
 export * from './compare.js';
+export * from './profile-selector.js';
