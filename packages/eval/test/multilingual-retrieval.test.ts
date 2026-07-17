@@ -10,9 +10,13 @@ test('MultilingualRetrievalIndex adds and retrieves records', () => {
   const index = new MultilingualRetrievalIndex();
   
   const mockRecord = {
-    source: { text: 'Hello world', language: 'en' },
-    sem: { clauses: [{ predicate: 'greeting' }] },
-    fingerprint: 'test-fp-1'
+    recordVersion: 'lunum-record/0.1-draft',
+    source: { text: 'Hello world', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'greeting', roles: {} }] },
+    fingerprint: 'test-fp-1',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low' as const, confidence: 0.9, reasons: [] },
+    meta: {}
   };
 
   index.add(mockRecord);
@@ -25,17 +29,18 @@ test('MultilingualRetrievalIndex adds and retrieves records', () => {
 test('MultilingualRetrievalIndex indexes by language', () => {
   const index = new MultilingualRetrievalIndex();
   
-  const enRecord = {
-    source: { text: 'Hello world', language: 'en' },
-    sem: { clauses: [{ predicate: 'greeting' }] },
-    fingerprint: 'en-1'
-  };
-
-  const elRecord = {
-    source: { text: 'Γεια σου κόσμε', language: 'el' },
-    sem: { clauses: [{ predicate: 'greeting' }] },
-    fingerprint: 'el-1'
-  };
+  const makeRecord = (text: string, lang: string, fp: string) => ({
+    recordVersion: 'lunum-record/0.1-draft',
+    source: { text, language: lang, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'test', roles: {} }] },
+    fingerprint: fp,
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low' as const, confidence: 0.9, reasons: [] },
+    meta: {}
+  });
+  
+  const enRecord = makeRecord('Hello world', 'en', 'en-1');
+  const elRecord = makeRecord('Γεια σου κόσμε', 'el', 'el-1');
 
   index.add(enRecord);
   index.add(elRecord);
@@ -50,9 +55,13 @@ test('MultilingualRetrievalIndex searches within language', () => {
   const index = new MultilingualRetrievalIndex();
   
   const record = {
-    source: { text: 'The quick brown fox jumps', language: 'en' },
-    sem: { clauses: [{ predicate: 'action' }] },
-    fingerprint: 'test-1'
+    recordVersion: 'lunum-record/0.1-draft',
+    source: { text: 'The quick brown fox jumps', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'action', roles: {} }] },
+    fingerprint: 'test-1',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low' as const, confidence: 0.9, reasons: [] },
+    meta: {}
   };
 
   index.add(record);
@@ -65,24 +74,26 @@ test('MultilingualRetrievalIndex searches within language', () => {
 
   const results = index.search(query);
   assert.strictEqual(results.length, 1);
-  assert.strictEqual(results[0].id, 'test-1');
-  assert.ok(results[0].score > 0);
+  const firstResult = results[0]!;
+  assert.strictEqual(firstResult.id, 'test-1');
+  assert.ok(firstResult.score > 0);
 });
 
 test('MultilingualRetrievalIndex cross-language search with false equivalences', () => {
   const index = new MultilingualRetrievalIndex();
   
-  const enRecord = {
-    source: { text: 'The cat sits on the mat', language: 'en' },
-    sem: { clauses: [{ predicate: 'location' }] },
-    fingerprint: 'en-cat'
-  };
-
-  const esRecord = {
-    source: { text: 'El gato se sienta en la alfombra', language: 'es' },
-    sem: { clauses: [{ predicate: 'location' }] },
-    fingerprint: 'es-cat'
-  };
+  const makeRecord = (text: string, lang: string, fp: string) => ({
+    recordVersion: 'lunum-record/0.1-draft',
+    source: { text, language: lang, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'location', roles: {} }] },
+    fingerprint: fp,
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low' as const, confidence: 0.9, reasons: [] },
+    meta: {}
+  });
+  
+  const enRecord = makeRecord('The cat sits on the mat', 'en', 'en-cat');
+  const esRecord = makeRecord('El gato se sienta en la alfombra', 'es', 'es-cat');
 
   index.add(enRecord);
   index.add(esRecord);
@@ -110,9 +121,13 @@ test('MultilingualRetrievalIndex clears index', () => {
   const index = new MultilingualRetrievalIndex();
   
   index.add({
-    source: { text: 'Test', language: 'en' },
-    sem: { clauses: [{ predicate: 'test' }] },
-    fingerprint: 'test-clear'
+    recordVersion: 'lunum-record/0.1-draft',
+    source: { text: 'Test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'test', roles: {} }] },
+    fingerprint: 'test-clear',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.9, reasons: [] },
+    meta: {}
   });
 
   index.clear();
@@ -126,9 +141,13 @@ test('False equivalence detection works', () => {
   const index = new MultilingualRetrievalIndex();
   
   const record = {
-    source: { text: 'Test record', language: 'en' },
-    sem: { clauses: [] }, // Empty clauses for testing
-    fingerprint: 'test-fp'
+    recordVersion: 'lunum-record/0.1-draft',
+    source: { text: 'Test record', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [] }, // Empty clauses for testing
+    fingerprint: 'test-fp',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low' as const, confidence: 0.9, reasons: [] },
+    meta: {}
   };
 
   const eq = index.detectFalseEquivalence('en', 'el', record);

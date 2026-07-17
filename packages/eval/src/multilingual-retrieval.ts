@@ -32,7 +32,7 @@ export interface RetrievalResult {
   /** Whether this is a true match or potential false-equivalence */
   isTrueMatch: boolean;
   /** False-equivalence confidence if applicable */
-  falseEquivalenceConfidence?: number;
+  falseEquivalenceConfidence?: number | undefined;
 }
 
 export interface RetrievalQuery {
