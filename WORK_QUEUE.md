@@ -54,3 +54,30 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 ## Claiming work
 
 Create `experiments/<experiment-id>/CLAIM.md` with worker, area, branch, start date, and intended dataset. A claim prevents accidental duplication; it does not reserve an area indefinitely.
+
+
+---
+
+# WORK_QUEUE v2 — evidence and hardening (2026-07-17)
+
+v1 (above) is fully landed. v2 turns implementations into evidence and reference code into adoptable infrastructure.
+
+## P1 — evidence
+
+- [ ] Run parse experiments (EN/EL/ES/ID) against local models via the eval runner; publish per-language metrics reports.
+- [ ] Run realization experiments (EN/EL/ES/ID) with protected-literal scoring; publish reports.
+- [ ] Token Atlas: measure natural vs safe/short/tight renderings with exact tokenizer counts on at least 3 named local models.
+
+## P1 — semantic contract hardening
+
+- [ ] Implement fingerprint migration utilities (code, not just docs): detect version, migrate records, golden vectors.
+- [ ] Wire conformance property tests into CI as hard gates (idempotence, key-order independence, fingerprint stability).
+
+## P2 — adoption
+
+- [ ] MCP server hardening: error contracts, input validation, conformance test suite.
+- [ ] OpenUnum shadow-mode live integration test against the real product runtime.
+
+## P2 — renderer
+
+- [ ] Renderer profile selection driven by Token Atlas measurements (per-model best profile).
