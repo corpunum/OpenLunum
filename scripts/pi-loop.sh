@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -uo pipefail
-# Singleton guard: exit if another instance of this loop is already running
-if [[ $(pgrep -fc "$(basename "$0")") -gt 1 ]]; then
-  echo "another $(basename "$0") instance is running — exiting" >&2
+# Singleton guard: flock held for process lifetime; second instances exit
+exec 9>"/tmp/openlunum-$(basename "$0").lock"
+if ! flock -n 9; then
+  echo "another $(basename "$0") instance holds the lock — exiting" >&2
   exit 0
 fi
 # NOTE: no `set -e` — the loop must survive verify failures and non-zero exits
