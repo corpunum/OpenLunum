@@ -11,7 +11,7 @@ import type { LunumRecord, LunumSem, LunumSidecar } from '@corpunum/lunum';
 
 export interface ShadowModeConfig {
   /** Enable shadow mode */
-  enabled: boolean;
+  enabled?: boolean;
   /** Log level for shadow operations */
   logLevel?: 'error' | 'warn' | 'info' | 'debug';
   /** Maximum number of shadow records to keep */
@@ -28,18 +28,17 @@ export interface ShadowRecord {
   /** Shadow record */
   shadow: LunumRecord;
   /** Comparison result */
-  comparison?: {
-    /** Are fingerprints the same? */
+  comparison?: {    /** Are fingerprints the same? */
     fingerprintsMatch: boolean;
     /** Are semantics the same? */
     semanticsMatch: boolean;
     /** Differences found */
     differences: string[];
-  };
+  } | undefined;
   /** Timestamp */
   timestamp: number;
   /** Error if any */
-  error?: string;
+  error?: string | undefined;
 }
 
 // ── Shadow Mode Adapter ─────────────────────────────────────────────
@@ -54,7 +53,7 @@ export class ShadowModeAdapter {
       logLevel: config.logLevel ?? 'info',
       maxRecords: config.maxRecords ?? 1000,
       compareWithProduction: config.compareWithProduction ?? false
-    };
+    } as Required<ShadowModeConfig>;
     this.shadowRecords = [];
   }
 
@@ -68,7 +67,7 @@ export class ShadowModeAdapter {
       fingerprintsMatch: boolean;
       semanticsMatch: boolean;
       differences: string[];
-    };
+    } | undefined;
   } {
     if (!this.config.enabled) {
       return {
@@ -158,6 +157,7 @@ export class ShadowModeAdapter {
       const c1 = sem1.clauses[i];
       const c2 = sem2.clauses[i];
       
+      if (!c1 || !c2) return false;
       if (c1.predicate !== c2.predicate) return false;
       if (c1.negated !== c2.negated) return false;
       
