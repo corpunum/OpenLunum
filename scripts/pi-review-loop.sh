@@ -52,13 +52,13 @@ pick_candidate() {
   local pr sha reviewed
   while read -r pr sha; do
     [[ -n "$pr" ]] || continue
-    reviewed=$(gh pr view "$pr" --repo corpunum/OpenLunum --json comments \
+    reviewed=$(timeout 60 gh pr view "$pr" --repo corpunum/OpenLunum --json comments \
       --jq ".comments[].body" 2>/dev/null | grep -c "REVIEW ${sha}:" || true)
     if [[ "$reviewed" == "0" ]]; then
       echo "$pr $sha"
       return 0
     fi
-  done < <(gh pr list --repo corpunum/OpenLunum --state open \
+  done < <(timeout 60 gh pr list --repo corpunum/OpenLunum --state open \
       --json number,headRefOid --jq 'sort_by(.number) | .[] | "\(.number) \(.headRefOid)"' 2>/dev/null)
   return 1
 }
@@ -73,7 +73,7 @@ while true; do
     continue
   fi
   pr=${sel% *}; sha=${sel#* }
-  branch=$(gh pr view "$pr" --repo corpunum/OpenLunum --json headRefName --jq .headRefName)
+  branch=$(timeout 60 gh pr view "$pr" --repo corpunum/OpenLunum --json headRefName --jq .headRefName)
   log "reviewing PR #$pr ($branch @ ${sha:0:8})"
 
   # Mechanical part: checkout + verify
@@ -122,13 +122,13 @@ $diff_excerpt" 2>>"$STATUS_LOG")
 
   # gh pr edit is broken by a projectCards GraphQL deprecation — use REST
   if [[ "$verdict" == "READY_FOR_MERGE" ]]; then
-    gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=ready-for-merge" >/dev/null 2>&1 || true
-    gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/needs-work" >/dev/null 2>&1 || true
+    timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=ready-for-merge" >/dev/null 2>&1 || true
+    timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/needs-work" >/dev/null 2>&1 || true
   else
-    gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=needs-work" >/dev/null 2>&1 || true
-    gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
+    timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=needs-work" >/dev/null 2>&1 || true
+    timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
   fi
-  gh pr comment "$pr" --repo corpunum/OpenLunum \
+  timeout 60 gh pr comment "$pr" --repo corpunum/OpenLunum \
     --body "REVIEW ${sha}: ${verdict} — ${reason} _(local reviewer: ${REVIEW_MODEL}; same-machine role-separated review, not fully independent)_" >/dev/null 2>&1 || true
 
   log "PR #$pr → $verdict"
