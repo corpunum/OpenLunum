@@ -6,6 +6,7 @@ import { findWorkspaceRoot, readJson, sha256File, validateProfile, writeJson } f
 import { OpenAICompatibleModel } from './model.js';
 import { runExperiment } from './runner.js';
 import { runSmoke } from './smoke.js';
+import { runParseExperimentCli } from './parse-experiment.js';
 import type { ExperimentManifest, ExperimentTask, ModelProfile, WorkArea } from './types.js';
 
 function flag(name: string): string | undefined {
@@ -61,7 +62,8 @@ async function main(): Promise<void> {
     console.log(await runExperiment(resolved)); return;
   }
   if (command === 'report') throw new Error('Reports are generated automatically by experiment:run in 0.2.0');
-  throw new Error('Commands: smoke | status | doctor --profile <file> | create --id <id> --area <area> --task <task> | run --manifest <file>');
+  if (command === 'parse-experiment') { await runParseExperimentCli(); return; }
+  throw new Error('Commands: smoke | status | doctor --profile <file> | create --id <id> --area <area> --task <task> | run --manifest <file> | parse-experiment <manifest>');
 }
 
 main().catch((error: unknown) => { console.error(error instanceof Error ? error.message : String(error)); process.exitCode = 1; });
