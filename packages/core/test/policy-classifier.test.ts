@@ -115,9 +115,9 @@ test('isValidCategory returns false for invalid category', () => {
 
 test('generatePolicyStats calculates correct statistics', () => {
   const classifications = [
-    { category: 'simple_fact', risk: 'low', confidence: 0.95, eligible: true, reasons: [] },
-    { category: 'safety_constraint', risk: 'high', confidence: 0.93, eligible: false, reasons: ['natural_only_category_safety_constraint'] },
-    { category: 'preference', risk: 'low', confidence: 0.96, eligible: true, reasons: [] }
+    { category: 'simple_fact', risk: 'low' as const, confidence: 0.95, eligible: true, reasons: [] },
+    { category: 'safety_constraint', risk: 'high' as const, confidence: 0.93, eligible: false, reasons: ['natural_only_category_safety_constraint'] },
+    { category: 'preference', risk: 'low' as const, confidence: 0.96, eligible: true, reasons: [] }
   ];
 
   const stats = generatePolicyStats(classifications);

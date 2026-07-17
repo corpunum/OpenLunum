@@ -299,13 +299,15 @@ export function classifyByCategory(
 ): EligibilityDecision {
   const metadata = CATEGORY_METADATA[category];
   const risk: RiskLevel = metadata?.typicalRisk ?? 'unknown';
+  const source = sourceText !== undefined ? sourceText : undefined;
+  const sem = semantic !== undefined ? semantic : undefined;
 
   return classifyContent({
     category,
     risk,
     confidence,
-    sourceText,
-    semantic
+    sourceText: source,
+    semantic: sem
   });
 }
 
@@ -329,7 +331,7 @@ export function getCategoriesByType(type: 'eligible' | 'natural_only'): string[]
  * @returns Category metadata or undefined
  */
 export function getCategoryMetadata(category: string): CategoryMetadata | undefined {
-  return CATEGORY_METADATA[category];
+  return CATEGORY_METADATA[category as keyof typeof CATEGORY_METADATA];
 }
 
 /**
@@ -339,7 +341,7 @@ export function getCategoryMetadata(category: string): CategoryMetadata | undefi
  * @returns True if category is valid
  */
 export function isValidCategory(category: string): boolean {
-  return ALL_CATEGORIES.has(category);
+  return ALL_CATEGORIES.has(category as string);
 }
 
 /**
