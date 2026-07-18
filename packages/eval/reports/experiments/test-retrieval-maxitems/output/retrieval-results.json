@@ -1,0 +1,45 @@
+{
+  "results": [
+    {
+      "id": "sample-query-1",
+      "status": "passed",
+      "rawOutput": "{\"query\":\"What is the capital of France?\",\"topK\":[\"paris\",\"london\",\"berlin\"],\"expected\":[\"paris\"]}",
+      "queryId": "sample-query-1",
+      "candidateIds": [
+        "paris",
+        "london",
+        "berlin",
+        "madrid",
+        "rome"
+      ],
+      "expectedRelevantIds": [
+        "paris"
+      ],
+      "rankedResultIds": [
+        "paris",
+        "london",
+        "berlin"
+      ],
+      "mode": "exact",
+      "exact": true,
+      "featurePrecision": 0.3333333333333333,
+      "featureRecall": 1,
+      "precisionAtK": 0.3333333333333333,
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "meanReciprocalRank": 1,
+      "falsePositives": [
+        "london",
+        "berlin"
+      ],
+      "falseNegatives": [],
+      "hasFalseEquivalence": false,
+      "isNearSemantic": false,
+      "latencyMs": 0
+    }
+  ],
+  "aggregateMetrics": {
+    "meanReciprocalRank": 1,
+    "items": 1
+  }
+}

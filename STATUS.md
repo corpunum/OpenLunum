@@ -27,20 +27,20 @@
 | Near-semantic fingerprint | Design | Separately designed from exact identity; not yet implemented |
 | Reference renderer | Prototype | Conservative and testable; not tokenizer-optimized |
 | Renderer profiles (safe/short/tight) | Experiment | Measured without changing semantics; not production-proven |
-| Tokenizer measurement framework | Experiment | Framework exists; exact target-machine adapters remain work |
+| Tokenizer measurement framework | Reference implementation | Cross-model measurement with Token Atlas; per-model profile selection available |
 | Mixed-context compiler | Prototype | Policy skeleton with natural fallback |
 | Raw multilingual parser | Experiment harness | Local models can be evaluated; no production parser is approved |
 | Multilingual realization | Experiment | English, Greek, Spanish, Indonesian; protected-literal scoring verified |
 | Abstention/clarification | Experiment | Available for low-confidence parses; threshold tuning needed |
 | Expanded typed structures | Reference implementation | Time, quantity, uncertainty, reference, modality implemented |
-| Canonical conformance vectors | Reference implementation | Property tests pass; not yet gate on all merges |
-| Tokenizer profile selection | Experiment | Measurement framework exists; target adapters in progress |
+| Canonical conformance vectors | Reference implementation | Property tests pass; wired into CI as hard gates |
+| Tokenizer profile selection | Reference implementation | Measurement framework with Token Atlas; per-model best profile selection available |
 | Context quality measurement | Experiment | Framework and policy datasets exist; downstream quality measurement ongoing |
 | Multilingual retrieval | Experiment | False-equivalence tests exist; production retrieval integration pending |
 | Conformance reports | Prototype | Hook/plugin/CLI paths documented; live adoption reports generated |
 | Profile Selection Result | Reference implementation | Explicit type for renderer profile selection |
-| Realization runner | Experiment | Protected-literal scoring for multilingual realization |
-| Token Atlas | Experiment | Cross-model, cross-profile token measurement framework |
+| Realization runner | Reference implementation | Protected-literal scoring for multilingual realization |
+| Token Atlas | Reference implementation | Cross-model, cross-profile token measurement framework |
 | Public package stability | Not stable | APIs may change before 1.0 |
 
 ## Release gates before 1.0
@@ -52,7 +52,8 @@
 5. Safety and quality gates for mixed-context use.
 6. At least three independently verified adoption paths.
 7. Published threat model, rollback process, and compatibility matrix.
+8. Property tests wired into CI as hard gates.
 
 ## Honest boundary
 
-OpenLunum has an architecture, a reference core, preserved evidence, and adoption contracts. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products.
+OpenLunum has an architecture, a reference core, preserved evidence, and adoption contracts. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products. Token Atlas provides cross-model measurements but per-model profile selection requires per-model testing. CI hard gates exist for conformance but not all merge gates are active.
