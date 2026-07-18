@@ -155,3 +155,5 @@
 - agent/typescript-agent-research-loop
 TASKS ALREADY CLAIMED — existing agent branches (do NOT work on these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):
 
+- agent/qwen/adoption/cli-pipeline
+>>>>>>> 13b43ed (feat(adopt): add standalone CLI pipeline (parse | realize | render) with documented examples)

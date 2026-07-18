@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFile, writeFile } from 'node:fs/promises';
-import { compileContext, deriveLunumSidecar, fingerprintSem, renderSem, validateSem } from '@corpunum/lunum';
+import { compileContext, createRecord, deriveLunumSidecar, deriveSurfaceSidecar, fingerprintSem, renderSem, validateSem } from '@corpunum/lunum';
 import type { ContextMessage, LunumSem, LunumRecord } from '@corpunum/lunum';
 
 function flag(name: string): string | undefined {
@@ -77,7 +77,116 @@ async function main(): Promise<void> {
     }
     return;
   }
-  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> [--from 0.1] [--to 0.2] [--dry-run]');
+  if (command === 'pipeline') {
+    // Standalone CLI pipeline: lunum parse | lunum realize | lunum render
+    // Usage: lunum pipeline --text <text> [--language en] [--category simple_fact] [--risk low]
+    // Or: cat input.json | lunum pipeline [--mode parse|realize|render|full]
+    const textInput = flag('text') || flag('content');
+    const inputFile = flag('input') || flag('file');
+    const language = flag('language') ?? 'en';
+    const category = flag('category') ?? 'simple_fact';
+    const risk = flag('risk') ?? 'low';
+    const mode = flag('mode') ?? 'full';
+    const outputFormat = flag('output') ?? 'json';
+
+    // Get input text
+    let inputText = textInput;
+    if (!inputText && inputFile) {
+      const data = await readJson<any>(inputFile);
+      inputText = data.source?.text || data.content || data.text || JSON.stringify(data);
+    }
+    if (!inputText) {
+      // Try stdin
+      const chunks: Buffer[] = [];
+      process.stdin.on('data', (chunk: Buffer) => chunks.push(chunk));
+      inputText = await new Promise<string>((resolve) => {
+        process.stdin.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+      });
+    }
+    if (!inputText || !inputText.trim()) {
+      console.error('Error: provide --text or pipe JSON via stdin');
+      process.exitCode = 1;
+      return;
+    }
+
+    // Parse step: derive sidecar
+    const sidecar = deriveLunumSidecar({ role: 'user', content: inputText, category, risk: risk as any });
+
+    if (mode === 'parse' || mode === 'parse-only') {
+      console.log(JSON.stringify({ step: 'parse', sidecar }, null, 2));
+      return;
+    }
+
+    // Realize step: create full record from sidecar sem
+    let record: LunumRecord;
+    if (sidecar.lunumSem) {
+      record = createRecord({
+        sourceText: inputText,
+        sourceLanguage: language,
+        role: 'user',
+        sem: sidecar.lunumSem,
+        category,
+        risk: risk as any,
+        confidence: Number(sidecar.lunumMeta.confidence) || 0.9
+      });
+    } else {
+      // Fallback: create record with heuristic surface
+      const surface = deriveSurfaceSidecar({ role: 'user', content: inputText, category, risk: risk as any });
+      record = createRecord({
+        sourceText: inputText,
+        sourceLanguage: language,
+        role: 'user',
+        sem: surface.lunumSem as LunumSem,
+        category,
+        risk: risk as any,
+        confidence: 0.5
+      });
+    }
+
+    if (mode === 'realize' || mode === 'realize-only') {
+      console.log(JSON.stringify({ step: 'realize', record }, null, 2));
+      return;
+    }
+
+    // Render step
+    const renderings = Object.fromEntries(
+      Object.entries(record.renderings).map(([profile, r]) => [profile, { code: r.code, profile: r.profile, tokens: null }])
+    );
+
+    if (mode === 'render' || mode === 'render-only') {
+      console.log(JSON.stringify({ step: 'render', renderings, fingerprint: record.fingerprint }, null, 2));
+      return;
+    }
+
+    // Full pipeline: parse | realize | render
+    const result = {
+      pipeline: 'parse | realize | render',
+      input: { text: inputText, language, category, risk },
+      parse: { sidecar: { lunumCode: sidecar.lunumCode, lunumFp: sidecar.lunumFp, lunumMeta: sidecar.lunumMeta } },
+      realize: {
+        recordVersion: record.recordVersion,
+        fingerprint: record.fingerprint,
+        semSchema: record.sem.schema,
+        clauses: record.sem.clauses.length,
+        renderings: renderings
+      },
+      output: {
+        code: Object.values(renderings)[0]?.code || '',
+        fingerprint: record.fingerprint,
+        policy: { eligible: record.policy.eligible, category: record.policy.category, risk: record.policy.risk, confidence: record.policy.confidence }
+      }
+    };
+
+    if (outputFormat === 'code') {
+      // Output just the code for piping to other tools
+      const code = Object.values(renderings)[0]?.code || '';
+      process.stdout.write(code);
+    } else {
+      console.log(JSON.stringify(result, null, 2));
+    }
+    return;
+  }
+  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> [--from 0.1] [--to 0.2] [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full]');
   process.exitCode = 2;
 }
 
