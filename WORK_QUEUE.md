@@ -57,11 +57,11 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 ## P2 — native model protocol
 
-- [ ] Add protocol annotations for Lunum-native model compatibility (token mappings, instruction templates, fallback profiles for non-native models).
+- [x] Add protocol annotations for Lunum-native model compatibility (token mappings, instruction templates, fallback profiles for non-native models). (PR #69)
 
 ## P2 — error observability
 
-- [ ] Add error tracking, circuit-breaker, and revert-capability types to support observable and reversible failure modes.
+- [x] Add error tracking, circuit-breaker, and revert-capability types to support observable and reversible failure modes.
 
 ## Claiming work
 
