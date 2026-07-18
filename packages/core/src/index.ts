@@ -2,6 +2,7 @@ export * from './types.js';
 export * from './constants.js';
 export * from './canonicalize.js';
 export * from './fingerprint.js';
+export * from './fingerprint-migration.js';
 export * from './render.js';
 export * from './policy.js';
 export * from './derive.js';
