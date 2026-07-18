@@ -15,6 +15,8 @@
 - Profile Selection Result type for renderer profile selection.
 - Realization runner with protected-literal scoring.
 - Token Atlas for cross-model, cross-profile token measurement.
+- API stability tests with golden snapshots for `packages/core`.
+- OpenUnum adapter end-to-end conformance verification.
 
 | Component | Status | Meaning |
 |---|---|---|
@@ -41,7 +43,8 @@
 | Profile Selection Result | Reference implementation | Explicit type for renderer profile selection |
 | Realization runner | Reference implementation | Protected-literal scoring for multilingual realization |
 | Token Atlas | Reference implementation | Cross-model, cross-profile token measurement framework |
-| Public package stability | Not stable | APIs may change before 1.0 |
+| API stability tests | Reference implementation | Snapshot-based tests for `packages/core` public exports |
+| OpenUnum adapter e2e conformance | Prototype | End-to-end verification against real product runtime |
 
 ## Release gates before 1.0
 

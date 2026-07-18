@@ -16,6 +16,11 @@
 - **Realization Runner:** Experiment runner with protected-literal scoring for multilingual realization.
 - **Token Atlas:** Cross-model, cross-profile token measurement framework for natural vs renderer profile comparison.
 - **Profile Selection:** Renderer profile selection driven by Token Atlas measurements (per-model best profile).
+- **Downstream Quality Gates:** Task-success metrics and quality gates to verify downstream task quality preservation.
+- **Fingerprint migration utilities:** Code-level utilities for detecting versions, migrating records, and golden vectors.
+- **CI conformance gates:** Property tests wired into CI as hard gates for idempotence and fingerprint stability.
+- **API stability tests:** Snapshot-based tests for `packages/core` public exports to detect breaking changes.
+- **OpenUnum adapter e2e conformance:** End-to-end verification against real product runtime.
 
 ## Since 0.2.1 — Merged Work (7650cc09, 605ae11, ef230af, 2001733)
 
@@ -42,6 +47,8 @@
 - **MCP server hardening:** Error contracts, input validation, conformance test suite.
 - **OpenUnum shadow-mode:** Live integration test against real product runtime.
 - **Renderer profile selection:** Per-model best profile driven by Token Atlas measurements.
+- **API stability tests:** Snapshot-based tests for `packages/core` public exports to detect breaking changes.
+- **OpenUnum adapter e2e conformance:** End-to-end verification against real product runtime.
 
 ---
 
