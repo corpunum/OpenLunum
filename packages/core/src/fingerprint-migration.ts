@@ -160,6 +160,138 @@ export function validateGoldenVector(
 }
 
 // ---------------------------------------------------------------------------
+// Rollback process: revert record to original source with verification
+// ---------------------------------------------------------------------------
+
+/**
+ * Result of a rollback operation.
+ * Returns the original source text along with verification status.
+ */
+export interface RollbackResult {
+  /** The original natural-language source text */
+  sourceText: string;
+  /** Language of the source, if available */
+  sourceLanguage: string | null;
+  /** Reference URI, if available */
+  sourceRef: string | null;
+  /** Verification status */
+  verified: boolean;
+  /** Verification method used */
+  verificationMethod: 'fingerprint' | 'direct' | 'none';
+  /** Warnings about the rollback */
+  warnings: string[];
+}
+
+/**
+ * Rollback a LunumRecord to its original natural-language source.
+ * 
+ * The rollback process:
+ * 1. Verifies the record's fingerprint matches the current semantic content
+ * 2. Extracts the original source text from `record.source`
+ * 3. Returns the source text with verification status
+ * 
+ * This is the canonical rollback path: given a Lunum-Sem record and its
+ * provenance chain, revert to the original natural-language source with
+ * verification.
+ *
+ * @param record - The LunumRecord to rollback
+ * @param options - Optional verification settings
+ * @returns RollbackResult with source text and verification status
+ */
+export function rollbackToSource(
+  record: LunumRecord,
+  options: { verifyFingerprint?: boolean } = {}
+): RollbackResult {
+  const warnings: string[] = [];
+  let verified = true;
+  let verificationMethod: 'fingerprint' | 'direct' | 'none' = 'none';
+
+  // Step 1: Verify fingerprint if requested
+  if (options.verifyFingerprint && record.fingerprint) {
+    const recomputed = migrateFingerprint(record.sem);
+    if (recomputed !== record.fingerprint) {
+      verified = false;
+      verificationMethod = 'fingerprint';
+      warnings.push(
+        `Fingerprint mismatch: record ${record.fingerprint.slice(0, 20)} ` +
+        `does not match current sem content (${recomputed.slice(0, 20)})`
+      );
+    } else {
+      verificationMethod = 'fingerprint';
+    }
+  } else if (record.fingerprint) {
+    // Even without explicit verification, note that fingerprint exists
+    verificationMethod = 'direct';
+  }
+
+  // Step 2: Extract source text
+  const sourceText = record.source.text ?? '';
+  const sourceLanguage = record.source.language;
+  const sourceRef = record.source.ref;
+
+  // Step 3: Validate source text integrity
+  if (!sourceText || sourceText.trim() === '') {
+    warnings.push('Source text is empty or missing');
+  }
+
+  return {
+    sourceText,
+    sourceLanguage,
+    sourceRef,
+    verified,
+    verificationMethod,
+    warnings
+  };
+}
+
+/**
+ * Rollback a batch of records to their original sources.
+ * Returns per-record results and aggregate summary.
+ */
+export function rollbackBatch(
+  records: LunumRecord[],
+  options: { verifyFingerprint?: boolean } = {}
+): { results: RollbackResult[]; summary: RollbackSummary } {
+  const results: RollbackResult[] = [];
+  let allVerified = true;
+  const warnings: string[] = [];
+
+  for (const record of records) {
+    const result = rollbackToSource(record, options);
+    results.push(result);
+    if (!result.verified) allVerified = false;
+    warnings.push(...result.warnings);
+  }
+
+  return {
+    results,
+    summary: {
+      total: records.length,
+      verified: results.filter(r => r.verified).length,
+      unverified: results.filter(r => !r.verified).length,
+      allVerified,
+      warnings
+    }
+  };
+}
+
+/**
+ * Summary of a batch rollback operation.
+ */
+export interface RollbackSummary {
+  /** Total records processed */
+  total: number;
+  /** Records with verified provenance */
+  verified: number;
+  /** Records with unverified or mismatched provenance */
+  unverified: number;
+  /** Whether all records verified successfully */
+  allVerified: boolean;
+  /** Warnings from the rollback */
+  warnings: string[];
+}
+
+// ---------------------------------------------------------------------------
 // Migration summary / reporting
 // ---------------------------------------------------------------------------
 

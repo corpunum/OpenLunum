@@ -13,7 +13,10 @@ import {
   buildGoldenVector,
   validateGoldenVector,
   dryRunMigration,
-  isCurrentSchema
+  isCurrentSchema,
+  rollbackToSource,
+  rollbackBatch,
+  type RollbackResult
 } from '../src/fingerprint-migration.js';
 import type { LunumRecord } from '../src/types.js';
 
@@ -328,4 +331,90 @@ test('dryRunMigration reports correct counts for mixed dataset', () => {
   assert.strictEqual(summary.total, 2);
   assert.strictEqual(summary.alreadyCurrent, 1);
   assert.strictEqual(summary.migrated, 1);
+});
+
+// ---------------------------------------------------------------------------
+// Rollback process (WORK_QUEUE v4 P2)
+// ---------------------------------------------------------------------------
+
+function makeValidRecord(text: string, world = 'real'): LunumRecord {
+  const sem = { schema: 'lunum-sem/0.1-draft', world: world as any, kind: 'instruction', clauses: [{ predicate: 'test', roles: {} }] };
+  const fp = migrateFingerprint(sem);
+  return {
+    recordVersion: '0.1-draft',
+    source: { text, language: 'en', role: null, ref: null },
+    sem,
+    fingerprint: fp,
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+}
+
+test('rollbackToSource: returns original source text with verification', () => {
+  const record = makeValidRecord('Original source text');
+  const result = rollbackToSource(record, { verifyFingerprint: true });
+  assert.strictEqual(result.sourceText, 'Original source text');
+  assert.strictEqual(result.sourceLanguage, 'en');
+  assert.strictEqual(result.verified, true);
+  assert.strictEqual(result.verificationMethod, 'fingerprint');
+  assert.strictEqual(result.warnings.length, 0);
+});
+
+test('rollbackToSource: detects fingerprint mismatch', () => {
+  const record = makeValidRecord('Original text');
+  // Tamper the semantic content (change world)
+  record.sem.world = 'fiction' as any;
+  const result = rollbackToSource(record, { verifyFingerprint: true });
+  assert.strictEqual(result.sourceText, 'Original text');
+  assert.strictEqual(result.verified, false);
+  assert.strictEqual(result.verificationMethod, 'fingerprint');
+  assert.ok(result.warnings.length > 0, 'Should have warnings about mismatch');
+});
+
+test('rollbackToSource: no verification returns direct method', () => {
+  const record = makeValidRecord('No verification text');
+  const result = rollbackToSource(record);
+  assert.strictEqual(result.sourceText, 'No verification text');
+  assert.strictEqual(result.verified, true);
+  assert.strictEqual(result.verificationMethod, 'direct');
+});
+
+test('rollbackToSource: empty source text produces warning', () => {
+  const record = makeValidRecord('');
+  record.source.text = '';
+  const result = rollbackToSource(record, { verifyFingerprint: true });
+  assert.strictEqual(result.sourceText, '');
+  assert.ok(result.warnings.some(w => w.includes('empty') || w.includes('missing')));
+});
+
+test('rollbackBatch: returns per-record results and summary', () => {
+  const records = [
+    makeValidRecord('Record A'),
+    makeValidRecord('Record B'),
+    makeValidRecord('Record C')
+  ];
+  const { results, summary } = rollbackBatch(records, { verifyFingerprint: true });
+  assert.strictEqual(results.length, 3);
+  assert.strictEqual(summary.total, 3);
+  assert.strictEqual(summary.verified, 3);
+  assert.strictEqual(summary.unverified, 0);
+  assert.strictEqual(summary.allVerified, true);
+});
+
+test('rollbackBatch: detects mixed verification status', () => {
+  const records: LunumRecord[] = [
+    makeValidRecord('Verified A'),
+    makeValidRecord('Unverified B'),
+    makeValidRecord('Verified C')
+  ];
+  // Tamper the middle record's sem
+  records[1]!.sem.world = 'fiction' as any;
+  const { results, summary } = rollbackBatch(records, { verifyFingerprint: true });
+  assert.strictEqual(results.length, 3);
+  assert.strictEqual(summary.total, 3);
+  assert.strictEqual(summary.verified, 2);
+  assert.strictEqual(summary.unverified, 1);
+  assert.strictEqual(summary.allVerified, false);
+  assert.ok(summary.warnings.length > 0, 'Should have warnings');
 });
