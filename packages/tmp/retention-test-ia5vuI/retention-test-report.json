@@ -1,0 +1,68 @@
+{
+  "experimentId": "retention-test",
+  "runId": "2026-07-18T17-22-06-966Z",
+  "languages": [
+    "en",
+    "el",
+    "es",
+    "id"
+  ],
+  "totalItems": 4,
+  "totalPassed": 4,
+  "totalFailed": 0,
+  "totalErrors": 0,
+  "overallRetentionRate": 1,
+  "languageMetrics": {
+    "en": {
+      "language": "en",
+      "totalItems": 1,
+      "passedItems": 1,
+      "failedItems": 0,
+      "errorItems": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 0.013059999999995853
+    },
+    "el": {
+      "language": "el",
+      "totalItems": 1,
+      "passedItems": 1,
+      "failedItems": 0,
+      "errorItems": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 0.0027100000000004343
+    },
+    "es": {
+      "language": "es",
+      "totalItems": 1,
+      "passedItems": 1,
+      "failedItems": 0,
+      "errorItems": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 0.039748000000003
+    },
+    "id": {
+      "language": "id",
+      "totalItems": 1,
+      "passedItems": 1,
+      "failedItems": 0,
+      "errorItems": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 0.0024399999999999977
+    }
+  },
+  "baselineThreshold": 0.5,
+  "regressionDetected": false,
+  "generatedAt": 1784395326966
+}
