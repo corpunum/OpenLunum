@@ -13,8 +13,10 @@
 - agent/docs/sync-1c04461b
 - agent/docs/sync-1e4a99dc
 - agent/docs/sync-287da81c
+- agent/docs/sync-339570d4
 - agent/docs/sync-35b43914
 - agent/docs/sync-3bde3733
+- agent/docs/sync-40e10514
 - agent/docs/sync-48f23688
 - agent/docs/sync-4c44df1c
 - agent/docs/sync-5428177e
@@ -33,6 +35,7 @@
 - agent/docs/sync-a6fbb9d9
 - agent/docs/sync-a89b0540
 - agent/docs/sync-adefb01c
+- agent/docs/sync-bceb401a
 - agent/docs/sync-c062de74
 - agent/docs/sync-c4637d7f
 - agent/docs/sync-cb0e785d
@@ -62,6 +65,7 @@
 - agent/phase6-1/retrieval-integration-runners
 - agent/phase6-1/retrieval-integration-runners-v2
 - agent/pi-local-model-experiment
+- agent/qwen/adoption/cli-pipeline
 - agent/qwen/adoption/mcp-server-hardening
 - agent/qwen/adoption/openunum-shadow-live-test
 - agent/qwen/agent-state/protocol
@@ -81,7 +85,9 @@
 - agent/qwen/eval/tests-temp-dirs
 - agent/qwen/eval/tests-temp-dirs-2
 - agent/qwen/infra/pr9-stack-reconcile
+- agent/qwen/issue-11/artifact-validation
 - agent/qwen/issue-11-completion
+- agent/qwen/issue-11/schema-validator-deep
 - agent/qwen/migration-bidirectional
 - agent/qwen/migration/golden-vectors
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline
@@ -93,12 +99,19 @@
 - agent/qwen/pr70-rebase
 - agent/qwen/realization/realization-runner
 - agent/qwen/release/provenance-and-signed-artifacts
+- agent/qwen/renderer/conformance-suite
+- agent/qwen/renderer/golden-output
 - agent/qwen/renderer/profile-selection
 - agent/qwen/renderer/token-atlas
 - agent/qwen/repository-reliability/pr8-contract-evidence
 - agent/qwen/repository-reliability/release-provenance
 - agent/qwen/retention-experiment
 - agent/qwen/retention/regression-gate
+- agent/qwen/retrieval/cross-lingual
+- agent/qwen/safety/mixed-context-quality-gates
+- agent/qwen/safety/prompt-injection-resistance
+- agent/qwen/safety/quality-gate-ci
+- agent/qwen/safety/quality-gate-ci-2
 - agent/qwen/schema-changelog
 - agent/qwen/schema-freeze-0.2
 - agent/qwen/schema-frozen-0.2
@@ -129,4 +142,3 @@
 - agent/semantic-contract/typed-structures-expand
 - agent/typescript-agent-research-loop
 TASKS ALREADY CLAIMED — existing agent branches (do NOT work on these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):
-- agent/qwen/renderer/conformance-suite
