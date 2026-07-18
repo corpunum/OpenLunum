@@ -1,15 +1,33 @@
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
 import { runRetrievalExperiment, type RetrievalManifest, type RetrievalFixture } from '../src/retrieval-runner.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
+// Track temp dirs for cleanup
+const tempDirs = new Set<string>();
+
+function createTempDir(): string {
+  const dir = path.join(os.tmpdir(), `openlunum-retrieval-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  tempDirs.add(dir);
+  return dir;
+}
+
+after(async () => {
+  for (const dir of tempDirs) {
+    try { await rm(dir, { recursive: true, force: true }); } catch { /* ignore */ }
+  }
+  tempDirs.clear();
+});
+
 test('retrieval runner loads fixtures and computes correct metrics', async () => {
+  const output = createTempDir();
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-retrieval-metrics',
@@ -20,11 +38,11 @@ test('retrieval runner loads fixtures and computes correct metrics', async () =>
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.5, minimumExactRate: 0.5, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-retrieval-metrics',
+    outputDirectory: output,
     retrievalConfig: { k: 3, mode: 'exact' }
   };
 
-  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-metrics/output');
+  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.ok(results.length > 0, 'Should have results from fixtures');
@@ -47,6 +65,7 @@ test('retrieval runner loads fixtures and computes correct metrics', async () =>
 });
 
 test('retrieval runner respects k threshold', async () => {
+  const output = createTempDir();
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-retrieval-k',
@@ -57,11 +76,11 @@ test('retrieval runner respects k threshold', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-retrieval-k',
+    outputDirectory: output,
     retrievalConfig: { k: 1, mode: 'exact' }
   };
 
-  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-k/output');
+  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, output);
 
   // With k=1, results should be sliced to 1 item
   for (const result of results) {
@@ -70,6 +89,7 @@ test('retrieval runner respects k threshold', async () => {
 });
 
 test('retrieval runner detects false positives and false negatives', async () => {
+  const output = createTempDir();
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-retrieval-fp-fn',
@@ -80,11 +100,11 @@ test('retrieval runner detects false positives and false negatives', async () =>
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-retrieval-fp-fn',
+    outputDirectory: output,
     retrievalConfig: { k: 3, mode: 'exact' }
   };
 
-  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-fp-fn/output');
+  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, output);
 
   // At least one fixture should have false positives or false negatives
   const hasFpOrFn = results.some(r => r.falsePositives.length > 0 || r.falseNegatives.length > 0);
@@ -92,6 +112,7 @@ test('retrieval runner detects false positives and false negatives', async () =>
 });
 
 test('retrieval runner rejects invalid k', async () => {
+  const output = createTempDir();
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-retrieval-invalid-k',
@@ -102,12 +123,12 @@ test('retrieval runner rejects invalid k', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-retrieval-invalid-k',
+    outputDirectory: output,
     retrievalConfig: { k: 0, mode: 'exact' }
   };
 
   await assert.rejects(
-    runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-invalid-k/output'),
+    runRetrievalExperiment(manifest, WORKSPACE_ROOT, output),
     { message: /Invalid k value: 0/ }
   );
 });
@@ -214,6 +235,7 @@ test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
 });
 
 test('retrieval runner respects limits.maxItems', async () => {
+  const output = createTempDir();
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-retrieval-maxitems',
@@ -224,16 +246,17 @@ test('retrieval runner respects limits.maxItems', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-retrieval-maxitems',
+    outputDirectory: output,
     retrievalConfig: { k: 3, mode: 'exact' }
   };
 
-  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-maxitems/output');
+  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(results.length <= 1, 'Should respect limits.maxItems=1');
 });
 
 test('retrieval runner detects near-semantic mode', async () => {
+  const output = createTempDir();
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-retrieval-near-semantic',
@@ -244,11 +267,11 @@ test('retrieval runner detects near-semantic mode', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-retrieval-near-semantic',
+    outputDirectory: output,
     retrievalConfig: { k: 3, mode: 'near-semantic' }
   };
 
-  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-near-semantic/output');
+  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, output);
 
   const nearSemanticResult = results.find(r => r.isNearSemantic);
   assert.ok(nearSemanticResult, 'Should detect near-semantic mode');
@@ -256,6 +279,7 @@ test('retrieval runner detects near-semantic mode', async () => {
 });
 
 test('retrieval runner detects false equivalence', async () => {
+  const output = createTempDir();
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-retrieval-false-eq',
@@ -266,11 +290,11 @@ test('retrieval runner detects false equivalence', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-retrieval-false-eq',
+    outputDirectory: output,
     retrievalConfig: { k: 3, mode: 'exact' }
   };
 
-  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-false-eq/output');
+  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, output);
 
   const result = results[0];
   assert.ok(result, 'Should have a result');
@@ -278,6 +302,7 @@ test('retrieval runner detects false equivalence', async () => {
 });
 
 test('retrieval runner computes aggregate MRR', async () => {
+  const output = createTempDir();
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-retrieval-mrr',
@@ -288,11 +313,11 @@ test('retrieval runner computes aggregate MRR', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-retrieval-mrr',
+    outputDirectory: output,
     retrievalConfig: { k: 3, mode: 'exact' }
   };
 
-  await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-mrr/output');
+  await runRetrievalExperiment(manifest, WORKSPACE_ROOT, output);
 
   // Check that the output file contains MRR
   const resultsPath = path.join('reports', 'experiments', 'test-retrieval-mrr', 'output', 'retrieval-results.json');
