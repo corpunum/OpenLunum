@@ -11,3 +11,4 @@ reports/experiments/**/raw-private/
 reports/pi-loop/
 reports/experiments/smoke-test/environment.json
 reports/nightly/
+packages/tmp/
