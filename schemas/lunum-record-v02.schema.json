@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/lunum-record/0.2",
+  "title": "Lunum Record 0.2 (Frozen)",
+  "description": "Frozen record wrapper schema. Field names are locked; additions require a new schema version.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recordVersion", "source", "sem", "fingerprint", "renderings", "policy"],
+  "properties": {
+    "recordVersion": {
+      "const": "lunum-record/0.2",
+      "description": "Record version identifier — locked for 0.2"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "text": { "type": "string" },
+        "language": { "type": ["string", "null"] },
+        "role": { "type": ["string", "null"] },
+        "ref": { "type": ["string", "null"] },
+        "format": { "type": "string", "enum": ["natural", "structured", "mixed"] }
+      }
+    },
+    "sem": {
+      "$ref": "lunum-sem-v02.schema.json",
+      "description": "Embedded Lunum-Sem 0.2 semantic object"
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^lfp:",
+      "description": "SHA-256 fingerprint of canonicalized Lunum-Sem"
+    },
+    "renderings": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z]{2}(-[a-z]{2})?$": {
+          "type": "object",
+          "required": ["code", "profile"],
+          "additionalProperties": false,
+          "properties": {
+            "code": { "type": "string" },
+            "profile": { "type": "string" },
+            "tokens": { "type": ["number", "null"] }
+          }
+        }
+      },
+      "description": "Localized renderings keyed by BCP-47 language tag"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "risk", "confidence"],
+      "properties": {
+        "eligible": { "type": "boolean" },
+        "risk": {
+          "enum": ["low", "medium", "high", "unknown"],
+          "description": "Risk classification — locked enum for 0.2"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Confidence score in [0, 1]"
+        },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "created": { "type": "string", "format": "date-time" },
+        "modified": { "type": "string", "format": "date-time" },
+        "schemaVersion": { "const": "0.2" }
+      },
+      "description": "Metadata — locked field set for 0.2"
+    }
+  }
+}

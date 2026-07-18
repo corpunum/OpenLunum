@@ -195,9 +195,18 @@ test('types-schema.ts exists and exports all schema interfaces', async () => {
   const content = fs.readFileSync(TYPES_SCHEMA_PATH, 'utf-8');
   const schemaFiles = fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.json'));
   for (const schemaFile of schemaFiles) {
-    const typeName = schemaFile.replace(/\.schema\.json$/, '').split('-')
-      .map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('') + 'Schema';
-    assert.ok(content.includes(`export interface ${typeName}`), `Must export ${typeName}`);
+    const baseName = schemaFile.replace(/\.schema\.json$/, '');
+    // Handle versioned schemas like lunum-sem-v02 -> LunumSemSchema02
+    const versionMatch = baseName.match(/^(.+)-v(\d+)$/);
+    if (versionMatch && versionMatch[1] && versionMatch[2]) {
+      const base = versionMatch[1].split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+      const typeName = base + 'Schema' + versionMatch[2];
+      assert.ok(content.includes(`export interface ${typeName}`), `Must export ${typeName}`);
+    } else {
+      const typeName = baseName.split('-')
+        .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join('') + 'Schema';
+      assert.ok(content.includes(`export interface ${typeName}`), `Must export ${typeName}`);
+    }
   }
 });
 

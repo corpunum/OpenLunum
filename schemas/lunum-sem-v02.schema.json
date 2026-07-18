@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/lunum-sem/0.2",
+  "title": "Lunum-Sem 0.2 (Frozen)",
+  "description": "Frozen semantic identity schema. Field names are locked; additions require a new schema version.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "world", "kind", "clauses"],
+  "properties": {
+    "schema": {
+      "const": "lunum-sem/0.2",
+      "description": "Schema version identifier — locked for 0.2"
+    },
+    "world": {
+      "type": "string",
+      "minLength": 1,
+      "description": "World marker: real, fiction, tool, dream, belief, metaphor"
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Semantic category: preference, fact, claim, instruction, etc."
+    },
+    "clauses": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/clause" },
+      "description": "Logical clauses forming the semantic record"
+    },
+    "references": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reference" },
+      "description": "External references with stable identifiers"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": { "type": "string" },
+        "author": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "license": { "type": "string" }
+      },
+      "description": "Provenance metadata — locked field set for 0.2"
+    },
+    "annotations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      },
+      "description": "Annotation metadata — locked field set for 0.2"
+    }
+  },
+  "$defs": {
+    "term": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "type": "string" },
+            "id": { "type": "string" },
+            "value": {},
+            "language": { "type": "string" },
+            "ref": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "title": { "type": "string" },
+        "type": { "type": "string" }
+      }
+    },
+    "clause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate", "roles"],
+      "properties": {
+        "predicate": { "type": "string", "minLength": 1, "description": "Locked predicate name" },
+        "roles": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/term" },
+          "description": "Role-bound terms — role names are locked"
+        },
+        "negated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Logical negation flag"
+        },
+        "modality": {
+          "type": ["string", "null"],
+          "enum": ["certainty", "possibility", "necessity", "obligation", null],
+          "description": "Modality type — locked enum for 0.2"
+        },
+        "time": {
+          "oneOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "object" }
+          ],
+          "description": "Time reference — ISO 8601 or typed structure"
+        },
+        "conditions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/clause" },
+          "description": "Preconditions for this clause"
+        },
+        "consequences": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/clause" },
+          "description": "Logical consequences of this clause"
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "evidence": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
