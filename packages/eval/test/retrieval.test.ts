@@ -320,7 +320,7 @@ test('retrieval runner computes aggregate MRR', async () => {
   await runRetrievalExperiment(manifest, WORKSPACE_ROOT, output);
 
   // Check that the output file contains MRR
-  const resultsPath = path.join('reports', 'experiments', 'test-retrieval-mrr', 'output', 'retrieval-results.json');
+  const resultsPath = path.join(output, 'retrieval-results.json');
   const resultsContent = JSON.parse(await readFile(resultsPath, 'utf8'));
   
   assert.ok(resultsContent.aggregateMetrics, 'Should have aggregateMetrics');
