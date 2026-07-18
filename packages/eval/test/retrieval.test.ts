@@ -155,6 +155,64 @@ test('retrieval runner rejects duplicate IDs in candidates', async () => {
   }
 });
 
+test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
+  const temp = await import('node:os').then(os => os.tmpdir());
+  const testDir = path.join(temp, 'retrieval-dup-expected-test');
+  const fixturesDir = path.join(testDir, 'fixtures');
+  await mkdir(fixturesDir, { recursive: true });
+  await writeFile(path.join(fixturesDir, 'dup-expected.json'), JSON.stringify({
+    queryId: 'dup-expected',
+    query: 'Test',
+    candidates: ['a', 'b', 'c'],
+    expectedRelevant: ['a', 'a'], // duplicate 'a'
+    rankedResults: ['a', 'b', 'c'],
+    mode: 'exact'
+  }, null, 2));
+
+  try {
+    const manifest: RetrievalManifest = {
+      schema: 'openlunum-experiment/0.1',
+      id: 'test-retrieval-dup-expected',
+      area: 'retrieval',
+      task: 'retrieval',
+      deterministic: true,
+      hypothesis: 'Verify duplicate expected detection',
+      baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+      limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+      gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+      outputDirectory: testDir,
+      retrievalConfig: { k: 3, mode: 'exact' }
+    };
+
+    // Temporarily swap the fixture dir by creating our fixtures in the standard location
+    // For now, just verify the code path exists
+    const stdFixturesDir = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+    // We'll test via the standard fixtures dir by adding a test fixture
+    // Actually, let's just verify the runner throws for duplicate expected
+    // by creating a fixture in the standard location
+    const dupFixturePath = path.join(stdFixturesDir, 'test-dup-expected.json');
+    await writeFile(dupFixturePath, JSON.stringify({
+      queryId: 'test-dup-expected',
+      query: 'Test duplicate expected',
+      candidates: ['a', 'b', 'c'],
+      expectedRelevant: ['a', 'a'],
+      rankedResults: ['a', 'b', 'c'],
+      mode: 'exact'
+    }, null, 2));
+
+    try {
+      await assert.rejects(
+        runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir),
+        { message: /duplicate IDs in expectedRelevant/ }
+      );
+    } finally {
+      await rm(dupFixturePath, { force: true });
+    }
+  } finally {
+    await rm(testDir, { recursive: true, force: true });
+  }
+});
+
 test('retrieval runner respects limits.maxItems', async () => {
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',

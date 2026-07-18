@@ -1,24 +1,24 @@
 {
   "results": [
     {
-      "id": "sample-query-1",
+      "id": "false-equivalence-query",
       "status": "passed",
-      "rawOutput": "{\"query\":\"What is the capital of France?\",\"topK\":[\"paris\",\"london\",\"berlin\"],\"expected\":[\"paris\"]}",
-      "queryId": "sample-query-1",
+      "rawOutput": "{\"query\":\"What language is spoken in Paris?\",\"topK\":[\"french\",\"english\",\"spanish\"],\"expected\":[\"french\"]}",
+      "queryId": "false-equivalence-query",
       "candidateIds": [
-        "paris",
-        "london",
-        "berlin",
-        "madrid",
-        "rome"
+        "french",
+        "english",
+        "spanish",
+        "german",
+        "italian"
       ],
       "expectedRelevantIds": [
-        "paris"
+        "french"
       ],
       "rankedResultIds": [
-        "paris",
-        "london",
-        "berlin"
+        "french",
+        "english",
+        "spanish"
       ],
       "mode": "exact",
       "exact": true,
@@ -29,11 +29,11 @@
       "reciprocalRank": 1,
       "meanReciprocalRank": 1,
       "falsePositives": [
-        "london",
-        "berlin"
+        "english",
+        "spanish"
       ],
       "falseNegatives": [],
-      "hasFalseEquivalence": false,
+      "hasFalseEquivalence": true,
       "isNearSemantic": false,
       "latencyMs": 0
     }
