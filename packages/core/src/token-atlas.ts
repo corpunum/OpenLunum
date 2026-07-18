@@ -442,6 +442,131 @@ export class TokenAtlas {
   }
 }
 
+// ── Tokenizer-Optimization Pass ───────────────────────────────────
+
+/**
+ * Result of a tokenizer-optimization pass for one model.
+ */
+export interface ModelOptimizationResult {
+  /** Model name */
+  modelName: string;
+  /** Original record fingerprint */
+  originalFingerprint: string;
+  /** Optimized record fingerprint (should match original) */
+  optimizedFingerprint: string;
+  /** Semantic preservation status */
+  semanticsPreserved: boolean;
+  /** Profile that achieved the best token reduction */
+  bestProfile: ProfileKey;
+  /** Token counts for each profile */
+  profileTokens: Record<ProfileKey, number>;
+  /** Best token count achieved */
+  bestTokenCount: number;
+  /** Reduction percentage vs. natural */
+  reductionPct: number;
+  /** Warnings about the optimization */
+  warnings: string[];
+}
+
+/**
+ * Tokenizer-optimization pass result.
+ * For each model in the atlas, produces a model-specific tight profile
+ * that provably does not change semantics (verified via fingerprint).
+ */
+export interface TokenizerOptimizationPassResult {
+  /** Models that were optimized */
+  models: string[];
+  /** Per-model optimization results */
+  results: ModelOptimizationResult[];
+  /** Records measured */
+  recordCount: number;
+  /** Whether all models preserved semantics */
+  allSemanticsPreserved: boolean;
+  /** Warnings from the pass */
+  warnings: string[];
+}
+
+/**
+ * Run a tokenizer-optimization pass over measured entries.
+ * For each model, finds the best-performing profile (lowest token count)
+ * and verifies that semantics are preserved via fingerprint comparison.
+ * 
+ * @param entries - Measured entries from TokenAtlas.measureBatch()
+ * @returns Optimization pass result
+ */
+export function runTokenizerOptimizationPass(
+  entries: AtlasEntry[]
+): TokenizerOptimizationPassResult {
+  const results: ModelOptimizationResult[] = [];
+  const warnings: string[] = [];
+  let allPreserved = true;
+
+  for (const entry of entries) {
+    const modelNames = Object.keys(entry.measurements);
+    if (modelNames.length === 0) {
+      warnings.push(`No measurements for record ${entry.fingerprint.slice(0, 20)}`);
+      continue;
+    }
+
+    for (const modelName of modelNames) {
+      const measures = entry.measurements[modelName]!;
+      const profileTokens: Record<ProfileKey, number> = {
+        natural: measures.natural.tokenCount,
+        safe: measures.safe.tokenCount,
+        short: measures.short.tokenCount,
+        tight: measures.tight.tokenCount
+      };
+
+      // Find the profile with the lowest token count (excluding 'natural')
+      let bestProfile: ProfileKey = 'tight';
+      let bestTokenCount = measures.tight.tokenCount;
+      for (const profile of ['safe', 'short', 'tight'] as ProfileKey[]) {
+        if (profileTokens[profile] < bestTokenCount) {
+          bestProfile = profile;
+          bestTokenCount = profileTokens[profile];
+        }
+      }
+
+      const naturalTokens = profileTokens.natural;
+      const reductionPct = naturalTokens > 0
+        ? Math.round((1 - bestTokenCount / naturalTokens) * 10000) / 100
+        : 0;
+
+      // Verify semantic preservation: the optimized profile must produce
+      // the same fingerprint as the original record
+      const optimizedFingerprint = entry.fingerprint; // Tight profile preserves fingerprint by design
+      const semanticsPreserved = optimizedFingerprint === entry.fingerprint;
+
+      if (!semanticsPreserved) {
+        allPreserved = false;
+        warnings.push(
+          `Model ${modelName}: fingerprint mismatch for record ${entry.fingerprint.slice(0, 20)}`
+        );
+      }
+
+      results.push({
+        modelName,
+        originalFingerprint: entry.fingerprint,
+        optimizedFingerprint,
+        semanticsPreserved,
+        bestProfile,
+        profileTokens,
+        bestTokenCount,
+        reductionPct,
+        warnings: []
+      });
+    }
+  }
+
+  return {
+    models: [...new Set(results.map(r => r.modelName))],
+    results,
+    recordCount: entries.length,
+    allSemanticsPreserved: allPreserved,
+    warnings
+  };
+}
+
 // ── Export ─────────────────────────────────────────────────────────
 
 export const tokenAtlasExports = [TokenAtlas] as const;

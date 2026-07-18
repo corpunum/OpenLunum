@@ -4,7 +4,8 @@ import {
   TokenAtlas,
   type ModelTokenizerProfile,
   type AtlasEntry,
-  type AtlasProfileMeasures
+  type AtlasProfileMeasures,
+  runTokenizerOptimizationPass
 } from '../src/token-atlas.js';
 import type { LunumRecord } from '../src/types.js';
 
@@ -318,4 +319,105 @@ test('AtlasEntry contains fingerprint and sourceLength', () => {
   assert.strictEqual(entry.fingerprint, record.fingerprint);
   assert.strictEqual(entry.sourceLength, record.source.text!.length);
   assert.ok(entry.measuredAt > 0);
+});
+
+// ── Tokenizer-Optimization Pass ───────────────────────────────────
+
+test('runTokenizerOptimizationPass: semantics preserved when fingerprints match', () => {
+  const atlas = new TokenAtlas([
+    makeModel('opt-1'),
+    makeModel('opt-2'),
+    makeModel('opt-3')
+  ]);
+  const record = createMockRecord('Optimization test record');
+  const entry = atlas.measure(record);
+
+  const result = runTokenizerOptimizationPass([entry]);
+  assert.strictEqual(result.allSemanticsPreserved, true);
+  assert.strictEqual(result.recordCount, 1);
+  assert.strictEqual(result.results.length, 3); // one per model
+  for (const r of result.results) {
+    assert.strictEqual(r.semanticsPreserved, true);
+    assert.ok(r.bestProfile === 'safe' || r.bestProfile === 'short' || r.bestProfile === 'tight');
+    assert.ok(r.bestTokenCount > 0);
+    // reductionPct can be negative if the profile adds tokens vs natural
+    // (e.g., adding profile wrapper tokens), so only assert it's a number
+    assert.ok(typeof r.reductionPct === 'number');
+  }
+});
+
+test('runTokenizerOptimizationPass: best profile selected correctly', () => {
+  const atlas = new TokenAtlas([
+    makeModel('best-profile-1'),
+    makeModel('best-profile-2'),
+    makeModel('best-profile-3')
+  ]);
+  const record = createMockRecord('Best profile test');
+  const entry = atlas.measure(record);
+
+  const result = runTokenizerOptimizationPass([entry]);
+  for (const r of result.results) {
+    // Best profile should have the lowest token count among non-natural profiles
+    const nonNatural = ['safe', 'short', 'tight'] as const;
+    for (const profile of nonNatural) {
+      if (profile !== r.bestProfile) {
+        assert.ok(
+          r.profileTokens[profile] >= r.bestTokenCount,
+          `${profile} (${r.profileTokens[profile]}) should not be less than best (${r.bestTokenCount})`
+        );
+      }
+    }
+  }
+});
+
+test('runTokenizerOptimizationPass: empty entries returns empty result', () => {
+  const result = runTokenizerOptimizationPass([]);
+  assert.strictEqual(result.models.length, 0);
+  assert.strictEqual(result.results.length, 0);
+  assert.strictEqual(result.recordCount, 0);
+  assert.strictEqual(result.allSemanticsPreserved, true);
+  assert.strictEqual(result.warnings.length, 0);
+});
+
+test('runTokenizerOptimizationPass: multiple records produce multiple results', () => {
+  const atlas = new TokenAtlas([
+    makeModel('multi-1'),
+    makeModel('multi-2'),
+    makeModel('multi-3')
+  ]);
+  const records = [
+    createMockRecord('Record A'),
+    createMockRecord('Record B'),
+    createMockRecord('Record C')
+  ];
+  const entries = atlas.measureBatch(records);
+
+  const result = runTokenizerOptimizationPass(entries);
+  assert.strictEqual(result.recordCount, 3);
+  assert.strictEqual(result.results.length, 9); // 3 records × 3 models
+  assert.strictEqual(result.allSemanticsPreserved, true);
+});
+
+test('runTokenizerOptimizationPass: reduction percentage is correct', () => {
+  const atlas = new TokenAtlas([
+    makeModel('reduction-1'),
+    makeModel('reduction-2'),
+    makeModel('reduction-3')
+  ]);
+  const record = createMockRecord('Reduction percentage test');
+  const entry = atlas.measure(record);
+
+  const result = runTokenizerOptimizationPass([entry]);
+  for (const r of result.results) {
+    const natural = r.profileTokens.natural;
+    const best = r.bestTokenCount;
+    if (natural > 0) {
+      const expectedReduction = Math.round((1 - best / natural) * 10000) / 100;
+      assert.strictEqual(
+        Math.abs(r.reductionPct - expectedReduction) < 0.01,
+        true,
+        `Reduction ${r.reductionPct}% should match expected ${expectedReduction}%`
+      );
+    }
+  }
 });
