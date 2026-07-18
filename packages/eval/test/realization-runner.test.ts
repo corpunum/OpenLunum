@@ -1,11 +1,30 @@
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert';
+import path from 'node:path';
+import { readFile, rm } from 'node:fs/promises';
+import os from 'node:os';
 import { runRealizationExperiment, type RealizationReport } from '../src/realization-runner.js';
 import type { ExperimentManifest, ExperimentItem } from '../src/types.js';
 
+// Track temp dirs for cleanup
+const tempDirs = new Set<string>();
+
+function createTempDir(): string {
+  const dir = path.join(os.tmpdir(), `openlunum-realization-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  tempDirs.add(dir);
+  return dir;
+}
+
+after(async () => {
+  for (const dir of tempDirs) {
+    try { await rm(dir, { recursive: true, force: true }); } catch { /* ignore */ }
+  }
+  tempDirs.clear();
+});
+
 // ── Helpers ────────────────────────────────────────────────────────
 
-function createManifest(id = 'test-realization'): ExperimentManifest {
+function createManifest(id = 'test-realization', outputDir?: string): ExperimentManifest {
   return {
     schema: 'openlunum-experiment/0.1',
     id,
@@ -15,7 +34,7 @@ function createManifest(id = 'test-realization'): ExperimentManifest {
     baselineCommit: 'abc123',
     limits: { maxItems: 5, maxAttemptsPerItem: 1, maxModelCalls: 100 },
     gates: { minimumFeatureRecall: 0.8, minimumExactRate: 0.5, requireProtectedLiteralCoverage: true },
-    outputDirectory: 'reports/realization-test'
+    outputDirectory: outputDir ?? createTempDir()
   };
 }
 
