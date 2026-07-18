@@ -1,0 +1,9 @@
+{
+  "queryId": "false-equivalence-query",
+  "query": "What language is spoken in Paris?",
+  "candidates": ["french", "english", "spanish", "german", "italian"],
+  "expectedRelevant": ["french"],
+  "rankedResults": ["french", "english", "spanish"],
+  "mode": "exact",
+  "falseEquivalenceIds": ["french", "france"]
+}

@@ -175,6 +175,50 @@ test('retrieval runner respects limits.maxItems', async () => {
   assert.ok(results.length <= 1, 'Should respect limits.maxItems=1');
 });
 
+test('retrieval runner detects near-semantic mode', async () => {
+  const manifest: RetrievalManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-retrieval-near-semantic',
+    area: 'retrieval',
+    task: 'retrieval',
+    deterministic: true,
+    hypothesis: 'Verify near-semantic mode is detected',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/test-retrieval-near-semantic',
+    retrievalConfig: { k: 3, mode: 'near-semantic' }
+  };
+
+  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-near-semantic/output');
+
+  const nearSemanticResult = results.find(r => r.isNearSemantic);
+  assert.ok(nearSemanticResult, 'Should detect near-semantic mode');
+  assert.strictEqual(nearSemanticResult!.mode, 'near-semantic');
+});
+
+test('retrieval runner detects false equivalence', async () => {
+  const manifest: RetrievalManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-retrieval-false-eq',
+    area: 'retrieval',
+    task: 'retrieval',
+    deterministic: true,
+    hypothesis: 'Verify false equivalence detection',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/test-retrieval-false-eq',
+    retrievalConfig: { k: 3, mode: 'exact' }
+  };
+
+  const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-retrieval-false-eq/output');
+
+  const result = results[0];
+  assert.ok(result, 'Should have a result');
+  assert.ok(result.hasFalseEquivalence, 'Should detect false equivalence in top-k');
+});
+
 test('retrieval runner computes aggregate MRR', async () => {
   const manifest: RetrievalManifest = {
     schema: 'openlunum-experiment/0.1',
