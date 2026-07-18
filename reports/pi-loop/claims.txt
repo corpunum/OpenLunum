@@ -13,7 +13,6 @@
 - agent/docs/sync-1c04461b
 - agent/docs/sync-1e4a99dc
 - agent/docs/sync-287da81c
-- agent/docs/sync-2a3e543f
 - agent/docs/sync-339570d4
 - agent/docs/sync-35b43914
 - agent/docs/sync-3bde3733
@@ -142,8 +141,6 @@
 - agent/qwen/safety/prompt-injection-resistance-rebased
 - agent/qwen/safety/quality-gate-ci
 - agent/qwen/safety/quality-gate-ci-2
-- agent/qwen/safety/rollback-process
-- agent/qwen/safety/threat-model-mitigations
 - agent/qwen/schema/bidirectional-fp-migration
 - agent/qwen/schema-changelog
 - agent/qwen/schema-freeze-0.2
