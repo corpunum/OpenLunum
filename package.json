@@ -15,6 +15,7 @@
     "test": "pnpm build && pnpm -r --sort test:unit",
     "eval:smoke": "pnpm --filter @corpunum/lunum-eval eval:smoke",
     "verify": "pnpm typecheck && pnpm test && pnpm eval:smoke",
+    "verify:strict": "pnpm build && pnpm -r --sort typecheck && pnpm -r --sort test:unit && pnpm eval:smoke && pnpm --filter @corpunum/lunum-eval verify:strict",
     "agent:status": "pnpm --filter @corpunum/lunum-eval agent:status",
     "model:doctor": "pnpm --filter @corpunum/lunum-eval model:doctor",
     "experiment:create": "pnpm --filter @corpunum/lunum-eval experiment:create",

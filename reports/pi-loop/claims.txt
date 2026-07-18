@@ -90,6 +90,8 @@
 - agent/qwen/eval/schema-field-mismatch
 - agent/qwen/eval/tests-temp-dirs
 - agent/qwen/eval/tests-temp-dirs-2
+- agent/qwen/hardening/api-stability-tests
+- agent/qwen/hardening/error-observability-integration
 - agent/qwen/infra/pr9-stack-reconcile
 - agent/qwen/issue-11/artifact-validation
 - agent/qwen/issue-11-completion
