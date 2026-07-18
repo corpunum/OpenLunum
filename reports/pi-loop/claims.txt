@@ -102,6 +102,7 @@
 - agent/qwen/hardening/error-observability-integration-rebased
 - agent/qwen/hardening/verify-strict-mode
 - agent/qwen/infra/pr9-stack-reconcile
+- agent/qwen/issue-11/aggregate-mrr
 - agent/qwen/issue-11/artifact-validation
 - agent/qwen/issue-11-completion
 - agent/qwen/issue-11/duplicate-candidate-retrieval
@@ -139,6 +140,7 @@
 - agent/qwen/safety/prompt-injection-resistance-rebased
 - agent/qwen/safety/quality-gate-ci
 - agent/qwen/safety/quality-gate-ci-2
+- agent/qwen/schema/bidirectional-fp-migration
 - agent/qwen/schema-changelog
 - agent/qwen/schema-freeze-0.2
 - agent/qwen/schema-frozen-0.2
