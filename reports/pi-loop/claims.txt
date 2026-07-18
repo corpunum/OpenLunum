@@ -9,11 +9,13 @@
 - agent/corpunum/semantic-contract/expand-typed-structures
 - agent/docs/sync-18a9c9c1
 - agent/docs/sync-1c04461b
+- agent/docs/sync-1e4a99dc
 - agent/docs/sync-287da81c
 - agent/docs/sync-35b43914
 - agent/docs/sync-3bde3733
 - agent/docs/sync-48f23688
 - agent/docs/sync-4c44df1c
+- agent/docs/sync-5428177e
 - agent/docs/sync-652d5da7
 - agent/docs/sync-66fdc244
 - agent/docs/sync-6ba1cb94
@@ -75,6 +77,8 @@
 - agent/qwen/eval/tests-temp-dirs
 - agent/qwen/eval/tests-temp-dirs-2
 - agent/qwen/infra/pr9-stack-reconcile
+- agent/qwen/issue-11-completion
+- agent/qwen/migration-bidirectional
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline-en
 - agent/qwen/phase6-1/retrieval-integration-fix
@@ -88,6 +92,7 @@
 - agent/qwen/renderer/token-atlas
 - agent/qwen/repository-reliability/pr8-contract-evidence
 - agent/qwen/repository-reliability/release-provenance
+- agent/qwen/schema-frozen-0.2
 - agent/qwen/semantic-contract/conformance-gates
 - agent/qwen/semantic-contract/expand-typed-structures
 - agent/qwen/semantic-contract/expand-typed-structures-v2
