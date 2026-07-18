@@ -1,34 +1,42 @@
-import { appendFile, mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { findWorkspaceRoot, loadDataset, readJson, validateManifest, writeJson } from './io.js';
+import { readJson, writeJson } from './io.js';
 import type { ExperimentManifest, ItemResult } from './types.js';
-
-// Type definitions for integration-specific data
-export interface IntegrationItem {
-  id: string;
-  integrationId: string;
-  fixtureId: string;
-  environmentRequirements: Record<string, unknown>;
-}
 
 export interface IntegrationManifest extends ExperimentManifest {
   task: 'integration';
-  // Task-specific configuration
   integrationConfig?: {
-    selectedIntegration: string;
+    integrationId: string;
     fixtureId: string;
   };
 }
 
-// Static integration registry
+export interface IntegrationItemResult extends ItemResult {
+  integrationId: string;
+  integrationVersion: string;
+  entrypointType: 'in-process' | 'executable';
+  fixtureId: string;
+  resultStatus: 'success' | 'failed' | 'error';
+  artifacts: Record<string, unknown>;
+  schemaValid: boolean;
+  requiredArtifactsPresent: boolean;
+}
+
+// Static repository-owned integration registry
+// Selection is by static integration ID, not manifest-provided registry
 const INTEGRATION_REGISTRY: Record<string, {
   version: string;
   entrypoint: 'in-process' | 'executable';
-  allowedEnvironment?: Record<string, unknown>;
+  allowedEnvironment: Record<string, unknown>;
   schema: Record<string, unknown>;
   artifacts: string[];
-}> = {
-  'test-registry': {
+  adapter: (fixture: Record<string, unknown>) => Promise<{ status: 'success' | 'failed'; data?: Record<string, unknown>; message: string }>;
+}> = {};
+
+// Register test integrations from fixtures
+function registerTestIntegrations(root: string): void {
+  // test-registry adapter
+  INTEGRATION_REGISTRY['test-registry'] = {
     version: '1.0.0',
     entrypoint: 'in-process',
     allowedEnvironment: {},
@@ -36,158 +44,142 @@ const INTEGRATION_REGISTRY: Record<string, {
       type: 'object',
       properties: {
         status: { type: 'string' },
-        message: { type: 'string' }
+        message: { type: 'string' },
+        data: { type: 'object' }
       },
-      required: ['status']
+      required: ['status', 'message']
     },
-    artifacts: ['output.json', 'log.txt']
-  }
-};
-
-// In-process adapter functions for integration
-const INTEGRATION_ADAPTERS: Record<string, (fixture: any) => Promise<any>> = {
-  'test-registry': async (fixture) => {
-    // Simulate integration logic
-    if (!fixture) {
-      throw new Error('No fixture provided');
+    artifacts: ['output.json', 'log.txt'],
+    adapter: async (fixture) => {
+      // Validate fixture has required fields
+      if (!fixture.fixtureId) {
+        return { status: 'failed', message: 'Fixture missing fixtureId' };
+      }
+      // Simulate in-process integration
+      return {
+        status: 'success',
+        data: { processed: true, input: fixture.input ?? null },
+        message: `Integration ${fixture.fixtureId} completed`
+      };
     }
-    
-    // Validate fixture schema
-    if (!fixture.fixtureId) {
-      throw new Error('Fixture missing required field: fixtureId');
-    }
-    
-    // Simulate execution
-    await new Promise(resolve => setTimeout(resolve, 10)); // Simulate async work
-    
-    return {
-      status: 'success',
-      message: 'Integration completed successfully',
-      data: 'some result'
-    };
-  }
-};
+  };
+}
 
-export async function runIntegrationExperiment(manifest: IntegrationManifest, root: string, outputDir: string): Promise<ItemResult[]> {
-  // Validate manifest
+function validateAgainstSchema(data: Record<string, unknown>, schema: Record<string, unknown>): boolean {
+  if (!schema.properties) return true;
+  const required: string[] = Array.isArray(schema.required) ? schema.required : [];
+  for (const field of required) {
+    if (!(field in data)) return false;
+  }
+  return true;
+}
+
+export async function runIntegrationExperiment(
+  manifest: IntegrationManifest,
+  root: string,
+  outputDir: string
+): Promise<IntegrationItemResult[]> {
+  // Register integrations from fixtures
+  registerTestIntegrations(root);
+
   if (!manifest.integrationConfig) {
     throw new Error('Missing integrationConfig in manifest');
   }
-  
-  const selectedIntegration = manifest.integrationConfig.selectedIntegration;
-  const fixtureId = manifest.integrationConfig.fixtureId;
-  
-  // Validate integration ID is in registry
-  if (!INTEGRATION_REGISTRY[selectedIntegration]) {
+
+  const { integrationId, fixtureId } = manifest.integrationConfig;
+
+  // Check integration is in static allowlist
+  const registry = INTEGRATION_REGISTRY[integrationId];
+  if (!registry) {
     return [{
       id: fixtureId,
       status: 'error',
-      rawOutput: `Unknown integration ID: ${selectedIntegration}`,
-      integrationId: selectedIntegration,
+      rawOutput: `Unknown integration ID: ${integrationId}`,
+      integrationId,
+      integrationVersion: '',
+      entrypointType: 'in-process',
       fixtureId,
-      error: `Unknown integration ID: ${selectedIntegration}`,
-      latencyMs: 10
+      resultStatus: 'error',
+      artifacts: {},
+      schemaValid: false,
+      requiredArtifactsPresent: false,
+      error: `Unknown integration ID: ${integrationId}`,
+      latencyMs: 0
     }];
   }
-  
-  const integration = INTEGRATION_REGISTRY[selectedIntegration];
-  
+
   // Load fixture
-  const fixturePath = `test-fixtures/integration/fixtures/${fixtureId}.json`;
-  let fixtureData: any;
+  const fixturePath = path.join(root, 'packages/eval/test-fixtures/integration/fixtures', `${fixtureId}.json`);
+  let fixture: Record<string, unknown>;
   try {
-    fixtureData = await readJson(fixturePath);
-  } catch (error: any) {
+    fixture = await readJson(fixturePath);
+  } catch {
     return [{
       id: fixtureId,
       status: 'error',
-      rawOutput: `Failed to load fixture ${fixtureId}: ${error.message}`,
-      integrationId: selectedIntegration,
+      rawOutput: `Fixture not found: ${fixturePath}`,
+      integrationId,
+      integrationVersion: registry.version,
+      entrypointType: registry.entrypoint,
       fixtureId,
-      error: `Failed to load fixture ${fixtureId}: ${error.message}`,
-      latencyMs: 10
+      resultStatus: 'error',
+      artifacts: {},
+      schemaValid: false,
+      requiredArtifactsPresent: false,
+      error: `Fixture not found: ${fixtureId}`,
+      latencyMs: 0
     }];
   }
-  
-  // Validate fixture schema against registry
+
+  // Execute adapter
+  let adapterResult: Awaited<ReturnType<typeof registry.adapter>>;
+  let error: string | undefined;
   try {
-    // For now, we'll just do a basic validation
-    if (!fixtureData.fixtureId) {
-      throw new Error('Fixture missing required field: fixtureId');
-    }
-  } catch (error: any) {
-    return [{
-      id: fixtureId,
-      status: 'error',
-      rawOutput: `Invalid fixture schema: ${error.message}`,
-      integrationId: selectedIntegration,
-      fixtureId,
-      error: `Invalid fixture schema: ${error.message}`,
-      latencyMs: 10
-    }];
+    adapterResult = await registry.adapter(fixture as Record<string, unknown>);
+  } catch (e: unknown) {
+    error = e instanceof Error ? e.message : String(e);
+    adapterResult = { status: 'failed', message: error };
   }
-  
-  // Execute integration
-  let resultStatus: 'success' | 'failed' | 'error' = 'failed';
-  let artifacts: Record<string, unknown> = {};
-  let rawOutput = '';
-  let error: string | undefined = undefined;
-  
-  try {
-    // Check if we have an adapter for this integration
-    if (INTEGRATION_ADAPTERS[selectedIntegration]) {
-      // Simulate execution with timeout
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout')), 1000)
-      );
-      
-      const executionPromise = INTEGRATION_ADAPTERS[selectedIntegration](fixtureData);
-      const result = await Promise.race([executionPromise, timeoutPromise]);
-      
-      resultStatus = 'success';
-      artifacts = {
-        'output.json': { status: 'success', data: result.data },
-        'log.txt': { level: 'info', message: 'Integration completed successfully' }
-      };
-      rawOutput = `Integration ${selectedIntegration} executed with status: ${resultStatus}`;
-    } else {
-      // Simulate default behavior for unimplemented integrations
-      resultStatus = 'success';
-      artifacts = {
-        'output.json': { status: 'success', data: 'default result' },
-        'log.txt': { level: 'info', message: 'Default integration completed' }
-      };
-      rawOutput = `Integration ${selectedIntegration} executed with status: ${resultStatus}`;
-    }
-  } catch (executionError: any) {
-    resultStatus = 'error';
-    error = executionError.message;
-    rawOutput = `Integration ${selectedIntegration} failed with error: ${error}`;
-  }
-  
-  // Validate result against schema
-  let passed = false;
-  if (resultStatus === 'success') {
-    // In a real implementation, we would validate the result against the schema
-    // For now, we'll just consider it successful if we got here
-    passed = true;
-  }
-  
-  const results: ItemResult[] = [{
+
+  // Build artifacts
+  const artifacts: Record<string, unknown> = {};
+  artifacts['output.json'] = adapterResult;
+  artifacts['log.txt'] = { level: 'info', message: adapterResult.message };
+
+  // Validate result against schema - check the full adapter result, not just data
+  const schemaValid = validateAgainstSchema(
+    { status: adapterResult.status, message: adapterResult.message, ...(adapterResult.data ?? {}) },
+    registry.schema
+  );
+
+  // Check required artifacts present
+  const requiredArtifactsPresent = registry.artifacts.every(a => a in artifacts);
+
+  const passed = adapterResult.status === 'success' && schemaValid && requiredArtifactsPresent;
+
+  const result: IntegrationItemResult = {
     id: fixtureId,
     status: passed ? 'passed' : 'failed',
-    rawOutput,
-    integrationId: selectedIntegration,
-    integrationVersion: integration.version,
-    entrypointType: integration.entrypoint,
+    rawOutput: JSON.stringify(adapterResult, null, 2),
+    integrationId,
+    integrationVersion: registry.version,
+    entrypointType: registry.entrypoint,
     fixtureId,
-    environmentRequirements: integration.allowedEnvironment || {},
-    resultStatus,
+    resultStatus: adapterResult.status,
     artifacts,
+    schemaValid,
+    requiredArtifactsPresent,
     exact: passed,
-    latencyMs: 100,
-    error: error || undefined
-  }];
-  
-  return results;
+    latencyMs: 0,
+    error
+  };
+
+  // Write results
+  if (outputDir) {
+    await mkdir(outputDir, { recursive: true });
+    const resultsPath = path.join(outputDir, 'integration-results.json');
+    await writeJson(resultsPath, [result]);
+  }
+
+  return [result];
 }

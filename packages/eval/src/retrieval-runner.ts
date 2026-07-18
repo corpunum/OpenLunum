@@ -1,146 +1,162 @@
-import { appendFile, mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { findWorkspaceRoot, loadDataset, readJson, validateManifest, writeJson } from './io.js';
+import { findWorkspaceRoot, readJson, writeJson } from './io.js';
 import type { ExperimentManifest, ItemResult } from './types.js';
 
-// Type definitions for retrieval-specific data
-export interface RetrievalItem {
-  id: string;
+export interface RetrievalFixture {
+  queryId: string;
   query: string;
-  expectedRelevant: string[]; // IDs of expected relevant items
-  candidates: string[]; // IDs of all candidate items (ranked)
-  mode: 'exact' | 'near-semantic'; // Mode of retrieval
+  candidates: string[];
+  expectedRelevant: string[];
+  rankedResults: string[];
+  mode: 'exact' | 'near-semantic';
+  falseEquivalenceIds?: string[];
 }
 
 export interface RetrievalManifest extends ExperimentManifest {
   task: 'retrieval';
-  // Task-specific configuration
   retrievalConfig?: {
-    k?: number; // Top-k results to evaluate
+    k?: number;
     mode?: 'exact' | 'near-semantic';
   };
 }
 
-export async function runRetrievalExperiment(manifest: RetrievalManifest, root: string, outputDir: string): Promise<ItemResult[]> {
-  // Validate manifest
+export interface RetrievalItemResult extends ItemResult {
+  queryId: string;
+  candidateIds: string[];
+  expectedRelevantIds: string[];
+  rankedResultIds: string[];
+  mode: 'exact' | 'near-semantic';
+  precisionAtK: number;
+  recallAtK: number;
+  reciprocalRank: number;
+  meanReciprocalRank: number;
+  falsePositives: string[];
+  falseNegatives: string[];
+  hasFalseEquivalence: boolean;
+  isNearSemantic: boolean;
+}
+
+function precisionAtK(results: string[], expected: string[]): number {
+  if (results.length === 0) return 0;
+  const relevant = results.filter(id => expected.includes(id)).length;
+  return relevant / results.length;
+}
+
+function recallAtK(results: string[], expected: string[]): number {
+  if (expected.length === 0) return 1;
+  const relevant = results.filter(id => expected.includes(id)).length;
+  return relevant / expected.length;
+}
+
+function reciprocalRank(results: string[], expected: string[]): number {
+  const idx = results.findIndex(id => expected.includes(id));
+  if (idx === -1) return 0;
+  return 1 / (idx + 1);
+}
+
+export async function runRetrievalExperiment(
+  manifest: RetrievalManifest,
+  root: string,
+  outputDir: string
+): Promise<RetrievalItemResult[]> {
   if (!manifest.retrievalConfig) {
     throw new Error('Missing retrievalConfig in manifest');
   }
 
-  // Validate k at the manifest level
-  const k = manifest.retrievalConfig.k || 3;
+  const k = manifest.retrievalConfig.k ?? 3;
   if (k <= 0) {
     throw new Error(`Invalid k value: ${k}`);
   }
 
-  // Load fixtures
-  const fixturePath = 'test-fixtures/retrieval/fixtures';
-  const fixtureFiles = await (await import('node:fs/promises')).readdir(fixturePath);
-  
+  const fixtureDir = path.join(root, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+  const entries = await readdir(fixtureDir);
+  const fixtureFiles = entries.filter(f => f.endsWith('.json')).sort();
+
   if (fixtureFiles.length === 0) {
-    throw new Error('No retrieval fixtures found');
+    throw new Error('No retrieval fixtures found in ' + fixtureDir);
   }
-  
-  const results: ItemResult[] = [];
-  
-  // Process each fixture
-  for (const fixtureFile of fixtureFiles) {
-    if (!fixtureFile.endsWith('.json')) continue;
-    
-    const fixtureData: any = await readJson(path.join(fixturePath, fixtureFile));
-    
-    // Validate fixture data
-    if (!fixtureData.queryId || !fixtureData.query) {
-      throw new Error(`Invalid fixture file ${fixtureFile}: missing required fields`);
+
+  const results: RetrievalItemResult[] = [];
+
+  for (const file of fixtureFiles) {
+    const fixturePath = path.join(fixtureDir, file);
+    const fixture: RetrievalFixture = await readJson(fixturePath);
+
+    // Validate fixture structure
+    if (!fixture.queryId || !fixture.query) {
+      throw new Error(`Fixture ${file}: missing queryId or query`);
     }
-    
-    if (!Array.isArray(fixtureData.candidates) || fixtureData.candidates.length === 0) {
-      throw new Error(`Invalid fixture file ${fixtureFile}: candidates must be a non-empty array`);
+    if (!Array.isArray(fixture.candidates) || fixture.candidates.length === 0) {
+      throw new Error(`Fixture ${file}: candidates must be a non-empty array`);
     }
-    
-    if (!Array.isArray(fixtureData.expectedRelevant)) {
-      throw new Error(`Invalid fixture file ${fixtureFile}: expectedRelevant must be an array`);
+    if (!Array.isArray(fixture.expectedRelevant)) {
+      throw new Error(`Fixture ${file}: expectedRelevant must be an array`);
     }
-    
-    if (!Array.isArray(fixtureData.rankedResults)) {
-      throw new Error(`Invalid fixture file ${fixtureFile}: rankedResults must be an array`);
+    if (!Array.isArray(fixture.rankedResults)) {
+      throw new Error(`Fixture ${file}: rankedResults must be an array`);
     }
-    
-    // Validate that ranked results are a subset of candidates
-    const candidateSet = new Set(fixtureData.candidates);
-    const invalidCandidates = fixtureData.rankedResults.filter((id: string) => !candidateSet.has(id));
-    if (invalidCandidates.length > 0) {
-      throw new Error(`Invalid fixture file ${fixtureFile}: ranked results contain unknown candidates: ${invalidCandidates.join(', ')}`);
+
+    // Validate ranked results are subset of candidates
+    const candidateSet = new Set(fixture.candidates);
+    const unknownCandidates = fixture.rankedResults.filter(id => !candidateSet.has(id));
+    if (unknownCandidates.length > 0) {
+      throw new Error(`Fixture ${file}: ranked results contain unknown candidates: ${unknownCandidates.join(', ')}`);
     }
-    
-    // Validate that expected relevant items are in candidates
-    const invalidExpected = fixtureData.expectedRelevant.filter((id: string) => !candidateSet.has(id));
-    if (invalidExpected.length > 0) {
-      throw new Error(`Invalid fixture file ${fixtureFile}: expected relevant items not in candidates: ${invalidExpected.join(', ')}`);
+
+    // Validate expected relevant are in candidates
+    const unknownExpected = fixture.expectedRelevant.filter(id => !candidateSet.has(id));
+    if (unknownExpected.length > 0) {
+      throw new Error(`Fixture ${file}: expected relevant not in candidates: ${unknownExpected.join(', ')}`);
     }
-    
-    // Validate k
-    const k = manifest.retrievalConfig.k || 3;
-    if (k <= 0) {
-      throw new Error(`Invalid k value: ${k}. k must be positive`);
-    }
-    
-    // Validate that ranked results are not longer than k
-    if (fixtureData.rankedResults.length < k) {
-      // For now, we'll just use what we have, but in a real implementation this would be an issue
-    }
-    
-    // Calculate metrics
-    const actualResults = fixtureData.rankedResults.slice(0, k);
-    const precisionAtK = calculatePrecisionAtK(actualResults, fixtureData.expectedRelevant);
-    const recallAtK = calculateRecallAtK(actualResults, fixtureData.expectedRelevant);
-    const reciprocalRank = calculateReciprocalRank(actualResults, fixtureData.expectedRelevant);
-    
-    // Determine success based on gate requirements
-    // Note: in a real implementation, we'd check against actual gates, but for now we'll just use a basic check
-    const passed = precisionAtK > 0.5 && recallAtK > 0.5;
-    
-    const result: ItemResult = {
-      id: fixtureData.queryId,
+
+    // Slice to top-k
+    const topK = fixture.rankedResults.slice(0, k);
+
+    // Compute metrics
+    const prec = precisionAtK(topK, fixture.expectedRelevant);
+    const rec = recallAtK(topK, fixture.expectedRelevant);
+    const rr = reciprocalRank(topK, fixture.expectedRelevant);
+    const fps = topK.filter(id => !fixture.expectedRelevant.includes(id));
+    const fns = fixture.expectedRelevant.filter(id => !topK.includes(id));
+    const falseEqIds = fixture.falseEquivalenceIds ?? [];
+    const hasFalseEq = falseEqIds.some(id => topK.includes(id));
+
+    // Gate: both precision and recall must meet threshold (0.5 default)
+    const passed = prec >= 0.5 && rec >= 0.5;
+
+    const result: RetrievalItemResult = {
+      id: fixture.queryId,
       status: passed ? 'passed' : 'failed',
-      rawOutput: `Retrieved ${actualResults.length} results for query: ${fixtureData.query}`,
-      queryId: fixtureData.queryId,
-      candidateIds: fixtureData.candidates,
-      expectedRelevantIds: fixtureData.expectedRelevant,
-      rankedResultIds: actualResults,
-      mode: manifest.retrievalConfig.mode || 'exact',
+      rawOutput: JSON.stringify({ query: fixture.query, topK, expected: fixture.expectedRelevant }),
+      queryId: fixture.queryId,
+      candidateIds: fixture.candidates,
+      expectedRelevantIds: fixture.expectedRelevant,
+      rankedResultIds: topK,
+      mode: manifest.retrievalConfig.mode ?? fixture.mode,
       exact: passed,
-      featureRecall: recallAtK,
-      featurePrecision: precisionAtK,
-      reciprocalRank: reciprocalRank,
-      meanReciprocalRank: reciprocalRank,
-      falsePositives: actualResults.filter((id: string) => !fixtureData.expectedRelevant.includes(id)),
-      falseNegatives: fixtureData.expectedRelevant.filter((id: string) => !actualResults.includes(id)),
-      hasFalseEquivalence: fixtureData.falseEquivalenceIds?.some((id: string) => actualResults.includes(id)) || false,
-      isNearSemantic: fixtureData.mode === 'near-semantic',
-      latencyMs: 100
+      featurePrecision: prec,
+      featureRecall: rec,
+      precisionAtK: prec,
+      recallAtK: rec,
+      reciprocalRank: rr,
+      meanReciprocalRank: rr,
+      falsePositives: fps,
+      falseNegatives: fns,
+      hasFalseEquivalence: hasFalseEq,
+      isNearSemantic: (manifest.retrievalConfig.mode ?? fixture.mode) === 'near-semantic',
+      latencyMs: 0
     };
-    
+
     results.push(result);
   }
-  
+
+  // Write per-fixture results
+  if (outputDir) {
+    await mkdir(outputDir, { recursive: true });
+    const resultsPath = path.join(outputDir, 'retrieval-results.json');
+    await writeFile(resultsPath, JSON.stringify(results, null, 2));
+  }
+
   return results;
-}
-
-function calculatePrecisionAtK(results: string[], expected: string[]): number {
-  if (results.length === 0) return 0;
-  const relevantCount = results.filter(id => expected.includes(id)).length;
-  return relevantCount / results.length;
-}
-
-function calculateRecallAtK(results: string[], expected: string[]): number {
-  if (expected.length === 0) return 1;
-  const relevantCount = results.filter(id => expected.includes(id)).length;
-  return relevantCount / expected.length;
-}
-
-function calculateReciprocalRank(results: string[], expected: string[]): number {
-  const firstRelevantIndex = results.findIndex(id => expected.includes(id));
-  if (firstRelevantIndex === -1) return 0;
-  return 1 / (firstRelevantIndex + 1);
 }

@@ -48,7 +48,10 @@ export function validateManifest(value: ExperimentManifest): void {
     for (const key of ['modelProfile'] as const) if (!String(value[key] ?? '').trim()) throw new Error(`${key} is required`);
     if (!value.dataset?.path || !/^[a-f0-9]{64}$/u.test(value.dataset.sha256)) throw new Error('dataset path and SHA-256 are required');
   }
-  if (value.limits.maxModelCalls < 1 || value.limits.maxItems < 1 || value.limits.maxAttemptsPerItem < 1) throw new Error('experiment limits must be positive');
+  const isDeterministic = value.deterministic === true;
+  // For deterministic tasks, maxModelCalls can be 0 since no model calls are needed
+  if (!isDeterministic && value.limits.maxModelCalls < 1) throw new Error('experiment limits must be positive');
+  if (value.limits.maxItems < 1 || value.limits.maxAttemptsPerItem < 1) throw new Error('experiment limits must be positive');
 }
 
 export function validateProfile(value: ModelProfile): void {
