@@ -168,6 +168,8 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - **Downstream quality gates:** Task-success metrics and quality gates to verify downstream task quality preservation.
 - **Fingerprint migration utilities:** Code-level utilities for detecting versions, migrating records, and golden vectors.
 - **CI conformance gates:** Property tests wired into CI as hard gates for idempotence and fingerprint stability.
+- **API stability tests:** Snapshot-based tests verifying no public exports are removed and no breaking signature changes occur in `packages/core`.
+- **OpenUnum adapter e2e conformance:** End-to-end verification of OpenUnum compatibility adapter against real product runtime.
 
 ## Evidence snapshot
 
@@ -259,6 +261,7 @@ packages/cli/             Command line interface for inspection, encoding, compi
 packages/eval/            Local-model experiment runner, metrics, failure reports, and Token Atlas measurements.
 packages/mcp/            Prototype reference server and tooling for Model Context Profile (MCP) integration.
 packages/adapter-openunum/ OpenUnum compatibility adapter package.
+packages/core/test/       API stability test suite with golden snapshots.
 schemas/                  machine-readable contracts
 registry/                 worlds, roles, categories, predicates
 integrations/openunum/    verified-current-state reference and adoption plan
