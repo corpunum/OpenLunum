@@ -370,3 +370,89 @@ test('selectedIntegration field is consistent across all result paths', async ()
   assert.strictEqual(missingResults[0]!.selectedIntegration, 'test-registry',
     'selectedIntegration should be set on missing fixture');
 });
+
+test('artifact validation detects missing artifacts when adapter produces none', async () => {
+  // The test-no-output adapter produces NO artifact files
+  // The required artifacts are output.json and log.txt
+  // So requiredArtifactsPresent should be false and status should be 'failed'
+  const output = createTempDir();
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-artifact-missing',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify missing artifacts are detected when adapter produces none',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: output,
+    integrationConfig: { selectedIntegration: 'test-no-output', fixtureId: 'test-fixture-1' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
+
+  assert.ok(Array.isArray(results));
+  assert.ok(results.length === 1);
+  const result = results[0]!;
+  assert.strictEqual(result.resultStatus, 'success', 'Adapter should still return success');
+  assert.strictEqual(result.requiredArtifactsPresent, false, 'Required artifacts should be missing');
+  assert.strictEqual(result.status, 'failed', 'Overall status should be failed due to missing artifacts');
+  assert.strictEqual(Object.keys(result.artifacts).length, 0, 'No artifacts should be present');
+});
+
+test('artifact validation passes when adapter produces all required artifacts', async () => {
+  // The test-registry adapter produces output.json and log.txt
+  // Required artifacts are output.json and log.txt
+  // So requiredArtifactsPresent should be true
+  const output = createTempDir();
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-artifact-present',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify required artifacts are detected when adapter produces them',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: output,
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
+
+  assert.ok(Array.isArray(results));
+  assert.ok(results.length === 1);
+  const result = results[0]!;
+  assert.strictEqual(result.resultStatus, 'success');
+  assert.strictEqual(result.requiredArtifactsPresent, true, 'All required artifacts should be present');
+  assert.strictEqual(result.status, 'passed', 'Overall status should be passed');
+  assert.ok(result.artifacts['output.json'], 'Should have output.json artifact');
+  assert.ok(result.artifacts['log.txt'], 'Should have log.txt artifact');
+});
+
+test('artifact validation detects partial artifacts', async () => {
+  // test-no-output adapter produces [] artifacts but requires [output.json, log.txt]
+  // This verifies the runner correctly detects partial (zero) artifact production
+  const output = createTempDir();
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-partial-artifacts',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify partial artifact production is detected',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: output,
+    integrationConfig: { selectedIntegration: 'test-no-output', fixtureId: 'test-fixture-1' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
+  // test-no-output produces [] artifacts but requires [output.json, log.txt]
+  // So partial (actually zero) artifacts are detected
+  assert.strictEqual(results[0]!.requiredArtifactsPresent, false, 'Partial artifacts should be detected');
+  assert.strictEqual(results[0]!.status, 'failed', 'Should fail with partial artifacts');
+});

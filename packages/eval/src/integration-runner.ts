@@ -23,6 +23,15 @@ export interface IntegrationItemResult extends ItemResult {
   environmentRequirements: Record<string, unknown>;
 }
 
+// Adapter result type: includes both the output data and the artifacts the adapter actually produced
+export interface AdapterResult {
+  status: 'success' | 'failed';
+  data?: Record<string, unknown>;
+  message: string;
+  /** Artifacts the adapter actually produced (file names or keys) */
+  producedArtifacts?: string[];
+}
+
 // Static repository-owned integration registry
 // Selection is by static integration ID, not manifest-provided registry
 const INTEGRATION_REGISTRY: Record<string, {
@@ -30,13 +39,15 @@ const INTEGRATION_REGISTRY: Record<string, {
   entrypoint: 'in-process' | 'executable';
   allowedEnvironment: Record<string, unknown>;
   schema: Record<string, unknown>;
-  artifacts: string[];
-  adapter: (fixture: Record<string, unknown>) => Promise<{ status: 'success' | 'failed'; data?: Record<string, unknown>; message: string }>;
+  /** Required artifact names the adapter must produce */
+  requiredArtifacts: string[];
+  /** Adapter function that returns its actual produced artifacts */
+  adapter: (fixture: Record<string, unknown>) => Promise<AdapterResult>;
 }> = {};
 
 // Register test integrations from fixtures
 function registerTestIntegrations(): void {
-  // test-registry adapter
+  // test-registry adapter: produces output.json and log.txt
   INTEGRATION_REGISTRY['test-registry'] = {
     version: '1.0.0',
     entrypoint: 'in-process',
@@ -50,7 +61,7 @@ function registerTestIntegrations(): void {
       },
       required: ['status', 'message']
     },
-    artifacts: ['output.json', 'log.txt'],
+    requiredArtifacts: ['output.json', 'log.txt'],
     adapter: async (fixture) => {
       // Validate fixture has required fields
       if (!fixture.fixtureId) {
@@ -60,7 +71,32 @@ function registerTestIntegrations(): void {
       return {
         status: 'success',
         data: { processed: true, input: fixture.input ?? null },
-        message: `Integration ${fixture.fixtureId} completed`
+        message: `Integration ${fixture.fixtureId} completed`,
+        producedArtifacts: ['output.json', 'log.txt']
+      };
+    }
+  };
+
+  // no-output adapter: produces NO artifacts (for testing missing artifact detection)
+  INTEGRATION_REGISTRY['test-no-output'] = {
+    version: '1.0.0',
+    entrypoint: 'in-process',
+    allowedEnvironment: {},
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string' },
+        message: { type: 'string' }
+      },
+      required: ['status', 'message']
+    },
+    requiredArtifacts: ['output.json', 'log.txt'],
+    adapter: async (_fixture) => {
+      // Simulates an adapter that runs but produces no artifact files
+      return {
+        status: 'success',
+        message: 'Integration completed with no output files',
+        producedArtifacts: []
       };
     }
   };
@@ -144,10 +180,19 @@ export async function runIntegrationExperiment(
     adapterResult = { status: 'failed', message: error };
   }
 
-  // Build artifacts
+  // Build artifacts from what the adapter actually produced
   const artifacts: Record<string, unknown> = {};
-  artifacts['output.json'] = adapterResult;
-  artifacts['log.txt'] = { level: 'info', message: adapterResult.message };
+  const producedArtifacts = adapterResult.producedArtifacts ?? [];
+  for (const artifactName of producedArtifacts) {
+    if (artifactName === 'output.json') {
+      artifacts[artifactName] = { ...adapterResult };
+    } else if (artifactName === 'log.txt') {
+      artifacts[artifactName] = { level: 'info', message: adapterResult.message };
+    } else {
+      // Generic artifact
+      artifacts[artifactName] = { content: adapterResult.message };
+    }
+  }
 
   // Validate result against schema
   const schemaValid = validateAgainstSchema(
@@ -155,8 +200,8 @@ export async function runIntegrationExperiment(
     registry.schema
   );
 
-  // Check required artifacts present
-  const requiredArtifactsPresent = registry.artifacts.every(a => a in artifacts);
+  // Check required artifacts present — compare adapter's declared output vs required
+  const requiredArtifactsPresent = registry.requiredArtifacts.every(a => producedArtifacts.includes(a));
 
   const passed = adapterResult.status === 'success' && schemaValid && requiredArtifactsPresent;
 
