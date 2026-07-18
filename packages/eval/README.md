@@ -6,6 +6,12 @@ Local-model experiment runner and report generator.
 
 Provides bounded local OpenAI-compatible parse/realization experiments with dataset hashes, raw failures, and generated reports. Supports the worker/evaluator/orchestrator operating model.
 
+## Features
+
+- **Realization Runner:** Experiment runner with protected-literal scoring for multilingual realization (EN/EL/ES/ID).
+- **Token Atlas:** Cross-model, cross-profile token measurement framework for natural vs renderer profile comparison.
+- **Per-language metrics:** Detailed reports with pass rates, protected-literal coverage, and semantic scores.
+
 ## Scripts
 
 ```bash
@@ -26,6 +32,18 @@ pnpm report:generate
 
 # Run smoke tests
 pnpm eval:smoke
+```
+
+## Realization experiment
+
+```bash
+pnpm eval:run --manifest experiments/realization-en-el-es-id/CLAIM.md
+```
+
+## Token atlas
+
+```bash
+pnpm eval:run --manifest experiments/token-atlas/CLAIM.md
 ```
 
 ## Architecture
@@ -54,3 +72,8 @@ reports/                      generated per-item results and summaries
 ## Status
 
 **Prototype.** Experiment runner works with configured endpoints. Independent semantic judging and cross-model validation are pending.
+
+## New in v0.2.0
+
+- **Realization runner:** Multilingual realization experiments (EN/EL/ES/ID) with protected-literal scoring.
+- **Token atlas:** Cross-model token measurement framework with aggregate statistics and per-model analysis.
