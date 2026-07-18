@@ -40,6 +40,26 @@ You are an autonomous worker agent on the OpenLunum project. Your job is to impl
 
 ## Current priority order
 
-Work through WORK_QUEUE v4 in `WORK_QUEUE.md` — the unchecked `[ ]` items under "WORK_QUEUE v4".
+**PRIORITY: Issue #11 audit fixes (do these BEFORE v4 items)**
+
+An external audit found these real gaps in the retrieval/integration runners. Fix each in a separate PR:
+
+1. **Integration schema validator is shallow**: In `packages/eval/src/integration-runner.ts`, the schema validator only checks whether required keys exist — it does NOT validate types, enums, nested structures, or reject unexpected fields. Fix: implement real deep validation against the registry's declared nested `data` structure (not a flattened object). Add tests for: wrong types, invalid enums, extra fields rejected, nested data shape mismatch.
+
+2. **Artifact validation is circular**: The runner creates `output.json` and `log.txt` itself, then checks they exist — so "missing-artifact" can never occur. Fix: separate artifact creation from validation. Add a test where expected artifacts are NOT created by the runner (e.g. an adapter that produces no output file) and verify the runner reports missing artifacts correctly.
+
+3. **Integration tests overstate coverage**: (a) "Schema mismatch" test runs VALID output and asserts valid — fix to actually pass invalid output. (b) "Adapter throwing error" tests a missing fixture, not a thrown error — fix to test an adapter that throws. (c) "Nonzero execution" permits either success or failure — fix to assert failure on nonzero. (d) Required-artifact tests check runner-created artifacts — fix per item 2.
+
+4. **Duplicate-candidate retrieval test broken**: Creates a temp fixture the runner never reads, makes no rejection assertion, then runs against normal fixtures. Fix: make the runner actually read the duplicate fixture and assert that duplicate candidate IDs are detected/rejected.
+
+5. **False-equivalence fixture contradictory**: `french` is both expected-relevant AND designated false-equivalent. This allows a correct hit to count as false-equivalent. Fix: use a record that is NOT in the expected-relevant set as the false-equivalence example.
+
+6. **Malformed retrieval fixtures abort without evidence bundle**: Throws before writing `item-results.jsonl`, `failures.jsonl`, `summary.json`, `report.md`. Fix: catch errors in the runner and still produce the complete evidence bundle with error status, not abort.
+
+7. **Nested config schemas permissive**: `retrievalConfig` and `integrationConfig` in `schemas/experiment.schema.json` do not declare `additionalProperties: false`. Fix: add it and verify existing manifests still validate.
+
+8. **Aggregate MRR missing from reports**: MRR exists only in the retrieval sidecar file, not in `summary.json` or `report.md`. The report validator does not check MRR. Fix: include aggregate MRR in both summary and report, and add it to report validation.
+
+After these 8 are merged, continue with WORK_QUEUE v4 in `WORK_QUEUE.md`.
 Priority order: P0 first (schema stability, migration rules), then P1, then P2.
 Each item is one PR. Skip items already claimed or checked off.
