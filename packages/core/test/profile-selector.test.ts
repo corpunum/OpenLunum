@@ -3,12 +3,16 @@
  *
  * Tests profile selection driven by Token Atlas measurements
  * for different model types.
+ *
+ * These tests cover the ProfileSelectionResult and ModelProfileRecommendation
+ * types exported from profile-selector.ts as part of the semantic contract.
  */
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ProfileSelector } from '../src/profile-selector.js';
 import type { ProfileType } from '../src/profiles.js';
+import type { ProfileSelectionResult, ModelProfileRecommendation } from '../src/profile-selector.js';
 
 function buildRecord(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
@@ -94,6 +98,65 @@ test('profile selector: short reduction is positive', () => {
   assert.ok(result.reduction.tight as number >= 0, 'tight reduction must be non-negative');
 });
 
+// ── ProfileSelectionResult Type Tests ──────────────────────────────
+// These tests verify the exported ProfileSelectionResult type has all required fields.
+
+test('ProfileSelectionResult: has all required fields', () => {
+  const selector = new ProfileSelector();
+  const record = buildRecord();
+  const result = selector.selectProfile(record as any, 'type-test-model');
+
+  const r = result as ProfileSelectionResult;
+
+  assert.ok('modelId' in r, 'ProfileSelectionResult must have modelId');
+  assert.ok('recommendedProfile' in r, 'must have recommendedProfile');
+  assert.ok('confidence' in r, 'must have confidence');
+  assert.ok('tokenCounts' in r, 'must have tokenCounts');
+  assert.ok('reduction' in r, 'must have reduction');
+  assert.ok('preservation' in r, 'must have preservation');
+  assert.ok('rationale' in r, 'must have rationale');
+  assert.ok('warnings' in r, 'must have warnings');
+
+  assert.strictEqual(typeof r.modelId, 'string');
+  assert.ok(['safe', 'short', 'tight'].includes(r.recommendedProfile));
+  assert.ok(typeof r.confidence === 'number');
+  assert.ok(typeof r.tokenCounts === 'object');
+  assert.ok(typeof r.reduction === 'object');
+  assert.ok(typeof r.preservation === 'object');
+  assert.ok(typeof r.rationale === 'string');
+  assert.ok(Array.isArray(r.warnings));
+});
+
+test('ProfileSelectionResult: confidence is in valid range', () => {
+  const selector = new ProfileSelector();
+  const record = buildRecord();
+  const result = selector.selectProfile(record as any);
+
+  assert.ok(result.confidence >= 0.5, 'confidence must be >= 0.5');
+  assert.ok(result.confidence <= 1, 'confidence must be <= 1');
+});
+
+test('ProfileSelectionResult: rationale is descriptive', () => {
+  const selector = new ProfileSelector();
+  const record = buildRecord();
+  const result = selector.selectProfile(record as any, 'test-model-7b');
+
+  const r = result as ProfileSelectionResult;
+  assert.ok(r.rationale.includes('Profile'), 'rationale must mention profile');
+  assert.ok(r.rationale.includes('Tokens'), 'rationale must mention tokens');
+});
+
+test('ProfileSelectionResult: warnings is array of strings', () => {
+  const selector = new ProfileSelector();
+  const record = buildRecord();
+  const result = selector.selectProfile(record as any);
+
+  assert.ok(Array.isArray(result.warnings));
+  for (const w of result.warnings) {
+    assert.ok(typeof w === 'string', 'each warning must be a string');
+  }
+});
+
 // ── Recommendation Caching Tests ───────────────────────────────────
 
 test('profile selector: caches recommendations by modelId', () => {
@@ -163,7 +226,6 @@ test('profile selector: collects warnings from all profiles', () => {
   const result = selector.selectProfile(record as any);
 
   assert.ok(Array.isArray(result.warnings));
-  // Tight profile removes provenance and renderings, so warnings may include those
   assert.ok(result.warnings.length >= 0);
 });
 
@@ -176,7 +238,6 @@ test('profile selector: detects small model patterns', () => {
   for (const modelId of smallModels) {
     const record = buildRecord();
     const result = selector.selectProfile(record as any, modelId);
-    // Small models may still get safe if preservation is very high
     assert.ok(result.recommendedProfile === 'safe' || result.recommendedProfile === 'short',
       `small model ${modelId} should prefer safe/short`);
   }
@@ -186,7 +247,6 @@ test('profile selector: handles empty modelId gracefully', () => {
   const selector = new ProfileSelector();
   const record = buildRecord();
 
-  // No modelId provided
   const result = selector.selectProfile(record as any);
 
   assert.strictEqual(result.modelId, 'generic');
