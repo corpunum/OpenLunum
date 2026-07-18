@@ -33,6 +33,7 @@
 - agent/docs/sync-94490d25
 - agent/docs/sync-9fa28e5c
 - agent/docs/sync-a48d2a89
+- agent/docs/sync-a5112523
 - agent/docs/sync-a6fbb9d9
 - agent/docs/sync-a89b0540
 - agent/docs/sync-adefb01c
@@ -47,6 +48,7 @@
 - agent/docs/sync-ef230afa
 - agent/docs/sync-f6aaf752
 - agent/docs/sync-fae49be6
+- agent/docs/sync-fe1f05a8
 - agent/eval/scratch
 - agent/evidence/nightly-20260718
 - agent/generic-node-local-model-experiment
@@ -91,6 +93,7 @@
 - agent/qwen/issue-11/duplicate-candidate-retrieval
 - agent/qwen/issue-11/false-equivalence
 - agent/qwen/issue-11/integration-tests-coverage
+- agent/qwen/issue-11/malformed-retrieval-bundle
 - agent/qwen/issue-11/schema-validator-deep
 - agent/qwen/migration-bidirectional
 - agent/qwen/migration/golden-vectors
