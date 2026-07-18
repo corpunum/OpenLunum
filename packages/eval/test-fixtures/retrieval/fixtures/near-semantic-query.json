@@ -1,0 +1,9 @@
+{
+  "queryId": "near-semantic-query",
+  "query": "Where is the Eiffel Tower located?",
+  "candidates": ["paris", "london", "berlin", "madrid", "rome", "france", "french"],
+  "expectedRelevant": ["paris", "france"],
+  "rankedResults": ["paris", "france", "london"],
+  "mode": "near-semantic",
+  "falseEquivalenceIds": ["french"]
+}
