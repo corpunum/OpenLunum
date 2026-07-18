@@ -51,6 +51,10 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 - [x] Add MCP/local service reference implementation.
 - [x] Add conformance reports for hook/plugin/CLI integrations.
 
+## P2 — agent-state protocol
+
+- [ ] Encode plans, steps, tool calls, results, constraints, evidence, and inter-agent handoffs in a validated Lunum-compatible format.
+
 ## Claiming work
 
 Create `experiments/<experiment-id>/CLAIM.md` with worker, area, branch, start date, and intended dataset. A claim prevents accidental duplication; it does not reserve an area indefinitely.
