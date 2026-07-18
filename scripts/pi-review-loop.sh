@@ -120,6 +120,13 @@ $diff_excerpt" 2>>"$STATUS_LOG")
     reason="verify fails on this branch (reviewer verdict overridden mechanically). $reason"
   fi
 
+  # Check if PR touches soft-protected paths
+  pr_files=$(timeout 60 gh pr diff "$pr" --repo corpunum/OpenLunum --name-only 2>/dev/null)
+  touches_soft=""
+  if echo "$pr_files" | grep -qP '^(packages/core/src/(canonicalize|fingerprint|derive|compare|types|types-schema)|schemas/|registry/)' 2>/dev/null; then
+    touches_soft="yes"
+  fi
+
   # gh pr edit is broken by a projectCards GraphQL deprecation — use REST
   if [[ "$verdict" == "READY_FOR_MERGE" ]]; then
     timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=ready-for-merge" >/dev/null 2>&1 || true
@@ -128,8 +135,14 @@ $diff_excerpt" 2>>"$STATUS_LOG")
     timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=needs-work" >/dev/null 2>&1 || true
     timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
   fi
+
+  # Add LGTM-protected override when reviewer approves soft-protected PRs
+  override_tag=""
+  if [[ "$verdict" == "READY_FOR_MERGE" && -n "$touches_soft" ]]; then
+    override_tag=$'\n\nLGTM-protected'
+  fi
   timeout 60 gh pr comment "$pr" --repo corpunum/OpenLunum \
-    --body "REVIEW ${sha}: ${verdict} — ${reason} _(local reviewer: ${REVIEW_MODEL}; same-machine role-separated review, not fully independent)_" >/dev/null 2>&1 || true
+    --body "REVIEW ${sha}: ${verdict} — ${reason} _(local reviewer: ${REVIEW_MODEL}; same-machine role-separated review, not fully independent)_${override_tag}" >/dev/null 2>&1 || true
 
   log "PR #$pr → $verdict"
   sleep 10

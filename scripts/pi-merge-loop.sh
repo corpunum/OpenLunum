@@ -22,8 +22,10 @@ LOGDIR="$REPO/reports/pi-merge"
 STATUS_LOG="$LOGDIR/merge-status.log"
 INTERVAL=180
 
-# Paths that always require the Claude maintainer
-PROTECTED_RE='^(datasets/protected/(?!README\.md)|packages/core/src/(canonicalize|fingerprint|derive|compare|types|types-schema)|schemas/|registry/|\.github/|scripts/(pi-|nightly))'
+# Hard-protected: always require Claude maintainer (CI, agent infra, protected data)
+HARD_PROTECTED_RE='^(datasets/protected/(?!README\.md)|\.github/|scripts/(pi-|nightly))'
+# Soft-protected: auto-merge if reviewer gave LGTM-protected in a comment
+SOFT_PROTECTED_RE='^(packages/core/src/(canonicalize|fingerprint|derive|compare|types|types-schema)|schemas/|registry/)'
 
 mkdir -p "$LOGDIR"
 log() { echo "[$(date -Iseconds)] $*" | tee -a "$STATUS_LOG"; }
@@ -64,13 +66,29 @@ while true; do
     files=$(timeout 60 gh pr diff "$pr" --repo corpunum/OpenLunum --name-only 2>/dev/null)
     [[ -n "$files" ]] || continue
 
-    if echo "$files" | grep -qP "$PROTECTED_RE"; then
+    # Hard-protected: always escalate
+    if echo "$files" | grep -qP "$HARD_PROTECTED_RE"; then
       timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=claude-review" >/dev/null 2>&1 || true
       timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
       timeout 60 gh pr comment "$pr" --repo corpunum/OpenLunum \
-        --body "Auto-merge declined: this PR touches protected paths (semantic core, schemas, CI, or agent infra). Queued for the Claude maintainer." >/dev/null 2>&1 || true
-      log "PR #$pr → claude-review (protected paths)"
+        --body "Auto-merge declined: this PR touches hard-protected paths (CI, agent infra, or protected data). Queued for the Claude maintainer." >/dev/null 2>&1 || true
+      log "PR #$pr → claude-review (hard-protected)"
       continue
+    fi
+
+    # Soft-protected: auto-merge if reviewer gave LGTM-protected
+    if echo "$files" | grep -qP "$SOFT_PROTECTED_RE"; then
+      has_override=$(timeout 60 gh pr view "$pr" --repo corpunum/OpenLunum --json comments \
+        --jq '[.comments[].body | select(test("LGTM-protected"))] | length' 2>/dev/null)
+      if [[ "${has_override:-0}" -lt 1 ]]; then
+        timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=claude-review" >/dev/null 2>&1 || true
+        timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
+        timeout 60 gh pr comment "$pr" --repo corpunum/OpenLunum \
+          --body "Auto-merge paused: soft-protected paths. Reviewer: comment \`LGTM-protected\` to override." >/dev/null 2>&1 || true
+        log "PR #$pr → claude-review (soft-protected, awaiting override)"
+        continue
+      fi
+      log "PR #$pr soft-protected with reviewer override — proceeding"
     fi
 
     timeout 60 gh pr ready "$pr" --repo corpunum/OpenLunum >/dev/null 2>&1 || true
