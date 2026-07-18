@@ -5,5 +5,5 @@
   "expectedRelevant": ["french"],
   "rankedResults": ["french", "english", "spanish"],
   "mode": "exact",
-  "falseEquivalenceIds": ["french", "france"]
+  "falseEquivalenceIds": ["english"]
 }

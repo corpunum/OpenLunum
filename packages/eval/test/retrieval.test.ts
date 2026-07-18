@@ -271,7 +271,7 @@ test('retrieval runner detects false equivalence', async () => {
     area: 'retrieval',
     task: 'retrieval',
     deterministic: true,
-    hypothesis: 'Verify false equivalence detection',
+    hypothesis: 'Verify false equivalence detection without contradicting expected-relevant',
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
@@ -284,6 +284,12 @@ test('retrieval runner detects false equivalence', async () => {
   const result = results[0];
   assert.ok(result, 'Should have a result');
   assert.ok(result.hasFalseEquivalence, 'Should detect false equivalence in top-k');
+  // Verify the fix: falseEquivalenceIds (english) is NOT in expectedRelevant (french)
+  // so a correct hit on french does not also count as false-equivalent
+  assert.ok(!result.falsePositives.includes('french'),
+    'french should NOT be a false-positive since it is in expectedRelevant');
+  assert.ok(result.falsePositives.includes('english'),
+    'english IS a false-positive since it is in topK but not in expectedRelevant');
 });
 
 test('retrieval runner computes aggregate MRR', async () => {
