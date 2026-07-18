@@ -17,3 +17,5 @@ export * from './downstream-quality.js';
 export * from './mixed-context-quality.js';
 export * from './prompt-injection.js';
 export * from './renderer-conformance.js';
+
+export * from './compatibility-matrix.js';
