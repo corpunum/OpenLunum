@@ -11,8 +11,8 @@
  */
 
 import { validateSem } from './canonicalize.js';
-import { runInjectionTests } from './prompt-injection.js';
-import { runConformanceSuite } from './renderer-conformance.js';
+import { runInjectionTests, type InjectionTestResult } from './prompt-injection.js';
+import { runConformanceSuite, type ConformanceTestCaseResult, type ProfileConformanceResult } from './renderer-conformance.js';
 import { createDefaultEvaluator, evaluateQuality, type QualityGate, type GateEvaluation } from './downstream-quality.js';
 import type { TaskType, QualityMetric, GateResult } from './downstream-quality.js';
 import type { ContextMessage } from './types.js';
@@ -103,7 +103,7 @@ function runInjectionResistanceGate(): GateCheckResult {
   const summary = runInjectionTests();
   const score = summary.passRate;
   const result = score >= 0.9 ? 'pass' : score >= 0.8 ? 'fail' : 'warn';
-  const details = summary.results.filter(function(r) { return !r.detected; }).map(function(r) { return 'Injection ' + r.id + ' (' + r.type + ') not detected'; });
+  const details = summary.results.filter(function(r: InjectionTestResult) { return !r.detected; }).map(function(r: InjectionTestResult) { return 'Injection ' + r.id + ' (' + r.type + ') not detected'; });
   if (details.length === 0) { details.push('All ' + summary.detected + '/' + summary.totalTests + ' detected'); }
 
   return { gate: 'injection-resistance', result, score, minimumScore: 0.9, details };
@@ -113,8 +113,8 @@ function runRendererConformanceGate(): GateCheckResult {
   const summary = runConformanceSuite();
   const score = summary.passRate;
   const result = score >= 0.9 ? 'pass' : score >= 0.8 ? 'fail' : 'warn';
-  const details = summary.results.filter(function(r) { return !r.allProfilesPass; }).map(function(r) {
-    return r.testCaseId + ': ' + r.profileResults.filter(function(p) { return !p.canonicalEqual; }).map(function(p) { return p.profile; }).join(', ');
+  const details = summary.results.filter(function(r: ConformanceTestCaseResult) { return !r.allProfilesPass; }).map(function(r: ConformanceTestCaseResult) {
+    return r.testCaseId + ': ' + r.profileResults.filter(function(p: ProfileConformanceResult) { return !p.canonicalEqual; }).map(function(p: ProfileConformanceResult) { return p.profile; }).join(', ');
   });
   if (details.length === 0) { details.push('All ' + summary.totalTests + ' records pass all profiles'); }
 
