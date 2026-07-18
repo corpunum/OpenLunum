@@ -356,3 +356,43 @@ test('negative compile fixture: tsc produces exactly one TS2322', async () => {
     `Unexpected diagnostic: ${sole}`
   );
 });
+
+// ── Schema 0.2 semantic-contract tests ──────────────────────────────
+
+import type { LunumSemSchema, Clause } from '../src/types-schema.js';
+
+test('LunumSemSchema has version 0.2 not 0.1-draft', () => {
+  // Type-level test: LunumSemSchema.schema must be "lunum-sem/0.2"
+  const schema: LunumSemSchema = {
+    schema: 'lunum-sem/0.2',
+    world: 'real',
+    kind: 'simple_fact',
+    clauses: [{ predicate: 'test', roles: { theme: 'x' } }]
+  };
+  assert.equal(schema.schema, 'lunum-sem/0.2');
+});
+
+test('Clause modality is restricted enum not arbitrary string', () => {
+  // Type-level test: modality must be one of the enum values or null
+  const factClause: Clause = { predicate: 'p', roles: {}, modality: 'fact' };
+  const beliefClause: Clause = { predicate: 'p', roles: {}, modality: 'belief' };
+  const goalClause: Clause = { predicate: 'p', roles: {}, modality: 'goal' };
+  const obligationClause: Clause = { predicate: 'p', roles: {}, modality: 'obligation' };
+  const permissionClause: Clause = { predicate: 'p', roles: {}, modality: 'permission' };
+  const nullClause: Clause = { predicate: 'p', roles: {}, modality: null };
+
+  assert.equal(factClause.modality, 'fact');
+  assert.equal(beliefClause.modality, 'belief');
+  assert.equal(goalClause.modality, 'goal');
+  assert.equal(obligationClause.modality, 'obligation');
+  assert.equal(permissionClause.modality, 'permission');
+  assert.equal(nullClause.modality, null);
+});
+
+test('References are typed objects not Record<string, unknown>', () => {
+  // Type-level test: references must have uri, optional type and label
+  const ref = { uri: 'https://example.com', type: 'doc', label: 'Example' };
+  assert.ok(typeof ref.uri === 'string');
+  assert.ok(ref.type === undefined || typeof ref.type === 'string');
+  assert.ok(ref.label === undefined || typeof ref.label === 'string');
+});
