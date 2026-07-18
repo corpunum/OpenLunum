@@ -205,6 +205,31 @@ function main() {
     if (!recomputabilityPass) overallPass = false;
   }
 
+  // 8b. Check MRR for retrieval tasks
+  if (summary.task === 'retrieval' && recomputed && recomputed.total > 0) {
+    const jsonlLines = fs.readFileSync(jsonlPath, 'utf-8').trim().split('\n').filter(l => l.trim());
+    const jsonlItems = jsonlLines.map(l => JSON.parse(l));
+    const computedMrr = jsonlItems.length > 0
+      ? jsonlItems.reduce((acc, item) => acc + (item.meanReciprocalRank ?? 0), 0) / jsonlItems.length
+      : 0;
+    const summaryMrr = summary.meanReciprocalRank;
+    // MRR must be present in summary for retrieval tasks
+    const mrrPresent = summaryMrr !== undefined && summaryMrr !== null;
+    const mrrMatches = mrrPresent && Math.abs(computedMrr - summaryMrr) < 0.0001;
+    results.push({ pass: mrrPresent, name: 'MRR present in summary', detail: mrrPresent ? `MRR=${summaryMrr.toFixed(4)}` : 'missing' });
+    if (!mrrPresent) overallPass = false;
+    results.push({ pass: mrrMatches, name: 'MRR recomputable from JSONL', detail: mrrMatches ? `computed ${computedMrr.toFixed(4)} matches summary` : `computed ${computedMrr.toFixed(4)} vs summary ${summaryMrr ?? 'null'}` });
+    if (!mrrMatches) overallPass = false;
+    // Check report.md includes MRR
+    const reportPath = path.join(fullPath, 'report.md');
+    if (fs.existsSync(reportPath)) {
+      const reportContent = fs.readFileSync(reportPath, 'utf-8');
+      const mrrInReport = reportContent.includes('Mean reciprocal rank') || reportContent.includes('meanReciprocalRank') || reportContent.includes('MRR');
+      results.push({ pass: mrrInReport, name: 'MRR in report.md', detail: mrrInReport ? 'present' : 'missing' });
+      if (!mrrInReport) overallPass = false;
+    }
+  }
+
   // 9. Integrity check
   if (expectedIntegrityHash) {
     // Hash the key fields to detect tampering

@@ -278,11 +278,19 @@ export async function runExperiment(manifestPath: string): Promise<string> {
   const featureRecall = results.length ? results.reduce((sum, result) => sum + (result.featureRecall ?? 1), 0) / results.length : 0;
   const protectedCoverage = results.length ? results.reduce((sum, result) => sum + (result.protectedLiteralCoverage ?? 1), 0) / results.length : 0;
 
+  // Compute aggregate MRR for retrieval tasks
+  let aggregateMrr = 0;
+  if (manifest.task === 'retrieval' && results.length > 0) {
+    const sum = results.reduce((acc, r) => acc + ((r as any).meanReciprocalRank ?? 0), 0);
+    aggregateMrr = sum / results.length;
+  }
+
   const summary = {
     experimentId: manifest.id, runId, task: manifest.task, deterministic: isDeterministic,
     items: results.length, calls: isDeterministic ? 0 : results.length,
     passed: results.length - failures.length, failed: failures.length,
     exactRate, featureRecall, protectedLiteralCoverage: protectedCoverage,
+    meanReciprocalRank: manifest.task === 'retrieval' ? aggregateMrr : undefined,
     gatesPassed: featureRecall >= (manifest.gates.minimumFeatureRecall ?? 0) &&
                  exactRate >= (manifest.gates.minimumExactRate ?? 0) &&
                  (!manifest.gates.requireProtectedLiteralCoverage || protectedCoverage === 1)
@@ -290,18 +298,23 @@ export async function runExperiment(manifestPath: string): Promise<string> {
 
   await writeJson(path.join(output, 'summary.json'), summary);
 
-  const markdown = `# Experiment ${manifest.id}
-
-- Run: ${runId}
-- Task: ${manifest.task}
-- Deterministic: ${isDeterministic}
-- Items: ${results.length}
-- Exact rate: ${exactRate.toFixed(4)}
-- Feature recall: ${featureRecall.toFixed(4)}
-- Protected literal coverage: ${protectedCoverage.toFixed(4)}
-- Gates passed: ${summary.gatesPassed}
-- Failures: ${failures.length}
-`;
+  const markdownLines = [
+    `# Experiment ${manifest.id}`,
+    '',
+    `- Run: ${runId}`,
+    `- Task: ${manifest.task}`,
+    `- Deterministic: ${isDeterministic}`,
+    `- Items: ${results.length}`,
+    `- Exact rate: ${exactRate.toFixed(4)}`,
+    `- Feature recall: ${featureRecall.toFixed(4)}`,
+    `- Protected literal coverage: ${protectedCoverage.toFixed(4)}`,
+    `- Gates passed: ${summary.gatesPassed}`,
+    `- Failures: ${failures.length}`
+  ];
+  if (manifest.task === 'retrieval') {
+    markdownLines.push(`- Mean reciprocal rank: ${aggregateMrr.toFixed(4)}`);
+  }
+  const markdown = markdownLines.join('\n') + '\n';
   await writeFile(path.join(output, 'report.md'), markdown, 'utf8');
 
   return output;
