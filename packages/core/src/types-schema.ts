@@ -62,7 +62,7 @@ export interface ProtectedEvalSchema {
   datasetId: string;
   dataset: {     path: string,     sha256: string,     license: string,     envVar?: string };
   instructions: string;
-  coverage: {     tasks: "parse" | "realize" | "render" | "context" | "retrieval" | "integration" | "conformance" | "infrastructure"[],     languages: string[],     categories: string[] };
+  coverage: {     tasks: ("parse" | "realize" | "render" | "context" | "retrieval" | "integration" | "conformance" | "infrastructure")[],     languages: string[],     categories: string[] };
 }
 
 export interface RendererProfileSchema {

@@ -16,8 +16,7 @@ test('ProtectedEvalSchema has required schema constant', () => {
     },
     instructions: 'Evaluate parse quality on protected examples.',
     coverage: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tasks: ['parse', 'realize'] as any,
+      tasks: ['parse', 'realize'],
       languages: ['en', 'el'],
       categories: ['domain-specific']
     }
@@ -43,8 +42,7 @@ test('ProtectedEvalSchema dataset supports envVar resolution', () => {
     },
     instructions: 'Test env var resolution.',
     coverage: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tasks: ['parse'] as any,
+      tasks: ['parse'],
       languages: ['en'],
       categories: ['general']
     }
@@ -55,7 +53,6 @@ test('ProtectedEvalSchema dataset supports envVar resolution', () => {
 });
 
 test('ProtectedEvalSchema coverage includes multiple tasks', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const schema: ProtectedEvalSchema = {
     schema: 'openlunum-protected-eval/0.1',
     id: 'test-multi-task',
@@ -68,21 +65,20 @@ test('ProtectedEvalSchema coverage includes multiple tasks', () => {
     },
     instructions: 'Test multi-task coverage.',
     coverage: {
-      tasks: ['parse', 'realize', 'render', 'context', 'retrieval', 'integration', 'conformance', 'infrastructure'] as any,
+      tasks: ['parse', 'realize', 'render', 'context', 'retrieval', 'integration', 'conformance', 'infrastructure'],
       languages: ['en', 'el', 'es', 'id'],
       categories: ['general', 'domain-specific', 'legal', 'medical']
     }
   };
 
-  assert.strictEqual((schema.coverage.tasks as string[]).length, 8);
-  assert.ok((schema.coverage.tasks as string[]).includes('parse'));
+  assert.strictEqual(schema.coverage.tasks.length, 8);
+  assert.ok(schema.coverage.tasks.includes('parse'));
   assert.ok((schema.coverage.tasks as string[]).includes('realize'));
   assert.strictEqual(schema.coverage.languages.length, 4);
   assert.strictEqual(schema.coverage.categories.length, 4);
 });
 
 test('ProtectedEvalSchema is assignable from literal object', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const literal: ProtectedEvalSchema = {
     schema: 'openlunum-protected-eval/0.1',
     id: 'literal-test',
@@ -95,7 +91,7 @@ test('ProtectedEvalSchema is assignable from literal object', () => {
     },
     instructions: 'Literal assignment test.',
     coverage: {
-      tasks: ['conformance'] as any,
+      tasks: ['conformance'],
       languages: ['en'],
       categories: ['testing']
     }
@@ -103,11 +99,10 @@ test('ProtectedEvalSchema is assignable from literal object', () => {
 
   assert.strictEqual(literal.schema, 'openlunum-protected-eval/0.1');
   assert.strictEqual(literal.id, 'literal-test');
-  assert.deepStrictEqual((literal.coverage.tasks as string[]), ['conformance']);
+  assert.deepStrictEqual(literal.coverage.tasks, ['conformance']);
 });
 
 test('ProtectedEvalSchema SHA-256 must be 64 hex characters', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validSchema: ProtectedEvalSchema = {
     schema: 'openlunum-protected-eval/0.1',
     id: 'valid-sha',
@@ -120,7 +115,7 @@ test('ProtectedEvalSchema SHA-256 must be 64 hex characters', () => {
     },
     instructions: 'Valid SHA-256 test.',
     coverage: {
-      tasks: ['parse'] as any,
+      tasks: ['parse'],
       languages: ['en'],
       categories: []
     }
@@ -129,7 +124,6 @@ test('ProtectedEvalSchema SHA-256 must be 64 hex characters', () => {
   assert.strictEqual(validSchema.dataset.sha256.length, 64);
 
   // All valid hex chars
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const hexSchema: ProtectedEvalSchema = {
     schema: 'openlunum-protected-eval/0.1',
     id: 'hex-test',
@@ -142,7 +136,7 @@ test('ProtectedEvalSchema SHA-256 must be 64 hex characters', () => {
     },
     instructions: 'Hex test.',
     coverage: {
-      tasks: ['parse'] as any,
+      tasks: ['parse'],
       languages: ['en'],
       categories: []
     }

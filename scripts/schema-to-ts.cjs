@@ -56,7 +56,12 @@ function tsType(prop, depth = 0, parentDefs = null) {
     if (t === 'array') {
       if (prop.items) {
         const defs = (parentDefs && parentDefs.items) ? (parentDefs.items.$defs || null) : null;
-        return `${tsType(prop.items, depth + 1, defs)}[]`;
+        const itemType = tsType(prop.items, depth + 1, defs);
+        // Wrap in parentheses to ensure correct operator precedence for enums
+        if (itemType.includes(' | ') && !itemType.startsWith('(')) {
+          return `(${itemType})[]`;
+        }
+        return `${itemType}[]`;
       }
       return 'unknown[]';
     }
