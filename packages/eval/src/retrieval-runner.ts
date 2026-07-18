@@ -126,8 +126,14 @@ export async function runRetrievalExperiment(
       throw new Error(`Fixture ${file}: duplicate IDs in rankedResults`);
     }
 
+    // Check for duplicate IDs in expectedRelevant
+    const expectedSet = new Set(fixture.expectedRelevant);
+    if (expectedSet.size !== fixture.expectedRelevant.length) {
+      throw new Error(`Fixture ${file}: duplicate IDs in expectedRelevant`);
+    }
+
     // Check for empty IDs
-    for (const id of [...fixture.candidates, ...fixture.rankedResults]) {
+    for (const id of [...fixture.candidates, ...fixture.rankedResults, ...fixture.expectedRelevant]) {
       if (typeof id !== 'string' || id.trim() === '') {
         throw new Error(`Fixture ${file}: empty ID found`);
       }
