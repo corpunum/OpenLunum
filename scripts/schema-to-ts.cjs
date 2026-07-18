@@ -33,7 +33,7 @@ function resolveRef(ref) {
   return null;
 }
 
-function tsType(prop, depth = 0, parentDefs = null) {
+function tsType(prop, depth = 0, parentDefs = null, versionPrefix = '', currentDefName = '') {
   if (depth > 10) return 'unknown';
   if (prop.const !== undefined) return JSON.stringify(prop.const);
   if (prop.enum) return prop.enum.map(v => JSON.stringify(v)).join(' | ');
@@ -41,23 +41,27 @@ function tsType(prop, depth = 0, parentDefs = null) {
     const ref = prop.$ref;
     if (ref.startsWith('#/')) {
       const key = ref.split('/').pop();
-      if (parentDefs && parentDefs[key]) return tsType(parentDefs[key], depth + 1, parentDefs);
-      return capitalize(key);
+      if (key === currentDefName) {
+        const typeName = versionPrefix ? versionPrefix + capitalize(key) : capitalize(key);
+        return typeName;
+      }
+      if (parentDefs && parentDefs[key]) return tsType(parentDefs[key], depth + 1, parentDefs, versionPrefix, key);
+      const typeName = versionPrefix ? versionPrefix + capitalize(key) : capitalize(key);
+      return typeName;
     }
     const refSchema = resolveRef(ref);
-    if (refSchema) return tsObject(refSchema, refSchema.$defs || null);
+    if (refSchema) return tsObject(refSchema, refSchema.$defs || null, versionPrefix);
     return capitalize(ref.split('/').pop().replace(/\.schema\.json$/, ''));
   }
-  if (prop.anyOf) return prop.anyOf.map(p => tsType(p, depth + 1, parentDefs)).join(' | ');
-  if (prop.allOf) return prop.allOf.map(p => tsType(p, depth + 1, parentDefs)).join(' & ');
+  if (prop.anyOf) return prop.anyOf.map(p => tsType(p, depth + 1, parentDefs, versionPrefix, currentDefName)).join(' | ');
+  if (prop.allOf) return prop.allOf.map(p => tsType(p, depth + 1, parentDefs, versionPrefix, currentDefName)).join(' & ');
   if (prop.type) {
     if (Array.isArray(prop.type)) return prop.type.map(t => tsPrimitive(t)).join(' | ');
     const t = prop.type;
     if (t === 'array') {
       if (prop.items) {
         const defs = (parentDefs && parentDefs.items) ? (parentDefs.items.$defs || null) : null;
-        const itemType = tsType(prop.items, depth + 1, defs);
-        // Wrap in parentheses to ensure correct operator precedence for enums
+        const itemType = tsType(prop.items, depth + 1, defs, versionPrefix, currentDefName);
         if (itemType.includes(' | ') && !itemType.startsWith('(')) {
           return `(${itemType})[]`;
         }
@@ -65,18 +69,18 @@ function tsType(prop, depth = 0, parentDefs = null) {
       }
       return 'unknown[]';
     }
-    if (t === 'object') return tsObject(prop, prop.$defs || parentDefs);
+    if (t === 'object') return tsObject(prop, prop.$defs || parentDefs, versionPrefix);
     return tsPrimitive(t);
   }
   return 'unknown';
 }
 
-function tsObject(schema, parentDefs = null) {
+function tsObject(schema, parentDefs = null, versionPrefix = '') {
   if (schema.properties) {
     const required = new Set(schema.required || []);
     const props = [];
     for (const [propName, propDef] of Object.entries(schema.properties)) {
-      const type = tsType(propDef, 0, parentDefs);
+      const type = tsType(propDef, 0, parentDefs, versionPrefix);
       const optional = required.has(propName) ? '' : '?';
       props.push(`    ${propName}${optional}: ${type}`);
     }
@@ -101,35 +105,48 @@ function capitalize(s) {
 
 function schemaToName(schemaId) {
   if (schemaId) {
-    const match = schemaId.match(/schemas\/([a-z0-9-]+)\/(\d+\.\d+)/);
-    if (match) return capitalize(match[1]) + 'Schema';
+    const match = schemaId.match(/schemas\/([a-z0-9-]+)\/([\d.]+)/);
+    if (match) {
+      const versionSuffix = match[2].replace(/[.\-]/g, '');
+      return capitalize(match[1]) + 'Schema' + versionSuffix;
+    }
   }
   return 'UnknownSchema';
 }
 
-function generateDefs(defs) {
-  if (!defs) return '';
-  return Object.entries(defs).map(([defName, defSchema]) => {
-    let typeStr = tsType({type: 'object', ...defSchema}, 0, defs);
-    return `export type ${capitalize(defName)} = ${typeStr};`;
-  }).join('\n');
+function getVersionFromId(schemaId) {
+  if (!schemaId) return '';
+  const m = schemaId.match(/\/(\d+\.\d+)/);
+  return m ? 'v' + m[1].replace(/\./g, '') : '';
 }
 
-function generateInterface(name, schema) {
+function generateDefs(defs, prefix = '') {
+  if (!defs) return '';
+  const results = [];
+  for (const [defName, defSchema] of Object.entries(defs)) {
+    const typeName = prefix ? prefix.replace(/-/g, '') + capitalize(defName) : capitalize(defName);
+    let typeStr = tsType({type: 'object', ...defSchema}, 0, defs, prefix, defName);
+    results.push(`export type ${typeName} = ${typeStr};`);
+  }
+  return results.join('\n');
+}
+
+function generateInterface(name, schema, version = '') {
   const props = [];
   const required = new Set(schema.required || []);
   const defs = schema.$defs || null;
+  const prefix = version ? version : '';
 
   if (schema.properties) {
     for (const [propName, propDef] of Object.entries(schema.properties)) {
-      const type = tsType(propDef, 0, defs);
+      const type = tsType(propDef, 0, defs, prefix);
       const optional = required.has(propName) ? '' : '?';
       props.push(`  ${propName}${optional}: ${type};`);
     }
   }
 
   const body = `export interface ${name} {\n${props.join('\n')}\n}`;
-  const defsCode = defs ? '\n\n' + generateDefs(defs) : '';
+  const defsCode = defs ? '\n\n' + generateDefs(defs, prefix) : '';
   return body + defsCode;
 }
 
@@ -140,7 +157,8 @@ function main() {
   const schemaFiles = fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.json')).sort();
   const interfaces = schemaFiles.map(file => {
     const schema = allSchemas[file];
-    return generateInterface(schemaToName(schema.$id || file), schema);
+    const version = getVersionFromId(schema.$id);
+    return generateInterface(schemaToName(schema.$id || file), schema, version);
   });
 
   const generated = HEADER + '\n' + interfaces.join('\n\n') + '\n';

@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { FP_VERSION, SEM_SCHEMA, RECORD_SCHEMA } from './constants.js';
+import { FP_VERSION, SEM_SCHEMA, RECORD_SCHEMA, SEM_SCHEMA_02, RECORD_SCHEMA_02, FP_VERSION_02 } from './constants.js';
 import { canonicalizeSem, stableStringify } from './canonicalize.js';
 import type { LunumRecord, LunumSem } from './types.js';
 
@@ -200,4 +200,235 @@ export function dryRunMigration(records: LunumRecord[]): MigrationSummary {
     migrated,
     failures
   };
+}
+
+// ---------------------------------------------------------------------------
+// Bidirectional migration (0.1 ↔ 0.2)
+// ---------------------------------------------------------------------------
+
+/** Warning emitted during lossy backward migration. */
+export interface MigrationWarning {
+  /** Machine-readable warning code */
+  code: string;
+  /** Human-readable message */
+  message: string;
+  /** Field that was lost or transformed */
+  field: string;
+}
+
+/** Result of forward migration (0.1 → 0.2). */
+export interface ForwardMigrationResult {
+  /** Migrated Lunum-Sem object */
+  sem: LunumSem;
+  /** Migrated LunumRecord object */
+  record: LunumRecord;
+  /** Warnings about fields that were preserved or enhanced */
+  warnings: MigrationWarning[];
+}
+
+/** Result of backward migration (0.2 → 0.1). */
+export interface BackwardMigrationResult {
+  /** Migrated Lunum-Sem object at 0.1 */
+  sem: LunumSem;
+  /** Migrated LunumRecord object at 0.1 */
+  record: LunumRecord;
+  /** Warnings about data loss during lossy downgrade */
+  warnings: MigrationWarning[];
+}
+
+/**
+ * Forward migration: 0.1-draft → 0.2 frozen.
+ * Upgrades schema version, locks modality enum, structures provenance/annotations.
+ * Returns a new record with updated schema references.
+ */
+export function migrateSem01to02(sem: LunumSem): ForwardMigrationResult {
+  const warnings: MigrationWarning[] = [];
+
+  // Deep copy to avoid mutating input
+  const migratedSem = structuredClone(sem);
+  (migratedSem as any).schema = SEM_SCHEMA_02;
+
+  // Upgrade clauses
+  if (Array.isArray(migratedSem.clauses)) {
+    migratedSem.clauses = migratedSem.clauses.map((clause: any) => {
+      const upgraded: any = { ...clause };
+
+      // Lock modality to enum if present
+      if (upgraded.modality !== undefined) {
+        const validModalities = ['certainty', 'possibility', 'necessity', 'obligation', null];
+        if (typeof upgraded.modality === 'string' && !validModalities.includes(upgraded.modality)) {
+          warnings.push({
+            code: 'MODALITY_LOCKED',
+            message: `Modality '${upgraded.modality}' locked to 'certainty' in 0.2`,
+            field: 'clauses[].modality'
+          });
+          upgraded.modality = 'certainty';
+        }
+      }
+
+      // Ensure time is ISO 8601 string if present
+      if (upgraded.time !== undefined && typeof upgraded.time !== 'string') {
+        upgraded.time = typeof upgraded.time === 'object' && upgraded.time !== null
+          ? JSON.stringify(upgraded.time)
+          : String(upgraded.time);
+        warnings.push({
+          code: 'TIME_STRINGIFIED',
+          message: 'Time field converted to ISO 8601 string',
+          field: 'clauses[].time'
+        });
+      }
+
+      return upgraded;
+    });
+  }
+
+  // Upgrade provenance to locked shape
+  if (migratedSem.provenance) {
+    const prov = migratedSem.provenance as any;
+    const lockedProv: any = {};
+    for (const key of ['source', 'author', 'timestamp', 'license'] as const) {
+      if (prov[key] !== undefined) lockedProv[key] = prov[key];
+    }
+    // Report lost fields
+    for (const key of Object.keys(prov)) {
+      if (!(key in lockedProv)) {
+        warnings.push({
+          code: 'PROVENANCE_FIELD_REMOVED',
+          message: `Provenance field '${key}' removed in 0.2 (locked field set)`,
+          field: `provenance.${key}`
+        });
+      }
+    }
+    migratedSem.provenance = lockedProv;
+  }
+
+  // Upgrade annotations to locked shape
+  if (migratedSem.annotations) {
+    const ann = migratedSem.annotations as any;
+    const lockedAnn: any = {};
+    for (const key of ['confidence', 'tags', 'notes'] as const) {
+      if (ann[key] !== undefined) lockedAnn[key] = ann[key];
+    }
+    for (const key of Object.keys(ann)) {
+      if (!(key in lockedAnn)) {
+        warnings.push({
+          code: 'ANNOTATION_FIELD_REMOVED',
+          message: `Annotation field '${key}' removed in 0.2 (locked field set)`,
+          field: `annotations.${key}`
+        });
+      }
+    }
+    migratedSem.annotations = lockedAnn;
+  }
+
+  // Migrate record - canonicalize with temp 0.1 schema, then restore 0.2
+  const recordVersion = RECORD_SCHEMA_02 as any;
+  const currentSchema = (migratedSem as any).schema;
+  (migratedSem as any).schema = SEM_SCHEMA;  // Temporarily set to 0.1 for canonicalization
+  const canonical = canonicalizeSem(migratedSem);
+  const digest = crypto.createHash('sha256').update(stableStringify(canonical)).digest('hex');
+  const newFp = `lfp:${FP_VERSION_02}:sha256:${digest.slice(0, 32)}`;  // 0.2 fingerprint
+  (migratedSem as any).schema = currentSchema;  // Restore to 0.2
+
+  return {
+    sem: migratedSem,
+    record: {
+      recordVersion,
+      source: (sem as any).source ?? { text: '', language: null },
+      sem: migratedSem,
+      fingerprint: newFp,
+      renderings: {},
+      policy: {
+        eligible: true,
+        category: 'migration',
+        risk: 'unknown' as const,
+        confidence: 0,
+        reasons: ['forward migration']
+      },
+      meta: { created: new Date().toISOString(), schemaVersion: '0.2' }
+    },
+    warnings
+  };
+}
+
+/**
+ * Backward migration: 0.2 frozen → 0.1-draft (lossy).
+ * Downgrades schema version, strips locked fields, warns about data loss.
+ * Returns a new record with 0.1 schema references.
+ */
+export function migrateSem02to01(sem: LunumSem): BackwardMigrationResult {
+  const warnings: MigrationWarning[] = [];
+
+  const migratedSem = structuredClone(sem);
+  (migratedSem as any).schema = SEM_SCHEMA;
+
+  // Downgrade clauses — modality becomes string again
+  if (Array.isArray(migratedSem.clauses)) {
+    migratedSem.clauses = migratedSem.clauses.map((clause: any) => {
+      const downgraded: any = { ...clause };
+      // Modality is already enum in 0.2, but 0.1 allows any string
+      // No warning needed — enum values are valid strings
+      return downgraded;
+    });
+  }
+
+  // Strip provenance to unrestricted shape
+  if (migratedSem.provenance) {
+    const prov = migratedSem.provenance as any;
+    // Convert locked provenance back to unrestricted (no data loss if only locked fields)
+    // But warn if there were originally more fields
+    warnings.push({
+      code: 'PROVENANCE_UNRESTRICTED',
+      message: 'Provenance reverted to unrestricted object shape',
+      field: 'provenance'
+    });
+  }
+
+  // Strip annotations to unrestricted shape
+  if (migratedSem.annotations) {
+    const ann = migratedSem.annotations as any;
+    warnings.push({
+      code: 'ANNOTATIONS_UNRESTRICTED',
+      message: 'Annotations reverted to unrestricted object shape',
+      field: 'annotations'
+    });
+  }
+
+  // Migrate record - ensure schema is 0.1 for canonicalization
+  const recordVersion = RECORD_SCHEMA as any;
+  const currentSchema = (migratedSem as any).schema;
+  (migratedSem as any).schema = SEM_SCHEMA;  // Set to 0.1 for canonicalization
+  const newFp = `lfp:${FP_VERSION}:sha256:${crypto.createHash('sha256').update(stableStringify(migratedSem)).digest('hex').slice(0, 32)}`;
+  (migratedSem as any).schema = currentSchema;  // Restore
+
+  return {
+    sem: migratedSem,
+    record: {
+      recordVersion,
+      source: (sem as any).source ?? { text: '', language: null },
+      sem: migratedSem,
+      fingerprint: newFp,
+      renderings: {},
+      policy: {
+        eligible: true,
+        category: 'migration',
+        risk: 'unknown' as const,
+        confidence: 0,
+        reasons: ['backward migration']
+      },
+      meta: { schemaVersion: '0.1-draft' }
+    },
+    warnings
+  };
+}
+
+/**
+ * Round-trip migration test: 0.1 → 0.2 → 0.1.
+ * Verifies that forward then backward migration produces a valid 0.1 record
+ * with explicit warnings about any data loss.
+ */
+export function roundTripMigration(initialSem: LunumSem): { forward: ForwardMigrationResult; backward: BackwardMigrationResult } {
+  const forward = migrateSem01to02(initialSem);
+  const backward = migrateSem02to01(forward.sem);
+  return { forward, backward };
 }

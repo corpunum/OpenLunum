@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import type { ProtectedEvalSchema } from '../src/types-schema.js';
+import type { ProtectedEvalSchema01 } from '../src/types-schema.js';
 
-test('ProtectedEvalSchema has required schema constant', () => {
-  const schema: ProtectedEvalSchema = {
+test('ProtectedEvalSchema01 has required schema constant', () => {
+  const schema: ProtectedEvalSchema01 = {
     schema: 'openlunum-protected-eval/0.1',
     id: 'test-protected-eval',
     version: '1.0.0',
@@ -28,8 +28,8 @@ test('ProtectedEvalSchema has required schema constant', () => {
   assert.ok(typeof schema.datasetId === 'string' && schema.datasetId.length > 0);
 });
 
-test('ProtectedEvalSchema dataset supports envVar resolution', () => {
-  const schema: ProtectedEvalSchema = {
+test('ProtectedEvalSchema01dataset supports envVar resolution', () => {
+  const schema: ProtectedEvalSchema01= {
     schema: 'openlunum-protected-eval/0.1',
     id: 'test-env-var-resolve',
     version: '1.0.0',
@@ -52,8 +52,8 @@ test('ProtectedEvalSchema dataset supports envVar resolution', () => {
   assert.strictEqual(schema.dataset.path, '$PROTECTED_DATASET');
 });
 
-test('ProtectedEvalSchema coverage includes multiple tasks', () => {
-  const schema: ProtectedEvalSchema = {
+test('ProtectedEvalSchema01coverage includes multiple tasks', () => {
+  const schema: ProtectedEvalSchema01= {
     schema: 'openlunum-protected-eval/0.1',
     id: 'test-multi-task',
     version: '1.0.0',
@@ -78,8 +78,8 @@ test('ProtectedEvalSchema coverage includes multiple tasks', () => {
   assert.strictEqual(schema.coverage.categories.length, 4);
 });
 
-test('ProtectedEvalSchema is assignable from literal object', () => {
-  const literal: ProtectedEvalSchema = {
+test('ProtectedEvalSchema01is assignable from literal object', () => {
+  const literal: ProtectedEvalSchema01= {
     schema: 'openlunum-protected-eval/0.1',
     id: 'literal-test',
     version: '0.1.0',
@@ -102,8 +102,8 @@ test('ProtectedEvalSchema is assignable from literal object', () => {
   assert.deepStrictEqual(literal.coverage.tasks, ['conformance']);
 });
 
-test('ProtectedEvalSchema SHA-256 must be 64 hex characters', () => {
-  const validSchema: ProtectedEvalSchema = {
+test('ProtectedEvalSchema01SHA-256 must be 64 hex characters', () => {
+  const validSchema: ProtectedEvalSchema01= {
     schema: 'openlunum-protected-eval/0.1',
     id: 'valid-sha',
     version: '1.0.0',
@@ -124,7 +124,7 @@ test('ProtectedEvalSchema SHA-256 must be 64 hex characters', () => {
   assert.strictEqual(validSchema.dataset.sha256.length, 64);
 
   // All valid hex chars
-  const hexSchema: ProtectedEvalSchema = {
+  const hexSchema: ProtectedEvalSchema01= {
     schema: 'openlunum-protected-eval/0.1',
     id: 'hex-test',
     version: '1.0.0',
