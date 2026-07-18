@@ -155,5 +155,5 @@
 - agent/typescript-agent-research-loop
 TASKS ALREADY CLAIMED — existing agent branches (do NOT work on these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):
 
-- agent/qwen/adoption/cli-pipeline
-
+- agent/qwen/safety/prompt-injection-resistance
+>>>>>>> 5a54461 (feat(safety): add prompt-injection resistance tests for 10 adversarial inputs)
