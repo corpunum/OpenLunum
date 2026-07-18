@@ -7,6 +7,7 @@
 - agent/context/near-semantic-fingerprints
 - agent/context/policy-datasets
 - agent/corpunum/semantic-contract/expand-typed-structures
+- agent/docs/sync-1272f7ba
 - agent/docs/sync-18a9c9c1
 - agent/docs/sync-1c04461b
 - agent/docs/sync-1e4a99dc
@@ -66,6 +67,7 @@
 - agent/qwen/campaign/status-report
 - agent/qwen/campaign/status-verify
 - agent/qwen/campaign/work-queue-v2-update
+- agent/qwen/cli-migrate-command
 - agent/qwen/context/pr10-policy-aware-success
 - agent/qwen/context/pr10-stack-reconcile
 - agent/qwen/core-renderer/main
@@ -92,7 +94,11 @@
 - agent/qwen/renderer/token-atlas
 - agent/qwen/repository-reliability/pr8-contract-evidence
 - agent/qwen/repository-reliability/release-provenance
+- agent/qwen/retention-experiment
+- agent/qwen/schema-changelog
+- agent/qwen/schema-freeze-0.2
 - agent/qwen/schema-frozen-0.2
+- agent/qwen/schema-json-ref-crossrefs
 - agent/qwen/semantic-contract/conformance-gates
 - agent/qwen/semantic-contract/expand-typed-structures
 - agent/qwen/semantic-contract/expand-typed-structures-v2
