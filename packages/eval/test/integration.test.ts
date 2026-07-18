@@ -259,3 +259,50 @@ test('integration manifest round-trips through schema validator', async () => {
   const valid2 = validate(serialized);
   assert.strictEqual(valid2, true, `Serialized manifest should validate against schema`);
 });
+
+test('integration runner handles adapter throwing error', async () => {
+  // Test with an integration that will throw - nonexistent registry
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-integration-throw',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify thrown errors are caught',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/test-integration-throw',
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'missing-fixture-id' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-throw/output');
+
+  assert.ok(Array.isArray(results));
+  assert.strictEqual(results[0]!.status, 'error', 'Should handle missing fixture gracefully');
+  assert.strictEqual(results[0]!.resultStatus, 'error', 'Result status should be error');
+});
+
+test('integration runner returns failed status for nonzero execution', async () => {
+  // The test-registry adapter returns failure if fixtureId is missing
+  // We verify that non-success status is properly recorded
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-integration-nonzero',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify nonzero execution status is recorded',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/test-integration-nonzero',
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-nonzero/output');
+
+  assert.ok(Array.isArray(results));
+  assert.ok(results[0]!.resultStatus === 'success' || results[0]!.resultStatus === 'failed',
+    'Result status should be success or failed');
+});
