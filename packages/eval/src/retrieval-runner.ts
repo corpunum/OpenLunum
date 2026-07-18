@@ -90,108 +90,136 @@ export async function runRetrievalExperiment(
   const toProcess = fixtureFiles.slice(0, maxItems);
 
   for (const file of toProcess) {
-    const fixturePath = path.join(fixtureDir, file);
-    const fixture: RetrievalFixture = await readJson(fixturePath);
+    try {
+      const fixturePath = path.join(fixtureDir, file);
+      const fixture: RetrievalFixture = await readJson(fixturePath);
 
-    // Validate fixture structure
-    if (!fixture.queryId || typeof fixture.queryId !== 'string' || fixture.queryId.trim() === '') {
-      throw new Error(`Fixture ${file}: queryId must be a non-empty string`);
-    }
-    if (!fixture.query || typeof fixture.query !== 'string' || fixture.query.trim() === '') {
-      throw new Error(`Fixture ${file}: query must be a non-empty string`);
-    }
-    if (!Array.isArray(fixture.candidates) || fixture.candidates.length === 0) {
-      throw new Error(`Fixture ${file}: candidates must be a non-empty array`);
-    }
-    if (!Array.isArray(fixture.expectedRelevant)) {
-      throw new Error(`Fixture ${file}: expectedRelevant must be an array`);
-    }
-    // Fail-closed: reject empty expected set
-    if (fixture.expectedRelevant.length === 0) {
-      throw new Error(`Fixture ${file}: expectedRelevant must not be empty`);
-    }
-    if (!Array.isArray(fixture.rankedResults)) {
-      throw new Error(`Fixture ${file}: rankedResults must be an array`);
-    }
-
-    // Check for duplicate IDs in candidates
-    const candidateSet = new Set(fixture.candidates);
-    if (candidateSet.size !== fixture.candidates.length) {
-      throw new Error(`Fixture ${file}: duplicate IDs in candidates`);
-    }
-
-    // Check for duplicate IDs in rankedResults
-    const rankedSet = new Set(fixture.rankedResults);
-    if (rankedSet.size !== fixture.rankedResults.length) {
-      throw new Error(`Fixture ${file}: duplicate IDs in rankedResults`);
-    }
-
-    // Check for duplicate IDs in expectedRelevant
-    const expectedSet = new Set(fixture.expectedRelevant);
-    if (expectedSet.size !== fixture.expectedRelevant.length) {
-      throw new Error(`Fixture ${file}: duplicate IDs in expectedRelevant`);
-    }
-
-    // Check for empty IDs
-    for (const id of [...fixture.candidates, ...fixture.rankedResults, ...fixture.expectedRelevant]) {
-      if (typeof id !== 'string' || id.trim() === '') {
-        throw new Error(`Fixture ${file}: empty ID found`);
+      // Validate fixture structure
+      if (!fixture.queryId || typeof fixture.queryId !== 'string' || fixture.queryId.trim() === '') {
+        throw new Error(`Fixture ${file}: queryId must be a non-empty string`);
       }
+      if (!fixture.query || typeof fixture.query !== 'string' || fixture.query.trim() === '') {
+        throw new Error(`Fixture ${file}: query must be a non-empty string`);
+      }
+      if (!Array.isArray(fixture.candidates) || fixture.candidates.length === 0) {
+        throw new Error(`Fixture ${file}: candidates must be a non-empty array`);
+      }
+      if (!Array.isArray(fixture.expectedRelevant)) {
+        throw new Error(`Fixture ${file}: expectedRelevant must be an array`);
+      }
+      // Fail-closed: reject empty expected set
+      if (fixture.expectedRelevant.length === 0) {
+        throw new Error(`Fixture ${file}: expectedRelevant must not be empty`);
+      }
+      if (!Array.isArray(fixture.rankedResults)) {
+        throw new Error(`Fixture ${file}: rankedResults must be an array`);
+      }
+
+      // Check for duplicate IDs in candidates
+      const candidateSet = new Set(fixture.candidates);
+      if (candidateSet.size !== fixture.candidates.length) {
+        throw new Error(`Fixture ${file}: duplicate IDs in candidates`);
+      }
+
+      // Check for duplicate IDs in rankedResults
+      const rankedSet = new Set(fixture.rankedResults);
+      if (rankedSet.size !== fixture.rankedResults.length) {
+        throw new Error(`Fixture ${file}: duplicate IDs in rankedResults`);
+      }
+
+      // Check for duplicate IDs in expectedRelevant
+      const expectedSet = new Set(fixture.expectedRelevant);
+      if (expectedSet.size !== fixture.expectedRelevant.length) {
+        throw new Error(`Fixture ${file}: duplicate IDs in expectedRelevant`);
+      }
+
+      // Check for empty IDs
+      for (const id of [...fixture.candidates, ...fixture.rankedResults, ...fixture.expectedRelevant]) {
+        if (typeof id !== 'string' || id.trim() === '') {
+          throw new Error(`Fixture ${file}: empty ID found`);
+        }
+      }
+
+      // Validate ranked results are subset of candidates
+      const unknownCandidates = fixture.rankedResults.filter(id => !candidateSet.has(id));
+      if (unknownCandidates.length > 0) {
+        throw new Error(`Fixture ${file}: ranked results contain unknown candidates: ${unknownCandidates.join(', ')}`);
+      }
+
+      // Validate expected relevant are in candidates
+      const unknownExpected = fixture.expectedRelevant.filter(id => !candidateSet.has(id));
+      if (unknownExpected.length > 0) {
+        throw new Error(`Fixture ${file}: expected relevant not in candidates: ${unknownExpected.join(', ')}`);
+      }
+
+      // Slice to top-k
+      const topK = fixture.rankedResults.slice(0, k);
+
+      // Compute metrics
+      const prec = precisionAtK(topK, fixture.expectedRelevant);
+      const rec = recallAtK(topK, fixture.expectedRelevant);
+      const rr = reciprocalRank(topK, fixture.expectedRelevant);
+      const fps = topK.filter(id => !fixture.expectedRelevant.includes(id));
+      const fns = fixture.expectedRelevant.filter(id => !topK.includes(id));
+      const falseEqIds = fixture.falseEquivalenceIds ?? [];
+      const hasFalseEq = falseEqIds.some(id => topK.includes(id));
+
+      // Use manifest gates instead of hard-coded 0.5
+      const minRecall = manifest.gates.minimumFeatureRecall ?? 0.5;
+      const minExact = manifest.gates.minimumExactRate ?? 0.5;
+      const passed = prec >= minExact && rec >= minRecall;
+
+      const result: RetrievalItemResult = {
+        id: fixture.queryId,
+        status: passed ? 'passed' : 'failed',
+        rawOutput: JSON.stringify({ query: fixture.query, topK, expected: fixture.expectedRelevant }),
+        queryId: fixture.queryId,
+        candidateIds: fixture.candidates,
+        expectedRelevantIds: fixture.expectedRelevant,
+        rankedResultIds: topK,
+        mode: manifest.retrievalConfig.mode ?? fixture.mode,
+        exact: passed,
+        featurePrecision: prec,
+        featureRecall: rec,
+        precisionAtK: prec,
+        recallAtK: rec,
+        reciprocalRank: rr,
+        meanReciprocalRank: rr,
+        falsePositives: fps,
+        falseNegatives: fns,
+        hasFalseEquivalence: hasFalseEq,
+        isNearSemantic: (manifest.retrievalConfig.mode ?? fixture.mode) === 'near-semantic',
+        latencyMs: 0
+      };
+
+      results.push(result);
+    } catch (err) {
+      // Catch errors per-fixture instead of aborting the entire run
+      // This ensures evidence bundle is always written
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      const baseId = file.replace(/\.json$/, '');
+      results.push({
+        id: baseId,
+        status: 'error',
+        rawOutput: errorMessage,
+        queryId: baseId,
+        candidateIds: [],
+        expectedRelevantIds: [],
+        rankedResultIds: [],
+        mode: manifest.retrievalConfig.mode ?? 'exact',
+        exact: false,
+        precisionAtK: 0,
+        recallAtK: 0,
+        reciprocalRank: 0,
+        meanReciprocalRank: 0,
+        falsePositives: [],
+        falseNegatives: [],
+        hasFalseEquivalence: false,
+        isNearSemantic: false,
+        error: errorMessage,
+        latencyMs: 0
+      } as RetrievalItemResult);
     }
-
-    // Validate ranked results are subset of candidates
-    const unknownCandidates = fixture.rankedResults.filter(id => !candidateSet.has(id));
-    if (unknownCandidates.length > 0) {
-      throw new Error(`Fixture ${file}: ranked results contain unknown candidates: ${unknownCandidates.join(', ')}`);
-    }
-
-    // Validate expected relevant are in candidates
-    const unknownExpected = fixture.expectedRelevant.filter(id => !candidateSet.has(id));
-    if (unknownExpected.length > 0) {
-      throw new Error(`Fixture ${file}: expected relevant not in candidates: ${unknownExpected.join(', ')}`);
-    }
-
-    // Slice to top-k
-    const topK = fixture.rankedResults.slice(0, k);
-
-    // Compute metrics
-    const prec = precisionAtK(topK, fixture.expectedRelevant);
-    const rec = recallAtK(topK, fixture.expectedRelevant);
-    const rr = reciprocalRank(topK, fixture.expectedRelevant);
-    const fps = topK.filter(id => !fixture.expectedRelevant.includes(id));
-    const fns = fixture.expectedRelevant.filter(id => !topK.includes(id));
-    const falseEqIds = fixture.falseEquivalenceIds ?? [];
-    const hasFalseEq = falseEqIds.some(id => topK.includes(id));
-
-    // Use manifest gates instead of hard-coded 0.5
-    const minRecall = manifest.gates.minimumFeatureRecall ?? 0.5;
-    const minExact = manifest.gates.minimumExactRate ?? 0.5;
-    const passed = prec >= minExact && rec >= minRecall;
-
-    const result: RetrievalItemResult = {
-      id: fixture.queryId,
-      status: passed ? 'passed' : 'failed',
-      rawOutput: JSON.stringify({ query: fixture.query, topK, expected: fixture.expectedRelevant }),
-      queryId: fixture.queryId,
-      candidateIds: fixture.candidates,
-      expectedRelevantIds: fixture.expectedRelevant,
-      rankedResultIds: topK,
-      mode: manifest.retrievalConfig.mode ?? fixture.mode,
-      exact: passed,
-      featurePrecision: prec,
-      featureRecall: rec,
-      precisionAtK: prec,
-      recallAtK: rec,
-      reciprocalRank: rr,
-      meanReciprocalRank: rr,
-      falsePositives: fps,
-      falseNegatives: fns,
-      hasFalseEquivalence: hasFalseEq,
-      isNearSemantic: (manifest.retrievalConfig.mode ?? fixture.mode) === 'near-semantic',
-      latencyMs: 0
-    };
-
-    results.push(result);
   }
 
   // Compute aggregate MRR

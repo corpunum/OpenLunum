@@ -155,7 +155,7 @@ test('retrieval runner rejects duplicate IDs in candidates', async () => {
       area: 'retrieval',
       task: 'retrieval',
       deterministic: true,
-      hypothesis: 'Verify duplicate candidate IDs are detected and rejected',
+      hypothesis: 'Verify duplicate candidate IDs produce error results',
       baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
       limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
       gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
@@ -163,11 +163,16 @@ test('retrieval runner rejects duplicate IDs in candidates', async () => {
       retrievalConfig: { k: 3, mode: 'exact' }
     };
 
-    // The runner should throw because the fixture has duplicate candidate IDs
-    await assert.rejects(
-      runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir),
-      { message: /duplicate IDs in candidates/ }
-    );
+    // The runner catches the error per-fixture and returns error result
+    const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir);
+    const errorResult = results.find(r => r.id === 'test-dup-candidates');
+    assert.ok(errorResult, 'Should have error result for duplicate fixture');
+    assert.strictEqual(errorResult!.status, 'error', 'Error result status should be error');
+    assert.ok(errorResult!.error?.includes('duplicate IDs in candidates'), 'Error should mention duplicates');
+    // Evidence bundle should still be written
+    const resultsPath = path.join(testDir, 'retrieval-results.json');
+    const resultsContent = JSON.parse(await readFile(resultsPath, 'utf8'));
+    assert.ok(resultsContent.results, 'Should have evidence bundle');
   } finally {
     await rm(dupFixturePath, { force: true });
   }
@@ -195,7 +200,7 @@ test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
       area: 'retrieval',
       task: 'retrieval',
       deterministic: true,
-      hypothesis: 'Verify duplicate expectedRelevant IDs are detected and rejected',
+      hypothesis: 'Verify duplicate expectedRelevant IDs produce error results',
       baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
       limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
       gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
@@ -203,11 +208,12 @@ test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
       retrievalConfig: { k: 3, mode: 'exact' }
     };
 
-    // The runner should throw because the fixture has duplicate expectedRelevant IDs
-    await assert.rejects(
-      runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir),
-      { message: /duplicate IDs in expectedRelevant/ }
-    );
+    // The runner catches the error per-fixture and returns error result
+    const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir);
+    const errorResult = results.find(r => r.id === 'test-dup-expected');
+    assert.ok(errorResult, 'Should have error result for duplicate fixture');
+    assert.strictEqual(errorResult!.status, 'error', 'Error result status should be error');
+    assert.ok(errorResult!.error?.includes('duplicate IDs in expectedRelevant'), 'Error should mention duplicates');
   } finally {
     await rm(dupFixturePath, { force: true });
   }
@@ -301,7 +307,58 @@ test('retrieval runner computes aggregate MRR', async () => {
   // Check that the output file contains MRR
   const resultsPath = path.join(output, 'retrieval-results.json');
   const resultsContent = JSON.parse(await readFile(resultsPath, 'utf8'));
-  
+
   assert.ok(resultsContent.aggregateMetrics, 'Should have aggregateMetrics');
   assert.ok(typeof resultsContent.aggregateMetrics.meanReciprocalRank === 'number', 'Should have meanReciprocalRank');
+});
+
+test('retrieval runner produces evidence bundle when malformed fixture aborts', async () => {
+  const testDir = createTempDir();
+  const stdFixturesDir = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+  const malformedFixturePath = path.join(stdFixturesDir, 'test-malformed.json');
+
+  // Write a malformed fixture (missing queryId)
+  await writeFile(malformedFixturePath, JSON.stringify({
+    query: 'Test malformed',
+    candidates: ['a', 'b'],
+    expectedRelevant: ['a'],
+    rankedResults: ['a', 'b'],
+    mode: 'exact'
+  }, null, 2));
+
+  try {
+    const manifest: RetrievalManifest = {
+      schema: 'openlunum-experiment/0.1',
+      id: 'test-retrieval-malformed',
+      area: 'retrieval',
+      task: 'retrieval',
+      deterministic: true,
+      hypothesis: 'Verify malformed fixtures produce error results and evidence bundle',
+      baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+      limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+      gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+      outputDirectory: testDir,
+      retrievalConfig: { k: 3, mode: 'exact' }
+    };
+
+    // Runner should NOT throw — it should catch the error per-fixture
+    const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir);
+
+    // Evidence bundle should exist
+    const resultsPath = path.join(testDir, 'retrieval-results.json');
+    const resultsContent = JSON.parse(await readFile(resultsPath, 'utf8'));
+    assert.ok(resultsContent, 'Should have evidence bundle');
+    assert.ok(Array.isArray(resultsContent.results), 'Should have results array');
+
+    // Should have at least one error result
+    const errorResult = results.find(r => r.status === 'error');
+    assert.ok(errorResult, 'Should have at least one error result');
+    assert.strictEqual(errorResult!.status, 'error', 'Error result status should be error');
+    assert.ok(errorResult!.error?.includes('queryId'), 'Error should mention missing queryId');
+    // Other results should still be present (not all aborted)
+    const nonErrorResults = results.filter(r => r.status !== 'error');
+    assert.ok(nonErrorResults.length > 0, 'Should have non-error results too');
+  } finally {
+    await rm(malformedFixturePath, { force: true });
+  }
 });
