@@ -65,7 +65,7 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 ## P2 — downstream quality gates
 
-- [ ] Add task-success metrics and quality gates that verify downstream task quality is preserved when using Lunum context vs raw text.
+- [x] Add task-success metrics and quality gates that verify downstream task quality is preserved when using Lunum context vs raw text.
 
 ## Claiming work
 
