@@ -356,3 +356,47 @@ test('negative compile fixture: tsc produces exactly one TS2322', async () => {
     `Unexpected diagnostic: ${sole}`
   );
 });
+
+// ── Issue #11 Item 7: nested config schemas permissive ─────────────
+
+test('existing experiment manifests validate against experiment schema', async () => {
+  const experimentsDir = path.join(WORKSPACE_ROOT, 'experiments');
+  const experimentSchema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  const dirs = fs.readdirSync(experimentsDir).filter((d) => {
+    try { fs.accessSync(path.join(experimentsDir, d, 'experiment.json')); return true; } catch { return false; }
+  });
+  assert.ok(dirs.length > 0, 'Must have experiment directories');
+  for (const dir of dirs) {
+    const manifestPath = path.join(experimentsDir, dir, 'experiment.json');
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8')) as Record<string, unknown>;
+    const errors: string[] = [];
+    const valid = validate(manifest, experimentSchema, errors);
+    assert.strictEqual(valid, true, `${dir}: schema validation failed: ${errors.join('; ')}`);
+  }
+});
+
+test('retrievalConfig rejects unknown fields', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  const retrievalSchema = schema.properties.retrievalConfig;
+  const data: Record<string, unknown> = { k: 10, mode: 'exact' };
+  // Valid fields should pass
+  const errors: string[] = [];
+  assert.strictEqual(validate(data, retrievalSchema, errors), true);
+  // Extra fields should fail with additionalProperties: false
+  data.extraField = 'unknown';
+  const errors2: string[] = [];
+  assert.strictEqual(validate(data, retrievalSchema, errors2), false, 'retrievalConfig should reject extra fields');
+});
+
+test('integrationConfig rejects unknown fields', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  const integrationSchema = schema.properties.integrationConfig;
+  const data: Record<string, unknown> = { selectedIntegration: 'openunum', fixtureId: 'test' };
+  // Valid fields should pass
+  const errors: string[] = [];
+  assert.strictEqual(validate(data, integrationSchema, errors), true);
+  // Extra fields should fail with additionalProperties: false
+  data.extraField = 'unknown';
+  const errors2: string[] = [];
+  assert.strictEqual(validate(data, integrationSchema, errors2), false, 'integrationConfig should reject extra fields');
+});

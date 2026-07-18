@@ -4,7 +4,7 @@
 export interface ExperimentSchema {
   schema: "openlunum-experiment/0.1";
   id: string;
-  area: "semantic-contract" | "multilingual-parse" | "realization" | "rendering" | "context" | "retrieval" | "integration" | "infrastructure";
+  area: "semantic-contract" | "multilingual-parse" | "realization" | "rendering" | "context" | "retrieval" | "integration" | "adoption" | "renderer" | "repository-reliability" | "infrastructure";
   task: "parse" | "realize" | "render" | "context" | "retrieval" | "integration" | "conformance" | "infrastructure";
   hypothesis: string;
   baselineCommit: string;

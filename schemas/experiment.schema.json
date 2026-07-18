@@ -32,6 +32,9 @@
         "context",
         "retrieval",
         "integration",
+        "adoption",
+        "renderer",
+        "repository-reliability",
         "infrastructure"
       ]
     },
@@ -96,7 +99,7 @@
         },
         "maxModelCalls": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 0
         }
       }
     },
@@ -132,6 +135,7 @@
     },
     "retrievalConfig": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Configuration for retrieval tasks",
       "properties": {
         "k": {
@@ -146,6 +150,7 @@
     },
     "integrationConfig": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Configuration for integration tasks",
       "properties": {
         "selectedIntegration": {
