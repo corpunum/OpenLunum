@@ -72,7 +72,7 @@ All v2 items implemented and merged as of 2026-07-18.
 
 ## P1 — semantic contract hardening
 
-- [x] Implement fingerprint migration utilities (code, not just docs): detect version, migrate records, golden vectors. (claimed)
+- [ ] Implement fingerprint migration utilities (code, not just docs): detect version, migrate records, golden vectors. (UNCHECKED by maintainer 2026-07-18: no migration code exists on main — claimed is not merged)
 - [x] Wire conformance property tests into CI as hard gates (idempotence, key-order independence, fingerprint stability). (PR #51)
 
 ## P2 — adoption
