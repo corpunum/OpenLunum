@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as path from 'path';
+import * as fs from 'node:fs';
 import { fileURLToPath } from 'url';
 import { runExperiment } from '../src/runner.js';
 import { writeFile, mkdir, readFile, rm } from 'node:fs/promises';
 import { mkdtemp } from 'node:fs/promises';
 import os from 'node:os';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -160,12 +161,28 @@ test('report validation with integrity hash', async () => {
     });
     const expectedHash = crypto.createHash('sha256').update(integrityData).digest('hex');
 
-    // Run validation with expected integrity hash
+    // Run validation with expected integrity hash (passing case)
     execFileSync('node', [scriptsPath, runDir, '--repo-root', workspaceRoot, '--expected-integrity', expectedHash], {
       cwd: workspaceRoot,
       encoding: 'utf8',
       timeout: 30000
     });
+
+    // Now tamper the summary and confirm validation fails with a wrong hash
+    const summaryPath = path.join(runDir, 'summary.json');
+    const tamperedSummary = JSON.parse(fs.readFileSync(summaryPath, 'utf8'));
+    tamperedSummary.passed = 999; // Tamper the data
+    fs.writeFileSync(summaryPath, JSON.stringify(tamperedSummary));
+
+    // Recompute the hash from the original (untampered) data, but the file is now tampered
+    // So validation should fail because the hash no longer matches
+    const { spawnSync } = await import('node:child_process');
+    const tamperedResult = spawnSync('node', [scriptsPath, runDir, '--repo-root', workspaceRoot, '--expected-integrity', expectedHash], {
+      cwd: workspaceRoot,
+      encoding: 'utf8',
+      timeout: 30000
+    });
+    assert.notStrictEqual(tamperedResult.status, 0, 'Tampered report should fail integrity check');
   } finally {
     await rm(temp, { recursive: true, force: true });
   }
