@@ -13,6 +13,7 @@
 - agent/docs/sync-35b43914
 - agent/docs/sync-3bde3733
 - agent/docs/sync-48f23688
+- agent/docs/sync-4c44df1c
 - agent/docs/sync-652d5da7
 - agent/docs/sync-66fdc244
 - agent/docs/sync-6ba1cb94
@@ -68,11 +69,11 @@
 - agent/qwen/core-renderer/main
 - agent/qwen/eval/integration-negative-matrix
 - agent/qwen/eval/parse-experiment-multilingual
+- agent/qwen/eval/report-validator-integrity-hash
 - agent/qwen/eval/retrieval-negative-matrix
 - agent/qwen/eval/schema-field-mismatch
 - agent/qwen/eval/tests-temp-dirs
 - agent/qwen/eval/tests-temp-dirs-2
-- agent/qwen/eval/report-validator-integrity-hash
 - agent/qwen/infra/pr9-stack-reconcile
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline-en
