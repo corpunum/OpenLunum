@@ -73,6 +73,12 @@ targets=$(git -C "$WT" diff --name-only "$since...HEAD" 2>/dev/null | grep -E '^
 
 if [[ $(time_left) -gt 600 && -n "$targets" ]]; then
   log "tester pass: targets = $(echo "$targets" | tr '\n' ' ')"
+  # Warm the tester model first — cold 122B loads take ~10 min and pi's
+  # request timeout gives up silently (empty tester log on 2026-07-18)
+  log "warming $TESTER_MODEL"
+  curl -s --max-time 1200 http://localhost:8080/v1/chat/completions -H 'Content-Type: application/json' \
+    -d "{\"model\":\"$TESTER_MODEL\",\"max_tokens\":5,\"messages\":[{\"role\":\"user\",\"content\":\"OK\"}]}" >/dev/null 2>&1
+  log "warm-up done"
   (cd "$WT" && timeout "$PI_TIMEOUT" pi --print --no-session \
     --provider local-llama --model "$TESTER_MODEL" --thinking high \
     "You are the nightly adversarial tester (red team) for OpenLunum, in $WT on a detached checkout of main. Recent commits:
