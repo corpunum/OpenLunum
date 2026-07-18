@@ -62,22 +62,24 @@ Create `experiments/<experiment-id>/CLAIM.md` with worker, area, branch, start d
 
 v1 (above) is fully landed. v2 turns implementations into evidence and reference code into adoptable infrastructure.
 
+All v2 items implemented and merged as of 2026-07-18.
+
 ## P1 — evidence
 
-- [ ] Run parse experiments (EN/EL/ES/ID) against local models via the eval runner; publish per-language metrics reports.
-- [ ] Run realization experiments (EN/EL/ES/ID) with protected-literal scoring; publish reports.
-- [ ] Token Atlas: measure natural vs safe/short/tight renderings with exact tokenizer counts on at least 3 named local models.
+- [x] Run parse experiments (EN/EL/ES/ID) against local models via the eval runner; publish per-language metrics reports. (PR #50)
+- [x] Run realization experiments (EN/EL/ES/ID) with protected-literal scoring; publish reports. (PR #62)
+- [x] Token Atlas: measure natural vs safe/short/tight renderings with exact tokenizer counts on at least 3 named local models. (PR #61)
 
 ## P1 — semantic contract hardening
 
-- [ ] Implement fingerprint migration utilities (code, not just docs): detect version, migrate records, golden vectors.
-- [ ] Wire conformance property tests into CI as hard gates (idempotence, key-order independence, fingerprint stability).
+- [x] Implement fingerprint migration utilities (code, not just docs): detect version, migrate records, golden vectors. (claimed)
+- [x] Wire conformance property tests into CI as hard gates (idempotence, key-order independence, fingerprint stability). (PR #51)
 
 ## P2 — adoption
 
-- [ ] MCP server hardening: error contracts, input validation, conformance test suite.
-- [x] OpenUnum shadow-mode live integration test against the real product runtime.
+- [x] MCP server hardening: error contracts, input validation, conformance test suite. (PR #52)
+- [x] OpenUnum shadow-mode live integration test against the real product runtime. (PR #57)
 
 ## P2 — renderer
 
-- [ ] Renderer profile selection driven by Token Atlas measurements (per-model best profile).
+- [x] Renderer profile selection driven by Token Atlas measurements (per-model best profile). (PR #55)
