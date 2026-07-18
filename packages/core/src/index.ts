@@ -13,3 +13,4 @@ export * from './token-atlas.js';
 export * from './agent-state.js';
 export * from './native-model.js';
 export * from './error-observability.js';
+export * from './downstream-quality.js';

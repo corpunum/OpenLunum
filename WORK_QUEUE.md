@@ -63,6 +63,10 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 - [x] Add error tracking, circuit-breaker, and revert-capability types to support observable and reversible failure modes.
 
+## P2 — downstream quality gates
+
+- [ ] Add task-success metrics and quality gates that verify downstream task quality is preserved when using Lunum context vs raw text.
+
 ## Claiming work
 
 Create `experiments/<experiment-id>/CLAIM.md` with worker, area, branch, start date, and intended dataset. A claim prevents accidental duplication; it does not reserve an area indefinitely.
