@@ -165,6 +165,9 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - **Realization runner:** Experiment runner with protected-literal scoring for multilingual realization experiments.
 - **Token Atlas:** Cross-model, cross-profile token measurement framework for measuring natural vs renderer profiles.
 - **Profile selection:** Renderer profile selection driven by Token Atlas measurements (per-model best profile).
+- **Downstream quality gates:** Task-success metrics and quality gates to verify downstream task quality preservation.
+- **Fingerprint migration utilities:** Code-level utilities for detecting versions, migrating records, and golden vectors.
+- **CI conformance gates:** Property tests wired into CI as hard gates for idempotence and fingerprint stability.
 
 ## Evidence snapshot
 
