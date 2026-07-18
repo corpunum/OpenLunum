@@ -261,6 +261,7 @@ test('integration manifest round-trips through schema validator', async () => {
 });
 
 test('integration runner handles adapter throwing error', async () => {
+  const output = createTempDir();
   // Test with an integration that will throw - nonexistent registry
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
@@ -272,11 +273,11 @@ test('integration runner handles adapter throwing error', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-throw',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'missing-fixture-id' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-throw/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.strictEqual(results[0]!.status, 'error', 'Should handle missing fixture gracefully');
@@ -284,6 +285,7 @@ test('integration runner handles adapter throwing error', async () => {
 });
 
 test('integration runner returns failed status for nonzero execution', async () => {
+  const output = createTempDir();
   // The test-registry adapter returns failure if fixtureId is missing
   // We verify that non-success status is properly recorded
   const manifest: IntegrationManifest = {
@@ -296,11 +298,11 @@ test('integration runner returns failed status for nonzero execution', async () 
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-nonzero',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-nonzero/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.ok(results[0]!.resultStatus === 'success' || results[0]!.resultStatus === 'failed',
