@@ -22,6 +22,7 @@
 - agent/docs/sync-4c44df1c
 - agent/docs/sync-5428177e
 - agent/docs/sync-57beaadb
+- agent/docs/sync-5c920edf
 - agent/docs/sync-652d5da7
 - agent/docs/sync-66fdc244
 - agent/docs/sync-6ba1cb94
@@ -69,7 +70,9 @@
 - agent/phase6-1/retrieval-integration-runners-v2
 - agent/pi-local-model-experiment
 - agent/qwen/adoption/cli-pipeline
+- agent/qwen/adoption/http-api-server
 - agent/qwen/adoption/mcp-server-hardening
+- agent/qwen/adoption/openunum-e2e-conformance
 - agent/qwen/adoption/openunum-shadow-live-test
 - agent/qwen/agent-state/protocol
 - agent/qwen/campaign/pr-verification
