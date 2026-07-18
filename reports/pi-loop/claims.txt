@@ -7,6 +7,7 @@
 - agent/context/near-semantic-fingerprints
 - agent/context/policy-datasets
 - agent/corpunum/semantic-contract/expand-typed-structures
+- agent/docs/sync-02f116d8
 - agent/docs/sync-1272f7ba
 - agent/docs/sync-18a9c9c1
 - agent/docs/sync-1c04461b
@@ -17,6 +18,7 @@
 - agent/docs/sync-48f23688
 - agent/docs/sync-4c44df1c
 - agent/docs/sync-5428177e
+- agent/docs/sync-57beaadb
 - agent/docs/sync-652d5da7
 - agent/docs/sync-66fdc244
 - agent/docs/sync-6ba1cb94
@@ -81,6 +83,7 @@
 - agent/qwen/infra/pr9-stack-reconcile
 - agent/qwen/issue-11-completion
 - agent/qwen/migration-bidirectional
+- agent/qwen/migration/golden-vectors
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline-en
 - agent/qwen/phase6-1/retrieval-integration-fix
@@ -95,6 +98,7 @@
 - agent/qwen/repository-reliability/pr8-contract-evidence
 - agent/qwen/repository-reliability/release-provenance
 - agent/qwen/retention-experiment
+- agent/qwen/retention/regression-gate
 - agent/qwen/schema-changelog
 - agent/qwen/schema-freeze-0.2
 - agent/qwen/schema-frozen-0.2
