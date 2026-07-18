@@ -134,14 +134,14 @@ test('retrieval runner rejects invalid k', async () => {
 });
 
 test('retrieval runner rejects duplicate IDs in candidates', async () => {
-  const temp = await import('node:os').then(os => os.tmpdir());
-  const testDir = path.join(temp, 'retrieval-dup-test');
-  const fixturePath = path.join(testDir, 'dup-candidates.json');
-  
-  await mkdir(testDir, { recursive: true });
-  await writeFile(fixturePath, JSON.stringify({
-    queryId: 'dup-test',
-    query: 'Test',
+  const testDir = createTempDir();
+  const stdFixturesDir = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+  const dupFixturePath = path.join(stdFixturesDir, 'test-dup-candidates.json');
+
+  // Write a fixture with duplicate candidate IDs to the standard fixtures dir
+  await writeFile(dupFixturePath, JSON.stringify({
+    queryId: 'test-dup-candidates',
+    query: 'Test duplicate candidates',
     candidates: ['a', 'b', 'a'], // duplicate 'a'
     expectedRelevant: ['a'],
     rankedResults: ['a', 'b'],
@@ -149,20 +149,13 @@ test('retrieval runner rejects duplicate IDs in candidates', async () => {
   }, null, 2));
 
   try {
-    // Create a custom fixtures dir for this test
-    const fixturesDir = path.join(testDir, 'fixtures');
-    await mkdir(fixturesDir, { recursive: true });
-    await writeFile(path.join(fixturesDir, 'dup-candidates.json'), await readFile(fixturePath, 'utf8'));
-
-    // Temporarily modify the runner to use our test dir
-    // For now, just verify the main runner works
     const manifest: RetrievalManifest = {
       schema: 'openlunum-experiment/0.1',
-      id: 'test-retrieval-dup',
+      id: 'test-retrieval-dup-candidates',
       area: 'retrieval',
       task: 'retrieval',
       deterministic: true,
-      hypothesis: 'Verify duplicate detection',
+      hypothesis: 'Verify duplicate candidate IDs are detected and rejected',
       baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
       limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
       gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
@@ -170,20 +163,25 @@ test('retrieval runner rejects duplicate IDs in candidates', async () => {
       retrievalConfig: { k: 3, mode: 'exact' }
     };
 
-    await runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir);
+    // The runner should throw because the fixture has duplicate candidate IDs
+    await assert.rejects(
+      runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir),
+      { message: /duplicate IDs in candidates/ }
+    );
   } finally {
-    await rm(testDir, { recursive: true, force: true });
+    await rm(dupFixturePath, { force: true });
   }
 });
 
 test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
-  const temp = await import('node:os').then(os => os.tmpdir());
-  const testDir = path.join(temp, 'retrieval-dup-expected-test');
-  const fixturesDir = path.join(testDir, 'fixtures');
-  await mkdir(fixturesDir, { recursive: true });
-  await writeFile(path.join(fixturesDir, 'dup-expected.json'), JSON.stringify({
-    queryId: 'dup-expected',
-    query: 'Test',
+  const testDir = createTempDir();
+  const stdFixturesDir = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+  const dupFixturePath = path.join(stdFixturesDir, 'test-dup-expected.json');
+
+  // Write a fixture with duplicate expectedRelevant IDs to the standard fixtures dir
+  await writeFile(dupFixturePath, JSON.stringify({
+    queryId: 'test-dup-expected',
+    query: 'Test duplicate expected relevant',
     candidates: ['a', 'b', 'c'],
     expectedRelevant: ['a', 'a'], // duplicate 'a'
     rankedResults: ['a', 'b', 'c'],
@@ -197,7 +195,7 @@ test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
       area: 'retrieval',
       task: 'retrieval',
       deterministic: true,
-      hypothesis: 'Verify duplicate expected detection',
+      hypothesis: 'Verify duplicate expectedRelevant IDs are detected and rejected',
       baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
       limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
       gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
@@ -205,32 +203,13 @@ test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
       retrievalConfig: { k: 3, mode: 'exact' }
     };
 
-    // Temporarily swap the fixture dir by creating our fixtures in the standard location
-    // For now, just verify the code path exists
-    const stdFixturesDir = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
-    // We'll test via the standard fixtures dir by adding a test fixture
-    // Actually, let's just verify the runner throws for duplicate expected
-    // by creating a fixture in the standard location
-    const dupFixturePath = path.join(stdFixturesDir, 'test-dup-expected.json');
-    await writeFile(dupFixturePath, JSON.stringify({
-      queryId: 'test-dup-expected',
-      query: 'Test duplicate expected',
-      candidates: ['a', 'b', 'c'],
-      expectedRelevant: ['a', 'a'],
-      rankedResults: ['a', 'b', 'c'],
-      mode: 'exact'
-    }, null, 2));
-
-    try {
-      await assert.rejects(
-        runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir),
-        { message: /duplicate IDs in expectedRelevant/ }
-      );
-    } finally {
-      await rm(dupFixturePath, { force: true });
-    }
+    // The runner should throw because the fixture has duplicate expectedRelevant IDs
+    await assert.rejects(
+      runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir),
+      { message: /duplicate IDs in expectedRelevant/ }
+    );
   } finally {
-    await rm(testDir, { recursive: true, force: true });
+    await rm(dupFixturePath, { force: true });
   }
 });
 
