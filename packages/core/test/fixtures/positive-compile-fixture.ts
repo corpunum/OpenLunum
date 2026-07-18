@@ -38,8 +38,8 @@ const _checkRecordSource: TwoWay<
 > = true;
 
 // Schema const value
-const _checkSchemaConst: 'lunum-sem/0.1-draft' extends LunumSemSchema['schema']
-  ? LunumSemSchema['schema'] extends 'lunum-sem/0.1-draft'
+const _checkSchemaConst: 'lunum-sem/0.2' extends LunumSemSchema['schema']
+  ? LunumSemSchema['schema'] extends 'lunum-sem/0.2'
     ? true
     : false
   : false = true;

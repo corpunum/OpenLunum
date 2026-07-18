@@ -20,7 +20,7 @@ const HEADER = `// Auto-generated from schemas/*.json — do not edit manually.
 
 // Load all schemas for cross-reference resolution
 const allSchemas = {};
-for (const file of fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.json')).sort()) {
+for (const file of fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.json') && !f.includes('-legacy')).sort()) {
   const content = fs.readFileSync(path.join(SCHEMAS_DIR, file), 'utf-8');
   const schema = JSON.parse(content);
   allSchemas[file] = schema;
@@ -137,7 +137,7 @@ function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes('--dry-run');
 
-  const schemaFiles = fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.json')).sort();
+  const schemaFiles = fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.json') && !f.includes('-legacy')).sort();
   const interfaces = schemaFiles.map(file => {
     const schema = allSchemas[file];
     return generateInterface(schemaToName(schema.$id || file), schema);

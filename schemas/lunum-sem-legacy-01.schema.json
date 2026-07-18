@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/lunum-sem/0.1-draft",
+  "title": "Lunum-Sem 0.1 Draft",
+  "description": "Lunum-Sem canonical semantic representation — version 0.1 (deprecated, use 0.2)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "world", "kind", "clauses"],
+  "properties": {
+    "schema": {
+      "const": "lunum-sem/0.1-draft"
+    },
+    "world": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "clauses": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/clause" }
+    },
+    "references": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "annotations": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "term": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["type"],
+          "properties": {
+            "type": { "type": "string" },
+            "id": { "type": "string" },
+            "value": {},
+            "language": { "type": "string" },
+            "ref": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "clause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate", "roles"],
+      "properties": {
+        "predicate": { "type": "string", "minLength": 1 },
+        "roles": { "type": "object", "additionalProperties": { "$ref": "#/$defs/term" } },
+        "negated": { "type": "boolean", "default": false },
+        "modality": { "type": ["string", "null"] },
+        "time": {},
+        "conditions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/clause" }
+        },
+        "consequences": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/clause" }
+        },
+        "annotations": { "type": "object" }
+      }
+    }
+  }
+}

@@ -22,7 +22,7 @@ export interface ExperimentSchema {
 export interface LunumRecordSchema {
   recordVersion: "lunum-record/0.1-draft";
   source: {     text: string,     language?: string | null,     role?: string | null,     ref?: string | null };
-  sem: {     schema: "lunum-sem/0.1-draft",     world: string,     kind: string,     clauses: Clause[],     references?: Record<string, unknown>[],     provenance?: Record<string, unknown>,     annotations?: Record<string, unknown> };
+  sem: {     schema: "lunum-sem/0.2",     world: string,     kind: string,     clauses: Clause[],     references?: {     uri: string,     type?: string,     label?: string }[],     provenance?: Record<string, unknown>,     annotations?: Record<string, unknown> };
   fingerprint: string;
   renderings: Record<string, unknown>;
   policy: {     eligible: boolean,     risk: "low" | "medium" | "high" | "unknown",     confidence: number,     reasons?: string[] };
@@ -30,17 +30,17 @@ export interface LunumRecordSchema {
 }
 
 export interface LunumSemSchema {
-  schema: "lunum-sem/0.1-draft";
+  schema: "lunum-sem/0.2";
   world: string;
   kind: string;
   clauses: Clause[];
-  references?: Record<string, unknown>[];
+  references?: {     uri: string,     type?: string,     label?: string }[];
   provenance?: Record<string, unknown>;
   annotations?: Record<string, unknown>;
 }
 
 export type Term = Record<string, unknown>;
-export type Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: string | null,     time?: unknown,     conditions?: Clause[],     consequences?: Clause[],     annotations?: Record<string, unknown> };
+export type Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: "fact" | "belief" | "goal" | "obligation" | "permission" | null,     time?: unknown,     conditions?: Clause[],     consequences?: Clause[],     annotations?: Record<string, unknown> };
 
 export interface ModelProfileSchema {
   schema: "openlunum-model-profile/0.1";

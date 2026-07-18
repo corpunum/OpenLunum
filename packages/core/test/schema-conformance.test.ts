@@ -108,7 +108,7 @@ const positiveFixtures = [
     data: {
       schema: 'openlunum-renderer-profile/0.1',
       id: 'safe/test/v1',
-      semSchema: 'lunum-sem/0.1-draft',
+      semSchema: 'lunum-sem/0.2',
       purpose: 'safe context',
       status: 'experimental',
       tokenStrategy: 'exact'
@@ -118,7 +118,7 @@ const positiveFixtures = [
     name: 'valid lunum-sem record',
     schema: 'lunum-sem.schema.json',
     data: {
-      schema: 'lunum-sem/0.1-draft',
+      schema: 'lunum-sem/0.2',
       world: 'real',
       kind: 'preference',
       clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } } }]
@@ -130,7 +130,7 @@ const positiveFixtures = [
     data: {
       recordVersion: 'lunum-record/0.1-draft',
       source: { text: 'Test source' },
-      sem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'test', clauses: [{ predicate: 'test', roles: {} }] },
+      sem: { schema: 'lunum-sem/0.2', world: 'real', kind: 'test', clauses: [{ predicate: 'test', roles: {} }] },
       fingerprint: 'lfp:0.1:sha256:abc',
       renderings: {},
       policy: { eligible: true, risk: 'low', confidence: 0.95, reasons: ['test'] }
@@ -159,7 +159,7 @@ const negativeFixtures = [
   {
     name: 'lunum-sem empty clauses',
     schema: 'lunum-sem.schema.json',
-    data: { schema: 'lunum-sem/0.1-draft', world: 'x', kind: 'x', clauses: [] }
+    data: { schema: 'lunum-sem/0.2', world: 'x', kind: 'x', clauses: [] }
   },
   {
     name: 'lunum-record missing sem',
@@ -193,7 +193,7 @@ test('negative fixtures: invalid JSON does not match its schema', async () => {
 test('types-schema.ts exists and exports all schema interfaces', async () => {
   assert.ok(fs.existsSync(TYPES_SCHEMA_PATH), 'types-schema.ts must exist');
   const content = fs.readFileSync(TYPES_SCHEMA_PATH, 'utf-8');
-  const schemaFiles = fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.json'));
+  const schemaFiles = fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.json') && !f.includes('-legacy'));
   for (const schemaFile of schemaFiles) {
     const typeName = schemaFile.replace(/\.schema\.json$/, '').split('-')
       .map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('') + 'Schema';

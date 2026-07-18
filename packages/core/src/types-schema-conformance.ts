@@ -31,8 +31,8 @@ type _TwoWayLunumSemCore = TwoWay<
 const _assertLunumSemCoreTwoWay: _TwoWayLunumSemCore = true;
 
 // Schema const must match exactly: "lunum-sem/0.1-draft"
-type _SemSchemaConst = 'lunum-sem/0.1-draft' extends LunumSemSchema['schema']
-  ? LunumSemSchema['schema'] extends 'lunum-sem/0.1-draft'
+type _SemSchemaConst = 'lunum-sem/0.2' extends LunumSemSchema['schema']
+  ? LunumSemSchema['schema'] extends 'lunum-sem/0.2'
     ? true
     : false
   : false;
