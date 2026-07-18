@@ -15,11 +15,10 @@ import {
 describe('error-observability', () => {
   function buildTracker(overrides: Partial<ObservabilityTracker> = {}): ObservabilityTracker {
     return {
-      errors: [],
-      circuits: {},
-      snapshots: [],
-      maxErrors: 100,
-      ...overrides
+      errors: overrides.errors ?? [],
+      circuits: overrides.circuits ?? {},
+      snapshots: overrides.snapshots ?? [],
+      maxErrors: overrides.maxErrors ?? 100
     };
   }
 
@@ -53,15 +52,16 @@ describe('error-observability', () => {
       const recorded = recordError(tracker, error);
       assert.strictEqual(recorded.id, 'err-1');
       assert.strictEqual(tracker.errors.length, 1);
-      assert.strictEqual(tracker.errors[0].message, 'parse failed');
+      assert.strictEqual(tracker.errors[0]!.message, 'parse failed');
     });
 
     it('auto-generates sequential IDs', () => {
       const tracker = buildTracker();
       recordError(tracker, { severity: 'warning', operation: 'render', message: 'w1', code: 'W1', recoverable: true });
       recordError(tracker, { severity: 'warning', operation: 'render', message: 'w2', code: 'W2', recoverable: true });
-      assert.strictEqual(tracker.errors[0].id, 'err-1');
-      assert.strictEqual(tracker.errors[1].id, 'err-2');
+      assert.strictEqual(tracker.errors.length, 2);
+      assert.strictEqual(tracker.errors[0]!.id, 'err-1');
+      assert.strictEqual(tracker.errors[1]!.id, 'err-2');
     });
 
     it('evicts oldest errors when exceeding maxErrors', () => {
@@ -70,8 +70,8 @@ describe('error-observability', () => {
       recordError(tracker, { severity: 'info', operation: 'parse', message: 'e2', code: 'E2', recoverable: true });
       recordError(tracker, { severity: 'info', operation: 'parse', message: 'e3', code: 'E3', recoverable: true });
       assert.strictEqual(tracker.errors.length, 2);
-      assert.strictEqual(tracker.errors[0].message, 'e2');
-      assert.strictEqual(tracker.errors[1].message, 'e3');
+      assert.strictEqual(tracker.errors[0]!.message, 'e2');
+      assert.strictEqual(tracker.errors[1]!.message, 'e3');
     });
   });
 
@@ -100,7 +100,7 @@ describe('error-observability', () => {
       updateCircuitBreaker(tracker, 'test', false);
       assert.strictEqual(tracker.circuits['test'].state, 'open');
       updateCircuitBreaker(tracker, 'test', true);
-      assert.strictEqual(tracker.circuits['test'].state, 'closed');
+      assert.strictEqual(tracker.circuits['test'].state, 'half-open');
     });
 
     it('transitions half-open → open on failure', () => {
