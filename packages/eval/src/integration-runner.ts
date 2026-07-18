@@ -6,7 +6,7 @@ import type { ExperimentManifest, ItemResult } from './types.js';
 export interface IntegrationManifest extends ExperimentManifest {
   task: 'integration';
   integrationConfig?: {
-    integrationId: string;
+    selectedIntegration: string;
     fixtureId: string;
   };
 }
@@ -20,6 +20,7 @@ export interface IntegrationItemResult extends ItemResult {
   artifacts: Record<string, unknown>;
   schemaValid: boolean;
   requiredArtifactsPresent: boolean;
+  environmentRequirements: Record<string, unknown>;
 }
 
 // Static repository-owned integration registry
@@ -34,7 +35,7 @@ const INTEGRATION_REGISTRY: Record<string, {
 }> = {};
 
 // Register test integrations from fixtures
-function registerTestIntegrations(root: string): void {
+function registerTestIntegrations(): void {
   // test-registry adapter
   INTEGRATION_REGISTRY['test-registry'] = {
     version: '1.0.0',
@@ -80,22 +81,22 @@ export async function runIntegrationExperiment(
   outputDir: string
 ): Promise<IntegrationItemResult[]> {
   // Register integrations from fixtures
-  registerTestIntegrations(root);
+  registerTestIntegrations();
 
   if (!manifest.integrationConfig) {
     throw new Error('Missing integrationConfig in manifest');
   }
 
-  const { integrationId, fixtureId } = manifest.integrationConfig;
+  const { selectedIntegration, fixtureId } = manifest.integrationConfig;
 
   // Check integration is in static allowlist
-  const registry = INTEGRATION_REGISTRY[integrationId];
+  const registry = INTEGRATION_REGISTRY[selectedIntegration];
   if (!registry) {
     return [{
       id: fixtureId,
       status: 'error',
-      rawOutput: `Unknown integration ID: ${integrationId}`,
-      integrationId,
+      rawOutput: `Unknown integration ID: ${selectedIntegration}`,
+      integrationId: selectedIntegration,
       integrationVersion: '',
       entrypointType: 'in-process',
       fixtureId,
@@ -103,13 +104,14 @@ export async function runIntegrationExperiment(
       artifacts: {},
       schemaValid: false,
       requiredArtifactsPresent: false,
-      error: `Unknown integration ID: ${integrationId}`,
+      environmentRequirements: {},
+      error: `Unknown integration ID: ${selectedIntegration}`,
       latencyMs: 0
     }];
   }
 
   // Load fixture
-  const fixturePath = path.join(root, 'packages/eval/test-fixtures/integration/fixtures', `${fixtureId}.json`);
+  const fixturePath = path.join(root, 'packages', 'eval', 'test-fixtures', 'integration', 'fixtures', `${fixtureId}.json`);
   let fixture: Record<string, unknown>;
   try {
     fixture = await readJson(fixturePath);
@@ -118,7 +120,7 @@ export async function runIntegrationExperiment(
       id: fixtureId,
       status: 'error',
       rawOutput: `Fixture not found: ${fixturePath}`,
-      integrationId,
+      integrationId: selectedIntegration,
       integrationVersion: registry.version,
       entrypointType: registry.entrypoint,
       fixtureId,
@@ -126,13 +128,14 @@ export async function runIntegrationExperiment(
       artifacts: {},
       schemaValid: false,
       requiredArtifactsPresent: false,
+      environmentRequirements: registry.allowedEnvironment,
       error: `Fixture not found: ${fixtureId}`,
       latencyMs: 0
     }];
   }
 
   // Execute adapter
-  let adapterResult: Awaited<ReturnType<typeof registry.adapter>>;
+  let adapterResult: Awaited<ReturnType<typeof registry['adapter']>>;
   let error: string | undefined;
   try {
     adapterResult = await registry.adapter(fixture as Record<string, unknown>);
@@ -146,7 +149,7 @@ export async function runIntegrationExperiment(
   artifacts['output.json'] = adapterResult;
   artifacts['log.txt'] = { level: 'info', message: adapterResult.message };
 
-  // Validate result against schema - check the full adapter result, not just data
+  // Validate result against schema
   const schemaValid = validateAgainstSchema(
     { status: adapterResult.status, message: adapterResult.message, ...(adapterResult.data ?? {}) },
     registry.schema
@@ -161,7 +164,7 @@ export async function runIntegrationExperiment(
     id: fixtureId,
     status: passed ? 'passed' : 'failed',
     rawOutput: JSON.stringify(adapterResult, null, 2),
-    integrationId,
+    integrationId: selectedIntegration,
     integrationVersion: registry.version,
     entrypointType: registry.entrypoint,
     fixtureId,
@@ -169,6 +172,7 @@ export async function runIntegrationExperiment(
     artifacts,
     schemaValid,
     requiredArtifactsPresent,
+    environmentRequirements: registry.allowedEnvironment,
     exact: passed,
     latencyMs: 0,
     error

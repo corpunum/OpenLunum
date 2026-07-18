@@ -26,6 +26,7 @@
     },
     "schemaValid": true,
     "requiredArtifactsPresent": true,
+    "environmentRequirements": {},
     "exact": true,
     "latencyMs": 0
   }

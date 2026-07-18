@@ -55,6 +55,14 @@ test('retrieval experiment executes through runExperiment', async () => {
       assert.ok(r.featureRecall !== undefined, 'Result must have recallAtK');
       assert.ok(r.reciprocalRank !== undefined, 'Result must have reciprocalRank');
     }
+
+    // Verify report files exist
+    assert.ok(await fileExists(path.join(runDir, 'manifest.snapshot.json')));
+    assert.ok(await fileExists(path.join(runDir, 'environment.json')));
+    assert.ok(await fileExists(path.join(runDir, 'item-results.jsonl')));
+    assert.ok(await fileExists(path.join(runDir, 'failures.jsonl')));
+    assert.ok(await fileExists(path.join(runDir, 'summary.json')));
+    assert.ok(await fileExists(path.join(runDir, 'report.md')));
   } finally {
     await rm(temp, { recursive: true, force: true });
   }
@@ -76,7 +84,7 @@ test('integration experiment executes through runExperiment', async () => {
       limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
       gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
       outputDirectory: output,
-      integrationConfig: { integrationId: 'test-registry', fixtureId: 'test-fixture-1' }
+      integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
     }), 'utf8');
 
     const runDir = await runExperiment(manifest);
@@ -142,3 +150,12 @@ test('retrieval experiment produces correct aggregate metrics', async () => {
     await rm(temp, { recursive: true, force: true });
   }
 });
+
+async function fileExists(p: string): Promise<boolean> {
+  try {
+    await readFile(p, 'utf8');
+    return true;
+  } catch {
+    return false;
+  }
+}

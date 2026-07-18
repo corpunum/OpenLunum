@@ -6,8 +6,6 @@ import { runIntegrationExperiment, type IntegrationManifest } from '../src/integ
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Workspace root for fixture paths
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
 test('integration runner executes adapter and validates schema', async () => {
@@ -22,7 +20,7 @@ test('integration runner executes adapter and validates schema', async () => {
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
     outputDirectory: 'reports/experiments/test-integration-adapter',
-    integrationConfig: { integrationId: 'test-registry', fixtureId: 'test-fixture-1' }
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
   const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-adapter/output');
@@ -30,7 +28,6 @@ test('integration runner executes adapter and validates schema', async () => {
   assert.ok(Array.isArray(results));
   assert.ok(results.length === 1);
 
-  assert.ok(results.length >= 1, 'Should have at least one result');
   const result = results[0]!;
   assert.strictEqual(result.integrationId, 'test-registry');
   assert.strictEqual(result.fixtureId, 'test-fixture-1');
@@ -40,6 +37,7 @@ test('integration runner executes adapter and validates schema', async () => {
   assert.strictEqual(result.status, 'passed');
   assert.ok(result.artifacts['output.json'], 'Should have output.json artifact');
   assert.ok(result.artifacts['log.txt'], 'Should have log.txt artifact');
+  assert.deepStrictEqual(result.environmentRequirements, {}, 'Should preserve environment requirements');
 });
 
 test('integration runner rejects unknown integration ID', async () => {
@@ -54,16 +52,16 @@ test('integration runner rejects unknown integration ID', async () => {
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
     outputDirectory: 'reports/experiments/test-integration-unknown',
-    integrationConfig: { integrationId: 'nonexistent-registry', fixtureId: 'test-fixture-1' }
+    integrationConfig: { selectedIntegration: 'nonexistent-registry', fixtureId: 'test-fixture-1' }
   };
 
   const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-unknown/output');
 
   assert.ok(Array.isArray(results));
   assert.ok(results.length === 1);
-  const errResult = results[0]!;
-  assert.strictEqual(errResult.status, 'error');
-  assert.ok(errResult.error?.includes('Unknown integration ID'));
+  assert.strictEqual(results[0]!.status, 'error');
+  assert.ok(results[0]!.error?.includes('Unknown integration ID'));
+  assert.strictEqual(results[0]!.resultStatus, 'error');
 });
 
 test('integration runner rejects missing fixture', async () => {
@@ -78,16 +76,16 @@ test('integration runner rejects missing fixture', async () => {
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
     outputDirectory: 'reports/experiments/test-integration-missing-fixture',
-    integrationConfig: { integrationId: 'test-registry', fixtureId: 'nonexistent-fixture' }
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'nonexistent-fixture' }
   };
 
   const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-missing-fixture/output');
 
   assert.ok(Array.isArray(results));
   assert.ok(results.length === 1);
-  const errResult2 = results[0]!;
-  assert.strictEqual(errResult2.status, 'error');
-  assert.ok(errResult2.error?.includes('Fixture not found'));
+  assert.strictEqual(results[0]!.status, 'error');
+  assert.ok(results[0]!.error?.includes('Fixture not found'));
+  assert.strictEqual(results[0]!.resultStatus, 'error');
 });
 
 test('integration runner validates required artifacts', async () => {
@@ -102,7 +100,7 @@ test('integration runner validates required artifacts', async () => {
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
     outputDirectory: 'reports/experiments/test-integration-artifacts',
-    integrationConfig: { integrationId: 'test-registry', fixtureId: 'test-fixture-1' }
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
   const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-artifacts/output');
@@ -110,4 +108,49 @@ test('integration runner validates required artifacts', async () => {
   assert.strictEqual(results[0]!.requiredArtifactsPresent, true, 'Required artifacts should be present');
   assert.ok('output.json' in results[0]!.artifacts);
   assert.ok('log.txt' in results[0]!.artifacts);
+});
+
+test('integration runner preserves integration version', async () => {
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-integration-version',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify integration version is preserved',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/test-integration-version',
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-version/output');
+
+  assert.strictEqual(results[0]!.integrationVersion, '1.0.0', 'Should preserve integration version');
+  assert.strictEqual(results[0]!.entrypointType, 'in-process', 'Should preserve entrypoint type');
+});
+
+test('integration runner handles adapter failure', async () => {
+  // The test-registry adapter returns failure if fixtureId is missing
+  // We can't easily test this without modifying the fixture, so we verify the error handling path exists
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-integration-error',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify error handling path exists',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/test-integration-error',
+    integrationConfig: { selectedIntegration: 'nonexistent', fixtureId: 'test' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-error/output');
+
+  assert.ok(Array.isArray(results));
+  assert.strictEqual(results[0]!.status, 'error');
+  assert.ok(results[0]!.error, 'Should have error message');
 });

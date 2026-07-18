@@ -1,65 +1,71 @@
-[
-  {
-    "id": "sample-query-1",
-    "status": "passed",
-    "rawOutput": "{\"query\":\"What is the capital of France?\",\"topK\":[\"paris\"],\"expected\":[\"paris\"]}",
-    "queryId": "sample-query-1",
-    "candidateIds": [
-      "paris",
-      "london",
-      "berlin",
-      "madrid",
-      "rome"
-    ],
-    "expectedRelevantIds": [
-      "paris"
-    ],
-    "rankedResultIds": [
-      "paris"
-    ],
-    "mode": "exact",
-    "exact": true,
-    "featurePrecision": 1,
-    "featureRecall": 1,
-    "precisionAtK": 1,
-    "recallAtK": 1,
-    "reciprocalRank": 1,
+{
+  "results": [
+    {
+      "id": "sample-query-1",
+      "status": "passed",
+      "rawOutput": "{\"query\":\"What is the capital of France?\",\"topK\":[\"paris\"],\"expected\":[\"paris\"]}",
+      "queryId": "sample-query-1",
+      "candidateIds": [
+        "paris",
+        "london",
+        "berlin",
+        "madrid",
+        "rome"
+      ],
+      "expectedRelevantIds": [
+        "paris"
+      ],
+      "rankedResultIds": [
+        "paris"
+      ],
+      "mode": "exact",
+      "exact": true,
+      "featurePrecision": 1,
+      "featureRecall": 1,
+      "precisionAtK": 1,
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "meanReciprocalRank": 1,
+      "falsePositives": [],
+      "falseNegatives": [],
+      "hasFalseEquivalence": false,
+      "isNearSemantic": false,
+      "latencyMs": 0
+    },
+    {
+      "id": "sample-query-2",
+      "status": "passed",
+      "rawOutput": "{\"query\":\"Who wrote the novel 'Pride and Prejudice'?\",\"topK\":[\"jane-austen\"],\"expected\":[\"jane-austen\"]}",
+      "queryId": "sample-query-2",
+      "candidateIds": [
+        "jane-austen",
+        "charles-dickens",
+        "william-shakespeare",
+        "mark-twain"
+      ],
+      "expectedRelevantIds": [
+        "jane-austen"
+      ],
+      "rankedResultIds": [
+        "jane-austen"
+      ],
+      "mode": "exact",
+      "exact": true,
+      "featurePrecision": 1,
+      "featureRecall": 1,
+      "precisionAtK": 1,
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "meanReciprocalRank": 1,
+      "falsePositives": [],
+      "falseNegatives": [],
+      "hasFalseEquivalence": false,
+      "isNearSemantic": false,
+      "latencyMs": 0
+    }
+  ],
+  "aggregateMetrics": {
     "meanReciprocalRank": 1,
-    "falsePositives": [],
-    "falseNegatives": [],
-    "hasFalseEquivalence": false,
-    "isNearSemantic": false,
-    "latencyMs": 0
-  },
-  {
-    "id": "sample-query-2",
-    "status": "passed",
-    "rawOutput": "{\"query\":\"Who wrote the novel 'Pride and Prejudice'?\",\"topK\":[\"jane-austen\"],\"expected\":[\"jane-austen\"]}",
-    "queryId": "sample-query-2",
-    "candidateIds": [
-      "jane-austen",
-      "charles-dickens",
-      "william-shakespeare",
-      "mark-twain"
-    ],
-    "expectedRelevantIds": [
-      "jane-austen"
-    ],
-    "rankedResultIds": [
-      "jane-austen"
-    ],
-    "mode": "exact",
-    "exact": true,
-    "featurePrecision": 1,
-    "featureRecall": 1,
-    "precisionAtK": 1,
-    "recallAtK": 1,
-    "reciprocalRank": 1,
-    "meanReciprocalRank": 1,
-    "falsePositives": [],
-    "falseNegatives": [],
-    "hasFalseEquivalence": false,
-    "isNearSemantic": false,
-    "latencyMs": 0
+    "items": 2
   }
-]
+}

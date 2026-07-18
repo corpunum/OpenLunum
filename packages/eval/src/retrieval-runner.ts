@@ -1,6 +1,6 @@
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { findWorkspaceRoot, readJson, writeJson } from './io.js';
+import { readJson } from './io.js';
 import type { ExperimentManifest, ItemResult } from './types.js';
 
 export interface RetrievalFixture {
@@ -55,6 +55,12 @@ function reciprocalRank(results: string[], expected: string[]): number {
   return 1 / (idx + 1);
 }
 
+function computeMRR(results: RetrievalItemResult[]): number {
+  if (results.length === 0) return 0;
+  const sum = results.reduce((acc, r) => acc + r.reciprocalRank, 0);
+  return sum / results.length;
+}
+
 export async function runRetrievalExperiment(
   manifest: RetrievalManifest,
   root: string,
@@ -79,13 +85,20 @@ export async function runRetrievalExperiment(
 
   const results: RetrievalItemResult[] = [];
 
-  for (const file of fixtureFiles) {
+  // Respect limits.maxItems
+  const maxItems = manifest.limits.maxItems ?? fixtureFiles.length;
+  const toProcess = fixtureFiles.slice(0, maxItems);
+
+  for (const file of toProcess) {
     const fixturePath = path.join(fixtureDir, file);
     const fixture: RetrievalFixture = await readJson(fixturePath);
 
     // Validate fixture structure
-    if (!fixture.queryId || !fixture.query) {
-      throw new Error(`Fixture ${file}: missing queryId or query`);
+    if (!fixture.queryId || typeof fixture.queryId !== 'string' || fixture.queryId.trim() === '') {
+      throw new Error(`Fixture ${file}: queryId must be a non-empty string`);
+    }
+    if (!fixture.query || typeof fixture.query !== 'string' || fixture.query.trim() === '') {
+      throw new Error(`Fixture ${file}: query must be a non-empty string`);
     }
     if (!Array.isArray(fixture.candidates) || fixture.candidates.length === 0) {
       throw new Error(`Fixture ${file}: candidates must be a non-empty array`);
@@ -93,12 +106,34 @@ export async function runRetrievalExperiment(
     if (!Array.isArray(fixture.expectedRelevant)) {
       throw new Error(`Fixture ${file}: expectedRelevant must be an array`);
     }
+    // Fail-closed: reject empty expected set
+    if (fixture.expectedRelevant.length === 0) {
+      throw new Error(`Fixture ${file}: expectedRelevant must not be empty`);
+    }
     if (!Array.isArray(fixture.rankedResults)) {
       throw new Error(`Fixture ${file}: rankedResults must be an array`);
     }
 
-    // Validate ranked results are subset of candidates
+    // Check for duplicate IDs in candidates
     const candidateSet = new Set(fixture.candidates);
+    if (candidateSet.size !== fixture.candidates.length) {
+      throw new Error(`Fixture ${file}: duplicate IDs in candidates`);
+    }
+
+    // Check for duplicate IDs in rankedResults
+    const rankedSet = new Set(fixture.rankedResults);
+    if (rankedSet.size !== fixture.rankedResults.length) {
+      throw new Error(`Fixture ${file}: duplicate IDs in rankedResults`);
+    }
+
+    // Check for empty IDs
+    for (const id of [...fixture.candidates, ...fixture.rankedResults]) {
+      if (typeof id !== 'string' || id.trim() === '') {
+        throw new Error(`Fixture ${file}: empty ID found`);
+      }
+    }
+
+    // Validate ranked results are subset of candidates
     const unknownCandidates = fixture.rankedResults.filter(id => !candidateSet.has(id));
     if (unknownCandidates.length > 0) {
       throw new Error(`Fixture ${file}: ranked results contain unknown candidates: ${unknownCandidates.join(', ')}`);
@@ -122,8 +157,10 @@ export async function runRetrievalExperiment(
     const falseEqIds = fixture.falseEquivalenceIds ?? [];
     const hasFalseEq = falseEqIds.some(id => topK.includes(id));
 
-    // Gate: both precision and recall must meet threshold (0.5 default)
-    const passed = prec >= 0.5 && rec >= 0.5;
+    // Use manifest gates instead of hard-coded 0.5
+    const minRecall = manifest.gates.minimumFeatureRecall ?? 0.5;
+    const minExact = manifest.gates.minimumExactRate ?? 0.5;
+    const passed = prec >= minExact && rec >= minRecall;
 
     const result: RetrievalItemResult = {
       id: fixture.queryId,
@@ -151,11 +188,17 @@ export async function runRetrievalExperiment(
     results.push(result);
   }
 
+  // Compute aggregate MRR
+  const mrr = computeMRR(results);
+
   // Write per-fixture results
   if (outputDir) {
     await mkdir(outputDir, { recursive: true });
     const resultsPath = path.join(outputDir, 'retrieval-results.json');
-    await writeFile(resultsPath, JSON.stringify(results, null, 2));
+    await writeFile(resultsPath, JSON.stringify({
+      results,
+      aggregateMetrics: { meanReciprocalRank: mrr, items: results.length }
+    }, null, 2));
   }
 
   return results;
