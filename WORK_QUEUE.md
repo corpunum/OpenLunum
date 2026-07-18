@@ -76,7 +76,7 @@ v1 (above) is fully landed. v2 turns implementations into evidence and reference
 ## P2 — adoption
 
 - [ ] MCP server hardening: error contracts, input validation, conformance test suite.
-- [ ] OpenUnum shadow-mode live integration test against the real product runtime.
+- [x] OpenUnum shadow-mode live integration test against the real product runtime.
 
 ## P2 — renderer
 
