@@ -8,3 +8,4 @@ export * from './derive.js';
 export * from './context.js';
 export * from './compare.js';
 export * from './profile-selector.js';
+export * from './token-atlas.js';
