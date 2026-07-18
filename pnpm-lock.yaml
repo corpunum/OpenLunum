@@ -21,6 +21,19 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/api:
+    dependencies:
+      '@corpunum/lunum':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.43
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+
   packages/cli:
     dependencies:
       '@corpunum/lunum':
