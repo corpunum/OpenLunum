@@ -40,19 +40,6 @@ You are an autonomous worker agent on the OpenLunum project. Your job is to impl
 
 ## Current priority order
 
-WORK_QUEUE v3 — Issue #11 completion (retrieval/integration runners).
-Work these IN ORDER. Each is a separate PR off main.
-
-1. **Schema field mismatch**: In `packages/eval/src/integration-runner.ts`, the code reads `integrationConfig.selectedIntegration` from the manifest (matching `schemas/experiment.schema.json`), but the `IntegrationResult` type in `packages/eval/src/types.ts` uses `integrationId`. Align the type to use `selectedIntegration` everywhere, or rename the schema field — pick one name and make code+schema+types agree. Add a test that round-trips a manifest through the schema validator.
-
-2. **Retrieval negative matrix**: In `packages/eval/src/retrieval-runner.ts` and its tests, add coverage for: duplicate IDs in expected/actual, empty expected sets, invalid/missing IDs, `maxItems` limit enforcement. Fix `meanReciprocalRank` to be a real aggregate (sum of per-query RR / number of queries), not per-item reciprocal rank. Use manifest `gates` thresholds instead of hard-coded `0.5`.
-
-3. **Integration negative matrix**: Add test cases for: timeout during execution, thrown errors from adapters, malformed adapter output (wrong shape), missing required artifacts, schema-mismatch between adapter output and expected format, nonzero/failed execution status. These should be in `packages/eval/test/integration-runner.test.ts`.
-
-4. **Tests must use temp dirs**: Any test that writes experiment reports must write to `os.tmpdir()` (via `mkdtemp`), not into repository paths like `reports/`. Clean up in an `after` hook. Check all test files under `packages/eval/test/`.
-
-5. **Report validator with integrity hash**: Add a test that runs the accepted report validator with a known-good integrity hash and confirms it passes, and with a tampered hash confirming it fails. This is the acceptance gate for Issue #11.
-
-When ALL 5 items are merged to main and `pnpm verify` is green, Issue #11 can be closed.
-
-After v3, fall back to PR-fixing mode.
+Work through WORK_QUEUE v4 in `WORK_QUEUE.md` — the unchecked `[ ]` items under "WORK_QUEUE v4".
+Priority order: P0 first (schema stability, migration rules), then P1, then P2.
+Each item is one PR. Skip items already claimed or checked off.

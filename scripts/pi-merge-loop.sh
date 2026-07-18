@@ -84,6 +84,16 @@ while true; do
 
     if verify_main; then
       log "PR #$pr MERGED, main green"
+      # Auto-close issues referenced in PR title (e.g. "Issue #11" or "#11")
+      pr_title=$(timeout 30 gh pr view "$pr" --repo corpunum/OpenLunum --json title --jq .title 2>/dev/null)
+      for issue_num in $(echo "$pr_title" | grep -oP '#\K\d+'); do
+        issue_state=$(timeout 30 gh issue view "$issue_num" --repo corpunum/OpenLunum --json state --jq .state 2>/dev/null)
+        if [[ "$issue_state" == "OPEN" ]]; then
+          timeout 30 gh issue close "$issue_num" --repo corpunum/OpenLunum \
+            --comment "Closed mechanically: PR #$pr merged and main is green." >/dev/null 2>&1 || true
+          log "Issue #$issue_num closed (referenced in PR #$pr)"
+        fi
+      done
     else
       sha=$(git -C "$WT" rev-parse origin/main)
       git -C "$WT" revert -m 1 --no-edit "$sha" >/dev/null 2>&1
