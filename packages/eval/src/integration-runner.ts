@@ -145,8 +145,12 @@ function registerTestIntegrations(): void {
   };
 }
 
-<<<<<<< HEAD
-function validateAgainstSchema(data: Record<string, unknown>, schema: Record<string, unknown>): boolean {
+/**
+ * Deep JSON Schema validator against a simplified subset of JSON Schema.
+ * Supports: type, properties, required, enum, additionalProperties, nested objects, arrays.
+ * Used for validating integration adapter output against the registry's declared schema.
+ */
+export function validateAgainstSchema(data: Record<string, unknown>, schema: Record<string, unknown>): boolean {
   const schemaType = schema.type as string | undefined;
 
   // Validate top-level type
@@ -221,12 +225,6 @@ function validateAgainstSchema(data: Record<string, unknown>, schema: Record<str
 
   return true;
 }
-
-  // Validate top-level type
-  if (schemaType === 'object' && typeof data !== 'object' || data === null) {
-    return false;
->>>>>>> d1148e8 (fix(issue-11): implement deep schema validator for integration runner)
-
 
 export async function runIntegrationExperiment(
   manifest: IntegrationManifest,
