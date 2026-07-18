@@ -18,6 +18,7 @@
 - agent/docs/sync-3bde3733
 - agent/docs/sync-40e10514
 - agent/docs/sync-48f23688
+- agent/docs/sync-4a2896fc
 - agent/docs/sync-4c44df1c
 - agent/docs/sync-5428177e
 - agent/docs/sync-57beaadb
@@ -87,6 +88,8 @@
 - agent/qwen/infra/pr9-stack-reconcile
 - agent/qwen/issue-11/artifact-validation
 - agent/qwen/issue-11-completion
+- agent/qwen/issue-11/duplicate-candidate-retrieval
+- agent/qwen/issue-11/false-equivalence
 - agent/qwen/issue-11/integration-tests-coverage
 - agent/qwen/issue-11/schema-validator-deep
 - agent/qwen/migration-bidirectional

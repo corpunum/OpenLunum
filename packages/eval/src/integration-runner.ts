@@ -115,7 +115,7 @@ function registerTestIntegrations(): void {
       },
       required: ['status', 'message']
     },
-    artifacts: ['output.json'],
+    requiredArtifacts: ['output.json'],
     adapter: async (_fixture) => {
       // Returns output with message explicitly undefined
       // Runner builds { status, message: undefined, ... } and validation rejects undefined values
@@ -138,7 +138,7 @@ function registerTestIntegrations(): void {
       },
       required: ['status', 'message']
     },
-    artifacts: ['output.json'],
+    requiredArtifacts: ['output.json'],
     adapter: async (_fixture) => {
       throw new Error('Simulated adapter crash');
     }
