@@ -154,3 +154,4 @@
 - agent/semantic-contract/typed-structures-expand
 - agent/typescript-agent-research-loop
 TASKS ALREADY CLAIMED — existing agent branches (do NOT work on these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):
+
