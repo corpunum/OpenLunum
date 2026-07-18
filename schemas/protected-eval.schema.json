@@ -35,10 +35,8 @@
       "required": ["path", "sha256", "license"],
       "properties": {
         "path": {
-          "oneOf": [
-            { "type": "string", "description": "Absolute path to dataset" },
-            { "type": "string", "description": "Environment variable reference (starts with $)" }
-          ]
+          "type": "string",
+          "description": "Absolute or relative path to dataset, or environment variable reference (starts with $)"
         },
         "sha256": {
           "type": "string",

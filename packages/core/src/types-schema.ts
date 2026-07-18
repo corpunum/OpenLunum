@@ -60,7 +60,7 @@ export interface ProtectedEvalSchema {
   id: string;
   version: string;
   datasetId: string;
-  dataset: {     path: unknown,     sha256: string,     license: string,     envVar?: string };
+  dataset: {     path: string,     sha256: string,     license: string,     envVar?: string };
   instructions: string;
   coverage: {     tasks: "parse" | "realize" | "render" | "context" | "retrieval" | "integration" | "conformance" | "infrastructure"[],     languages: string[],     categories: string[] };
 }
