@@ -136,3 +136,17 @@ elif ! alive; then
   log "loop dead without STUCK — auto-restarting"
   restart_loop
 fi
+
+# ---- Ensure supporting loops are alive --------------------------------
+if ! pgrep -f 'pi-review-loop\.sh' >/dev/null 2>&1; then
+  log "reviewer loop dead — restarting"
+  REVIEW_MODEL="${REVIEW_MODEL:-openai/superqwen-agentworld-35b-a3b}" nohup bash "$REPO/scripts/pi-review-loop.sh" > "$REPO/reports/pi-review/nohup.log" 2>&1 &
+fi
+if ! pgrep -f 'pi-merge-loop\.sh' >/dev/null 2>&1; then
+  log "merge bot dead — restarting"
+  nohup bash "$REPO/scripts/pi-merge-loop.sh" >> "$REPO/reports/pi-merge/merge-status.log" 2>&1 &
+fi
+if ! pgrep -f 'pi-docs-loop\.sh' >/dev/null 2>&1; then
+  log "docs loop dead — restarting"
+  nohup bash "$REPO/scripts/pi-docs-loop.sh" > "$REPO/reports/pi-docs/nohup.log" 2>&1 &
+fi
