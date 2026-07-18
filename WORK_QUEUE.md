@@ -53,7 +53,15 @@ Agents choose one area and create an experiment-specific branch. Priority is evi
 
 ## P2 — agent-state protocol
 
-- [ ] Encode plans, steps, tool calls, results, constraints, evidence, and inter-agent handoffs in a validated Lunum-compatible format.
+- [x] Encode plans, steps, tool calls, results, constraints, evidence, and inter-agent handoffs in a validated Lunum-compatible format.
+
+## P2 — native model protocol
+
+- [ ] Add protocol annotations for Lunum-native model compatibility (token mappings, instruction templates, fallback profiles for non-native models).
+
+## P2 — error observability
+
+- [ ] Add error tracking, circuit-breaker, and revert-capability types to support observable and reversible failure modes.
 
 ## Claiming work
 
