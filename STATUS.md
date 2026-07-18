@@ -17,6 +17,7 @@
 - Token Atlas for cross-model, cross-profile token measurement.
 - API stability tests with golden snapshots for `packages/core`.
 - OpenUnum adapter end-to-end conformance verification.
+- **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in summary.json and report.md.
 
 | Component | Status | Meaning |
 |---|---|---|
@@ -45,6 +46,7 @@
 | Token Atlas | Reference implementation | Cross-model, cross-profile token measurement framework |
 | API stability tests | Reference implementation | Snapshot-based tests for `packages/core` public exports |
 | OpenUnum adapter e2e conformance | Prototype | End-to-end verification against real product runtime |
+| Aggregate MRR | Reference implementation | Mean Reciprocal Rank for retrieval tasks, computed and validated in reports |
 
 ## Release gates before 1.0
 

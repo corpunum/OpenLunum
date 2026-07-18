@@ -13,6 +13,10 @@
 
 ### Added — Features (0.2.0)
 - **Profile Selection Result:** Explicit type for renderer profile selection driven by Token Atlas measurements.
+- **Report validation:** Script to validate report integrity with known-good and tampered hash verification.
+- **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in reports.
+- **MRR validation tests:** 5 tests for MRR inclusion and validation in retrieval reports.
+- **Report validation script:** Validates MRR presence, recomputability, and inclusion in report.md for retrieval tasks.
 - **Realization Runner:** Experiment runner with protected-literal scoring for multilingual realization.
 - **Token Atlas:** Cross-model, cross-profile token measurement framework for natural vs renderer profile comparison.
 - **Profile Selection:** Renderer profile selection driven by Token Atlas measurements (per-model best profile).
@@ -21,6 +25,24 @@
 - **CI conformance gates:** Property tests wired into CI as hard gates for idempotence and fingerprint stability.
 - **API stability tests:** Snapshot-based tests for `packages/core` public exports to detect breaking changes.
 - **OpenUnum adapter e2e conformance:** End-to-end verification against real product runtime.
+
+## Since 0.2.0 (Documentation Sync)
+
+### Added — Infrastructure & Tooling (0.2.0)
+- **Core Library:** Strict TypeScript reference library providing semantic contracts, canonicalization, and release provenance.
+- **CLI:** Tools for inspecting, encoding, compiling, and verifying Lunum releases.
+- **MCP Prototype:** Reference server implementation for Model Context Protocol tooling.
+- **OpenUnum Adapter:** Compatibility package matching existing product sidecar shapes.
+
+### Added — Evaluation & Metrics (0.2.0)
+- **Realization Runner:** Multilingual realization experiments (EN/EL/ES/ID) with protected-literal scoring.
+- **Token Atlas:** Cross-model, cross-profile token measurement framework for natural vs renderer profile comparison.
+- **API Stability Tests:** Snapshot-based tests for `packages/core` public exports to detect breaking changes.
+- **OpenUnum Adapter e2e Conformance:** End-to-end verification against real product runtime.
+- **CI Conformance Gates:** Property tests wired into CI as hard gates for idempotence, key-order independence, fingerprint stability.
+- **Fingerprint Migration Utilities:** Code-level utilities for detecting versions, migrating records, and golden vectors.
+- **Downstream Quality Gates:** Task-success metrics and quality gates to verify downstream task quality preservation.
+- **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, included in summary.json and report.md.
 
 ## Since 0.2.1 — Merged Work (7650cc09, 605ae11, ef230af, 2001733)
 
