@@ -125,12 +125,7 @@
 2026-07-19T00:00:25+03:00,88,87,2087
 2026-07-19T00:25:28+03:00,89,89,2065
 2026-07-18T22:00:12+03:00,91,86,2074
->>>>>>> 13b43ed (feat(adopt): add standalone CLI pipeline (parse | realize | render) with documented examples)
 2026-07-19T00:40:30+03:00,94,91,2048
-2026-07-18T23:40:23+03:00,83,84,2049
-2026-07-18T23:45:24+03:00,93,92,2075
-2026-07-18T23:50:24+03:00,93,91,2044
->>>>>>> 44f0e0a (feat(hardening): error observability integration for eval runner)
-2026-07-19T01:10:33+03:00,90,87,2042
-2026-07-19T01:30:35+03:00,85,83,2079
-2026-07-19T01:35:35+03:00,89,87,2067
+2026-07-18T21:05:06+03:00,87,87,2067
+2026-07-18T21:10:07+03:00,95,69,4415
+>>>>>>> 40c7322 (feat(safety): add mixed-context quality gates for natural vs Lunum vs mixed evaluation)
