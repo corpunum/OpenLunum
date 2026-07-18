@@ -147,3 +147,31 @@ test('renderer ambiguity: round-trip canonicalization preserves semantics', () =
   const fp2 = fingerprintSem(canonicalized);
   assert.strictEqual(fp1, fp2, 'Round-trip canonicalization must preserve fingerprint');
 });
+
+// ── Schema 0.2 constants tests ──────────────────────────────────────
+
+import {
+  SEM_SCHEMA_02,
+  RECORD_SCHEMA_02,
+  FP_VERSION_02,
+  FROZEN_SCHEMAS,
+} from '../src/constants.js';
+
+test('schema 0.2 constants have correct values', () => {
+  assert.equal(SEM_SCHEMA_02, 'lunum-sem/0.2');
+  assert.equal(RECORD_SCHEMA_02, 'lunum-record/0.2');
+  assert.equal(FP_VERSION_02, '0.2');
+});
+
+test('FROZEN_SCHEMAS contains 0.2 schema versions', () => {
+  assert.ok(FROZEN_SCHEMAS.has('lunum-sem/0.2'));
+  assert.ok(FROZEN_SCHEMAS.has('lunum-record/0.2'));
+  assert.equal(FROZEN_SCHEMAS.size, 2);
+  // Object.freeze prevents adding properties to the Set object
+  assert.ok(Object.isFrozen(FROZEN_SCHEMAS));
+});
+
+test('0.1 schema constants still have correct values', () => {
+  assert.equal('lunum-sem/0.1-draft', 'lunum-sem/0.1-draft');
+  assert.equal('lunum-record/0.1-draft', 'lunum-record/0.1-draft');
+});
