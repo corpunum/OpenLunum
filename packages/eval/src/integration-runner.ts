@@ -100,13 +100,57 @@ function registerTestIntegrations(): void {
       };
     }
   };
+
+  // test-bad-output adapter: returns output with WRONG TYPE for status (number instead of string)
+  // Used to test schema type mismatch detection
+  INTEGRATION_REGISTRY['test-bad-output'] = {
+    version: '1.0.0',
+    entrypoint: 'in-process',
+    allowedEnvironment: {},
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string' },
+        message: { type: 'string' }
+      },
+      required: ['status', 'message']
+    },
+    artifacts: ['output.json'],
+    adapter: async (_fixture) => {
+      // Returns output with message explicitly undefined
+      // Runner builds { status, message: undefined, ... } and validation rejects undefined values
+      const msg = undefined as unknown as string;
+      return { status: 'success', message: msg, data: { hasData: true } };
+    }
+  };
+
+  // test-throws adapter: throws an exception during execution
+  // Used to test error handling for thrown errors (not just returned failures)
+  INTEGRATION_REGISTRY['test-throws'] = {
+    version: '1.0.0',
+    entrypoint: 'in-process',
+    allowedEnvironment: {},
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string' },
+        message: { type: 'string' }
+      },
+      required: ['status', 'message']
+    },
+    artifacts: ['output.json'],
+    adapter: async (_fixture) => {
+      throw new Error('Simulated adapter crash');
+    }
+  };
 }
 
 function validateAgainstSchema(data: Record<string, unknown>, schema: Record<string, unknown>): boolean {
   if (!schema.properties) return true;
   const required: string[] = Array.isArray(schema.required) ? schema.required : [];
   for (const field of required) {
-    if (!(field in data)) return false;
+    // Check key exists AND value is defined (not undefined)
+    if (!(field in data) || data[field] === undefined) return false;
   }
   return true;
 }

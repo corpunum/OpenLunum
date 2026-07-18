@@ -85,6 +85,7 @@
 - agent/qwen/eval/tests-temp-dirs
 - agent/qwen/eval/tests-temp-dirs-2
 - agent/qwen/infra/pr9-stack-reconcile
+- agent/qwen/issue-11/artifact-validation
 - agent/qwen/issue-11-completion
 - agent/qwen/issue-11/schema-validator-deep
 - agent/qwen/migration-bidirectional

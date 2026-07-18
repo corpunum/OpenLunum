@@ -205,26 +205,27 @@ test('integration runner preserves environment requirements in result', async ()
 
 test('integration runner validates schema mismatch', async () => {
   const output = createTempDir();
-  // When schema requires fields that adapter doesn't provide, schemaValid should be false
+  // test-bad-output adapter returns status as number (123) instead of string
+  // Schema requires status: { type: 'string' }, so schemaValid should be false
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-schema-mismatch',
     area: 'integration',
     task: 'integration',
     deterministic: true,
-    hypothesis: 'Verify schema mismatch detection',
+    hypothesis: 'Verify schema mismatch detection with wrong type',
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
     outputDirectory: output,
-    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+    integrationConfig: { selectedIntegration: 'test-bad-output', fixtureId: 'test-fixture-1' }
   };
 
   const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
-  assert.ok(results[0]!.schemaValid, 'Schema validation should pass for valid adapter output');
-  assert.ok(results[0]!.requiredArtifactsPresent, 'Required artifacts should be present');
+  assert.strictEqual(results[0]!.schemaValid, false, 'Schema validation should fail for wrong type');
+  assert.strictEqual(results[0]!.status, 'failed', 'Should fail due to schema mismatch');
 });
 
 test('integration manifest round-trips through schema validator', async () => {
@@ -262,51 +263,55 @@ test('integration manifest round-trips through schema validator', async () => {
 
 test('integration runner handles adapter throwing error', async () => {
   const output = createTempDir();
-  // Test with an integration that will throw - nonexistent registry
+  // test-throws adapter throws an Error during execution
+  // The runner should catch the thrown error and return failed status
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-throw',
     area: 'integration',
     task: 'integration',
     deterministic: true,
-    hypothesis: 'Verify thrown errors are caught',
+    hypothesis: 'Verify thrown errors are caught and reported',
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
     outputDirectory: output,
-    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'missing-fixture-id' }
+    integrationConfig: { selectedIntegration: 'test-throws', fixtureId: 'test-fixture-1' }
   };
 
   const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
-  assert.strictEqual(results[0]!.status, 'error', 'Should handle missing fixture gracefully');
-  assert.strictEqual(results[0]!.resultStatus, 'error', 'Result status should be error');
+  assert.strictEqual(results[0]!.status, 'failed', 'Should report failed for thrown error');
+  assert.strictEqual(results[0]!.resultStatus, 'failed', 'Result status should be failed');
+  assert.strictEqual(results[0]!.error, 'Simulated adapter crash', 'Error message should be preserved');
 });
 
 test('integration runner returns failed status for nonzero execution', async () => {
   const output = createTempDir();
-  // The test-registry adapter returns failure if fixtureId is missing
-  // We verify that non-success status is properly recorded
+  // Use test-bad-output adapter which returns output with undefined message
+  // This causes schema validation to fail, so overall status should be 'failed'
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-nonzero',
     area: 'integration',
     task: 'integration',
     deterministic: true,
-    hypothesis: 'Verify nonzero execution status is recorded',
+    hypothesis: 'Verify nonzero execution fails properly',
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
     outputDirectory: output,
-    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+    integrationConfig: { selectedIntegration: 'test-bad-output', fixtureId: 'test-fixture-1' }
   };
 
   const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
-  assert.ok(results[0]!.resultStatus === 'success' || results[0]!.resultStatus === 'failed',
-    'Result status should be success or failed');
+  assert.strictEqual(results[0]!.status, 'failed',
+    'Overall status should be failed when schema validation fails');
+  assert.strictEqual(results[0]!.schemaValid, false,
+    'Schema validation should fail for output with undefined required field');
 });
 
 test('selectedIntegration field is consistent across all result paths', async () => {
