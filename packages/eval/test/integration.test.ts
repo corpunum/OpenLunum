@@ -229,7 +229,12 @@ test('integration runner validates schema mismatch', async () => {
 
 test('integration manifest round-trips through schema validator', async () => {
   const output = createTempDir();
-  const ajv = new AjvModule.Ajv({ allErrors: true, strict: false });
+  const ajv = new AjvModule.Ajv({ allErrors: true, strict: false, validateSchema: false });
+
+  // Add shared schema first (experiment schema refs it)
+  const sharedRaw = await readFile(path.join(WORKSPACE_ROOT, 'schemas', 'shared.schema.json'), 'utf8');
+  const sharedSchema = JSON.parse(sharedRaw);
+  ajv.addSchema(sharedSchema, sharedSchema.$id);
 
   const schemaRaw = await readFile(path.join(WORKSPACE_ROOT, 'schemas', 'experiment.schema.json'), 'utf8');
   const schema = JSON.parse(schemaRaw);

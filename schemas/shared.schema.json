@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/shared/0.1",
+  "title": "OpenLunum shared definitions 0.1",
+  "description": "Cross-referencable definitions used by experiment, protected-eval, and report-validation schemas",
+  "$defs": {
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Absolute or relative path to dataset, or environment variable reference (starts with $)"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 hash of the dataset file"
+        },
+        "license": {
+          "type": "string",
+          "description": "License identifier or provenance note"
+        },
+        "envVar": {
+          "type": "string",
+          "description": "Environment variable name for path resolution (if path starts with $)"
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxItems", "maxAttemptsPerItem", "maxModelCalls"],
+      "properties": {
+        "maxItems": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum items to process in this task"
+        },
+        "maxAttemptsPerItem": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum retry attempts per item"
+        },
+        "maxModelCalls": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum model API calls for the entire run"
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimumFeatureRecall", "minimumExactRate", "requireProtectedLiteralCoverage"],
+      "properties": {
+        "minimumFeatureRecall": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Minimum feature recall threshold (0-1)"
+        },
+        "minimumExactRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Minimum exact match rate threshold (0-1)"
+        },
+        "requireProtectedLiteralCoverage": {
+          "type": "boolean",
+          "description": "Whether protected literal coverage is required"
+        }
+      }
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]+$",
+      "description": "Lowercase alphanumeric ID with hyphens, no leading hyphen"
+    },
+    "task": {
+      "type": "string",
+      "enum": ["parse", "realize", "render", "context", "retrieval", "integration", "conformance", "infrastructure"],
+      "description": "Supported task types"
+    },
+    "area": {
+      "type": "string",
+      "enum": ["semantic-contract", "multilingual-parse", "realization", "rendering", "context", "retrieval", "integration", "infrastructure"],
+      "description": "Supported work areas"
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tasks", "languages", "categories"],
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/task" }
+        },
+        "languages": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 2, "maxLength": 5 },
+          "description": "ISO 639-1 language codes"
+        },
+        "categories": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

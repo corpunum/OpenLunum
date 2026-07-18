@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openlunum.org/schemas/report-validation/0.1",
   "title": "OpenLunum report validation manifest 0.1",
+  "description": "Report validation schema with cross-references to experiment and shared definitions",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -10,39 +11,41 @@
     "limits", "gates", "outputDirectory"
   ],
   "properties": {
-    "schema": { "const": "openlunum-experiment/0.1" },
-    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$" },
-    "area": { "type": "string" },
-    "task": { "enum": ["parse", "realize", "render", "context", "retrieval", "integration", "conformance", "infrastructure"] },
-    "hypothesis": { "type": "string", "minLength": 10 },
-    "baselineCommit": { "type": "string", "minLength": 3 },
-    "dataset": {
-      "type": "object",
-      "required": ["path", "sha256"],
-      "properties": {
-        "path": { "type": "string" },
-        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
-      }
+    "$ref": "experiment.schema.json",
+    "schema": {
+      "const": "openlunum-experiment/0.1"
     },
-    "modelProfile": { "type": "string" },
+    "id": {
+      "$ref": "https://openlunum.org/schemas/shared/0.1#/$defs/id"
+    },
+    "area": {
+      "type": "string"
+    },
+    "task": {
+      "$ref": "https://openlunum.org/schemas/shared/0.1#/$defs/task"
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 10
+    },
+    "baselineCommit": {
+      "type": "string",
+      "minLength": 3
+    },
+    "dataset": {
+      "$ref": "https://openlunum.org/schemas/shared/0.1#/$defs/dataset"
+    },
+    "modelProfile": {
+      "type": "string"
+    },
     "limits": {
-      "type": "object",
-      "required": ["maxItems", "maxAttemptsPerItem", "maxModelCalls"],
-      "properties": {
-        "maxItems": { "type": "integer", "minimum": 1 },
-        "maxAttemptsPerItem": { "type": "integer", "minimum": 1 },
-        "maxModelCalls": { "type": "integer", "minimum": 1 }
-      }
+      "$ref": "https://openlunum.org/schemas/shared/0.1#/$defs/limits"
     },
     "gates": {
-      "type": "object",
-      "required": ["minimumFeatureRecall", "minimumExactRate", "requireProtectedLiteralCoverage"],
-      "properties": {
-        "minimumFeatureRecall": { "type": "number", "minimum": 0, "maximum": 1 },
-        "minimumExactRate": { "type": "number", "minimum": 0, "maximum": 1 },
-        "requireProtectedLiteralCoverage": { "type": "boolean" }
-      }
+      "$ref": "https://openlunum.org/schemas/shared/0.1#/$defs/gates"
     },
-    "outputDirectory": { "type": "string" }
+    "outputDirectory": {
+      "type": "string"
+    }
   }
 }

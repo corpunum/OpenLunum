@@ -244,7 +244,16 @@ test('lunum-record schema has fingerprint pattern', async () => {
 
 test('experiment schema has task types', async () => {
   const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
-  const tasks = schema.properties.task.enum;
+  const taskDef = schema.properties.task.$ref
+    ? (() => {
+        const refUrl = schema.properties.task.$ref;
+        const fileName = refUrl.includes('.json') ? refUrl.split('#')[0] : 'shared.schema.json';
+        const baseUrl = refUrl.includes('https://openlunum.org/schemas/') ? 'https://openlunum.org/schemas/' : '';
+        const cleanFileName = fileName.replace(baseUrl, '').replace(/^https:\/\//, '');
+        return JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, cleanFileName), 'utf-8'))?.$defs?.task;
+      })()
+    : schema.properties.task;
+  const tasks = taskDef?.enum || [];
   assert.ok(Array.isArray(tasks) && tasks.length > 0, 'Must have task types');
   assert.ok(tasks.includes('parse'), 'Must include parse');
 });

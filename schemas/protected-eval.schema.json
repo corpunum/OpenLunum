@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openlunum.org/schemas/protected-eval/0.1",
   "title": "OpenLunum protected evaluation manifest 0.1",
+  "description": "Protected evaluation manifest schema with cross-references to shared definitions and Lunum-Sem",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -18,8 +19,7 @@
       "const": "openlunum-protected-eval/0.1"
     },
     "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9-]+$"
+      "$ref": "https://openlunum.org/schemas/shared/0.1#/$defs/id"
     },
     "version": {
       "type": "string",
@@ -30,27 +30,7 @@
       "description": "Immutable identifier for the protected dataset"
     },
     "dataset": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["path", "sha256", "license"],
-      "properties": {
-        "path": {
-          "type": "string",
-          "description": "Absolute or relative path to dataset, or environment variable reference (starts with $)"
-        },
-        "sha256": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{64}$"
-        },
-        "license": {
-          "type": "string",
-          "description": "License identifier or provenance note"
-        },
-        "envVar": {
-          "type": "string",
-          "description": "Environment variable name for path resolution (if path starts with $)"
-        }
-      }
+      "$ref": "https://openlunum.org/schemas/shared/0.1#/$defs/dataset"
     },
     "instructions": {
       "type": "string",
@@ -58,26 +38,7 @@
       "description": "Evaluator instructions for protected evaluation"
     },
     "coverage": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["tasks", "languages", "categories"],
-      "properties": {
-        "tasks": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": ["parse", "realize", "render", "context", "retrieval", "integration", "conformance", "infrastructure"]
-          }
-        },
-        "languages": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "categories": {
-          "type": "array",
-          "items": { "type": "string" }
-        }
-      }
+      "$ref": "https://openlunum.org/schemas/shared/0.1#/$defs/coverage"
     }
   }
 }
