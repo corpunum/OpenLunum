@@ -1,8 +1,9 @@
-import { test } from 'node:test';
+import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
-import { readFile } from 'node:fs/promises';
+import { readFile, rm } from 'node:fs/promises';
+import os from 'node:os';
 import * as AjvModule from 'ajv';
 import { runIntegrationExperiment, type IntegrationManifest } from '../src/integration-runner.js';
 
@@ -10,7 +11,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
+// Track temp dirs for cleanup
+const tempDirs = new Set<string>();
+
+function createTempDir(): string {
+  const dir = path.join(os.tmpdir(), `openlunum-integration-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  tempDirs.add(dir);
+  return dir;
+}
+
+after(async () => {
+  for (const dir of tempDirs) {
+    try { await rm(dir, { recursive: true, force: true }); } catch { /* ignore */ }
+  }
+  tempDirs.clear();
+});
+
 test('integration runner executes adapter and validates schema', async () => {
+  const output = createTempDir();
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-adapter',
@@ -21,11 +39,11 @@ test('integration runner executes adapter and validates schema', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-adapter',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-adapter/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.ok(results.length === 1);
@@ -43,6 +61,7 @@ test('integration runner executes adapter and validates schema', async () => {
 });
 
 test('integration runner rejects unknown integration ID', async () => {
+  const output = createTempDir();
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-unknown',
@@ -53,11 +72,11 @@ test('integration runner rejects unknown integration ID', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-unknown',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'nonexistent-registry', fixtureId: 'test-fixture-1' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-unknown/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.ok(results.length === 1);
@@ -67,6 +86,7 @@ test('integration runner rejects unknown integration ID', async () => {
 });
 
 test('integration runner rejects missing fixture', async () => {
+  const output = createTempDir();
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-missing-fixture',
@@ -77,11 +97,11 @@ test('integration runner rejects missing fixture', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-missing-fixture',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'nonexistent-fixture' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-missing-fixture/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.ok(results.length === 1);
@@ -91,6 +111,7 @@ test('integration runner rejects missing fixture', async () => {
 });
 
 test('integration runner validates required artifacts', async () => {
+  const output = createTempDir();
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-artifacts',
@@ -101,11 +122,11 @@ test('integration runner validates required artifacts', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-artifacts',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-artifacts/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.strictEqual(results[0]!.requiredArtifactsPresent, true, 'Required artifacts should be present');
   assert.ok('output.json' in results[0]!.artifacts);
@@ -113,6 +134,7 @@ test('integration runner validates required artifacts', async () => {
 });
 
 test('integration runner preserves integration version', async () => {
+  const output = createTempDir();
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-version',
@@ -123,17 +145,18 @@ test('integration runner preserves integration version', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-version',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-version/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.strictEqual(results[0]!.integrationVersion, '1.0.0', 'Should preserve integration version');
   assert.strictEqual(results[0]!.entrypointType, 'in-process', 'Should preserve entrypoint type');
 });
 
 test('integration runner handles adapter failure', async () => {
+  const output = createTempDir();
   // The test-registry adapter returns failure if fixtureId is missing
   // We can't easily test this without modifying the fixture, so we verify the error handling path exists
   const manifest: IntegrationManifest = {
@@ -146,11 +169,11 @@ test('integration runner handles adapter failure', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-error',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'nonexistent', fixtureId: 'test' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-error/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.strictEqual(results[0]!.status, 'error');
@@ -158,6 +181,7 @@ test('integration runner handles adapter failure', async () => {
 });
 
 test('integration runner preserves environment requirements in result', async () => {
+  const output = createTempDir();
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
     id: 'test-integration-env-reqs',
@@ -168,11 +192,11 @@ test('integration runner preserves environment requirements in result', async ()
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-env-reqs',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-env-reqs/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.ok(results[0]!.environmentRequirements, 'Should have environmentRequirements');
@@ -180,6 +204,7 @@ test('integration runner preserves environment requirements in result', async ()
 });
 
 test('integration runner validates schema mismatch', async () => {
+  const output = createTempDir();
   // When schema requires fields that adapter doesn't provide, schemaValid should be false
   const manifest: IntegrationManifest = {
     schema: 'openlunum-experiment/0.1',
@@ -191,11 +216,11 @@ test('integration runner validates schema mismatch', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/test-integration-schema-mismatch',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
-  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-schema-mismatch/output');
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, output);
 
   assert.ok(Array.isArray(results));
   assert.ok(results[0]!.schemaValid, 'Schema validation should pass for valid adapter output');
@@ -203,6 +228,7 @@ test('integration runner validates schema mismatch', async () => {
 });
 
 test('integration manifest round-trips through schema validator', async () => {
+  const output = createTempDir();
   const ajv = new AjvModule.Ajv({ allErrors: true, strict: false });
 
   const schemaRaw = await readFile(path.join(WORKSPACE_ROOT, 'schemas', 'experiment.schema.json'), 'utf8');
@@ -221,7 +247,7 @@ test('integration manifest round-trips through schema validator', async () => {
     baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
     limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 1 },
     gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
-    outputDirectory: 'reports/experiments/round-trip-test',
+    outputDirectory: output,
     integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
   };
 
