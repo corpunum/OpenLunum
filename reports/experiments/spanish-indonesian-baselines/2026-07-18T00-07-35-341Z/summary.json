@@ -1,0 +1,14 @@
+{
+  "experimentId": "spanish-indonesian-baselines",
+  "runId": "2026-07-18T00-07-35-341Z",
+  "task": "parse",
+  "deterministic": false,
+  "items": 16,
+  "calls": 16,
+  "passed": 0,
+  "failed": 16,
+  "exactRate": 0,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "gatesPassed": false
+}

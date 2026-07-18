@@ -154,3 +154,48 @@ test('integration runner handles adapter failure', async () => {
   assert.strictEqual(results[0]!.status, 'error');
   assert.ok(results[0]!.error, 'Should have error message');
 });
+
+test('integration runner preserves environment requirements in result', async () => {
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-integration-env-reqs',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify environment requirements are preserved in result',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/test-integration-env-reqs',
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-env-reqs/output');
+
+  assert.ok(Array.isArray(results));
+  assert.ok(results[0]!.environmentRequirements, 'Should have environmentRequirements');
+  assert.deepStrictEqual(results[0]!.environmentRequirements, {}, 'Should match registry allowedEnvironment');
+});
+
+test('integration runner validates schema mismatch', async () => {
+  // When schema requires fields that adapter doesn't provide, schemaValid should be false
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-integration-schema-mismatch',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify schema mismatch detection',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/test-integration-schema-mismatch',
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+  };
+
+  const results = await runIntegrationExperiment(manifest, WORKSPACE_ROOT, 'reports/experiments/test-integration-schema-mismatch/output');
+
+  assert.ok(Array.isArray(results));
+  assert.ok(results[0]!.schemaValid, 'Schema validation should pass for valid adapter output');
+  assert.ok(results[0]!.requiredArtifactsPresent, 'Required artifacts should be present');
+});

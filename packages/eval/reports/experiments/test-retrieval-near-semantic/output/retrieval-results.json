@@ -1,0 +1,45 @@
+{
+  "results": [
+    {
+      "id": "false-equivalence-query",
+      "status": "passed",
+      "rawOutput": "{\"query\":\"What language is spoken in Paris?\",\"topK\":[\"french\",\"english\",\"spanish\"],\"expected\":[\"french\"]}",
+      "queryId": "false-equivalence-query",
+      "candidateIds": [
+        "french",
+        "english",
+        "spanish",
+        "german",
+        "italian"
+      ],
+      "expectedRelevantIds": [
+        "french"
+      ],
+      "rankedResultIds": [
+        "french",
+        "english",
+        "spanish"
+      ],
+      "mode": "near-semantic",
+      "exact": true,
+      "featurePrecision": 0.3333333333333333,
+      "featureRecall": 1,
+      "precisionAtK": 0.3333333333333333,
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "meanReciprocalRank": 1,
+      "falsePositives": [
+        "english",
+        "spanish"
+      ],
+      "falseNegatives": [],
+      "hasFalseEquivalence": true,
+      "isNearSemantic": true,
+      "latencyMs": 0
+    }
+  ],
+  "aggregateMetrics": {
+    "meanReciprocalRank": 1,
+    "items": 1
+  }
+}

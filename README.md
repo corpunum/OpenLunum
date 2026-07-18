@@ -138,12 +138,36 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 
 ## What exists today
 
-- A draft `Lunum-Sem` schema and deterministic canonicalization/fingerprint library.
+- A strict reference implementation for Lunum-Sem, providing semantic contracts, deterministic canonicalization/fingerprint library, and release provenance.
 - A conservative reference renderer and mixed-context compiler.
+- Safe, short, and tight renderer profiles without changing semantics.
+- Tokenizer measurement framework with llama.cpp-compatible counting.
+- Full-prompt quality gates for local-model evaluation.
+- Near-semantic fingerprint design separate from exact identity.
+- Expanded typed structures: time, quantity, uncertainty, reference, and modality.
+- Canonical conformance vectors and property tests.
+- Multilingual realization (English, Greek, Spanish, Indonesian) with protected-literal and independent semantic scoring.
+- Round-trip self-consistency as a secondary metric.
+- Abstention/clarification outputs for low-confidence parses.
+- Context quality measurement framework and policy datasets.
+- Multilingual retrieval and false-equivalence tests.
+- An MCP (Model Context Protocol) reference server with parse, realize, fingerprint, retrieve, and validate tools.
+- Conformance reports for hook/plugin/CLI integration paths.
 - An OpenUnum compatibility adapter preserving its current sidecar return shape.
 - Historical research and measured results from Lunum 1 through 2.7.
 - Integration profiles for OpenUnum, Claude Code, Codex CLI, Gemini CLI/Antigravity transition, OpenCode, Pi, OpenClaw, and generic Node agents.
 - Contract and safety-oriented tests.
+- Architecture decision records in `docs/decisions/`.
+
+## New in v0.2.0
+
+- **Profile Selection Result type:** Explicit type for renderer profile selection driven by Token Atlas measurements.
+- **Realization runner:** Experiment runner with protected-literal scoring for multilingual realization experiments.
+- **Token Atlas:** Cross-model, cross-profile token measurement framework for measuring natural vs renderer profiles.
+- **Profile selection:** Renderer profile selection driven by Token Atlas measurements (per-model best profile).
+- **Downstream quality gates:** Task-success metrics and quality gates to verify downstream task quality preservation.
+- **Fingerprint migration utilities:** Code-level utilities for detecting versions, migrating records, and golden vectors.
+- **CI conformance gates:** Property tests wired into CI as hard gates for idempotence and fingerprint stability.
 
 ## Evidence snapshot
 
@@ -230,10 +254,11 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 ## Repository map
 
 ```text
-packages/core/            strict TypeScript reference library
-packages/cli/             inspect/encode/compile command line
-packages/eval/            local-model experiment runner and reports
-packages/adapter-openunum/ OpenUnum compatibility package
+packages/core/            Core library providing strict TypeScript reference semantics, canonicalization, and release provenance.
+packages/cli/             Command line interface for inspection, encoding, compilation, and release verification.
+packages/eval/            Local-model experiment runner, metrics, failure reports, and Token Atlas measurements.
+packages/mcp/            Prototype reference server and tooling for Model Context Profile (MCP) integration.
+packages/adapter-openunum/ OpenUnum compatibility adapter package.
 schemas/                  machine-readable contracts
 registry/                 worlds, roles, categories, predicates
 integrations/openunum/    verified-current-state reference and adoption plan
@@ -241,6 +266,7 @@ integrations/*/            design/reference profiles for other products
 eval/                     metrics, fixtures, gates, and historical ledger
 research/archive/         complete initial handover and prior experiments
 docs/                     vision, architecture, language, security, versioning
+docs/decisions/           architecture decision records (ADRs)
 ```
 
 ## Honest status

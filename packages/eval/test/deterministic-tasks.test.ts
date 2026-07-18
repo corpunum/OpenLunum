@@ -6,6 +6,7 @@ import { runExperiment } from '../src/runner.js';
 import { writeFile, mkdir, readFile, rm } from 'node:fs/promises';
 import { mkdtemp } from 'node:fs/promises';
 import os from 'node:os';
+import { execFileSync } from 'node:child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -108,6 +109,63 @@ test('integration experiment executes through runExperiment', async () => {
       assert.ok(r.fixtureId, 'Result must have fixtureId');
       assert.ok(r.resultStatus !== undefined, 'Result must have resultStatus');
     }
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('report validation with integrity hash', async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-report-validation-'));
+  try {
+    const manifest = path.join(temp, 'experiment.json');
+    const output = path.join(temp, 'reports');
+    await writeFile(manifest, JSON.stringify({
+      schema: 'openlunum-experiment/0.1',
+      id: 'report-validation',
+      area: 'retrieval',
+      task: 'retrieval',
+      hypothesis: 'Verify report validation passes',
+      baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+      deterministic: true,
+      limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+      gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+      outputDirectory: output,
+      retrievalConfig: { k: 3, mode: 'exact' }
+    }), 'utf8');
+
+    const runDir = await runExperiment(manifest);
+
+    // Verify report directory has all expected files
+    assert.ok(await fileExists(path.join(runDir, 'manifest.snapshot.json')));
+    assert.ok(await fileExists(path.join(runDir, 'environment.json')));
+    assert.ok(await fileExists(path.join(runDir, 'item-results.jsonl')));
+    assert.ok(await fileExists(path.join(runDir, 'summary.json')));
+    assert.ok(await fileExists(path.join(runDir, 'report.md')));
+
+    // Validate report with the validate-report.cjs script
+    const scriptsPath = path.resolve(__dirname, '..', '..', '..', '..', 'scripts', 'validate-report.cjs');
+    const workspaceRoot = path.resolve(__dirname, '..', '..', '..', '..');
+    
+    // Load the summary to compute expected integrity hash
+    const summaryRaw = await readFile(path.join(runDir, 'summary.json'), 'utf8');
+    const summary = JSON.parse(summaryRaw);
+    const envRaw = await readFile(path.join(runDir, 'environment.json'), 'utf8');
+    const environment = JSON.parse(envRaw);
+    
+    const crypto = await import('node:crypto');
+    const integrityData = JSON.stringify({
+      summary,
+      itemCount: summary.items ?? 0,
+      model: environment?.modelProfile?.model
+    });
+    const expectedHash = crypto.createHash('sha256').update(integrityData).digest('hex');
+
+    // Run validation with expected integrity hash
+    execFileSync('node', [scriptsPath, runDir, '--repo-root', workspaceRoot, '--expected-integrity', expectedHash], {
+      cwd: workspaceRoot,
+      encoding: 'utf8',
+      timeout: 30000
+    });
   } finally {
     await rm(temp, { recursive: true, force: true });
   }
