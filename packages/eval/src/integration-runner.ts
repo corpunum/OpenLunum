@@ -145,13 +145,84 @@ function registerTestIntegrations(): void {
   };
 }
 
-function validateAgainstSchema(data: Record<string, unknown>, schema: Record<string, unknown>): boolean {
-  if (!schema.properties) return true;
-  const required: string[] = Array.isArray(schema.required) ? schema.required : [];
-  for (const field of required) {
-    // Check key exists AND value is defined (not undefined)
-    if (!(field in data) || data[field] === undefined) return false;
+/**
+ * Deep JSON Schema validator against a simplified subset of JSON Schema.
+ * Supports: type, properties, required, enum, additionalProperties, nested objects, arrays.
+ * Used for validating integration adapter output against the registry's declared schema.
+ */
+export function validateAgainstSchema(data: Record<string, unknown>, schema: Record<string, unknown>): boolean {
+  const schemaType = schema.type as string | undefined;
+
+  // Validate top-level type
+  if (schemaType === 'object' && typeof data !== 'object' || data === null) {
+    return false;
   }
+  if (schemaType === 'string' && typeof data !== 'string') {
+    return false;
+  }
+  if (schemaType === 'number' && typeof data !== 'number') {
+    return false;
+  }
+  if (schemaType === 'boolean' && typeof data !== 'boolean') {
+    return false;
+  }
+
+  // Enum validation
+  if (Array.isArray(schema.enum)) {
+    const strData = typeof data === 'object' ? JSON.stringify(data) : data;
+    const enumMatch = schema.enum.some((e: unknown) => {
+      const strE = typeof e === 'object' ? JSON.stringify(e) : e;
+      return strData === strE;
+    });
+    if (!enumMatch) return false;
+  }
+
+  // Object-level validation
+  if (schemaType === 'object' && typeof data === 'object' && data !== null && !Array.isArray(data)) {
+    const properties = schema.properties as Record<string, Record<string, unknown>> | undefined;
+    const required: string[] = Array.isArray(schema.required) ? schema.required : [];
+
+    // Check required fields
+    for (const field of required) {
+      if (!(field in data)) return false;
+    }
+
+    // Validate each property against its sub-schema
+    if (properties) {
+      for (const [key, value] of Object.entries(data)) {
+        if (key in properties && properties[key]) {
+          if (!validateAgainstSchema(value as Record<string, unknown>, properties[key] as Record<string, unknown>)) {
+            return false;
+          }
+        } else if (key in properties) {
+          // properties[key] exists but is undefined, treat as valid (no constraint)
+        } else {
+          // Extra field not in properties
+          const additional = schema.additionalProperties;
+          if (additional === false) return false;
+          // If additionalProperties is a schema object, validate against it
+          if (typeof additional === 'object' && additional !== null && !Array.isArray(additional)) {
+            if (!validateAgainstSchema(value as Record<string, unknown>, additional as Record<string, unknown>)) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Array validation
+  if (schemaType === 'array' && Array.isArray(data)) {
+    const items = schema.items as Record<string, unknown> | undefined;
+    if (items) {
+      for (const item of data) {
+        if (!validateAgainstSchema(item as Record<string, unknown>, items as Record<string, unknown>)) {
+          return false;
+        }
+      }
+    }
+  }
+
   return true;
 }
 
