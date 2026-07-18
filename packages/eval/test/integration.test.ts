@@ -308,3 +308,65 @@ test('integration runner returns failed status for nonzero execution', async () 
   assert.ok(results[0]!.resultStatus === 'success' || results[0]!.resultStatus === 'failed',
     'Result status should be success or failed');
 });
+
+test('selectedIntegration field is consistent across all result paths', async () => {
+  // Verify the semantic-contract change: selectedIntegration is always set,
+  // regardless of success, error, or unknown integration paths
+
+  // Path 1: Success
+  const successOutput = createTempDir();
+  const successManifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-selected-integration-success',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify selectedIntegration is set on success',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: successOutput,
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+  };
+  const successResults = await runIntegrationExperiment(successManifest, WORKSPACE_ROOT, successOutput);
+  assert.strictEqual(successResults[0]!.selectedIntegration, 'test-registry',
+    'selectedIntegration should be set on success');
+
+  // Path 2: Unknown integration
+  const unknownOutput = createTempDir();
+  const unknownManifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-selected-integration-unknown',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify selectedIntegration is set on unknown integration',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: unknownOutput,
+    integrationConfig: { selectedIntegration: 'nonexistent-registry', fixtureId: 'test-fixture-1' }
+  };
+  const unknownResults = await runIntegrationExperiment(unknownManifest, WORKSPACE_ROOT, unknownOutput);
+  assert.strictEqual(unknownResults[0]!.selectedIntegration, 'nonexistent-registry',
+    'selectedIntegration should be set on unknown integration');
+
+  // Path 3: Missing fixture
+  const missingOutput = createTempDir();
+  const missingManifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-selected-integration-missing',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify selectedIntegration is set on missing fixture',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 0 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: missingOutput,
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'nonexistent-fixture' }
+  };
+  const missingResults = await runIntegrationExperiment(missingManifest, WORKSPACE_ROOT, missingOutput);
+  assert.strictEqual(missingResults[0]!.selectedIntegration, 'test-registry',
+    'selectedIntegration should be set on missing fixture');
+});
