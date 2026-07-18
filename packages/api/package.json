@@ -1,0 +1,25 @@
+{
+  "name": "@corpunum/lunum-api",
+  "version": "0.2.0",
+  "description": "HTTP API reference server for Lunum semantic content",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/src/server.js",
+    "dev": "tsx src/server.ts",
+    "test:unit": "node --test dist/test/*.test.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "@corpunum/lunum": "workspace:*"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

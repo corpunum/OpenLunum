@@ -1,0 +1,426 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Lunum API Reference Server",
+    "version": "0.2.0",
+    "description": "HTTP API reference server for Lunum semantic content integration. Provides REST endpoints for parse, realize, render, retrieve, and context operations.",
+    "contact": {
+      "name": "OpenLunum",
+      "url": "https://github.com/corpunum/OpenLunum"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "description": "Returns server status, version, and uptime information.",
+        "responses": {
+          "200": {
+            "description": "Server is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "enum": ["ok"] },
+                    "version": { "type": "string" },
+                    "uptime": { "type": "integer" },
+                    "lunumVersion": { "type": "string" },
+                    "routes": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routes": {
+      "get": {
+        "summary": "List available routes",
+        "description": "Returns all registered API routes.",
+        "responses": {
+          "200": {
+            "description": "List of routes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": { "type": "string" },
+                    "routes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "method": { "type": "string" },
+                          "path": { "type": "string" },
+                          "description": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/parse": {
+      "post": {
+        "summary": "Parse natural language to Lunum semantics",
+        "description": "Converts natural language text into Lunum-Sem structured semantics.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["text", "language"],
+                "properties": {
+                  "text": { "type": "string", "description": "Natural language text to parse" },
+                  "language": { "type": "string", "description": "Source language code (en, el, es, id)" },
+                  "role": { "type": "string", "description": "Role context" },
+                  "category": { "type": "string", "description": "Category hint" },
+                  "risk": { "type": "string", "description": "Risk level" },
+                  "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Parsed Lunum record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "record": { "$ref": "#/components/schemas/LunumRecord" },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "language": { "type": "string" },
+                        "tokens": { "type": "integer" },
+                        "timestamp": { "type": "string", "format": "date-time" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/realize": {
+      "post": {
+        "summary": "Realize Lunum semantics to natural language",
+        "description": "Converts Lunum-Sem structured semantics into natural language text.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sem", "language"],
+                "properties": {
+                  "sem": { "$ref": "#/components/schemas/LunumSem" },
+                  "language": { "type": "string", "description": "Target language code" },
+                  "profile": { "type": "string", "description": "Render profile" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Realized text with Lunum sidecar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": { "type": "string" },
+                    "sidecar": { "$ref": "#/components/schemas/LunumSidecar" },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "language": { "type": "string" },
+                        "tokens": { "type": "integer" },
+                        "timestamp": { "type": "string", "format": "date-time" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/render": {
+      "post": {
+        "summary": "Render Lunum semantics with a profile",
+        "description": "Renders Lunum-Sem semantics using a specified render profile (safe, short, tight, generic-en-pivot/0.1).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sem", "profile"],
+                "properties": {
+                  "sem": { "$ref": "#/components/schemas/LunumSem" },
+                  "profile": { "type": "string", "description": "Render profile" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rendered output",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "output": { "type": "string" },
+                    "profile": { "type": "string" },
+                    "tokens": { "type": ["integer", "null"] }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/retrieve": {
+      "post": {
+        "summary": "Retrieve semantically similar records",
+        "description": "Searches for semantically similar Lunum records by query text.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["query"],
+                "properties": {
+                  "query": { "type": "string", "description": "Query text" },
+                  "maxResults": { "type": "integer", "default": 10 },
+                  "threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "language": { "type": "string" },
+                  "nearSemantic": { "type": "boolean", "default": false }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retrieved records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "score": { "type": "number" },
+                          "record": { "$ref": "#/components/schemas/LunumRecord" }
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "query": { "type": "string" },
+                        "totalMatches": { "type": "integer" },
+                        "mode": { "type": "string", "enum": ["exact", "near-semantic"] },
+                        "timestamp": { "type": "string", "format": "date-time" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/context": {
+      "post": {
+        "summary": "Compile shadow context from messages",
+        "description": "Compiles a shadow-mode context from a list of messages, preserving natural content.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["messages"],
+                "properties": {
+                  "messages": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["role", "content"],
+                      "properties": {
+                        "role": { "type": "string" },
+                        "content": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Compiled shadow context",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": { "type": "string" },
+                    "naturalMessages": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "role": { "type": "string" },
+                          "content": { "type": "string" }
+                        }
+                      }
+                    },
+                    "mixedMessages": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "role": { "type": "string" },
+                          "content": { "type": "string" }
+                        }
+                      }
+                    },
+                    "naturalTokens": { "type": "integer" },
+                    "mixedTokens": { "type": "integer" },
+                    "ratio": { "type": "number" },
+                    "estimatedSavings": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi": {
+      "get": {
+        "summary": "OpenAPI specification",
+        "description": "Returns the full OpenAPI 3.1.0 specification for this API.",
+        "responses": {
+          "200": {
+            "description": "OpenAPI spec",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LunumRecord": {
+        "type": "object",
+        "properties": {
+          "recordVersion": { "type": "string" },
+          "source": {
+            "type": "object",
+            "properties": {
+              "text": { "type": "string" },
+              "language": { "type": ["string", "null"] },
+              "role": { "type": ["string", "null"] },
+              "ref": { "type": ["string", "null"] }
+            }
+          },
+          "sem": { "$ref": "#/components/schemas/LunumSem" },
+          "fingerprint": { "type": "string" },
+          "renderings": { "type": "object" },
+          "policy": {
+            "type": "object",
+            "properties": {
+              "eligible": { "type": "boolean" },
+              "category": { "type": "string" },
+              "risk": { "type": "string" },
+              "confidence": { "type": "number" },
+              "reasons": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "meta": { "type": "object" }
+        }
+      },
+      "LunumSem": {
+        "type": "object",
+        "properties": {
+          "schema": { "type": "string" },
+          "world": { "type": "string" },
+          "kind": { "type": "string" },
+          "clauses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "predicate": { "type": "string" },
+                "roles": { "type": "object" },
+                "negated": { "type": "boolean" },
+                "conditions": { "type": "array" },
+                "consequences": { "type": "array" },
+                "modality": { "type": "string" }
+              }
+            }
+          },
+          "annotations": { "type": "object" },
+          "provenance": { "type": "object" },
+          "references": { "type": "array" }
+        }
+      },
+      "LunumSidecar": {
+        "type": "object",
+        "properties": {
+          "lunumCode": { "type": ["string", "null"] },
+          "lunumSem": { "$ref": "#/components/schemas/LunumSem" },
+          "lunumFp": { "type": ["string", "null"] },
+          "lunumMeta": {
+            "type": "object",
+            "properties": {
+              "eligible": { "type": "boolean" },
+              "semantic": { "type": "boolean" },
+              "renderer": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
