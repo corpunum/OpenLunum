@@ -2,6 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
+import { readFile } from 'node:fs/promises';
+import * as AjvModule from 'ajv';
 import { runIntegrationExperiment, type IntegrationManifest } from '../src/integration-runner.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,7 +31,7 @@ test('integration runner executes adapter and validates schema', async () => {
   assert.ok(results.length === 1);
 
   const result = results[0]!;
-  assert.strictEqual(result.integrationId, 'test-registry');
+  assert.strictEqual(result.selectedIntegration, 'test-registry');
   assert.strictEqual(result.fixtureId, 'test-fixture-1');
   assert.strictEqual(result.resultStatus, 'success');
   assert.strictEqual(result.schemaValid, true);
@@ -198,4 +200,36 @@ test('integration runner validates schema mismatch', async () => {
   assert.ok(Array.isArray(results));
   assert.ok(results[0]!.schemaValid, 'Schema validation should pass for valid adapter output');
   assert.ok(results[0]!.requiredArtifactsPresent, 'Required artifacts should be present');
+});
+
+test('integration manifest round-trips through schema validator', async () => {
+  const ajv = new AjvModule.Ajv({ allErrors: true, strict: false });
+
+  const schemaRaw = await readFile(path.join(WORKSPACE_ROOT, 'schemas', 'experiment.schema.json'), 'utf8');
+  const schema = JSON.parse(schemaRaw);
+  // Remove $schema reference to avoid meta-schema lookup
+  delete schema.$schema;
+  const validate = ajv.compile(schema);
+
+  const manifest: IntegrationManifest = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'round-trip-test',
+    area: 'integration',
+    task: 'integration',
+    deterministic: true,
+    hypothesis: 'Verify manifest round-trips through schema validator',
+    baselineCommit: '5ca28b9c0f0366a46eac5edd163b65b7024714ff',
+    limits: { maxItems: 10, maxAttemptsPerItem: 1, maxModelCalls: 1 },
+    gates: { minimumFeatureRecall: 0.0, minimumExactRate: 0.0, requireProtectedLiteralCoverage: false },
+    outputDirectory: 'reports/experiments/round-trip-test',
+    integrationConfig: { selectedIntegration: 'test-registry', fixtureId: 'test-fixture-1' }
+  };
+
+  const valid = validate(manifest);
+  assert.strictEqual(valid, true, `Manifest should validate against schema: ${JSON.stringify(validate.errors)}`);
+
+  // Re-serialize and re-validate to ensure round-trip
+  const serialized = JSON.parse(JSON.stringify(manifest));
+  const valid2 = validate(serialized);
+  assert.strictEqual(valid2, true, `Serialized manifest should validate against schema`);
 });

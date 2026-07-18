@@ -3,7 +3,7 @@
     "id": "test-fixture-1",
     "status": "passed",
     "rawOutput": "{\n  \"status\": \"success\",\n  \"data\": {\n    \"processed\": true,\n    \"input\": {\n      \"testData\": \"some test input\"\n    }\n  },\n  \"message\": \"Integration test-fixture-1 completed\"\n}",
-    "integrationId": "test-registry",
+    "selectedIntegration": "test-registry",
     "integrationVersion": "1.0.0",
     "entrypointType": "in-process",
     "fixtureId": "test-fixture-1",

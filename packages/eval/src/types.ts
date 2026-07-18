@@ -62,7 +62,8 @@ export interface ItemResult {
   expectedRelevantIds?: string[];
   rankedResultIds?: string[];
   mode?: 'exact' | 'near-semantic';
-  integrationId?: string;
+  selectedIntegration?: string;
+  integrationId?: string; // deprecated, use selectedIntegration
   integrationVersion?: string;
   entrypointType?: 'in-process' | 'executable';
   fixtureId?: string;

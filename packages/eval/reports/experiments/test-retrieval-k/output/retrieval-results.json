@@ -1,6 +1,75 @@
 {
   "results": [
     {
+      "id": "false-equivalence-query",
+      "status": "passed",
+      "rawOutput": "{\"query\":\"What language is spoken in Paris?\",\"topK\":[\"french\"],\"expected\":[\"french\"]}",
+      "queryId": "false-equivalence-query",
+      "candidateIds": [
+        "french",
+        "english",
+        "spanish",
+        "german",
+        "italian"
+      ],
+      "expectedRelevantIds": [
+        "french"
+      ],
+      "rankedResultIds": [
+        "french"
+      ],
+      "mode": "exact",
+      "exact": true,
+      "featurePrecision": 1,
+      "featureRecall": 1,
+      "precisionAtK": 1,
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "meanReciprocalRank": 1,
+      "falsePositives": [],
+      "falseNegatives": [],
+      "hasFalseEquivalence": true,
+      "isNearSemantic": false,
+      "latencyMs": 0
+    },
+    {
+      "id": "near-semantic-query",
+      "status": "passed",
+      "rawOutput": "{\"query\":\"Where is the Eiffel Tower located?\",\"topK\":[\"paris\"],\"expected\":[\"paris\",\"france\"]}",
+      "queryId": "near-semantic-query",
+      "candidateIds": [
+        "paris",
+        "london",
+        "berlin",
+        "madrid",
+        "rome",
+        "france",
+        "french"
+      ],
+      "expectedRelevantIds": [
+        "paris",
+        "france"
+      ],
+      "rankedResultIds": [
+        "paris"
+      ],
+      "mode": "exact",
+      "exact": true,
+      "featurePrecision": 1,
+      "featureRecall": 0.5,
+      "precisionAtK": 1,
+      "recallAtK": 0.5,
+      "reciprocalRank": 1,
+      "meanReciprocalRank": 1,
+      "falsePositives": [],
+      "falseNegatives": [
+        "france"
+      ],
+      "hasFalseEquivalence": false,
+      "isNearSemantic": false,
+      "latencyMs": 0
+    },
+    {
       "id": "sample-query-1",
       "status": "passed",
       "rawOutput": "{\"query\":\"What is the capital of France?\",\"topK\":[\"paris\"],\"expected\":[\"paris\"]}",
@@ -66,6 +135,6 @@
   ],
   "aggregateMetrics": {
     "meanReciprocalRank": 1,
-    "items": 2
+    "items": 4
   }
 }
