@@ -12,7 +12,7 @@ export interface IntegrationManifest extends ExperimentManifest {
 }
 
 export interface IntegrationItemResult extends ItemResult {
-  integrationId: string;
+  selectedIntegration: string;
   integrationVersion: string;
   entrypointType: 'in-process' | 'executable';
   fixtureId: string;
@@ -96,7 +96,7 @@ export async function runIntegrationExperiment(
       id: fixtureId,
       status: 'error',
       rawOutput: `Unknown integration ID: ${selectedIntegration}`,
-      integrationId: selectedIntegration,
+      selectedIntegration: selectedIntegration,
       integrationVersion: '',
       entrypointType: 'in-process',
       fixtureId,
@@ -120,7 +120,7 @@ export async function runIntegrationExperiment(
       id: fixtureId,
       status: 'error',
       rawOutput: `Fixture not found: ${fixturePath}`,
-      integrationId: selectedIntegration,
+      selectedIntegration: selectedIntegration,
       integrationVersion: registry.version,
       entrypointType: registry.entrypoint,
       fixtureId,
@@ -164,7 +164,7 @@ export async function runIntegrationExperiment(
     id: fixtureId,
     status: passed ? 'passed' : 'failed',
     rawOutput: JSON.stringify(adapterResult, null, 2),
-    integrationId: selectedIntegration,
+    selectedIntegration: selectedIntegration,
     integrationVersion: registry.version,
     entrypointType: registry.entrypoint,
     fixtureId,

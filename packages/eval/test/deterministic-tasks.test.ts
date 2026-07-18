@@ -105,7 +105,7 @@ test('integration experiment executes through runExperiment', async () => {
 
     // Verify each result has integration-specific fields
     for (const r of results) {
-      assert.ok(r.integrationId, 'Result must have integrationId');
+      assert.ok(r.selectedIntegration, 'Result must have selectedIntegration');
       assert.ok(r.fixtureId, 'Result must have fixtureId');
       assert.ok(r.resultStatus !== undefined, 'Result must have resultStatus');
     }
