@@ -8,16 +8,19 @@
 
 ## Current capabilities
 
-- Core library providing strict TypeScript reference semantics, serialization, and canonicalization.
-- CLI tools for inspection, encoding, and compilation.
+- Core library providing strict TypeScript reference semantics, serialization, canonicalization, and release provenance.
+- CLI tools for inspection, encoding, compilation, and release verification.
 - MCP (Model Context Protocol) prototype reference server and tooling for services.
 - OpenUnum compatibility package matching existing product sidecar shapes.
+- Profile Selection Result type for renderer profile selection.
+- Realization runner with protected-literal scoring.
+- Token Atlas for cross-model, cross-profile token measurement.
 
 | Component | Status | Meaning |
 |---|---|---|
 | Lunum-Sem draft schema | Reference draft | Useful for experimentation; not yet stable |
-| Core library | Reference implementation | Strict TypeScript reference for semantics, serialization, and canonicalization |
-| CLI tools | Prototype | Inspection, encoding, and compilation command line interfaces |
+| Core library | Reference implementation | Strict TypeScript reference for semantics, serialization, canonicalization, and release provenance |
+| CLI tools | Prototype | Inspection, encoding, compilation, and release verification interfaces |
 | MCP reference server | Prototype | Reference implementation of Model Context Protocol tooling |
 | OpenUnum adapter | Reference contract | Matches present sidecar shape; live adoption still requires product work |
 | Exact semantic fingerprint | Reference implementation | Versioned exact identity, not fuzzy equivalence |
@@ -35,6 +38,9 @@
 | Context quality measurement | Experiment | Framework and policy datasets exist; downstream quality measurement ongoing |
 | Multilingual retrieval | Experiment | False-equivalence tests exist; production retrieval integration pending |
 | Conformance reports | Prototype | Hook/plugin/CLI paths documented; live adoption reports generated |
+| Profile Selection Result | Reference implementation | Explicit type for renderer profile selection |
+| Realization runner | Experiment | Protected-literal scoring for multilingual realization |
+| Token Atlas | Experiment | Cross-model, cross-profile token measurement framework |
 | Public package stability | Not stable | APIs may change before 1.0 |
 
 ## Release gates before 1.0

@@ -138,7 +138,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 
 ## What exists today
 
-- A strict reference implementation for Lunum-Sem, providing semantic contracts and deterministic canonicalization/fingerprint library.
+- A strict reference implementation for Lunum-Sem, providing semantic contracts, deterministic canonicalization/fingerprint library, and release provenance.
 - A conservative reference renderer and mixed-context compiler.
 - Safe, short, and tight renderer profiles without changing semantics.
 - Tokenizer measurement framework with llama.cpp-compatible counting.
@@ -158,6 +158,13 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Integration profiles for OpenUnum, Claude Code, Codex CLI, Gemini CLI/Antigravity transition, OpenCode, Pi, OpenClaw, and generic Node agents.
 - Contract and safety-oriented tests.
 - Architecture decision records in `docs/decisions/`.
+
+## New in v0.2.0
+
+- **Profile Selection Result type:** Explicit type for renderer profile selection driven by Token Atlas measurements.
+- **Realization runner:** Experiment runner with protected-literal scoring for multilingual realization experiments.
+- **Token Atlas:** Cross-model, cross-profile token measurement framework for measuring natural vs renderer profiles.
+- **Profile selection:** Renderer profile selection driven by Token Atlas measurements (per-model best profile).
 
 ## Evidence snapshot
 
@@ -244,10 +251,10 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 ## Repository map
 
 ```text
-packages/core/            Core library providing strict TypeScript reference semantics and canonicalization.
-packages/cli/             Command line interface for inspection, encoding, and compilation.
-packages/eval/            Local-model experiment runner, metrics, and failure reports.
-packages/mcp/            Prototype reference server and tooling for Model Context Protocol (MCP).
+packages/core/            Core library providing strict TypeScript reference semantics, canonicalization, and release provenance.
+packages/cli/             Command line interface for inspection, encoding, compilation, and release verification.
+packages/eval/            Local-model experiment runner, metrics, failure reports, and Token Atlas measurements.
+packages/mcp/            Prototype reference server and tooling for Model Context Profile (MCP) integration.
 packages/adapter-openunum/ OpenUnum compatibility adapter package.
 schemas/                  machine-readable contracts
 registry/                 worlds, roles, categories, predicates

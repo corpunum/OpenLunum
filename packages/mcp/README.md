@@ -6,6 +6,12 @@ MCP (Model Context Protocol) server for Lunum semantic content integration.
 
 This package provides a reference implementation of an MCP server that enables AI agents to interact with Lunum semantic content through standardized tools. It is **not** a production-grade integration; it demonstrates the pattern for products that prefer MCP as an adoption path.
 
+## Features
+
+- **Error contracts:** Proper error handling and contract validation.
+- **Input validation:** Schema validation for all tool inputs.
+- **Conformance test suite:** Comprehensive tests for MCP protocol compliance.
+
 ## Tools
 
 | Tool | Description |
@@ -54,3 +60,9 @@ await server.start();
 ## Status
 
 **Prototype.** Reference implementation exists and builds. Production validation against live MCP clients is pending.
+
+## New in v0.2.0
+
+- **Error contracts:** Proper error handling and contract validation.
+- **Input validation:** Schema validation for all tool inputs.
+- **Conformance test suite:** Comprehensive tests for MCP protocol compliance.
