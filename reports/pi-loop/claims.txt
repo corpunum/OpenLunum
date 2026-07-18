@@ -22,17 +22,21 @@
 - agent/docs/sync-4c44df1c
 - agent/docs/sync-5428177e
 - agent/docs/sync-57beaadb
+- agent/docs/sync-58fd0d8b
 - agent/docs/sync-5c920edf
 - agent/docs/sync-652d5da7
 - agent/docs/sync-66fdc244
 - agent/docs/sync-6ba1cb94
+- agent/docs/sync-70d505ae
 - agent/docs/sync-730bf13c
 - agent/docs/sync-7342ea99
 - agent/docs/sync-7650cc09
+- agent/docs/sync-816e9b05
 - agent/docs/sync-836142d9
 - agent/docs/sync-897b1415
 - agent/docs/sync-94490d25
 - agent/docs/sync-9fa28e5c
+- agent/docs/sync-a0742db0
 - agent/docs/sync-a48d2a89
 - agent/docs/sync-a5112523
 - agent/docs/sync-a6fbb9d9
@@ -70,11 +74,14 @@
 - agent/phase6-1/retrieval-integration-runners-v2
 - agent/pi-local-model-experiment
 - agent/qwen/adoption/cli-pipeline
+- agent/qwen/adoption/cli-pipeline-rebased
 - agent/qwen/adoption/http-api-server
+- agent/qwen/adoption/http-api-server-rebased
 - agent/qwen/adoption/mcp-server-hardening
 - agent/qwen/adoption/openunum-e2e-conformance
 - agent/qwen/adoption/openunum-shadow-live-test
 - agent/qwen/agent-state/protocol
+- agent/qwen/campaign/pr-fixing
 - agent/qwen/campaign/pr-verification
 - agent/qwen/campaign/status-report
 - agent/qwen/campaign/status-verify
@@ -92,14 +99,20 @@
 - agent/qwen/eval/tests-temp-dirs-2
 - agent/qwen/hardening/api-stability-tests
 - agent/qwen/hardening/error-observability-integration
+- agent/qwen/hardening/error-observability-integration-rebased
+- agent/qwen/hardening/verify-strict-mode
 - agent/qwen/infra/pr9-stack-reconcile
+- agent/qwen/issue-11/aggregate-mrr
 - agent/qwen/issue-11/artifact-validation
 - agent/qwen/issue-11-completion
 - agent/qwen/issue-11/duplicate-candidate-retrieval
 - agent/qwen/issue-11/false-equivalence
+- agent/qwen/issue-11/false-equivalence-fix
+- agent/qwen/issue-11/false-equivalence-rebased
 - agent/qwen/issue-11/integration-tests-coverage
 - agent/qwen/issue-11/malformed-retrieval-bundle
 - agent/qwen/issue-11/schema-validator-deep
+- agent/qwen/issue-11/schema-validator-deep-rebased
 - agent/qwen/migration-bidirectional
 - agent/qwen/migration/golden-vectors
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline
@@ -113,6 +126,7 @@
 - agent/qwen/release/provenance-and-signed-artifacts
 - agent/qwen/renderer/conformance-suite
 - agent/qwen/renderer/golden-output
+- agent/qwen/renderer/golden-output-rebased
 - agent/qwen/renderer/profile-selection
 - agent/qwen/renderer/token-atlas
 - agent/qwen/repository-reliability/pr8-contract-evidence
@@ -121,13 +135,16 @@
 - agent/qwen/retention/regression-gate
 - agent/qwen/retrieval/cross-lingual
 - agent/qwen/safety/mixed-context-quality-gates
+- agent/qwen/safety/mixed-context-quality-gates-rebased
 - agent/qwen/safety/prompt-injection-resistance
+- agent/qwen/safety/prompt-injection-resistance-rebased
 - agent/qwen/safety/quality-gate-ci
 - agent/qwen/safety/quality-gate-ci-2
 - agent/qwen/schema-changelog
 - agent/qwen/schema-freeze-0.2
 - agent/qwen/schema-frozen-0.2
 - agent/qwen/schema-json-ref-crossrefs
+- agent/qwen/schema/nested-config-additional-properties
 - agent/qwen/semantic-contract/conformance-gates
 - agent/qwen/semantic-contract/expand-typed-structures
 - agent/qwen/semantic-contract/expand-typed-structures-v2
@@ -154,6 +171,3 @@
 - agent/semantic-contract/typed-structures-expand
 - agent/typescript-agent-research-loop
 TASKS ALREADY CLAIMED — existing agent branches (do NOT work on these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):
-
-- agent/qwen/adoption/cli-pipeline
->>>>>>> 13b43ed (feat(adopt): add standalone CLI pipeline (parse | realize | render) with documented examples)

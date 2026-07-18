@@ -13,7 +13,10 @@ import {
   buildGoldenVector,
   validateGoldenVector,
   dryRunMigration,
-  isCurrentSchema
+  isCurrentSchema,
+  forwardMigrate,
+  backwardMigrate,
+  bidirectionalMigration
 } from '../src/fingerprint-migration.js';
 import type { LunumRecord } from '../src/types.js';
 
@@ -328,4 +331,107 @@ test('dryRunMigration reports correct counts for mixed dataset', () => {
   assert.strictEqual(summary.total, 2);
   assert.strictEqual(summary.alreadyCurrent, 1);
   assert.strictEqual(summary.migrated, 1);
+});
+
+// ---------------------------------------------------------------------------
+// Bidirectional migration (Issue #11 → WORK_QUEUE v4)
+// ---------------------------------------------------------------------------
+
+function makeRecord(id: string, fpVersion: string): LunumRecord {
+  // Use only valid hex chars: '0'-'9' and 'a'-'f'
+  const hexId = id.replace(/[^a-f0-9]/g, 'a').padStart(64, 'a').slice(0, 64);
+  return {
+    recordVersion: `${fpVersion}-draft`,
+    source: { text: `text-${id}`, language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: id, kind: 'k', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: `lfp:${fpVersion}:sha256:${hexId}`,
+    renderings: {},
+    policy: { eligible: true, category: id, risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+}
+
+test('forwardMigrate: v0.1 → v0.2 migrates all v0.1 records', () => {
+  const records = [makeRecord('a', '0.1'), makeRecord('b', '0.1')];
+  const result = forwardMigrate(records);
+  assert.strictEqual(result.migrated, 2);
+  assert.strictEqual(result.alreadyV02, 0);
+  assert.strictEqual(result.records.length, 2);
+  for (const rec of result.records) {
+    assert.ok(rec.fingerprint?.startsWith('lfp:0.2:'), `All records should be v0.2, got: ${rec.fingerprint}`);
+  }
+  assert.strictEqual(result.warnings.length, 0);
+});
+
+test('forwardMigrate: v0.2 records unchanged', () => {
+  const v02Record = makeRecord('x', '0.2');
+  const originalFp = v02Record.fingerprint;
+  const result = forwardMigrate([v02Record]);
+  assert.strictEqual(result.alreadyV02, 1);
+  assert.strictEqual(result.migrated, 0);
+  assert.strictEqual(result.records[0]!.fingerprint, originalFp);
+});
+
+test('forwardMigrate: mixed v0.1/v0.2 preserves v0.2, migrates v0.1', () => {
+  const records = [makeRecord('a', '0.1'), makeRecord('b', '0.2'), makeRecord('c', '0.1')];
+  const result = forwardMigrate(records);
+  assert.strictEqual(result.migrated, 2);
+  assert.strictEqual(result.alreadyV02, 1);
+  // Check that migrated records are v0.2
+  const v02Rec = result.records.find(r => r.fingerprint?.startsWith('lfp:0.2:'));
+  assert.ok(v02Rec, 'Should have at least one v0.2 record');
+});
+
+test('backwardMigrate: v0.2 → v0.1 migrates all v0.2 records', () => {
+  const records = [makeRecord('a', '0.2'), makeRecord('b', '0.2')];
+  const result = backwardMigrate(records);
+  assert.strictEqual(result.migrated, 2);
+  assert.strictEqual(result.alreadyV01, 0);
+  assert.strictEqual(result.records.length, 2);
+  for (const rec of result.records) {
+    assert.ok(rec.fingerprint?.startsWith('lfp:0.1:'), `All records should be v0.1, got: ${rec.fingerprint}`);
+  }
+  assert.ok(result.warnings.length > 0, 'Backward migration should emit warnings');
+  for (const w of result.warnings) {
+    assert.strictEqual(w.type, 'fingerprint-regenerated');
+  }
+});
+
+test('backwardMigrate: v0.1 records unchanged', () => {
+  const v01Record = makeRecord('y', '0.1');
+  const originalFp = v01Record.fingerprint;
+  const result = backwardMigrate([v01Record]);
+  assert.strictEqual(result.alreadyV01, 1);
+  assert.strictEqual(result.migrated, 0);
+  assert.strictEqual(result.records[0]!.fingerprint, originalFp);
+  assert.strictEqual(result.warnings.length, 0);
+});
+
+test('bidirectionalMigration: v0.1 → v0.2 → v0.1 cycle preserves record count', () => {
+  const records = [makeRecord('a', '0.1'), makeRecord('b', '0.1'), makeRecord('c', '0.1')];
+  const result = bidirectionalMigration(records);
+  assert.strictEqual(result.forward.migrated, 3);
+  assert.strictEqual(result.backward.migrated, 3);
+  assert.strictEqual(result.backward.records.length, 3);
+  // All should be back to v0.1 after the cycle
+  for (const rec of result.backward.records) {
+    assert.ok(rec.fingerprint?.startsWith('lfp:0.1:'), 'After backward pass, all should be v0.1');
+  }
+  assert.ok(result.netWarnings.length > 0, 'Should have warnings from backward migration');
+});
+
+test('bidirectionalMigration: forward then backward is idempotent on data integrity', () => {
+  const records = [makeRecord('a', '0.1'), makeRecord('b', '0.1')];
+  const result = bidirectionalMigration(records);
+  // After forward, all should be v0.2
+  for (const rec of result.forward.records) {
+    assert.ok(rec.fingerprint?.startsWith('lfp:0.2:')); // Forward migrated
+  }
+  // After backward, all should be v0.1
+  for (const rec of result.backward.records) {
+    assert.ok(rec.fingerprint?.startsWith('lfp:0.1:')); // Backward migrated
+  }
+  // Semantic content should be preserved through both migrations
+  assert.strictEqual(result.backward.records[0]!.sem.world, 'a');
+  assert.strictEqual(result.backward.records[1]!.sem.world, 'b');
 });

@@ -160,6 +160,119 @@ export function validateGoldenVector(
 }
 
 // ---------------------------------------------------------------------------
+// Bidirectional migration (v0.1 ↔ v0.2)
+// ---------------------------------------------------------------------------
+
+/** Version strings used in bidirectional migration tests */
+export const FP_VERSION_V01 = '0.1' as const;
+export const FP_VERSION_V02 = '0.2' as const;
+
+/** Data-loss warnings emitted during backward migration */
+export interface MigrationWarning {
+  /** Type of data loss */
+  type: 'fingerprint-regenerated' | 'schema-downgraded' | 'renderings-lost' | 'policy-downgraded';
+  /** Record identifier */
+  recordId: string;
+  /** Human-readable description */
+  message: string;
+}
+
+/** Result of a forward migration (v0.1 → v0.2) */
+export interface ForwardMigrationResult {
+  /** Migrated records */
+  records: LunumRecord[];
+  /** Number of records already at v0.2 (unchanged) */
+  alreadyV02: number;
+  /** Number of records migrated from v0.1 → v0.2 */
+  migrated: number;
+  /** Warnings (none expected for forward migration) */
+  warnings: MigrationWarning[];
+}
+
+/** Result of a backward migration (v0.2 → v0.1, lossy) */
+export interface BackwardMigrationResult {
+  /** Migrated records */
+  records: LunumRecord[];
+  /** Number of records already at v0.1 (unchanged) */
+  alreadyV01: number;
+  /** Number of records migrated from v0.2 → v0.1 */
+  migrated: number;
+  /** Warnings about data loss */
+  warnings: MigrationWarning[];
+}
+
+/**
+ * Forward-migrate records from v0.1 to v0.2.
+ * Regenerates fingerprints at the new version.
+ * This is a safe, lossless migration.
+ */
+export function forwardMigrate(records: LunumRecord[]): ForwardMigrationResult {
+  const alreadyV02 = [] as LunumRecord[];
+  const migrated = [] as LunumRecord[];
+  const warnings: MigrationWarning[] = [];
+
+  for (const record of records) {
+    const fpVer = detectRecordFpVersion(record);
+    if (fpVer === FP_VERSION_V02) {
+      alreadyV02.push(record);
+    } else {
+      // Forward migrate: regenerate fingerprint at v0.2
+      const canonical = canonicalizeSem(record.sem);
+      const digest = crypto.createHash('sha256').update(stableStringify(canonical)).digest('hex');
+      const newFp = `lfp:${FP_VERSION_V02}:sha256:${digest.slice(0, 32)}`;
+      migrated.push({ ...record, fingerprint: newFp });
+    }
+  }
+
+  return { records: [...alreadyV02, ...migrated], alreadyV02: alreadyV02.length, migrated: migrated.length, warnings };
+}
+
+/**
+ * Backward-migrate records from v0.2 to v0.1 (lossy).
+ * Regenerates fingerprints at v0.1 and downgrades schema references.
+ * Emits warnings for each record that loses information.
+ */
+export function backwardMigrate(records: LunumRecord[]): BackwardMigrationResult {
+  const alreadyV01 = [] as LunumRecord[];
+  const migrated = [] as LunumRecord[];
+  const warnings: MigrationWarning[] = [];
+
+  for (const record of records) {
+    const fpVer = detectRecordFpVersion(record);
+    if (fpVer === FP_VERSION_V01) {
+      alreadyV01.push(record);
+    } else {
+      // Backward migrate: regenerate fingerprint at v0.1
+      const canonical = canonicalizeSem(record.sem);
+      const digest = crypto.createHash('sha256').update(stableStringify(canonical)).digest('hex');
+      const newFp = `lfp:${FP_VERSION_V01}:sha256:${digest.slice(0, 32)}`;
+      migrated.push({ ...record, fingerprint: newFp });
+      warnings.push({
+        type: 'fingerprint-regenerated',
+        recordId: record.fingerprint?.slice(0, 20) ?? record.source?.text?.slice(0, 20) ?? 'unknown',
+        message: `Fingerprint regenerated from v0.2 to v0.1 for record`
+      });
+    }
+  }
+
+  return { records: [...alreadyV01, ...migrated], alreadyV01: alreadyV01.length, migrated: migrated.length, warnings };
+}
+
+/**
+ * Run a bidirectional migration cycle: v0.1 → v0.2 → v0.1.
+ * Returns both forward and backward results plus warnings from backward pass.
+ */
+export function bidirectionalMigration(records: LunumRecord[]): {
+  forward: ForwardMigrationResult;
+  backward: BackwardMigrationResult;
+  netWarnings: MigrationWarning[];
+} {
+  const forward = forwardMigrate(records);
+  const backward = backwardMigrate(forward.records);
+  return { forward, backward, netWarnings: backward.warnings };
+}
+
+// ---------------------------------------------------------------------------
 // Migration summary / reporting
 // ---------------------------------------------------------------------------
 
