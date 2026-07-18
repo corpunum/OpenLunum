@@ -55,6 +55,16 @@ export interface ModelProfileSchema {
   metadata?: Record<string, unknown>;
 }
 
+export interface ProtectedEvalSchema {
+  schema: "openlunum-protected-eval/0.1";
+  id: string;
+  version: string;
+  datasetId: string;
+  dataset: {     path: string,     sha256: string,     license: string,     envVar?: string };
+  instructions: string;
+  coverage: {     tasks: ("parse" | "realize" | "render" | "context" | "retrieval" | "integration" | "conformance" | "infrastructure")[],     languages: string[],     categories: string[] };
+}
+
 export interface RendererProfileSchema {
   schema: "openlunum-renderer-profile/0.1";
   id: string;
