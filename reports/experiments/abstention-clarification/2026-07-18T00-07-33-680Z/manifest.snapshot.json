@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "abstention-clarification",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "hypothesis": "Adding explicit abstention and clarification outputs for low-confidence parses will improve parsing reliability by providing clear signals when the parser is uncertain about its output.",
+  "baselineCommit": "80e06b91fb9ffb3a09fbf837e6baa0eeb388cead",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "modelProfile": "profiles/models/local-openai-compatible.example.json",
+  "limits": {
+    "maxItems": 16,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 16
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": true
+  },
+  "outputDirectory": "reports/experiments/abstention-clarification"
+}
