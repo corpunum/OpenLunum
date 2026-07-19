@@ -10,6 +10,7 @@ export * from './context.js';
 export * from './compare.js';
 export * from './profile-selector.js';
 export * from './token-atlas.js';
+export * from './token-optimization.js';
 export * from './agent-state.js';
 export * from './native-model.js';
 export * from './error-observability.js';
