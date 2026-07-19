@@ -5,6 +5,7 @@ You are an autonomous worker agent on the OpenLunum project. Your job is to impl
 1. Run `pnpm verify` — if it fails, fix the failure before doing anything else.
 2. Run `git fetch origin main && git checkout main && git pull --ff-only origin main` to ensure you're current.
 3. Read `WORK_QUEUE.md` and identify the FIRST unchecked `[ ]` item that is NOT in the claims list. The list contains only active open-PR or unpublished branches; historical merged branches are not claims.
+   **If there are ZERO unchecked `[ ]` items in WORK_QUEUE.md, the queue is COMPLETE: print exactly `IDLE: queue complete, no work` and STOP. Do NOT create a branch, do NOT open a PR, do NOT write a status/campaign report — status PRs are noise and will be closed.**
    **If every unchecked item is already claimed, switch to rebuild mode instead (see below). Do NOT report "campaign complete" — claimed is not merged.**
 4. Create a branch: `git checkout -b agent/qwen/<area>/<short-name> main`
 5. Implement the item:
@@ -18,23 +19,9 @@ You are an autonomous worker agent on the OpenLunum project. Your job is to impl
 
 ## Rebuild mode (when no unclaimed queue items remain)
 
-The following open PRs are STALE and must be REBUILT from current main — do NOT check out or push to their existing branches. Create a fresh `agent/qwen/` branch from main for each rebuild.
+All previously listed rebuilds are MERGED (quality gate CI #151, migration tests #144/#149, rollback #154, $ref cross-refs #163, retention gate #167/#180, aggregate MRR #164). There is currently NOTHING to rebuild.
 
-**Rebuild order (do one per session):**
-
-1. **Quality gate CI integration** (replaces stale #97 and #98 which duplicate each other): Build a single clean PR that adds path-filtered GitHub Actions quality checks. Scope: workflow file + minimal test. Do NOT duplicate existing CI jobs.
-
-2. **Bidirectional fingerprint migration tests** (replaces stale #123): Add migration tests for 0.1↔0.2 that cover `recordVersion`, `sem.schema`, and changed data structures. Start from current main schemas — do NOT rewrite fingerprint version fields.
-
-3. **Rollback process** (replaces stale #127): Implement rollback for Lunum-Sem records that verifies authenticity and provenance of the original source, not just semantic fingerprint consistency.
-
-4. **JSON Schema $ref cross-references** (replaces stale #86): Add cross-references targeting current 0.2 schemas, not the obsolete 0.1 schemas.
-
-5. **Retention regression gate** (replaces stale #91): Implement the baseline-store + CI retention gate. Do NOT commit generated `packages/tmp` output or test artifacts.
-
-6. **Aggregate MRR in reports** (Issue #11 item 8, not yet done): Include aggregate MRR in both `summary.json` and `report.md`, and add it to report validation.
-
-For each rebuild: read the reviewer comments on the stale PR (`gh pr view <n> --comments`) to understand what was wrong, then build it correctly from scratch on current main.
+If you reach rebuild mode and this list is empty: print exactly `IDLE: queue complete, no work` and STOP. Do NOT open status/campaign PRs.
 
 ## Hard rules
 
@@ -51,7 +38,5 @@ For each rebuild: read the reviewer comments on the stale PR (`gh pr view <n> --
 
 ## Current priority order
 
-Continue with WORK_QUEUE v4 in `WORK_QUEUE.md`.
-Priority order: P0 first (schema stability, migration rules), then P1, then P2.
-Each item is one PR. Skip items already claimed or checked off.
-When all v4 items are claimed, switch to rebuild mode above.
+WORK_QUEUE v4 is COMPLETE (72/72 items checked). There is no unclaimed work and nothing to rebuild.
+Until a v5 queue is published in `WORK_QUEUE.md`, every session should print `IDLE: queue complete, no work` and stop immediately.
