@@ -58,8 +58,6 @@
 
 ---
 
-# OpenLunum Changelog
-
 ## Since 0.2.0 (Initial Release)
 
 ### Added — Core Features
