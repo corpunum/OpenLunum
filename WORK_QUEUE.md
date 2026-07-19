@@ -132,7 +132,7 @@ v1-v3 are fully landed. v4 targets the 8 release gates from STATUS.md to move th
 
 ## P1 — multilingual retention (release gate 3)
 
-- [ ] Run parse+realize round-trip retention experiments on all 4 languages (EN/EL/ES/ID) against at least 2 local models; publish pass/fail per-language metrics.
+- [x] Run parse+realize round-trip retention experiments on all 4 languages (EN/EL/ES/ID) against at least 2 local models; publish pass/fail per-language metrics. *(PR #176)*
 - [ ] Add a retention regression gate to CI: if any language drops below the baseline threshold recorded in the first run, the build fails. *(PR #155 open)*
 - [ ] Measure cross-lingual retrieval precision: query in language A, retrieve semantically equivalent records in language B.
 
