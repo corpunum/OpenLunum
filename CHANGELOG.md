@@ -2,8 +2,14 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Added — Retention Regression Gate (PR #167)
+- **Retention regression gate:** Baseline store with provenance (dataset/model/schema), regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), and nightly CI integration. Types and logic in `packages/eval/src/baseline-store.ts`. 11 tests in `packages/eval/test/baseline-store.test.ts`. CI workflow at `.github/workflows/retention-regression-gate.yml`. (PR #167)
+
 ### Added — Retrieval (PR #164)
 - **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in `summary.json` and `report.md`. Tests rebuilt and revalidated in `packages/eval/test/` (PR #164).
+
+### Changed — Quality Gate CI (PR #151)
+- **Quality gate CI rebuild:** Rebuilt quality gate CI integration per maintainer feedback (replaces stale PRs #97 and #98). Unified runner wrapping downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, and prompt-gates into a single runnable suite for CI. Exit codes: 0=pass, 1=warn, 2=fail. Configurable gates with `minimumPassRate` and `strictMode` support. Types in `packages/core/src/quality-gate-ci.ts`. Tests in `packages/core/test/quality-gate-ci.test.ts`. CI workflow at `.github/workflows/quality-gate.yml`. (PR #151)
 
 ### Changed — Schema (PR #160, PR #163)
 - **Bidirectional migration rebuild:** Revalidated bidirectional migration (0.1 ↔ 0.2) with comprehensive test coverage — recordVersion and schema migration, modality locking, provenance/annotations field trimming, input-order preservation, source text identity, clause count/predicate preservation, and source/destination schema validation. 220 new lines in `packages/core/test/fingerprint-migration.test.ts`. (PR #160)

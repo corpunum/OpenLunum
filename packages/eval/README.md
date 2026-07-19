@@ -10,6 +10,7 @@ Provides bounded local OpenAI-compatible parse/realization experiments with data
 
 - **Realization Runner:** Experiment runner with protected-literal scoring for multilingual realization (EN/EL/ES/ID).
 - **Token Atlas:** Cross-model, cross-profile token measurement framework for natural vs renderer profile comparison.
+- **Retention regression gate:** Baseline store with provenance (dataset/model/schema), regression detection, stale-baseline checks, and CI integration. Prevents multilingual retention quality from degrading over time.
 - **Per-language metrics:** Detailed reports with pass rates, protected-literal coverage, and semantic scores.
 
 ## Scripts
@@ -32,6 +33,9 @@ pnpm report:generate
 
 # Run smoke tests
 pnpm eval:smoke
+
+# Run retention experiment
+pnpm eval:retention
 ```
 
 ## Realization experiment
@@ -77,3 +81,4 @@ reports/                      generated per-item results and summaries
 
 - **Realization runner:** Multilingual realization experiments (EN/EL/ES/ID) with protected-literal scoring.
 - **Token atlas:** Cross-model token measurement framework with aggregate statistics and per-model analysis.
+- **Retention regression gate:** Baseline store with provenance, regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), and nightly CI integration. 11 tests.

@@ -38,6 +38,7 @@
 - Rollback process: `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests rather than trusting the record itself. 10 unit tests. Types in `packages/core/src/rollback-process.ts`.
 - Orchestrator handover doc: `ORCHESTRATOR.md` with 6-layer stack architecture (Cloud Orchestrator, Watchdog, Local Orchestrator with LLM diagnosis, Reviewer, Worker, Merge Bot), key paths, hardware profile, escalation path (bash auto-fix → LLM diagnosis → NEEDS_CLOUD → cloud orchestrator → user notification), merge bot `orchestrator-approved` label for hard-protected PRs, and ops runbook for any LLM to take over. `ORCHESTRATOR-PROMPT.md` provides copy-paste handover instructions.
 - Quality gate CI integration: unified runner wrapping downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, and prompt-gates; configurable pass rates, exit codes (0=pass, 1=warn, 2=fail), CI workflow on PRs touching core/eval src.
+- Retention regression gate: baseline store with provenance (dataset/model/schema), regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), and nightly CI integration. Types in `packages/eval/src/baseline-store.ts`. 11 tests.
 
 | Component | Status | Meaning |
 |---|---|---|
@@ -86,6 +87,7 @@
 | Orchestrator handover | Reference document | 6-layer stack architecture (Cloud Orchestrator, Watchdog, Local Orchestrator with LLM diagnosis, Reviewer, Worker, Merge Bot), key paths, escalation path (bash → LLM diagnosis → NEEDS_CLOUD → cloud → user), merge bot `orchestrator-approved` label for hard-protected PRs. `ORCHESTRATOR-PROMPT.md` provides copy-paste handover.
 | Safety rollback process | Reference implementation | `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests. 10 unit tests.
 | Quality gate CI integration | Prototype | Unified runner for downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, prompt-gates; configurable pass rates; CI workflow on core/eval PRs.
+| Retention regression gate | Reference implementation | Baseline store with provenance (dataset/model/schema), regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), nightly CI workflow. 11 tests in `packages/eval/test/baseline-store.test.ts`.
 
 ## Release gates before 1.0
 
