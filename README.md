@@ -180,6 +180,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Orchestrator handover doc: `ORCHESTRATOR.md` with 6-layer stack architecture (Cloud Orchestrator, Watchdog, Local Orchestrator with LLM diagnosis, Reviewer, Worker, Merge Bot), key paths, hardware profile, escalation path (bash auto-fix → LLM diagnosis → NEEDS_CLOUD → cloud orchestrator → user notification), merge bot `orchestrator-approved` label for hard-protected PRs, and ops runbook for any LLM to take over. `ORCHESTRATOR-PROMPT.md` provides copy-paste handover instructions.
 - Safety rollback process: `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests rather than trusting the record itself. 10 unit tests. Types in `packages/core/src/rollback-process.ts`.
 - CLI migrate command: `lunum migrate <file> --from 0.1 --to 0.2` or `--from 0.2 --to 0.1` for bidirectional migration, with `--dry-run` mode for preflight reports. Supports single records and arrays; reports schema versions, fingerprints, warnings, and validation status per record. 152 lines of tests in `packages/cli/test/cli.test.ts`.
+- Fail-closed merge policy: `scripts/pi-merge-policy.mjs` checks required CI checks (`verify`, `schema-drift`, `report-validation`, `protected-data-boundary`; plus `quality-gates` for core/eval src changes), approval labels with head-bound review comments, blocking conditions, and path protection. `scripts/pi-merge-loop.sh` binds merges to exact heads (`--match-head-commit`), auto-reverts on red main. 181-line policy evaluator, 109-line tests. (commit 88017f8)
 
 ## New in v0.2.0
 
@@ -313,7 +314,7 @@ schemas/                  machine-readable contracts (0.1-draft and frozen 0.2);
 registry/                 worlds, roles, categories, predicates
 profiles/models/          Model profile definitions (token mappings, instruction templates).
 profiles/renderers/       Renderer profile definitions (safe, short, tight).
-scripts/                  Automation: nightly window, release sign/verify, schema-to-ts, validation, orchestrator loop (pi-orchestrator.sh), worker/reviewer/merge/watchdog loops.
+scripts/                  Automation: nightly window, release sign/verify, schema-to-ts, validation, orchestrator loop (pi-orchestrator.sh), worker/reviewer/merge/watchdog loops, fail-closed merge policy (pi-merge-policy.mjs + pi-merge-loop.sh).
 test-fixtures/            Integration and retrieval test fixtures with manifests.
 python/                   Python research workspace for model, tokenizer, corpus, and statistics work.
 examples/                 Example semantic records for quick-start and pipeline adoption.

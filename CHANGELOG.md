@@ -2,6 +2,9 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Added — Merge Policy (88017f8)
+- **Fail-closed exact-head merge policy:** `scripts/pi-merge-policy.mjs` evaluates all required CI checks (`verify`, `schema-drift`, `report-validation`, `protected-data-boundary`; plus `quality-gates` when core/eval src is touched), approval labels (`ready-for-merge` or `orchestrator-approved` with head-bound review comments), blocking conditions, and path protection before allowing the merge bot to proceed. `scripts/pi-merge-loop.sh` now binds every merge to the exact head that passed policy (`--match-head-commit`), closing the TOCTOU gap. Auto-revert runs `pnpm verify` on main after every merge and reverts if verification fails. 181-line policy evaluator + 109-line tests. (commit 88017f8)
+
 ### Changed — CLI (PR #174)
 - **CLI migrate command enhanced:** `lunum migrate` now uses proper migration utilities from `@corpunum/lunum` (`migrateForward01to02`, `migrateBackward02to01`). Supports `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward) migrations. Provides detailed results including schema versions, fingerprints, warnings, and validation status. Supports both single records and arrays of records. Adds `--dry-run` mode that reports changes without modifying files, and in-place write mode that transforms records and writes back to file. 152 lines of tests in `packages/cli/test/cli.test.ts`. (PR #174, commit d5ba255)
 
