@@ -177,3 +177,33 @@ Most v4 implementation work has landed, but the queue is **not mechanically comp
 ## Claiming work
 
 Same rules as v1: create `experiments/<experiment-id>/CLAIM.md` with worker, area, branch, start date. One item per PR.
+
+---
+
+# WORK_QUEUE v5 — live-evidence repairs (2026-07-20)
+
+v1–v4 are landed. v5 comes from the 2026-07-20 live test campaign (report: `lunum-live-test-report-2026-07-20.md` on the maintainer's desktop): the live-model experiment path had never actually worked — the parse runner discarded its own prompt, so every historical parse/retention result scored garbage. These items make live evidence real. Do NOT duplicate PR #220 (renderer goldens / tokenizer proof / quality-gate script — it merges when CI billing renews).
+
+## P0 — eval pipeline correctness
+
+- [ ] Fix `parse-experiment` CLI arg handling: `runParseExperimentCli` reads `process.argv[2]` (the subcommand itself) instead of the manifest path — `node cli.js parse-experiment <manifest>` always fails with ENOENT. Add a regression test that invokes the subcommand through the real CLI entry.
+- [ ] Fix parse runner prompt: `parse-experiment.ts` (~line 151) must send `parsePrompt(item).system`, not the generic "experiment runner" string that hides the task from the model. Add a test asserting the system prompt contains the schema instructions.
+- [ ] Add `max_tokens` (default 4096, profile-overridable) to `OpenAICompatibleModel.complete` in `packages/eval/src/model.ts` — thinking models consume the server default budget and return empty content.
+
+## P1 — make parse prompts actually parseable
+
+- [ ] Embed the Lunum-Sem schema shape + one canonical one-shot example in `parsePrompt` (proven live: validity went 0/16 → 14/16 with the example present).
+- [ ] Ship a controlled predicate/role vocabulary with the parse prompt (from the gold dataset's identifier inventory) so models can hit gold identifiers instead of guessing synonyms (`remove_file` vs `delete`).
+- [ ] Score near-semantic fingerprint matches alongside exact matches in parse experiments; report both. Exact-only underreports capability when identifiers differ but semantics match.
+
+## P1 — honest retention evidence
+
+- [ ] Re-run the 4-language (EN/EL/ES/ID) parse+retention experiment against at least 2 named local models AFTER the P0/P1 fixes above, publish per-language metrics, and record these as the retention gate's baselines (replacing any baselines produced by the broken path).
+
+## P2 — gate calibration
+
+- [ ] Recalibrate parse/retention gate thresholds from the honest baselines (current 0.95 recall / 0.75 exact are unreachable for free-vocabulary models); document the rationale in the experiment README.
+
+## Claiming work
+
+Same rules as v1: create `experiments/<experiment-id>/CLAIM.md`. One item per PR.

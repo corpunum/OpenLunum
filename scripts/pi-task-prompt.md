@@ -38,5 +38,8 @@ If you reach rebuild mode and this list is empty: print exactly `IDLE: queue com
 
 ## Current priority order
 
-WORK_QUEUE v4 is COMPLETE (72/72 items checked). There is no unclaimed work and nothing to rebuild.
-Until a v5 queue is published in `WORK_QUEUE.md`, every session should print `IDLE: queue complete, no work` and stop immediately.
+Work from WORK_QUEUE v5 (live-evidence repairs) plus the 3 re-opened v4 items in `WORK_QUEUE.md`.
+Priority order: v5 P0 (eval pipeline correctness — small mechanical fixes) first, then v5 P1, then the re-opened v4 items, then v5 P2.
+Each item is one PR. Skip items already claimed or checked off.
+The retention re-run item (v5 P1, "honest retention evidence") is BLOCKED until all three v5 P0 items are merged — do not claim it before then.
+If every unchecked item is claimed, print `IDLE: all work claimed` and stop — do NOT open status/campaign PRs.
