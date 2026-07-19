@@ -15,6 +15,7 @@ export * from './native-model.js';
 export * from './error-observability.js';
 export * from './downstream-quality.js';
 export * from './mixed-context-quality.js';
+export * from './quality-gate-ci.js';
 export * from './prompt-injection.js';
 export * from './renderer-conformance.js';
 export * from './compatibility-matrix.js';
