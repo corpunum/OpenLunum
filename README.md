@@ -166,6 +166,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Architecture decision records in `docs/decisions/`.
 - Frozen Lunum-Sem schema 0.2 with locked fields, enums, and `$ref` cross-references.
 - Schema migration test suite validating 0.1→0.2 record transformation with golden vectors.
+- Bidirectional migration (0.1 ↔ 0.2) with schema validation: forward and backward migration functions validate source/destination schemas, emit field-level loss warnings, regenerate fingerprints, and preserve input order. Round-trip test (0.1→0.2→0.1) with explicit loss warnings.
 - Schema changelog at `schemas/CHANGELOG.md` documenting every breaking change.
 
 ## New in v0.2.0
@@ -180,6 +181,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - **Tokenizer optimization pass:** Model-specific tight profiles that provably do not change semantics, with per-model best profile selection via Token Atlas.
 - **Downstream quality gates:** Task-success metrics and quality gates to verify downstream task quality preservation.
 - **Fingerprint migration utilities:** Code-level utilities for detecting versions, migrating records, and golden vectors.
+- **Bidirectional migration (0.1 ↔ 0.2):** Forward (`migrateForward01to02`) and backward (`migrateBackward02to01`) migration functions with schema validation, field-level loss warnings, fingerprint regeneration, and input-order preservation. Batch operations (`migrateRecordsForward`, `migrateRecordsBackward`) and round-trip test (`roundTripMigration`) included.
 - **CI conformance gates:** Property tests wired into CI as hard gates for idempotence and fingerprint stability.
 - **Native model protocol:** Token mappings, instruction templates, and fallback profiles for native and non-native model families.
 - **Renderer conformance suite:** Property tests verifying round-trip canonicalization for safe, short, and tight profiles against 10 test records.

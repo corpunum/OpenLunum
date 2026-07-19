@@ -33,6 +33,7 @@
 - Near-semantic fingerprint implementation: feature extraction, configurable similarity threshold, nfp:* format, similarity comparison.
 - Near-semantic + exact fingerprint interop: records carry both lfp: and nfp:, hybrid search (exact-first, near-fallback).
 - Near-semantic retrieval tests: recall vs exact, false-positive rate, fingerprint stability across generations.
+- Bidirectional migration (0.1 ↔ 0.2): forward (`migrateForward01to02`) and backward (`migrateBackward02to01`) functions with schema validation, field-level loss warnings, fingerprint regeneration, and input-order preservation. Batch operations (`migrateRecordsForward`, `migrateRecordsBackward`) and round-trip test (`roundTripMigration`) included.
 
 | Component | Status | Meaning |
 |---|---|---|
@@ -76,6 +77,7 @@
 | Near-semantic fingerprint implementation | Prototype | Feature extraction, configurable threshold, nfp:* format, similarity comparison with threshold-based matching |
 | Near-semantic retrieval tests | Reference implementation | Recall vs exact, false-positive rate, fingerprint stability across generations |
 | Near-semantic + exact fingerprint interop | Prototype | Records carry both lfp: and nfp:, hybrid search exact-first with near-fallback |
+| Bidirectional migration (0.1 ↔ 0.2) | Reference implementation | Forward and backward migration with schema validation, field-level loss warnings, fingerprint regeneration, input-order preservation. Round-trip test with explicit loss warnings. 190 lines of tests.
 
 ## Release gates before 1.0
 
@@ -90,4 +92,4 @@
 
 ## Honest boundary
 
-OpenLunum has an architecture, a reference core, preserved evidence, adoption contracts, and a frozen Lunum-Sem 0.2 schema with migration test suite. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products. Token Atlas provides cross-model measurements but per-model profile selection requires per-model testing. CI hard gates exist for conformance but not all merge gates are active. Release gates 1 and 2 are substantially addressed by the schema 0.2 freeze and migration test suite; remaining gates require further evidence.
+OpenLunum has an architecture, a reference core, preserved evidence, adoption contracts, and a frozen Lunum-Sem 0.2 schema with migration test suite and bidirectional migration (0.1 ↔ 0.2) with schema validation. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products. Token Atlas provides cross-model measurements but per-model profile selection requires per-model testing. CI hard gates exist for conformance but not all merge gates are active. Release gates 1 and 2 are substantially addressed by the schema 0.2 freeze, migration test suite, and bidirectional migration with validation; remaining gates require further evidence.
