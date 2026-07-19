@@ -14,6 +14,9 @@
 ### Added — Retention Baseline Store (PR #180)
 - **Retention baseline store:** Per-language retention metrics save/load with `saveBaseline()` and `loadBaseline()`. Snapshot-to-baseline conversion via `snapshotToBaseline()`. Regression detection via `compareRetentionAgainstBaseline()` — detects when any language drops below its baseline, below minimum threshold (0.5), or overall drops >5pp. Types in `packages/eval/src/retention-baseline.ts`. 289 lines of implementation, 274 lines of tests in `packages/eval/test/retention-baseline.test.ts`. (PR #180)
 
+### Added — Renderer Profiles (PR #182)
+- **Renderer profiles upgraded to Reference:** Deterministic golden-output tests for safe/short/tight profiles on 10+ diverse inputs. Model-specific tight profiles via Token Atlas; per-model best profile selection available. Types in `packages/core/src/profile-selector.ts`. Golden-output tests on main. (PR #182, commit c2e9a28)
+
 ### Added — Retrieval (PR #164)
 - **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in `summary.json` and `report.md`. Tests rebuilt and revalidated in `packages/eval/test/` (PR #164).
 
