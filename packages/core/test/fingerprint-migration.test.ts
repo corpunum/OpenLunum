@@ -517,3 +517,223 @@ test('roundTripMigration produces valid 0.1 record', () => {
   assert.strictEqual(result.backward.record.recordVersion, 'lunum-record/0.1-draft');
   assert.ok(result.backward.warnings.length > 0);
 });
+
+// ── Rebuild: comprehensive bidirectional migration tests ───────────
+// These tests specifically cover the maintainer's feedback from PR #123:
+// - recordVersion and sem.schema are properly migrated
+// - Changed data structures (clauses, provenance, annotations) are migrated
+// - Input order is preserved
+// - Both source and destination schemas are validated
+// - Field-level loss warnings are emitted
+
+
+test('bidirectional migration: forward changes recordVersion from 0.1-draft to 0.2', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: 'lfp:0.1:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = migrateForward01to02(record);
+  assert.strictEqual(result.record.recordVersion, 'lunum-record/0.2');
+  assert.strictEqual(result.destValid, true);
+  assert.strictEqual(result.sourceValid, true);
+});
+
+test('bidirectional migration: backward changes recordVersion from 0.2 to 0.1-draft', () => {
+  const record: LunumRecord = {
+    recordVersion: 'lunum-record/0.2',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.2', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: 'lfp:0.2:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = migrateBackward02to01(record);
+  assert.strictEqual(result.record.recordVersion, 'lunum-record/0.1-draft');
+  assert.strictEqual(result.destValid, true);
+  assert.strictEqual(result.sourceValid, true);
+});
+
+test('bidirectional migration: forward changes sem.schema from 0.1-draft to 0.2', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {}, modality: 'unknown_modality' }] },
+    fingerprint: 'lfp:0.1:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = migrateForward01to02(record);
+  assert.strictEqual(result.sem.schema, 'lunum-sem/0.2');
+  // Unknown modality should be locked to certainty
+  const clause = result.sem.clauses[0]!;
+  assert.strictEqual(clause.modality, 'certainty');
+  assert.ok(result.warnings.some(w => w.code === 'MODALITY_LOCKED'));
+});
+
+test('bidirectional migration: backward changes sem.schema from 0.2 to 0.1-draft', () => {
+  const record: LunumRecord = {
+    recordVersion: 'lunum-record/0.2',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.2', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], provenance: { source: 'manual' }, annotations: { confidence: 0.5 } },
+    fingerprint: 'lfp:0.2:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = migrateBackward02to01(record);
+  assert.strictEqual(result.sem.schema, 'lunum-sem/0.1-draft');
+  // Backward migration should emit warnings for unrestricted schemas
+  assert.ok(result.warnings.some(w => w.code === 'PROVENANCE_UNRESTRICTED'));
+  assert.ok(result.warnings.some(w => w.code === 'ANNOTATIONS_UNRESTRICTED'));
+});
+
+test('bidirectional migration: forward migrates provenance locked fields', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { 
+      schema: 'lunum-sem/0.1-draft', 
+      world: 'test', 
+      kind: 'test', 
+      clauses: [{ predicate: 'p', roles: {} }],
+      provenance: { source: 'manual', author: 'alice', extraField: 'removed' }
+    },
+    fingerprint: 'lfp:0.1:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = migrateForward01to02(record);
+  // extraField should be removed
+  assert.strictEqual((result.sem.provenance as any).extraField, undefined);
+  // Source and author should be preserved
+  assert.strictEqual((result.sem.provenance as any).source, 'manual');
+  assert.strictEqual((result.sem.provenance as any).author, 'alice');
+  // Should emit warning for removed field
+  assert.ok(result.warnings.some(w => w.code === 'PROVENANCE_FIELD_REMOVED'));
+});
+
+test('bidirectional migration: forward migrates annotations locked fields', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { 
+      schema: 'lunum-sem/0.1-draft', 
+      world: 'test', 
+      kind: 'test', 
+      clauses: [{ predicate: 'p', roles: {} }],
+      annotations: { confidence: 0.9, extraAnnotation: 'removed' }
+    },
+    fingerprint: 'lfp:0.1:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = migrateForward01to02(record);
+  // extraAnnotation should be removed
+  assert.strictEqual((result.sem.annotations as any).extraAnnotation, undefined);
+  // Confidence should be preserved
+  assert.strictEqual((result.sem.annotations as any).confidence, 0.9);
+  // Should emit warning for removed field
+  assert.ok(result.warnings.some(w => w.code === 'ANNOTATION_FIELD_REMOVED'));
+});
+
+test('bidirectional migration: forward and backward preserve source text', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'The user prefers red wine.', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'prefer', roles: { experiencer: 'u', object: 'o' } }] },
+    fingerprint: 'lfp:0.1:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = roundTripMigration(record);
+  assert.strictEqual(result.forward.record.source.text, 'The user prefers red wine.');
+  assert.strictEqual(result.backward.record.source.text, 'The user prefers red wine.');
+  // Source should be identical after round trip
+  assert.strictEqual(result.backward.record.source.text, record.source.text);
+});
+
+test('bidirectional migration: multiple records preserve input order', () => {
+  const records: LunumRecord[] = [
+    { recordVersion: '0.1-draft', source: { text: 'first', language: null, role: null, ref: null }, sem: { schema: 'lunum-sem/0.1-draft', world: 'a', kind: 'k', clauses: [{ predicate: 'a', roles: {} }] }, fingerprint: 'lfp:0.1:sha256:a', renderings: {}, policy: { eligible: true, category: 'a', risk: 'low', confidence: 1, reasons: [] }, meta: {} },
+    { recordVersion: '0.1-draft', source: { text: 'second', language: null, role: null, ref: null }, sem: { schema: 'lunum-sem/0.1-draft', world: 'b', kind: 'k', clauses: [{ predicate: 'b', roles: {} }] }, fingerprint: 'lfp:0.1:sha256:b', renderings: {}, policy: { eligible: true, category: 'b', risk: 'low', confidence: 1, reasons: [] }, meta: {} },
+    { recordVersion: '0.1-draft', source: { text: 'third', language: null, role: null, ref: null }, sem: { schema: 'lunum-sem/0.1-draft', world: 'c', kind: 'k', clauses: [{ predicate: 'c', roles: {} }] }, fingerprint: 'lfp:0.1:sha256:c', renderings: {}, policy: { eligible: true, category: 'c', risk: 'low', confidence: 1, reasons: [] }, meta: {} }
+  ];
+  const fwdResult = migrateRecordsForward(records);
+  assert.ok(fwdResult.orderPreserved, 'Forward migration should preserve input order');
+  assert.strictEqual(fwdResult.results[0]!.record.source.text, 'first');
+  assert.strictEqual(fwdResult.results[1]!.record.source.text, 'second');
+  assert.strictEqual(fwdResult.results[2]!.record.source.text, 'third');
+  
+  const bwdResult = migrateRecordsBackward(fwdResult.results.map(r => r.record));
+  assert.ok(bwdResult.orderPreserved, 'Backward migration should preserve input order');
+  assert.strictEqual(bwdResult.results[0]!.record.source.text, 'first');
+  assert.strictEqual(bwdResult.results[1]!.record.source.text, 'second');
+  assert.strictEqual(bwdResult.results[2]!.record.source.text, 'third');
+});
+
+test('bidirectional migration: validates source schema before migration', () => {
+  // Valid 0.1 record
+  const validRecord: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [] },
+    fingerprint: 'lfp:0.1:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  assert.strictEqual(validateRecord(validRecord), true);
+  assert.strictEqual(validateSemSchema(validRecord.sem), true);
+  
+  // Invalid record (missing recordVersion)
+  const invalidRecord: LunumRecord = {
+    recordVersion: '',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [] },
+    fingerprint: 'lfp:0.1:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  assert.strictEqual(validateRecord(invalidRecord), false);
+});
+
+test('bidirectional migration: round-trip preserves clause count and predicates', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { 
+      schema: 'lunum-sem/0.1-draft', 
+      world: 'test', 
+      kind: 'test', 
+      clauses: [
+        { predicate: 'prefer', roles: { experiencer: 'u', object: 'o' } },
+        { predicate: 'deny', roles: { agent: 'a', theme: 't' }, negated: true },
+        { predicate: 'require', roles: { agent: 'a' }, modality: 'obligation' }
+      ]
+    },
+    fingerprint: 'lfp:0.1:sha256:abc',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = roundTripMigration(record);
+  // Forward should preserve all clauses
+  assert.strictEqual(result.forward.sem.clauses.length, 3);
+  // Backward should also preserve all clauses
+  assert.strictEqual(result.backward.sem.clauses.length, 3);
+  // Predicates should be preserved
+  assert.strictEqual(result.backward.sem.clauses[0]!.predicate, 'prefer');
+  assert.strictEqual(result.backward.sem.clauses[1]!.predicate, 'deny');
+  assert.strictEqual(result.backward.sem.clauses[2]!.predicate, 'require');
+});
