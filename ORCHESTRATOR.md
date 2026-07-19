@@ -162,11 +162,13 @@ rm -f reports/orchestrator/NEEDS_CLOUD
 ### Update worker priorities
 ```bash
 cd ~/openlunum-workers/review
-git fetch origin main && git reset --hard origin/main
+git fetch origin main
+git switch -c agent/worker-priority-$(date +%Y%m%d-%H%M) origin/main
 # Edit scripts/pi-task-prompt.md
 git add scripts/pi-task-prompt.md
-ALLOW_MAIN_COMMIT=1 git commit -m "fix(worker): update priorities"
-ALLOW_MAIN_PUSH=1 git push origin HEAD:main
+git commit -m "fix(worker): update priorities"
+git push -u origin HEAD
+gh pr create --draft --repo corpunum/OpenLunum --title "fix(worker): update priorities" --body "Orchestrator work-order update."
 ```
 
 ### Close stale PRs
@@ -182,11 +184,13 @@ PI_MODEL="openai/qwen3.6-35b-a3b" nohup bash scripts/pi-loop.sh /home/corpunum/O
 ### Update this document (MANDATORY every check-in)
 ```bash
 cd ~/openlunum-workers/review
-git fetch origin main && git reset --hard origin/main
-# Edit ORCHESTRATOR.md — update the "Current State" section
+git fetch origin main
+git switch -c agent/orchestrator-check-in-$(date +%Y%m%d-%H%M) origin/main
+# Edit ORCHESTRATOR.md — replace the single "Current State" section
 git add ORCHESTRATOR.md
-ALLOW_MAIN_COMMIT=1 git commit -m "docs: orchestrator check-in $(date +%Y-%m-%d)"
-ALLOW_MAIN_PUSH=1 git push origin HEAD:main
+git commit -m "docs: orchestrator check-in $(date +%Y-%m-%d)"
+git push -u origin HEAD
+gh pr create --draft --repo corpunum/OpenLunum --title "docs: orchestrator check-in" --body "Operational handover update."
 ```
 
 ## Models
@@ -228,34 +232,16 @@ GitHub Actions currently fails every job before recording a workflow step, consi
 
 ---
 
-## Current State (2026-07-19)
+## Current State (2026-07-19, 23:35 EEST)
 
 **Last updated by**: GPT-5 Codex (cloud orchestrator)
-**Timestamp**: 2026-07-19T20:12+03:00
+**Canonical main at audit start**: `c1972ef`
 
-- **Incident #188**: confirmed. With no branch protection, the old merge bot ignored GitHub checks and blockers, unconditionally converted drafts to ready, and merged #185, #186, #187, and #190 after failed/no-step Actions jobs.
-- **Merge control repair**: `88017f8` is on `main`. The bot now fails closed on drafts, conflicts, blocking labels, unresolved current-head `NEEDS_WORK`, stale approvals, missing/non-successful exact-head checks, and checks with zero recorded steps. Merges use `--match-head-commit`. Fourteen policy tests and full `pnpm verify` pass.
-- **GitHub protection**: `main` now requires exact contexts `verify`, `schema-drift`, `report-validation`, and `protected-data-boundary`, with strict updates, admin enforcement, conversation resolution, and force-push/deletion disabled. There are no bypasses for `orchestrator-approved`; that label only satisfies protected-path review when paired with a reason bound to the current head.
-- **Deployment**: the repaired merge bot is live and has mechanically blocked #181 and #184. The temporary `PAUSED` guard was moved to `/tmp/openlunum-PAUSED-issue-188`; worker, reviewer, docs, watchdog, and model services remain active.
-- **CI blocker**: Actions jobs currently fail before steps because account payments/spending limits prevent runners from starting. This now blocks every merge as intended. Fix billing/runner availability; do not relax required checks.
-- **Open PR audit**: #189, #184, #181, and #178 are `NEEDS_WORK` and must be rebuilt from current `main`; #191 is a new draft migration-CLI candidate requiring independent review. Re-check the live PR list because the worker remains active.
-- **Post-merge audit**: keep #187's three reopened gates. Repair #185/#190 claims: renderer conformance is only 7/10, there are no exact committed renderer goldens, tokenizer preservation is tautological, and no named-model retention report was published. Downgrade Reference/established wording until evidence exists.
-- **Urgent #186 repair**: draft PR #193 adds containment-safe filenames, unique model IDs, retained model/settings identity, no-winner handling for all-error runs, explicit ties, and negative tests. Local `pnpm verify` passes. Keep it draft until the protected exact-head checks run successfully; a protocol-compliant experiment is still required before claiming maturity.
-- **Dashboard repair**: port 3847 is active via `openlunum-dashboard.service`. Its backend/frontend now use `origin/main` plus live GitHub PR/check data, expose drafts and blocked state, detect no-step Actions failures, distinguish fresh telemetry from mere HTTP availability, deduplicate merge throughput, and stop inventing release completion from weighted maturity labels. Current authoritative display: 69/72 accepted queue entries, 3 open v4 gates, 7 open PRs, 4 drafts, and 7 blocked PRs. The worker checkout was synchronized to `88017f8` at this check-in.
-- **ETA**: scope estimates to the defined v4/pre-1.0 queue, not the open-ended project vision. While Actions cannot start jobs, merge/release ETA is unbounded. After service restoration: best case 8–16 productive hours (~1 day), likely 2–4 calendar days, conservative 1–2 weeks if another semantic audit/rebuild cycle is needed. Do not call completion until all three reopened gates have independent evidence on `main`, #193 is resolved, exact-head checks pass, and #188 closes with control proof.
-- **Handover note**: the quoted audit referenced a canonical `HANDOVER.md`, but no such file exists on current `main`. This `ORCHESTRATOR.md` remains the repository's mandated handover record.
-
----
-
-## Current State (2026-07-19, late evening)
-
-**Last updated by**: Claude (cloud orchestrator)
-**Timestamp**: 2026-07-19T23:20+03:00
-
-- **CI outage override (USER-APPROVED)**: Actions quota is exhausted and renews only with the billing cycle — the previous entry's "do not relax required checks" stance would have frozen the repo for weeks. With the user's explicit approval: (1) `pi-merge-policy.mjs` now skips hosted-check requirements while the COMMITTED flag `reports/orchestrator/CI_OUTAGE` exists; (2) required status checks were removed from branch protection; (3) the merge bot runs `gh pr ready` on labeled PRs before policy. All other policy gates (head-bound reviews, blocking labels, NEEDS_WORK, mergeable, TOCTOU match-head) remain fail-closed. Local `pnpm verify` + auto-revert is the operative gate. **When billing renews: delete CI_OUTAGE via commit, re-add the four required contexts, and restore strict mode.**
-- **Merges verified post-fix**: #195, #198, #210 merged, main green each time.
-- **Queue**: WORK_QUEUE shows 72/72 checked. CAVEAT: the previous entry's audit re-opened 3 evidence gates (renderer goldens, tokenizer preservation proof, named-model retention report) — checkbox-done is not evidence-done. A v5 queue should start from those gates.
-- **PR cleanup**: ~25 duplicate/spam PRs closed (worker was rebuilding merged items and spamming campaign-status PRs). Task prompt now enforces `IDLE: queue complete, no work` when no unchecked items remain (commit a516912).
-- **Open PRs**: #196, #214 — CI workflow fixes on `claude-review`, parked until Actions billing renews (untestable without runners).
-- **Health**: all flags clear, all 4 loops UP, temps ~90°C, single merge-bot instance (duplicate killed).
-- **Next actions**: (1) billing renews → restore strict CI mode, review #196/#214; (2) write WORK_QUEUE v5 starting from the 3 re-opened evidence gates.
+- **Safety pause active**: `reports/pi-loop/PAUSED` exists operationally. Persistent worker, reviewer, and merge loops were stopped after the worker ignored its idle order, created campaign-status PRs #222–#224, and the reviewer issued false approvals. Docs, dashboard, router, watchdog, and timers remain available. Do not resume campaign automation until this control repair is merged and the work order is explicitly released.
+- **Hosted CI outage**: exact-head jobs still fail before recording steps. Those runs are outage evidence, not code evidence. Merge/release ETA remains unbounded until hosted jobs execute normally.
+- **Protection restored live**: `main` again requires strict exact contexts `verify`, `schema-drift`, `report-validation`, and `protected-data-boundary`; admin enforcement and conversation resolution are enabled, force-push/deletion disabled. Never remove these requirements to work around billing or runner failures.
+- **Outage bypass revoked in this branch**: merge policy always requires exact-head checks, the committed `CI_OUTAGE` bypass is removed, and the merge loop no longer converts drafts to ready. Tests must prove callers cannot request a skip.
+- **PR #220**: draft head `8dae7b0`, now behind `main`, labeled `needs-work`, `maintainer-blocked`, and `claude-review`. Earlier automated READY comments are invalid. Required repairs were split across isolated local branches: migration `972aa95`, tokenizer `0d6f856`, quality gates `54f9cca`, renderer reviewable goldens `f7c8c55`. Consolidate only after cross-review and rebase; do not push four competing PRs.
+- **Honest remaining blocker**: the repaired quality runner exposes renderer conformance as 7/10 and exits 2. This must be repaired, not suppressed. Human-readable renderer goldens also expose intentional annotation/provenance removal and long-role truncation; exact stability alone is not semantic approval.
+- **PR cleanup**: #222, #223, and #224 were closed as forbidden campaign-status churn. #196 and #214 remain untouched pending disposition after #220 is accepted or supersedes them.
+- **Next safe sequence**: consolidate the four local repair commits on a fresh branch from current `main`; resolve conflicts and renderer conformance; run the complete clean local suite; keep #220 draft; wait for exact-head hosted checks with real steps; obtain independent subsystem review; then accept queue gates and merge with exact-head binding.

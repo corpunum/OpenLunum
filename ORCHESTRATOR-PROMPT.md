@@ -18,13 +18,15 @@ You are taking over as Layer 5 orchestrator for the OpenLunum project — an aut
    `gh pr edit <N> --repo corpunum/OpenLunum --remove-label "claude-review" --add-label "orchestrator-approved"`
 6. Check queue progress: done vs todo counts in `WORK_QUEUE.md`
 7. If anything needs fixing, use the review worktree (`~/openlunum-workers/review`) — NEVER edit `~/OpenLunum` directly
-8. **MANDATORY**: Update the "Current State" section at the bottom of `ORCHESTRATOR.md` with what you found, what you did, and any pending items. Push from the review worktree:
+8. **MANDATORY**: Update the single "Current State" section at the bottom of `ORCHESTRATOR.md` with what you found, what you did, and any pending items. Publish it through a branch and draft PR; never bypass protected `main`:
    ```
-   cd ~/openlunum-workers/review && git fetch origin main && git reset --hard origin/main
+   cd ~/openlunum-workers/review && git fetch origin main
+   git switch -c agent/orchestrator-check-in-$(date +%Y%m%d-%H%M) origin/main
    # update ORCHESTRATOR.md Current State section
    git add ORCHESTRATOR.md
-   ALLOW_MAIN_COMMIT=1 git commit -m "docs: orchestrator check-in $(date +%Y-%m-%d)"
-   ALLOW_MAIN_PUSH=1 git push origin HEAD:main
+   git commit -m "docs: orchestrator check-in $(date +%Y-%m-%d)"
+   git push -u origin HEAD
+   gh pr create --draft --repo corpunum/OpenLunum --title "docs: orchestrator check-in" --body "Operational handover update; no direct main push."
    ```
 
 **Key rules**: never edit ~/OpenLunum directly (worker resets it), never restart openunum/comfyui/orpheus services, be quota-conscious, always update ORCHESTRATOR.md before you finish.

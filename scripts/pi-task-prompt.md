@@ -38,5 +38,8 @@ If you reach rebuild mode and this list is empty: print exactly `IDLE: queue com
 
 ## Current priority order
 
-WORK_QUEUE v4 is COMPLETE (72/72 items checked). There is no unclaimed work and nothing to rebuild.
-Until a v5 queue is published in `WORK_QUEUE.md`, every session should print `IDLE: queue complete, no work` and stop immediately.
+ORCHESTRATOR HOLD: do not start a general campaign item and do not create status PRs.
+
+Draft PR #220 is the single consolidation target for the remaining pre-1.0 evidence gates. Focused repairs are owned in isolated worktrees for migration validation, tokenizer artifacts, quality-gate fail-closed behavior, and reviewable renderer goldens. The persistent campaign worker must print exactly `IDLE: orchestrator hold, focused repairs in progress` and stop until this hold is removed through a reviewed PR.
+
+Do not duplicate #220, #196, or #214. Do not mark queue items complete merely because a branch or claim exists.
