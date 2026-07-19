@@ -35,7 +35,8 @@
 - Near-semantic retrieval tests: recall vs exact, false-positive rate, fingerprint stability across generations.
 - Bidirectional migration (0.1 ↔ 0.2): forward (`migrateForward01to02`) and backward (`migrateBackward02to01`) functions with schema validation, field-level loss warnings, fingerprint regeneration, and input-order preservation. Batch operations (`migrateRecordsForward`, `migrateRecordsBackward`) and round-trip test (`roundTripMigration`) included.
 - Local orchestrator: `scripts/pi-orchestrator.sh` with 3h systemd timer for flag checks, loop health, STUCK auto-fix, stale PR detection, throughput tracking, and NEEDS_CLOUD escalation.
-- Orchestrator handover doc: `ORCHESTRATOR.md` with 5-layer stack architecture (orchestrator, watchdog, local orchestrator, reviewer, worker, merge bot), key paths, hardware profile, worker loop description, and ops runbook for any LLM to take over.
+- Rollback process: `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests rather than trusting the record itself. 10 unit tests. Types in `packages/core/src/rollback-process.ts`.
+- Orchestrator handover doc: `ORCHESTRATOR.md` with 6-layer stack architecture (Cloud Orchestrator, Watchdog, Local Orchestrator with LLM diagnosis, Reviewer, Worker, Merge Bot), key paths, hardware profile, escalation path (bash auto-fix → LLM diagnosis → NEEDS_CLOUD → cloud orchestrator → user notification), merge bot `orchestrator-approved` label for hard-protected PRs, and ops runbook for any LLM to take over. `ORCHESTRATOR-PROMPT.md` provides copy-paste handover instructions.
 - Quality gate CI integration: unified runner wrapping downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, and prompt-gates; configurable pass rates, exit codes (0=pass, 1=warn, 2=fail), CI workflow on PRs touching core/eval src.
 
 | Component | Status | Meaning |
@@ -82,7 +83,8 @@
 | Near-semantic + exact fingerprint interop | Prototype | Records carry both lfp: and nfp:, hybrid search exact-first with near-fallback |
 | Bidirectional migration (0.1 ↔ 0.2) | Reference implementation | Forward and backward migration with schema validation, field-level loss warnings, fingerprint regeneration, input-order preservation. Round-trip test with explicit loss warnings. 190 lines of tests.
 | Local orchestrator | Prototype | `scripts/pi-orchestrator.sh` with 3h timer, flag checks, loop health, STUCK auto-fix, stale PR detection, throughput tracking, NEEDS_CLOUD escalation.
-| Orchestrator handover | Reference document | 5-layer stack architecture, key paths, hardware profile, worker loop, ops runbook for any LLM takeover.
+| Orchestrator handover | Reference document | 6-layer stack architecture (Cloud Orchestrator, Watchdog, Local Orchestrator with LLM diagnosis, Reviewer, Worker, Merge Bot), key paths, escalation path (bash → LLM diagnosis → NEEDS_CLOUD → cloud → user), merge bot `orchestrator-approved` label for hard-protected PRs. `ORCHESTRATOR-PROMPT.md` provides copy-paste handover.
+| Safety rollback process | Reference implementation | `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests. 10 unit tests.
 | Quality gate CI integration | Prototype | Unified runner for downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, prompt-gates; configurable pass rates; CI workflow on core/eval PRs.
 
 ## Release gates before 1.0
