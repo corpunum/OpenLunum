@@ -132,7 +132,8 @@
     },
     "retrievalConfig": {
       "type": "object",
-      "description": "Configuration for retrieval tasks",
+      "additionalProperties": false,
+      "description": "Configuration for retrieval tasks — locked field set for 0.2",
       "properties": {
         "k": {
           "type": "integer",
@@ -146,7 +147,8 @@
     },
     "integrationConfig": {
       "type": "object",
-      "description": "Configuration for integration tasks",
+      "additionalProperties": false,
+      "description": "Configuration for integration tasks — locked field set for 0.2",
       "properties": {
         "selectedIntegration": {
           "type": "string"
