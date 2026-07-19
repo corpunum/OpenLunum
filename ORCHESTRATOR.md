@@ -176,3 +176,5 @@ User notification → desktop notify-send for critical issues
 - **Open PRs**: draft #147 (quality-gate CI), #127 (rollback process), and #91 (retention regression gate). #91 is stale with no file diff; leave it for the automated rebuild/triage flow unless it persists.
 - **Merges**: recent main merges are green; no reverts reported.
 - **CI**: still requires follow-up for billing/runner reliability; the local pipeline is nominal.
+- **Throughput action**: claim generation now lists only open-PR or unpublished agent branches, so historical merged branches no longer force the worker into rebuild mode. The worker prompt now explicitly rejects loop telemetry and generated artifacts. `pnpm verify` passed after this orchestration change.
+- **Protected PRs**: #147 and #150 are conflicted/draft and require a clean scoped rebuild plus maintainer review; protections remain in force. Do not force-merge them. #91 remains stale/no-diff and should be rebuilt or closed after its successor exists.

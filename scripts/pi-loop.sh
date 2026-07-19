@@ -81,11 +81,21 @@ clean_stale_dist() {
 }
 
 generate_claims() {
-  # List existing agent branches so Pi does not duplicate work
+  # A branch is a claim only while it has an open PR, or while it is a
+  # local, unpublished branch ahead of main. Historical remote branches are
+  # retained after merge and must not permanently block their queue topics.
   {
-    echo "TASKS ALREADY CLAIMED — existing agent branches (do NOT work on these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):"
-    git -C "$WORKDIR" branch -r --list 'origin/agent/*' --format='- %(refname:short)' 2>/dev/null | sed 's|origin/||'
-    git -C "$WORKDIR" branch --list 'agent/*' --format='- %(refname:short)' 2>/dev/null
+    echo "TASKS ALREADY CLAIMED — active agent branches only (do NOT duplicate these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):"
+    timeout 60 gh pr list --repo corpunum/OpenLunum --state open --json headRefName --jq \
+      '.[] | select(.headRefName | startswith("agent/")) | "- \(.headRefName)"' 2>/dev/null || true
+    while read -r branch; do
+      [[ -n "$branch" ]] || continue
+      ahead=$(git -C "$WORKDIR" rev-list --count "origin/main..$branch" 2>/dev/null || echo 0)
+      [[ "$ahead" -gt 0 ]] || continue
+      if ! git -C "$WORKDIR" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+        echo "- $branch"
+      fi
+    done < <(git -C "$WORKDIR" branch --list 'agent/*' --format='%(refname:short)' 2>/dev/null)
   } | sort -u > "$CLAIMS_FILE"
 }
 

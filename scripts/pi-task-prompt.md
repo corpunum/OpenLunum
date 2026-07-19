@@ -4,7 +4,7 @@ You are an autonomous worker agent on the OpenLunum project. Your job is to impl
 
 1. Run `pnpm verify` — if it fails, fix the failure before doing anything else.
 2. Run `git fetch origin main && git checkout main && git pull --ff-only origin main` to ensure you're current.
-3. Read `WORK_QUEUE.md` and identify the FIRST unchecked `[ ]` item that is NOT in the claims list (already-claimed tasks are listed in your system prompt — skip those topics entirely).
+3. Read `WORK_QUEUE.md` and identify the FIRST unchecked `[ ]` item that is NOT in the claims list. The list contains only active open-PR or unpublished branches; historical merged branches are not claims.
    **If every unchecked item is already claimed, switch to rebuild mode instead (see below). Do NOT report "campaign complete" — claimed is not merged.**
 4. Create a branch: `git checkout -b agent/qwen/<area>/<short-name> main`
 5. Implement the item:
@@ -43,7 +43,7 @@ For each rebuild: read the reviewer comments on the stale PR (`gh pr view <n> --
 - NEVER touch `datasets/protected/` in the same PR as code changes under `packages/`, `schemas/`, or `registry/`.
 - NEVER merge your own PR to main.
 - NEVER force-push after pushing.
-- NEVER commit generated output, tmp files, `packages/tmp/`, loop telemetry, or report artifacts.
+- NEVER commit generated output, tmp files, `packages/tmp/`, loop telemetry, or report artifacts. In particular, do not stage anything under `reports/pi-loop/`, `reports/pi-review/`, `reports/pi-merge/`, `reports/pi-docs/`, or `reports/orchestrator/`.
 - Before running `pnpm verify`, clean stale dist/ artifacts: `find packages -name dist -type d -exec rm -rf {} + 2>/dev/null; pnpm build`
 - Keep commits small and well-named.
 - If `pnpm verify` fails 3 times in a row on the same issue, STOP and report the error clearly.
