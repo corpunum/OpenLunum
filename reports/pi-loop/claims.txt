@@ -47,6 +47,7 @@
 - agent/docs/sync-89970250
 - agent/docs/sync-8bc5afbe
 - agent/docs/sync-93418779
+- agent/docs/sync-937bfba5
 - agent/docs/sync-94490d25
 - agent/docs/sync-9fa28e5c
 - agent/docs/sync-a0742db0
@@ -75,6 +76,7 @@
 - agent/docs/sync-f8c11736
 - agent/docs/sync-fae49be6
 - agent/docs/sync-fb2e3b8d
+- agent/docs/sync-fb4fbcac
 - agent/docs/sync-fe1f05a8
 - agent/docs/sync-ff33cea3
 - agent/docs/sync-ffc633fc
@@ -170,6 +172,8 @@
 - agent/qwen/retention-experiment
 - agent/qwen/retention/regression-gate
 - agent/qwen/retention/regression-gate-rebuild
+- agent/qwen/retention/regression-gate-rebuild-v2
+- agent/qwen/retrieval/aggregate-mrr-rebuild
 - agent/qwen/retrieval/cross-lingual
 - agent/qwen/safety/compatibility-matrix
 - agent/qwen/safety/mixed-context-quality-gates
@@ -179,6 +183,7 @@
 - agent/qwen/safety/quality-gate-ci
 - agent/qwen/safety/quality-gate-ci-2
 - agent/qwen/safety/quality-gate-ci-rebuild
+- agent/qwen/safety/quality-gate-ci-rebuild-v2
 - agent/qwen/safety/quality-gate-ci-v2
 - agent/qwen/safety/rollback-process
 - agent/qwen/safety/rollback-process-rebuild
