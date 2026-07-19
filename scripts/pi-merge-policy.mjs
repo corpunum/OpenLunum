@@ -1,7 +1,17 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
-import { pathToFileURL } from "node:url";
+import { existsSync } from "node:fs";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { dirname, join } from "node:path";
+
+// When GitHub Actions billing is down, hosted checks never start and would
+// deadlock every merge. The flag file lets the orchestrator skip the hosted
+// check requirement; local verify + auto-revert in the merge bot still gate.
+export const CI_OUTAGE_FLAG = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..", "reports", "orchestrator", "CI_OUTAGE",
+);
 
 export const REQUIRED_CHECKS = [
   "verify",
@@ -41,7 +51,7 @@ function bodyIncludes(body, headSha, verdict) {
   return normalized.includes(headSha.toUpperCase()) && normalized.includes(verdict);
 }
 
-export function evaluateMergePolicy({ pr, comments = [], reviews = [], checks = [] }) {
+export function evaluateMergePolicy({ pr, comments = [], reviews = [], checks = [], skipRequiredChecks = false }) {
   const reasons = [];
   const headSha = pr.head?.sha ?? pr.headSha;
   const labels = labelNames(pr);
@@ -87,7 +97,7 @@ export function evaluateMergePolicy({ pr, comments = [], reviews = [], checks = 
     reasons.push("no merge approval label is present");
   }
 
-  const requiredChecks = requiredChecksFor(pr);
+  const requiredChecks = skipRequiredChecks ? [] : requiredChecksFor(pr);
   const byName = latestChecks(checks, headSha);
   for (const name of requiredChecks) {
     const check = byName.get(name);
@@ -165,7 +175,10 @@ export function evaluateGitHubPullRequest(repo, prNumber) {
     }
   }
 
-  return evaluateMergePolicy({ pr, comments, reviews, checks });
+  return evaluateMergePolicy({
+    pr, comments, reviews, checks,
+    skipRequiredChecks: existsSync(CI_OUTAGE_FLAG),
+  });
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
