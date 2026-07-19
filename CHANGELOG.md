@@ -2,6 +2,11 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Added — Merge Control (PR #188, commits 88017f8, a49fe3f)
+- **Merge policy module:** `scripts/pi-merge-policy.mjs` (194 lines) with `evaluateMergePolicy()` implementing fail-closed exact-head policy, draft/conflict/blocking-label/unresolved-review/stale-approval/missing-checks/zero-step gates, `--match-head-commit` merges, required-checks lists with quality-gates gating for core/eval changes. `REQUIRED_CHECKS` exports `verify`, `schema-drift`, `report-validation`, `protected-data-boundary`. Types in `scripts/pi-merge-policy.mjs`. 14 tests in `scripts/pi-merge-policy.test.mjs`. (commit 88017f8)
+- **CI_OUTAGE flag:** `scripts/pi-merge-policy.mjs` exports `CI_OUTAGE_FLAG` path (`reports/orchestrator/CI_OUTAGE`); when present, the merge bot skips the hosted-required-checks requirement while still requiring local `pnpm verify` and auto-revert. (commit a49fe3f)
+- **Merge loop hardening:** `scripts/pi-merge-loop.sh` updated to enforce exact-head policy, fail-closed on drafts/conflicts/blocking labels, and use `--match-head-commit` for all merges. (commit 88017f8)
+
 ### Changed — CLI (PR #174)
 - **CLI migrate command enhanced:** `lunum migrate` now uses proper migration utilities from `@corpunum/lunum` (`migrateForward01to02`, `migrateBackward02to01`). Supports `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward) migrations. Provides detailed results including schema versions, fingerprints, warnings, and validation status. Supports both single records and arrays of records. Adds `--dry-run` mode that reports changes without modifying files, and in-place write mode that transforms records and writes back to file. 152 lines of tests in `packages/cli/test/cli.test.ts`. (PR #174, commit d5ba255)
 
