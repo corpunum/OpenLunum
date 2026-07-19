@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
+import crypto from 'node:crypto';
 import { fingerprintSem } from '../src/fingerprint.js';
 import { canonicalizeSem } from '../src/canonicalize.js';
 import {
@@ -20,7 +21,9 @@ import {
   migrateRecordsBackward,
   roundTripMigration,
   validateSemSchema,
-  validateRecord
+  validateRecord,
+  rollbackToSource,
+  rollbackBatch
 } from '../src/fingerprint-migration.js';
 import type { LunumRecord } from '../src/types.js';
 
@@ -516,4 +519,276 @@ test('roundTripMigration produces valid 0.1 record', () => {
   assert.strictEqual(result.backward.sem.schema, 'lunum-sem/0.1-draft');
   assert.strictEqual(result.backward.record.recordVersion, 'lunum-record/0.1-draft');
   assert.ok(result.backward.warnings.length > 0);
+});
+
+// ---------------------------------------------------------------------------
+// Rollback process tests
+// ---------------------------------------------------------------------------
+
+test('rollbackToSource returns source text with verified integrity', () => {
+  const sourceText = 'The cat sat on the mat.';
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: sourceText, language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'sat', roles: { subject: 'cat', object: 'mat' } }] },
+    fingerprint: '',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  // Compute correct fingerprint
+  record.fingerprint = migrateFingerprint(record.sem);
+  const result = rollbackToSource(record, { verifySourceDigest: false });
+  assert.strictEqual(result.sourceText, sourceText);
+  assert.strictEqual(result.sourceLanguage, 'en');
+  assert.strictEqual(result.integrity, 'verified');
+  assert.strictEqual(result.provenance, 'absent');
+  assert.strictEqual(result.sourceAuthenticity, 'unverified');
+  assert.strictEqual(result.verified, true);
+});
+
+test('rollbackToSource detects fingerprint mismatch', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: 'lfp:0.1:sha256:wrongdigest1234567890abcdef1234567890abcdef1234567890abcdef',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record);
+  assert.strictEqual(result.integrity, 'mismatch');
+  assert.strictEqual(result.verified, false);
+});
+
+test('rollbackToSource reports absent integrity when no fingerprint', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: '',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record);
+  assert.strictEqual(result.integrity, 'absent');
+});
+
+test('rollbackToSource fails on empty source text', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: '', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record);
+  assert.strictEqual(result.sourceText, '');
+  assert.strictEqual(result.verified, false);
+});
+
+test('rollbackToSource verifies source digest when available', () => {
+  const sourceText = 'The quick brown fox jumps.';
+  const digest = crypto.createHash('sha256').update(sourceText).digest('hex');
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: sourceText, language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], provenance: { source: 'txt', timestamp: '2024-01-01', sourceDigest: digest } },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record);
+  assert.strictEqual(result.sourceAuthenticity, 'verified');
+});
+
+test('rollbackToSource detects source digest mismatch', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], provenance: { source: 'txt', timestamp: '2024-01-01', sourceDigest: 'wrongdigest1234567890abcdef1234567890abcdef1234567890abcdef1234567890' } },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record);
+  assert.strictEqual(result.sourceAuthenticity, 'unverified');
+  assert.strictEqual(result.verified, false);
+});
+
+test('rollbackToSource verifies provenance chain with signature', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], provenance: { source: 'txt', timestamp: '2024-01-01', signature: 'sig123' } },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record, { verifySourceDigest: false });
+  assert.strictEqual(result.provenance, 'verified');
+});
+
+test('rollbackToSource reports partial provenance without auth fields', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], provenance: { source: 'txt', timestamp: '2024-01-01' } },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record, { verifySourceDigest: false });
+  assert.strictEqual(result.provenance, 'partial');
+});
+
+test('rollbackToSource reports absent provenance when no provenance chain', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record, { verifySourceDigest: false });
+  assert.strictEqual(result.provenance, 'absent');
+});
+
+test('rollbackBatch returns per-record results and summary', () => {
+  const records: LunumRecord[] = [
+    {
+      recordVersion: '0.1-draft',
+      source: { text: 'first', language: 'en', role: null, ref: null },
+      sem: { schema: 'lunum-sem/0.1-draft', world: 'a', kind: 'k', clauses: [{ predicate: 'p', roles: {} }] },
+      fingerprint: '',
+      renderings: {},
+      policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+      meta: {}
+    },
+    {
+      recordVersion: '0.1-draft',
+      source: { text: 'second', language: 'en', role: null, ref: null },
+      sem: { schema: 'lunum-sem/0.1-draft', world: 'b', kind: 'k', clauses: [{ predicate: 'p', roles: {} }] },
+      fingerprint: '',
+      renderings: {},
+      policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+      meta: {}
+    }
+  ];
+  // Compute correct fingerprints
+  records[0]!.fingerprint = migrateFingerprint(records[0]!.sem);
+  records[1]!.fingerprint = migrateFingerprint(records[1]!.sem);
+
+  const { results, summary } = rollbackBatch(records, { verifySourceDigest: false });
+  assert.strictEqual(results.length, 2);
+  assert.strictEqual(results[0]!.sourceText, 'first');
+  assert.strictEqual(results[1]!.sourceText, 'second');
+  assert.strictEqual(summary.total, 2);
+  assert.strictEqual(summary.verified, 2);
+  assert.strictEqual(summary.allVerified, true);
+});
+
+test('rollbackBatch handles mixed verification status', () => {
+  const records: LunumRecord[] = [
+    {
+      recordVersion: '0.1-draft',
+      source: { text: 'good', language: 'en', role: null, ref: null },
+      sem: { schema: 'lunum-sem/0.1-draft', world: 'a', kind: 'k', clauses: [{ predicate: 'p', roles: {} }] },
+      fingerprint: '',
+      renderings: {},
+      policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+      meta: {}
+    },
+    {
+      recordVersion: '0.1-draft',
+      source: { text: 'bad', language: 'en', role: null, ref: null },
+      sem: { schema: 'lunum-sem/0.1-draft', world: 'b', kind: 'k', clauses: [{ predicate: 'p', roles: {} }] },
+      fingerprint: 'lfp:0.1:sha256:wrongdigest1234567890abcdef1234567890abcdef1234567890abcdef',
+      renderings: {},
+      policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+      meta: {}
+    }
+  ];
+  records[0]!.fingerprint = migrateFingerprint(records[0]!.sem);
+
+  const { results, summary } = rollbackBatch(records, { verifySourceDigest: false });
+  assert.strictEqual(results[0]!.verified, true);
+  assert.strictEqual(results[1]!.verified, false);
+  assert.strictEqual(summary.verified, 1);
+  assert.strictEqual(summary.unverified, 1);
+  assert.strictEqual(summary.allVerified, false);
+});
+
+test('rollbackToSource preserves input order in batch', () => {
+  const records: LunumRecord[] = [
+    {
+      recordVersion: '0.1-draft',
+      source: { text: 'a', language: null, role: null, ref: null },
+      sem: { schema: 'lunum-sem/0.1-draft', world: 'a', kind: 'k', clauses: [{ predicate: 'a', roles: {} }] },
+      fingerprint: '',
+      renderings: {},
+      policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+      meta: {}
+    },
+    {
+      recordVersion: '0.1-draft',
+      source: { text: 'b', language: null, role: null, ref: null },
+      sem: { schema: 'lunum-sem/0.1-draft', world: 'b', kind: 'k', clauses: [{ predicate: 'b', roles: {} }] },
+      fingerprint: '',
+      renderings: {},
+      policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+      meta: {}
+    }
+  ];
+  records[0]!.fingerprint = migrateFingerprint(records[0]!.sem);
+  records[1]!.fingerprint = migrateFingerprint(records[1]!.sem);
+
+  const { results } = rollbackBatch(records, { verifySourceDigest: false });
+  assert.strictEqual(results[0]!.sourceText, 'a');
+  assert.strictEqual(results[1]!.sourceText, 'b');
+});
+
+test('rollbackToSource includes debug details when mismatches occur', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: 'lfp:0.1:sha256:wrongdigest',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record);
+  assert.ok(result.details);
+  assert.ok(result.details!.computedFp);
+  assert.strictEqual(result.details!.storedFp, 'lfp:0.1:sha256:wrongdigest');
+});
+
+test('rollbackToSource fails closed when evidence is absent', () => {
+  // Record with no fingerprint, no provenance, no digest
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: '',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  const result = rollbackToSource(record);
+  assert.strictEqual(result.integrity, 'absent');
+  assert.strictEqual(result.provenance, 'absent');
+  assert.strictEqual(result.sourceAuthenticity, 'unverified');
+  // With no fingerprint and no provenance, should be unverified
+  assert.strictEqual(result.verified, false);
 });

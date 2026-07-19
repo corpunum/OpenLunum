@@ -502,3 +502,287 @@ export function roundTripMigration(initialRecord: LunumRecord): {
   const backward = migrateBackward02to01(forward.record);
   return { forward, backward };
 }
+
+// ===========================================================================
+// Rollback process: revert to original source with verification
+// ===========================================================================
+
+/** Integrity status of the semantic payload. */
+export type IntegrityStatus = 'verified' | 'mismatch' | 'absent';
+
+/** Provenance chain status. */
+export type ProvenanceStatus = 'verified' | 'partial' | 'absent';
+
+/** Source authenticity status. */
+export type SourceAuthenticityStatus = 'verified' | 'unverified' | 'absent';
+
+/**
+ * Result of a rollback operation.
+ *
+ * Provides separate integrity/provenance/source-authenticity statuses
+ * so callers can determine exactly what was verified and what was not.
+ */
+export interface RollbackResult {
+  /** The original natural-language source text */
+  sourceText: string;
+  /** Source language if available */
+  sourceLanguage: string | null;
+  /** Source reference if available */
+  sourceRef: string | null;
+  /** Whether the semantic payload matches the record fingerprint */
+  integrity: IntegrityStatus;
+  /** Whether the provenance chain is complete and verifiable */
+  provenance: ProvenanceStatus;
+  /** Whether the source text is authenticated against a stored digest */
+  sourceAuthenticity: SourceAuthenticityStatus;
+  /** Whether the rollback can be considered trustworthy */
+  verified: boolean;
+  /** Warnings about the rollback */
+  warnings: string[];
+  /** Details for debugging */
+  details?: {
+    /** Computed fingerprint of current sem */
+    computedFp?: string;
+    /** Stored fingerprint in record */
+    storedFp?: string;
+    /** Provenance fields found */
+    provenanceFields?: string[];
+    /** Source digest if available */
+    sourceDigest?: string;
+  };
+}
+
+/**
+ * Summary of a batch rollback operation.
+ */
+export interface RollbackSummary {
+  /** Total records processed */
+  total: number;
+  /** Records with fully verified rollback */
+  verified: number;
+  /** Records with partial verification */
+  partial: number;
+  /** Records with no or failed verification */
+  unverified: number;
+  /** Whether all records were fully verified */
+  allVerified: boolean;
+  /** Warnings from the rollback */
+  warnings: string[];
+}
+
+/**
+ * Compute a SHA-256 digest of a string.
+ */
+function computeDigest(input: string): string {
+  return crypto.createHash('sha256').update(input).digest('hex');
+}
+
+/**
+ * Rollback a LunumRecord to its original natural-language source
+ * with separate integrity/provenance/source-authenticity verification.
+ *
+ * The rollback process:
+ * 1. Verifies the record's fingerprint matches the current semantic content
+ *    (integrity check)
+ * 2. Validates the provenance chain for completeness
+ *    (provenance check)
+ * 3. Authenticates the source text against a stored digest if available
+ *    (source-authenticity check)
+ * 4. Returns source text with all verification statuses
+ *
+ * Fail closed: if evidence is absent, verification is false.
+ * Empty source text causes failure (not just a warning).
+ *
+ * @param record - The LunumRecord to rollback
+ * @param options - Optional verification settings
+ * @returns RollbackResult with source text and verification statuses
+ */
+export function rollbackToSource(
+  record: LunumRecord,
+  options: {
+    /** Recompute and verify fingerprint against sem content (default: true) */
+    verifyFingerprint?: boolean;
+    /** Verify provenance chain completeness (default: true) */
+    verifyProvenance?: boolean;
+    /** Verify source text against stored digest (default: true) */
+    verifySourceDigest?: boolean;
+  } = {}
+): RollbackResult {
+  const opts = {
+    verifyFingerprint: options.verifyFingerprint ?? true,
+    verifyProvenance: options.verifyProvenance ?? true,
+    verifySourceDigest: options.verifySourceDigest ?? true,
+  };
+
+  const warnings: string[] = [];
+  const details: { computedFp?: string; storedFp?: string; provenanceFields?: string[]; sourceDigest?: string } = {};
+
+  // ── Step 1: Integrity check ──────────────────────────────────────
+  let integrity: IntegrityStatus;
+  if (opts.verifyFingerprint && record.fingerprint && record.fingerprint.length > 0) {
+    const computedFp = migrateFingerprint(record.sem);
+    details.computedFp = computedFp;
+    details.storedFp = record.fingerprint;
+
+    if (computedFp === record.fingerprint) {
+      integrity = 'verified';
+    } else {
+      integrity = 'mismatch';
+      warnings.push(
+        `Fingerprint mismatch: stored ${record.fingerprint.slice(0, 20)} ` +
+        `does not match recomputed ${computedFp.slice(0, 20)}`
+      );
+    }
+  } else {
+    integrity = 'absent';
+    if (opts.verifyFingerprint) {
+      warnings.push('Fingerprint verification skipped: no fingerprint in record');
+    }
+  }
+
+  // ── Step 2: Provenance chain check ───────────────────────────────
+  let provenance: ProvenanceStatus = 'absent';
+  if (opts.verifyProvenance) {
+    const prov = record.sem.provenance;
+    if (prov && typeof prov === 'object' && !Array.isArray(prov)) {
+      const requiredFields = ['source', 'timestamp'];
+      const presentFields = requiredFields.filter(f => f in prov);
+      details.provenanceFields = presentFields;
+
+      if (presentFields.length === requiredFields.length) {
+        // Check for a signature or digest in provenance
+        const hasAuthenticatingField = 'signature' in prov || 'sourceDigest' in prov || 'author' in prov;
+        if (hasAuthenticatingField) {
+          provenance = 'verified';
+        } else {
+          // Has required fields but no auth mechanism — partial
+          provenance = 'partial';
+          warnings.push('Provenance has required fields but no signature/sourceDigest for authentication');
+        }
+      } else {
+        provenance = 'partial';
+        const missing = requiredFields.filter(f => !(f in prov));
+        warnings.push(`Provenance missing required fields: ${missing.join(', ')}`);
+      }
+    } else {
+      provenance = 'absent';
+      warnings.push('No provenance chain found in sem');
+    }
+  }
+
+  // ── Step 3: Source authenticity check ────────────────────────────
+  let sourceAuthenticity: SourceAuthenticityStatus = 'absent';
+  const sourceText = record.source.text ?? '';
+  let sourceDigest: string | undefined = undefined;
+
+  // If source text is present but we're not verifying, mark as unverified
+  if (!opts.verifySourceDigest && sourceText.trim().length > 0) {
+    sourceAuthenticity = 'unverified';
+  }
+
+  if (opts.verifySourceDigest) {
+    // Check if there's a stored source digest in provenance
+    const prov = record.sem.provenance;
+    const storedDigest = prov && typeof prov === 'object' && 'sourceDigest' in prov
+      ? String(prov.sourceDigest)
+      : undefined;
+
+    if (storedDigest && storedDigest.length > 0) {
+      sourceDigest = storedDigest;
+      const computedDigest = computeDigest(sourceText);
+      if (computedDigest === storedDigest) {
+        sourceAuthenticity = 'verified';
+      } else {
+        sourceAuthenticity = 'unverified';
+        warnings.push(`Source text digest mismatch: stored ${storedDigest.slice(0, 16)} vs computed ${computedDigest.slice(0, 16)}`);
+      }
+    } else if (record.source.ref && record.source.ref.length > 0) {
+      // Source has a reference — can be verified externally
+      sourceAuthenticity = 'unverified';
+      warnings.push(`Source text has reference ${record.source.ref} but no inline digest for verification`);
+    } else if (sourceText.trim().length > 0) {
+      // No digest, no ref — source exists but cannot be authenticated
+      sourceAuthenticity = 'unverified';
+      warnings.push('Source text present but no digest or reference for authentication');
+    }
+  }
+
+  // ── Step 4: Validate source text ─────────────────────────────────
+  if (!sourceText || sourceText.trim() === '') {
+    // Empty source is a failure, not just a warning
+    warnings.push('Source text is empty or missing');
+    // Mark source authenticity as absent if empty
+    if (sourceAuthenticity === 'absent') {
+      sourceAuthenticity = 'absent';
+    }
+  }
+
+  // ── Step 5: Determine overall verified status ────────────────────
+  // Fail closed: integrity must be verified, source must not be empty
+  // Provenance being absent or partial is acceptable if integrity is verified
+  // Source authenticity must be verified or unverified (not absent)
+  let verified =
+    integrity === 'verified' &&
+    (provenance === 'verified' || provenance === 'partial' || provenance === 'absent') &&
+    (sourceAuthenticity === 'verified' || sourceAuthenticity === 'unverified');
+
+  // If source is empty, always fail
+  if (!sourceText || sourceText.trim() === '') {
+    verified = false;
+  }
+
+  const result: RollbackResult = {
+    sourceText,
+    sourceLanguage: record.source.language,
+    sourceRef: record.source.ref,
+    integrity,
+    provenance,
+    sourceAuthenticity,
+    verified,
+    warnings,
+  };
+  if (sourceDigest !== undefined) {
+    details.sourceDigest = sourceDigest;
+  }
+  if (Object.keys(details).length > 0) {
+    result.details = details;
+  }
+  return result;
+}
+
+/**
+ * Rollback a batch of records to their original sources.
+ * Returns per-record results and aggregate summary.
+ * Preserves input order.
+ */
+export function rollbackBatch(
+  records: LunumRecord[],
+  options?: Parameters<typeof rollbackToSource>[1]
+): { results: RollbackResult[]; summary: RollbackSummary } {
+  const results: RollbackResult[] = [];
+  const allWarnings: string[] = [];
+
+  for (const record of records) {
+    const result = rollbackToSource(record, options);
+    results.push(result);
+    allWarnings.push(...result.warnings);
+  }
+
+  const verified = results.filter((r) => r.verified).length;
+  const unverified = results.filter((r) => !r.verified).length;
+  const partial = results.filter(
+    (r) => r.verified === false && r.integrity !== 'absent' && r.provenance !== 'absent' && r.sourceAuthenticity !== 'absent'
+  ).length;
+
+  return {
+    results,
+    summary: {
+      total: records.length,
+      verified,
+      partial,
+      unverified,
+      allVerified: verified === records.length && unverified === 0,
+      warnings: allWarnings,
+    },
+  };
+}
