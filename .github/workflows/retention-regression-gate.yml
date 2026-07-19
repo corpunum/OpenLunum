@@ -1,0 +1,86 @@
+name: retention-regression-gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/eval/src/retention-experiment.ts'
+      - 'packages/eval/src/baseline-store.ts'
+      - 'packages/eval/src/realization.ts'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openlunum-retention-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  retention-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Run retention experiment
+        id: retention
+        run: |
+          # Run the retention experiment (uses local model if configured)
+          pnpm --filter @corpunum/lunum-eval eval:retention 2>&1 || true
+      - name: Check regression gate
+        id: gate
+        run: |
+          EXIT_CODE=$(node -e "
+            const path = require('path');
+            const { checkRegression, printRegressionSummary } = require('./packages/eval/dist/src/baseline-store.js');
+            const { readFileSync, readdirSync } = require('fs');
+
+            // Find latest retention report
+            const reportsDir = './reports/experiments/retention';
+            if (!readdirSync(reportsDir).length) {
+              console.log('No retention reports found');
+              process.exit(0);
+            }
+
+            const runs = readdirSync(reportsDir).sort().reverse();
+            const latestRun = path.join(reportsDir, runs[0]);
+            const summary = JSON.parse(readFileSync(path.join(latestRun, 'summary.json'), 'utf-8'));
+
+            // Parse metrics from summary
+            const metrics = {};
+            for (const [lang, rate] of Object.entries(summary.languageMetrics || {})) {
+              metrics[lang] = {
+                language: lang,
+                retentionRate: rate.retentionRate,
+                avgPredicateMatch: rate.avgPredicateMatch,
+                avgRoleMatch: rate.avgRoleMatch,
+                avgProtectedLiteralPreservation: rate.avgProtectedLiteralPreservation
+              };
+            }
+
+            const result = checkRegression(process.cwd(), metrics);
+            console.log(printRegressionSummary(result));
+            process.exit(result.passed ? 0 : 2);
+          ")
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+      - name: Regression gate result
+        run: |
+          echo "Exit code: ${{ steps.gate.outputs.exit_code }}"
+          if [ "${{ steps.gate.outputs.exit_code }}" = "2" ]; then
+            echo "❌ Critical regression detected"
+            exit 1
+          else
+            echo "✅ No critical regression"
+          fi
