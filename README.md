@@ -44,12 +44,13 @@ Read these files in order:
 1. [`START_HERE.md`](START_HERE.md)
 2. [`AGENTS.md`](AGENTS.md)
 3. [`WORK_QUEUE.md`](WORK_QUEUE.md)
-4. [`docs/AGENT_OPERATING_MODEL.md`](docs/AGENT_OPERATING_MODEL.md)
-5. [`docs/EXPERIMENT_PROTOCOL.md`](docs/EXPERIMENT_PROTOCOL.md)
-6. [`docs/EVALUATION_PROTOCOL.md`](docs/EVALUATION_PROTOCOL.md)
-7. [`docs/DATASET_POLICY.md`](docs/DATASET_POLICY.md)
-8. [`docs/LOCAL_MODEL_WORKERS.md`](docs/LOCAL_MODEL_WORKERS.md)
-9. [`docs/MULTILINGUAL_MODEL.md`](docs/MULTILINGUAL_MODEL.md)
+4. [`ORCHESTRATOR.md`](ORCHESTRATOR.md)
+5. [`docs/AGENT_OPERATING_MODEL.md`](docs/AGENT_OPERATING_MODEL.md)
+6. [`docs/EXPERIMENT_PROTOCOL.md`](docs/EXPERIMENT_PROTOCOL.md)
+7. [`docs/EVALUATION_PROTOCOL.md`](docs/EVALUATION_PROTOCOL.md)
+8. [`docs/DATASET_POLICY.md`](docs/DATASET_POLICY.md)
+9. [`docs/LOCAL_MODEL_WORKERS.md`](docs/LOCAL_MODEL_WORKERS.md)
+10. [`docs/MULTILINGUAL_MODEL.md`](docs/MULTILINGUAL_MODEL.md)
 
 ### Mandatory bootstrap
 
@@ -301,7 +302,7 @@ schemas/                  machine-readable contracts (0.1-draft and frozen 0.2);
 registry/                 worlds, roles, categories, predicates
 profiles/models/          Model profile definitions (token mappings, instruction templates).
 profiles/renderers/       Renderer profile definitions (safe, short, tight).
-scripts/                  Automation: nightly window, release sign/verify, schema-to-ts, validation.
+scripts/                  Automation: nightly window, release sign/verify, schema-to-ts, validation, orchestrator loop (pi-orchestrator.sh), worker/reviewer/merge/watchdog loops.
 test-fixtures/            Integration and retrieval test fixtures with manifests.
 python/                   Python research workspace for model, tokenizer, corpus, and statistics work.
 examples/                 Example semantic records for quick-start and pipeline adoption.

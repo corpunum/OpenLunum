@@ -34,6 +34,8 @@
 - Near-semantic + exact fingerprint interop: records carry both lfp: and nfp:, hybrid search (exact-first, near-fallback).
 - Near-semantic retrieval tests: recall vs exact, false-positive rate, fingerprint stability across generations.
 - Bidirectional migration (0.1 ↔ 0.2): forward (`migrateForward01to02`) and backward (`migrateBackward02to01`) functions with schema validation, field-level loss warnings, fingerprint regeneration, and input-order preservation. Batch operations (`migrateRecordsForward`, `migrateRecordsBackward`) and round-trip test (`roundTripMigration`) included.
+- Local orchestrator: `scripts/pi-orchestrator.sh` with 3h systemd timer for flag checks, loop health, STUCK auto-fix, stale PR detection, throughput tracking, and NEEDS_CLOUD escalation.
+- Orchestrator handover doc: `ORCHESTRATOR.md` with 5-layer stack architecture (orchestrator, watchdog, local orchestrator, reviewer, worker, merge bot), key paths, hardware profile, worker loop description, and ops runbook for any LLM to take over.
 
 | Component | Status | Meaning |
 |---|---|---|
@@ -78,6 +80,8 @@
 | Near-semantic retrieval tests | Reference implementation | Recall vs exact, false-positive rate, fingerprint stability across generations |
 | Near-semantic + exact fingerprint interop | Prototype | Records carry both lfp: and nfp:, hybrid search exact-first with near-fallback |
 | Bidirectional migration (0.1 ↔ 0.2) | Reference implementation | Forward and backward migration with schema validation, field-level loss warnings, fingerprint regeneration, input-order preservation. Round-trip test with explicit loss warnings. 190 lines of tests.
+| Local orchestrator | Prototype | `scripts/pi-orchestrator.sh` with 3h timer, flag checks, loop health, STUCK auto-fix, stale PR detection, throughput tracking, NEEDS_CLOUD escalation.
+| Orchestrator handover | Reference document | 5-layer stack architecture, key paths, hardware profile, worker loop, ops runbook for any LLM takeover.
 
 ## Release gates before 1.0
 
