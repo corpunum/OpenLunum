@@ -21,6 +21,7 @@ WT=/home/corpunum/openlunum-workers/merger
 LOGDIR="$REPO/reports/pi-merge"
 STATUS_LOG="$LOGDIR/merge-status.log"
 INTERVAL=180
+MERGE_POLICY="$REPO/scripts/pi-merge-policy.mjs"
 
 # Hard-protected: always require Claude maintainer (CI, agent infra, protected data)
 HARD_PROTECTED_RE='^(datasets/protected/(?!README\.md)|\.github/|scripts/(pi-|nightly))'
@@ -32,6 +33,8 @@ log() { echo "[$(date -Iseconds)] $*" | tee -a "$STATUS_LOG"; }
 
 timeout 60 gh label create claude-review --repo corpunum/OpenLunum --color b60205 --description "Protected paths — Claude maintainer review required" 2>/dev/null || true
 timeout 60 gh label create needs-rebase --repo corpunum/OpenLunum --color fbca04 --description "Conflicts with main — rebase needed" 2>/dev/null || true
+timeout 60 gh label create maintainer-blocked --repo corpunum/OpenLunum --color b60205 --description "Current-head maintainer findings block automation" 2>/dev/null || true
+timeout 60 gh label create merge-policy-blocked --repo corpunum/OpenLunum --color d93f0b --description "Fail-closed merge policy is not satisfied" 2>/dev/null || true
 
 ensure_worktree() {
   [[ -d "$WT" ]] || git -C "$REPO" worktree add --detach "$WT" origin/main >/dev/null 2>&1
@@ -68,6 +71,8 @@ while true; do
 
   all_prs=$(echo "$prs $approved_prs" | tr ' ' '\n' | sort -un | tr '\n' ' ')
   for pr in $all_prs; do
+    head_sha=$(timeout 30 gh pr view "$pr" --repo corpunum/OpenLunum --json headRefOid --jq .headRefOid 2>/dev/null)
+    [[ -n "$head_sha" ]] || { log "PR #$pr → policy blocked (head SHA unavailable)"; continue; }
     files=$(timeout 60 gh pr diff "$pr" --repo corpunum/OpenLunum --name-only 2>/dev/null)
     [[ -n "$files" ]] || continue
 
@@ -92,7 +97,7 @@ while true; do
     # Soft-protected: auto-merge if reviewer gave LGTM-protected
     if echo "$files" | grep -qP "$SOFT_PROTECTED_RE"; then
       has_override=$(timeout 60 gh pr view "$pr" --repo corpunum/OpenLunum --json comments \
-        --jq '[.comments[].body | select(test("LGTM-protected"))] | length' 2>/dev/null)
+        --jq "[.comments[].body | select(contains(\"$head_sha\") and contains(\"LGTM-protected\"))] | length" 2>/dev/null)
       if [[ "${has_override:-0}" -lt 1 ]]; then
         timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=claude-review" >/dev/null 2>&1 || true
         timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
@@ -104,9 +109,22 @@ while true; do
       log "PR #$pr soft-protected with reviewer override — proceeding"
     fi
 
-    timeout 60 gh pr ready "$pr" --repo corpunum/OpenLunum >/dev/null 2>&1 || true
-    if ! timeout 120 gh pr merge "$pr" --repo corpunum/OpenLunum --merge >/dev/null 2>&1; then
+    # Fail closed before merge. Drafts, blockers, stale/missing reviews, and
+    # missing/pending/failed/no-step checks on the exact head all stop here.
+    policy_output=$(timeout 120 node "$MERGE_POLICY" --repo corpunum/OpenLunum --pr "$pr" 2>&1)
+    policy_exit=$?
+    if [[ $policy_exit -ne 0 ]]; then
+      reason=$(echo "$policy_output" | jq -r '.reasons | join("; ")' 2>/dev/null || echo "policy evaluator error")
+      timeout 30 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=merge-policy-blocked" >/dev/null 2>&1 || true
+      log "PR #$pr → policy blocked ($reason)"
+      continue
+    fi
+    timeout 30 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/merge-policy-blocked" >/dev/null 2>&1 || true
+
+    # Bind the merge to the head that passed policy to close the TOCTOU gap.
+    if ! timeout 120 gh pr merge "$pr" --repo corpunum/OpenLunum --merge --match-head-commit "$head_sha" >/dev/null 2>&1; then
       timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=needs-rebase" >/dev/null 2>&1 || true
+      timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
       timeout 60 gh pr comment "$pr" --repo corpunum/OpenLunum \
         --body "Auto-merge failed (likely conflicts). Rebase onto main and push; the reviewer will re-review." >/dev/null 2>&1 || true
       log "PR #$pr → needs-rebase (merge failed)"
