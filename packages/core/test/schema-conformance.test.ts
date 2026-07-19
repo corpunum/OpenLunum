@@ -310,6 +310,114 @@ test('positive compile fixture: TwoWay checks on actual public/generated types c
   assert.strictEqual(result.status, 0, `tsc must succeed for positive fixture, got ${result.status}`);
 });
 
+// ── Issue #11 item 7: nested config schemas additionalProperties ──────
+
+test('experiment schema: retrievalConfig has additionalProperties: false', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  assert.strictEqual(schema.properties.retrievalConfig.additionalProperties, false,
+    'retrievalConfig must have additionalProperties: false');
+});
+
+test('experiment schema: integrationConfig has additionalProperties: false', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  assert.strictEqual(schema.properties.integrationConfig.additionalProperties, false,
+    'integrationConfig must have additionalProperties: false');
+});
+
+test('experiment manifest with valid retrievalConfig validates', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  const data = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-exp-1',
+    area: 'retrieval',
+    task: 'retrieval',
+    hypothesis: 'A test hypothesis that is long enough for validation',
+    baselineCommit: 'abc123',
+    limits: { maxItems: 10, maxAttemptsPerItem: 3, maxModelCalls: 100 },
+    gates: { minimumFeatureRecall: 0.9, minimumExactRate: 0.95, requireProtectedLiteralCoverage: true },
+    outputDirectory: 'reports/experiments/test',
+    retrievalConfig: { k: 3, mode: 'exact' }
+  };
+  const errors: string[] = [];
+  const pass = validate(data, schema, errors);
+  assert.strictEqual(pass, true, `Valid retrievalConfig should pass: ${errors.join('; ')}`);
+});
+
+test('experiment manifest with valid integrationConfig validates', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  const data = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-exp-2',
+    area: 'integration',
+    task: 'integration',
+    hypothesis: 'A test hypothesis that is long enough for validation',
+    baselineCommit: 'abc123',
+    limits: { maxItems: 10, maxAttemptsPerItem: 3, maxModelCalls: 100 },
+    gates: { minimumFeatureRecall: 0.9, minimumExactRate: 0.95, requireProtectedLiteralCoverage: true },
+    outputDirectory: 'reports/experiments/test',
+    integrationConfig: { selectedIntegration: 'test-integration', fixtureId: 'test-fixture-1' }
+  };
+  const errors: string[] = [];
+  const pass = validate(data, schema, errors);
+  assert.strictEqual(pass, true, `Valid integrationConfig should pass: ${errors.join('; ')}`);
+});
+
+test('experiment manifest rejects extra field in retrievalConfig', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  const data = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-exp-3',
+    area: 'retrieval',
+    task: 'retrieval',
+    hypothesis: 'A test hypothesis that is long enough for validation',
+    baselineCommit: 'abc123',
+    limits: { maxItems: 10, maxAttemptsPerItem: 3, maxModelCalls: 100 },
+    gates: { minimumFeatureRecall: 0.9, minimumExactRate: 0.95, requireProtectedLiteralCoverage: true },
+    outputDirectory: 'reports/experiments/test',
+    retrievalConfig: { k: 3, mode: 'exact', extraField: 'should fail' }
+  };
+  const errors: string[] = [];
+  const pass = validate(data, schema, errors);
+  assert.strictEqual(pass, false, `Extra field in retrievalConfig should fail: ${errors.join('; ')}`);
+});
+
+test('experiment manifest rejects extra field in integrationConfig', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+  const data = {
+    schema: 'openlunum-experiment/0.1',
+    id: 'test-exp-4',
+    area: 'integration',
+    task: 'integration',
+    hypothesis: 'A test hypothesis that is long enough for validation',
+    baselineCommit: 'abc123',
+    limits: { maxItems: 10, maxAttemptsPerItem: 3, maxModelCalls: 100 },
+    gates: { minimumFeatureRecall: 0.9, minimumExactRate: 0.95, requireProtectedLiteralCoverage: true },
+    outputDirectory: 'reports/experiments/test',
+    integrationConfig: { selectedIntegration: 'test-integration', fixtureId: 'test-fixture-1', extraField: 'should fail' }
+  };
+  const errors: string[] = [];
+  const pass = validate(data, schema, errors);
+  assert.strictEqual(pass, false, `Extra field in integrationConfig should fail: ${errors.join('; ')}`);
+});
+
+test('existing test fixtures validate with updated schema', () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'experiment.schema.json'), 'utf-8'));
+
+  // test-retrieval-manifest.json has retrievalConfig with valid fields only
+  const retrievalFixturePath = path.join(WORKSPACE_ROOT, 'test-fixtures', 'retrieval', 'test-retrieval-manifest.json');
+  const retrievalData = JSON.parse(fs.readFileSync(retrievalFixturePath, 'utf-8'));
+  const retErrors: string[] = [];
+  const retPass = validate(retrievalData, schema, retErrors);
+  assert.strictEqual(retPass, true, `test-retrieval-manifest.json should validate: ${retErrors.join('; ')}`);
+
+  // test-integration-manifest.json has integrationConfig with valid fields only
+  const integrationFixturePath = path.join(WORKSPACE_ROOT, 'test-fixtures', 'integration', 'test-integration-manifest.json');
+  const integrationData = JSON.parse(fs.readFileSync(integrationFixturePath, 'utf-8'));
+  const intErrors: string[] = [];
+  const intPass = validate(integrationData, schema, intErrors);
+  assert.strictEqual(intPass, true, `test-integration-manifest.json should validate: ${intErrors.join('; ')}`);
+});
+
 test('negative compile fixture: tsc produces exactly one TS2322', async () => {
   // Run tsc on the negative fixture and assert the exact diagnostic.
   // Unrelated errors must NOT exist — this prevents false positives.

@@ -9,7 +9,7 @@
   "limits": {
     "maxItems": 2,
     "maxAttemptsPerItem": 1,
-    "maxModelCalls": 0
+    "maxModelCalls": 1
   },
   "gates": {
     "minimumFeatureRecall": 0.5,
