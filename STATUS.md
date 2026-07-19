@@ -30,6 +30,9 @@
 - Native model protocol: token mappings, instruction templates, and fallback profiles for 8 model families.
 - Renderer conformance suite: round-trip canonicalization property tests for safe/short/tight profiles.
 - Agent-state protocol: validated types for plans, steps, tool calls, evidence, and inter-agent handoffs.
+- Near-semantic fingerprint implementation: feature extraction, configurable similarity threshold, nfp:* format, similarity comparison.
+- Near-semantic + exact fingerprint interop: records carry both lfp: and nfp:, hybrid search (exact-first, near-fallback).
+- Near-semantic retrieval tests: recall vs exact, false-positive rate, fingerprint stability across generations.
 
 | Component | Status | Meaning |
 |---|---|---|
@@ -42,7 +45,7 @@
 | MCP reference server | Prototype | Reference implementation of Model Context Protocol tooling |
 | OpenUnum adapter | Reference contract | Matches present sidecar shape; live adoption still requires product work |
 | Exact semantic fingerprint | Reference implementation | Versioned exact identity, not fuzzy equivalence |
-| Near-semantic fingerprint | Design | Separately designed from exact identity; not yet implemented |
+| Near-semantic fingerprint | Prototype | Feature extraction, configurable similarity threshold, nfp:* format; similarity comparison implemented |
 | Reference renderer | Prototype | Conservative and testable; not tokenizer-optimized |
 | Renderer profiles (safe/short/tight) | Experiment | Measured without changing semantics; not production-proven |
 | Tokenizer measurement framework | Reference implementation | Cross-model measurement with Token Atlas; per-model profile selection available |
@@ -70,6 +73,9 @@
 | Native model protocol | Prototype | Token mappings, instruction templates, and fallback profiles for 8 model families |
 | Renderer conformance suite | Reference implementation | Round-trip canonicalization property tests for safe/short/tight profiles |
 | Agent-state protocol | Prototype | Validated types for plans, steps, tool calls, evidence, and inter-agent handoffs |
+| Near-semantic fingerprint implementation | Prototype | Feature extraction, configurable threshold, nfp:* format, similarity comparison with threshold-based matching |
+| Near-semantic retrieval tests | Reference implementation | Recall vs exact, false-positive rate, fingerprint stability across generations |
+| Near-semantic + exact fingerprint interop | Prototype | Records carry both lfp: and nfp:, hybrid search exact-first with near-fallback |
 
 ## Release gates before 1.0
 

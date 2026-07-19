@@ -143,7 +143,9 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Safe, short, and tight renderer profiles without changing semantics.
 - Tokenizer measurement framework with llama.cpp-compatible counting.
 - Full-prompt quality gates for local-model evaluation.
-- Near-semantic fingerprint design separate from exact identity.
+- Near-semantic fingerprint implementation with feature extraction and configurable similarity threshold.
+- Near-semantic retrieval tests: recall vs exact fingerprint, false-positive rate measurement.
+- Near-semantic + exact fingerprint interop: records carry both lfp: and nfp: fingerprints, queries can specify which type to match.
 - Expanded typed structures: time, quantity, uncertainty, reference, and modality.
 - Canonical conformance vectors and property tests.
 - Multilingual realization (English, Greek, Spanish, Indonesian) with protected-literal and independent semantic scoring.
@@ -187,6 +189,9 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - **Native model protocol:** Token mappings, instruction templates, and fallback profiles for native and non-native model families.
 - **Renderer conformance suite:** Property tests verifying round-trip canonicalization for safe, short, and tight profiles against 10 test records.
 - **Agent-state protocol:** Validated types for plans, steps, tool calls, results, constraints, evidence, and inter-agent handoffs.
+- **Near-semantic fingerprint implementation:** Feature extraction, configurable similarity threshold, nfp:* fingerprint format, similarity comparison with threshold-based matching.
+- **Near-semantic retrieval tests:** Identical-record fingerprint stability, near-match similarity within threshold, unrelated-record low similarity, recall comparison vs exact fingerprint, false-positive rate measurement.
+- **Near-semantic + exact fingerprint interop:** Records carry both exact (lfp:) and near-semantic (nfp:) fingerprints; hybrid search tries exact first, then falls back to near-semantic.
 - **API stability tests:** Snapshot-based tests verifying no public exports are removed and no breaking signature changes occur in `packages/core`.
 - **OpenUnum adapter e2e conformance:** End-to-end verification of OpenUnum compatibility adapter against real product runtime.
 - **HTTP API reference server:** New `packages/api` package with REST endpoints (parse, realize, render, retrieve, health) and OpenAPI 3.1.0 spec. Third adoption path after MCP and CLI.
@@ -288,13 +293,13 @@ The repository map at the end of this document lists top-level directories. Pack
 ## Repository map
 
 ```text
-packages/core/            Core library: semantics, canonicalization, fingerprints, renderer conformance, native-model protocol, agent-state protocol, policy classifier.
+packages/core/            Core library: semantics, canonicalization, fingerprints (exact + near-semantic), renderer conformance, native-model protocol, agent-state protocol, policy classifier.
 packages/cli/             Command line interface for inspection, encoding, compilation, release verification, and pipeline adoption.
 packages/api/             HTTP API reference server with OpenAPI spec and integration tests.
 packages/eval/            Local-model experiment runner, metrics, failure reports, Token Atlas, and downstream quality gates.
 packages/mcp/             Prototype reference server and tooling for Model Context Protocol (MCP) integration.
 packages/adapter-openunum/ OpenUnum compatibility adapter package.
-packages/core/test/       API stability test suite with golden snapshots.
+packages/core/test/       API stability test suite with golden snapshots; near-semantic fingerprint interop and retrieval tests.
 schemas/                  machine-readable contracts (0.1-draft and frozen 0.2); `schemas/CHANGELOG.md` for migration instructions
 registry/                 worlds, roles, categories, predicates
 integrations/openunum/    verified-current-state reference and adoption plan

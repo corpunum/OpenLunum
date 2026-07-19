@@ -34,6 +34,11 @@
 ### Changed — Renderer (PR #114)
 - **Tokenizer optimization pass:** Model-specific tight profiles that provably do not change semantics. Per-model best profile selection via Token Atlas measurements.
 
+### Added — Near-Semantic Fingerprints (PR #137, PR #136)
+- **Near-semantic fingerprint implementation:** Feature extraction, configurable similarity threshold, nfp:* fingerprint format, similarity comparison with threshold-based matching. Types in `packages/core/src/near-semantic-fingerprints.ts`.
+- **Near-semantic + exact fingerprint interop:** Records carry both exact (lfp:) and near-semantic (nfp:) fingerprints; hybrid search tries exact match first, then falls back to near-semantic. 13 new tests in `packages/core/test/near-semantic-exact-interop.test.ts`.
+- **Near-semantic retrieval tests:** Identical-record fingerprint stability, near-match similarity within threshold, unrelated-record low similarity, recall comparison vs exact fingerprint, false-positive rate measurement, threshold adjustment effects on precision-recall, fingerprint stability across multiple generations. Tests in `packages/core/test/near-semantic-retrieval.test.ts`.
+
 ---
 
 ## Since 0.2.1 — Merged Work (5280ba9, 7650cc09, 605ae11, ef230af, 2001733)
