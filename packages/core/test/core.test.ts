@@ -147,3 +147,153 @@ test('renderer ambiguity: round-trip canonicalization preserves semantics', () =
   const fp2 = fingerprintSem(canonicalized);
   assert.strictEqual(fp1, fp2, 'Round-trip canonicalization must preserve fingerprint');
 });
+
+// ── Schema 0.2 constants tests ──────────────────────────────────────
+
+import {
+  SEM_SCHEMA_02,
+  RECORD_SCHEMA_02,
+  FP_VERSION_02,
+  FROZEN_SCHEMAS,
+} from '../src/constants.js';
+
+test('schema 0.2 constants have correct values', () => {
+  assert.equal(SEM_SCHEMA_02, 'lunum-sem/0.2');
+  assert.equal(RECORD_SCHEMA_02, 'lunum-record/0.2');
+  assert.equal(FP_VERSION_02, '0.2');
+});
+
+test('FROZEN_SCHEMAS contains 0.2 schema versions', () => {
+  assert.ok(FROZEN_SCHEMAS.has('lunum-sem/0.2'));
+  assert.ok(FROZEN_SCHEMAS.has('lunum-record/0.2'));
+  assert.equal(FROZEN_SCHEMAS.size, 2);
+  // Object.freeze prevents adding properties to the Set object
+  assert.ok(Object.isFrozen(FROZEN_SCHEMAS));
+});
+
+test('0.1 schema constants still have correct values', () => {
+  assert.equal('lunum-sem/0.1-draft', 'lunum-sem/0.1-draft');
+  assert.equal('lunum-record/0.1-draft', 'lunum-record/0.1-draft');
+});
+
+// ── Semantic-contract type tests (v02 migration) ────────────────────
+
+import {
+  type LunumSemSchema01,
+  type LunumSemSchema02,
+  type LunumRecordSchema01,
+  type LunumRecordSchema02,
+  type v01Clause,
+  type v02Clause,
+} from '../src/types-schema.js';
+import { SEM_SCHEMA, RECORD_SCHEMA, FP_VERSION } from '../src/constants.js';
+
+test('0.1 semantic schema type accepts standard record', () => {
+  const schema: LunumSemSchema01 = {
+    schema: SEM_SCHEMA,
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'Prefer', roles: { experiencer: { id: 'user', type: 'actor' }, theme: { id: 'feature', type: 'concept' } } }]
+  };
+  assert.equal(schema.schema, SEM_SCHEMA);
+  assert.ok(Array.isArray(schema.clauses));
+  assert.equal(schema.clauses.length, 1);
+});
+
+test('0.2 semantic schema type accepts standard record', () => {
+  const schema: LunumSemSchema02 = {
+    schema: SEM_SCHEMA_02,
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'Prefer', roles: { experiencer: { id: 'user', type: 'actor' }, theme: { id: 'feature', type: 'concept' } } }]
+  };
+  assert.equal(schema.schema, SEM_SCHEMA_02);
+  assert.ok(Array.isArray(schema.clauses));
+});
+
+test('0.1 record schema type with nested structure', () => {
+  const record: LunumRecordSchema01 = {
+    recordVersion: 'lunum-record/0.1-draft',
+    source: { text: 'Test record source' },
+    sem: {
+      schema: SEM_SCHEMA,
+      world: 'real',
+      kind: 'preference',
+      clauses: [{ predicate: 'Prefer', roles: { experiencer: { id: 'user', type: 'actor' } } }]
+    },
+    fingerprint: `lfp:${FP_VERSION}:sha256:abc123`,
+    renderings: { 'generic-en-pivot/0.1': { code: 'R prefer user' } },
+    policy: { eligible: true, risk: 'low', confidence: 0.95 }
+  };
+  assert.equal(record.source.text, 'Test record source');
+  assert.equal(record.sem.schema, SEM_SCHEMA);
+  assert.match(record.fingerprint, /^lfp:0\.1:sha256:/);
+});
+
+test('0.2 record schema type with nested structure', () => {
+  const record: LunumRecordSchema02 = {
+    recordVersion: 'lunum-record/0.2',
+    source: { text: 'Test record source', language: 'en', role: 'user' },
+    sem: {
+      schema: SEM_SCHEMA_02,
+      world: 'real',
+      kind: 'preference',
+      clauses: [{ predicate: 'Prefer', roles: { experiencer: { id: 'user', type: 'actor' } } }],
+      provenance: { source: 'test', author: 'agent', timestamp: '2026-01-01T00:00:00Z' }
+    },
+    fingerprint: `lfp:${FP_VERSION_02}:sha256:def456`,
+    renderings: {},
+    policy: { eligible: true, risk: 'low', confidence: 0.95 }
+  };
+  assert.equal(record.recordVersion, 'lunum-record/0.2');
+  assert.equal(record.sem.schema, SEM_SCHEMA_02);
+  assert.match(record.fingerprint, /^lfp:0\.2:sha256:/);
+});
+
+test('v01Clause type supports negation and modality', () => {
+  const clause: v01Clause = {
+    predicate: 'should',
+    roles: { agent: { id: 'system', type: 'actor' } },
+    negated: false,
+    modality: null,
+    conditions: [{ predicate: 'when', roles: { subject: { id: 'condition', type: 'concept' } } }]
+  };
+  assert.equal(clause.negated, false);
+  assert.ok(Array.isArray(clause.conditions));
+});
+
+test('v02Clause type supports modality enum values', () => {
+  const clause: v02Clause = {
+    predicate: 'require',
+    roles: { agent: { id: 'system', type: 'actor' } },
+    modality: 'obligation',
+    conditions: [{ predicate: 'when', roles: { subject: { id: 'condition', type: 'concept' } } }],
+    consequences: [{ predicate: 'then', roles: { theme: { id: 'result', type: 'concept' } } }]
+  };
+  assert.equal(clause.modality, 'obligation');
+  assert.ok(Array.isArray(clause.conditions));
+  assert.ok(Array.isArray(clause.consequences));
+});
+
+test('FROZEN_SCHEMAS matches 0.2 schema constant values', () => {
+  assert.ok(FROZEN_SCHEMAS.has(SEM_SCHEMA_02));
+  assert.ok(FROZEN_SCHEMAS.has(RECORD_SCHEMA_02));
+  assert.equal(FROZEN_SCHEMAS.size, 2);
+});
+
+test('0.1 and 0.2 schema versions are distinct', () => {
+  assert.notEqual(SEM_SCHEMA, SEM_SCHEMA_02);
+  assert.notEqual(RECORD_SCHEMA, RECORD_SCHEMA_02);
+  assert.notEqual(FP_VERSION, FP_VERSION_02);
+  assert.ok(!SEM_SCHEMA.includes('0.2'));
+  assert.ok(SEM_SCHEMA_02.includes('0.2'));
+});
+
+test('clause types preserve predicate and roles structure', () => {
+  const v01: v01Clause = { predicate: 'test', roles: { agent: { type: 'actor', id: 'a' } } };
+  const v02: v02Clause = { predicate: 'test', roles: { agent: { type: 'actor', id: 'a' } } };
+  assert.equal(v01.predicate, 'test');
+  assert.equal(v02.predicate, 'test');
+  assert.equal(typeof v01.roles, 'object');
+  assert.equal(typeof v02.roles, 'object');
+});

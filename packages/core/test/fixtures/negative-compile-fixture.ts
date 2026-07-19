@@ -13,7 +13,7 @@
  */
 
 import type { LunumSem } from '../../src/types.js';
-import type { LunumSemSchema as LunumSemSchemaType } from '../../src/types-schema.js';
+import type { LunumSemSchema02 as LunumSemSchemaType } from '../../src/types-schema.js';
 
 // Helper: two-way structural assignability
 type TwoWay<T, U> = T extends U ? (U extends T ? true : false) : false;

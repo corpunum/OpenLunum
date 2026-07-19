@@ -12,8 +12,8 @@ import type {
   LunumRecord,
 } from './types.js';
 import type {
-  LunumSemSchema,
-  LunumRecordSchema,
+  LunumSemSchema01,
+  LunumRecordSchema01,
 } from './types-schema.js';
 
 // ── Helper: two-way structural assignability ──────────────────────
@@ -26,13 +26,13 @@ type TwoWay<T, U> = T extends U ? (U extends T ? true : false) : false;
 // Two-way: world and kind must be structurally compatible (both string)
 type _TwoWayLunumSemCore = TwoWay<
   Pick<LunumSem, 'world' | 'kind'>,
-  Pick<LunumSemSchema, 'world' | 'kind'>
+  Pick<LunumSemSchema01, 'world' | 'kind'>
 >;
 const _assertLunumSemCoreTwoWay: _TwoWayLunumSemCore = true;
 
 // Schema const must match exactly: "lunum-sem/0.1-draft"
-type _SemSchemaConst = 'lunum-sem/0.1-draft' extends LunumSemSchema['schema']
-  ? LunumSemSchema['schema'] extends 'lunum-sem/0.1-draft'
+type _SemSchemaConst = 'lunum-sem/0.1-draft' extends LunumSemSchema01['schema']
+  ? LunumSemSchema01['schema'] extends 'lunum-sem/0.1-draft'
     ? true
     : false
   : false;
@@ -45,21 +45,21 @@ const _assertSemSchemaConst: _SemSchemaConst = true;
 // Two-way: fingerprint must be string on both sides
 type _TwoWayRecordFingerprint = TwoWay<
   Pick<LunumRecord, 'fingerprint'>,
-  Pick<LunumRecordSchema, 'fingerprint'>
+  Pick<LunumRecordSchema01, 'fingerprint'>
 >;
 const _assertRecordFingerprintTwoWay: _TwoWayRecordFingerprint = true;
 
 // Two-way: sem world/kind must match string types
 type _TwoWayRecordSem = TwoWay<
   Pick<LunumRecord['sem'], 'world' | 'kind'>,
-  Pick<LunumRecordSchema['sem'], 'world' | 'kind'>
+  Pick<LunumRecordSchema01['sem'], 'world' | 'kind'>
 >;
 const _assertRecordSemTwoWay: _TwoWayRecordSem = true;
 
 // Two-way: source.text must be string on both sides
 type _TwoWayRecordSource = TwoWay<
   Pick<LunumRecord['source'], 'text'>,
-  Pick<LunumRecordSchema['source'], 'text'>
+  Pick<LunumRecordSchema01['source'], 'text'>
 >;
 const _assertRecordSourceTwoWay: _TwoWayRecordSource = true;
 
