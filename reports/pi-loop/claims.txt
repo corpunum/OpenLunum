@@ -57,6 +57,7 @@
 - agent/docs/sync-a89b0540
 - agent/docs/sync-adefb01c
 - agent/docs/sync-b80f55d3
+- agent/docs/sync-bbed62af
 - agent/docs/sync-bceb401a
 - agent/docs/sync-c062de74
 - agent/docs/sync-c4637d7f
@@ -181,8 +182,10 @@
 - agent/qwen/safety/rollback-process
 - agent/qwen/safety/rollback-process-rebuild
 - agent/qwen/safety/rollback-process-v2
+- agent/qwen/safety/rollback-rebuild
 - agent/qwen/safety/threat-model-mitigations
 - agent/qwen/schema/bidirectional-fp-migration
+- agent/qwen/schema/bidirectional-migration-rebuild
 - agent/qwen/schema-changelog
 - agent/qwen/schema-freeze-0.2
 - agent/qwen/schema-frozen-0.2

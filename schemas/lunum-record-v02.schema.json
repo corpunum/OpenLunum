@@ -24,7 +24,7 @@
       }
     },
     "sem": {
-      "$ref": "lunum-sem-v02.schema.json",
+      "$ref": "https://openlunum.org/schemas/lunum-sem/0.2",
       "description": "Embedded Lunum-Sem 0.2 semantic object"
     },
     "fingerprint": {
@@ -64,12 +64,7 @@
           "enum": ["low", "medium", "high", "unknown"],
           "description": "Risk classification — locked enum for 0.2"
         },
-        "confidence": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Confidence score in [0, 1]"
-        },
+        "confidence": { "$ref": "https://openlunum.org/schemas/shared/1#/$defs/confidence" },
         "reasons": {
           "type": "array",
           "items": { "type": "string" },
@@ -81,8 +76,8 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "created": { "type": "string", "format": "date-time" },
-        "modified": { "type": "string", "format": "date-time" },
+        "created": { "$ref": "https://openlunum.org/schemas/shared/1#/$defs/iso8601" },
+        "modified": { "$ref": "https://openlunum.org/schemas/shared/1#/$defs/iso8601" },
         "schemaVersion": { "const": "0.2" }
       },
       "description": "Metadata — locked field set for 0.2"
