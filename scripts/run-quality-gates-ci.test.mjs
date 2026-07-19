@@ -96,7 +96,7 @@ test('quality-gate process exit preserves warning contract unless strict', () =>
   assert.equal(normalizeProcessExit(2, true), 2);
 });
 
-test('runner executes fallback-only mode end to end and preserves a gate failure', async () => {
+test('runner executes fallback-only mode end to end and reports a passing gate suite', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'quality-gate-e2e-'));
   try {
     const outputPath = join(directory, 'output.txt');
@@ -106,9 +106,10 @@ test('runner executes fallback-only mode end to end and preserves a gate failure
       encoding: 'utf8',
       env: { ...process.env, GITHUB_OUTPUT: outputPath, GITHUB_STEP_SUMMARY: summaryPath },
     });
-    assert.equal(result.status, 2, result.stderr);
+    assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /Quality gate input mode: fallback-only/);
-    assert.match(await readFile(outputPath, 'utf8'), /gate_exit_code=2/);
+    assert.match(result.stdout, /Overall Score: 100\.0%/);
+    assert.match(await readFile(outputPath, 'utf8'), /gate_exit_code=0/);
     assert.match(await readFile(outputPath, 'utf8'), /input_mode=fallback-only/);
     assert.match(await readFile(summaryPath, 'utf8'), /Quality Gate CI Report/);
   } finally {
