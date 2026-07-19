@@ -53,6 +53,7 @@
 - agent/docs/sync-a22dbc42
 - agent/docs/sync-a48d2a89
 - agent/docs/sync-a5112523
+- agent/docs/sync-a5fd2bce
 - agent/docs/sync-a6fbb9d9
 - agent/docs/sync-a89b0540
 - agent/docs/sync-adefb01c
@@ -190,6 +191,7 @@
 - agent/qwen/schema-freeze-0.2
 - agent/qwen/schema-frozen-0.2
 - agent/qwen/schema-json-ref-crossrefs
+- agent/qwen/schema/json-ref-crossrefs-rebuild
 - agent/qwen/schema/json-ref-crossrefs-v2
 - agent/qwen/schema/nested-config-additional-properties
 - agent/qwen/semantic-contract/conformance-gates
