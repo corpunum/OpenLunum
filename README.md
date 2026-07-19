@@ -314,7 +314,7 @@ schemas/                  machine-readable contracts (0.1-draft and frozen 0.2);
 registry/                 worlds, roles, categories, predicates
 profiles/models/          Model profile definitions (token mappings, instruction templates).
 profiles/renderers/       Renderer profile definitions (safe, short, tight).
-scripts/                  Automation: nightly window, release sign/verify, schema-to-ts, validation, orchestrator loop (pi-orchestrator.sh), worker/reviewer/merge/watchdog loops.
+scripts/                  Automation: nightly window, release sign/verify, schema-to-ts, validation, orchestrator loop (pi-orchestrator.sh), worker/reviewer/merge/watchdog loops, merge policy with fail-closed exact-head (pi-merge-policy.mjs).
 test-fixtures/            Integration and retrieval test fixtures with manifests.
 python/                   Python research workspace for model, tokenizer, corpus, and statistics work.
 examples/                 Example semantic records for quick-start and pipeline adoption.
