@@ -118,7 +118,7 @@ All 5 blockers resolved and merged. Issue #11 can be closed.
 
 v1-v3 are fully landed. v4 targets the 8 release gates from STATUS.md to move the project from experiment/prototype to reference-stable.
 
-All v4 items implemented and merged as of 2026-07-19.
+Most v4 implementation work has landed, but the queue is **not mechanically complete**. A maintainer audit on 2026-07-19 reopened three claims whose current evidence does not satisfy the stated acceptance text. Do not report v4 as 100% accepted until the unchecked items below are repaired and independently reviewed.
 
 ## P0 — schema stability (release gate 1)
 
@@ -129,7 +129,7 @@ All v4 items implemented and merged as of 2026-07-19.
 ## P0 — migration rules (release gate 2)
 
 - [x] Implement bidirectional fingerprint migration tests: 0.1→0.2 forward, 0.2→0.1 lossy backward with explicit data-loss warnings. *(PR #144, #149 merged)*
-- [x] Add a migration CLI command: `lunum migrate <file> --from 0.1 --to 0.2` that transforms records in place with a dry-run mode. *(merged on main)*
+- [ ] Add a migration CLI command: `lunum migrate <file> --from 0.1 --to 0.2` that transforms records in place with a dry-run mode. *(Current main only rewrites `sem.schema`; it does not migrate record structure/fingerprint, validate source and destination schemas, fail closed, or write atomically. Draft repair: PR #178.)*
 - [x] Golden migration vectors: add 20+ fixture pairs (0.1 input → expected 0.2 output) covering every structural change. *(golden-migration-vectors.test.ts on main)*
 
 ## P1 — multilingual retention (release gate 3)
@@ -140,8 +140,8 @@ All v4 items implemented and merged as of 2026-07-19.
 
 ## P1 — renderer measurement (release gate 4)
 
-- [x] Upgrade renderer profiles from "Experiment" to "Reference": add deterministic golden-output tests for safe/short/tight on 10+ diverse inputs. *(golden-output tests on main)*
-- [x] Add a tokenizer-optimization pass: for each named local model in Token Atlas, produce a model-specific tight profile that provably does not change semantics. *(PR #124 merged)*
+- [ ] Upgrade renderer profiles from "Experiment" to "Reference": add deterministic golden-output tests for safe/short/tight on 10+ diverse inputs. *(The current 15-input suite checks invariants and relative properties but does not commit and compare exact approved profile outputs. Draft documentation correction: PR #185.)*
+- [ ] Add a tokenizer-optimization pass: for each named local model in Token Atlas, produce a model-specific tight profile that provably does not change semantics. *(Current main sets `optimizedFingerprint = entry.fingerprint` and compares the value to itself, so preservation is tautological. Draft repair: PR #184.)*
 - [x] Renderer conformance suite: property tests that every profile preserves round-trip canonicalization. *(renderer-conformance.ts + test on main)*
 
 ## P1 — safety and quality gates (release gate 5)
