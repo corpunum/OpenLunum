@@ -168,10 +168,11 @@ User notification → desktop notify-send for critical issues
 
 ## Current State (2026-07-19)
 
-- **Last cloud check-in**: 2026-07-19T12:00+03:00
-- **Health**: all flags clear (including `NEEDS_CLOUD`); worker, reviewer, merge, and docs loops are up. Latest temperature: CPU 89°C, GPU 87°C, frequency 2052MHz.
+- **Last cloud check-in**: 2026-07-19T12:02+03:00
+- **Health**: all flags clear (including `NEEDS_CLOUD`); worker, reviewer, merge, and docs loops are up. The router and both loaded 35B model servers passed health checks. Latest temperature: CPU 85°C, GPU 83°C, frequency 2142MHz.
 - **Verification**: `pnpm verify` and `pnpm agent:status` passed in the review worktree; eval smoke dataset hash: `6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873`.
 - **Work queue**: 45 done, 27 todo (v4 in progress); worker remains in rebuild mode.
+- **Activity**: a new worker run started at 12:01; reviewer is actively validating PR #150. Docs loop completed its latest pass at 12:00.
 - **Open PRs**: draft #147 (quality-gate CI), #127 (rollback process), and #91 (retention regression gate). #91 is stale with no file diff; leave it for the automated rebuild/triage flow unless it persists.
 - **Merges**: recent main merges are green; no reverts reported.
 - **CI**: still requires follow-up for billing/runner reliability; the local pipeline is nominal.
