@@ -34,10 +34,9 @@ jobs:
       - name: Run quality gate CI
         id: gates
         run: |
-          EXIT_CODE=$(node -e "
-            const { runQualityGates, generateCIReport } = require('./packages/core/dist/src/quality-gate-ci.js');
+          node -e "
+            const { runQualityGates, generateCIReport, checkQualityGates } = require('./packages/core/dist/src/quality-gate-ci.js');
             const { readFileSync } = require('fs');
-            const { parseRecord } = require('./packages/core/dist/src/index.js');
 
             // Load test records from protected dataset
             let records = [];
@@ -54,21 +53,23 @@ jobs:
             // Fallback: create minimal test records if none found
             if (records.length === 0) {
               records = [{
-                id: 'ci-test',
-                type: 'record',
-                version: '0.2',
-                semantic: {
-                  identity: { fingerprint: 'test', modality: 'text' },
-                  content: { proposition: { predicate: 'test', arguments: [] } }
-                },
-                provenance: { source: 'ci', timestamp: Date.now() }
+                recordVersion: '0.2',
+                source: { text: 'ci-test', language: 'en', role: 'user', ref: null },
+                sem: { schema: '0.2', world: 'test', kind: 'fact', clauses: [{ predicate: 'test', roles: {} }] },
+                fingerprint: 'fp-ci-test',
+                renderings: {},
+                policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.9, reasons: ['test'] },
+                meta: {}
               }];
             }
 
             const report = runQualityGates(records, { minimumPassRate: 0.8 });
-            console.log(generateCIReport(report));
+            const md = generateCIReport(report);
+            console.log(md);
+
+            // Write summary to GITHUB_OUTPUT for downstream jobs
+            require('fs').writeFileSync(process.env.GITHUB_OUTPUT, 'exit_code=' + report.exitCode + '\n', { flag: 'a' });
             process.exit(report.exitCode);
-          ") || true
-          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          "
       - name: Quality gate result
-        run: echo "Quality gates completed"
+        run: echo "Quality gates completed (exit code: ${{ steps.gates.outputs.exit_code }})"
