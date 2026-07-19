@@ -280,7 +280,7 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 
 ## Repository map (extended)
 
-The repository map at the end of this document lists top-level directories. Package-specific details are in each `packages/<name>/README.md`.
+The repository map at the end of this document lists top-level directories. Package-specific details are in `docs/`.
 
 ## Naming
 
