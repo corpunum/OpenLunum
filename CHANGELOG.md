@@ -23,12 +23,25 @@
 - **Nightly experiment runs:** Automated nightly evaluation runs with 28 manifests, producing structured evidence reports.
 - **Error observability integration:** Circuit-breaker and revert-capability types wired into the eval runner so experiments auto-halt on repeated failures.
 
+### Added — Protocol (PR #132, PR #130)
+- **Native model protocol:** Token mappings, instruction templates, and fallback profiles for native and non-native model families. Types in `packages/core/src/native-model.ts`.
+- **Renderer conformance suite:** Property tests verifying round-trip canonicalization for safe, short, and tight profiles against 10 diverse test records. Types in `packages/core/src/renderer-conformance.ts`.
+- **Agent-state protocol:** Validated types for plans, steps, tool calls, results, constraints, evidence, and inter-agent handoffs. Types in `packages/core/src/agent-state.ts`.
+
+### Fixed — Schema (PR #134)
+- **Nested config schemas:** Added `additionalProperties: false` to prevent unexpected fields in nested config objects across experiment and protected-eval schemas.
+
 ### Changed — Renderer (PR #114)
 - **Tokenizer optimization pass:** Model-specific tight profiles that provably do not change semantics. Per-model best profile selection via Token Atlas measurements.
 
 ---
 
-## Since 0.2.1 — Merged Work (7650cc09, 605ae11, ef230af, 2001733)
+## Since 0.2.1 — Merged Work (5280ba9, 7650cc09, 605ae11, ef230af, 2001733)
+
+### Fixed — Schema (5280ba9, PR #134)
+- **Nested config schemas:** Added `additionalProperties: false` to prevent unexpected fields in nested config objects.
+
+### Added — Downstream Quality Gates (2001733)
 
 ### Added — Downstream Quality Gates (2001733)
 - **Task-success metrics:** Metrics that verify downstream task quality is preserved when using Lunam context vs raw text.
