@@ -52,7 +52,7 @@ export interface RoundTripReport {
   /** Per-model retention profiles computed from experiment results */
   modelProfiles: Record<string, ModelRetentionProfile>;
   /** Best model for each language (highest retention rate) */
-  bestModelsByLanguage: Record<RealizationLanguage, string>;
+  bestModelsByLanguage: Partial<Record<RealizationLanguage, string[]>>;
   baselineThreshold: number;
   regressionDetected: boolean;
   generatedAt: number;
@@ -62,6 +62,14 @@ export interface RoundTripReport {
 export interface ModelRetentionProfile {
   /** Model identifier */
   modelId: string;
+  /** Concrete model/router identifier from the evaluated profile */
+  modelName: string;
+  /** Generation settings required to distinguish reproducible profiles */
+  settings: {
+    temperature: number;
+    seed?: number;
+    timeoutMs: number;
+  };
   /** Total items evaluated across all languages */
   totalItems: number;
   /** Total items passed across all languages */
@@ -115,6 +123,33 @@ export interface RoundTripResult {
   retention: boolean;
   latencyMs: number;
   error?: string;
+}
+
+interface ModelSelectionCandidate {
+  modelId: string;
+  total: number;
+  passed: number;
+  failed: number;
+}
+
+/** Select every top-scoring model; error-only candidates are not evaluated. */
+export function selectBestModelIds(candidates: ModelSelectionCandidate[]): string[] {
+  const evaluated = candidates.filter(candidate => candidate.passed + candidate.failed > 0);
+  if (evaluated.length === 0) return [];
+  const bestRate = Math.max(...evaluated.map(candidate => candidate.passed / candidate.total));
+  return evaluated
+    .filter(candidate => candidate.passed / candidate.total === bestRate)
+    .map(candidate => candidate.modelId)
+    .sort();
+}
+
+/** Keep report filenames inside one directory without losing readable safe IDs. */
+export function modelProfileReportFilename(modelId: string): string {
+  if (!modelId.trim()) throw new Error('Model profile id must be non-empty');
+  const safeId = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/u.test(modelId)
+    ? modelId
+    : `encoded-${Buffer.from(modelId, 'utf8').toString('base64url')}`;
+  return `model-profile-${safeId}.md`;
 }
 
 // ── JSON extraction helper ────────────────────────────────────────
@@ -191,6 +226,12 @@ export async function runRoundTripRetentionExperiment(
   dataset: ExperimentItem[],
   modelProfiles: ModelProfile[]
 ): Promise<{ results: RoundTripResult[]; report: RoundTripReport }> {
+  const profileIds = modelProfiles.map(profile => profile.id);
+  if (profileIds.some(id => !id.trim())) throw new Error('Model profile ids must be non-empty');
+  if (new Set(profileIds).size !== profileIds.length) {
+    throw new Error('Model profile ids must be unique');
+  }
+
   const engine = new RealizationEngine();
   const languages: RealizationLanguage[] = ['en', 'el', 'es', 'id'];
   const results: RoundTripResult[] = [];
@@ -376,7 +417,7 @@ export async function runRoundTripRetentionExperiment(
 
   // Compute per-model retention profiles
   const modelRetentionProfiles: Record<string, ModelRetentionProfile> = {};
-  const bestModelsByLanguage: Record<RealizationLanguage, string> = {} as Record<RealizationLanguage, string>;
+  const bestModelsByLanguage: Partial<Record<RealizationLanguage, string[]>> = {};
 
   for (const profile of modelProfiles) {
     const langStatsPerModel: Record<string, { total: number; passed: number; failed: number; errors: number; predicateMatches: number[]; roleMatches: number[]; literalPreservations: number[]; latencies: number[] }> = {};
@@ -456,6 +497,12 @@ export async function runRoundTripRetentionExperiment(
 
     modelRetentionProfiles[profile.id] = {
       modelId: profile.id,
+      modelName: profile.model,
+      settings: {
+        temperature: profile.temperature,
+        ...(profile.seed === undefined ? {} : { seed: profile.seed }),
+        timeoutMs: profile.timeoutMs
+      },
       totalItems: overall.total,
       totalPassed: overall.passed,
       totalFailed: overall.failed,
@@ -472,22 +519,18 @@ export async function runRoundTripRetentionExperiment(
 
   // Compute best model for each language
   for (const lang of languages) {
-    let bestModelId = '';
-    let bestRate = -1;
-    for (const profile of modelProfiles) {
+    const candidates = modelProfiles.map(profile => {
       const key = `${lang}-${profile.id}` as LangModelKey;
       const s = stats.get(key);
-      if (s && s.total > 0) {
-        const rate = s.passed / s.total;
-        if (rate > bestRate) {
-          bestRate = rate;
-          bestModelId = profile.id;
-        }
-      }
-    }
-    if (bestModelId) {
-      bestModelsByLanguage[lang] = bestModelId;
-    }
+      return {
+        modelId: profile.id,
+        total: s?.total ?? 0,
+        passed: s?.passed ?? 0,
+        failed: s?.failed ?? 0
+      };
+    });
+    const bestModelIds = selectBestModelIds(candidates);
+    if (bestModelIds.length > 0) bestModelsByLanguage[lang] = bestModelIds;
   }
 
   const report: RoundTripReport = {
@@ -546,27 +589,32 @@ export async function runRoundTripRetentionExperiment(
 
 `;
     }
-    await writeFile(path.join(outputDir, `model-profile-${modelId}.md`), md, 'utf-8');
+    const profilePath = path.resolve(outputDir, modelProfileReportFilename(modelId));
+    if (path.dirname(profilePath) !== path.resolve(outputDir)) {
+      throw new Error(`Model profile report path escaped output directory: ${modelId}`);
+    }
+    await writeFile(profilePath, md, 'utf-8');
   }
 
   // Write best models by language
-  if (Object.keys(bestModelsByLanguage).length > 0) {
-    let bestMd = '# Best Model by Language\n\n';
-    for (const lang of languages) {
-      const bestModel = bestModelsByLanguage[lang];
-      if (bestModel) {
-        const profile = modelRetentionProfiles[bestModel];
-        const langProfile = profile?.languageBreakdown[lang as RealizationLanguage];
-        if (langProfile) {
-          bestMd += `## ${lang.toUpperCase()}: ${bestModel}\n`;
-          bestMd += `- Retention Rate: ${(langProfile.retentionRate * 100).toFixed(1)}%\n`;
-          bestMd += `- Avg Predicate Match: ${langProfile.avgPredicateMatch.toFixed(3)}\n`;
-          bestMd += `- Avg Role Match: ${langProfile.avgRoleMatch.toFixed(3)}\n\n`;
-        }
+  let bestMd = '# Best Model by Language\n\n';
+  for (const lang of languages) {
+    const bestModelIds = bestModelsByLanguage[lang];
+    if (bestModelIds?.length) {
+      const bestModel = bestModelIds[0]!;
+      const profile = modelRetentionProfiles[bestModel];
+      const langProfile = profile?.languageBreakdown[lang as RealizationLanguage];
+      if (langProfile) {
+        bestMd += `## ${lang.toUpperCase()}: ${bestModelIds.join(', ')}\n`;
+        bestMd += `- Retention Rate: ${(langProfile.retentionRate * 100).toFixed(1)}%\n`;
+        bestMd += `- Avg Predicate Match: ${langProfile.avgPredicateMatch.toFixed(3)}\n`;
+        bestMd += `- Avg Role Match: ${langProfile.avgRoleMatch.toFixed(3)}\n\n`;
       }
+    } else {
+      bestMd += `## ${lang.toUpperCase()}: no evaluated model\n\n`;
     }
-    await writeFile(path.join(outputDir, 'best-models-by-language.md'), bestMd, 'utf-8');
   }
+  await writeFile(path.join(outputDir, 'best-models-by-language.md'), bestMd, 'utf-8');
 
   // Write per-language markdown reports
   for (const lang of languages) {
