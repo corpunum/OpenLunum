@@ -1,0 +1,74 @@
+name: quality-gates
+
+on:
+  pull_request:
+    paths:
+      - 'packages/core/src/**'
+      - 'packages/eval/src/**'
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.13.1
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run quality gates
+        id: gates
+        run: |
+          set -euo pipefail
+          EXIT_CODE=$(node -e "
+            const { checkQualityGates } = require('./packages/core/dist/src/quality-gate-ci.js');
+            process.exit(checkQualityGates({ runContextQuality: false }));
+          ")
+          echo "exit_code=${EXIT_CODE}" >> "$GITHUB_OUTPUT"
+          echo "::notice::Quality gate exit code: ${EXIT_CODE}"
+
+      - name: Generate CI report
+        if: always()
+        run: |
+          node -e "
+            const { runQualityGates, generateCIReport } = require('./packages/core/dist/src/quality-gate-ci.js');
+            const report = runQualityGates({ runContextQuality: false });
+            const md = generateCIReport(report);
+            require('fs').writeFileSync('reports/quality-gates-ci.md', md);
+          " 2>/dev/null || echo "Report generation optional"
+
+      - name: Upload quality gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-gate-report
+          path: reports/quality-gates-ci.md
+          retention-days: 7
+
+      - name: Fail on gate failure
+        if: steps.gates.outputs.exit_code == '2'
+        run: |
+          echo "::error::Quality gates failed (exit code: 2)"
+          exit 1
+
+      - name: Warn on gate warning
+        if: steps.gates.outputs.exit_code == '1'
+        run: |
+          echo "::warning::Quality gates warned (exit code: 1)"
