@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFile, writeFile } from 'node:fs/promises';
-import { compileContext, createRecord, deriveLunumSidecar, deriveSurfaceSidecar, fingerprintSem, renderSem, validateSem } from '@corpunum/lunum';
+import { compileContext, createRecord, deriveLunumSidecar, deriveSurfaceSidecar, fingerprintSem, renderSem, validateSem, runQualityGates, generateCIReport } from '@corpunum/lunum';
 import type { ContextMessage, LunumSem, LunumRecord } from '@corpunum/lunum';
 
 function flag(name: string): string | undefined {
@@ -186,7 +186,50 @@ async function main(): Promise<void> {
     }
     return;
   }
-  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> [--from 0.1] [--to 0.2] [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full]');
+  if (command === 'quality-gate') {
+    // Run quality gates on records
+    // Usage: lunum quality-gate --records <file> [--min-pass-rate 0.8] [--strict] [--output report.md]
+    const recordsFile = flag('records') || flag('file') || process.argv[3];
+    const minPassRate = flag('min-pass-rate') ? parseFloat(flag('min-pass-rate')!) : 0.8;
+    const strict = process.argv.includes('--strict');
+    const outputReport = flag('output');
+
+    let records: LunumRecord[];
+    if (recordsFile) {
+      const data = await readJson<any>(recordsFile);
+      records = Array.isArray(data) ? data : [data];
+    } else {
+      // Try stdin
+      const chunks: Buffer[] = [];
+      process.stdin.on('data', (chunk: Buffer) => chunks.push(chunk));
+      const input = await new Promise<string>((resolve) => {
+        process.stdin.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+      });
+      const data = JSON.parse(input);
+      records = Array.isArray(data) ? data : [data];
+    }
+
+    if (records.length === 0) {
+      console.error('Error: no records provided');
+      process.exitCode = 1;
+      return;
+    }
+
+    const report = runQualityGates(records, { minimumPassRate: minPassRate, strictMode: strict });
+    const markdown = generateCIReport(report);
+
+    if (outputReport) {
+      await writeFile(outputReport, markdown, 'utf-8');
+      console.log(`Quality gate report written to ${outputReport}`);
+      console.log(`Exit code: ${report.exitCode}`);
+    } else {
+      console.log(markdown);
+    }
+
+    process.exitCode = report.exitCode;
+    return;
+  }
+  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> [--from 0.1] [--to 0.2] [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full] | quality-gate --records <file> [--min-pass-rate 0.8] [--strict] [--output report.md]');
   process.exitCode = 2;
 }
 
