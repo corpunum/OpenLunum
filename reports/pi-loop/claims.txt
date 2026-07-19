@@ -27,10 +27,12 @@
 - agent/docs/sync-4a2896fc
 - agent/docs/sync-4c44df1c
 - agent/docs/sync-4cdbd848
+- agent/docs/sync-53c151cf
 - agent/docs/sync-5428177e
 - agent/docs/sync-57beaadb
 - agent/docs/sync-58fd0d8b
 - agent/docs/sync-5c920edf
+- agent/docs/sync-60cf4713
 - agent/docs/sync-652d5da7
 - agent/docs/sync-66fdc244
 - agent/docs/sync-6ba1cb94
@@ -71,6 +73,7 @@
 - agent/docs/sync-fae49be6
 - agent/docs/sync-fb2e3b8d
 - agent/docs/sync-fe1f05a8
+- agent/docs/sync-ff33cea3
 - agent/docs/sync-ffc633fc
 - agent/eval/scratch
 - agent/evidence/nightly-20260718
@@ -137,6 +140,7 @@
 - agent/qwen/issue-11/schema-validator-deep
 - agent/qwen/issue-11/schema-validator-deep-rebased
 - agent/qwen/migration-bidirectional
+- agent/qwen/migration/bidirectional-tests-v2
 - agent/qwen/migration/coherent-bidirectional
 - agent/qwen/migration/golden-vectors
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline
@@ -161,6 +165,7 @@
 - agent/qwen/repository-reliability/release-provenance
 - agent/qwen/retention-experiment
 - agent/qwen/retention/regression-gate
+- agent/qwen/retention/regression-gate-rebuild
 - agent/qwen/retrieval/cross-lingual
 - agent/qwen/safety/compatibility-matrix
 - agent/qwen/safety/mixed-context-quality-gates
@@ -169,8 +174,11 @@
 - agent/qwen/safety/prompt-injection-resistance-rebased
 - agent/qwen/safety/quality-gate-ci
 - agent/qwen/safety/quality-gate-ci-2
+- agent/qwen/safety/quality-gate-ci-rebuild
 - agent/qwen/safety/quality-gate-ci-v2
 - agent/qwen/safety/rollback-process
+- agent/qwen/safety/rollback-process-rebuild
+- agent/qwen/safety/rollback-process-v2
 - agent/qwen/safety/threat-model-mitigations
 - agent/qwen/schema/bidirectional-fp-migration
 - agent/qwen/schema-changelog
