@@ -49,6 +49,10 @@ function makeRecord(id: string, sourceText: string): LunumRecord {
   };
 }
 
+function tamperRecord(record: LunumRecord, badFingerprint: string): LunumRecord {
+  return { ...record, fingerprint: badFingerprint };
+}
+
 function computeSourceDigest(source: { text: string; language: string | null }): string {
   const normalized = `${source.language || ''}::${source.text}`;
   return crypto.createHash('sha256').update(normalized).digest('hex');
@@ -129,14 +133,10 @@ describe('rollback-process', () => {
   });
 
   it('rollbackBatch detects mixed success/failure', () => {
-    const records = [
-      makeRecord('test-1', 'Good source'),
-      makeRecord('test-2', 'Good source')
-    ];
-    // Tamper with one record
-    (records[0] as any).fingerprint = 'lfp:0.2:sha256:bad';
+    const goodRecord = makeRecord('test-1', 'Good source');
+    const badRecord = tamperRecord(goodRecord, 'lfp:0.2:sha256:bad');
 
-    const summary = rollbackBatch(records);
+    const summary = rollbackBatch([goodRecord, badRecord]);
 
     assert.ok(summary.failed > 0 || summary.overallIntegrityStatus === 'failed');
   });
@@ -152,5 +152,98 @@ describe('rollback-process', () => {
     const record = makeRecord('test-1', 'Test text');
 
     assert.ok(!verifySourceAuthentic(record, 'wrong-digest'));
+  });
+
+  // ── Fail-closed behavior tests (rebuild of PR #127) ────────────────
+
+  it('rollbackToSource fails when source text is empty (fail closed)', () => {
+    const record = makeRecord('test-1', '');
+    const result = rollbackToSource(record);
+
+    // Empty source should be a failure, not just a warning
+    assert.equal(result.success, false);
+    assert.equal(result.sourceStatus, 'absent');
+  });
+
+  it('rollbackToSource succeeds when fingerprint verified but provenance absent', () => {
+    const sem: LunumSem = {
+      schema: 'lunum-sem/0.1-draft',
+      world: 'test',
+      kind: 'fact',
+      clauses: [{ predicate: 'test', roles: {} }]
+    };
+    const fingerprint = migrateFingerprint(sem);
+    const record: LunumRecord = {
+      recordVersion: 'lunum-record/0.2',
+      source: { text: 'Test source', language: 'en', role: 'user', ref: null },
+      sem,
+      fingerprint,
+      renderings: {},
+      policy: { eligible: true, category: 'test', risk: 'low' as const, confidence: 0.9, reasons: ['test'] },
+      meta: {}
+    };
+    const result = rollbackToSource(record);
+
+    // Integrity verified, provenance absent, source verified — should succeed
+    assert.equal(result.success, true);
+    assert.equal(result.integrityStatus, 'verified');
+    assert.equal(result.provenanceStatus, 'absent');
+    assert.equal(result.sourceStatus, 'verified');
+  });
+
+  it('rollbackToSource fails when provenance digest mismatch', () => {
+    const record = makeRecord('test-1', 'Test source');
+    const result = rollbackToSource(record, { expectedProvenanceDigest: 'wrong-digest' });
+
+    assert.equal(result.success, false);
+    assert.equal(result.provenanceStatus, 'failed');
+  });
+
+  it('rollbackToSource fails when source digest mismatch', () => {
+    const record = makeRecord('test-1', 'Test source');
+    const result = rollbackToSource(record, { expectedSourceDigest: 'wrong-digest' });
+
+    assert.equal(result.success, false);
+    assert.equal(result.sourceStatus, 'failed');
+  });
+
+  it('rollbackToSource succeeds with matching external source digest', () => {
+    const record = makeRecord('test-1', 'Test source');
+    const sourceDigest = computeSourceDigest(record.source);
+
+    const result = rollbackToSource(record, {
+      expectedSourceDigest: sourceDigest
+    });
+
+    assert.equal(result.success, true);
+    assert.equal(result.integrityStatus, 'verified');
+    assert.equal(result.sourceStatus, 'verified');
+  });
+
+  it('rollbackBatch returns correct overall statuses', () => {
+    const goodRecord = makeRecord('test-1', 'Good source');
+    const badRecord = tamperRecord(goodRecord, 'lfp:0.2:sha256:bad');
+
+    const summary = rollbackBatch([goodRecord, badRecord]);
+
+    assert.equal(summary.total, 2);
+    assert.equal(summary.success, 1);
+    assert.equal(summary.failed, 1);
+    assert.equal(summary.overallIntegrityStatus, 'failed');
+  });
+
+  it('rollbackBatch with all good records returns verified overall status', () => {
+    const records = [
+      makeRecord('test-1', 'Source 1'),
+      makeRecord('test-2', 'Source 2'),
+      makeRecord('test-3', 'Source 3')
+    ];
+
+    const summary = rollbackBatch(records);
+
+    assert.equal(summary.total, 3);
+    assert.equal(summary.success, 3);
+    assert.equal(summary.failed, 0);
+    assert.equal(summary.overallIntegrityStatus, 'verified');
   });
 });

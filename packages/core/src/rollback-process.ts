@@ -143,7 +143,7 @@ export function rollbackToSource(
     details.push(`Fingerprint mismatch: expected ${expectedFp.slice(0, 20)}..., got ${record.fingerprint.slice(0, 20)}...`);
   }
 
-  // 2. Provenance verification: check provenance chain
+  // 2. Provenance verification: check provenance chain against external digest
   const provenanceDigest = computeProvenanceDigest(record.sem);
   if (options.expectedProvenanceDigest && provenanceDigest) {
     if (options.expectedProvenanceDigest === provenanceDigest) {
@@ -153,17 +153,17 @@ export function rollbackToSource(
       provenanceStatus = 'failed';
       details.push('Provenance digest mismatch with external source');
     }
+  } else if (options.expectedProvenanceDigest && !provenanceDigest) {
+    // External digest provided but cannot compute local digest
+    provenanceStatus = 'failed';
+    details.push('External provenance digest provided but local digest not computable');
   } else if (provenanceDigest) {
-    if (record.sem.provenance && typeof record.sem.provenance === 'object' &&
-        Object.keys(record.sem.provenance).length > 0) {
-      provenanceStatus = 'verified';
-      details.push('Provenance chain present and non-empty');
-    } else {
-      provenanceStatus = 'absent';
-      warnings.push('No provenance chain available for verification');
-    }
+    // No external digest to compare against — provenance is present but not independently verified
+    provenanceStatus = 'absent';
+    warnings.push('Provenance present but not verified against external source');
   } else {
-    warnings.push('No provenance digest computable');
+    provenanceStatus = 'absent';
+    warnings.push('No provenance chain available for verification');
   }
 
   // 3. Source authenticity: verify source text is consistent
@@ -184,9 +184,14 @@ export function rollbackToSource(
     warnings.push('Source text is empty or missing');
   }
 
-  // Fail closed: rollback succeeds if integrity is verified or absent (no fingerprint to check)
-  // but fails if integrity check actually failed
-  const success = integrityStatus !== 'failed';
+  // Fail closed: rollback succeeds only when all present evidence is verified.
+  // - If integrity is absent (no fingerprint), that's acceptable (no evidence to fail).
+  // - If provenance is absent, that's acceptable (no chain to verify).
+  // - If source is absent (empty text), that's a failure — we need the source to roll back to.
+  // - If any present evidence fails, rollback fails.
+  const anyFailed = integrityStatus === 'failed' || provenanceStatus === 'failed' || sourceStatus === 'failed';
+  const sourceRequired = sourceStatus === 'absent'; // Empty source text is a failure
+  const success = !anyFailed && !sourceRequired;
 
   return {
     success,
