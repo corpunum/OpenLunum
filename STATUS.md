@@ -55,7 +55,7 @@
 | Exact semantic fingerprint | Reference implementation | Versioned exact identity, not fuzzy equivalence |
 | Near-semantic fingerprint | Prototype | Feature extraction, configurable similarity threshold, nfp:* format; similarity comparison implemented |
 | Reference renderer | Prototype | Conservative and testable; not tokenizer-optimized |
-| Renderer profiles (safe/short/tight) | Experiment | Measured without changing semantics; not production-proven |
+| Renderer profiles (safe/short/tight) | Reference | Deterministic golden-output tests on 10+ diverse inputs; model-specific tight profiles via Token Atlas; per-model best profile selection available |
 | Tokenizer measurement framework | Reference implementation | Cross-model measurement with Token Atlas; per-model profile selection available |
 | Mixed-context compiler | Prototype | Policy skeleton with natural fallback |
 | Raw multilingual parser | Experiment harness | Local models can be evaluated; no production parser is approved |
@@ -106,4 +106,4 @@
 
 ## Honest boundary
 
-OpenLunum has an architecture, a reference core, preserved evidence, adoption contracts, and a frozen Lunum-Sem 0.2 schema with migration test suite and bidirectional migration (0.1 ↔ 0.2) with schema validation. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products. Token Atlas provides cross-model measurements but per-model profile selection requires per-model testing. CI hard gates exist for conformance but not all merge gates are active. Release gates 1 and 2 are substantially addressed by the schema 0.2 freeze, migration test suite, and bidirectional migration with validation; remaining gates require further evidence. Multilingual round-trip retention is now experimentally measured (EN/EL/ES/ID) but per-model retention profiles are not yet established.
+OpenLunum has an architecture, a reference core, preserved evidence, adoption contracts, and a frozen Lunum-Sem 0.2 schema with migration test suite and bidirectional migration (0.1 ↔ 0.2) with schema validation. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products. Token Atlas provides cross-model measurements; renderer profiles are now Reference with golden-output tests, though per-model profile selection still requires per-model testing. CI hard gates exist for conformance but not all merge gates are active. Release gates 1 and 2 are substantially addressed by the schema 0.2 freeze, migration test suite, and bidirectional migration with validation; remaining gates require further evidence. Renderer profiles (safe/short/tight) upgraded to Reference in PR #182. Multilingual round-trip retention is now experimentally measured (EN/EL/ES/ID) but per-model retention profiles are not yet established.
