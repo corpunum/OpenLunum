@@ -177,4 +177,4 @@ User notification → desktop notify-send for critical issues
 - **Merges**: recent main merges are green; no reverts reported.
 - **CI**: still requires follow-up for billing/runner reliability; the local pipeline is nominal.
 - **Throughput action**: claim generation now lists only open-PR or unpublished agent branches, so historical merged branches no longer force the worker into rebuild mode. The worker prompt now explicitly rejects loop telemetry and generated artifacts. `pnpm verify` passed after this orchestration change.
-- **Protected PRs**: #147 and #150 are conflicted/draft and require a clean scoped rebuild plus maintainer review; protections remain in force. Do not force-merge them. #91 remains stale/no-diff and should be rebuilt or closed after its successor exists.
+- **Protected PR triage**: closed stale/conflicted drafts #147, #150, #127, and #91 with rebuild guidance. #147's gate runner was functionally invalid; #150 could mark unauthenticated provenance as verified. Rebuild each from current main in narrowly scoped branches; protections remain in force and no PR was force-merged.
