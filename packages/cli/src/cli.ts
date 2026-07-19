@@ -40,40 +40,116 @@ async function main(): Promise<void> {
     const fromVersion = flag('from') ?? '0.1';
     const toVersion = flag('to') ?? '0.2';
     const dryRun = process.argv.includes('--dry-run');
+
+    const { migrateForward01to02, migrateBackward02to01, validateSemSchema, validateRecord } = require('@corpunum/lunum');
+
     const data = await readJson<any>(path);
     const records = Array.isArray(data) ? data : [data];
-    const changes: Array<{ id: string; oldSchema: string; newSchema: string }> = [];
-    const warnings: string[] = [];
+    const changes: Array<{ id: string; warnings: string[]; sourceValid: boolean; destValid: boolean }> = [];
+    const allWarnings: string[] = [];
     let migrated = 0;
     let unchanged = 0;
+    let failed = 0;
+
     for (const record of records) {
-      const oldSchema = record.sem?.schema ?? 'unknown';
-      if (!oldSchema.includes(fromVersion)) {
-        warnings.push(`${record.id || 'unknown'}: schema ${oldSchema} does not match --from ${fromVersion}`);
+      const recordId = record.id || record.fingerprint?.slice(0, 20) || 'unknown';
+
+      // Validate source schema
+      const sourceValid = validateRecord(record) && validateSemSchema(record.sem);
+      if (!sourceValid) {
+        allWarnings.push(`${recordId}: source record validation failed`);
         unchanged++;
         continue;
       }
-      const newSem = { ...record.sem, schema: `lunum-sem/${toVersion}` };
+
+      // Perform migration
+      let result;
+      if (fromVersion === '0.1' && toVersion === '0.2') {
+        result = migrateForward01to02(record);
+      } else if (fromVersion === '0.2' && toVersion === '0.1') {
+        result = migrateBackward02to01(record);
+      } else {
+        allWarnings.push(`${recordId}: unsupported migration ${fromVersion}→${toVersion}`);
+        unchanged++;
+        continue;
+      }
+
+      if (!result.sourceValid || !result.destValid) {
+        allWarnings.push(`${recordId}: migration validation failed (source: ${result.sourceValid}, dest: ${result.destValid})`);
+        failed++;
+        continue;
+      }
+
       changes.push({
-        id: record.id || 'unknown',
-        oldSchema,
-        newSchema: newSem.schema
+        id: recordId,
+        warnings: result.warnings.map((w: { message: string }) => w.message),
+        sourceValid: result.sourceValid,
+        destValid: result.destValid
       });
+
+      if (result.warnings.length > 0) {
+        allWarnings.push(...result.warnings.map((w: { message: string }) => `${recordId}: ${w.message}`));
+      }
+
       migrated++;
     }
+
+    // Check if any failures should cause exit code 1 (fail closed)
+    const hasFailures = failed > 0;
+    const hasWarnings = allWarnings.length > 0;
+
     if (dryRun) {
-      console.log(JSON.stringify({ dryRun: true, from: fromVersion, to: toVersion, total: records.length, migrated, unchanged, changes, warnings }, null, 2));
+      const output = {
+        dryRun: true,
+        from: fromVersion,
+        to: toVersion,
+        total: records.length,
+        migrated,
+        unchanged,
+        failed,
+        changes,
+        warnings: allWarnings
+      };
+      console.log(JSON.stringify(output, null, 2));
+      if (hasFailures) process.exitCode = 1;
     } else {
-      // Transform and write back
+      // Transform records with migration results
+      let idx = 0;
       const transformed = records.map(record => {
-        const oldSchema = record.sem?.schema ?? 'unknown';
-        if (!oldSchema.includes(fromVersion)) return record;
-        const newSem = { ...record.sem, schema: `lunum-sem/${toVersion}` };
-        return { ...record, sem: newSem };
+        const recordId = record.id || record.fingerprint?.slice(0, 20) || 'unknown';
+        const change = changes[idx];
+        idx++;
+        if (!change || !change.destValid) return record;
+
+      // Re-run migration to get the migrated record
+      let migratedRecord;
+      if (fromVersion === '0.1' && toVersion === '0.2') {
+        migratedRecord = migrateForward01to02(record).record;
+      } else {
+        migratedRecord = migrateBackward02to01(record).record;
+      }
+        return migratedRecord;
       });
+
       const output = Array.isArray(data) ? transformed : transformed[0];
-      await writeFile(path, JSON.stringify(output, null, 2));
-      console.log(JSON.stringify({ dryRun: false, from: fromVersion, to: toVersion, total: records.length, migrated, unchanged, changes, warnings }, null, 2));
+      // Atomic write: write to temp file, then rename
+      const tmpPath = path + '.tmp';
+      await writeFile(tmpPath, JSON.stringify(output, null, 2));
+      // Use fs.rename for atomicity (same filesystem)
+      const { rename } = await import('node:fs/promises');
+      await rename(tmpPath, path);
+
+      console.log(JSON.stringify({
+        dryRun: false,
+        from: fromVersion,
+        to: toVersion,
+        total: records.length,
+        migrated,
+        unchanged,
+        failed,
+        warnings: allWarnings
+      }, null, 2));
+      if (hasFailures) process.exitCode = 1;
     }
     return;
   }
