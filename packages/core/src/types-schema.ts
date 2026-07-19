@@ -22,12 +22,12 @@ export interface ExperimentSchema01 {
 export interface LunumRecordSchema02 {
   recordVersion: "lunum-record/0.2";
   source: {     text: string,     language?: string | null,     role?: string | null,     ref?: string | null,     format?: "natural" | "structured" | "mixed" };
-  sem: {     schema: "lunum-sem/0.2",     world: string,     kind: string,     clauses: v02Clause[],     references?: v02Reference[],     provenance?: {     source?: string,     author?: string,     timestamp?: string,     license?: string },     annotations?: {     confidence?: number,     tags?: string[],     notes?: string } };
+  sem: {     schema: "lunum-sem/0.2",     world: string,     kind: string,     clauses: v02Clause[],     references?: Reference[],     provenance?: {     source?: string,     author?: string,     timestamp?: Iso8601,     license?: string },     annotations?: {     confidence?: Confidence,     tags?: string[],     notes?: string } };
   fingerprint: string;
   nearSemanticFingerprint?: string;
   renderings: Record<string, unknown>;
-  policy: {     eligible: boolean,     risk: "low" | "medium" | "high" | "unknown",     confidence: number,     reasons?: string[] };
-  meta?: {     created?: string,     modified?: string,     schemaVersion?: "0.2" };
+  policy: {     eligible: boolean,     risk: "low" | "medium" | "high" | "unknown",     confidence: Confidence,     reasons?: string[] };
+  meta?: {     created?: Iso8601,     modified?: Iso8601,     schemaVersion?: "0.2" };
 }
 
 export interface LunumRecordSchema01 {
@@ -45,14 +45,14 @@ export interface LunumSemSchema02 {
   world: string;
   kind: string;
   clauses: v02Clause[];
-  references?: v02Reference[];
-  provenance?: {     source?: string,     author?: string,     timestamp?: string,     license?: string };
-  annotations?: {     confidence?: number,     tags?: string[],     notes?: string };
+  references?: Reference[];
+  provenance?: {     source?: string,     author?: string,     timestamp?: Iso8601,     license?: string };
+  annotations?: {     confidence?: Confidence,     tags?: string[],     notes?: string };
 }
 
 export type v02Term = Record<string, unknown>;
 export type v02Reference = {     id: string,     url: string,     title?: string,     type?: string };
-export type v02Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: "certainty" | "possibility" | "necessity" | "obligation" | null,     time?: unknown,     conditions?: v02Clause[],     consequences?: v02Clause[],     annotations?: {     confidence?: number,     evidence?: string } };
+export type v02Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: "certainty" | "possibility" | "necessity" | "obligation" | null,     time?: unknown,     conditions?: v02Clause[],     consequences?: v02Clause[],     annotations?: {     confidence?: Confidence,     evidence?: string } };
 
 export interface LunumSemSchema01 {
   schema: "lunum-sem/0.1-draft";
