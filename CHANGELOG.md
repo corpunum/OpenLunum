@@ -34,6 +34,9 @@
 ### Changed — Renderer (PR #114)
 - **Tokenizer optimization pass:** Model-specific tight profiles that provably do not change semantics. Per-model best profile selection via Token Atlas measurements.
 
+### Added — Schema Migration (PR #144)
+- **Bidirectional migration (0.1 ↔ 0.2) with schema validation:** `migrateForward01to02()` and `migrateBackward02to01()` validate source and destination schemas, emit field-level warnings for data loss (e.g., modality locked to enum, provenance field set, annotations field set), regenerate fingerprints at the target version, and preserve input order. `migrateRecordsForward()` and `migrateRecordsBackward()` batch the operations. `roundTripMigration()` verifies 0.1→0.2→0.1 round-trips with explicit loss warnings. Types in `packages/core/src/fingerprint-migration.ts`. 190 lines of tests in `packages/core/test/fingerprint-migration.test.ts`.
+
 ### Added — Near-Semantic Fingerprints (PR #137, PR #136)
 - **Near-semantic fingerprint implementation:** Feature extraction, configurable similarity threshold, nfp:* fingerprint format, similarity comparison with threshold-based matching. Types in `packages/core/src/near-semantic-fingerprints.ts`.
 - **Near-semantic + exact fingerprint interop:** Records carry both exact (lfp:) and near-semantic (nfp:) fingerprints; hybrid search tries exact match first, then falls back to near-semantic. 13 new tests in `packages/core/test/near-semantic-exact-interop.test.ts`.
