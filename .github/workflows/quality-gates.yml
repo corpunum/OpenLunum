@@ -1,0 +1,49 @@
+name: quality-gates
+
+on:
+  pull_request:
+    paths:
+      - 'packages/core/src/**'
+      - 'packages/eval/src/**'
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Run quality gates
+        run: |
+          set -euo pipefail
+          # Run the quality gate CI runner as a quick smoke check
+          # Exit code 0 = pass, 1 = warn, 2 = fail
+          if ! node -e "
+            const { runQualityGates } = require('./packages/core/dist/src/quality-gate-ci.js');
+            // Smoke test: run with empty results to verify module loads and produces a report
+            const report = runQualityGates([], { minimumPassRate: 0.8, strictMode: false });
+            if (!report.ok || report.exitCode !== 0) {
+              console.error('Smoke test failed:', report);
+              process.exit(2);
+            }
+            console.log('Quality gate CI module: OK (exit', report.exitCode, ')');
+          "; then
+            echo "::error::Quality gate CI module failed to load or produce valid report"
+            exit 2
+          fi
+      - name: Run quality-gate-ci unit tests
+        run: node --test packages/core/dist/test/quality-gate-ci.test.js
+      - name: Run downstream-quality tests (gate data validation)
+        run: node --test packages/core/dist/test/downstream-quality.test.js
