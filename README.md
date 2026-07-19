@@ -307,6 +307,10 @@ profiles/renderers/       Renderer profile definitions (safe, short, tight).
 scripts/                  Automation: nightly window, release sign/verify, schema-to-ts, validation.
 test-fixtures/            Integration and retrieval test fixtures with manifests.
 python/                   Python research workspace for model, tokenizer, corpus, and statistics work.
+examples/                 Example semantic records for quick-start and pipeline adoption.
+datasets/                 Evaluation datasets: dev, adversarial, protected, and manifests; see DATASET_POLICY.md.
+experiments/              Worker experiment manifests and evidence directories.
+reports/                  Structured evidence reports from nightly runs, conformance gates, and campaign tracking.
 eval/                     metrics, fixtures, gates, and historical ledger
 research/archive/         complete initial handover and prior experiments
 docs/                     vision, architecture, language, security, versioning
