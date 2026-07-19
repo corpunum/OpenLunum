@@ -12,6 +12,7 @@
 - agent/docs/sync-1272f7ba
 - agent/docs/sync-18a53906
 - agent/docs/sync-18a9c9c1
+- agent/docs/sync-1a9b1157
 - agent/docs/sync-1c04461b
 - agent/docs/sync-1e4a99dc
 - agent/docs/sync-287da81c
@@ -25,6 +26,7 @@
 - agent/docs/sync-48f23688
 - agent/docs/sync-4a2896fc
 - agent/docs/sync-4c44df1c
+- agent/docs/sync-4cdbd848
 - agent/docs/sync-5428177e
 - agent/docs/sync-57beaadb
 - agent/docs/sync-58fd0d8b
@@ -51,6 +53,7 @@
 - agent/docs/sync-a6fbb9d9
 - agent/docs/sync-a89b0540
 - agent/docs/sync-adefb01c
+- agent/docs/sync-b80f55d3
 - agent/docs/sync-bceb401a
 - agent/docs/sync-c062de74
 - agent/docs/sync-c4637d7f
@@ -66,7 +69,9 @@
 - agent/docs/sync-f6aaf752
 - agent/docs/sync-f8c11736
 - agent/docs/sync-fae49be6
+- agent/docs/sync-fb2e3b8d
 - agent/docs/sync-fe1f05a8
+- agent/docs/sync-ffc633fc
 - agent/eval/scratch
 - agent/evidence/nightly-20260718
 - agent/evidence/nightly-20260719
@@ -99,6 +104,7 @@
 - agent/qwen/campaign/pr-fixing-check
 - agent/qwen/campaign/pr-verification
 - agent/qwen/campaign/status-report
+- agent/qwen/campaign/status-report-20260719
 - agent/qwen/campaign/status-verify
 - agent/qwen/campaign/work-queue-v2-update
 - agent/qwen/check-issue11-branches
@@ -131,6 +137,7 @@
 - agent/qwen/issue-11/schema-validator-deep
 - agent/qwen/issue-11/schema-validator-deep-rebased
 - agent/qwen/migration-bidirectional
+- agent/qwen/migration/coherent-bidirectional
 - agent/qwen/migration/golden-vectors
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline
 - agent/qwen/multilingual-parsing/multilingual-parse-baseline-en
@@ -162,6 +169,7 @@
 - agent/qwen/safety/prompt-injection-resistance-rebased
 - agent/qwen/safety/quality-gate-ci
 - agent/qwen/safety/quality-gate-ci-2
+- agent/qwen/safety/quality-gate-ci-v2
 - agent/qwen/safety/rollback-process
 - agent/qwen/safety/threat-model-mitigations
 - agent/qwen/schema/bidirectional-fp-migration
@@ -169,6 +177,7 @@
 - agent/qwen/schema-freeze-0.2
 - agent/qwen/schema-frozen-0.2
 - agent/qwen/schema-json-ref-crossrefs
+- agent/qwen/schema/json-ref-crossrefs-v2
 - agent/qwen/schema/nested-config-additional-properties
 - agent/qwen/semantic-contract/conformance-gates
 - agent/qwen/semantic-contract/expand-typed-structures
