@@ -1,7 +1,22 @@
 #!/usr/bin/env node
-import { readFile, writeFile } from 'node:fs/promises';
-import { compileContext, createRecord, deriveLunumSidecar, deriveSurfaceSidecar, fingerprintSem, renderSem, validateSem } from '@corpunum/lunum';
-import type { ContextMessage, LunumSem, LunumRecord } from '@corpunum/lunum';
+import { readFile, rename, unlink, writeFile } from 'node:fs/promises';
+import {
+  compileContext,
+  createRecord,
+  deriveLunumSidecar,
+  deriveSurfaceSidecar,
+  fingerprintSem,
+  migrateBackward02to01,
+  migrateForward01to02,
+  parseFingerprint,
+  RECORD_SCHEMA,
+  RECORD_SCHEMA_02,
+  renderSem,
+  SEM_SCHEMA,
+  SEM_SCHEMA_02,
+  validateSem,
+} from '@corpunum/lunum';
+import type { ContextMessage, LunumSem, LunumRecord, MigrationWarning } from '@corpunum/lunum';
 
 function flag(name: string): string | undefined {
   const index = process.argv.indexOf(`--${name}`);
@@ -10,6 +25,166 @@ function flag(name: string): string | undefined {
 
 async function readJson<T>(path: string): Promise<T> {
   return JSON.parse(await readFile(path, 'utf8')) as T;
+}
+
+function normalizedVersion(value: string): '0.1' | '0.2' | null {
+  const normalized = value.trim().toLowerCase();
+  if (normalized === '0.1' || normalized === '0.1-draft' || normalized.endsWith('/0.1-draft')) return '0.1';
+  if (normalized === '0.2' || normalized.endsWith('/0.2')) return '0.2';
+  return null;
+}
+
+function migrationDirection(fromRaw: string, toRaw: string): { from: '0.1' | '0.2'; to: '0.1' | '0.2' } {
+  const from = normalizedVersion(fromRaw);
+  const to = normalizedVersion(toRaw);
+  if (!from || !to || from === to || !((from === '0.1' && to === '0.2') || (from === '0.2' && to === '0.1'))) {
+    throw new Error(`Unsupported migration direction: ${fromRaw} -> ${toRaw}. Supported directions are 0.1 -> 0.2 and 0.2 -> 0.1.`);
+  }
+  return { from, to };
+}
+
+function recordId(record: Partial<LunumRecord>, index: number): string {
+  return typeof record.fingerprint === 'string' && record.fingerprint.length > 0
+    ? record.fingerprint.slice(0, 24)
+    : `record-${index}`;
+}
+
+function sourceVersionMatches(record: Partial<LunumRecord>, from: '0.1' | '0.2'): boolean {
+  if (from === '0.1') {
+    return record.recordVersion === RECORD_SCHEMA && record.sem?.schema === SEM_SCHEMA;
+  }
+  return record.recordVersion === RECORD_SCHEMA_02 && record.sem?.schema === SEM_SCHEMA_02;
+}
+
+function destinationVersionMatches(record: LunumRecord, to: '0.1' | '0.2'): boolean {
+  const parsedFingerprint = parseFingerprint(record.fingerprint);
+  if (to === '0.1') {
+    return record.recordVersion === RECORD_SCHEMA && record.sem.schema === SEM_SCHEMA && parsedFingerprint?.version === '0.1';
+  }
+  return record.recordVersion === RECORD_SCHEMA_02 && record.sem.schema === SEM_SCHEMA_02 && parsedFingerprint?.version === '0.2';
+}
+
+async function writeJsonAtomically(path: string, value: unknown): Promise<void> {
+  const tempPath = `${path}.tmp-${process.pid}-${Date.now()}`;
+  try {
+    await writeFile(tempPath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+    await rename(tempPath, path);
+  } catch (error) {
+    await unlink(tempPath).catch(() => undefined);
+    throw error;
+  }
+}
+
+async function runMigrationCommand(): Promise<void> {
+  const path = flag('file') || process.argv[3];
+  if (!path) throw new Error('<file> or --file <path> is required');
+
+  const direction = migrationDirection(flag('from') ?? '0.1', flag('to') ?? '0.2');
+  const dryRun = process.argv.includes('--dry-run');
+  const originalBytes = await readFile(path, 'utf8');
+  const data = JSON.parse(originalBytes) as unknown;
+  const rawRecords = Array.isArray(data) ? data : [data];
+
+  const migratedRecords: LunumRecord[] = [];
+  const results: Array<{
+    index: number;
+    id: string;
+    status: 'migrated' | 'failed';
+    oldRecordVersion: string | null;
+    newRecordVersion: string | null;
+    oldSchema: string | null;
+    newSchema: string | null;
+    oldFingerprint: string | null;
+    newFingerprint: string | null;
+    warnings: MigrationWarning[];
+    errors: string[];
+  }> = [];
+
+  for (const [index, raw] of rawRecords.entries()) {
+    const record = raw as Partial<LunumRecord>;
+    const id = recordId(record, index);
+    const errors: string[] = [];
+    let warnings: MigrationWarning[] = [];
+    let migratedRecord: LunumRecord | null = null;
+
+    if (!record || typeof record !== 'object') {
+      errors.push('record must be an object');
+    } else if (!sourceVersionMatches(record, direction.from)) {
+      errors.push(`source record must have ${direction.from === '0.1' ? RECORD_SCHEMA : RECORD_SCHEMA_02} and ${direction.from === '0.1' ? SEM_SCHEMA : SEM_SCHEMA_02}`);
+    } else {
+      try {
+        const migration = direction.from === '0.1'
+          ? migrateForward01to02(record as LunumRecord)
+          : migrateBackward02to01(record as LunumRecord);
+        warnings = migration.warnings;
+        migratedRecord = migration.record;
+        if (!migration.sourceValid) errors.push('source validation failed');
+        if (!migration.destValid) errors.push('destination validation failed');
+        if (!destinationVersionMatches(migration.record, direction.to)) {
+          errors.push('destination record version, semantic schema, or fingerprint version is inconsistent');
+        }
+      } catch (error) {
+        errors.push(error instanceof Error ? error.message : String(error));
+      }
+    }
+
+    if (errors.length > 0 || !migratedRecord) {
+      results.push({
+        index,
+        id,
+        status: 'failed',
+        oldRecordVersion: typeof record.recordVersion === 'string' ? record.recordVersion : null,
+        newRecordVersion: migratedRecord?.recordVersion ?? null,
+        oldSchema: typeof record.sem?.schema === 'string' ? record.sem.schema : null,
+        newSchema: migratedRecord?.sem.schema ?? null,
+        oldFingerprint: typeof record.fingerprint === 'string' ? record.fingerprint : null,
+        newFingerprint: migratedRecord?.fingerprint ?? null,
+        warnings,
+        errors,
+      });
+      continue;
+    }
+
+    migratedRecords.push(migratedRecord);
+    results.push({
+      index,
+      id,
+      status: 'migrated',
+      oldRecordVersion: record.recordVersion ?? null,
+      newRecordVersion: migratedRecord.recordVersion,
+      oldSchema: record.sem?.schema ?? null,
+      newSchema: migratedRecord.sem.schema,
+      oldFingerprint: record.fingerprint ?? null,
+      newFingerprint: migratedRecord.fingerprint,
+      warnings,
+      errors: [],
+    });
+  }
+
+  const failed = results.filter((result) => result.status === 'failed').length;
+  const summary = {
+    dryRun,
+    from: direction.from,
+    to: direction.to,
+    total: rawRecords.length,
+    migrated: results.length - failed,
+    failed,
+    warnings: results.reduce((count, result) => count + result.warnings.length, 0),
+    results,
+  };
+
+  if (failed > 0) {
+    console.error(JSON.stringify(summary, null, 2));
+    process.exitCode = 1;
+    return;
+  }
+
+  if (!dryRun) {
+    const output = Array.isArray(data) ? migratedRecords : migratedRecords[0];
+    await writeJsonAtomically(path, output);
+  }
+
+  console.log(JSON.stringify(summary, null, 2));
 }
 
 async function main(): Promise<void> {
@@ -35,52 +210,10 @@ async function main(): Promise<void> {
     return;
   }
   if (command === 'migrate') {
-    const path = flag('file') || process.argv[3];
-    if (!path) throw new Error('<file> or --file <path> is required');
-    const fromVersion = flag('from') ?? '0.1';
-    const toVersion = flag('to') ?? '0.2';
-    const dryRun = process.argv.includes('--dry-run');
-    const data = await readJson<any>(path);
-    const records = Array.isArray(data) ? data : [data];
-    const changes: Array<{ id: string; oldSchema: string; newSchema: string }> = [];
-    const warnings: string[] = [];
-    let migrated = 0;
-    let unchanged = 0;
-    for (const record of records) {
-      const oldSchema = record.sem?.schema ?? 'unknown';
-      if (!oldSchema.includes(fromVersion)) {
-        warnings.push(`${record.id || 'unknown'}: schema ${oldSchema} does not match --from ${fromVersion}`);
-        unchanged++;
-        continue;
-      }
-      const newSem = { ...record.sem, schema: `lunum-sem/${toVersion}` };
-      changes.push({
-        id: record.id || 'unknown',
-        oldSchema,
-        newSchema: newSem.schema
-      });
-      migrated++;
-    }
-    if (dryRun) {
-      console.log(JSON.stringify({ dryRun: true, from: fromVersion, to: toVersion, total: records.length, migrated, unchanged, changes, warnings }, null, 2));
-    } else {
-      // Transform and write back
-      const transformed = records.map(record => {
-        const oldSchema = record.sem?.schema ?? 'unknown';
-        if (!oldSchema.includes(fromVersion)) return record;
-        const newSem = { ...record.sem, schema: `lunum-sem/${toVersion}` };
-        return { ...record, sem: newSem };
-      });
-      const output = Array.isArray(data) ? transformed : transformed[0];
-      await writeFile(path, JSON.stringify(output, null, 2));
-      console.log(JSON.stringify({ dryRun: false, from: fromVersion, to: toVersion, total: records.length, migrated, unchanged, changes, warnings }, null, 2));
-    }
+    await runMigrationCommand();
     return;
   }
   if (command === 'pipeline') {
-    // Standalone CLI pipeline: lunum parse | lunum realize | lunum render
-    // Usage: lunum pipeline --text <text> [--language en] [--category simple_fact] [--risk low]
-    // Or: cat input.json | lunum pipeline [--mode parse|realize|render|full]
     const textInput = flag('text') || flag('content');
     const inputFile = flag('input') || flag('file');
     const language = flag('language') ?? 'en';
@@ -89,14 +222,12 @@ async function main(): Promise<void> {
     const mode = flag('mode') ?? 'full';
     const outputFormat = flag('output') ?? 'json';
 
-    // Get input text
     let inputText = textInput;
     if (!inputText && inputFile) {
-      const data = await readJson<any>(inputFile);
-      inputText = data.source?.text || data.content || data.text || JSON.stringify(data);
+      const inputData = await readJson<any>(inputFile);
+      inputText = inputData.source?.text || inputData.content || inputData.text || JSON.stringify(inputData);
     }
     if (!inputText) {
-      // Try stdin
       const chunks: Buffer[] = [];
       process.stdin.on('data', (chunk: Buffer) => chunks.push(chunk));
       inputText = await new Promise<string>((resolve) => {
@@ -109,7 +240,6 @@ async function main(): Promise<void> {
       return;
     }
 
-    // Parse step: derive sidecar
     const sidecar = deriveLunumSidecar({ role: 'user', content: inputText, category, risk: risk as any });
 
     if (mode === 'parse' || mode === 'parse-only') {
@@ -117,7 +247,6 @@ async function main(): Promise<void> {
       return;
     }
 
-    // Realize step: create full record from sidecar sem
     let record: LunumRecord;
     if (sidecar.lunumSem) {
       record = createRecord({
@@ -130,7 +259,6 @@ async function main(): Promise<void> {
         confidence: Number(sidecar.lunumMeta.confidence) || 0.9
       });
     } else {
-      // Fallback: create record with heuristic surface
       const surface = deriveSurfaceSidecar({ role: 'user', content: inputText, category, risk: risk as any });
       record = createRecord({
         sourceText: inputText,
@@ -148,9 +276,8 @@ async function main(): Promise<void> {
       return;
     }
 
-    // Render step
     const renderings = Object.fromEntries(
-      Object.entries(record.renderings).map(([profile, r]) => [profile, { code: r.code, profile: r.profile, tokens: null }])
+      Object.entries(record.renderings).map(([profile, rendering]) => [profile, { code: rendering.code, profile: rendering.profile, tokens: null }])
     );
 
     if (mode === 'render' || mode === 'render-only') {
@@ -158,7 +285,6 @@ async function main(): Promise<void> {
       return;
     }
 
-    // Full pipeline: parse | realize | render
     const result = {
       pipeline: 'parse | realize | render',
       input: { text: inputText, language, category, risk },
@@ -168,7 +294,7 @@ async function main(): Promise<void> {
         fingerprint: record.fingerprint,
         semSchema: record.sem.schema,
         clauses: record.sem.clauses.length,
-        renderings: renderings
+        renderings
       },
       output: {
         code: Object.values(renderings)[0]?.code || '',
@@ -178,15 +304,13 @@ async function main(): Promise<void> {
     };
 
     if (outputFormat === 'code') {
-      // Output just the code for piping to other tools
-      const code = Object.values(renderings)[0]?.code || '';
-      process.stdout.write(code);
+      process.stdout.write(Object.values(renderings)[0]?.code || '');
     } else {
       console.log(JSON.stringify(result, null, 2));
     }
     return;
   }
-  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> [--from 0.1] [--to 0.2] [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full]');
+  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> --from 0.1 --to 0.2 [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full]');
   process.exitCode = 2;
 }
 
