@@ -169,7 +169,6 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Schema migration test suite validating 0.1→0.2 record transformation with golden vectors.
 - Bidirectional migration (0.1 ↔ 0.2) with schema validation: forward and backward migration functions validate source/destination schemas, emit field-level loss warnings, regenerate fingerprints, and preserve input order. Round-trip test (0.1→0.2→0.1) with explicit loss warnings.
 - Schema changelog at `schemas/CHANGELOG.md` documenting every breaking change.
-- Quality gate CI integration: unified runner wrapping downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, and prompt-gates; configurable pass rates and strict mode.
 
 ## New in v0.2.0
 
