@@ -129,7 +129,7 @@ Most v4 implementation work has landed, but the queue is **not mechanically comp
 ## P0 — migration rules (release gate 2)
 
 - [x] Implement bidirectional fingerprint migration tests: 0.1→0.2 forward, 0.2→0.1 lossy backward with explicit data-loss warnings. *(PR #144, #149 merged)*
-- [ ] Add a migration CLI command: `lunum migrate <file> --from 0.1 --to 0.2` that transforms records in place with a dry-run mode. *(The outage repair bundle adds explicit direction checks, source/destination version checks, fingerprint migration, all-or-nothing failure, atomic writes, and exact CLI tests. Keep unchecked until independent review and hosted CI pass.)*
+- [ ] Add a migration CLI command: `lunum migrate <file> --from 0.1 --to 0.2` that transforms records in place with a dry-run mode. *(The outage repair bundle adds explicit direction checks, source/destination version checks, fingerprint migration, malformed-input handling, all-or-nothing failure, atomic writes, and exact CLI tests. Keep unchecked until independent review and hosted CI pass.)*
 - [x] Golden migration vectors: add 20+ fixture pairs (0.1 input → expected 0.2 output) covering every structural change. *(golden-migration-vectors.test.ts on main)*
 
 ## P1 — multilingual retention (release gate 3)
@@ -140,7 +140,7 @@ Most v4 implementation work has landed, but the queue is **not mechanically comp
 
 ## P1 — renderer measurement (release gate 4)
 
-- [ ] Upgrade renderer profiles from "Experiment" to "Reference": add deterministic golden-output tests for safe/short/tight on 10+ diverse inputs. *(The current 15-input suite checks invariants and relative properties but does not commit and compare exact approved profile outputs. This remains outside the current bundle and is still required.)*
+- [ ] Upgrade renderer profiles from "Experiment" to "Reference": add deterministic golden-output tests for safe/short/tight on 10+ diverse inputs. *(The outage repair bundle adds 10 diverse fixtures and 30 exact full-output SHA-256 snapshots across safe/short/tight. Keep unchecked until reviewers inspect the complete outputs and hosted CI passes on the exact head.)*
 - [ ] Add a tokenizer-optimization pass: for each named local model in Token Atlas, produce a model-specific tight profile that provably does not change semantics. *(The outage repair bundle adds `runVerifiedTokenizerOptimizationPass`, which applies every candidate profile, recomputes source and optimized fingerprints, compares canonical semantics, rejects lossy lower-token profiles, and includes stale-fingerprint mutation coverage. Keep unchecked until independent review and hosted CI pass.)*
 - [x] Renderer conformance suite: property tests that every profile preserves round-trip canonicalization. *(renderer-conformance.ts + test on main)*
 
