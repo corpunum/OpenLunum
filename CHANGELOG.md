@@ -2,6 +2,13 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Added — Schema (PR #83)
+- **Lunum-Sem schema 0.2 frozen:** Locked field names, enum constraints for `modality` and `risk`, `$ref` cross-references between `experiment.schema.json`, `protected-eval.schema.json`, and the core Lunum-Sem schema. Migration test validates 0.1→0.2 transformation. See `schemas/CHANGELOG.md` for full breaking-change catalog.
+- **Schema changelog:** `schemas/CHANGELOG.md` documenting every breaking change with migration instructions for both `lunum-sem` and `lunum-record`.
+- **Schema migration test suite:** 312-line test validating record transformation from 0.1 to 0.2, covering all locked fields and enum constraints.
+- **Comprehensive type tests for v02 migration:** 122 lines of semantic-contract type tests covering all migration paths in `packages/core/test/core.test.ts`.
+- **Versioned TypeScript types:** `schema-to-ts.cjs` updated to generate `LunumSemSchema01` and `LunumSemSchema02` from versioned schemas.
+
 ### Added — Adoption (PR #120, PR #115)
 - **HTTP API reference server:** New `packages/api` package with REST endpoints for parse, realize, render, retrieve, and health checks. Includes OpenAPI 3.1.0 spec and integration tests. Third adoption path after MCP and CLI.
 - **Standalone CLI pipeline:** `lunum parse | lunum realize | lunum render` pipeline with documented examples for offline, pipeline-friendly, and scriptable adoption.
