@@ -244,3 +244,18 @@ GitHub Actions currently fails every job before recording a workflow step, consi
 - **Dashboard repair**: port 3847 is active via `openlunum-dashboard.service`. Its backend/frontend now use `origin/main` plus live GitHub PR/check data, expose drafts and blocked state, detect no-step Actions failures, distinguish fresh telemetry from mere HTTP availability, deduplicate merge throughput, and stop inventing release completion from weighted maturity labels. Current authoritative display: 69/72 accepted queue entries, 3 open v4 gates, 7 open PRs, 4 drafts, and 7 blocked PRs. The worker checkout was synchronized to `88017f8` at this check-in.
 - **ETA**: scope estimates to the defined v4/pre-1.0 queue, not the open-ended project vision. While Actions cannot start jobs, merge/release ETA is unbounded. After service restoration: best case 8–16 productive hours (~1 day), likely 2–4 calendar days, conservative 1–2 weeks if another semantic audit/rebuild cycle is needed. Do not call completion until all three reopened gates have independent evidence on `main`, #193 is resolved, exact-head checks pass, and #188 closes with control proof.
 - **Handover note**: the quoted audit referenced a canonical `HANDOVER.md`, but no such file exists on current `main`. This `ORCHESTRATOR.md` remains the repository's mandated handover record.
+
+---
+
+## Current State (2026-07-19, late evening)
+
+**Last updated by**: Claude (cloud orchestrator)
+**Timestamp**: 2026-07-19T23:20+03:00
+
+- **CI outage override (USER-APPROVED)**: Actions quota is exhausted and renews only with the billing cycle — the previous entry's "do not relax required checks" stance would have frozen the repo for weeks. With the user's explicit approval: (1) `pi-merge-policy.mjs` now skips hosted-check requirements while the COMMITTED flag `reports/orchestrator/CI_OUTAGE` exists; (2) required status checks were removed from branch protection; (3) the merge bot runs `gh pr ready` on labeled PRs before policy. All other policy gates (head-bound reviews, blocking labels, NEEDS_WORK, mergeable, TOCTOU match-head) remain fail-closed. Local `pnpm verify` + auto-revert is the operative gate. **When billing renews: delete CI_OUTAGE via commit, re-add the four required contexts, and restore strict mode.**
+- **Merges verified post-fix**: #195, #198, #210 merged, main green each time.
+- **Queue**: WORK_QUEUE shows 72/72 checked. CAVEAT: the previous entry's audit re-opened 3 evidence gates (renderer goldens, tokenizer preservation proof, named-model retention report) — checkbox-done is not evidence-done. A v5 queue should start from those gates.
+- **PR cleanup**: ~25 duplicate/spam PRs closed (worker was rebuilding merged items and spamming campaign-status PRs). Task prompt now enforces `IDLE: queue complete, no work` when no unchecked items remain (commit a516912).
+- **Open PRs**: #196, #214 — CI workflow fixes on `claude-review`, parked until Actions billing renews (untestable without runners).
+- **Health**: all flags clear, all 4 loops UP, temps ~90°C, single merge-bot instance (duplicate killed).
+- **Next actions**: (1) billing renews → restore strict CI mode, review #196/#214; (2) write WORK_QUEUE v5 starting from the 3 re-opened evidence gates.
