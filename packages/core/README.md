@@ -1,196 +1,182 @@
-# Lunum Core
+# @corpunum/lunum-core
 
-The core package contains the fundamental building blocks for Lunum semantics and related utilities.
+The core package provides the fundamental building blocks for Lunum semantics, fingerprints, renderers, and related utilities.
 
-## Features
+## Modules
 
-### Release Provenance
+| Module | Exported | Description |
+|---|:---:|---|
+| `types` | ✓ | Core Lunum-Sem types, record structures, and schema-conformance helpers |
+| `constants` | ✓ | Named predicates, roles, categories, and risk/modality enum values |
+| `canonicalize` | ✓ | Deterministic canonicalization for stable fingerprints |
+| `fingerprint` | ✓ | Exact semantic fingerprints (lfp:), versioned identity |
+| `fingerprint-migration` | ✓ | Bidirectional migration (0.1 ↔ 0.2) with schema validation, field-level warnings, and fingerprint regeneration |
+| `render` | ✓ | Lunum-Code renderer (compact model-facing output) |
+| `policy` | ✓ | Policy classifier for context risk/confidence classification |
+| `derive` | ✓ | Derive helpers for building record fields |
+| `context` | ✓ | Context management and mixed-context composition |
+| `compare` | ✓ | Record comparison and similarity utilities |
+| `profile-selector` | ✓ | Renderer profile selection driven by Token Atlas measurements |
+| `token-atlas` | ✓ | Cross-model, cross-profile token measurement framework |
+| `agent-state` | ✓ | Validated types for plans, steps, tool calls, evidence, and inter-agent handoffs |
+| `native-model` | ✓ | Token mappings, instruction templates, and fallback profiles for 8 model families |
+| `error-observability` | ✓ | Circuit-breaker and revert-capability types for observable failure modes |
+| `downstream-quality` | ✓ | Task-success metrics and quality gate evaluation |
+| `mixed-context-quality` | ✓ | Downstream accuracy comparison across natural vs Lunum vs mixed context |
+| `prompt-injection` | ✓ | Prompt-injection resistance utilities and adversarial detection |
+| `renderer-conformance` | ✓ | Property tests for round-trip canonicalization of safe/short/tight profiles |
+| `compatibility-matrix` | ✓ | Schema-package version compatibility testing |
 
-This package includes functionality for tracking release artifacts and creating signed manifests to verify the integrity and origin of released packages.
+## Internal modules
 
-The release-provenance module provides:
+These modules are used by the core package or exported separately but not re-exported from the main `index`:
 
-- `createReleaseManifest()` - Creates a manifest of release artifacts
-- `signReleaseManifest()` - Signs a release manifest with a private key
-- `verifyReleaseManifest()` - Verifies a signed release manifest with a public key
-- `getCurrentCommit()` - Gets the current git commit hash
-- `getCurrentVersion()` - Gets the current package version
+- `conformance-reports` — Conformance report generation for hook/plugin/CLI paths
+- `conformance-vectors` — Canonical conformance vector generation and property tests
+- `context-measurement` — Context size and quality measurement
+- `llama-tokenizer` — llama.cpp-compatible tokenizer counting
+- `near-semantic-fingerprints` — Near-semantic fingerprints (nfp:), feature extraction, configurable similarity threshold
+- `policy-classifier` — Policy classification with risk/confidence categories
+- `profiles` — Renderer profile definitions (safe, short, tight)
+- `prompt-gates` — Prompt-injection test harness with 10 adversarial inputs
+- `release-provenance` — Release artifact tracking, signed manifests, and verification
+- `rollback-process` — `rollbackToSource()` and `rollbackBatch()` with integrity/provenance/source-authenticity verification (verified/failed/absent), fail closed when evidence absent, digest-based source verification. 10 unit tests.
+- `tokenizer-measurement` — Tokenizer measurement utilities and profile selection
+- `typed-structures` — Expanded typed structures: time, quantity, uncertainty, reference, modality
+- `types-schema` / `types-schema-conformance` — Schema conformance helpers for 0.1 and 0.2
 
-### Token Atlas
-
-The Token Atlas measures token counts for Lunum rendering profiles across multiple models, producing aggregate statistics and per-model analysis.
+## Quick start
 
 ```typescript
-import { TokenAtlas } from '@corpunum/lunum';
+import {
+  canonicalizeSem,
+  fingerprint,
+  render,
+  TokenAtlas,
+  ProfileSelector,
+  migrateForward01to02,
+  rollbackToSource,
+  classifyPolicy,
+  agentStateSchema,
+  nativeModelProtocol
+} from '@corpunum/lunum';
 
-// Create an atlas with at least 3 named models
+// Canonicalize a record for stable fingerprinting
+const canonical = canonicalizeSem(record);
+
+// Generate exact fingerprint
+const lfp = fingerprint(canonical);
+
+// Render compact Lunum-Code
+const code = render(record, { profile: 'safe' });
+
+// Token measurement
 const atlas = new TokenAtlas([
-  { name: 'llama3.1-8b', tokenizer: { model: 'llama3.1', addBos: true, addEos: true } },
-  { name: 'qwen2.5-7b',  tokenizer: { model: 'qwen2.5', addBos: true, addEos: true } },
-  { name: 'mistral-7b',  tokenizer: { model: 'mistral', addBos: true, addEos: true } }
+  { name: 'llama3.1-8b', tokenizer: { model: 'llama3.1' } },
+  { name: 'qwen2.5-7b',  tokenizer: { model: 'qwen2.5' } }
 ]);
-
-// Measure one or more records
 const entry = atlas.measure(record);
-const entries = atlas.measureBatch(records);
 
-// Generate a report
-const report = atlas.report({ title: 'Token Atlas Report' });
-```
-
-### Profile Selector
-
-The Profile Selector recommends the best renderer profile per model based on Token Atlas measurements.
-
-```typescript
-import { ProfileSelector } from '@corpunum/lunum';
-
+// Profile selection
 const selector = new ProfileSelector(atlas);
-const profile = selector.select(model, record);
+const profile = selector.select('llama3.1-8b', record);
+
+// Schema migration
+const migrated02 = migrateForward01to02(record01);
+
+// Rollback to source
+const rollbackResult = rollbackToSource(record);
+
+// Policy classification
+const policy = classifyPolicy(record);
+
+// Agent state
+const agentState = agentStateSchema.parse({
+  plan: { id: 'p1', status: 'active', steps: [] },
+  toolCalls: [],
+  evidence: []
+});
+
+// Native model protocol
+const mapping = nativeModelProtocol.getMapping('llama');
 ```
 
-### Usage Example
+## Features in detail
 
-```typescript
-import { 
-  createReleaseManifest,
-  signReleaseManifest,
-  verifyReleaseManifest 
-} from '@corpunum/lunum';
+### Lunum-Sem schema 0.2 (Frozen)
 
-// Create a release manifest
-const manifest = createReleaseManifest(
-  '1.0.0', 
-  'abc123def456', 
-  ['dist/index.js', 'dist/types.d.ts']
-);
+Locked field names, enum constraints for `modality` and `risk`, and `$ref` cross-references between experiment, protected-eval, and core schemas. See `schemas/CHANGELOG.md` for migration instructions.
 
-// Sign the manifest
-const signedManifest = signReleaseManifest(manifest, privateKey);
+### Bidirectional migration (0.1 ↔ 0.2)
 
-// Verify the signature
-const isValid = verifyReleaseManifest(signedManifest, publicKey);
-```
+Forward (`migrateForward01to02`) and backward (`migrateBackward02to01`) migration functions with:
+- Schema validation at source and destination
+- Field-level loss warnings (e.g., modality locked to enum, provenance field set, annotations field set)
+- Fingerprint regeneration at target version
+- Input-order preservation
+- Batch operations (`migrateRecordsForward`, `migrateRecordsBackward`)
+- Round-trip test (`roundTripMigration`) with explicit loss warnings
+- 190 lines of tests
 
-## Features
+### Exact fingerprints (lfp:)
 
-### Release Provenance
+Versioned deterministic retrieval identity. Stable across canonicalization. Not fuzzy equivalence.
 
-This package includes functionality for tracking release artifacts and creating signed manifests to verify the integrity and origin of released packages.
+### Near-semantic fingerprints (nfp:)
 
-The release-provenance module provides:
+Feature extraction, configurable similarity threshold, nfp:* format. Similarity comparison with threshold-based matching. Records carry both lfp: and nfp:; hybrid search tries exact first, falls back to near-semantic.
 
-- `createReleaseManifest()` - Creates a manifest of release artifacts
-- `signReleaseManifest()` - Signs a release manifest with a private key
-- `verifyReleaseManifest()` - Verifies a signed release manifest with a public key
-- `getCurrentCommit()` - Gets the current git commit hash
-- `getCurrentVersion()` - Gets the current package version
+### Rollback process
 
-### Usage Example
+`rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent). Fail closed when evidence is absent. Verify source/provenance digests rather than trusting the record itself. 10 unit tests.
 
-```typescript
-import { 
-  createReleaseManifest,
-  signReleaseManifest,
-  verifyReleaseManifest 
-} from '@corpunum/lunum';
+### Agent-state protocol
 
-// Create a release manifest
-const manifest = createReleaseManifest(
-  '1.0.0', 
-  'abc123def456', 
-  ['dist/index.js', 'dist/types.d.ts']
-);
+Validated types for plans, steps, tool calls, results, constraints, evidence, and inter-agent handoffs.
 
-// Sign the manifest
-const signedManifest = signReleaseManifest(manifest, privateKey);
+### Native model protocol
 
-// Verify the signature
-const isValid = verifyReleaseManifest(signedManifest, publicKey);
-```
+Token mappings, instruction templates, and fallback profiles for native (lunum) and non-native model families (gemma, llama, qwen, claude, gemini, openai, unknown). 8 model families.
 
-### API Reference
+### Tokenizer measurement
 
-#### `createReleaseManifest(version, commit, files)`
+Cross-model, cross-profile token measurement with Token Atlas. Per-model best profile selection. llama.cpp-compatible counting.
 
-Creates a release manifest for a given version, commit, and list of files.
+### Renderer conformance
 
-- `version` (string): The release version
-- `commit` (string): The git commit hash
-- `files` (string[]): List of files included in this release
+Property tests verifying round-trip canonicalization for safe, short, and tight profiles against 10 diverse test records.
 
-Returns: `ReleaseManifest`
+### Prompt injection resistance
 
-#### `signReleaseManifest(manifest, privateKey)`
+10 adversarial inputs crafted to corrupt Lunum-Sem records through the parser. All must be detected or rejected.
 
-Signs a release manifest with a private key.
+### Mixed-context quality
 
-- `manifest` (ReleaseManifest): The manifest to sign
-- `privateKey` (string): The private key to sign with
+Downstream task accuracy comparison across natural vs Lunum vs mixed context on multiple task types.
 
-Returns: `ReleaseManifest` with signature
+### Error observability
 
-#### `verifyReleaseManifest(manifest, publicKey)`
+Circuit-breaker and revert-capability types for observable and reversible failure modes.
 
-Verifies a signed release manifest with a public key.
+### Compatibility matrix
 
-- `manifest` (ReleaseManifest): The signed manifest to verify
-- `publicKey` (string): The public key to verify with
-
-Returns: `boolean` indicating if the signature is valid
-
-#### Token Atlas API
-
-- `new TokenAtlas(models: ModelConfig[]): TokenAtlas` - Creates a token measurement atlas with at least 3 models
-- `atlas.measure(record: LunumRecord): TokenAtlasEntry` - Measures a single record
-- `atlas.measureBatch(records: LunumRecord[]): TokenAtlasEntry[]` - Measures multiple records
-- `atlas.report(options: ReportOptions): AtlasReport` - Generates a measurement report
-- `TokenAtlas.withCommonModels()` - Factory for pre-configured common models
-
-#### Profile Selector API
-
-- `new ProfileSelector(atlas: TokenAtlas): ProfileSelector` - Creates a profile selector from a token atlas
-- `selector.select(model: string, record: LunumRecord): string` - Selects the best profile for a model and record
-
-Creates a release manifest for a given version, commit, and list of files.
-
-- `version` (string): The release version
-- `commit` (string): The git commit hash
-- `files` (string[]): List of files included in this release
-
-Returns: `ReleaseManifest`
-
-#### `signReleaseManifest(manifest, privateKey)`
-
-Signs a release manifest with a private key.
-
-- `manifest` (ReleaseManifest): The manifest to sign
-- `privateKey` (string): The private key to sign with
-
-Returns: `ReleaseManifest` with signature
-
-#### `verifyReleaseManifest(manifest, publicKey)`
-
-Verifies a signed release manifest with a public key.
-
-- `manifest` (ReleaseManifest): The signed manifest to verify
-- `publicKey` (string): The public key to verify with
-
-Returns: `boolean` indicating if the signature is valid
-
-#### `getCurrentCommit()`
-
-Gets the current git commit hash.
-
-Returns: `string`
-
-#### `getCurrentVersion()`
-
-Gets the current package version.
-
-Returns: `string`
+Schema-package version compatibility testing. Documents which Lunum-Sem schema versions work with which package versions.
 
 ## New in v0.2.0
 
-- **Token Atlas:** Cross-model, cross-profile token measurement framework with aggregate statistics.
+- **Bidirectional migration (0.1 ↔ 0.2):** Forward and backward migration with schema validation, field-level loss warnings, fingerprint regeneration, input-order preservation. 190 lines of tests.
+- **Near-semantic fingerprints:** Feature extraction, configurable threshold, nfp:* format, similarity comparison with threshold-based matching.
+- **Agent-state protocol:** Validated types for plans, steps, tool calls, evidence, and inter-agent handoffs.
+- **Native model protocol:** Token mappings, instruction templates, fallback profiles for 8 model families.
+- **Renderer conformance suite:** Round-trip canonicalization property tests for safe/short/tight profiles.
+- **Mixed-context quality:** Downstream accuracy comparison across natural vs Lunum vs mixed context.
+- **Prompt injection resistance:** 10 adversarial inputs tested against parser.
+- **Rollback process:** `rollbackToSource()` and `rollbackBatch()` with integrity/provenance/source-authenticity verification. 10 unit tests.
+- **Error observability:** Circuit-breaker and revert-capability types.
+- **Compatibility matrix:** Schema-package version compatibility.
+- **Downstream quality gates:** Task-success metrics and quality gate evaluation.
 - **Profile Selector:** Renderer profile selection driven by Token Atlas measurements.
+- **Token Atlas:** Cross-model, cross-profile token measurement framework.
+- **Comprehensive type tests for v02 migration:** 122 lines of semantic-contract type tests.
+- **API stability tests:** Snapshot-based tests for public exports.
+- **Schema migration utilities:** Version detection, migration, and golden vectors.
