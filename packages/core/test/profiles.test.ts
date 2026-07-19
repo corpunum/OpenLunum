@@ -79,3 +79,37 @@ test('ProfileGenerator sets config', () => {
   const config = generator.getConfig('safe');
   assert.strictEqual(config.preserveAnnotations, false);
 });
+test('ProfileGenerator: all profiles default to Reference level', () => {
+  const generator = new ProfileGenerator();
+  
+  for (const type of ['safe', 'short', 'tight'] as const) {
+    const config = generator.getConfig(type);
+    assert.strictEqual(config.level, 'Reference', `${type} profile level is Reference`);
+    assert.strictEqual(generator.isReferenceLevel(type), true, `${type} is reference level`);
+  }
+});
+
+test('ProfileGenerator: allProfilesReference returns true', () => {
+  const generator = new ProfileGenerator();
+  
+  assert.strictEqual(generator.allProfilesReference(), true);
+});
+
+test('ProfileGenerator: setConfig preserves level', () => {
+  const generator = new ProfileGenerator();
+  
+  generator.setConfig('safe', { preserveAnnotations: false });
+  
+  const config = generator.getConfig('safe');
+  assert.strictEqual(config.level, 'Reference', 'level preserved after setConfig');
+  assert.strictEqual(config.preserveAnnotations, false);
+});
+
+test('ProfileGenerator: isReferenceLevel returns false when set to Experiment', () => {
+  const generator = new ProfileGenerator();
+  
+  generator.setConfig('safe', { level: 'Experiment' as any });
+  
+  assert.strictEqual(generator.isReferenceLevel('safe'), false);
+  assert.strictEqual(generator.allProfilesReference(), false);
+});
