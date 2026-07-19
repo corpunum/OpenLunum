@@ -38,6 +38,8 @@ jobs:
         id: gates
         env:
           QUALITY_GATE_STRICT: '0'
-        run: node scripts/run-quality-gates-ci.mjs
+        # The repository currently has no committed protected record fixtures.
+        # Keep this synthetic smoke mode explicit; remove it when fixtures land.
+        run: node scripts/run-quality-gates-ci.mjs --fallback-only
       - name: Quality gate result
         run: echo "Quality gates completed with gate exit code ${{ steps.gates.outputs.gate_exit_code }} over ${{ steps.gates.outputs.record_count }} record(s)"
