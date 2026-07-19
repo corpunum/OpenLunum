@@ -1,4 +1,3 @@
-- agent/codex/automation/claim-loop-churn
 - agent/coding-agent/semantic-contract/expand-semantic-structures
 - agent/eval/scratch
 - agent/OpenLunum-agent/semantic-contract/semantic-typed-structures
@@ -6,6 +5,8 @@
 - agent/qwen/context/pr10-policy-aware-success
 - agent/qwen/issue-11/false-equivalence-rebased
 - agent/qwen/migration/cli-migrate-command
+- agent/qwen/multilingual/cross-lingual-retrieval
+- agent/qwen/renderer/upgrade-to-reference
 - agent/qwen/repository-reliability/pr8-contract-evidence
 - agent/qwen/semantic-contract/expand-typed-structures-v4
 - agent/qwen/semantic-contract/expand-typed-structures-v5

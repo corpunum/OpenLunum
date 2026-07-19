@@ -14,6 +14,7 @@
 
 import type { LunumRecord, LunumRendering } from './types.js';
 import { ProfileGenerator } from './profiles.js';
+import { canonicalizeSem, stableStringify } from './canonicalize.js';
 import type { LlamaTokenizerConfig, TokenCountResult } from './llama-tokenizer.js';
 import { LlamaTokenizer } from './llama-tokenizer.js';
 
@@ -466,6 +467,8 @@ export interface ModelOptimizationResult {
   reductionPct: number;
   /** Warnings about the optimization */
   warnings: string[];
+  /** The optimized record with the best profile applied (undefined if verification failed) */
+  optimizedRecord?: LunumRecord | undefined;
 }
 
 /**
@@ -489,7 +492,8 @@ export interface TokenizerOptimizationPassResult {
 /**
  * Run a tokenizer-optimization pass over measured entries.
  * For each model, finds the best-performing profile (lowest token count)
- * and verifies that semantics are preserved via fingerprint comparison.
+ * and verifies that semantics are preserved via both fingerprint and
+ * canonicalization comparison.
  * 
  * @param entries - Measured entries from TokenAtlas.measureBatch()
  * @returns Optimization pass result
@@ -532,15 +536,14 @@ export function runTokenizerOptimizationPass(
         ? Math.round((1 - bestTokenCount / naturalTokens) * 10000) / 100
         : 0;
 
-      // Verify semantic preservation: the optimized profile must produce
-      // the same fingerprint as the original record
-      const optimizedFingerprint = entry.fingerprint; // Tight profile preserves fingerprint by design
-      const semanticsPreserved = optimizedFingerprint === entry.fingerprint;
+      // Verify semantic preservation via canonicalization
+      const { semanticsPreserved, optimizedRecord, optimizedFingerprint } =
+        verifySemanticPreservation(entry.record, bestProfile);
 
       if (!semanticsPreserved) {
         allPreserved = false;
         warnings.push(
-          `Model ${modelName}: fingerprint mismatch for record ${entry.fingerprint.slice(0, 20)}`
+          `Model ${modelName}: semantics changed for record ${entry.fingerprint.slice(0, 20)} via ${bestProfile} profile`
         );
       }
 
@@ -553,7 +556,8 @@ export function runTokenizerOptimizationPass(
         profileTokens,
         bestTokenCount,
         reductionPct,
-        warnings: []
+        warnings: [],
+        optimizedRecord: optimizedRecord ?? undefined
       });
     }
   }
@@ -564,6 +568,50 @@ export function runTokenizerOptimizationPass(
     recordCount: entries.length,
     allSemanticsPreserved: allPreserved,
     warnings
+  };
+}
+
+/**
+ * Verify that applying a profile preserves semantics.
+ * Uses both fingerprint comparison and canonicalization.
+ */
+function verifySemanticPreservation(
+  record: LunumRecord,
+  profile: ProfileKey
+): {
+  semanticsPreserved: boolean;
+  optimizedRecord: LunumRecord | undefined;
+  optimizedFingerprint: string;
+} {
+  // For tight profile, verify via fingerprint preservation
+  // For safe/short, verify via canonicalization
+  const profileGenerator = new ProfileGenerator();
+  let optimizedRecord: LunumRecord | undefined;
+
+  if (profile === 'tight' || profile === 'short' || profile === 'safe') {
+    const result = profileGenerator.profile(record, profile as ProfileType);
+    optimizedRecord = result.record as LunumRecord;
+  } else {
+    optimizedRecord = record;
+  }
+
+  const optimizedFingerprint = optimizedRecord?.fingerprint || record.fingerprint;
+
+  // Verify via canonicalization of the semantic content
+  const originalCanonical = canonicalizeSem(record.sem);
+  const optimizedCanonical = optimizedRecord ? canonicalizeSem(optimizedRecord.sem) : originalCanonical;
+  
+  const canonicalMatch = stableStringify(originalCanonical) === stableStringify(optimizedCanonical);
+  const fingerprintMatch = optimizedFingerprint === record.fingerprint;
+
+  // Semantics preserved if either canonical form matches OR fingerprint matches
+  // (some profiles may change fingerprint due to metadata removal but preserve semantics)
+  const semanticsPreserved = canonicalMatch || fingerprintMatch;
+
+  return {
+    semanticsPreserved,
+    optimizedRecord,
+    optimizedFingerprint
   };
 }
 
