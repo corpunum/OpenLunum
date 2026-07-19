@@ -2,6 +2,14 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Added — Retrieval (PR #164)
+- **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in `summary.json` and `report.md`. Tests rebuilt and revalidated in `packages/eval/test/` (PR #164).
+
+### Changed — Schema (PR #160, PR #163)
+- **Bidirectional migration rebuild:** Revalidated bidirectional migration (0.1 ↔ 0.2) with comprehensive test coverage — recordVersion and schema migration, modality locking, provenance/annotations field trimming, input-order preservation, source text identity, clause count/predicate preservation, and source/destination schema validation. 220 new lines in `packages/core/test/fingerprint-migration.test.ts`. (PR #160)
+- **JSON Schema $ref cross-references rebuild:** Restructured `$ref` cross-references to use `schemas/shared.schema.json` as the single source for term, reference, iso8601, and confidence definitions. `lunum-sem-v02.schema.json` and `lunum-record-v02.schema.json` now reference shared definitions via `https://openlunum.org/schemas/shared/1#/$defs/...` URIs. Full AJV validation of the complete schema graph (6 schemas) with fixture-based validation tests. 334 lines in `packages/eval/test/schema-crossrefs.test.ts`. (PR #163)
+- **Type tightening in types-schema.ts:** `Reference[]` replaces `v02Reference[]`; `Confidence` replaces raw `number` for confidence fields; `Iso8601` replaces raw `string` for timestamp fields in provenance and meta. (PR #163)
+
 ### Added — Schema (PR #83)
 - **Lunum-Sem schema 0.2 frozen:** Locked field names, enum constraints for `modality` and `risk`, `$ref` cross-references between `experiment.schema.json`, `protected-eval.schema.json`, and the core Lunum-Sem schema. Migration test validates 0.1→0.2 transformation. See `schemas/CHANGELOG.md` for full breaking-change catalog.
 - **Schema changelog:** `schemas/CHANGELOG.md` documenting every breaking change with migration instructions for both `lunum-sem` and `lunum-record`.

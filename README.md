@@ -152,6 +152,8 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Abstention/clarification outputs for low-confidence parses.
 - Context quality measurement framework and policy datasets.
 - Multilingual retrieval and false-equivalence tests.
+- Aggregate MRR: Mean Reciprocal Rank for retrieval tasks, computed and validated in summary.json and report.md.
+- Near-semantic + exact fingerprint interop: records carry both lfp: and nfp:, hybrid search exact-first with near-fallback.
 - An MCP (Model Context Protocol) reference server with parse, realize, fingerprint, retrieve, and validate tools.
 - An HTTP API reference server with OpenAPI spec and integration tests.
 - A standalone CLI pipeline (`lunum parse | lunum realize | lunum render`).
@@ -164,6 +166,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Threat model with concrete mitigations and parser-hallucination tests.
 - Compatibility matrix for schema-package versions.
 - Error observability integration for eval runner (circuit-breaker, revert-capability).
+- API stability tests: snapshot-based tests verifying no public exports are removed and no breaking signature changes occur in `packages/core`.
 - Architecture decision records in `docs/decisions/`.
 - Frozen Lunum-Sem schema 0.2 with locked fields, enums, and `$ref` cross-references.
 - Schema migration test suite validating 0.1→0.2 record transformation with golden vectors.
