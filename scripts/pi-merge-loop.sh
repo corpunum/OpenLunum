@@ -21,7 +21,7 @@ WT=/home/corpunum/openlunum-workers/merger
 LOGDIR="$REPO/reports/pi-merge"
 STATUS_LOG="$LOGDIR/merge-status.log"
 INTERVAL=180
-MERGE_POLICY="$REPO/scripts/pi-merge-policy.mjs"
+MERGE_POLICY="${MERGE_POLICY:-$REPO/scripts/pi-merge-policy.mjs}"
 
 # Hard-protected: always require Claude maintainer (CI, agent infra, protected data)
 HARD_PROTECTED_RE='^(datasets/protected/(?!README\.md)|\.github/|scripts/(pi-|nightly))'
