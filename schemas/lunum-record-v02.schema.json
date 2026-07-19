@@ -30,7 +30,12 @@
     "fingerprint": {
       "type": "string",
       "pattern": "^lfp:",
-      "description": "SHA-256 fingerprint of canonicalized Lunum-Sem"
+      "description": "SHA-256 exact fingerprint of canonicalized Lunum-Sem"
+    },
+    "nearSemanticFingerprint": {
+      "type": "string",
+      "pattern": "^nfp:",
+      "description": "Near-semantic fingerprint for fuzzy matching (optional)"
     },
     "renderings": {
       "type": "object",
