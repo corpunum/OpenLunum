@@ -144,15 +144,16 @@ describe('runConformanceSuite', () => {
     assert.strictEqual(summary.passRate, 0);
   });
 
-  it('profiles produce warnings', () => {
+  it('profiles warn only when non-semantic renderings are removed', () => {
     const records = createTestRecords();
     const summary = runConformanceSuite(records);
 
-    // Some profiles should have warnings (annotations, provenance removal)
+    // Semantic fields are never removed. The one tight warning concerns an
+    // existing derived rendering, which is not part of canonical semantics.
     const tightWarnings = summary.results
       .flatMap(r => r.profileResults.filter(p => p.profile === 'tight' && p.warnings.length > 0));
-    // At least some records have warnings
-    assert.ok(tightWarnings.length >= 2, `Expected >= 2 tight profile warnings, got ${tightWarnings.length}`);
+    assert.strictEqual(tightWarnings.length, 1);
+    assert.deepStrictEqual(tightWarnings[0]!.warnings, ['Renderings removed']);
   });
 
   it('token reduction varies by profile', () => {
@@ -215,6 +216,14 @@ describe('getConformanceFailures', () => {
 });
 
 describe('profile conformance properties', () => {
+  it('all built-in records preserve canonical semantics in every profile', () => {
+    const summary = runConformanceSuite(createTestRecords());
+
+    assert.strictEqual(summary.passRate, 1);
+    assert.strictEqual(summary.failedTests, 0);
+    assert.deepStrictEqual(getConformanceFailures(), []);
+  });
+
   it('safe profile preserves most structure', () => {
     const record = createTestRecords()[0]!.record;
     const { profileResults } = runConformanceSuite([{ id: 'test', description: 'test', record }]).results[0]!;

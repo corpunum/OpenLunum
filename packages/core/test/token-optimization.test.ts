@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { fingerprintSem } from '../src/fingerprint.js';
+import { ProfileGenerator, type ProfileResult, type ProfileType } from '../src/profiles.js';
 import { runVerifiedTokenizerOptimizationPass } from '../src/token-optimization.js';
 import type { AtlasEntry, AtlasProfileMeasures, ModelTokenizerProfile } from '../src/token-atlas.js';
 import type { LunumRecord } from '../src/types.js';
@@ -57,11 +58,34 @@ function modelProfile(name = 'model'): ModelTokenizerProfile {
   return { name, tokenizer: { model: `${name}-tokenizer`, addBos: true, addEos: false } };
 }
 
+class SemanticsMutatingProfileGenerator extends ProfileGenerator {
+  override profile(record: LunumRecord, type: ProfileType = 'safe'): ProfileResult {
+    const result = super.profile(record, type);
+    if (type === 'safe') return result;
+    return {
+      ...result,
+      record: {
+        ...result.record,
+        sem: {
+          ...result.record.sem,
+          clauses: result.record.sem.clauses.map((clause) => ({
+            ...clause,
+            roles: { ...clause.roles, object: 'mutated' },
+          })),
+        },
+      },
+    };
+  }
+}
+
 test('verified optimization rejects lower-token profiles that alter canonical semantics', () => {
   const record = recordWithRole('x'.repeat(80), true);
   const result = runVerifiedTokenizerOptimizationPass([
     entry(record, { model: measures({ natural: 100, safe: 60, short: 30, tight: 10 }) }),
-  ], { modelProfiles: [modelProfile()] });
+  ], {
+    modelProfiles: [modelProfile()],
+    profileGenerator: new SemanticsMutatingProfileGenerator(),
+  });
 
   const model = result.results[0];
   assert.ok(model);

@@ -71,13 +71,17 @@ test('ProfileGenerator gets config', () => {
   assert.strictEqual(config.preserveAnnotations, true);
 });
 
-test('ProfileGenerator sets config', () => {
+test('ProfileGenerator rejects semantic-loss configuration', () => {
   const generator = new ProfileGenerator();
-  
-  generator.setConfig('safe', { preserveAnnotations: false });
-  
-  const config = generator.getConfig('safe');
-  assert.strictEqual(config.preserveAnnotations, false);
+
+  assert.throws(
+    () => generator.setConfig('safe', { preserveAnnotations: false }),
+    /cannot discard canonical semantics or provenance/,
+  );
+  assert.throws(
+    () => generator.setConfig('tight', { preserveProvenance: false }),
+    /cannot discard canonical semantics or provenance/,
+  );
 });
 test('ProfileGenerator: all profiles default to Reference level', () => {
   const generator = new ProfileGenerator();
@@ -98,11 +102,11 @@ test('ProfileGenerator: allProfilesReference returns true', () => {
 test('ProfileGenerator: setConfig preserves level', () => {
   const generator = new ProfileGenerator();
   
-  generator.setConfig('safe', { preserveAnnotations: false });
+  generator.setConfig('safe', { maxTokenReduction: 0.2 });
   
   const config = generator.getConfig('safe');
   assert.strictEqual(config.level, 'Reference', 'level preserved after setConfig');
-  assert.strictEqual(config.preserveAnnotations, false);
+  assert.strictEqual(config.maxTokenReduction, 0.2);
 });
 
 test('ProfileGenerator: isReferenceLevel returns false when set to Experiment', () => {

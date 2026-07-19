@@ -327,21 +327,20 @@ test('renderer golden: deterministic output for all profiles and inputs', () => 
       );
     }
 
-    // Verify annotations: safe preserves, short/tight reduces
+    // Canonical semantic annotations are preserved by every renderer profile.
     if ((record.sem as any).annotations && Object.keys((record.sem as any).annotations).length > 0) {
       const origAnnotCount = Object.keys((record.sem as any).annotations).length;
       assert.ok(
         safe.record.sem.annotations && Object.keys(safe.record.sem.annotations).length > 0,
         `${name}: annotations preserved in safe`
       );
-      // short and tight should have fewer or equal annotation keys
       const shortAnnotCount = Object.keys((short.record.sem as any).annotations || {}).length;
       const tightAnnotCount = Object.keys((tight.record.sem as any).annotations || {}).length;
-      assert.ok(shortAnnotCount <= origAnnotCount, `${name}: short annotations <= original (${shortAnnotCount} <= ${origAnnotCount})`);
-      assert.ok(tightAnnotCount <= origAnnotCount, `${name}: tight annotations <= original (${tightAnnotCount} <= ${origAnnotCount})`);
+      assert.strictEqual(shortAnnotCount, origAnnotCount, `${name}: short annotations preserved`);
+      assert.strictEqual(tightAnnotCount, origAnnotCount, `${name}: tight annotations preserved`);
     }
 
-    // Verify provenance: safe preserves, tight reduces
+    // Canonical provenance is evidence and is preserved by every profile.
     if ((record.sem as any).provenance && Object.keys((record.sem as any).provenance).length > 0) {
       const origProvCount = Object.keys((record.sem as any).provenance).length;
       assert.ok(
@@ -349,7 +348,7 @@ test('renderer golden: deterministic output for all profiles and inputs', () => 
         `${name}: provenance preserved in safe`
       );
       const tightProvCount = Object.keys((tight.record.sem as any).provenance || {}).length;
-      assert.ok(tightProvCount <= origProvCount, `${name}: tight provenance <= original (${tightProvCount} <= ${origProvCount})`);
+      assert.strictEqual(tightProvCount, origProvCount, `${name}: tight provenance preserved`);
     }
 
     // Verify renderings: tight removes
@@ -453,7 +452,7 @@ test('renderer golden: predicates preserved across all profiles', () => {
   }
 });
 
-test('renderer golden: warnings for annotation removal', () => {
+test('renderer golden: annotations are semantic and are never removed', () => {
   const generator = new ProfileGenerator();
   const entry = diverseInputs.find(r => r.name === 'with-annotations')!;
 
@@ -461,15 +460,13 @@ test('renderer golden: warnings for annotation removal', () => {
   const short = generator.profileShort(entry.record);
   const tight = generator.profileTight(entry.record);
 
-  // Safe should not warn about annotations
-  assert.ok(!safe.warnings!.some(w => w.toLowerCase().includes('annotation')), 'safe: no annotation warning');
-
-  // Short and tight should warn about annotation removal
-  assert.ok(short.warnings!.some(w => w.toLowerCase().includes('annotation')), 'short: warns about annotations');
-  assert.ok(tight.warnings!.some(w => w.toLowerCase().includes('annotation')), 'tight: warns about annotations');
+  for (const result of [safe, short, tight]) {
+    assert.deepStrictEqual(result.record.sem.annotations, entry.record.sem.annotations);
+    assert.ok(!result.warnings!.some(w => w.toLowerCase().includes('annotation')));
+  }
 });
 
-test('renderer golden: warnings for provenance removal', () => {
+test('renderer golden: provenance is evidence and is never removed', () => {
   const generator = new ProfileGenerator();
   const entry = diverseInputs.find(r => r.name === 'with-provenance')!;
 
@@ -477,11 +474,10 @@ test('renderer golden: warnings for provenance removal', () => {
   const short = generator.profileShort(entry.record);
   const tight = generator.profileTight(entry.record);
 
-  // Safe should not warn about provenance
-  assert.ok(!safe.warnings!.some(w => w.toLowerCase().includes('provenance')), 'safe: no provenance warning');
-
-  // Tight should warn about provenance removal
-  assert.ok(tight.warnings!.some(w => w.toLowerCase().includes('provenance')), 'tight: warns about provenance');
+  for (const result of [safe, short, tight]) {
+    assert.deepStrictEqual(result.record.sem.provenance, entry.record.sem.provenance);
+    assert.ok(!result.warnings!.some(w => w.toLowerCase().includes('provenance')));
+  }
 });
 
 test('renderer golden: warnings for rendering removal', () => {
@@ -541,14 +537,15 @@ test('renderer golden: profile config is retrievable', () => {
   }
 });
 
-test('renderer golden: config can be modified', () => {
+test('renderer golden: non-semantic config can be modified', () => {
   const generator = new ProfileGenerator();
 
   const before = generator.getConfig('safe');
   assert.strictEqual(before.preserveAnnotations, true);
 
-  generator.setConfig('safe', { preserveAnnotations: false });
+  generator.setConfig('safe', { maxTokenReduction: 0.2 });
 
   const after = generator.getConfig('safe');
-  assert.strictEqual(after.preserveAnnotations, false);
+  assert.strictEqual(after.maxTokenReduction, 0.2);
+  assert.strictEqual(after.preserveAnnotations, true);
 });
