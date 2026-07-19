@@ -1,0 +1,14 @@
+{
+  "experimentId": "protected-literal-scoring",
+  "runId": "2026-07-19T00-12-00-060Z",
+  "task": "realize",
+  "deterministic": false,
+  "items": 16,
+  "calls": 16,
+  "passed": 0,
+  "failed": 16,
+  "exactRate": 0,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "gatesPassed": false
+}

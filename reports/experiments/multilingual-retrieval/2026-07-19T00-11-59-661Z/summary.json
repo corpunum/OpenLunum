@@ -1,0 +1,15 @@
+{
+  "experimentId": "multilingual-retrieval",
+  "runId": "2026-07-19T00-11-59-661Z",
+  "task": "retrieval",
+  "deterministic": false,
+  "items": 16,
+  "calls": 16,
+  "passed": 0,
+  "failed": 16,
+  "exactRate": 0,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "meanReciprocalRank": 0,
+  "gatesPassed": false
+}
