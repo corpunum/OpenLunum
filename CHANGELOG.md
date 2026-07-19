@@ -5,6 +5,18 @@
 ### Added — Merge Policy (PR #187, commit 88017f8)
 - **Fail-closed exact-head merge policy:** `scripts/pi-merge-policy.mjs` evaluates merge eligibility against required checks (verify, schema-drift, report-validation, protected-data-boundary; quality-gates when core/eval src changes), enforces fail-closed on missing/pending/failed checks at the exact head commit, and blocks drafts, blockers, and stale reviews. `scripts/pi-merge-loop.sh` runs the auto-merge bot that picks up `ready-for-merge` and `orchestrator-approved` PRs, classifies paths as hard-protected (CI, agent infra, protected data → always require `claude-review`) or soft-protected (core types, schemas, registry → reviewer override via `LGTM-protected` comment), evaluates the merge policy before each merge, binds the merge to the exact head commit that passed policy (`--match-head-commit`), verifies main green after merge, and auto-reverts with a red-merge report when main goes red. Labels: `merge-policy-blocked`, `claude-review`, `needs-rebase`, `needs-work`, `maintainer-blocked`. Tests in `scripts/pi-merge-policy.test.mjs`. (PR #187, commit 88017f8)
 
+### Added — CI Outage Flag (commits 5890a16, a49fe3f)
+- **CI_OUTAGE flag in merge policy:** `scripts/pi-merge-policy.mjs` now skips hosted-check requirements (verify, schema-drift, report-validation, protected-data-boundary) when the committed flag file `reports/orchestrator/CI_OUTAGE` exists. This allows merges to continue during GitHub Actions billing outages. Flag is committed (not in .gitignore) so worker resets cannot delete it. Required status checks were removed from branch protection during the outage. All other policy gates (head-bound reviews, blocking labels, NEEDS_WORK, mergeable, TOCTOU match-head) remain fail-closed. When billing renews: delete CI_OUTAGE via commit, re-add the four required contexts, and restore strict mode. (commits 5890a16, a49fe3f)
+
+### Changed — Merge Loop (commit 530f7ca)
+- **Undraft labeled PRs before policy check:** `scripts/pi-merge-loop.sh` now runs `gh pr ready` on labeled PRs before evaluating the merge policy, so draft PRs with the correct labels can be merged without manual intervention. (commit 530f7ca)
+
+### Changed — Worker Agent (commit a516912)
+- **Idle when queue complete:** `scripts/pi-task-prompt.md` now enforces `IDLE: queue complete, no work` when WORK_QUEUE.md has zero unchecked `[ ]` items. Worker stops creating branches, opening PRs, or writing campaign-status reports when the queue is complete. Campaign-status PR spam stopped. (commit a516912)
+
+### Docs — Campaign Complete (commit 2f685df)
+- **WORK_QUEUE v4 complete:** 72/72 items checked. Campaign tracking reports updated. (~25 duplicate/spam PRs closed by cleanup). (commit 2f685df)
+
 
 ### Changed — CLI (PR #174)
 - **CLI migrate command enhanced:** `lunum migrate` now uses proper migration utilities from `@corpunum/lunum` (`migrateForward01to02`, `migrateBackward02to01`). Supports `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward) migrations. Provides detailed results including schema versions, fingerprints, warnings, and validation status. Supports both single records and arrays of records. Adds `--dry-run` mode that reports changes without modifying files, and in-place write mode that transforms records and writes back to file. 152 lines of tests in `packages/cli/test/cli.test.ts`. (PR #174, commit d5ba255)
