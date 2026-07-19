@@ -177,6 +177,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Multilingual round-trip retention: parse→realize round-trips on EN/EL/ES/ID against local models. Gold Sem realized to target language, parsed back, compared against gold. Scores: predicate match, role match, protected-literal preservation. 14 tests in `packages/eval/test/round-trip-retention.test.ts`. (PR #176)
 - Orchestrator handover doc: `ORCHESTRATOR.md` with 6-layer stack architecture (Cloud Orchestrator, Watchdog, Local Orchestrator with LLM diagnosis, Reviewer, Worker, Merge Bot), key paths, hardware profile, escalation path (bash auto-fix → LLM diagnosis → NEEDS_CLOUD → cloud orchestrator → user notification), merge bot `orchestrator-approved` label for hard-protected PRs, and ops runbook for any LLM to take over. `ORCHESTRATOR-PROMPT.md` provides copy-paste handover instructions.
 - Safety rollback process: `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests rather than trusting the record itself. 10 unit tests. Types in `packages/core/src/rollback-process.ts`.
+- CLI migrate command: `lunum migrate <file> --from 0.1 --to 0.2` or `--from 0.2 --to 0.1` for bidirectional migration, with `--dry-run` mode for preflight reports. Supports single records and arrays; reports schema versions, fingerprints, warnings, and validation status per record. 152 lines of tests in `packages/cli/test/cli.test.ts`.
 
 ## New in v0.2.0
 
