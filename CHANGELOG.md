@@ -2,6 +2,9 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Changed — CLI (PR #174)
+- **CLI migrate command enhanced:** `lunum migrate` now uses proper migration utilities from `@corpunum/lunum` (`migrateForward01to02`, `migrateBackward02to01`). Supports `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward) migrations. Provides detailed results including schema versions, fingerprints, warnings, and validation status. Supports both single records and arrays of records. Adds `--dry-run` mode that reports changes without modifying files, and in-place write mode that transforms records and writes back to file. 152 lines of tests in `packages/cli/test/cli.test.ts`. (PR #174, commit d5ba255)
+
 ### Added — Multilingual Round-Trip Retention (PR #176)
 - **Round-trip retention experiment:** Parse→realize round-trips on all 4 languages (EN/EL/ES/ID) against local models. Gold Sem is realized to each target language via local model, parsed back, and compared against gold Sem. Scores: predicate match, role match, protected-literal preservation. Per-language pass/fail metrics published. Types in `packages/eval/src/round-trip-retention.ts`. 14 tests in `packages/eval/test/round-trip-retention.test.ts`. (PR #176)
 
@@ -81,6 +84,9 @@
 ---
 
 ## Since 0.2.0
+
+### Added — CLI Migration (PR #174)
+- **Enhanced CLI migrate command:** Bidirectional `--from` / `--to` support, `--dry-run` mode, detailed results with schema versions and fingerprints, single-record and array support. (PR #174)
 
 ### Added — Evidence & Hardening (PR #50, #61, #62, #51, #66, #52, #55, #57)
 - **Parse experiments:** EN/EL/ES/ID runs against local models via eval runner with per-language metrics.
