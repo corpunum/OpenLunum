@@ -13,7 +13,14 @@ import {
   buildGoldenVector,
   validateGoldenVector,
   dryRunMigration,
-  isCurrentSchema
+  isCurrentSchema,
+  migrateForward01to02,
+  migrateBackward02to01,
+  migrateRecordsForward,
+  migrateRecordsBackward,
+  roundTripMigration,
+  validateSemSchema,
+  validateRecord
 } from '../src/fingerprint-migration.js';
 import type { LunumRecord } from '../src/types.js';
 
@@ -328,4 +335,185 @@ test('dryRunMigration reports correct counts for mixed dataset', () => {
   assert.strictEqual(summary.total, 2);
   assert.strictEqual(summary.alreadyCurrent, 1);
   assert.strictEqual(summary.migrated, 1);
+});
+
+// ---------------------------------------------------------------------------
+// Bidirectional migration tests (0.1 ↔ 0.2)
+// ---------------------------------------------------------------------------
+
+test('validateSemSchema returns true for valid schema', () => {
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [] };
+  assert.strictEqual(validateSemSchema(sem), true);
+});
+
+test('validateSemSchema returns false for empty schema', () => {
+  const sem = { schema: '', world: 'test', kind: 'test', clauses: [] };
+  assert.strictEqual(validateSemSchema(sem), false);
+});
+
+test('validateRecord returns true for valid record', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [] },
+    fingerprint: 'lfp:0.1:sha256:abcdef',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  assert.strictEqual(validateRecord(record), true);
+});
+
+test('validateRecord returns false for missing recordVersion', () => {
+  const record: LunumRecord = {
+    recordVersion: '',
+    source: { text: 'test', language: null, role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [] },
+    fingerprint: 'lfp:0.1:sha256:abcdef',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 1, reasons: [] },
+    meta: {}
+  };
+  assert.strictEqual(validateRecord(record), false);
+});
+
+test('migrateForward01to02 upgrades schema and recordVersion', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.5, reasons: ['test'] },
+    meta: {}
+  };
+  const result = migrateForward01to02(record);
+  assert.strictEqual(result.record.recordVersion, 'lunum-record/0.2');
+  assert.strictEqual(result.sem.schema, 'lunum-sem/0.2');
+  assert.ok(result.record.fingerprint.startsWith('lfp:0.2:'));
+  assert.strictEqual(result.sourceValid, true);
+  assert.strictEqual(result.destValid, true);
+});
+
+test('migrateForward01to02 locks modality to enum', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {}, modality: 'unknown_value' }] },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.5, reasons: ['test'] },
+    meta: {}
+  };
+  const result = migrateForward01to02(record);
+  const clause = result.sem.clauses[0]!;
+  assert.strictEqual(clause.modality, 'certainty');
+  assert.strictEqual(result.warnings.length, 1);
+  assert.strictEqual(result.warnings[0]!.code, 'MODALITY_LOCKED');
+});
+
+test('migrateForward01to02 warns on extra provenance fields', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], provenance: { source: 'txt', author: 'a', timestamp: 't', license: 'L', extraField: 'x' } },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.5, reasons: ['test'] },
+    meta: {}
+  };
+  const result = migrateForward01to02(record);
+  const warnings = result.warnings.filter(w => w.field.startsWith('provenance.'));
+  assert.ok(warnings.length > 0);
+  assert.strictEqual(result.sem.provenance!.extraField, undefined);
+});
+
+test('migrateForward01to02 warns on extra annotation fields', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], annotations: { confidence: 0.5, extra: 'x' } },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.5, reasons: ['test'] },
+    meta: {}
+  };
+  const result = migrateForward01to02(record);
+  const warnings = result.warnings.filter(w => w.field.startsWith('annotations.'));
+  assert.ok(warnings.length > 0);
+  assert.strictEqual(result.sem.annotations!.extra, undefined);
+});
+
+test('migrateBackward02to01 downgrades schema and recordVersion', () => {
+  const record: LunumRecord = {
+    recordVersion: 'lunum-record/0.2',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.2', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }] },
+    fingerprint: 'lfp:0.2:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.5, reasons: ['test'] },
+    meta: {}
+  };
+  const result = migrateBackward02to01(record);
+  assert.strictEqual(result.record.recordVersion, 'lunum-record/0.1-draft');
+  assert.strictEqual(result.sem.schema, 'lunum-sem/0.1-draft');
+  assert.ok(result.record.fingerprint.startsWith('lfp:0.1:'));
+  assert.strictEqual(result.sourceValid, true);
+  assert.strictEqual(result.destValid, true);
+});
+
+test('migrateBackward02to01 emits warnings for unrestricted schemas', () => {
+  const record: LunumRecord = {
+    recordVersion: 'lunum-record/0.2',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.2', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], provenance: { source: 'txt' }, annotations: { confidence: 0.5 } },
+    fingerprint: 'lfp:0.2:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.5, reasons: ['test'] },
+    meta: {}
+  };
+  const result = migrateBackward02to01(record);
+  assert.ok(result.warnings.some(w => w.code === 'PROVENANCE_UNRESTRICTED'));
+  assert.ok(result.warnings.some(w => w.code === 'ANNOTATIONS_UNRESTRICTED'));
+});
+
+test('migrateRecordsForward preserves input order', () => {
+  const records: LunumRecord[] = [
+    { recordVersion: '0.1-draft', source: { text: 'a', language: null, role: null, ref: null }, sem: { schema: 'lunum-sem/0.1-draft', world: 'a', kind: 'k', clauses: [{ predicate: 'a', roles: {} }] }, fingerprint: 'lfp:0.1:sha256:aaa', renderings: {}, policy: { eligible: true, category: 'a', risk: 'low', confidence: 1, reasons: [] }, meta: {} },
+    { recordVersion: '0.1-draft', source: { text: 'b', language: null, role: null, ref: null }, sem: { schema: 'lunum-sem/0.1-draft', world: 'b', kind: 'k', clauses: [{ predicate: 'b', roles: {} }] }, fingerprint: 'lfp:0.1:sha256:bbb', renderings: {}, policy: { eligible: true, category: 'b', risk: 'low', confidence: 1, reasons: [] }, meta: {} }
+  ];
+  const result = migrateRecordsForward(records);
+  assert.strictEqual(result.results.length, 2);
+  assert.strictEqual(result.orderPreserved, true);
+  assert.strictEqual(result.results[0]!.record.recordVersion, 'lunum-record/0.2');
+  assert.strictEqual(result.results[1]!.record.recordVersion, 'lunum-record/0.2');
+});
+
+test('migrateRecordsBackward preserves input order', () => {
+  const records: LunumRecord[] = [
+    { recordVersion: 'lunum-record/0.2', source: { text: 'a', language: null, role: null, ref: null }, sem: { schema: 'lunum-sem/0.2', world: 'a', kind: 'k', clauses: [{ predicate: 'a', roles: {} }] }, fingerprint: 'lfp:0.2:sha256:aaa', renderings: {}, policy: { eligible: true, category: 'a', risk: 'low', confidence: 1, reasons: [] }, meta: {} },
+    { recordVersion: 'lunum-record/0.2', source: { text: 'b', language: null, role: null, ref: null }, sem: { schema: 'lunum-sem/0.2', world: 'b', kind: 'k', clauses: [{ predicate: 'b', roles: {} }] }, fingerprint: 'lfp:0.2:sha256:bbb', renderings: {}, policy: { eligible: true, category: 'b', risk: 'low', confidence: 1, reasons: [] }, meta: {} }
+  ];
+  const result = migrateRecordsBackward(records);
+  assert.strictEqual(result.results.length, 2);
+  assert.strictEqual(result.orderPreserved, true);
+  assert.strictEqual(result.results[0]!.record.recordVersion, 'lunum-record/0.1-draft');
+  assert.strictEqual(result.results[1]!.record.recordVersion, 'lunum-record/0.1-draft');
+});
+
+test('roundTripMigration produces valid 0.1 record', () => {
+  const record: LunumRecord = {
+    recordVersion: '0.1-draft',
+    source: { text: 'test', language: 'en', role: null, ref: null },
+    sem: { schema: 'lunum-sem/0.1-draft', world: 'test', kind: 'test', clauses: [{ predicate: 'p', roles: {} }], provenance: { source: 'txt' }, annotations: { confidence: 0.5 } },
+    fingerprint: 'lfp:0.1:sha256:abcdef1234567890',
+    renderings: {},
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.5, reasons: ['test'] },
+    meta: {}
+  };
+  const result = roundTripMigration(record);
+  assert.strictEqual(result.forward.sem.schema, 'lunum-sem/0.2');
+  assert.strictEqual(result.backward.sem.schema, 'lunum-sem/0.1-draft');
+  assert.strictEqual(result.backward.record.recordVersion, 'lunum-record/0.1-draft');
+  assert.ok(result.backward.warnings.length > 0);
 });
