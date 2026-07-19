@@ -3,12 +3,14 @@
  *
  * Measures precision when querying in language A and retrieving
  * semantically equivalent records in language B. Uses Lunum-Sem
- * fingerprints for cross-lingual semantic matching.
+ * structural equivalence for cross-lingual semantic matching.
+ *
+ * A record is considered semantically equivalent to another if they
+ * share the same semantic group identifier (groupId) in their
+ * annotations, regardless of language or surface text.
  */
 
-import { readFile, mkdir, writeFile } from 'node:fs/promises';
-import * as path from 'node:path';
-import { parseFingerprint } from '@corpunum/lunum';
+import { mkdir, writeFile } from 'node:fs/promises';
 import type { LunumRecord, LunumSem } from '@corpunum/lunum';
 import type { LanguageCode } from './multilingual-retrieval.js';
 
@@ -100,19 +102,49 @@ export interface CrossLingualReport {
 // ── Cross-Lingual Index ────────────────────────────────────────────
 
 /**
+ * Extract the semantic group ID from a record's annotations.
+ * Returns undefined if no semantic group is specified.
+ */
+export function extractSemanticGroup(record: LunumRecord): string | undefined {
+  const sem = record.sem as unknown as { annotations?: Record<string, unknown> };
+  const annotations = sem?.annotations;
+  if (!annotations || typeof annotations !== 'object') return undefined;
+  const group = (annotations as any).groupId;
+  if (typeof group === 'string' && group.length > 0) return group;
+  // Fallback: use a hash of the canonicalized semantic content
+  return undefined;
+}
+
+/**
+ * Check if two records share the same semantic group.
+ */
+export function areSemanticallyEquivalent(a: LunumRecord, b: LunumRecord): boolean {
+  const groupA = extractSemanticGroup(a);
+  const groupB = extractSemanticGroup(b);
+  if (groupA && groupB) return groupA === groupB;
+  // Fallback: compare fingerprints
+  if (a.fingerprint && b.fingerprint) {
+    const fpA = a.fingerprint.split(':');
+    const fpB = b.fingerprint.split(':');
+    if (fpA.length >= 4 && fpB.length >= 4) {
+      return fpA[3] === fpB[3]; // Same digest = same semantics
+    }
+  }
+  return false;
+}
+
+/**
  * Index Lunum-Sem records for cross-lingual retrieval.
- * Uses fingerprints to identify semantically equivalent records
- * across different languages.
+ * Records are indexed by language and by semantic group.
  */
 export class CrossLingualIndex {
   private records: Map<string, LunumRecord> = new Map();
-  private fingerprintIndex: Map<string, LunumRecord[]> = new Map();
   private languageIndex: Map<LanguageCode, string[]> = new Map();
+  private semanticGroupIndex: Map<string, string[]> = new Map();
 
   /**
    * Add records to the index.
-   * Records are indexed by fingerprint (for cross-lingual matching)
-   * and by language (for targeted retrieval).
+   * Records are indexed by language and by semantic group ID.
    */
   add(records: LunumRecord[]): void {
     for (const record of records) {
@@ -126,18 +158,13 @@ export class CrossLingualIndex {
       }
       this.languageIndex.get(lang)!.push(id);
 
-      // Index by fingerprint for cross-lingual semantic matching
-      const fp = record.fingerprint;
-      if (fp) {
-        const parsed = parseFingerprint(fp);
-        if (parsed) {
-          // Group by the digest prefix (shared fingerprints indicate equivalence)
-          const fpGroup = parsed.digest.slice(0, 8);
-          if (!this.fingerprintIndex.has(fpGroup)) {
-            this.fingerprintIndex.set(fpGroup, []);
-          }
-          this.fingerprintIndex.get(fpGroup)!.push(record);
+      // Index by semantic group
+      const groupId = extractSemanticGroup(record);
+      if (groupId) {
+        if (!this.semanticGroupIndex.has(groupId)) {
+          this.semanticGroupIndex.set(groupId, []);
         }
+        this.semanticGroupIndex.get(groupId)!.push(id);
       }
     }
   }
@@ -150,10 +177,40 @@ export class CrossLingualIndex {
   }
 
   /**
+   * Get all record IDs in the same semantic group.
+   */
+  getIdsBySemanticGroup(groupId: string): string[] {
+    return this.semanticGroupIndex.get(groupId) || [];
+  }
+
+  /**
    * Get a record by ID.
    */
   getById(id: string): LunumRecord | undefined {
     return this.records.get(id);
+  }
+
+  /**
+   * Find semantically equivalent records in a target language.
+   * Uses semantic group matching when available, falls back to
+   * fingerprint comparison.
+   */
+  findEquivalentInLanguage(
+    sourceRecord: LunumRecord,
+    targetLang: LanguageCode
+  ): LunumRecord[] {
+    const targetIds = this.getIdsByLanguage(targetLang);
+    const equivalents: LunumRecord[] = [];
+
+    for (const id of targetIds) {
+      const targetRecord = this.getById(id);
+      if (!targetRecord) continue;
+      if (areSemanticallyEquivalent(sourceRecord, targetRecord)) {
+        equivalents.push(targetRecord);
+      }
+    }
+
+    return equivalents;
   }
 
   /**
@@ -169,6 +226,7 @@ export class CrossLingualIndex {
   getStats(): {
     totalRecords: number;
     recordsByLanguage: Record<LanguageCode, number>;
+    semanticGroups: number;
   } {
     const recordsByLanguage: Record<LanguageCode, number> = {};
     for (const [lang, ids] of this.languageIndex.entries()) {
@@ -176,7 +234,8 @@ export class CrossLingualIndex {
     }
     return {
       totalRecords: this.records.size,
-      recordsByLanguage
+      recordsByLanguage,
+      semanticGroups: this.semanticGroupIndex.size
     };
   }
 }
@@ -233,8 +292,20 @@ function evaluateQuery(
     const record = index.getById(id);
     if (!record) continue;
 
-    // Determine if this is a true semantic match
-    const isTrueMatch = query.expectedIds.includes(id);
+    // Determine if this is a true semantic match using the query's expected IDs
+    const isTrueMatch = query.expectedIds.some(expectedId => {
+      // Direct match
+      if (expectedId === id) return true;
+      // Fingerprint digest match
+      if (expectedId && record.fingerprint) {
+        const fpParts = record.fingerprint.split(':');
+        const expectedParts = expectedId.split(':');
+        if (fpParts.length >= 4 && expectedParts.length >= 4) {
+          return fpParts[3] === expectedParts[3];
+        }
+      }
+      return false;
+    });
 
     retrieved.push({
       id,
@@ -392,6 +463,9 @@ export interface ParallelRecordGroup {
 /**
  * Create cross-lingual queries from parallel record groups.
  * For each group, generate queries from each language to all other languages.
+ *
+ * Uses semantic group IDs from annotations when available, falling back
+ * to fingerprint comparison.
  */
 export function createCrossLingualQueries(
   groups: ParallelRecordGroup[],
@@ -404,35 +478,41 @@ export function createCrossLingualQueries(
     if (group.records.length < 2) continue;
 
     // Group records by language
-    const recordsByLang = new Map<LanguageCode, LunumRecord>();
+    const recordsByLang = new Map<LanguageCode, LunumRecord[]>();
     for (const record of group.records) {
       const lang = (record.source.language as LanguageCode) || 'en';
       if (!recordsByLang.has(lang)) {
-        recordsByLang.set(lang, record);
+        recordsByLang.set(lang, []);
       }
+      recordsByLang.get(lang)!.push(record);
     }
 
     if (recordsByLang.size < 2) continue;
 
     // Generate queries
     let count = 0;
-    for (const [sourceLang, sourceRecord] of recordsByLang) {
+    for (const [sourceLang, sourceRecords] of recordsByLang) {
       if (count >= maxQueriesPerGroup) break;
 
-      // For each other language, create a query
       for (const targetLang of languages) {
         if (sourceLang === targetLang) continue;
         if (count >= maxQueriesPerGroup) break;
 
-        // Expected IDs: records from target language in same group
         const targetRecords = recordsByLang.get(targetLang);
-        if (!targetRecords) continue;
+        if (!targetRecords || targetRecords.length === 0) continue;
+
+        // Build expected IDs from all target language records in this group
+        const expectedIds = targetRecords.map(r => r.fingerprint || '');
+
+        // Use the first source record as the query
+        const sourceRecord = sourceRecords[0];
+        if (!sourceRecord) continue;
 
         queries.push({
           queryText: sourceRecord.source.text || '',
           queryLanguage: sourceLang,
           targetLanguage: targetLang,
-          expectedIds: [targetRecords.fingerprint || '']
+          expectedIds
         });
         count++;
       }
