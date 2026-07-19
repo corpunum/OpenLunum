@@ -84,6 +84,11 @@ generate_claims() {
   # A branch is a claim only while it has an open PR, or while it is a
   # local, unpublished branch ahead of main. Historical remote branches are
   # retained after merge and must not permanently block their queue topics.
+  local remote_branches branch ahead
+  # Fetch the remote branch names once. Doing an ls-remote per historical
+  # branch delays every worker run and leaves the model with an empty claim set.
+  remote_branches=$(git ls-remote --heads origin 'refs/heads/agent/*' 2>/dev/null \
+    | awk '{sub("refs/heads/", "", $2); print $2}')
   {
     echo "TASKS ALREADY CLAIMED — active agent branches only (do NOT duplicate these topics; pick a DIFFERENT unchecked item from WORK_QUEUE.md):"
     timeout 60 gh pr list --repo corpunum/OpenLunum --state open --json headRefName --jq \
@@ -92,7 +97,7 @@ generate_claims() {
       [[ -n "$branch" ]] || continue
       ahead=$(git -C "$WORKDIR" rev-list --count "origin/main..$branch" 2>/dev/null || echo 0)
       [[ "$ahead" -gt 0 ]] || continue
-      if ! git -C "$WORKDIR" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+      if ! grep -Fqx "$branch" <<< "$remote_branches"; then
         echo "- $branch"
       fi
     done < <(git -C "$WORKDIR" branch --list 'agent/*' --format='%(refname:short)' 2>/dev/null)
@@ -106,6 +111,9 @@ auto_open_prs() {
     case "$branch" in agent/eval/*) continue ;; esac  # eval sandbox branches are never real work
     ahead=$(git -C "$WORKDIR" rev-list --count "origin/main..$branch" 2>/dev/null || echo 0)
     [[ "$ahead" -gt 0 ]] || continue
+    # A stale branch can be ahead by commit ancestry while its file tree is
+    # identical to main. It is not work and must not create a duplicate PR.
+    git -C "$WORKDIR" diff --quiet "origin/main...$branch" -- || continue
     pr_count=$(gh pr list --repo corpunum/OpenLunum --head "$branch" --state open --json number --jq 'length' 2>/dev/null || echo error)
     if [[ "$pr_count" == "0" ]]; then
       git -C "$WORKDIR" push -u origin "$branch" 2>/dev/null || true
