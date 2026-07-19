@@ -1,0 +1,25 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "parse-experiment-multilingual",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "deterministic": false,
+  "hypothesis": "Local models achieve comparable parse accuracy across English, Greek, Spanish, and Indonesian when prompted with consistent Lunum-Sem extraction instructions.",
+  "baselineCommit": "1c04461",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "modelProfile": "profiles/models/local-openai-compatible.example.json",
+  "limits": {
+    "maxItems": 16,
+    "maxAttemptsPerItem": 2,
+    "maxModelCalls": 32
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": false
+  },
+  "outputDirectory": "reports/parse-experiment-multilingual"
+}

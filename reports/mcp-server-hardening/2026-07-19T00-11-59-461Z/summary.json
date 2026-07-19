@@ -1,0 +1,14 @@
+{
+  "experimentId": "mcp-server-hardening",
+  "runId": "2026-07-19T00-11-59-461Z",
+  "task": "conformance",
+  "deterministic": true,
+  "items": 7,
+  "calls": 0,
+  "passed": 7,
+  "failed": 0,
+  "exactRate": 1,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "gatesPassed": true
+}
