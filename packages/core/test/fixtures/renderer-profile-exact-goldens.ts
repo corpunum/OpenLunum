@@ -59,7 +59,6 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
           "clauses": [
             {
               "predicate": "like",
@@ -110,7 +109,6 @@ export const approvedRendererSnapshots = {
             }
           ],
           "kind": "fact",
-          "provenance": {},
           "schema": "lunum-sem/0.1-draft",
           "world": "real"
         },
@@ -184,7 +182,6 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
           "clauses": [
             {
               "negated": true,
@@ -237,7 +234,6 @@ export const approvedRendererSnapshots = {
             }
           ],
           "kind": "fact",
-          "provenance": {},
           "schema": "lunum-sem/0.1-draft",
           "world": "real"
         },
@@ -324,7 +320,6 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
           "clauses": [
             {
               "conditions": [
@@ -403,7 +398,6 @@ export const approvedRendererSnapshots = {
             }
           ],
           "kind": "instruction",
-          "provenance": {},
           "schema": "lunum-sem/0.1-draft",
           "world": "tool"
         },
@@ -474,9 +468,9 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
           "clauses": [
             {
+              "modality": "possibility",
               "predicate": "rain",
               "roles": {}
             }
@@ -514,12 +508,12 @@ export const approvedRendererSnapshots = {
         "sem": {
           "clauses": [
             {
+              "modality": "possibility",
               "predicate": "rain",
               "roles": {}
             }
           ],
           "kind": "prediction",
-          "provenance": {},
           "schema": "lunum-sem/0.1-draft",
           "world": "real"
         },
@@ -598,7 +592,12 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
+          "annotations": {
+            "confidence": 0.95,
+            "tags": [
+              "ui"
+            ]
+          },
           "clauses": [
             {
               "predicate": "prefer",
@@ -619,9 +618,7 @@ export const approvedRendererSnapshots = {
           "text": "annotations"
         }
       },
-      "warnings": [
-        "Annotations removed"
-      ]
+      "warnings": []
     },
     "tight": {
       "record": {
@@ -657,7 +654,6 @@ export const approvedRendererSnapshots = {
             }
           ],
           "kind": "preference",
-          "provenance": {},
           "schema": "lunum-sem/0.1-draft",
           "world": "real"
         },
@@ -668,9 +664,7 @@ export const approvedRendererSnapshots = {
           "text": "annotations"
         }
       },
-      "warnings": [
-        "Annotations removed"
-      ]
+      "warnings": []
     }
   },
   "provenance": {
@@ -736,7 +730,6 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
           "clauses": [
             {
               "predicate": "state",
@@ -791,7 +784,10 @@ export const approvedRendererSnapshots = {
             }
           ],
           "kind": "fact",
-          "provenance": {},
+          "provenance": {
+            "author": "alice",
+            "source": "manual"
+          },
           "schema": "lunum-sem/0.1-draft",
           "world": "real"
         },
@@ -802,9 +798,7 @@ export const approvedRendererSnapshots = {
           "text": "provenance"
         }
       },
-      "warnings": [
-        "Provenance removed"
-      ]
+      "warnings": []
     }
   },
   "metadata-rendering": {
@@ -884,7 +878,9 @@ export const approvedRendererSnapshots = {
           }
         },
         "sem": {
-          "annotations": {},
+          "annotations": {
+            "confidence": 0.8
+          },
           "clauses": [
             {
               "predicate": "access",
@@ -908,9 +904,7 @@ export const approvedRendererSnapshots = {
           "text": "metadata-rendering"
         }
       },
-      "warnings": [
-        "Annotations removed"
-      ]
+      "warnings": []
     },
     "tight": {
       "record": {
@@ -943,7 +937,9 @@ export const approvedRendererSnapshots = {
             }
           ],
           "kind": "rule",
-          "provenance": {},
+          "provenance": {
+            "source": "spec"
+          },
           "schema": "lunum-sem/0.1-draft",
           "world": "tool"
         },
@@ -955,8 +951,6 @@ export const approvedRendererSnapshots = {
         }
       },
       "warnings": [
-        "Annotations removed",
-        "Provenance removed",
         "Renderings removed"
       ]
     }
@@ -1020,13 +1014,12 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
           "clauses": [
             {
               "predicate": "process",
               "roles": {
                 "agent": "system",
-                "subject": "An extremely long descriptive text that exceeds fi..."
+                "subject": "An extremely long descriptive text that exceeds fifty characters and must be snapshotted"
               }
             }
           ],
@@ -1066,12 +1059,11 @@ export const approvedRendererSnapshots = {
               "predicate": "process",
               "roles": {
                 "agent": "system",
-                "subject": "An extremely long descriptive text that exceeds fi..."
+                "subject": "An extremely long descriptive text that exceeds fifty characters and must be snapshotted"
               }
             }
           ],
           "kind": "fact",
-          "provenance": {},
           "schema": "lunum-sem/0.1-draft",
           "world": "real"
         },
@@ -1151,7 +1143,6 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
           "clauses": [
             {
               "predicate": "see",
@@ -1209,7 +1200,6 @@ export const approvedRendererSnapshots = {
             }
           ],
           "kind": "instruction",
-          "provenance": {},
           "references": [
             {
               "ref": "docs",
@@ -1296,7 +1286,6 @@ export const approvedRendererSnapshots = {
         "recordVersion": "lunum-record/0.1-draft",
         "renderings": {},
         "sem": {
-          "annotations": {},
           "clauses": [
             {
               "predicate": "like",
@@ -1361,7 +1350,6 @@ export const approvedRendererSnapshots = {
             }
           ],
           "kind": "statement",
-          "provenance": {},
           "schema": "lunum-sem/0.1-draft",
           "world": "real"
         },
