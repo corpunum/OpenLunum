@@ -358,3 +358,95 @@ test('round-trip retention: two models produce different model results', async (
   // Cleanup
   fs.rmSync(tmpDir, { recursive: true, force: true });
 });
+
+test('round-trip retention: produces per-model retention profiles', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rt-retention-test-'));
+  const manifest = { ...testManifest, outputDirectory: tmpDir } as any;
+
+  const { report } = await runRoundTripRetentionExperiment(manifest, WORKSPACE_ROOT, testDataset, testModelProfiles);
+
+  // Should have profiles for both models
+  assert.ok(report.modelProfiles, 'Should have modelProfiles');
+  assert.strictEqual(Object.keys(report.modelProfiles).length, 2, 'Should have 2 model profiles');
+  assert.ok(report.modelProfiles['local-model-1'], 'Should have profile for local-model-1');
+  assert.ok(report.modelProfiles['local-model-2'], 'Should have profile for local-model-2');
+
+  // Check profile structure
+  for (const [modelId, profile] of Object.entries(report.modelProfiles)) {
+    assert.strictEqual(profile.modelId, modelId, `Model ID should match key`);
+    assert.ok(profile.totalItems > 0, `${modelId} should have items`);
+    assert.ok(profile.totalItems === 16, `${modelId} should have 4 items × 4 languages`);
+    assert.ok(profile.retentionRate >= 0, `${modelId} should have non-negative retention rate`);
+    assert.ok(profile.retentionRate <= 1, `${modelId} retention rate should be <= 1`);
+    assert.ok(profile.passesBaseline !== undefined, `${modelId} should have passesBaseline flag`);
+
+    // Check per-language breakdown
+    for (const lang of ['en', 'el', 'es', 'id'] as const) {
+      assert.ok(profile.languageBreakdown[lang], `${modelId} should have breakdown for ${lang}`);
+      assert.strictEqual(profile.languageBreakdown[lang]!.language, lang, `Language should match`);
+      assert.ok(profile.languageBreakdown[lang]!.totalItems > 0, `${modelId} ${lang} should have items`);
+      assert.strictEqual(profile.languageBreakdown[lang]!.totalItems, 4, `${modelId} ${lang} should have 4 items`);
+    }
+  }
+
+  // Cleanup
+  fs.rmSync(tmpDir, { recursive: true, force: true });
+});
+
+test('round-trip retention: best models by language are computed', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rt-retention-test-'));
+  const manifest = { ...testManifest, outputDirectory: tmpDir } as any;
+
+  const { report } = await runRoundTripRetentionExperiment(manifest, WORKSPACE_ROOT, testDataset, testModelProfiles);
+
+  // Should have best models for all 4 languages
+  assert.ok(report.bestModelsByLanguage, 'Should have bestModelsByLanguage');
+  for (const lang of ['en', 'el', 'es', 'id'] as const) {
+    assert.ok(report.bestModelsByLanguage[lang], `Should have best model for ${lang}`);
+    assert.ok(['local-model-1', 'local-model-2'].includes(report.bestModelsByLanguage[lang]!), `${lang} best model should be one of the tested models`);
+  }
+
+  // Cleanup
+  fs.rmSync(tmpDir, { recursive: true, force: true });
+});
+
+test('round-trip retention: model profiles include semantic scores', async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rt-retention-test-'));
+  const manifest = { ...testManifest, outputDirectory: tmpDir } as any;
+
+  const { report } = await runRoundTripRetentionExperiment(manifest, WORKSPACE_ROOT, testDataset, testModelProfiles);
+
+  for (const [modelId, profile] of Object.entries(report.modelProfiles)) {
+    assert.ok(profile.avgPredicateMatch >= 0, `${modelId} should have non-negative avg predicate match`);
+    assert.ok(profile.avgPredicateMatch <= 1, `${modelId} avg predicate match should be <= 1`);
+    assert.ok(profile.avgRoleMatch >= 0, `${modelId} should have non-negative avg role match`);
+    assert.ok(profile.avgRoleMatch <= 1, `${modelId} avg role match should be <= 1`);
+    assert.ok(profile.avgProtectedLiteralPreservation >= 0, `${modelId} should have non-negative avg literal preservation`);
+    assert.ok(profile.avgProtectedLiteralPreservation <= 1, `${modelId} avg literal preservation should be <= 1`);
+    assert.ok(profile.meanLatencyMs >= 0, `${modelId} should have non-negative mean latency`);
+  }
+
+  // Cleanup
+  fs.rmSync(tmpDir, { recursive: true, force: true });
+});
+
+test('round-trip retention: writes model profile reports to disk', async () => {
+  const reportDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rt-retention-model-'));
+  const manifest = { ...testManifest, outputDirectory: '' } as any;
+
+  await runRoundTripRetentionExperiment(manifest, reportDir, testDataset.slice(0, 1), testModelProfiles);
+
+  const reportFiles = fs.readdirSync(reportDir);
+  
+  // Should have model profile markdown files
+  const modelProfileFiles = reportFiles.filter(f => f.startsWith('model-profile-') && f.endsWith('.md'));
+  assert.strictEqual(modelProfileFiles.length, 2, 'Should write 2 model profile markdown files');
+  assert.ok(modelProfileFiles.some(f => f === 'model-profile-local-model-1.md'), 'Should have model-profile-local-model-1.md');
+  assert.ok(modelProfileFiles.some(f => f === 'model-profile-local-model-2.md'), 'Should have model-profile-local-model-2.md');
+
+  // Should have best models by language file
+  assert.ok(reportFiles.some(f => f === 'best-models-by-language.md'), 'Should write best-models-by-language.md');
+
+  // Cleanup
+  fs.rmSync(reportDir, { recursive: true, force: true });
+});

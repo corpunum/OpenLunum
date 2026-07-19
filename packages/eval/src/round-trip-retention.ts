@@ -49,9 +49,55 @@ export interface RoundTripReport {
   totalErrors: number;
   overallRetentionRate: number;
   languageMetrics: Record<RealizationLanguage, RoundTripMetric>;
+  /** Per-model retention profiles computed from experiment results */
+  modelProfiles: Record<string, ModelRetentionProfile>;
+  /** Best model for each language (highest retention rate) */
+  bestModelsByLanguage: Record<RealizationLanguage, string>;
   baselineThreshold: number;
   regressionDetected: boolean;
   generatedAt: number;
+}
+
+/** Retention profile for a single model across all languages */
+export interface ModelRetentionProfile {
+  /** Model identifier */
+  modelId: string;
+  /** Total items evaluated across all languages */
+  totalItems: number;
+  /** Total items passed across all languages */
+  totalPassed: number;
+  /** Total items failed across all languages */
+  totalFailed: number;
+  /** Total errors across all languages */
+  totalErrors: number;
+  /** Overall retention rate */
+  retentionRate: number;
+  /** Average predicate match across all languages */
+  avgPredicateMatch: number;
+  /** Average role match across all languages */
+  avgRoleMatch: number;
+  /** Average protected literal preservation across all languages */
+  avgProtectedLiteralPreservation: number;
+  /** Mean latency in milliseconds */
+  meanLatencyMs: number;
+  /** Per-language breakdown */
+  languageBreakdown: Record<RealizationLanguage, ModelLanguageProfile>;
+  /** Whether this model passes the baseline threshold overall */
+  passesBaseline: boolean;
+}
+
+/** Retention profile for a single model on a single language */
+export interface ModelLanguageProfile {
+  language: RealizationLanguage;
+  totalItems: number;
+  passedItems: number;
+  failedItems: number;
+  errorItems: number;
+  retentionRate: number;
+  avgPredicateMatch: number;
+  avgRoleMatch: number;
+  avgProtectedLiteralPreservation: number;
+  meanLatencyMs: number;
 }
 
 export interface RoundTripResult {
@@ -328,6 +374,122 @@ export async function runRoundTripRetentionExperiment(
   const baselineThreshold = manifest.gates?.minimumExactRate ?? 0.5;
   const regressionDetected = overallRetentionRate < baselineThreshold;
 
+  // Compute per-model retention profiles
+  const modelRetentionProfiles: Record<string, ModelRetentionProfile> = {};
+  const bestModelsByLanguage: Record<RealizationLanguage, string> = {} as Record<RealizationLanguage, string>;
+
+  for (const profile of modelProfiles) {
+    const langStatsPerModel: Record<string, { total: number; passed: number; failed: number; errors: number; predicateMatches: number[]; roleMatches: number[]; literalPreservations: number[]; latencies: number[] }> = {};
+
+    for (const lang of languages) {
+      const key = `${lang}-${profile.id}` as LangModelKey;
+      const s = stats.get(key);
+      if (s) {
+        if (!langStatsPerModel[profile.id]) {
+          langStatsPerModel[profile.id] = { total: 0, passed: 0, failed: 0, errors: 0, predicateMatches: [] as number[], roleMatches: [] as number[], literalPreservations: [] as number[], latencies: [] as number[] };
+        }
+        const m = langStatsPerModel[profile.id]!;
+        m.total += s.total;
+        m.passed += s.passed;
+        m.failed += s.failed;
+        m.errors += s.errors;
+        m.predicateMatches.push(...s.predicateMatches);
+        m.roleMatches.push(...s.roleMatches);
+        m.literalPreservations.push(...s.literalPreservations);
+        m.latencies.push(...s.latencies);
+      }
+    }
+
+    const overall = langStatsPerModel[profile.id] ?? { total: 0, passed: 0, failed: 0, errors: 0, predicateMatches: [], roleMatches: [], literalPreservations: [], latencies: [] };
+    const overallRetentionRate = overall.total > 0 ? overall.passed / overall.total : 0;
+
+    const languageBreakdown: Record<RealizationLanguage, ModelLanguageProfile> = {
+      en: { language: 'en', totalItems: 0, passedItems: 0, failedItems: 0, errorItems: 0, retentionRate: 0, avgPredicateMatch: 0, avgRoleMatch: 0, avgProtectedLiteralPreservation: 0, meanLatencyMs: 0 } as any,
+      el: { language: 'el', totalItems: 0, passedItems: 0, failedItems: 0, errorItems: 0, retentionRate: 0, avgPredicateMatch: 0, avgRoleMatch: 0, avgProtectedLiteralPreservation: 0, meanLatencyMs: 0 } as any,
+      es: { language: 'es', totalItems: 0, passedItems: 0, failedItems: 0, errorItems: 0, retentionRate: 0, avgPredicateMatch: 0, avgRoleMatch: 0, avgProtectedLiteralPreservation: 0, meanLatencyMs: 0 } as any,
+      id: { language: 'id', totalItems: 0, passedItems: 0, failedItems: 0, errorItems: 0, retentionRate: 0, avgPredicateMatch: 0, avgRoleMatch: 0, avgProtectedLiteralPreservation: 0, meanLatencyMs: 0 } as any
+    };
+
+    let bestLangForModel: RealizationLanguage = 'en';
+    let bestLangRate = -1;
+
+    for (const lang of languages) {
+      const key = `${lang}-${profile.id}` as LangModelKey;
+      const s = stats.get(key);
+      if (s) {
+        const lr = s.total > 0 ? s.passed / s.total : 0;
+        const apm = s.predicateMatches.length > 0 ? s.predicateMatches.reduce((a, b) => a + b, 0) / s.predicateMatches.length : 0;
+        const arm = s.roleMatches.length > 0 ? s.roleMatches.reduce((a, b) => a + b, 0) / s.roleMatches.length : 0;
+        const alp = s.literalPreservations.length > 0 ? s.literalPreservations.reduce((a, b) => a + b, 0) / s.literalPreservations.length : 0;
+        const ml = s.latencies.length > 0 ? s.latencies.reduce((a, b) => a + b, 0) / s.latencies.length : 0;
+
+        languageBreakdown[lang] = {
+          language: lang,
+          totalItems: s.total,
+          passedItems: s.passed,
+          failedItems: s.failed,
+          errorItems: s.errors,
+          retentionRate: lr,
+          avgPredicateMatch: apm,
+          avgRoleMatch: arm,
+          avgProtectedLiteralPreservation: alp,
+          meanLatencyMs: ml
+        };
+
+        if (lr > bestLangRate) {
+          bestLangRate = lr;
+          bestLangForModel = lang;
+        }
+      }
+    }
+
+
+
+    const avgPredicateMatch = overall.predicateMatches.length > 0
+      ? overall.predicateMatches.reduce((a, b) => a + b, 0) / overall.predicateMatches.length : 0;
+    const avgRoleMatch = overall.roleMatches.length > 0
+      ? overall.roleMatches.reduce((a, b) => a + b, 0) / overall.roleMatches.length : 0;
+    const avgLiteralPreservation = overall.literalPreservations.length > 0
+      ? overall.literalPreservations.reduce((a, b) => a + b, 0) / overall.literalPreservations.length : 0;
+    const avgLatency = overall.latencies.length > 0
+      ? overall.latencies.reduce((a, b) => a + b, 0) / overall.latencies.length : 0;
+
+    modelRetentionProfiles[profile.id] = {
+      modelId: profile.id,
+      totalItems: overall.total,
+      totalPassed: overall.passed,
+      totalFailed: overall.failed,
+      totalErrors: overall.errors,
+      retentionRate: overallRetentionRate,
+      avgPredicateMatch,
+      avgRoleMatch,
+      avgProtectedLiteralPreservation: avgLiteralPreservation,
+      meanLatencyMs: avgLatency,
+      languageBreakdown,
+      passesBaseline: overallRetentionRate >= baselineThreshold
+    };
+  }
+
+  // Compute best model for each language
+  for (const lang of languages) {
+    let bestModelId = '';
+    let bestRate = -1;
+    for (const profile of modelProfiles) {
+      const key = `${lang}-${profile.id}` as LangModelKey;
+      const s = stats.get(key);
+      if (s && s.total > 0) {
+        const rate = s.passed / s.total;
+        if (rate > bestRate) {
+          bestRate = rate;
+          bestModelId = profile.id;
+        }
+      }
+    }
+    if (bestModelId) {
+      bestModelsByLanguage[lang] = bestModelId;
+    }
+  }
+
   const report: RoundTripReport = {
     experimentId: manifest.id,
     runId: new Date().toISOString().replace(/[:.]/gu, '-'),
@@ -339,6 +501,8 @@ export async function runRoundTripRetentionExperiment(
     totalErrors,
     overallRetentionRate,
     languageMetrics,
+    modelProfiles: modelRetentionProfiles,
+    bestModelsByLanguage,
     baselineThreshold,
     regressionDetected,
     generatedAt: Date.now()
@@ -349,6 +513,60 @@ export async function runRoundTripRetentionExperiment(
   await mkdir(outputDir, { recursive: true });
   const reportPath = path.join(outputDir, `${manifest.id}-report.json`);
   await writeFile(reportPath, JSON.stringify(report, null, 2), 'utf-8');
+
+  // Write model profile reports
+  for (const modelId of Object.keys(modelRetentionProfiles)) {
+    const profile = modelRetentionProfiles[modelId]!;
+    let md = `# Model Retention Profile: ${modelId}
+
+## Overall
+- Total Items: ${profile.totalItems}
+- Passed: ${profile.totalPassed}
+- Failed: ${profile.totalFailed}
+- Errors: ${profile.totalErrors}
+- Retention Rate: ${(profile.retentionRate * 100).toFixed(1)}%
+- Avg Predicate Match: ${profile.avgPredicateMatch.toFixed(3)}
+- Avg Role Match: ${profile.avgRoleMatch.toFixed(3)}
+- Avg Protected Literal Preservation: ${profile.avgProtectedLiteralPreservation.toFixed(3)}
+- Mean Latency: ${profile.meanLatencyMs.toFixed(2)}ms
+- Passes Baseline: ${profile.passesBaseline ? 'Yes' : 'No'}
+
+## Per-Language Breakdown
+`;
+    for (const lang of languages) {
+      const lb = profile.languageBreakdown[lang as RealizationLanguage];
+      md += `### ${lang.toUpperCase()}
+- Items: ${lb.totalItems}
+- Passed: ${lb.passedItems}
+- Retention Rate: ${(lb.retentionRate * 100).toFixed(1)}%
+- Avg Predicate Match: ${lb.avgPredicateMatch.toFixed(3)}
+- Avg Role Match: ${lb.avgRoleMatch.toFixed(3)}
+- Avg Protected Literal Preservation: ${lb.avgProtectedLiteralPreservation.toFixed(3)}
+- Mean Latency: ${lb.meanLatencyMs.toFixed(2)}ms
+
+`;
+    }
+    await writeFile(path.join(outputDir, `model-profile-${modelId}.md`), md, 'utf-8');
+  }
+
+  // Write best models by language
+  if (Object.keys(bestModelsByLanguage).length > 0) {
+    let bestMd = '# Best Model by Language\n\n';
+    for (const lang of languages) {
+      const bestModel = bestModelsByLanguage[lang];
+      if (bestModel) {
+        const profile = modelRetentionProfiles[bestModel];
+        const langProfile = profile?.languageBreakdown[lang as RealizationLanguage];
+        if (langProfile) {
+          bestMd += `## ${lang.toUpperCase()}: ${bestModel}\n`;
+          bestMd += `- Retention Rate: ${(langProfile.retentionRate * 100).toFixed(1)}%\n`;
+          bestMd += `- Avg Predicate Match: ${langProfile.avgPredicateMatch.toFixed(3)}\n`;
+          bestMd += `- Avg Role Match: ${langProfile.avgRoleMatch.toFixed(3)}\n\n`;
+        }
+      }
+    }
+    await writeFile(path.join(outputDir, 'best-models-by-language.md'), bestMd, 'utf-8');
+  }
 
   // Write per-language markdown reports
   for (const lang of languages) {
