@@ -2,6 +2,9 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Added — Multilingual Round-Trip Retention (PR #176)
+- **Round-trip retention experiment:** Parse→realize round-trips on all 4 languages (EN/EL/ES/ID) against local models. Gold Sem is realized to each target language via local model, parsed back, and compared against gold Sem. Scores: predicate match, role match, protected-literal preservation. Per-language pass/fail metrics published. Types in `packages/eval/src/round-trip-retention.ts`. 14 tests in `packages/eval/test/round-trip-retention.test.ts`. (PR #176)
+
 ### Added — Retention Regression Gate (PR #167)
 - **Retention regression gate:** Baseline store with provenance (dataset/model/schema), regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), and nightly CI integration. Types and logic in `packages/eval/src/baseline-store.ts`. 11 tests in `packages/eval/test/baseline-store.test.ts`. CI workflow at `.github/workflows/retention-regression-gate.yml`. (PR #167)
 
