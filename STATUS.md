@@ -23,11 +23,16 @@
 - Mixed-context quality gates: downstream accuracy comparison across natural vs Lunum vs mixed.
 - Threat model with concrete mitigations for injection, hallucination, and ambiguity.
 - Compatibility matrix for schema-version and package-version pairs.
+- Schema 0.2 frozen with locked fields, enums, and `$ref` cross-references.
+- Schema migration test suite (312 lines) validating 0.1→0.2 record transformation with golden vectors.
+- Comprehensive semantic-contract type tests for v02 migration (122 lines).
 - Error observability: circuit-breaker and revert-capability types in eval runner.
 
 | Component | Status | Meaning |
 |---|---|---|
-| Lunum-Sem draft schema | Reference draft | Useful for experimentation; not yet stable |
+| Lunum-Sem schema 0.2 | Frozen | Locked field names, enum constraints, `$ref` cross-references; migration from 0.1 validated |
+| Schema migration test suite | Reference implementation | 312-line test validating 0.1→0.2 record transformation with golden vectors |
+| Comprehensive type tests for v02 | Reference implementation | 122 lines of semantic-contract type tests covering all migration paths |
 | Core library | Reference implementation | Strict TypeScript reference for semantics, serialization, canonicalization, and release provenance |
 | CLI tools | Prototype | Inspection, encoding, compilation, release verification, and pipeline adoption interfaces |
 | HTTP API reference server | Prototype | REST endpoints with OpenAPI spec; third adoption path |
@@ -75,4 +80,4 @@
 
 ## Honest boundary
 
-OpenLunum has an architecture, a reference core, preserved evidence, and adoption contracts. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products. Token Atlas provides cross-model measurements but per-model profile selection requires per-model testing. CI hard gates exist for conformance but not all merge gates are active.
+OpenLunum has an architecture, a reference core, preserved evidence, adoption contracts, and a frozen Lunum-Sem 0.2 schema with migration test suite. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products. Token Atlas provides cross-model measurements but per-model profile selection requires per-model testing. CI hard gates exist for conformance but not all merge gates are active. Release gates 1 and 2 are substantially addressed by the schema 0.2 freeze and migration test suite; remaining gates require further evidence.

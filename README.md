@@ -164,9 +164,15 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Compatibility matrix for schema-package versions.
 - Error observability integration for eval runner (circuit-breaker, revert-capability).
 - Architecture decision records in `docs/decisions/`.
+- Frozen Lunum-Sem schema 0.2 with locked fields, enums, and `$ref` cross-references.
+- Schema migration test suite validating 0.1→0.2 record transformation with golden vectors.
+- Schema changelog at `schemas/CHANGELOG.md` documenting every breaking change.
 
 ## New in v0.2.0
 
+- **Lunum-Sem schema 0.2 frozen:** Locked field names, enum constraints, and `$ref` cross-references between experiment, protected-eval, and core schemas. Migration test validates 0.1→0.2 transformation. See `schemas/CHANGELOG.md`.
+- **Schema migration test suite:** 312-line test validating record transformation from 0.1 to 0.2 with golden vectors.
+- **Comprehensive type tests for v02 migration:** 122 lines of semantic-contract type tests covering all migration paths.
 - **Profile Selection Result type:** Explicit type for renderer profile selection driven by Token Atlas measurements.
 - **Realization runner:** Experiment runner with protected-literal scoring for multilingual realization experiments.
 - **Token Atlas:** Cross-model, cross-profile token measurement framework for measuring natural vs renderer profiles.
@@ -206,7 +212,7 @@ Example semantic record:
 
 ```json
 {
-  "schema": "lunum-sem/0.1-draft",
+  "schema": "lunum-sem/0.2",
   "world": "real",
   "kind": "preference",
   "clauses": [
@@ -248,6 +254,7 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 - **Lunum-I** means *Lunum Interlingua*, not “version one.” It names the independent specification line.
 - Historical Lunum 1→2.7 artifacts remain preserved and are not rewritten.
 - Draft schema identifiers use explicit versions, for example `lunum-sem/0.1-draft`.
+- Lunum-Sem schema 0.2 is frozen; see `schemas/CHANGELOG.md` for migration instructions.
 
 ## Non-negotiable principles
 
@@ -269,7 +276,7 @@ packages/eval/            Local-model experiment runner, metrics, failure report
 packages/mcp/             Prototype reference server and tooling for Model Context Protocol (MCP) integration.
 packages/adapter-openunum/ OpenUnum compatibility adapter package.
 packages/core/test/       API stability test suite with golden snapshots.
-schemas/                  machine-readable contracts
+schemas/                  machine-readable contracts (0.1-draft and frozen 0.2); `schemas/CHANGELOG.md` for migration instructions
 registry/                 worlds, roles, categories, predicates
 integrations/openunum/    verified-current-state reference and adoption plan
 integrations/*/            design/reference profiles for other products
