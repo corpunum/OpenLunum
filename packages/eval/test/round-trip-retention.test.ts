@@ -106,7 +106,11 @@ const testModelProfiles = [
 ];
 
 // Import the round-trip retention runner
-import { runRoundTripRetentionExperiment } from '../src/round-trip-retention.js';
+import {
+  modelProfileReportFilename,
+  runRoundTripRetentionExperiment,
+  selectBestModelIds
+} from '../src/round-trip-retention.js';
 
 // ── Tests ─────────────────────────────────────────────────────────
 
@@ -373,7 +377,14 @@ test('round-trip retention: produces per-model retention profiles', async () => 
 
   // Check profile structure
   for (const [modelId, profile] of Object.entries(report.modelProfiles)) {
+    const sourceProfile = testModelProfiles.find(candidate => candidate.id === modelId)!;
     assert.strictEqual(profile.modelId, modelId, `Model ID should match key`);
+    assert.strictEqual(profile.modelName, sourceProfile.model, `Model name should retain profile identity`);
+    assert.deepStrictEqual(profile.settings, {
+      temperature: sourceProfile.temperature,
+      seed: sourceProfile.seed,
+      timeoutMs: sourceProfile.timeoutMs
+    }, `Model settings should remain reproducible`);
     assert.ok(profile.totalItems > 0, `${modelId} should have items`);
     assert.ok(profile.totalItems === 16, `${modelId} should have 4 items × 4 languages`);
     assert.ok(profile.retentionRate >= 0, `${modelId} should have non-negative retention rate`);
@@ -399,15 +410,49 @@ test('round-trip retention: best models by language are computed', async () => {
 
   const { report } = await runRoundTripRetentionExperiment(manifest, WORKSPACE_ROOT, testDataset, testModelProfiles);
 
-  // Should have best models for all 4 languages
+  // Error-only languages intentionally have no winner. Any reported winners
+  // must be explicit arrays so ties are not silently input-order dependent.
   assert.ok(report.bestModelsByLanguage, 'Should have bestModelsByLanguage');
   for (const lang of ['en', 'el', 'es', 'id'] as const) {
-    assert.ok(report.bestModelsByLanguage[lang], `Should have best model for ${lang}`);
-    assert.ok(['local-model-1', 'local-model-2'].includes(report.bestModelsByLanguage[lang]!), `${lang} best model should be one of the tested models`);
+    const winners = report.bestModelsByLanguage[lang];
+    if (winners) {
+      assert.ok(winners.length > 0, `${lang} winner list should be non-empty`);
+      assert.ok(winners.every(model => ['local-model-1', 'local-model-2'].includes(model)), `${lang} winners should be tested models`);
+    }
   }
 
   // Cleanup
   fs.rmSync(tmpDir, { recursive: true, force: true });
+});
+
+test('round-trip retention: all-error models have no best-model winner', () => {
+  assert.deepStrictEqual(selectBestModelIds([
+    { modelId: 'a', total: 4, passed: 0, failed: 0 },
+    { modelId: 'b', total: 4, passed: 0, failed: 0 }
+  ]), []);
+});
+
+test('round-trip retention: best-model selection reports ties explicitly', () => {
+  assert.deepStrictEqual(selectBestModelIds([
+    { modelId: 'b', total: 4, passed: 2, failed: 1 },
+    { modelId: 'a', total: 4, passed: 2, failed: 2 },
+    { modelId: 'c', total: 4, passed: 1, failed: 3 }
+  ]), ['a', 'b']);
+});
+
+test('round-trip retention: profile report filenames cannot traverse directories', () => {
+  const filename = modelProfileReportFilename('../../outside');
+  assert.ok(!filename.includes('/'));
+  assert.ok(!filename.includes('\\'));
+  assert.ok(filename.startsWith('model-profile-encoded-'));
+});
+
+test('round-trip retention: duplicate profile ids fail before evaluation', async () => {
+  const duplicateProfiles = [testModelProfiles[0]!, { ...testModelProfiles[1]!, id: testModelProfiles[0]!.id }];
+  await assert.rejects(
+    runRoundTripRetentionExperiment(testManifest as any, WORKSPACE_ROOT, testDataset, duplicateProfiles),
+    /must be unique/
+  );
 });
 
 test('round-trip retention: model profiles include semantic scores', async () => {
