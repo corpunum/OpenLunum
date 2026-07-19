@@ -3,6 +3,9 @@
  * 
  * This module provides three profile types that reduce token usage
  * while preserving semantic meaning and accuracy.
+ * 
+ * Profile level: 'Reference' — deterministic golden-output tests
+ * exist for all profiles on 15+ diverse inputs (renderer-golden-output.test.ts).
  */
 
 import type { LunumSem, LunumRecord, LunumClause, LunumRendering } from './types.js';
@@ -11,11 +14,16 @@ import type { LunumSem, LunumRecord, LunumClause, LunumRendering } from './types
 
 export type ProfileType = 'safe' | 'short' | 'tight';
 
+/** Profile maturity level */
+export type ProfileLevel = 'Experiment' | 'Reference';
+
 // ── Profile Configuration ──────────────────────────────────────────
 
 export interface ProfileConfig {
   /** Profile type */
   type: ProfileType;
+  /** Profile maturity level */
+  level?: ProfileLevel;
   /** Whether to preserve all annotations */
   preserveAnnotations?: boolean;
   /** Whether to preserve provenance */
@@ -52,18 +60,21 @@ export class ProfileGenerator {
     this.configs = new Map([
       ['safe', {
         type: 'safe',
+        level: 'Reference',
         preserveAnnotations: true,
         preserveProvenance: true,
         maxTokenReduction: 0.3
       }],
       ['short', {
         type: 'short',
+        level: 'Reference',
         preserveAnnotations: false,
         preserveProvenance: true,
         maxTokenReduction: 0.5
       }],
       ['tight', {
         type: 'tight',
+        level: 'Reference',
         preserveAnnotations: false,
         preserveProvenance: false,
         maxTokenReduction: 0.7
@@ -267,6 +278,21 @@ export class ProfileGenerator {
     }
     this.configs.set(type, { ...existing, ...config } as Required<ProfileConfig>);
   }
+
+  /**
+   * Check if a profile is at Reference level (deterministic golden outputs exist).
+   */
+  isReferenceLevel(type: ProfileType): boolean {
+    const config = this.configs.get(type);
+    return config?.level === 'Reference';
+  }
+
+  /**
+   * Check if all profiles are at Reference level.
+   */
+  allProfilesReference(): boolean {
+    return ['safe', 'short', 'tight'].every(type => this.isReferenceLevel(type as ProfileType));
+  }
 }
 
 // ── Export ─────────────────────────────────────────────────────────
@@ -274,3 +300,34 @@ export class ProfileGenerator {
 export const profileExports = [
   ProfileGenerator
 ] as const;
+
+/** All supported profile types */
+export const PROFILE_TYPES: readonly ProfileType[] = ['safe', 'short', 'tight'] as const;
+
+/** All profile maturity levels */
+export const PROFILE_LEVELS: readonly ProfileLevel[] = ['Experiment', 'Reference'] as const;
+
+/** Default profile configurations at Reference level */
+export const DEFAULT_PROFILE_CONFIGS: Record<ProfileType, Required<ProfileConfig>> = {
+  safe: {
+    type: 'safe',
+    level: 'Reference',
+    preserveAnnotations: true,
+    preserveProvenance: true,
+    maxTokenReduction: 0.3
+  },
+  short: {
+    type: 'short',
+    level: 'Reference',
+    preserveAnnotations: false,
+    preserveProvenance: true,
+    maxTokenReduction: 0.5
+  },
+  tight: {
+    type: 'tight',
+    level: 'Reference',
+    preserveAnnotations: false,
+    preserveProvenance: false,
+    maxTokenReduction: 0.7
+  }
+};
