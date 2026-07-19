@@ -27,6 +27,9 @@
 - Schema migration test suite (312 lines) validating 0.1→0.2 record transformation with golden vectors.
 - Comprehensive semantic-contract type tests for v02 migration (122 lines).
 - Error observability: circuit-breaker and revert-capability types in eval runner.
+- Native model protocol: token mappings, instruction templates, and fallback profiles for 8 model families.
+- Renderer conformance suite: round-trip canonicalization property tests for safe/short/tight profiles.
+- Agent-state protocol: validated types for plans, steps, tool calls, evidence, and inter-agent handoffs.
 
 | Component | Status | Meaning |
 |---|---|---|
@@ -64,6 +67,9 @@
 | Threat model with mitigations | Prototype | Concrete mitigations for injection, hallucination, ambiguity with parser tests |
 | Compatibility matrix | Prototype | Schema-version and package-version compatibility testing |
 | Error observability | Prototype | Circuit-breaker and revert-capability types in eval runner |
+| Native model protocol | Prototype | Token mappings, instruction templates, and fallback profiles for 8 model families |
+| Renderer conformance suite | Reference implementation | Round-trip canonicalization property tests for safe/short/tight profiles |
+| Agent-state protocol | Prototype | Validated types for plans, steps, tool calls, evidence, and inter-agent handoffs |
 
 ## Release gates before 1.0
 

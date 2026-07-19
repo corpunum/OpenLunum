@@ -164,6 +164,9 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Compatibility matrix for schema-package versions.
 - Error observability integration for eval runner (circuit-breaker, revert-capability).
 - Architecture decision records in `docs/decisions/`.
+- Native model protocol annotations for token mappings, instruction templates, and fallback profiles.
+- Renderer conformance suite: property tests verifying round-trip canonicalization across safe/short/tight profiles.
+- Agent-state protocol for plans, steps, tool calls, evidence, and inter-agent handoffs.
 - Frozen Lunum-Sem schema 0.2 with locked fields, enums, and `$ref` cross-references.
 - Schema migration test suite validating 0.1→0.2 record transformation with golden vectors.
 - Schema changelog at `schemas/CHANGELOG.md` documenting every breaking change.
@@ -181,6 +184,9 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - **Downstream quality gates:** Task-success metrics and quality gates to verify downstream task quality preservation.
 - **Fingerprint migration utilities:** Code-level utilities for detecting versions, migrating records, and golden vectors.
 - **CI conformance gates:** Property tests wired into CI as hard gates for idempotence and fingerprint stability.
+- **Native model protocol:** Token mappings, instruction templates, and fallback profiles for native and non-native model families.
+- **Renderer conformance suite:** Property tests verifying round-trip canonicalization for safe, short, and tight profiles against 10 test records.
+- **Agent-state protocol:** Validated types for plans, steps, tool calls, results, constraints, evidence, and inter-agent handoffs.
 - **API stability tests:** Snapshot-based tests verifying no public exports are removed and no breaking signature changes occur in `packages/core`.
 - **OpenUnum adapter e2e conformance:** End-to-end verification of OpenUnum compatibility adapter against real product runtime.
 - **HTTP API reference server:** New `packages/api` package with REST endpoints (parse, realize, render, retrieve, health) and OpenAPI 3.1.0 spec. Third adoption path after MCP and CLI.
@@ -256,6 +262,10 @@ lfp:0.1:sha256:…
 
 Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration matrix](integrations/README.md).
 
+## Repository map (extended)
+
+The repository map at the end of this document lists top-level directories. Package-specific details are in each `packages/<name>/README.md`.
+
 ## Naming
 
 - **OpenLunum** is the repository and project umbrella.
@@ -278,7 +288,7 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 ## Repository map
 
 ```text
-packages/core/            Core library providing strict TypeScript reference semantics, canonicalization, and release provenance.
+packages/core/            Core library: semantics, canonicalization, fingerprints, renderer conformance, native-model protocol, agent-state protocol, policy classifier.
 packages/cli/             Command line interface for inspection, encoding, compilation, release verification, and pipeline adoption.
 packages/api/             HTTP API reference server with OpenAPI spec and integration tests.
 packages/eval/            Local-model experiment runner, metrics, failure reports, Token Atlas, and downstream quality gates.
