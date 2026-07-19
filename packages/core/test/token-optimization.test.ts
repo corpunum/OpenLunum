@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { fingerprintSem } from '../src/fingerprint.js';
 import { runVerifiedTokenizerOptimizationPass } from '../src/token-optimization.js';
-import type { AtlasEntry, AtlasProfileMeasures } from '../src/token-atlas.js';
+import type { AtlasEntry, AtlasProfileMeasures, ModelTokenizerProfile } from '../src/token-atlas.js';
 import type { LunumRecord } from '../src/types.js';
 
 function recordWithRole(value: string, metadata = true): LunumRecord {
@@ -46,15 +46,22 @@ function entry(record: LunumRecord, modelMeasures: Record<string, AtlasProfileMe
     fingerprint: record.fingerprint,
     sourceLength: record.source.text.length,
     measurements: modelMeasures,
+    tokenizerProfiles: Object.fromEntries(
+      Object.keys(modelMeasures).map((name) => [name, modelProfile(name).tokenizer]),
+    ),
     measuredAt: 1,
   };
+}
+
+function modelProfile(name = 'model'): ModelTokenizerProfile {
+  return { name, tokenizer: { model: `${name}-tokenizer`, addBos: true, addEos: false } };
 }
 
 test('verified optimization rejects lower-token profiles that alter canonical semantics', () => {
   const record = recordWithRole('x'.repeat(80), true);
   const result = runVerifiedTokenizerOptimizationPass([
     entry(record, { model: measures({ natural: 100, safe: 60, short: 30, tight: 10 }) }),
-  ]);
+  ], { modelProfiles: [modelProfile()] });
 
   const model = result.results[0];
   assert.ok(model);
@@ -67,13 +74,15 @@ test('verified optimization rejects lower-token profiles that alter canonical se
   assert.ok(model.candidates.find((candidate) => candidate.profile === 'tight' && !candidate.semanticsPreserved));
   assert.match(model.warnings.join('\n'), /short rejected/);
   assert.match(model.warnings.join('\n'), /tight rejected/);
+  assert.equal(result.artifacts[0]?.valid, true);
+  assert.equal(result.artifacts[0]?.verifiedRecordCount, 1);
 });
 
 test('verified optimization selects the lowest-token profile among semantic matches', () => {
   const record = recordWithRole('short value', false);
   const result = runVerifiedTokenizerOptimizationPass([
     entry(record, { model: measures({ natural: 80, safe: 50, short: 30, tight: 20 }) }),
-  ]);
+  ], { modelProfiles: [modelProfile()] });
 
   const model = result.results[0];
   assert.ok(model);
@@ -82,24 +91,95 @@ test('verified optimization selects the lowest-token profile among semantic matc
   assert.equal(model.reductionPct, 75);
   assert.equal(model.semanticsPreserved, true);
   assert.equal(model.optimizedFingerprint, fingerprintSem(model.optimizedRecord?.sem));
+  const artifact = result.artifacts[0];
+  assert.ok(artifact);
+  assert.equal(artifact.schema, 'openlunum-model-specific-tight-profile/0.1');
+  assert.match(artifact.id, /^tight\/model\/model-tokenizer\//);
+  assert.deepEqual(artifact.tokenizer, { model: 'model-tokenizer', addBos: true, addEos: false });
+  assert.equal(artifact.sourceRendererProfile, 'generic-en-pivot/0.1');
+  assert.equal(artifact.selections[0]?.selectedProfile, 'tight');
+  assert.equal(artifact.selections[0]?.recordFingerprint, fingerprintSem(record.sem));
 });
 
-test('verified optimization reports records with no model measurements', () => {
+test('verified optimization fails closed when a configured model lacks record coverage', () => {
   const record = recordWithRole('no measurements', false);
-  const result = runVerifiedTokenizerOptimizationPass([entry(record, {})]);
+  const result = runVerifiedTokenizerOptimizationPass([entry(record, {})], {
+    modelProfiles: [modelProfile()],
+  });
 
   assert.equal(result.results.length, 0);
   assert.equal(result.recordCount, 1);
-  assert.equal(result.allSemanticsPreserved, true);
-  assert.equal(result.warnings.length, 1);
-  assert.match(result.warnings[0] ?? '', /No model measurements/);
+  assert.equal(result.allSemanticsPreserved, false);
+  assert.equal(result.artifacts[0]?.valid, false);
+  assert.equal(result.artifacts[0]?.verifiedRecordCount, 0);
+  assert.match(result.warnings.join('\n'), /Missing measurement/);
 });
 
-test('verified optimization handles an empty batch', () => {
-  const result = runVerifiedTokenizerOptimizationPass([]);
-  assert.deepEqual(result.models, []);
+test('verified optimization fails closed on an empty batch', () => {
+  const result = runVerifiedTokenizerOptimizationPass([], { modelProfiles: [modelProfile()] });
+  assert.deepEqual(result.models, ['model']);
   assert.deepEqual(result.results, []);
   assert.equal(result.recordCount, 0);
-  assert.equal(result.allSemanticsPreserved, true);
-  assert.deepEqual(result.warnings, []);
+  assert.equal(result.allSemanticsPreserved, false);
+  assert.equal(result.artifacts[0]?.valid, false);
+  assert.match(result.warnings.join('\n'), /at least one measured record/);
+});
+
+test('verified optimization fails closed without named model profiles', () => {
+  const record = recordWithRole('unbound', false);
+  const result = runVerifiedTokenizerOptimizationPass([
+    entry(record, { model: measures({ natural: 8, safe: 7, short: 6, tight: 5 }) }),
+  ], { modelProfiles: [] });
+
+  assert.equal(result.allSemanticsPreserved, false);
+  assert.deepEqual(result.artifacts, []);
+  assert.match(result.warnings.join('\n'), /at least one named model profile/);
+  assert.match(result.warnings.join('\n'), /unconfigured model/);
+});
+
+test('verified optimization rejects errored and zero token measurements', () => {
+  const record = recordWithRole('bad count', false);
+  const invalid = measures({ natural: 10, safe: 8, short: 0, tight: 4 });
+  invalid.tight.errors = ['tokenizer unavailable'];
+  const result = runVerifiedTokenizerOptimizationPass([
+    entry(record, { model: invalid }),
+  ], { modelProfiles: [modelProfile()] });
+
+  assert.equal(result.results.length, 0);
+  assert.equal(result.allSemanticsPreserved, false);
+  assert.equal(result.artifacts[0]?.valid, false);
+  assert.match(result.warnings.join('\n'), /short: tokenCount must be a positive safe integer/);
+  assert.match(result.warnings.join('\n'), /tight: tokenizer unavailable/);
+});
+
+test('verified optimization rejects a tokenizer configuration not used by the measurement', () => {
+  const record = recordWithRole('wrong tokenizer', false);
+  const measured = entry(record, {
+    model: measures({ natural: 10, safe: 8, short: 6, tight: 4 }),
+  });
+  measured.tokenizerProfiles.model = { model: 'different-tokenizer' };
+  const result = runVerifiedTokenizerOptimizationPass([measured], {
+    modelProfiles: [modelProfile()],
+  });
+
+  assert.equal(result.allSemanticsPreserved, false);
+  assert.equal(result.artifacts[0]?.valid, false);
+  assert.match(result.warnings.join('\n'), /configuration does not match artifact/);
+});
+
+test('verified optimization requires every configured model on every record', () => {
+  const first = recordWithRole('first', false);
+  const second = recordWithRole('second', false);
+  const good = measures({ natural: 10, safe: 8, short: 6, tight: 4 });
+  const result = runVerifiedTokenizerOptimizationPass([
+    entry(first, { alpha: good, beta: good }),
+    entry(second, { alpha: good }),
+  ], { modelProfiles: [modelProfile('alpha'), modelProfile('beta')] });
+
+  assert.equal(result.allSemanticsPreserved, false);
+  assert.equal(result.artifacts.find((artifact) => artifact.modelName === 'alpha')?.valid, true);
+  const beta = result.artifacts.find((artifact) => artifact.modelName === 'beta');
+  assert.equal(beta?.valid, false);
+  assert.equal(beta?.expectedRecordCount, 2);
+  assert.equal(beta?.verifiedRecordCount, 1);
 });
