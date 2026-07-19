@@ -152,11 +152,17 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Context quality measurement framework and policy datasets.
 - Multilingual retrieval and false-equivalence tests.
 - An MCP (Model Context Protocol) reference server with parse, realize, fingerprint, retrieve, and validate tools.
+- An HTTP API reference server with OpenAPI spec and integration tests.
+- A standalone CLI pipeline (`lunum parse | lunum realize | lunum render`).
 - Conformance reports for hook/plugin/CLI integration paths.
 - An OpenUnum compatibility adapter preserving its current sidecar return shape.
 - Historical research and measured results from Lunum 1 through 2.7.
 - Integration profiles for OpenUnum, Claude Code, Codex CLI, Gemini CLI/Antigravity transition, OpenCode, Pi, OpenClaw, and generic Node agents.
-- Contract and safety-oriented tests.
+- Prompt-injection resistance tests with 10 adversarial inputs.
+- Mixed-context quality gates for natural vs Lunum vs mixed evaluation.
+- Threat model with concrete mitigations and parser-hallucination tests.
+- Compatibility matrix for schema-package versions.
+- Error observability integration for eval runner (circuit-breaker, revert-capability).
 - Architecture decision records in `docs/decisions/`.
 
 ## New in v0.2.0
@@ -257,9 +263,10 @@ Start with [the adoption model](docs/ADOPTION-MODEL.md) and [the integration mat
 
 ```text
 packages/core/            Core library providing strict TypeScript reference semantics, canonicalization, and release provenance.
-packages/cli/             Command line interface for inspection, encoding, compilation, and release verification.
-packages/eval/            Local-model experiment runner, metrics, failure reports, and Token Atlas measurements.
-packages/mcp/            Prototype reference server and tooling for Model Context Profile (MCP) integration.
+packages/cli/             Command line interface for inspection, encoding, compilation, release verification, and pipeline adoption.
+packages/api/             HTTP API reference server with OpenAPI spec and integration tests.
+packages/eval/            Local-model experiment runner, metrics, failure reports, Token Atlas, and downstream quality gates.
+packages/mcp/             Prototype reference server and tooling for Model Context Protocol (MCP) integration.
 packages/adapter-openunum/ OpenUnum compatibility adapter package.
 packages/core/test/       API stability test suite with golden snapshots.
 schemas/                  machine-readable contracts

@@ -9,7 +9,8 @@
 ## Current capabilities
 
 - Core library providing strict TypeScript reference semantics, serialization, canonicalization, and release provenance.
-- CLI tools for inspection, encoding, compilation, and release verification.
+- CLI tools for inspection, encoding, compilation, release verification, and pipeline adoption.
+- HTTP API reference server with OpenAPI spec and integration tests.
 - MCP (Model Context Protocol) prototype reference server and tooling for services.
 - OpenUnum compatibility package matching existing product sidecar shapes.
 - Profile Selection Result type for renderer profile selection.
@@ -18,12 +19,18 @@
 - API stability tests with golden snapshots for `packages/core`.
 - OpenUnum adapter end-to-end conformance verification.
 - **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in summary.json and report.md.
+- Prompt-injection resistance tests: 10 adversarial inputs tested against parser.
+- Mixed-context quality gates: downstream accuracy comparison across natural vs Lunum vs mixed.
+- Threat model with concrete mitigations for injection, hallucination, and ambiguity.
+- Compatibility matrix for schema-version and package-version pairs.
+- Error observability: circuit-breaker and revert-capability types in eval runner.
 
 | Component | Status | Meaning |
 |---|---|---|
 | Lunum-Sem draft schema | Reference draft | Useful for experimentation; not yet stable |
 | Core library | Reference implementation | Strict TypeScript reference for semantics, serialization, canonicalization, and release provenance |
-| CLI tools | Prototype | Inspection, encoding, compilation, and release verification interfaces |
+| CLI tools | Prototype | Inspection, encoding, compilation, release verification, and pipeline adoption interfaces |
+| HTTP API reference server | Prototype | REST endpoints with OpenAPI spec; third adoption path |
 | MCP reference server | Prototype | Reference implementation of Model Context Protocol tooling |
 | OpenUnum adapter | Reference contract | Matches present sidecar shape; live adoption still requires product work |
 | Exact semantic fingerprint | Reference implementation | Versioned exact identity, not fuzzy equivalence |
@@ -38,7 +45,8 @@
 | Expanded typed structures | Reference implementation | Time, quantity, uncertainty, reference, modality implemented |
 | Canonical conformance vectors | Reference implementation | Property tests pass; wired into CI as hard gates |
 | Tokenizer profile selection | Reference implementation | Measurement framework with Token Atlas; per-model best profile selection available |
-| Context quality measurement | Experiment | Framework and policy datasets exist; downstream quality measurement ongoing |
+| Context quality measurement | Prototype | Framework and policy datasets exist; mixed-context quality gates implemented |
+| Mixed-context quality gates | Prototype | Downstream accuracy comparison across natural vs Lunum vs mixed context |
 | Multilingual retrieval | Experiment | False-equivalence tests exist; production retrieval integration pending |
 | Conformance reports | Prototype | Hook/plugin/CLI paths documented; live adoption reports generated |
 | Profile Selection Result | Reference implementation | Explicit type for renderer profile selection |
@@ -47,6 +55,12 @@
 | API stability tests | Reference implementation | Snapshot-based tests for `packages/core` public exports |
 | OpenUnum adapter e2e conformance | Prototype | End-to-end verification against real product runtime |
 | Aggregate MRR | Reference implementation | Mean Reciprocal Rank for retrieval tasks, computed and validated in reports |
+| HTTP API reference server | Prototype | REST endpoints with OpenAPI spec; third adoption path |
+| Prompt-injection resistance | Prototype | 10 adversarial inputs tested against parser |
+| Mixed-context quality gates | Prototype | Downstream accuracy comparison across natural vs Lunum vs mixed |
+| Threat model with mitigations | Prototype | Concrete mitigations for injection, hallucination, ambiguity with parser tests |
+| Compatibility matrix | Prototype | Schema-version and package-version compatibility testing |
+| Error observability | Prototype | Circuit-breaker and revert-capability types in eval runner |
 
 ## Release gates before 1.0
 

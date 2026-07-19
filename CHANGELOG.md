@@ -2,6 +2,27 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Added — Adoption (PR #120, PR #115)
+- **HTTP API reference server:** New `packages/api` package with REST endpoints for parse, realize, render, retrieve, and health checks. Includes OpenAPI 3.1.0 spec and integration tests. Third adoption path after MCP and CLI.
+- **Standalone CLI pipeline:** `lunum parse | lunum realize | lunum render` pipeline with documented examples for offline, pipeline-friendly, and scriptable adoption.
+
+### Added — Safety & Quality (PR #128, PR #126, PR #116, PR #117)
+- **Prompt-injection resistance tests:** 10 adversarial inputs crafted to corrupt Lunum-Sem records through the parser; all must be detected or rejected. Tests in `packages/core/test/prompt-gates.test.ts`.
+- **Mixed-context quality gates:** Downstream task accuracy comparison across natural vs Lunum vs mixed context on multiple task types. Structured quality reports with per-mode metrics.
+- **Threat model expansion:** Concrete mitigations for each threat in `docs/THREAT-MODEL.md`, including schema validation, type checking, confidence gating, prompt-injection resistance, provenance chain integrity, and parser-hallucination tests.
+- **Compatibility matrix:** Schema-package version compatibility testing. Documents which Lunum-Sem schema versions work with which package versions, tested in CI.
+
+### Added — Evaluation (PR #129, PR #118)
+- **Nightly experiment runs:** Automated nightly evaluation runs with 28 manifests, producing structured evidence reports.
+- **Error observability integration:** Circuit-breaker and revert-capability types wired into the eval runner so experiments auto-halt on repeated failures.
+
+### Changed — Renderer (PR #114)
+- **Tokenizer optimization pass:** Model-specific tight profiles that provably do not change semantics. Per-model best profile selection via Token Atlas measurements.
+
+---
+
+## Since 0.2.0 (Documentation Sync)
+
 ### Added — Infrastructure & Tooling (0.2.0)
 - **Core Library:** Strict TypeScript reference library providing semantic contracts, canonicalization, and release provenance.
 - **CLI:** Tools for inspecting, encoding, compiling, and verifying Lunum releases.
