@@ -224,14 +224,14 @@ Port 3847, systemd service `openlunum-dashboard`. Backend: `server.mjs` (Node.js
 
 ## CI Status
 
-GitHub Actions billing was exhausted ~2026-06-13, restored 2026-07-09. CI runs still show failures (runner issues). Pipeline works fully without CI (reviewer + local verify). Quality gate CI workflow now exists (PR #151/152 merged).
+GitHub Actions currently fails every job before recording a workflow step, consistent with an account billing/spending or runner-allocation refusal. Local work and review can continue, but protected `main` cannot merge without successful exact-head required checks. Do not describe the release pipeline as fully operational and do not relax protection to work around this external failure.
 
 ---
 
 ## Current State (2026-07-19)
 
 **Last updated by**: GPT-5 Codex (cloud orchestrator)
-**Timestamp**: 2026-07-19T20:00+03:00
+**Timestamp**: 2026-07-19T20:12+03:00
 
 - **Incident #188**: confirmed. With no branch protection, the old merge bot ignored GitHub checks and blockers, unconditionally converted drafts to ready, and merged #185, #186, #187, and #190 after failed/no-step Actions jobs.
 - **Merge control repair**: `88017f8` is on `main`. The bot now fails closed on drafts, conflicts, blocking labels, unresolved current-head `NEEDS_WORK`, stale approvals, missing/non-successful exact-head checks, and checks with zero recorded steps. Merges use `--match-head-commit`. Fourteen policy tests and full `pnpm verify` pass.
@@ -241,4 +241,6 @@ GitHub Actions billing was exhausted ~2026-06-13, restored 2026-07-09. CI runs s
 - **Open PR audit**: #189, #184, #181, and #178 are `NEEDS_WORK` and must be rebuilt from current `main`; #191 is a new draft migration-CLI candidate requiring independent review. Re-check the live PR list because the worker remains active.
 - **Post-merge audit**: keep #187's three reopened gates. Repair #185/#190 claims: renderer conformance is only 7/10, there are no exact committed renderer goldens, tokenizer preservation is tautological, and no named-model retention report was published. Downgrade Reference/established wording until evidence exists.
 - **Urgent #186 repair**: draft PR #193 adds containment-safe filenames, unique model IDs, retained model/settings identity, no-winner handling for all-error runs, explicit ties, and negative tests. Local `pnpm verify` passes. Keep it draft until the protected exact-head checks run successfully; a protocol-compliant experiment is still required before claiming maturity.
+- **Dashboard repair**: port 3847 is active via `openlunum-dashboard.service`. Its backend/frontend now use `origin/main` plus live GitHub PR/check data, expose drafts and blocked state, detect no-step Actions failures, distinguish fresh telemetry from mere HTTP availability, deduplicate merge throughput, and stop inventing release completion from weighted maturity labels. Current authoritative display: 69/72 accepted queue entries, 3 open v4 gates, 7 open PRs, 4 drafts, and 7 blocked PRs. The worker checkout was synchronized to `88017f8` at this check-in.
+- **ETA**: scope estimates to the defined v4/pre-1.0 queue, not the open-ended project vision. While Actions cannot start jobs, merge/release ETA is unbounded. After service restoration: best case 8–16 productive hours (~1 day), likely 2–4 calendar days, conservative 1–2 weeks if another semantic audit/rebuild cycle is needed. Do not call completion until all three reopened gates have independent evidence on `main`, #193 is resolved, exact-head checks pass, and #188 closes with control proof.
 - **Handover note**: the quoted audit referenced a canonical `HANDOVER.md`, but no such file exists on current `main`. This `ORCHESTRATOR.md` remains the repository's mandated handover record.
