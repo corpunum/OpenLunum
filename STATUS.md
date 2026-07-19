@@ -60,9 +60,7 @@
 | API stability tests | Reference implementation | Snapshot-based tests for `packages/core` public exports |
 | OpenUnum adapter e2e conformance | Prototype | End-to-end verification against real product runtime |
 | Aggregate MRR | Reference implementation | Mean Reciprocal Rank for retrieval tasks, computed and validated in reports |
-| HTTP API reference server | Prototype | REST endpoints with OpenAPI spec; third adoption path |
 | Prompt-injection resistance | Prototype | 10 adversarial inputs tested against parser |
-| Mixed-context quality gates | Prototype | Downstream accuracy comparison across natural vs Lunum vs mixed |
 | Threat model with mitigations | Prototype | Concrete mitigations for injection, hallucination, ambiguity with parser tests |
 | Compatibility matrix | Prototype | Schema-version and package-version compatibility testing |
 | Error observability | Prototype | Circuit-breaker and revert-capability types in eval runner |

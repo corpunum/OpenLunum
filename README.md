@@ -177,11 +177,20 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - **Realization runner:** Experiment runner with protected-literal scoring for multilingual realization experiments.
 - **Token Atlas:** Cross-model, cross-profile token measurement framework for measuring natural vs renderer profiles.
 - **Profile selection:** Renderer profile selection driven by Token Atlas measurements (per-model best profile).
+- **Tokenizer optimization pass:** Model-specific tight profiles that provably do not change semantics, with per-model best profile selection via Token Atlas.
 - **Downstream quality gates:** Task-success metrics and quality gates to verify downstream task quality preservation.
 - **Fingerprint migration utilities:** Code-level utilities for detecting versions, migrating records, and golden vectors.
 - **CI conformance gates:** Property tests wired into CI as hard gates for idempotence and fingerprint stability.
 - **API stability tests:** Snapshot-based tests verifying no public exports are removed and no breaking signature changes occur in `packages/core`.
 - **OpenUnum adapter e2e conformance:** End-to-end verification of OpenUnum compatibility adapter against real product runtime.
+- **HTTP API reference server:** New `packages/api` package with REST endpoints (parse, realize, render, retrieve, health) and OpenAPI 3.1.0 spec. Third adoption path after MCP and CLI.
+- **Standalone CLI pipeline:** `lunum parse | lunum realize | lunum render` pipeline for scriptable offline adoption.
+- **Prompt-injection resistance tests:** 10 adversarial inputs crafted to corrupt Lunum-Sem records through the parser.
+- **Mixed-context quality gates:** Downstream task accuracy comparison across natural vs Lunum vs mixed context.
+- **Threat model expansion:** Concrete mitigations for injection, hallucination, ambiguity, provenance chain integrity, and parser-hallucination.
+- **Compatibility matrix:** Schema-package version compatibility testing documented and CI-tested.
+- **Error observability:** Circuit-breaker and revert-capability types wired into the eval runner for auto-halt on repeated failures.
+- **Nightly experiment runs:** Automated nightly evaluation with structured evidence reports.
 
 ## Evidence snapshot
 
