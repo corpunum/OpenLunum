@@ -5,17 +5,26 @@
 ### Changed — CLI (PR #174)
 - **CLI migrate command enhanced:** `lunum migrate` now uses proper migration utilities from `@corpunum/lunum` (`migrateForward01to02`, `migrateBackward02to01`). Supports `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward) migrations. Provides detailed results including schema versions, fingerprints, warnings, and validation status. Supports both single records and arrays of records. Adds `--dry-run` mode that reports changes without modifying files, and in-place write mode that transforms records and writes back to file. 152 lines of tests in `packages/cli/test/cli.test.ts`. (PR #174, commit d5ba255)
 
+### Docs — sync (PR #185, PR #183)
+- **Documentation syncs:** Status table and changelog entries updated for merged work through PR #185. (PR #185, PR #183)
+
 ### Added — Multilingual Round-Trip Retention (PR #176)
 - **Round-trip retention experiment:** Parse→realize round-trips on all 4 languages (EN/EL/ES/ID) against local models. Gold Sem is realized to each target language via local model, parsed back, and compared against gold Sem. Scores: predicate match, role match, protected-literal preservation. Per-language pass/fail metrics published. Types in `packages/eval/src/round-trip-retention.ts`. 14 tests in `packages/eval/test/round-trip-retention.test.ts`. (PR #176)
 
 ### Added — Retention Regression Gate (PR #167)
 - **Retention regression gate:** Baseline store with provenance (dataset/model/schema), regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), and nightly CI integration. Types and logic in `packages/eval/src/baseline-store.ts`. 11 tests in `packages/eval/test/baseline-store.test.ts`. CI workflow at `.github/workflows/retention-regression-gate.yml`. (PR #167)
 
+### Added — Per-Model Retention Profiles (PR #186)
+- **Per-model retention profiles:** `ModelRetentionProfile` and `ModelLanguageProfile` types that track per-model retention characteristics across all languages. Round-trip retention experiment runner now computes and outputs: (1) `modelProfiles` — per-model retention metrics including per-language breakdown, (2) `bestModelsByLanguage` — best model for each language by retention rate, (3) model profile markdown reports, (4) best-models-by-language summary report. Addresses STATUS.md honest boundary: "per-model retention profiles are not yet established." 18 total round-trip retention tests pass. (PR #186, commit d547115)
+
 ### Added — Retention Baseline Store (PR #180)
 - **Retention baseline store:** Per-language retention metrics save/load with `saveBaseline()` and `loadBaseline()`. Snapshot-to-baseline conversion via `snapshotToBaseline()`. Regression detection via `compareRetentionAgainstBaseline()` — detects when any language drops below its baseline, below minimum threshold (0.5), or overall drops >5pp. Types in `packages/eval/src/retention-baseline.ts`. 289 lines of implementation, 274 lines of tests in `packages/eval/test/retention-baseline.test.ts`. (PR #180)
 
 ### Added — Renderer Profiles (PR #182)
 - **Renderer profiles upgraded to Reference:** Deterministic golden-output tests for safe/short/tight profiles on 10+ diverse inputs. Model-specific tight profiles via Token Atlas; per-model best profile selection available. Types in `packages/core/src/profile-selector.ts`. Golden-output tests on main. (PR #182, commit c2e9a28)
+
+### Changed — STATUS.md Maturity (PR #186)
+- **Per-model retention profiles now established:** Per-language retention metrics are now tracked per-model, with `bestModelsByLanguage` summaries. Downgraded renderer profiles from Reference to Experiment in STATUS.md (reverted in PR #186). Honesty boundary updated: "per-model retention profiles are not yet established" replaced with per-model profile results. (PR #185, commit 95f121f)
 
 ### Added — Retrieval (PR #164)
 - **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in `summary.json` and `report.md`. Tests rebuilt and revalidated in `packages/eval/test/` (PR #164).

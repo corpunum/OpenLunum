@@ -3,7 +3,7 @@
 **Status:** Prototype  
 **Source:** `packages/eval/src/round-trip-retention.ts`  
 **Tests:** `packages/eval/test/round-trip-retention.test.ts`  
-**PR:** #176
+**PR:** #176 (initial), #186 (per-model retention profiles)
 
 ## Overview
 
@@ -31,7 +31,7 @@ For each evaluation item:
 | Spanish | `es` |
 | Indonesian | `id` |
 
-Experiments run against at least 2 local models. Per-language metrics are published for each model.
+Experiments run against at least 2 local models. Per-language and per-model metrics are published. PR #186 added per-model retention profiles with `ModelRetentionProfile` and `ModelLanguageProfile` types, `bestModelsByLanguage` summaries, and model profile markdown reports.
 
 ## Metrics
 
@@ -64,10 +64,12 @@ Experiments run against at least 2 local models. Per-language metrics are publis
 | `totalErrors` | `number` | Total error items |
 | `overallRetentionRate` | `number` | Overall retention rate |
 | `perLanguage` | `RoundTripMetric[]` | Per-language metrics |
+| `modelProfiles` | `Record<string, ModelRetentionProfile>` | Per-model retention profiles with per-language breakdown (PR #186) |
+| `bestModelsByLanguage` | `Record<RealizationLanguage, string>` | Best model for each language by retention rate (PR #186) |
 
 ## Honest boundary
 
-- This is a prototype experiment runner. It measures retention but does not yet establish per-model retention thresholds.
+- This is a prototype experiment runner. Per-model retention profiles are now established (PR #186) with `ModelRetentionProfile` and `ModelLanguageProfile` types, but production thresholds are not yet set.
 - The experiment tests parse→realize→parse cycles but does not test the full context pipeline (e.g., retrieval, injection, mixed-context).
-- Per-language retention profiles are not yet established; results are per-language per-model, not yet aggregated into a production profile.
+- Results are published per-language per-model and aggregated into per-model profiles; best-models-by-language summaries are available but not yet used for automatic model selection.
 - Threshold tuning for pass/fail is not yet automated; results must be reviewed manually.
