@@ -2,10 +2,19 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
-### Added — Merge Control (PR #188, commits 88017f8, a49fe3f)
-- **Merge policy module:** `scripts/pi-merge-policy.mjs` (194 lines) with `evaluateMergePolicy()` implementing fail-closed exact-head policy, draft/conflict/blocking-label/unresolved-review/stale-approval/missing-checks/zero-step gates, `--match-head-commit` merges, required-checks lists with quality-gates gating for core/eval changes. `REQUIRED_CHECKS` exports `verify`, `schema-drift`, `report-validation`, `protected-data-boundary`. Types in `scripts/pi-merge-policy.mjs`. 14 tests in `scripts/pi-merge-policy.test.mjs`. (commit 88017f8)
-- **CI_OUTAGE flag:** `scripts/pi-merge-policy.mjs` exports `CI_OUTAGE_FLAG` path (`reports/orchestrator/CI_OUTAGE`); when present, the merge bot skips the hosted-required-checks requirement while still requiring local `pnpm verify` and auto-revert. (commit a49fe3f)
-- **Merge loop hardening:** `scripts/pi-merge-loop.sh` updated to enforce exact-head policy, fail-closed on drafts/conflicts/blocking labels, and use `--match-head-commit` for all merges. (commit 88017f8)
+### Changed — Merge Policy (PR #190, commit 88017f8)
+- **Fail-closed exact-head merge policy:** New `scripts/pi-merge-policy.mjs` with strict merge enforcement. Required checks: verify, schema-drift, report-validation, protected-data-boundary; quality-gates for changes to `packages/core/src/` or `packages/eval/src/`. Blocks drafts, conflicts, blocking labels (needs-work, needs-rebase, maintainer-blocked), unresolved current-head NEEDS_WORK, stale approvals, missing/non-successful exact-head checks, and checks with zero recorded steps. Uses `--match-head-commit` on merge to close the TOCTOU gap. CI_OUTAGE flag (`reports/orchestrator/CI_OUTAGE`) lets the orchestrator skip hosted checks during GitHub Actions billing outages while local verify + auto-revert still gate. 14 policy tests in `scripts/pi-merge-policy.test.mjs`. (commit 88017f8)
+- **Merge loop updated:** `scripts/pi-merge-loop.sh` now uses `MERGE_POLICY` env var for policy evaluation, creates `maintainer-blocked` and `merge-policy-blocked` labels, binds `LGTM-protected` overrides to exact head SHA, and runs policy evaluation before every merge.
+
+### Changed — CI_OUTAGE flag (PR #190, commit a49fe3f)
+- **CI_OUTAGE flag:** When GitHub Actions billing is exhausted, hosted checks never start and would deadlock every merge. The flag file (`reports/orchestrator/CI_OUTAGE`) lets the orchestrator skip the hosted check requirement; local verify + auto-revert in the merge bot still gate. (commit a49fe3f)
+
+### Docs — merge control and audit (PR #190)
+- **Incident #188:** confirmed — without branch protection the old merge bot ignored checks and blockers, merging PRs after failed/no-step Actions jobs. Repair: exact-head fail-closed policy with 14 tests and `pnpm verify` passing. (commit 88017f8)
+- **Post-merge audit findings:** renderer conformance is only 7/10, no exact committed renderer goldens, tokenizer preservation is tautological, and no named-model retention report was published. Downgrade Reference/established wording until evidence exists. (commit f565108)
+- **Dashboard and ETA check-in:** port 3847 dashboard now uses `origin/main` plus live GitHub PR/check data, detects no-step Actions failures, and shows current authoritative state. ETA scoped to v4/pre-1.0 queue. (commit 4f4e7a5)
+- **Retention hardening:** STATUS.md honest boundary updated to reflect per-model retention profiles established (PR #186). (commit b85a2d3)
+- **Merge-control handover:** `ORCHESTRATOR.md` updated with 6-layer stack architecture, escalation path, `orchestrator-approved` label semantics, and copy-paste handover prompt. (commit 8b6b11d)
 
 ### Changed — CLI (PR #174)
 - **CLI migrate command enhanced:** `lunum migrate` now uses proper migration utilities from `@corpunum/lunum` (`migrateForward01to02`, `migrateBackward02to01`). Supports `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward) migrations. Provides detailed results including schema versions, fingerprints, warnings, and validation status. Supports both single records and arrays of records. Adds `--dry-run` mode that reports changes without modifying files, and in-place write mode that transforms records and writes back to file. 152 lines of tests in `packages/cli/test/cli.test.ts`. (PR #174, commit d5ba255)
