@@ -81,6 +81,7 @@ export interface LunumRecord {
   };
   sem: LunumSem;
   fingerprint: string;
+  nearSemanticFingerprint?: string;
   renderings: Record<string, LunumRendering>;
   policy: EligibilityDecision;
   meta: Record<string, unknown>;
