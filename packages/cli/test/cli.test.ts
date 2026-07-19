@@ -5,23 +5,25 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { fingerprintSem } from '@corpunum/lunum';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const cli = path.resolve(here, '../src/cli.js');
 
 function record01(predicate = 'test') {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'fact',
+    clauses: [{ predicate, roles: { subject: 'entity' }, negated: false }],
+    annotations: { confidence: 1 },
+    provenance: { source: 'test' },
+  };
   return {
     recordVersion: 'lunum-record/0.1-draft',
     source: { text: `${predicate} source`, language: 'en', role: 'user', ref: null },
-    sem: {
-      schema: 'lunum-sem/0.1-draft',
-      world: 'real',
-      kind: 'fact',
-      clauses: [{ predicate, roles: { subject: 'entity' }, negated: false }],
-      annotations: { confidence: 1 },
-      provenance: { source: 'test' },
-    },
-    fingerprint: `lfp:0.1:sha256:${'a'.repeat(32)}`,
+    sem,
+    fingerprint: fingerprintSem(sem),
     renderings: {},
     policy: {
       eligible: true,
@@ -123,5 +125,41 @@ test('CLI migrate fails the whole batch and writes nothing when any source is in
     const report = JSON.parse(result.stderr) as { migrated: number; failed: number };
     assert.equal(report.migrated, 1);
     assert.equal(report.failed, 1);
+  });
+});
+
+test('CLI migrate rejects a malformed clause and leaves the source untouched', async () => {
+  const malformed = record01('malformed');
+  malformed.sem.clauses[0] = { predicate: '', roles: { subject: 'entity' }, negated: false };
+  await withTempFile(malformed, async (file) => {
+    const before = await readFile(file, 'utf8');
+    const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
+    assert.equal(result.status, 1);
+    assert.equal(await readFile(file, 'utf8'), before);
+    assert.match(result.stderr, /clauses\[0\]\.predicate must be a non-empty string/);
+  });
+});
+
+test('CLI migrate rejects a stale source fingerprint digest and leaves the source untouched', async () => {
+  const stale = record01('stale');
+  stale.fingerprint = `lfp:0.1:sha256:${'a'.repeat(32)}`;
+  await withTempFile(stale, async (file) => {
+    const before = await readFile(file, 'utf8');
+    const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
+    assert.equal(result.status, 1);
+    assert.equal(await readFile(file, 'utf8'), before);
+    assert.match(result.stderr, /fingerprint digest does not match canonical semantic content/);
+  });
+});
+
+test('CLI migrate rejects a source fingerprint from the wrong version and leaves the source untouched', async () => {
+  const wrongVersion = record01('wrong_version');
+  wrongVersion.fingerprint = wrongVersion.fingerprint.replace('lfp:0.1:', 'lfp:0.2:');
+  await withTempFile(wrongVersion, async (file) => {
+    const before = await readFile(file, 'utf8');
+    const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
+    assert.equal(result.status, 1);
+    assert.equal(await readFile(file, 'utf8'), before);
+    assert.match(result.stderr, /fingerprint version must equal 0\.1/);
   });
 });

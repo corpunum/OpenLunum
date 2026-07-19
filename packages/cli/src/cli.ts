@@ -73,10 +73,85 @@ function isRecordLike(value: unknown): value is LunumRecord {
   );
 }
 
-function sourceVersionMatches(record: LunumRecord, from: MigrationVersion): boolean {
-  return from === '0.1'
-    ? record.recordVersion === RECORD_SCHEMA && record.sem.schema === SEM_SCHEMA
-    : record.recordVersion === RECORD_SCHEMA_02 && record.sem.schema === SEM_SCHEMA_02;
+const SEM_FIELDS = new Set(['schema', 'world', 'kind', 'clauses', 'references', 'provenance', 'annotations']);
+const CLAUSE_FIELDS = new Set(['predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences', 'annotations']);
+const RECORD_FIELDS_01 = new Set(['recordVersion', 'source', 'sem', 'fingerprint', 'renderings', 'policy', 'meta']);
+const RECORD_FIELDS_02 = new Set([...RECORD_FIELDS_01, 'nearSemanticFingerprint']);
+
+function unexpectedFields(value: Record<string, unknown>, allowed: Set<string>, location: string): string[] {
+  return Object.keys(value)
+    .filter((key) => !allowed.has(key))
+    .map((key) => `${location}.${key} is not allowed`);
+}
+
+function validateClause(value: unknown, location: string, version: MigrationVersion): string[] {
+  if (!isObject(value)) return [`${location} must be an object`];
+  const errors = unexpectedFields(value, CLAUSE_FIELDS, location);
+  if (typeof value.predicate !== 'string' || value.predicate.trim().length === 0) {
+    errors.push(`${location}.predicate must be a non-empty string`);
+  }
+  if (!isObject(value.roles)) errors.push(`${location}.roles must be an object`);
+  if (value.negated !== undefined && typeof value.negated !== 'boolean') {
+    errors.push(`${location}.negated must be a boolean`);
+  }
+  if (value.modality !== undefined && value.modality !== null) {
+    if (typeof value.modality !== 'string') errors.push(`${location}.modality must be a string or null`);
+    if (version === '0.2' && !['certainty', 'possibility', 'necessity', 'obligation'].includes(String(value.modality))) {
+      errors.push(`${location}.modality is not valid for Lunum-Sem 0.2`);
+    }
+  }
+  for (const nestedField of ['conditions', 'consequences'] as const) {
+    const nested = value[nestedField];
+    if (nested === undefined) continue;
+    if (!Array.isArray(nested)) {
+      errors.push(`${location}.${nestedField} must be an array`);
+      continue;
+    }
+    nested.forEach((clause, index) => errors.push(...validateClause(clause, `${location}.${nestedField}[${index}]`, version)));
+  }
+  return errors;
+}
+
+function validateSourceRecord(value: unknown, version: MigrationVersion): string[] {
+  if (!isRecordLike(value)) return ['record must match the LunumRecord structure'];
+
+  const errors = unexpectedFields(value as unknown as Record<string, unknown>, version === '0.1' ? RECORD_FIELDS_01 : RECORD_FIELDS_02, 'record');
+  const expectedRecordSchema = version === '0.1' ? RECORD_SCHEMA : RECORD_SCHEMA_02;
+  const expectedSemSchema = version === '0.1' ? SEM_SCHEMA : SEM_SCHEMA_02;
+  if (value.recordVersion !== expectedRecordSchema) errors.push(`record.recordVersion must equal ${expectedRecordSchema}`);
+  if (value.sem.schema !== expectedSemSchema) errors.push(`record.sem.schema must equal ${expectedSemSchema}`);
+  errors.push(...unexpectedFields(value.sem as unknown as Record<string, unknown>, SEM_FIELDS, 'record.sem'));
+  if (typeof value.sem.world !== 'string' || value.sem.world.trim().length === 0) errors.push('record.sem.world must be a non-empty string');
+  if (typeof value.sem.kind !== 'string' || value.sem.kind.trim().length === 0) errors.push('record.sem.kind must be a non-empty string');
+  if (value.sem.clauses.length === 0) errors.push('record.sem.clauses must be a non-empty array');
+  value.sem.clauses.forEach((clause, index) => errors.push(...validateClause(clause, `record.sem.clauses[${index}]`, version)));
+
+  if (version === '0.2') {
+    errors.push(...unexpectedFields(value.source as unknown as Record<string, unknown>, new Set(['text', 'language', 'role', 'ref', 'format']), 'record.source'));
+    if (value.meta.schemaVersion !== undefined && value.meta.schemaVersion !== '0.2') errors.push('record.meta.schemaVersion must equal 0.2');
+    if (!['low', 'medium', 'high', 'unknown'].includes(String(value.policy.risk))) errors.push('record.policy.risk is not valid for Lunum Record 0.2');
+  }
+
+  return errors;
+}
+
+function validateSourceFingerprint(record: LunumRecord, version: MigrationVersion): string[] {
+  const parsed = parseFingerprint(record.fingerprint);
+  if (!parsed || parsed.prefix !== 'lfp' || parsed.algorithm !== 'sha256') {
+    return ['source fingerprint must be a valid lfp SHA-256 fingerprint'];
+  }
+  if (parsed.version !== version) return [`source fingerprint version must equal ${version}`];
+  if (parsed.digest.length < 16 || parsed.digest.length > 64) return ['source fingerprint digest must contain 16 to 64 hexadecimal characters'];
+
+  try {
+    const canonicalInput = structuredClone(record.sem);
+    canonicalInput.schema = SEM_SCHEMA;
+    const expected = fingerprintSem(canonicalInput, { length: parsed.digest.length });
+    const expectedDigest = parseFingerprint(expected)?.digest;
+    return expectedDigest === parsed.digest ? [] : ['source fingerprint digest does not match canonical semantic content'];
+  } catch (error) {
+    return [`source fingerprint cannot be verified: ${error instanceof Error ? error.message : String(error)}`];
+  }
 }
 
 function destinationVersionMatches(record: LunumRecord, to: MigrationVersion): boolean {
@@ -128,11 +203,14 @@ async function runMigrationCommand(): Promise<void> {
     let migratedRecord: LunumRecord | null = null;
     const rawObject = isObject(raw) ? raw : null;
 
-    if (!isRecordLike(raw)) {
-      errors.push('record must match the LunumRecord structure');
-    } else if (!sourceVersionMatches(raw, direction.from)) {
-      errors.push(`source record must have ${direction.from === '0.1' ? RECORD_SCHEMA : RECORD_SCHEMA_02} and ${direction.from === '0.1' ? SEM_SCHEMA : SEM_SCHEMA_02}`);
+    const sourceErrors = validateSourceRecord(raw, direction.from);
+    if (sourceErrors.length > 0 || !isRecordLike(raw)) {
+      errors.push(...sourceErrors);
     } else {
+      errors.push(...validateSourceFingerprint(raw, direction.from));
+    }
+
+    if (errors.length === 0 && isRecordLike(raw)) {
       try {
         const migration = direction.from === '0.1'
           ? migrateForward01to02(raw)
