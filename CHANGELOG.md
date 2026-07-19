@@ -42,6 +42,13 @@
 - **Near-semantic + exact fingerprint interop:** Records carry both exact (lfp:) and near-semantic (nfp:) fingerprints; hybrid search tries exact match first, then falls back to near-semantic. 13 new tests in `packages/core/test/near-semantic-exact-interop.test.ts`.
 - **Near-semantic retrieval tests:** Identical-record fingerprint stability, near-match similarity within threshold, unrelated-record low similarity, recall comparison vs exact fingerprint, false-positive rate measurement, threshold adjustment effects on precision-recall, fingerprint stability across multiple generations. Tests in `packages/core/test/near-semantic-retrieval.test.ts`.
 
+### Added — Infra (ffc633f)
+- **Local orchestrator:** `scripts/pi-orchestrator.sh` with 3h systemd timer for flag checks, loop health, STUCK auto-fix, stale PR detection, throughput tracking, and NEEDS_CLOUD escalation. Timer enabled as `openlunum-orchestrator.timer`.
+- **Orchestrator handover doc:** `ORCHESTRATOR.md` with 5-layer stack architecture (orchestrator, watchdog, local orchestrator, reviewer, worker, merge bot), key paths, hardware profile, worker loop description, and ops runbook enabling any LLM to take over as orchestrator.
+
+### Changed — Schema (PR #146)
+- **JSON Schema $ref cross-references v2 redesign:** Restructured `$ref` cross-references between experiment.schema.json, protected-eval.schema.json, and the core Lunum-Sem schema. Added `schemas/shared.schema.json` for shared definitions. Updated `schemas/lunum-sem-v02.schema.json` with v2 reference graph. Test suite in `packages/eval/test/schema-crossrefs.test.ts` validates the cross-reference graph.
+
 ---
 
 ## Since 0.2.0
