@@ -302,12 +302,17 @@ packages/adapter-openunum/ OpenUnum compatibility adapter package.
 packages/core/test/       API stability test suite with golden snapshots; near-semantic fingerprint interop and retrieval tests.
 schemas/                  machine-readable contracts (0.1-draft and frozen 0.2); `schemas/CHANGELOG.md` for migration instructions
 registry/                 worlds, roles, categories, predicates
-integrations/openunum/    verified-current-state reference and adoption plan
-integrations/*/            design/reference profiles for other products
+profiles/models/          Model profile definitions (token mappings, instruction templates).
+profiles/renderers/       Renderer profile definitions (safe, short, tight).
+scripts/                  Automation: nightly window, release sign/verify, schema-to-ts, validation.
+test-fixtures/            Integration and retrieval test fixtures with manifests.
+python/                   Python research workspace for model, tokenizer, corpus, and statistics work.
 eval/                     metrics, fixtures, gates, and historical ledger
 research/archive/         complete initial handover and prior experiments
 docs/                     vision, architecture, language, security, versioning
 docs/decisions/           architecture decision records (ADRs)
+integrations/openunum/    verified-current-state reference and adoption plan
+integrations/*/           design/reference profiles for other products
 ```
 
 ## Honest status
