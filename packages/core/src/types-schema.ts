@@ -114,3 +114,12 @@ export interface ReportValidationSchema01 {
   gates: {     minimumFeatureRecall: number,     minimumExactRate: number,     requireProtectedLiteralCoverage: boolean };
   outputDirectory: string;
 }
+
+export interface SharedSchema1 {
+
+}
+
+export type Term = Record<string, unknown>;
+export type Reference = {     id: string,     url: string,     label?: string };
+export type Iso8601 = string;
+export type Confidence = number;

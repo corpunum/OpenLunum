@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/shared/1",
+  "title": "OpenLunum shared definitions",
+  "description": "Common definitions shared across Lunum-Sem schemas. Referenced via $ref by experiment, protected-eval, and report-validation schemas.",
+  "$defs": {
+    "term": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "type": "string", "minLength": 1 },
+            "id": { "type": "string" },
+            "value": {},
+            "language": { "type": "string" },
+            "ref": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$" },
+        "url": { "type": "string", "format": "uri" },
+        "label": { "type": "string" }
+      }
+    },
+    "iso8601": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 date-time string"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence score between 0 and 1"
+    }
+  }
+}
