@@ -34,10 +34,9 @@ jobs:
       - name: Run quality gate CI
         id: gates
         run: |
-          EXIT_CODE=$(node -e "
+          node -e "
             const { runQualityGates, generateCIReport } = require('./packages/core/dist/src/quality-gate-ci.js');
             const { readFileSync } = require('fs');
-            const { parseRecord } = require('./packages/core/dist/src/index.js');
 
             // Load test records from protected dataset
             let records = [];
@@ -54,21 +53,28 @@ jobs:
             // Fallback: create minimal test records if none found
             if (records.length === 0) {
               records = [{
-                id: 'ci-test',
-                type: 'record',
-                version: '0.2',
-                semantic: {
-                  identity: { fingerprint: 'test', modality: 'text' },
+                recordVersion: '0.2',
+                source: { text: 'ci-fallback', language: null, role: null, ref: null },
+                sem: {
+                  schema: 'sem/0.2',
+                  identity: { fingerprint: 'lfp:0.2:sha256:00000000000000000000000000000000', modality: 'text' },
                   content: { proposition: { predicate: 'test', arguments: [] } }
                 },
-                provenance: { source: 'ci', timestamp: Date.now() }
+                fingerprint: 'lfp:0.2:sha256:00000000000000000000000000000000',
+                renderings: {},
+                policy: { eligible: true, reason: 'ci-test', version: '0.2' },
+                meta: { schemaVersion: '0.2' }
               }];
             }
 
             const report = runQualityGates(records, { minimumPassRate: 0.8 });
             console.log(generateCIReport(report));
             process.exit(report.exitCode);
-          ") || true
-          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          " && EXIT_CODE=0 || EXIT_CODE=$?
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            echo "Quality gates failed with exit code $EXIT_CODE" >&2
+            exit 1
+          fi
       - name: Quality gate result
-        run: echo "Quality gates completed"
+        run: echo "Quality gates completed with exit code ${{ steps.gates.outputs.exit_code }}"
