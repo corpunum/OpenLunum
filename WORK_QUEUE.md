@@ -120,56 +120,56 @@ v1-v3 are fully landed. v4 targets the 8 release gates from STATUS.md to move th
 
 ## P0 — schema stability (release gate 1)
 
-- [ ] Freeze Lunum-Sem schema 0.2: audit all `additionalProperties` constraints, lock field names, add a schema version migration test that reads a 0.1 record and produces a valid 0.2 record.
-- [ ] Add JSON Schema `$ref` cross-references between experiment.schema.json, protected-eval.schema.json, and the core Lunum-Sem schema so tools can validate the full graph.
-- [ ] Schema changelog: create `schemas/CHANGELOG.md` documenting every breaking change with migration instructions.
+- [x] Freeze Lunum-Sem schema 0.2: audit all `additionalProperties` constraints, lock field names, add a schema version migration test that reads a 0.1 record and produces a valid 0.2 record. *(PR #83 merged)*
+- [x] Add JSON Schema `$ref` cross-references between experiment.schema.json, protected-eval.schema.json, and the core Lunum-Sem schema so tools can validate the full graph. *(PR #146 merged)*
+- [x] Schema changelog: create `schemas/CHANGELOG.md` documenting every breaking change with migration instructions. *(exists on main)*
 
 ## P0 — migration rules (release gate 2)
 
-- [ ] Implement bidirectional fingerprint migration tests: 0.1→0.2 forward, 0.2→0.1 lossy backward with explicit data-loss warnings.
+- [x] Implement bidirectional fingerprint migration tests: 0.1→0.2 forward, 0.2→0.1 lossy backward with explicit data-loss warnings. *(PR #144, #149 merged)*
 - [ ] Add a migration CLI command: `lunum migrate <file> --from 0.1 --to 0.2` that transforms records in place with a dry-run mode.
-- [ ] Golden migration vectors: add 20+ fixture pairs (0.1 input → expected 0.2 output) covering every structural change.
+- [x] Golden migration vectors: add 20+ fixture pairs (0.1 input → expected 0.2 output) covering every structural change. *(golden-migration-vectors.test.ts on main)*
 
 ## P1 — multilingual retention (release gate 3)
 
 - [ ] Run parse+realize round-trip retention experiments on all 4 languages (EN/EL/ES/ID) against at least 2 local models; publish pass/fail per-language metrics.
-- [ ] Add a retention regression gate to CI: if any language drops below the baseline threshold recorded in the first run, the build fails.
+- [ ] Add a retention regression gate to CI: if any language drops below the baseline threshold recorded in the first run, the build fails. *(PR #155 open)*
 - [ ] Measure cross-lingual retrieval precision: query in language A, retrieve semantically equivalent records in language B.
 
 ## P1 — renderer measurement (release gate 4)
 
 - [ ] Upgrade renderer profiles from "Experiment" to "Reference": add deterministic golden-output tests for safe/short/tight on 10+ diverse inputs.
 - [ ] Add a tokenizer-optimization pass: for each named local model in Token Atlas, produce a model-specific tight profile that provably does not change semantics.
-- [ ] Renderer conformance suite: property tests that every profile preserves round-trip canonicalization.
+- [x] Renderer conformance suite: property tests that every profile preserves round-trip canonicalization. *(renderer-conformance.ts + test on main)*
 
 ## P1 — safety and quality gates (release gate 5)
 
-- [ ] Implement mixed-context quality gates: measure downstream task accuracy with natural vs Lunum vs mixed context on at least 3 task types.
-- [ ] Add prompt-injection resistance tests: craft 10 adversarial inputs that attempt to corrupt Lunum-Sem records through the parser; all must be detected or rejected.
-- [ ] Quality gate CI integration: run quality gates on every PR that touches `packages/core/src/` or `packages/eval/src/`.
+- [x] Implement mixed-context quality gates: measure downstream task accuracy with natural vs Lunum vs mixed context on at least 3 task types. *(PR #118 merged)*
+- [x] Add prompt-injection resistance tests: craft 10 adversarial inputs that attempt to corrupt Lunum-Sem records through the parser; all must be detected or rejected. *(PR #117 merged)*
+- [ ] Quality gate CI integration: run quality gates on every PR that touches `packages/core/src/` or `packages/eval/src/`. *(PR #151 pending merge)*
 
 ## P1 — adoption paths (release gate 6)
 
 - [ ] Verify the OpenUnum adapter end-to-end: install, configure, run in shadow mode, compare outputs to direct API — publish a conformance report.
-- [ ] Add a second adoption path: standalone CLI pipeline (`lunum parse | lunum realize | lunum render`) with documented examples.
-- [ ] Add a third adoption path: HTTP API reference server (extend the MCP package or create `packages/api`) with OpenAPI spec and integration tests.
+- [x] Add a second adoption path: standalone CLI pipeline (`lunum parse | lunum realize | lunum render`) with documented examples. *(packages/cli exists on main)*
+- [x] Add a third adoption path: HTTP API reference server (extend the MCP package or create `packages/api`) with OpenAPI spec and integration tests. *(packages/api exists on main)*
 
 ## P2 — threat model and rollback (release gate 7)
 
 - [ ] Expand `docs/THREAT-MODEL.md` with concrete mitigations for each threat (not just listings) and add a test for each parser-hallucination and renderer-ambiguity case.
-- [ ] Implement rollback process: given a Lunum-Sem record and its provenance chain, revert to the original natural-language source with verification.
-- [ ] Add a compatibility matrix: which schema versions work with which package versions, tested in CI.
+- [x] Implement rollback process: given a Lunum-Sem record and its provenance chain, revert to the original natural-language source with verification. *(PR #154 merged)*
+- [x] Add a compatibility matrix: which schema versions work with which package versions, tested in CI. *(PR #128 merged)*
 
 ## P2 — near-semantic fingerprints (from STATUS.md "Design" → implementation)
 
-- [ ] Implement near-semantic fingerprint generation: feature extraction, configurable similarity threshold, LSH or embedding-based bucketing.
-- [ ] Add near-semantic retrieval tests: query by near-fingerprint, verify recall vs exact fingerprint, measure false-positive rate.
-- [ ] Near-semantic + exact fingerprint interop: a single record carries both, and queries can specify which type to match.
+- [x] Implement near-semantic fingerprint generation: feature extraction, configurable similarity threshold, LSH or embedding-based bucketing. *(near-semantic-fingerprints.ts on main)*
+- [x] Add near-semantic retrieval tests: query by near-fingerprint, verify recall vs exact fingerprint, measure false-positive rate. *(near-semantic-retrieval.test.ts on main)*
+- [x] Near-semantic + exact fingerprint interop: a single record carries both, and queries can specify which type to match. *(PR #137 merged)*
 
 ## P2 — hardening
 
-- [ ] Add `packages/core` API stability tests: snapshot all public exports and fail CI if any are removed or have breaking signature changes without a major version bump.
-- [ ] Error observability integration: wire circuit-breaker and revert-capability types into the eval runner so experiments auto-halt on repeated failures.
+- [x] Add `packages/core` API stability tests: snapshot all public exports and fail CI if any are removed or have breaking signature changes without a major version bump. *(api-stability.test.ts on main)*
+- [x] Error observability integration: wire circuit-breaker and revert-capability types into the eval runner so experiments auto-halt on repeated failures. *(PR #119 merged)*
 - [ ] Add a `pnpm verify --strict` mode that also runs slow property tests, schema-drift checks, and the full eval smoke suite — gate nightly on this.
 
 ## Claiming work
