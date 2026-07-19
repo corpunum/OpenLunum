@@ -170,6 +170,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Bidirectional migration (0.1 ↔ 0.2) with schema validation: forward and backward migration functions validate source/destination schemas, emit field-level loss warnings, regenerate fingerprints, and preserve input order. Round-trip test (0.1→0.2→0.1) with explicit loss warnings.
 - Schema changelog at `schemas/CHANGELOG.md` documenting every breaking change.
 - Quality gate CI integration: unified runner wrapping downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, and prompt-gates; configurable pass rates and strict mode.
+- Safety rollback process: `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests rather than trusting the record itself. 10 unit tests. Types in `packages/core/src/rollback-process.ts`.
 
 ## New in v0.2.0
 
