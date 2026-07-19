@@ -144,8 +144,6 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Tokenizer measurement framework with llama.cpp-compatible counting.
 - Full-prompt quality gates for local-model evaluation.
 - Near-semantic fingerprint implementation with feature extraction and configurable similarity threshold.
-- Near-semantic retrieval tests: recall vs exact fingerprint, false-positive rate measurement.
-- Near-semantic + exact fingerprint interop: records carry both lfp: and nfp: fingerprints, queries can specify which type to match.
 - Expanded typed structures: time, quantity, uncertainty, reference, and modality.
 - Canonical conformance vectors and property tests.
 - Multilingual realization (English, Greek, Spanish, Indonesian) with protected-literal and independent semantic scoring.
@@ -166,9 +164,6 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Compatibility matrix for schema-package versions.
 - Error observability integration for eval runner (circuit-breaker, revert-capability).
 - Architecture decision records in `docs/decisions/`.
-- Native model protocol annotations for token mappings, instruction templates, and fallback profiles.
-- Renderer conformance suite: property tests verifying round-trip canonicalization across safe/short/tight profiles.
-- Agent-state protocol for plans, steps, tool calls, evidence, and inter-agent handoffs.
 - Frozen Lunum-Sem schema 0.2 with locked fields, enums, and `$ref` cross-references.
 - Schema migration test suite validating 0.1→0.2 record transformation with golden vectors.
 - Schema changelog at `schemas/CHANGELOG.md` documenting every breaking change.

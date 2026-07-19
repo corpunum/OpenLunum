@@ -41,25 +41,6 @@
 
 ---
 
-## Since 0.2.1 — Merged Work (5280ba9, 7650cc09, 605ae11, ef230af, 2001733)
-
-### Fixed — Schema (5280ba9, PR #134)
-- **Nested config schemas:** Added `additionalProperties: false` to prevent unexpected fields in nested config objects.
-
-### Added — Downstream Quality Gates (2001733)
-
-### Added — Downstream Quality Gates (2001733)
-- **Task-success metrics:** Metrics that verify downstream task quality is preserved when using Lunam context vs raw text.
-- **Quality gates:** Evaluation gates to ensure semantic retention and downstream quality.
-- **Downstream task evaluation:** Verification that Lunum context preserves task completion rates.
-
-### Changed — Evaluation Infrastructure (605ae11)
-- **Reconciliation of runners:** Aligned retrieval/integration runners with main branch evaluation protocol.
-- **Evaluation suite consistency:** Ensured development suite matches declared evaluation boundaries.
-
-### Changed — Work Queue Documentation (ef230af)
-- **Check-off downstream gates:** Documented downstream-quality gate items as completed in work queue.
-
 ## Since 0.2.0
 
 ### Added — Evidence & Hardening (PR #50, #61, #62, #51, #66, #52, #55, #57)
