@@ -96,7 +96,8 @@ test('model profile schema accepts maxTokens and rejects invalid budgets', async
   const validate = new Ajv({ strict: true }).compile(schema);
 
   assert.equal(validate(profile({ maxTokens: 4096 })), true, JSON.stringify(validate.errors));
-  for (const maxTokens of [0, -1, 1.5]) {
+  assert.equal(validate(profile({ maxTokens: Number.MAX_SAFE_INTEGER })), true, JSON.stringify(validate.errors));
+  for (const maxTokens of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1]) {
     assert.equal(validate(profile({ maxTokens })), false, `schema should reject maxTokens=${maxTokens}`);
   }
 });
