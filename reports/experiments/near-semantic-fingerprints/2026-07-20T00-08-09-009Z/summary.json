@@ -1,0 +1,14 @@
+{
+  "experimentId": "near-semantic-fingerprints",
+  "runId": "2026-07-20T00-08-09-009Z",
+  "task": "integration",
+  "deterministic": false,
+  "items": 16,
+  "calls": 16,
+  "passed": 0,
+  "failed": 16,
+  "exactRate": 0,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "gatesPassed": false
+}

@@ -1,0 +1,14 @@
+{
+  "experimentId": "conformance-gates",
+  "runId": "2026-07-20T00-08-08-043Z",
+  "task": "conformance",
+  "deterministic": true,
+  "items": 10,
+  "calls": 0,
+  "passed": 9,
+  "failed": 1,
+  "exactRate": 0.9,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "gatesPassed": false
+}
