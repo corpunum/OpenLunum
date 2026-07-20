@@ -2,17 +2,20 @@
 
 This is the entry point for humans and coding agents. OpenLunum is a research-and-engineering repository, not a prompt-compression toy. A valid contribution must improve a declared area without silently weakening meaning, safety, reproducibility, or compatibility.
 
-## 1. Understand the architecture
+## 1. Understand the architecture and operating model
 
 Read in this order:
 
 1. `VISION.md`
 2. `docs/ARCHITECTURE.md`
 3. `docs/MULTILINGUAL_MODEL.md`
-4. `docs/AGENT_OPERATING_MODEL.md`
-5. `docs/EXPERIMENT_PROTOCOL.md`
-6. `docs/EVALUATION_PROTOCOL.md`
-7. `WORK_QUEUE.md`
+4. `docs/REPOSITORY_OPERATING_MODEL.md`
+5. `docs/AGENT_OPERATING_MODEL.md`
+6. `docs/EXPERIMENT_PROTOCOL.md`
+7. `docs/EVALUATION_PROTOCOL.md`
+8. the assigned GitHub issue
+
+`WORK_QUEUE.md` is historical roadmap context. GitHub issues are the canonical backlog and assignment state.
 
 The core separation is:
 
@@ -37,25 +40,31 @@ pnpm agent:status
 
 Node 22 and pnpm 10.13.1 are required. Python is optional and reserved for corpus/model research that does not belong in the TypeScript reference SDK.
 
-## 3. Choose exactly one work area
+Do not begin assigned work while the baseline is failing unless the issue explicitly targets that failure.
 
-Choose one area from `WORK_QUEUE.md`. Create an experiment before changing behavior:
+## 3. Work only from an explicit assignment
+
+A local worker receives one ready GitHub issue through `reports/orchestrator/WORKER_ASSIGNMENT.md`. See `scripts/WORKER_ASSIGNMENT.example.md` and `scripts/pi-task-prompt.md`.
+
+If no valid assignment exists, the worker remains idle and creates nothing.
+
+The default branch format is:
+
+```text
+work/<worker>/<issue-number>-<short-name>
+```
+
+Use one issue per branch and at most one active implementation pull request per worker. Local worktrees may persist; remote task branches are deleted after merge or rejection.
+
+## 4. Establish a baseline
+
+Behavior-changing and evidence-changing work begins from the issue's declared baseline and, where applicable, an experiment manifest:
 
 ```bash
 pnpm experiment:create -- --id <short-id> --area <area> --task <parse|realize|render|context>
 ```
 
-Use a branch such as:
-
-```text
-agent/<worker-name>/<area>/<experiment-id>
-```
-
-Do not optimize several unrelated areas in one branch.
-
-## 4. Establish a baseline
-
-Run deterministic checks first:
+Run deterministic checks before changing behavior:
 
 ```bash
 pnpm verify
@@ -68,24 +77,42 @@ pnpm model:doctor -- --profile profiles/models/my-local-model.json
 pnpm experiment:run -- experiments/<id>/experiment.json
 ```
 
-No paid API is required. Local servers are expected. The runner records model identity, settings, dataset hash, raw outputs, failures, and aggregate metrics.
+The runner records model identity, settings, dataset hash, raw outputs, failures, and aggregate metrics. Different quantizations, server builds, or chat templates are different evaluation environments.
 
-## 5. Iterate within the manifest budget
+## 5. Iterate within the assignment budget
 
-The experiment manifest defines maximum items, attempts, and model calls. Stop when a hard gate fails repeatedly, the budget is exhausted, or improvement becomes ambiguous. Never hide failed cases or change the benchmark to make the candidate win.
+The issue and experiment manifest define maximum items, attempts, model calls, timeouts, and wall-clock budget. Stop when a hard gate fails repeatedly, the budget is exhausted, or improvement becomes ambiguous.
+
+Never hide failed cases, silently retry exclusions, or change the benchmark to make a candidate win.
 
 ## 6. Publish a proposal, not a verdict
 
-A worker agent may push a branch and open a PR containing code, experiment manifests, raw result references, and generated reports. It must not merge semantic, fingerprint, protected-data, or safety-policy changes by itself.
+A worker may push one assigned task branch and open one draft pull request containing code, experiment manifests, raw-result references, generated reports where appropriate, failures, reproduction commands, and limitations.
 
-A stronger orchestrator or human decides whether the evidence supports implementation. Small local models are candidate generators and test workers; they are not the final semantic authority.
+The worker exits after reporting:
+
+- `candidate` — a coherent draft pull request exists;
+- `blocked` — a named dependency or decision prevents completion;
+- `no-improvement` — the bounded attempt produced no acceptable candidate.
+
+A stronger orchestrator, independent evaluator, or human decides whether the evidence supports implementation and merging. Small local models are candidate generators and test workers; they are not the final semantic authority.
+
+## Change tiers
+
+- **Tier 1:** mechanical, non-semantic documentation and low-risk tooling cleanup.
+- **Tier 2:** normal CLI, API, MCP, adapter, reporting, and implementation work.
+- **Tier 3:** schema, canonicalization, fingerprints, parser scoring, protected data, safety, renderer preservation, and support/maturity claims.
+
+Tier 3 work requires independent evaluation bound to the candidate head SHA.
 
 ## Non-negotiable rules
 
 - Preserve original source text and provenance.
 - Surface heuristics are not canonical semantics.
 - Token savings without meaning and task-quality evidence are not success.
-- Never edit code and `datasets/protected/` in the same PR.
-- Never claim language/model support without a named tested profile and report.
-- Never delete negative results.
-- Never push directly to `main` from an autonomous experiment loop.
+- Never edit code and protected evaluation data in the same pull request.
+- Never claim language/model/tokenizer support without a named tested profile and accepted report.
+- Never delete or hide negative results.
+- Never push directly to `main` from a worker.
+- Never create campaign, status, sync, completion, or idle branches.
+- Never select another issue after completing an assignment.

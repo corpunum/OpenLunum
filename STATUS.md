@@ -2,122 +2,134 @@
 
 **Repository:** OpenLunum  
 **Technology:** Lunum  
-**Specification line:** Lunum-I (Lunum Interlingua)  
+**Specification line:** Lunum-I — Lunum Interlingua  
 **Workspace version:** 0.2.0  
-**Maturity:** pre-1.0 research-to-reference implementation
+**Maturity:** pre-1.0 research-to-reference implementation  
+**Status date:** 2026-07-20
 
-## Current capabilities
+This file is a periodically reconciled summary. GitHub issues are the canonical backlog and acceptance state. Support and maturity claims require exact evidence references; implementation presence alone is not acceptance evidence.
 
-- Core library providing strict TypeScript reference semantics, serialization, canonicalization, and release provenance.
-- CLI tools for inspection, encoding, compilation, release verification, and pipeline adoption. Migrate command with bidirectional migration (0.1 ↔ 0.2), atomic writes, source/dest validation, and MigrationWarning details.
-- HTTP API reference server with OpenAPI spec and integration tests.
-- MCP (Model Context Protocol) prototype reference server and tooling for services.
-- OpenUnum compatibility package matching existing product sidecar shapes.
-- Profile Selection Result type for renderer profile selection.
-- Realization runner with protected-literal scoring.
-- Token Atlas for cross-model, cross-profile token measurement.
-- API stability tests with golden snapshots for `packages/core`.
-- OpenUnum adapter end-to-end conformance verification.
-- **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in summary.json and report.md.
-- Parse prompt with schema shape and one-shot example: `parsePrompt` system message includes the expected Lunum-Sem JSON structure (schema, world, kind, clauses with predicate/roles/negated) and a canonical preference example; live test showed parse validity improving 0/16 → 14/16. Regression test verifies schema shape fields and example parseability. Types in `packages/eval/src/prompts.ts`. (PR #232)
-- Prompt-injection resistance tests: 10 adversarial inputs tested against parser.
-- Mixed-context quality gates: downstream accuracy comparison across natural vs Lunum vs mixed.
-- Threat model with concrete mitigations for injection, hallucination, and ambiguity.
-- Compatibility matrix for schema-version and package-version pairs.
-- Schema 0.2 frozen with locked fields, enums, and `$ref` cross-references.
-- Schema migration test suite (312 lines) validating 0.1→0.2 record transformation with golden vectors.
-- Comprehensive semantic-contract type tests for v02 migration (122 lines).
-- Error observability: circuit-breaker and revert-capability types in eval runner.
-- Native model protocol: token mappings, instruction templates, and fallback profiles for 8 model families.
-- Renderer conformance suite: round-trip canonicalization property tests for safe/short/tight profiles.
-- Agent-state protocol: validated types for plans, steps, tool calls, evidence, and inter-agent handoffs.
-- Near-semantic fingerprint implementation: feature extraction, configurable similarity threshold, nfp:* format, similarity comparison.
-- Near-semantic + exact fingerprint interop: records carry both lfp: and nfp:, hybrid search (exact-first, near-fallback).
-- Near-semantic retrieval tests: recall vs exact, false-positive rate, fingerprint stability across generations.
-- Bidirectional migration (0.1 ↔ 0.2): forward (`migrateForward01to02`) and backward (`migrateBackward02to01`) functions with schema validation, field-level loss warnings, fingerprint regeneration, and input-order preservation. Batch operations (`migrateRecordsForward`, `migrateRecordsBackward`) and round-trip test (`roundTripMigration`) included.
-- Local orchestrator: `scripts/pi-orchestrator.sh` with 3h systemd timer for flag checks, loop health, STUCK auto-fix, stale PR detection, throughput tracking, and NEEDS_CLOUD escalation.
-- Fail-closed merge policy: `scripts/pi-merge-policy.mjs` enforces required checks (verify, schema-drift, report-validation, protected-data-boundary; quality-gates for core/eval src changes), fail-closed exact-head binding (`--match-head-commit`), draft/blocker/stale-check blocking, CI_OUTAGE flag support (skips hosted checks when `reports/orchestrator/CI_OUTAGE` exists), and `scripts/pi-merge-loop.sh` runs auto-merge bot with hard-protected paths (CI, agent infra, protected data → `claude-review` label) and soft-protected paths (core types, schemas, registry → reviewer `LGTM-protected` override), post-merge main verification with auto-revert on red, and auto-close of referenced issues. `scripts/pi-merge-loop.sh` runs `gh pr ready` on labeled PRs before policy. Labels: `merge-policy-blocked`, `claude-review`, `needs-rebase`, `needs-work`, `maintainer-blocked`. Tests in `scripts/pi-merge-policy.test.mjs`.
-- Rollback process: `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests rather than trusting the record itself. 10 unit tests. Types in `packages/core/src/rollback-process.ts`.
-- Orchestrator handover doc: `ORCHESTRATOR.md` with 6-layer stack architecture (Cloud Orchestrator, Watchdog, Local Orchestrator with LLM diagnosis, Reviewer, Worker, Merge Bot), key paths, hardware profile, escalation path (bash auto-fix → LLM diagnosis → NEEDS_CLOUD → cloud orchestrator → user notification), merge bot `orchestrator-approved` label for hard-protected PRs, and ops runbook for any LLM to take over. `ORCHESTRATOR-PROMPT.md` provides copy-paste handover instructions.
-- Quality gate CI integration: unified runner wrapping downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, and prompt-gates; configurable pass rates, exit codes (0=pass, 1=warn, 2=fail), CI workflow on PRs touching core/eval src.
-- Retention regression gate: baseline store with provenance (dataset/model/schema), regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), and nightly CI integration. Types in `packages/eval/src/baseline-store.ts`. 11 tests.
-- Retention baseline store: per-language retention metrics save/load (`saveBaseline()`, `loadBaseline()`), snapshot-to-baseline conversion (`snapshotToBaseline()`), regression detection (`compareRetentionAgainstBaseline()`) — detects when any language drops below baseline, below minimum threshold (0.5), or overall drops >5pp. Types in `packages/eval/src/retention-baseline.ts`. 289 lines of implementation, 274 lines of tests.
-- Per-model retention profiles: `ModelRetentionProfile` and `ModelLanguageProfile` types tracking per-model retention across all languages. Outputs: `modelProfiles` (per-model metrics with per-language breakdown), `bestModelsByLanguage`, model profile markdown reports, best-models-by-language summary. 18 total round-trip retention tests pass. (PR #186)
-- Multilingual round-trip retention: parse→realize round-trips on EN/EL/ES/ID against local models. Gold Sem realized to target language, parsed back, compared against gold. Scores: predicate match, role match, protected-literal preservation. 14 tests in `packages/eval/test/round-trip-retention.test.ts`.
-- Fail-closed merge policy: `scripts/pi-merge-policy.mjs` checks required CI checks (`verify`, `schema-drift`, `report-validation`, `protected-data-boundary`, and `quality-gates` for core/eval changes), approval labels with head-bound reviews, blocking conditions, and path protection. `scripts/pi-merge-loop.sh` binds merges to exact heads (`--match-head-commit`), runs `gh pr ready` on labeled PRs before policy, and auto-reverts on red main. CI_OUTAGE flag support: skips hosted checks when `reports/orchestrator/CI_OUTAGE` exists. 181-line policy evaluator, 109-line tests. (commit 88017f8)
-- Controlled predicate/role vocabulary in parsePrompt: `parsePrompt` ships a controlled vocabulary drawn from the gold dataset's identifier inventory so models hit gold identifiers instead of guessing synonyms (`remove_file` vs `delete`). Types in `packages/eval/src/prompts.ts`.
-- Eval max_tokens: `OpenAICompatibleModel.complete` in `packages/eval/src/model.ts` now accepts `max_tokens` (default 4096, profile-overridable) so thinking models consume the configured budget and do not return empty content.
-- Eval parse-experiment CLI fix: `runParseExperimentCli` now reads manifest path from `process.argv[3]` (after subcommand at `argv[2]`), fixing ENOENT error. Regression test invokes subcommand through real CLI entry.
-- Parse experiment now sends the system prompt: `parse-experiment.ts` passes `parsePrompt(item).system` to the model instead of the hardcoded "You are a precise Lunum experiment runner" string, so the model receives the full schema instructions and one-shot example from the parse prompt. Regression test verifies the system prompt is sent. Types in `packages/eval/src/parse-experiment.ts`. (PR #241)
-- Tokenizer-optimization pass verification: Pass compares optimized fingerprint against original via actual fingerprint comparison (not tautological self-comparison), ensuring the pass provably preserves semantics.
-- Recalibrated parse/retention gate thresholds: Parse and retention gate thresholds recalibrated from honest baselines (0.95 recall / 0.75 exact are unreachable for free-vocabulary models); rationale documented.
+## Architecture
 
-| Component | Status | Meaning |
-|---|---|---|
-| Lunum-Sem schema 0.2 | Frozen | Locked field names, enum constraints, `$ref` cross-references; migration from 0.1 validated |
-| Schema migration test suite | Reference implementation | 312-line test validating 0.1→0.2 record transformation with golden vectors |
-| Comprehensive type tests for v02 | Reference implementation | 122 lines of semantic-contract type tests covering all migration paths |
-| Core library | Reference implementation | Strict TypeScript reference for semantics, serialization, canonicalization, and release provenance |
-| CLI tools | Prototype | Inspection, encoding, compilation, release verification, pipeline adoption, and bidirectional migration with atomic writes and schema validation |
-| HTTP API reference server | Prototype | REST endpoints with OpenAPI spec; third adoption path |
-| MCP reference server | Prototype | Reference implementation of Model Context Protocol tooling |
-| OpenUnum adapter | Reference contract | Matches present sidecar shape; live adoption still requires product work |
-| Exact semantic fingerprint | Reference implementation | Versioned exact identity, not fuzzy equivalence |
-| Near-semantic fingerprint | Prototype | Feature extraction, configurable similarity threshold, nfp:* format; similarity comparison implemented |
-| Reference renderer | Prototype | Conservative and testable; not tokenizer-optimized |
-| Renderer profiles (safe/short/tight) | Reference | Deterministic golden-output tests on 10+ diverse inputs; model-specific tight profiles via Token Atlas; per-model best profile selection available |
-| Tokenizer measurement framework | Reference implementation | Cross-model measurement with Token Atlas; per-model profile selection available |
-| Mixed-context compiler | Prototype | Policy skeleton with natural fallback |
-| Raw multilingual parser | Experiment harness | Local models can be evaluated; no production parser is approved |
-| Multilingual realization | Experiment | English, Greek, Spanish, Indonesian; protected-literal scoring verified |
-| Abstention/clarification | Experiment | Available for low-confidence parses; threshold tuning needed |
-| Expanded typed structures | Reference implementation | Time, quantity, uncertainty, reference, modality implemented |
-| Canonical conformance vectors | Reference implementation | Property tests pass; wired into CI as hard gates |
-| Tokenizer profile selection | Reference implementation | Measurement framework with Token Atlas; per-model best profile selection available |
-| Context quality measurement | Prototype | Framework and policy datasets exist; mixed-context quality gates implemented |
-| Mixed-context quality gates | Prototype | Downstream accuracy comparison across natural vs Lunum vs mixed context |
-| Multilingual retrieval | Experiment | False-equivalence tests exist; production retrieval integration pending |
-| Conformance reports | Prototype | Hook/plugin/CLI paths documented; live adoption reports generated |
-| Profile Selection Result | Reference implementation | Explicit type for renderer profile selection |
-| Realization runner | Reference implementation | Protected-literal scoring for multilingual realization |
-| Token Atlas | Reference implementation | Cross-model, cross-profile token measurement framework |
-| API stability tests | Reference implementation | Snapshot-based tests for `packages/core` public exports |
-| OpenUnum adapter e2e conformance | Prototype | End-to-end verification against real product runtime |
-| Aggregate MRR | Reference implementation | Mean Reciprocal Rank for retrieval tasks, computed and validated in reports |
-| Parse prompt schema shape + one-shot example | Prototype | `parsePrompt` system message includes the expected Lunum-Sem JSON structure and a canonical preference example; live test showed parse validity improving 0/16 → 14/16. Regression test in `packages/eval/test/parse-experiment.test.ts`. (PR #232) |
-| Prompt-injection resistance | Prototype | 10 adversarial inputs tested against parser |
-| Threat model with mitigations | Prototype | Concrete mitigations for injection, hallucination, ambiguity with parser tests |
-| Compatibility matrix | Prototype | Schema-version and package-version compatibility testing |
-| Error observability | Prototype | Circuit-breaker and revert-capability types in eval runner |
-| Native model protocol | Prototype | Token mappings, instruction templates, and fallback profiles for 8 model families |
-| Renderer conformance suite | Reference implementation | Round-trip canonicalization property tests for safe/short/tight profiles |
-| Agent-state protocol | Prototype | Validated types for plans, steps, tool calls, evidence, and inter-agent handoffs |
-| Near-semantic fingerprint implementation | Prototype | Feature extraction, configurable threshold, nfp:* format, similarity comparison with threshold-based matching |
-| Near-semantic retrieval tests | Reference implementation | Recall vs exact, false-positive rate, fingerprint stability across generations |
-| Near-semantic + exact fingerprint interop | Prototype | Records carry both lfp: and nfp:, hybrid search exact-first with near-fallback |
-| Bidirectional migration (0.1 ↔ 0.2) | Reference implementation | Forward and backward migration with schema validation, field-level loss warnings, fingerprint regeneration, input-order preservation. Round-trip test with explicit loss warnings. 190 lines of tests.
-| Local orchestrator | Prototype | `scripts/pi-orchestrator.sh` with 3h timer, flag checks, loop health, STUCK auto-fix, stale PR detection, throughput tracking, NEEDS_CLOUD escalation.
-| Fail-closed merge policy | Prototype | `scripts/pi-merge-policy.mjs` enforces required checks (verify, schema-drift, report-validation, protected-data-boundary; quality-gates for core/eval src changes), fail-closed exact-head binding (`--match-head-commit`), draft/blocker/stale-check blocking, CI_OUTAGE flag support (skips hosted checks when `reports/orchestrator/CI_OUTAGE` exists), and `scripts/pi-merge-loop.sh` runs auto-merge bot with hard-protected paths (CI, agent infra, protected data → `claude-review`) and soft-protected paths (core types, schemas, registry → `LGTM-protected` override), post-merge main verification with auto-revert on red. `scripts/pi-merge-loop.sh` runs `gh pr ready` on labeled PRs before policy. Tests in `scripts/pi-merge-policy.test.mjs`.
-| Orchestrator handover | Reference document | 6-layer stack architecture (Cloud Orchestrator, Watchdog, Local Orchestrator with LLM diagnosis, Reviewer, Worker, Merge Bot), key paths, escalation path (bash → LLM diagnosis → NEEDS_CLOUD → cloud → user), merge bot `orchestrator-approved` label for hard-protected PRs. `ORCHESTRATOR-PROMPT.md` provides copy-paste handover.
-| Safety rollback process | Reference implementation | `rollbackToSource()` and `rollbackBatch()` verify integrity/provenance/source-authenticity (verified/failed/absent), fail closed when evidence is absent, verify source/provenance digests. 10 unit tests.
-| Quality gate CI integration | Prototype | Unified runner for downstream-quality, mixed-context-quality, prompt-injection, renderer-conformance, prompt-gates; configurable pass rates; CI workflow on core/eval PRs.
-| Retention regression gate | Reference implementation | Baseline store with provenance (dataset/model/schema), regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), nightly CI workflow. 11 tests in `packages/eval/test/baseline-store.test.ts`. |
-| Retention baseline store | Reference implementation | Per-language retention metrics save/load (`saveBaseline()`, `loadBaseline()`), snapshot-to-baseline conversion (`snapshotToBaseline()`), regression detection (`compareRetentionAgainstBaseline()` — detects when any language drops below baseline, below minimum threshold 0.5, or overall drops >5pp). 289 lines of implementation, 274 lines of tests in `packages/eval/test/retention-baseline.test.ts`. |
-| Per-model retention profiles | Prototype | `ModelRetentionProfile` and `ModelLanguageProfile` types tracking per-model retention across all languages. Outputs: `modelProfiles` (per-model metrics with per-language breakdown), `bestModelsByLanguage`, model profile markdown reports, best-models-by-language summary. 18 total round-trip retention tests pass. |
-| Multilingual round-trip retention | Prototype | Parse→realize round-trips on EN/EL/ES/ID against local models. Gold Sem realized to target language, parsed back, compared against gold. Scores: predicate match, role match, protected-literal preservation. 14 tests in `packages/eval/test/round-trip-retention.test.ts`. |
-| Fail-closed merge policy | Reference implementation | `scripts/pi-merge-policy.mjs` checks required CI checks (`verify`, `schema-drift`, `report-validation`, `protected-data-boundary`, `quality-gates` for core/eval src), approval labels with head-bound review comments, blocking conditions, and path protection. `scripts/pi-merge-loop.sh` binds merges to exact heads (`--match-head-commit`), runs `gh pr ready` on labeled PRs before policy, and auto-reverts on red main. CI_OUTAGE flag support: skips hosted checks when `reports/orchestrator/CI_OUTAGE` exists. 181-line evaluator, 109-line tests. |
+OpenLunum separates canonical meaning from model-facing representation:
 
-## Release gates before 1.0
+```text
+source evidence -> Lunum-Sem -> exact/near-semantic identity
+                              -> measured renderer profile
+                              -> safe natural-language fallback
+```
 
-1. Stable semantic schema and canonical serialization specification.
-2. Migration rules for records and fingerprints across schema versions.
-3. Multilingual semantic-retention evaluation on named corpora.
-4. Tokenizer-aware renderer profiles with reproducible measurements.
-5. Safety and quality gates for mixed-context use.
-6. At least three independently verified adoption paths.
-7. Published threat model, rollback process, and compatibility matrix.
-8. Property tests wired into CI as hard gates.
+The repository owns language semantics, schemas, canonicalization, fingerprints, renderers, policies, evaluations, and conformance contracts. Products own persistence, retrieval, context budgets, safety controls, and user experience.
+
+## Implemented foundations
+
+The repository currently includes:
+
+- strict TypeScript semantic types, canonicalization, serialization, and provenance;
+- frozen Lunum-Sem 0.2 schema assets and migration tooling;
+- exact and near-semantic fingerprint implementations;
+- safe, short, and tight renderer profiles with conformance and golden-output tests;
+- tokenizer and model-profile measurement tooling;
+- multilingual parse and realization experiment harnesses;
+- controlled predicate/role vocabulary and schema-bearing parse prompts;
+- configurable model token budgets and near-semantic parse scoring;
+- CLI, HTTP API, MCP, and OpenUnum adapter paths;
+- reproducible experiment manifests, dataset/profile hashing, raw-result retention, and report validation;
+- safety, prompt-injection, rollback, compatibility, and downstream-quality tests;
+- fail-closed exact-head merge policy and protected-data boundary checks;
+- assignment-driven local worker documentation and one-shot dispatcher tooling.
+
+This list describes implemented foundations. It does not by itself declare universal correctness, language support, production readiness, or accepted model performance.
+
+## Repository operating state
+
+The repository uses the operating model in `docs/REPOSITORY_OPERATING_MODEL.md`:
+
+- `main` is the only persistent shared development line;
+- workers use persistent local worktrees and disposable `work/<worker>/<issue>-<name>` branches;
+- GitHub issues are the backlog and assignment source of truth;
+- the default repository-wide limit is three active implementation pull requests;
+- workers run once for one explicit assignment and exit;
+- semantic and evidence-sensitive changes require independent evaluation;
+- accepted pull requests are squash merged and branches are deleted;
+- campaign, status, sync, completion, and idle branches are prohibited.
+
+The legacy persistent campaign loop is not the desired execution model. Local orchestration should use `scripts/pi-dispatch-once.sh` with a validated local assignment file.
+
+## CI and merge controls
+
+The merge policy requires successful current-head checks:
+
+- `verify`;
+- `schema-drift`;
+- `report-validation`;
+- `protected-data-boundary`;
+- `quality-gates` when core/eval source paths require it.
+
+The policy also blocks drafts, non-mergeable heads, blocking labels, current-head `NEEDS_WORK`, missing head-bound approval evidence, stale checks, failed checks, checks from unexpected producers, and workflow jobs with no recorded steps. Merges are bound to the expected head SHA.
+
+PR workflows avoid duplicate task-branch `push` runs and defer full PR checks while a candidate remains draft. Marking a pull request ready triggers the acceptance checks.
+
+Issue #188 remains the control-proof issue until live branch-protection configuration and enforcement are independently verified. Do not close it solely because repository policy code exists.
+
+## Evidence status
+
+The parse experiment path was repaired after discovering that historical live-model evidence was generated through a broken path. Repairs now present on `main` include:
+
+- correct CLI manifest argument handling;
+- delivery of the full parse system prompt;
+- embedded schema shape and canonical example;
+- controlled predicate/role vocabulary;
+- profile-overridable model token budgets;
+- fail-closed exact and near-semantic outcome scoring.
+
+Historical parse and retention reports produced before these repairs are not accepted baselines.
+
+### Immediate evidence milestone
+
+Issue #253 is the current bounded milestone:
+
+- run honest EN/EL/ES/ID parse and retention experiments;
+- use at least two named local model environments where required by the issue;
+- preserve raw item results, failures, timeouts, and exclusions;
+- report exact and near-semantic-only outcomes separately;
+- record dataset, profile, environment, and candidate hashes;
+- establish accepted replacement baselines before threshold calibration.
+
+Thresholds must be calibrated from accepted evidence, not retrofitted to historical broken-path results.
+
+## Release-gate view
+
+| Gate | Current view |
+|---|---|
+| Stable semantic schema and canonical serialization | Substantially implemented; changes remain Tier 3 |
+| Migration rules across schema versions | Implemented and tested for current 0.1/0.2 paths |
+| Multilingual semantic-retention evidence | Not accepted until issue #253 produces reviewed replacement baselines |
+| Tokenizer-aware renderer profiles | Implemented with golden and preservation tests; broader model evidence remains ongoing |
+| Safety and mixed-context quality gates | Implemented as prototype/reference test infrastructure; product proof remains limited |
+| Three adoption paths | CLI, HTTP API, MCP, and OpenUnum adapter exist; independent product adoption evidence remains limited |
+| Threat model, rollback, compatibility | Implemented and documented; continue adversarial review |
+| Property and conformance tests in CI | Implemented; live branch-protection enforcement still tracked by issue #188 |
+
+## Known organizational gaps
+
+- A machine-readable accepted-evidence registry is not yet canonical.
+- GitHub milestones and issue labels need to fully encode the proposed roadmap and work states.
+- The local system service/timer configuration must be migrated from persistent campaign invocation to assignment-driven one-shot dispatch.
+- Old closed-unmerged branches require local inspection for unique commits before deletion.
+- Live branch-protection configuration requires independent verification before incident #188 can close.
 
 ## Honest boundary
 
-OpenLunum has an architecture, a reference core, preserved evidence, adoption contracts, and a frozen Lunum-Sem 0.2 schema with migration test suite and bidirectional migration (0.1 ↔ 0.2) with schema validation. It does not yet provide a general language-agnostic natural-language parser, universal compression, or production proof across arbitrary models and products. Token Atlas provides cross-model measurements; renderer profiles are now Reference with golden-output tests and tokenizer-optimization pass that verifies semantic preservation via fingerprint comparison. CI hard gates exist for conformance but not all merge gates are active. Parse/retention gate thresholds recalibrated from honest baselines (current 0.95 recall / 0.75 exact are unreachable for free-vocabulary models). Release gates 1 and 2 are substantially addressed by the schema 0.2 freeze, migration test suite, and bidirectional migration with validation; remaining gates require further evidence. Renderer profiles (safe/short/tight) upgraded to Reference with deterministic golden-output tests and tokenizer-optimization pass verification. Multilingual round-trip retention is now experimentally measured (EN/EL/ES/ID) with per-model retention profiles established (PR #186), producing per-model metrics and best-models-by-language summaries.
+OpenLunum has a coherent architecture, a strict reference core, migration and adoption tooling, guarded experiment infrastructure, and an improving body of evidence.
+
+It does not yet provide:
+
+- a production-approved general language-agnostic parser;
+- universal semantic equivalence across arbitrary domains and languages;
+- universal token compression across models;
+- production proof across unrelated products;
+- accepted replacement multilingual baselines from the repaired live-model path;
+- a completed 1.0 support and compatibility guarantee.
+
+Natural fallback remains required whenever parsing, rendering, provenance, or safety evidence is insufficient.
