@@ -1,0 +1,19 @@
+# Default ownership
+* @corpunum
+
+# Semantic and compatibility boundaries
+/packages/core/src/ @corpunum
+/schemas/ @corpunum
+/registry/ @corpunum
+
+# Evaluation evidence and protected data
+/packages/eval/src/ @corpunum
+/datasets/protected/ @corpunum
+/reports/accepted-evidence/ @corpunum
+
+# Repository controls and worker infrastructure
+/.github/ @corpunum
+/scripts/pi-* @corpunum
+/ORCHESTRATOR.md @corpunum
+/ORCHESTRATOR-PROMPT.md @corpunum
+/docs/REPOSITORY_OPERATING_MODEL.md @corpunum
