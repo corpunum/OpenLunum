@@ -2,6 +2,7 @@ name: quality-gate
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - 'packages/cli/src/**'
       - 'packages/cli/test/**'
@@ -22,6 +23,7 @@ concurrency:
 
 jobs:
   quality-gates:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
