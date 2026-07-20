@@ -70,59 +70,14 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
   });
 
-  // 2026-07-20: the parse prompt previously showed only a `preference`
-  // example. Every conditional_instruction/safety_constraint item in the
-  // dataset failed across every model tested (up to 550B) because the
-  // model had never seen the `conditions` array shape or the non-actor/
-  // concept/object role types (metric, quantity, date, feature, project)
-  // that those items require. These two examples are real gold records
-  // from datasets/dev/multilingual-core-v1.jsonl (battery-en, delete-en),
-  // not invented — do not drift them from the actual gold data.
-  const conditionalExample = JSON.stringify({
-    schema: 'lunum-sem/0.1-draft',
-    world: 'real',
-    kind: 'conditional_instruction',
-    clauses: [{
-      predicate: 'enable',
-      roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'feature', id: 'power_saving' } },
-      negated: false,
-      conditions: [{
-        predicate: 'below',
-        roles: { subject: { type: 'metric', id: 'battery_level' }, value: { type: 'quantity', value: 20, unit: 'percent' } },
-        negated: false
-      }]
-    }]
-  });
-  const safetyExample = JSON.stringify({
-    schema: 'lunum-sem/0.1-draft',
-    world: 'real',
-    kind: 'safety_constraint',
-    clauses: [{
-      predicate: 'delete',
-      roles: { agent: { type: 'actor', id: 'assistant' }, object: { type: 'concept', id: 'files' } },
-      negated: true,
-      conditions: [{
-        predicate: 'confirmed',
-        roles: { agent: { type: 'actor', id: 'user' } },
-        negated: false
-      }]
-    }]
-  });
-
   return {
     system: [
       'Convert the input into Lunum-Sem JSON.',
-      'Return one JSON object only; no markdown, no reasoning text before or after the JSON.',
+      'Return one JSON object only; no markdown.',
       'Use schema lunum-sem/0.1-draft.',
       'Preserve entities, roles, negation, conditions, quantities, dates, time, modality, and uncertainty.',
       'Use language-neutral controlled identifiers in lower_snake_case.',
       'Do not invent facts. If ambiguous, record an annotation warning rather than choosing silently.',
-      '',
-      'Conditional inputs ("when X", "if X", "unless X", thresholds like "below 20%") MUST use',
-      '"kind": "conditional_instruction" or "safety_constraint" and wrap the triggering test in a',
-      '"conditions" array on the clause — never flatten a threshold or confirmation requirement into',
-      'the main clause\'s roles. A negated main clause ("do not delete... unless confirmed") plus a',
-      '"conditions" entry for the confirmation is the correct shape; do not drop the conditions array.',
       '',
       'Expected JSON structure:',
       '{',
@@ -131,20 +86,13 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       '  "kind": "<clause kind>",',
       '  "clauses": [{',
       '    "predicate": "<verb>",',
-      '    "roles": { "<role>": { "type": "<actor|concept|object|metric|quantity|date|feature|project>", "id": "<lower_snake_case>" }, ... },',
-      '    "negated": <true|false>,',
-      '    "conditions": [{ "predicate": "<comparison-or-check>", "roles": {...}, "negated": <true|false> }]',
+      '    "roles": { "<role>": { "type": "<actor|concept|object>", "id": "<lower_snake_case>" }, ... },',
+      '    "negated": <true|false>',
       '  }]',
       '}',
       '',
-      'Example (preference — no condition):',
+      'Example:',
       exampleOutput,
-      '',
-      'Example (conditional_instruction — threshold trigger, note the conditions array and metric/quantity types):',
-      conditionalExample,
-      '',
-      'Example (safety_constraint — confirmation requirement, note negated:true on the main clause):',
-      safetyExample,
       '',
       vocabularyBlock()
     ].join('\n'),
