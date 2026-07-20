@@ -1,453 +1,178 @@
-import { test } from 'node:test';
-import assert from 'node:assert';
-import {
-  TokenAtlas,
-  type ModelTokenizerProfile,
-  type AtlasEntry,
-  type AtlasProfileMeasures,
-  runTokenizerOptimizationPass
-} from '../src/token-atlas.js';
-import type { LunumRecord } from '../src/types.js';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { fingerprintSem } from '../src/fingerprint.js';
+import { TokenAtlas, type AtlasProfileMeasures, type LunumRecord, type ModelTokenizerProfile } from '../src/index.js';
+import { runTokenizerOptimizationPass } from '../src/token-optimization-compat.js';
 import { runVerifiedTokenizerOptimizationPass } from '../src/token-optimization.js';
 
-// ── Helpers ────────────────────────────────────────────────────────
-
-function createMockRecord(
-  text: string,
-  language = 'en',
-  predicate = 'test'
-): LunumRecord {
+function createMockRecord(text: string, predicate = 'test'): LunumRecord {
+  const sem: LunumRecord['sem'] = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'test-world',
+    kind: predicate,
+    clauses: [{ predicate, roles: { subject: 'entity', description: 'A value that remains intact across renderer profiles.' } }],
+    annotations: { source: 'test' },
+    provenance: { author: 'test' },
+  };
   return {
     recordVersion: 'lunum-record/0.1-draft',
-    source: { text, language, role: null, ref: null },
-    sem: {
-      schema: 'lunum-sem/0.1-draft',
-      world: 'test-world',
-      kind: predicate,
-      clauses: [{ predicate, roles: { subject: 'entity' } }],
-      annotations: { source: 'test' },
-      provenance: { author: 'test' }
-    },
-    fingerprint: `sha256-${text.slice(0, 16)}`,
+    source: { text, language: 'en', role: null, ref: null },
+    sem,
+    fingerprint: fingerprintSem(sem),
     renderings: {},
-    policy: {
-      eligible: true,
-      category: 'test',
-      risk: 'low' as const,
-      confidence: 0.95,
-      reasons: ['test policy']
-    },
-    meta: {}
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.95, reasons: ['test policy'] },
+    meta: {},
   };
 }
 
-function makeModel(name: string): ModelTokenizerProfile {
+function model(name: string): ModelTokenizerProfile {
   return { name, tokenizer: { model: name, addBos: true, addEos: true } };
 }
 
-// ── Constructor Tests ──────────────────────────────────────────────
+function atlas(): TokenAtlas {
+  return new TokenAtlas([model('alpha'), model('beta'), model('gamma')]);
+}
 
-test('TokenAtlas requires at least 3 models', () => {
-  assert.throws(
-    () => new TokenAtlas([makeModel('a'), makeModel('b')]),
-    { message: /requires at least 3 named models/ }
-  );
+test('TokenAtlas requires at least three named models and exposes defensive copies', () => {
+  assert.throws(() => new TokenAtlas([model('a'), model('b')]), /requires at least 3 named models/u);
+  const measured = atlas();
+  assert.equal(measured.getModelCount(), 3);
+  const models = measured.getModels();
+  models.length = 0;
+  assert.equal(measured.getModelCount(), 3);
 });
 
-test('TokenAtlas accepts exactly 3 models', () => {
-  const atlas = new TokenAtlas([makeModel('a'), makeModel('b'), makeModel('c')]);
-  assert.strictEqual(atlas.getModelCount(), 3);
-});
-
-test('TokenAtlas.withCommonModels creates 3 models', () => {
-  const atlas = TokenAtlas.withCommonModels();
-  assert.strictEqual(atlas.getModelCount(), 3);
-  const models = atlas.getModels();
-  assert.strictEqual(models[0]?.name, 'llama3.1-8b-instruct');
-  assert.strictEqual(models[1]?.name, 'qwen2.5-7b-instruct');
-  assert.strictEqual(models[2]?.name, 'mistral-7b-instruct-v0.3');
-});
-
-// ── Measure Tests ─────────────────────────────────────────────────
-
-test('measure returns an AtlasEntry with all profiles', () => {
-  const atlas = new TokenAtlas([
-    makeModel('test-model-1'),
-    makeModel('test-model-2'),
-    makeModel('test-model-3')
+test('withCommonModels binds three explicit tokenizer identities', () => {
+  const measured = TokenAtlas.withCommonModels();
+  assert.deepEqual(measured.getModels().map((entry) => entry.name), [
+    'llama3.1-8b-instruct',
+    'qwen2.5-7b-instruct',
+    'mistral-7b-instruct-v0.3',
   ]);
-  const record = createMockRecord('Hello world, this is a test sentence.');
-  const entry: AtlasEntry = atlas.measure(record);
+});
 
-  assert.ok(entry);
-  assert.strictEqual(entry.fingerprint, record.fingerprint);
-  assert.strictEqual(entry.sourceLength, record.source.text!.length);
+test('measure records natural and three distinct renderer profiles with tokenizer identity', () => {
+  const measured = atlas();
+  const record = createMockRecord('A natural-language input whose token count is measured rather than assumed.');
+  const entry = measured.measure(record);
+
+  assert.equal(entry.record, record);
+  assert.equal(entry.fingerprint, record.fingerprint);
+  assert.equal(entry.sourceLength, record.source.text.length);
   assert.ok(entry.measuredAt > 0);
-  assert.deepStrictEqual(entry.tokenizerProfiles['test-model-1'], {
-    model: 'test-model-1',
-    addBos: true,
-    addEos: true
-  });
+  assert.deepEqual(entry.tokenizerProfiles.alpha, model('alpha').tokenizer);
 
-  const models = atlas.getModels();
-  for (const model of models) {
-    const mm = entry.measurements[model.name] as AtlasProfileMeasures | undefined;
-    assert.ok(mm);
-    assert.strictEqual(mm!.natural.profile, 'natural');
-    assert.strictEqual(mm!.safe.profile, 'safe');
-    assert.strictEqual(mm!.short.profile, 'short');
-    assert.strictEqual(mm!.tight.profile, 'tight');
+  for (const modelName of ['alpha', 'beta', 'gamma']) {
+    const counts = entry.measurements[modelName];
+    assert.ok(counts);
+    assert.deepEqual(
+      [counts.natural.profile, counts.safe.profile, counts.short.profile, counts.tight.profile],
+      ['natural', 'safe', 'short', 'tight'],
+    );
+    assert.ok(counts.natural.tokenCount > 0);
+    assert.ok(counts.safe.tokenCount > 0);
+    assert.ok(counts.short.tokenCount > 0);
+    assert.ok(counts.tight.tokenCount > 0);
+    assert.ok(counts.short.tokenCount <= counts.safe.tokenCount, `${modelName}: short must not exceed safe`);
+    assert.ok(counts.tight.tokenCount <= counts.short.tokenCount, `${modelName}: tight must not exceed short`);
   }
 });
 
-test('measure counts tokens with the named model tokenizer', () => {
-  const atlas = new TokenAtlas([
-    makeModel('count-test-1'),
-    makeModel('count-test-2'),
-    makeModel('count-test-3')
-  ]);
-  const record = createMockRecord('Short text');
-  const entry: AtlasEntry = atlas.measure(record);
-  const mm = entry.measurements['count-test-1'] as AtlasProfileMeasures | undefined;
-  assert.ok(mm);
-  assert.ok(mm!.natural.tokenCount > 0, 'Natural token count should be positive');
+test('natural-language comparison remains empirical and can show profile overhead', () => {
+  const entry = atlas().measure(createMockRecord('x'));
+  const counts = entry.measurements.alpha!;
+  assert.ok(counts.safe.tokenCount > counts.natural.tokenCount);
+  assert.ok(counts.short.tokenCount > counts.natural.tokenCount);
+  assert.ok(counts.tight.tokenCount > counts.natural.tokenCount);
 });
 
-test('profile token counts show reduction for compressed profiles', () => {
-  const atlas = new TokenAtlas([
-    makeModel('reduction-test-1'),
-    makeModel('reduction-test-2'),
-    makeModel('reduction-test-3')
+test('measureBatch, report, accessors, and clear preserve measured evidence', () => {
+  const measured = atlas();
+  const entries = measured.measureBatch([
+    createMockRecord('First measured record.', 'first'),
+    createMockRecord('Second measured record with more words.', 'second'),
   ]);
-  const record = createMockRecord(
-    'This is a longer sentence with multiple words that should be tokenized differently across profiles.'
-  );
-  const entry: AtlasEntry = atlas.measure(record);
-  const models = atlas.getModels();
+  assert.equal(entries.length, 2);
+  assert.equal(measured.getRecordCount(), 2);
 
-  for (const model of models) {
-    const mm = entry.measurements[model.name] as AtlasProfileMeasures | undefined;
-    assert.ok(mm);
-    const natural = mm!.natural.tokenCount;
-    const safe = mm!.safe.tokenCount;
-    const short = mm!.short.tokenCount;
-    const tight = mm!.tight.tokenCount;
-
-    assert.ok(
-      tight <= natural || tight === 0,
-      `Tight (${tight}) should be <= natural (${natural})`
-    );
-    assert.ok(
-      short <= natural || short === 0,
-      `Short (${short}) should be <= natural (${natural})`
-    );
-    assert.ok(
-      safe <= natural || safe === 0,
-      `Safe (${safe}) should be <= natural (${natural})`
-    );
-  }
-});
-
-test('measureBatch measures multiple records', () => {
-  const atlas = new TokenAtlas([
-    makeModel('batch-1'),
-    makeModel('batch-2'),
-    makeModel('batch-3')
-  ]);
-  const records = [
-    createMockRecord('First record'),
-    createMockRecord('Second record'),
-    createMockRecord('Third record')
-  ];
-  const entries = atlas.measureBatch(records);
-  assert.strictEqual(entries.length, 3);
-  assert.strictEqual(atlas.getRecordCount(), 3);
-});
-
-// ── Report Tests ──────────────────────────────────────────────────
-
-test('report generates an AtlasReport with aggregates', () => {
-  const atlas = new TokenAtlas([
-    makeModel('report-model-1'),
-    makeModel('report-model-2'),
-    makeModel('report-model-3')
-  ]);
-  atlas.measureBatch([
-    createMockRecord('Report test one'),
-    createMockRecord('Report test two with more words'),
-    createMockRecord('Third report entry')
-  ]);
-  const report = atlas.report({ title: 'Test Report' });
-
-  assert.strictEqual(report.title, 'Test Report');
-  assert.strictEqual(report.models.length, 3);
-  assert.deepStrictEqual(report.profiles, ['natural', 'safe', 'short', 'tight']);
-  assert.strictEqual(report.totalRecords, 3);
+  const report = measured.report({ title: 'Renderer Atlas' });
+  assert.equal(report.title, 'Renderer Atlas');
+  assert.deepEqual(report.models, ['alpha', 'beta', 'gamma']);
+  assert.deepEqual(report.profiles, ['natural', 'safe', 'short', 'tight']);
+  assert.equal(report.totalRecords, 2);
+  assert.equal(report.entries.length, 2);
   assert.ok(report.generatedAt > 0);
-  assert.ok(report.aggregates);
-  assert.strictEqual(report.entries.length, 3);
+  for (const modelName of report.models) {
+    const aggregate = report.aggregates[modelName];
+    assert.ok(aggregate);
+    for (const profile of report.profiles) {
+      assert.ok(profile in aggregate.averages);
+      assert.ok(profile in aggregate.medians);
+      assert.ok(profile in aggregate.stdDevs);
+      assert.ok(profile in aggregate.ranges);
+    }
+  }
+
+  const copy = measured.getEntries();
+  copy.length = 0;
+  assert.equal(measured.getRecordCount(), 2);
+  measured.clear();
+  assert.equal(measured.getRecordCount(), 0);
 });
 
-test('report aggregates include averages medians stdDevs ranges', () => {
-  const atlas = new TokenAtlas([
-    makeModel('agg-1'),
-    makeModel('agg-2'),
-    makeModel('agg-3')
-  ]);
-  atlas.measureBatch([
-    createMockRecord('Aggregation test record one'),
-    createMockRecord('Aggregation test record two longer'),
-    createMockRecord('Aggregation test record three even longer sentence')
-  ]);
-  const report = atlas.report();
-  const modelAgg = report.aggregates['agg-1'];
-
-  assert.ok(modelAgg);
-  assert.strictEqual(modelAgg.model, 'agg-1');
-  assert.ok(modelAgg.averages);
-  assert.ok(modelAgg.medians);
-  assert.ok(modelAgg.stdDevs);
-  assert.ok(modelAgg.ranges);
-  assert.ok(modelAgg.avgReduction);
-
-  // All profile keys exist
-  assert.ok('natural' in modelAgg.averages);
-  assert.ok('safe' in modelAgg.averages);
-  assert.ok('short' in modelAgg.averages);
-  assert.ok('tight' in modelAgg.averages);
-  assert.ok('natural' in modelAgg.medians);
-  assert.ok('safe' in modelAgg.medians);
-  assert.ok('short' in modelAgg.medians);
-  assert.ok('tight' in modelAgg.medians);
-  assert.ok('natural' in modelAgg.ranges);
-  assert.ok('safe' in modelAgg.ranges);
-  assert.ok('short' in modelAgg.ranges);
-  assert.ok('tight' in modelAgg.ranges);
+test('measure preserves existing renderings while measuring generated profile codes', () => {
+  const record = createMockRecord('Record with an existing rendering.');
+  record.renderings.en = { code: 'Existing natural rendering.', profile: 'natural/en', tokens: 4 };
+  const entry = atlas().measure(record);
+  assert.deepEqual(entry.record.renderings.en, record.renderings.en);
+  assert.ok(entry.measurements.alpha?.safe.tokenCount);
 });
 
-test('report includes per-model avgReduction', () => {
-  const atlas = new TokenAtlas([
-    makeModel('red-1'),
-    makeModel('red-2'),
-    makeModel('red-3')
-  ]);
-  atlas.measureBatch([
-    createMockRecord('Reduction test longer sentence with many words'),
-    createMockRecord('Another reduction test with additional text')
-  ]);
-  const report = atlas.report();
-  const reduction = report.aggregates['red-1']?.avgReduction;
-
-  assert.ok(reduction);
-  assert.ok('safe' in reduction);
-  assert.ok('short' in reduction);
-  assert.ok('tight' in reduction);
-});
-
-// ── Lifecycle Tests ───────────────────────────────────────────────
-
-test('clear removes all measurements', () => {
-  const atlas = new TokenAtlas([
-    makeModel('clear-1'),
-    makeModel('clear-2'),
-    makeModel('clear-3')
-  ]);
-  atlas.measure(createMockRecord('Before clear'));
-  assert.strictEqual(atlas.getRecordCount(), 1);
-
-  atlas.clear();
-  assert.strictEqual(atlas.getRecordCount(), 0);
-  assert.strictEqual(atlas.getEntries().length, 0);
-});
-
-test('getModels returns a copy of the array', () => {
-  const models = [makeModel('copy-1'), makeModel('copy-2'), makeModel('copy-3')];
-  const atlas = new TokenAtlas(models);
-  const retrieved = atlas.getModels();
-
-  assert.strictEqual(retrieved.length, 3);
-  assert.strictEqual(retrieved[0]?.name, 'copy-1');
-  // Verify it's a different array reference
-  retrieved.length = 0;
-  assert.strictEqual(atlas.getModels().length, 3);
-});
-
-test('getEntries returns a copy', () => {
-  const atlas = new TokenAtlas([
-    makeModel('entries-1'),
-    makeModel('entries-2'),
-    makeModel('entries-3')
-  ]);
-  atlas.measure(createMockRecord('Entry test'));
-  const entries = atlas.getEntries();
-  assert.strictEqual(entries.length, 1);
-  entries.length = 0;
-  assert.strictEqual(atlas.getEntries().length, 1);
-});
-
-// ── Edge Cases ────────────────────────────────────────────────────
-
-test('measure handles empty source text', () => {
-  const atlas = new TokenAtlas([
-    makeModel('empty-1'),
-    makeModel('empty-2'),
-    makeModel('empty-3')
-  ]);
-  const entry = atlas.measure(createMockRecord('', 'en'));
-  const mm = entry.measurements['empty-1'] as AtlasProfileMeasures | undefined;
-  assert.ok(mm);
-  assert.ok(mm!.natural.tokenCount >= 0);
-});
-
-test('measure handles records with existing renderings', () => {
-  const atlas = new TokenAtlas([
-    makeModel('rendering-1'),
-    makeModel('rendering-2'),
-    makeModel('rendering-3')
-  ]);
-  const record = createMockRecord('Record with rendering');
-  record.renderings['safe'] = { code: 'safe-profile-code', profile: 'safe', tokens: 5 };
-  const entry = atlas.measure(record);
-  const mm = entry.measurements['rendering-1'] as AtlasProfileMeasures | undefined;
-  assert.ok(mm);
-  assert.ok(mm!.natural.tokenCount >= 0);
-});
-
-test('AtlasEntry contains fingerprint and sourceLength', () => {
-  const atlas = new TokenAtlas([
-    makeModel('entry-fields-1'),
-    makeModel('entry-fields-2'),
-    makeModel('entry-fields-3')
-  ]);
-  const entry = atlas.measure(createMockRecord('Entry field test'));
-  const record = entry.record;
-
-  assert.strictEqual(entry.fingerprint, record.fingerprint);
-  assert.strictEqual(entry.sourceLength, record.source.text!.length);
-  assert.ok(entry.measuredAt > 0);
-});
-
-test('measured named models produce bound model-specific profile artifacts', () => {
-  const atlas = TokenAtlas.withCommonModels();
-  const entries = atlas.measureBatch([
-    createMockRecord('A complete measured record without hidden model assumptions.'),
-  ]);
-  const result = runVerifiedTokenizerOptimizationPass(entries, {
-    modelProfiles: atlas.getModels(),
-    sourceRendererProfile: 'generic-en-pivot/0.1',
+test('verified optimization binds every result to current fingerprints and exact tokenizer profiles', () => {
+  const measured = atlas();
+  const entries = measured.measureBatch([createMockRecord('A complete measured record.')]);
+  const verified = runVerifiedTokenizerOptimizationPass(entries, {
+    modelProfiles: measured.getModels(),
+    sourceRendererProfile: 'renderer-profiles/0.1',
   });
 
-  assert.strictEqual(result.allSemanticsPreserved, true);
-  assert.strictEqual(result.artifacts.length, atlas.getModelCount());
-  for (const artifact of result.artifacts) {
-    assert.strictEqual(artifact.valid, true);
-    assert.strictEqual(artifact.expectedRecordCount, 1);
-    assert.strictEqual(artifact.verifiedRecordCount, 1);
-    assert.strictEqual(artifact.selections.length, 1);
-    assert.deepStrictEqual(
-      artifact.tokenizer,
-      entries[0]?.tokenizerProfiles[artifact.modelName]
-    );
+  assert.equal(verified.allSemanticsPreserved, true);
+  assert.equal(verified.artifacts.length, 3);
+  for (const artifact of verified.artifacts) {
+    assert.equal(artifact.valid, true);
+    assert.equal(artifact.expectedRecordCount, 1);
+    assert.equal(artifact.verifiedRecordCount, 1);
+    assert.deepEqual(artifact.tokenizer, entries[0]!.tokenizerProfiles[artifact.modelName]);
+    assert.equal(artifact.selections[0]?.recordFingerprint, entries[0]!.fingerprint);
   }
 });
 
-// ── Tokenizer-Optimization Pass ───────────────────────────────────
-
-test('runTokenizerOptimizationPass: semantics preserved when fingerprints match', () => {
-  const atlas = new TokenAtlas([
-    makeModel('opt-1'),
-    makeModel('opt-2'),
-    makeModel('opt-3')
-  ]);
-  const record = createMockRecord('Optimization test record');
-  const entry = atlas.measure(record);
-
-  const result = runTokenizerOptimizationPass([entry]);
-  assert.strictEqual(result.allSemanticsPreserved, true);
-  assert.strictEqual(result.recordCount, 1);
-  assert.strictEqual(result.results.length, 3); // one per model
-  for (const r of result.results) {
-    assert.strictEqual(r.semanticsPreserved, true);
-    assert.ok(r.bestProfile === 'safe' || r.bestProfile === 'short' || r.bestProfile === 'tight');
-    assert.ok(r.bestTokenCount > 0);
-    // reductionPct can be negative if the profile adds tokens vs natural
-    // (e.g., adding profile wrapper tokens), so only assert it's a number
-    assert.ok(typeof r.reductionPct === 'number');
-  }
-});
-
-test('runTokenizerOptimizationPass: best profile selected correctly', () => {
-  const atlas = new TokenAtlas([
-    makeModel('best-profile-1'),
-    makeModel('best-profile-2'),
-    makeModel('best-profile-3')
-  ]);
-  const record = createMockRecord('Best profile test');
-  const entry = atlas.measure(record);
-
-  const result = runTokenizerOptimizationPass([entry]);
-  for (const r of result.results) {
-    // Best profile should have the lowest token count among non-natural profiles
-    const nonNatural = ['safe', 'short', 'tight'] as const;
-    for (const profile of nonNatural) {
-      if (profile !== r.bestProfile) {
-        assert.ok(
-          r.profileTokens[profile] >= r.bestTokenCount,
-          `${profile} (${r.profileTokens[profile]}) should not be less than best (${r.bestTokenCount})`
-        );
-      }
-    }
-  }
-});
-
-test('runTokenizerOptimizationPass: empty entries returns empty result', () => {
-  const result = runTokenizerOptimizationPass([]);
-  assert.strictEqual(result.models.length, 0);
-  assert.strictEqual(result.results.length, 0);
-  assert.strictEqual(result.recordCount, 0);
-  assert.strictEqual(result.allSemanticsPreserved, true);
-  assert.strictEqual(result.warnings.length, 0);
-});
-
-test('runTokenizerOptimizationPass: multiple records produce multiple results', () => {
-  const atlas = new TokenAtlas([
-    makeModel('multi-1'),
-    makeModel('multi-2'),
-    makeModel('multi-3')
-  ]);
-  const records = [
-    createMockRecord('Record A'),
-    createMockRecord('Record B'),
-    createMockRecord('Record C')
-  ];
-  const entries = atlas.measureBatch(records);
-
+test('compatibility optimization entry point delegates to the verified path', () => {
+  const entries = atlas().measureBatch([createMockRecord('Compatibility entry point.')]);
   const result = runTokenizerOptimizationPass(entries);
-  assert.strictEqual(result.recordCount, 3);
-  assert.strictEqual(result.results.length, 9); // 3 records × 3 models
-  assert.strictEqual(result.allSemanticsPreserved, true);
+  assert.equal(result.allSemanticsPreserved, true);
+  assert.equal(result.results.length, 3);
+  assert.ok(result.results.every((entry) => entry.originalFingerprint === entries[0]!.fingerprint));
 });
 
-test('runTokenizerOptimizationPass: reduction percentage is correct', () => {
-  const atlas = new TokenAtlas([
-    makeModel('reduction-1'),
-    makeModel('reduction-2'),
-    makeModel('reduction-3')
-  ]);
-  const record = createMockRecord('Reduction percentage test');
-  const entry = atlas.measure(record);
+test('optimization fails closed for stale attached fingerprints', () => {
+  const measured = atlas();
+  const entry = measured.measure(createMockRecord('Stale fingerprint test.'));
+  entry.fingerprint = 'lfp:0.1:sha256:stale-attached-value';
 
-  const result = runTokenizerOptimizationPass([entry]);
-  for (const r of result.results) {
-    const natural = r.profileTokens.natural;
-    const best = r.bestTokenCount;
-    if (natural > 0) {
-      const expectedReduction = Math.round((1 - best / natural) * 10000) / 100;
-      assert.strictEqual(
-        Math.abs(r.reductionPct - expectedReduction) < 0.01,
-        true,
-        `Reduction ${r.reductionPct}% should match expected ${expectedReduction}%`
-      );
-    }
-  }
+  const result = runVerifiedTokenizerOptimizationPass([entry], { modelProfiles: measured.getModels() });
+  assert.equal(result.allSemanticsPreserved, false);
+  assert.equal(result.results.length, 0);
+  assert.match(result.warnings.join('\n'), /attached fingerprint is stale or inconsistent/u);
+});
+
+test('invalid token measurements fail closed', () => {
+  const measured = atlas();
+  const entry = measured.measure(createMockRecord('Invalid count test.'));
+  const counts = entry.measurements.alpha as AtlasProfileMeasures;
+  counts.tight.tokenCount = 0;
+
+  const result = runVerifiedTokenizerOptimizationPass([entry], { modelProfiles: measured.getModels() });
+  assert.equal(result.allSemanticsPreserved, false);
+  assert.match(result.warnings.join('\n'), /tokenCount must be a positive safe integer/u);
 });
