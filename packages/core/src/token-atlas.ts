@@ -16,6 +16,7 @@ import type { LunumRecord, LunumRendering } from './types.js';
 import { ProfileGenerator } from './profiles.js';
 import type { LlamaTokenizerConfig, TokenCountResult } from './llama-tokenizer.js';
 import { LlamaTokenizer } from './llama-tokenizer.js';
+import { fingerprintSem } from './fingerprint.js';
 
 // ── Type alias ─────────────────────────────────────────────────────
 
@@ -490,7 +491,12 @@ export interface TokenizerOptimizationPassResult {
  * Run a tokenizer-optimization pass over measured entries.
  * For each model, finds the best-performing profile (lowest token count)
  * and verifies that semantics are preserved via fingerprint comparison.
- * 
+ *
+ * Unlike the tautological version that compared entry.fingerprint to itself,
+ * this pass actually profiles the record with each profile, computes the
+ * fingerprint of the profiled semantic object, and compares it to the
+ * original record's fingerprint to verify semantic preservation.
+ *
  * @param entries - Measured entries from TokenAtlas.measureBatch()
  * @returns Optimization pass result
  */
@@ -500,6 +506,7 @@ export function runTokenizerOptimizationPass(
   const results: ModelOptimizationResult[] = [];
   const warnings: string[] = [];
   let allPreserved = true;
+  const profileGenerator = new ProfileGenerator();
 
   for (const entry of entries) {
     const modelNames = Object.keys(entry.measurements);
@@ -532,15 +539,28 @@ export function runTokenizerOptimizationPass(
         ? Math.round((1 - bestTokenCount / naturalTokens) * 10000) / 100
         : 0;
 
-      // Verify semantic preservation: the optimized profile must produce
-      // the same fingerprint as the original record
-      const optimizedFingerprint = entry.fingerprint; // Tight profile preserves fingerprint by design
-      const semanticsPreserved = optimizedFingerprint === entry.fingerprint;
+      // Actually profile the record to get a model-specific optimized profile
+      // and verify semantic preservation via fingerprint comparison
+      let optimizedFingerprint = '';
+      let semanticsPreserved = false;
+      let optimizationWarnings: string[] = [];
+
+      // Apply the best profile to get the optimized record
+      const profileResult = profileGenerator.profile(entry.record, bestProfile as 'safe' | 'short' | 'tight');
+      const profiledRecord = profileResult.record as LunumRecord;
+
+      // Compute fingerprint of the profiled sem object
+      try {
+        optimizedFingerprint = fingerprintSem(profiledRecord.sem);
+        semanticsPreserved = optimizedFingerprint === entry.fingerprint;
+      } catch (err) {
+        optimizationWarnings.push(`Fingerprint error: ${err instanceof Error ? err.message : String(err)}`);
+      }
 
       if (!semanticsPreserved) {
         allPreserved = false;
         warnings.push(
-          `Model ${modelName}: fingerprint mismatch for record ${entry.fingerprint.slice(0, 20)}`
+          `Model ${modelName}: fingerprint mismatch for record ${entry.fingerprint.slice(0, 20)}: original=${entry.fingerprint.slice(0, 30)}... optimized=${optimizedFingerprint.slice(0, 30)}...`
         );
       }
 
@@ -553,7 +573,7 @@ export function runTokenizerOptimizationPass(
         profileTokens,
         bestTokenCount,
         reductionPct,
-        warnings: []
+        warnings: optimizationWarnings
       });
     }
   }
