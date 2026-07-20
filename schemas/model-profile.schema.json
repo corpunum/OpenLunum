@@ -43,6 +43,10 @@
     "seed": {
       "type": "integer"
     },
+    "maxTokens": {
+      "type": "integer",
+      "minimum": 1
+    },
     "timeoutMs": {
       "type": "integer",
       "minimum": 1000
