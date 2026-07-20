@@ -97,7 +97,40 @@ test('primitive literals and references are hard compatibility constraints', () 
   const result = generator.compareSem(first, changed);
   assert.equal(result.similar, false);
   assert.equal(result.similarity, 0);
-  assert.match(result.hardMismatchReasons?.join('\n') ?? '', /literal or reference values differ/u);
+  assert.match(result.hardMismatchReasons?.join('\n') ?? '', /typed literal|reference value/u);
+});
+
+test('hard literals preserve primitive types', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.1);
+  const pairs: Array<[string | number | boolean, string | number | boolean]> = [
+    [1, '1'],
+    [true, 'true'],
+    [false, 'false']
+  ];
+
+  for (const [left, right] of pairs) {
+    const first = createSem();
+    const second = createSem();
+    first.clauses[0]!.roles.value = left;
+    second.clauses[0]!.roles.value = right;
+    const result = generator.compareSem(first, second);
+    assert.equal(result.similar, false);
+    assert.equal(result.similarity, 0);
+    assert.equal(result.hardCompatible, false);
+  }
+});
+
+test('hard literals preserve multiplicity', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.1);
+  const first = createSem();
+  const second = createSem();
+  first.clauses[0]!.roles.items = [1, 1];
+  second.clauses[0]!.roles.items = [1];
+
+  const result = generator.compareSem(first, second);
+  assert.equal(result.similar, false);
+  assert.equal(result.similarity, 0);
+  assert.match(result.hardMismatchReasons?.join('\n') ?? '', /multiplicity/u);
 });
 
 test('explicit protected literals are also enforced', () => {
@@ -116,7 +149,7 @@ test('explicit protected literals are also enforced', () => {
   assert.match(result.hardMismatchReasons?.join('\n') ?? '', /protected literal differs/u);
 });
 
-test('legacy, malformed, identical malformed, and tampered fingerprints fail closed', () => {
+test('legacy, malformed, identical malformed, and checksum-mismatched fingerprints fail closed', () => {
   const generator = new NearSemanticFingerprintGenerator();
   const first = 'nfp:12345678' as NearSemanticFingerprint;
   const second = 'nfp:87654321' as NearSemanticFingerprint;
@@ -124,7 +157,7 @@ test('legacy, malformed, identical malformed, and tampered fingerprints fail clo
     const invalid = generator.compare(left, right);
     assert.equal(invalid.similarity, 0);
     assert.equal(invalid.similar, false);
-    assert.match(invalid.hardMismatchReasons?.join('\n') ?? '', /Invalid or tampered/u);
+    assert.match(invalid.hardMismatchReasons?.join('\n') ?? '', /Invalid or checksum-mismatched/u);
   }
 
   const valid = generator.generate(createSem());
@@ -132,7 +165,7 @@ test('legacy, malformed, identical malformed, and tampered fingerprints fail clo
   const tamperedResult = generator.compare(valid, tampered);
   assert.equal(tamperedResult.similarity, 0);
   assert.equal(tamperedResult.similar, false);
-  assert.match(tamperedResult.hardMismatchReasons?.join('\n') ?? '', /Invalid or tampered/u);
+  assert.match(tamperedResult.hardMismatchReasons?.join('\n') ?? '', /Invalid or checksum-mismatched/u);
 });
 
 test('empty semantic feature sketches remain valid and comparable', () => {
