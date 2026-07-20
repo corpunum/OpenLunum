@@ -19,6 +19,7 @@
 - API stability tests with golden snapshots for `packages/core`.
 - OpenUnum adapter end-to-end conformance verification.
 - **Aggregate MRR:** Mean Reciprocal Rank for retrieval tasks, computed and validated in summary.json and report.md.
+- Parse prompt with schema shape and one-shot example: `parsePrompt` system message includes the expected Lunum-Sem JSON structure (schema, world, kind, clauses with predicate/roles/negated) and a canonical preference example; live test showed parse validity improving 0/16 → 14/16. Regression test verifies schema shape fields and example parseability. Types in `packages/eval/src/prompts.ts`. (PR #232)
 - Prompt-injection resistance tests: 10 adversarial inputs tested against parser.
 - Mixed-context quality gates: downstream accuracy comparison across natural vs Lunum vs mixed.
 - Threat model with concrete mitigations for injection, hallucination, and ambiguity.
@@ -77,6 +78,7 @@
 | API stability tests | Reference implementation | Snapshot-based tests for `packages/core` public exports |
 | OpenUnum adapter e2e conformance | Prototype | End-to-end verification against real product runtime |
 | Aggregate MRR | Reference implementation | Mean Reciprocal Rank for retrieval tasks, computed and validated in reports |
+| Parse prompt schema shape + one-shot example | Prototype | `parsePrompt` system message includes the expected Lunum-Sem JSON structure and a canonical preference example; live test showed parse validity improving 0/16 → 14/16. Regression test in `packages/eval/test/parse-experiment.test.ts`. (PR #232) |
 | Prompt-injection resistance | Prototype | 10 adversarial inputs tested against parser |
 | Threat model with mitigations | Prototype | Concrete mitigations for injection, hallucination, ambiguity with parser tests |
 | Compatibility matrix | Prototype | Schema-version and package-version compatibility testing |
