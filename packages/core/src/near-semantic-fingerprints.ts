@@ -20,17 +20,15 @@ export interface SimilarityResult {
 }
 
 type WeightedFeatures = Map<string, { count: number; weight: number }>;
-type SerializedFeature = [key: string, count: number, weight: number];
 
-interface FingerprintPayload {
-  version: 2;
+interface SemanticPayload {
   hard: {
     world: string;
     kind: string;
     clauseShapes: string[];
     literals: string[];
   };
-  features: SerializedFeature[];
+  features: Array<[key: string, count: number, weight: number]>;
 }
 
 function assertThreshold(threshold: number): void {
@@ -52,13 +50,11 @@ function addFeature(features: WeightedFeatures, key: string, weight: number): vo
 }
 
 function clauseShape(clause: LunumClause): string {
-  const conditions = (clause.conditions ?? []).map(clauseShape).sort();
-  const consequences = (clause.consequences ?? []).map(clauseShape).sort();
   return stableValue({
     negated: clause.negated === true,
     modality: clause.modality ?? null,
-    conditions,
-    consequences
+    conditions: (clause.conditions ?? []).map(clauseShape).sort(),
+    consequences: (clause.consequences ?? []).map(clauseShape).sort()
   });
 }
 
@@ -147,51 +143,21 @@ function hardLiteralSignature(sem: LunumSem): string[] {
   return [...output].sort();
 }
 
-function serializeFeatures(features: WeightedFeatures): SerializedFeature[] {
-  return [...features.entries()]
-    .sort(([left], [right]) => left.localeCompare(right))
-    .map(([key, value]) => [key, value.count, value.weight]);
-}
-
-function deserializeFeatures(features: SerializedFeature[]): WeightedFeatures {
-  return new Map(features.map(([key, count, weight]) => [key, { count, weight }]));
-}
-
-function buildPayload(sem: LunumSem): FingerprintPayload {
+function buildPayload(sem: LunumSem): SemanticPayload {
   return {
-    version: 2,
     hard: {
       world: sem.world,
       kind: sem.kind,
       clauseShapes: sem.clauses.map(clauseShape).sort(),
       literals: hardLiteralSignature(sem)
     },
-    features: serializeFeatures(extractFeatures(sem))
+    features: [...extractFeatures(sem).entries()]
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, value]) => [key, value.count, value.weight])
   };
 }
 
-function encodePayload(payload: FingerprintPayload): string {
-  return Buffer.from(stableValue(payload), 'utf8').toString('base64url');
-}
-
-function decodePayload(fingerprint: NearSemanticFingerprint): FingerprintPayload | null {
-  const match = fingerprint.match(/^nfp:2:sha256:([a-f0-9]{64}):([A-Za-z0-9_-]+)$/u);
-  if (!match) return null;
-  try {
-    const serialized = Buffer.from(match[2]!, 'base64url').toString('utf8');
-    const digest = createHash('sha256').update(serialized).digest('hex');
-    if (digest !== match[1]) return null;
-    const payload = JSON.parse(serialized) as Partial<FingerprintPayload>;
-    if (payload.version !== 2 || !payload.hard || !Array.isArray(payload.features)) return null;
-    if (typeof payload.hard.world !== 'string' || typeof payload.hard.kind !== 'string') return null;
-    if (!Array.isArray(payload.hard.clauseShapes) || !Array.isArray(payload.hard.literals)) return null;
-    return payload as FingerprintPayload;
-  } catch {
-    return null;
-  }
-}
-
-function compareHardPayload(first: FingerprintPayload, second: FingerprintPayload): string[] {
+function hardMismatchReasons(first: SemanticPayload, second: SemanticPayload): string[] {
   const reasons: string[] = [];
   if (first.hard.world !== second.hard.world) reasons.push(`world differs: ${first.hard.world} != ${second.hard.world}`);
   if (first.hard.kind !== second.hard.kind) reasons.push(`kind differs: ${first.hard.kind} != ${second.hard.kind}`);
@@ -206,16 +172,14 @@ function compareHardPayload(first: FingerprintPayload, second: FingerprintPayloa
 
 function protectedLiteralMismatchReasons(first: LunumSem, second: LunumSem, options: NearSemanticComparisonOptions): string[] {
   if (!options.protectedLiterals || options.protectedLiterals.length === 0) return [];
-  const reasons: string[] = [];
   const firstValues = new Set<string>();
   const secondValues = new Set<string>();
   collectPrimitiveValues(first, firstValues);
   collectPrimitiveValues(second, secondValues);
-  for (const literal of options.protectedLiterals) {
-    const key = String(literal);
-    if (firstValues.has(key) !== secondValues.has(key)) reasons.push(`protected literal differs: ${key}`);
-  }
-  return reasons;
+  return options.protectedLiterals
+    .map(String)
+    .filter((literal) => firstValues.has(literal) !== secondValues.has(literal))
+    .map((literal) => `protected literal differs: ${literal}`);
 }
 
 function weightedJaccard(first: WeightedFeatures, second: WeightedFeatures): { similarity: number; matchedWeight: number; totalWeight: number } {
@@ -241,10 +205,8 @@ export class NearSemanticFingerprintGenerator {
   }
 
   generate(sem: LunumSem): NearSemanticFingerprint {
-    const payload = buildPayload(sem);
-    const serialized = stableValue(payload);
-    const hash = createHash('sha256').update(serialized).digest('hex');
-    return `nfp:2:sha256:${hash}:${encodePayload(payload)}`;
+    const hash = createHash('sha256').update(stableValue(buildPayload(sem))).digest('hex');
+    return `nfp:2:sha256:${hash}`;
   }
 
   generateFromRecord(record: LunumRecord): NearSemanticFingerprint {
@@ -252,39 +214,33 @@ export class NearSemanticFingerprintGenerator {
   }
 
   compare(fp1: NearSemanticFingerprint, fp2: NearSemanticFingerprint): SimilarityResult {
-    if (fp1 === fp2) {
-      return {
-        fingerprint1: fp1,
-        fingerprint2: fp2,
-        similarity: 1,
-        similar: true,
-        threshold: this.threshold,
-        hardCompatible: true,
-        hardMismatchReasons: [],
-        matchedWeight: 1,
-        totalWeight: 1
-      };
-    }
-    const first = decodePayload(fp1);
-    const second = decodePayload(fp2);
-    if (!first || !second) {
-      return {
-        fingerprint1: fp1,
-        fingerprint2: fp2,
-        similarity: 0,
-        similar: false,
-        threshold: this.threshold,
-        hardCompatible: false,
-        hardMismatchReasons: ['Opaque or invalid near-semantic fingerprint; compare semantic inputs with compareSem()'],
-        matchedWeight: 0,
-        totalWeight: 0
-      };
-    }
-    const reasons = compareHardPayload(first, second);
+    const exact = fp1 === fp2;
+    return {
+      fingerprint1: fp1,
+      fingerprint2: fp2,
+      similarity: exact ? 1 : 0,
+      similar: exact,
+      threshold: this.threshold,
+      hardCompatible: exact,
+      hardMismatchReasons: exact ? [] : ['Opaque near-semantic fingerprints differ; compare semantic inputs with compareSem()'],
+      matchedWeight: exact ? 1 : 0,
+      totalWeight: 1
+    };
+  }
+
+  compareSem(first: LunumSem, second: LunumSem, options: NearSemanticComparisonOptions = {}): SimilarityResult {
+    const fingerprint1 = this.generate(first);
+    const fingerprint2 = this.generate(second);
+    const firstPayload = buildPayload(first);
+    const secondPayload = buildPayload(second);
+    const reasons = [
+      ...hardMismatchReasons(firstPayload, secondPayload),
+      ...protectedLiteralMismatchReasons(first, second, options)
+    ];
     if (reasons.length > 0) {
       return {
-        fingerprint1: fp1,
-        fingerprint2: fp2,
+        fingerprint1,
+        fingerprint2,
         similarity: 0,
         similar: false,
         threshold: this.threshold,
@@ -294,10 +250,10 @@ export class NearSemanticFingerprintGenerator {
         totalWeight: 0
       };
     }
-    const score = weightedJaccard(deserializeFeatures(first.features), deserializeFeatures(second.features));
+    const score = weightedJaccard(extractFeatures(first), extractFeatures(second));
     return {
-      fingerprint1: fp1,
-      fingerprint2: fp2,
+      fingerprint1,
+      fingerprint2,
       similarity: score.similarity,
       similar: score.similarity >= this.threshold,
       threshold: this.threshold,
@@ -305,22 +261,6 @@ export class NearSemanticFingerprintGenerator {
       hardMismatchReasons: [],
       matchedWeight: score.matchedWeight,
       totalWeight: score.totalWeight
-    };
-  }
-
-  compareSem(first: LunumSem, second: LunumSem, options: NearSemanticComparisonOptions = {}): SimilarityResult {
-    const fingerprint1 = this.generate(first);
-    const fingerprint2 = this.generate(second);
-    const result = this.compare(fingerprint1, fingerprint2);
-    const protectedReasons = protectedLiteralMismatchReasons(first, second, options);
-    if (protectedReasons.length === 0) return result;
-    return {
-      ...result,
-      similarity: 0,
-      similar: false,
-      hardCompatible: false,
-      hardMismatchReasons: [...(result.hardMismatchReasons ?? []), ...protectedReasons],
-      matchedWeight: 0
     };
   }
 
