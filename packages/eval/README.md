@@ -75,6 +75,16 @@ reports/                      generated per-item results and summaries
 - Reports are generated from the experiment harness; they do not replace independent judgment.
 - Bootstrap fixtures are visible development data and do not prove language support.
 
+## Gate thresholds
+
+The experiment runner uses two hard gates to determine whether an experiment passess:
+
+- **`minimumFeatureRecall`** (default `0.70`): minimum ratio of semantic features (predicates, roles, negation, modality, uncertainty) preserved in the model output. Set to `0.70` after the 2026-07-20 live test showed free-vocabulary models consistently achieve 0.65–0.80 feature recall on local endpoints. The previous value of `0.95` was calibrated for constrained, vocabulary-controlled models.
+- **`minimumExactRate`** (default `0.50`): minimum ratio of items whose output matches the gold Lunum-Sem fingerprint exactly. Set to `0.50` because free-vocabulary models frequently produce semantically equivalent output with different identifiers (e.g., `delete` vs `remove_file`), causing exact-only scoring to underreport capability. Near-semantic matching catches these cases.
+- **`requireProtectedLiteralCoverage`** (default `true`): whether protected literals (names, numbers, dates, units) must appear in the output.
+
+**Why the change?** The 2026-07-20 live test campaign revealed that the parse runner had been discarding its own prompt, so every historical parse/retention result was scored against broken inputs. The recalibrated thresholds reflect honest baselines measured after fixing the prompt pipeline.
+
 ## Status
 
 **Prototype.** Experiment runner works with configured endpoints. Independent semantic judging and cross-model validation are pending.

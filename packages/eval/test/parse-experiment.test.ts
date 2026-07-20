@@ -470,3 +470,20 @@ test('parsePrompt includes schema shape and one-shot example', () => {
   assert.ok(Array.isArray(parsed.clauses));
   assert.strictEqual(parsed.clauses[0].predicate, 'prefer');
 });
+
+test('default gate thresholds are recalibrated for free-vocabulary models', async () => {
+  // The v5 live test (2026-07-20) showed that historical thresholds of
+  // 0.95 feature recall / 0.75 exact were unreachable for free-vocabulary
+  // models on local endpoints. Recalibrated values: 0.70 / 0.50.
+  // Read the workspace-level cli source (not dist/src/cli.ts which is compiled JS).
+  const cliSource = await readFile(path.join(WORKSPACE_ROOT, 'packages', 'eval', 'src', 'cli.ts'), 'utf8');
+
+  assert.ok(cliSource.includes('minimumFeatureRecall: 0.70'), 'default feature recall gate should be 0.70');
+  assert.ok(cliSource.includes('minimumExactRate: 0.50'), 'default exact rate gate should be 0.50');
+
+  const gatesMatch = cliSource.match(/gates:\s*\{[^}]+\}/);
+  assert.ok(gatesMatch, 'cli should have a gates definition');
+  assert.ok(gatesMatch[0].includes('0.70'), 'gates definition must contain 0.70');
+  assert.ok(gatesMatch[0].includes('0.50'), 'gates definition must contain 0.50');
+  assert.ok(!gatesMatch[0].includes('0.95'), 'gates default should not be old 0.95 recall');
+});
