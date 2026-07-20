@@ -1,87 +1,130 @@
-import { test } from 'node:test';
-import assert from 'node:assert';
-import { 
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
   NearSemanticFingerprintGenerator,
   type NearSemanticFingerprint
 } from '../src/near-semantic-fingerprints.js';
+import type { LunumSem } from '../src/types.js';
 
-// Helper to create mock semantic representations
-const createMockSem = (overrides = {}) => ({
-  schema: 'lunum-sem/0.1-draft',
-  world: 'test',
-  kind: 'test',
-  clauses: [{ 
-    predicate: 'test', 
-    roles: { subject: 'test' },
-    ...overrides
-  }],
-  references: [],
-  provenance: {},
-  annotations: {}
-});
+function createSem(): LunumSem {
+  return {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{
+      predicate: 'prefer',
+      roles: {
+        experiencer: { type: 'actor', id: 'user' },
+        theme: { type: 'concept', id: 'concise_answers' }
+      },
+      negated: false
+    }]
+  };
+}
 
-test('NearSemanticFingerprintGenerator generates fingerprints', () => {
+test('near-semantic fingerprints are deterministic and order independent', () => {
   const generator = new NearSemanticFingerprintGenerator();
-  
-  const sem = createMockSem();
-  const fingerprint = generator.generate(sem);
-  
-  assert.ok(fingerprint.startsWith('nfp:'));
+  const first = createSem();
+  const second = createSem();
+  second.clauses[0]!.roles = {
+    theme: second.clauses[0]!.roles.theme!,
+    experiencer: second.clauses[0]!.roles.experiencer!
+  };
+
+  const fingerprint = generator.generate(first);
+  assert.match(fingerprint, /^nfp:2:sha256:[a-f0-9]{64}$/u);
+  assert.equal(generator.generate(second), fingerprint);
 });
 
-test('NearSemanticFingerprintGenerator generates from record', () => {
+test('semantic comparison is symmetric and tolerates a single identifier variation', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.8);
+  const first = createSem();
+  const second = createSem();
+  const experiencer = second.clauses[0]!.roles.experiencer;
+  assert.ok(experiencer && typeof experiencer === 'object' && !Array.isArray(experiencer));
+  experiencer.id = 'customer';
+
+  const forward = generator.compareSem(first, second);
+  const reverse = generator.compareSem(second, first);
+
+  assert.equal(forward.similarity, reverse.similarity);
+  assert.ok(forward.similarity >= 0.8);
+  assert.equal(forward.similar, true);
+  assert.equal(forward.hardCompatible, true);
+});
+
+test('negation, modality, kind, and extra clauses fail closed', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.5);
+  const mutations: LunumSem[] = [];
+
+  const negated = createSem();
+  negated.clauses[0]!.negated = true;
+  mutations.push(negated);
+
+  const modal = createSem();
+  modal.clauses[0]!.modality = 'possible';
+  mutations.push(modal);
+
+  const differentKind = createSem();
+  differentKind.kind = 'command';
+  mutations.push(differentKind);
+
+  const extraClause = createSem();
+  extraClause.clauses.push({ predicate: 'delete', roles: { object: 'file' }, negated: false });
+  mutations.push(extraClause);
+
+  for (const mutation of mutations) {
+    const result = generator.compareSem(createSem(), mutation);
+    assert.equal(result.similarity, 0);
+    assert.equal(result.similar, false);
+    assert.equal(result.hardCompatible, false);
+    assert.ok((result.hardMismatchReasons?.length ?? 0) > 0);
+  }
+});
+
+test('protected literals are a hard compatibility constraint', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.1);
+  const changed = createSem();
+  const theme = changed.clauses[0]!.roles.theme;
+  assert.ok(theme && typeof theme === 'object' && !Array.isArray(theme));
+  theme.id = 'verbose_answers';
+
+  const result = generator.compareSem(createSem(), changed, {
+    protectedLiterals: ['concise_answers']
+  });
+
+  assert.equal(result.similar, false);
+  assert.equal(result.similarity, 0);
+  assert.match(result.hardMismatchReasons?.join('\n') ?? '', /protected literal differs/u);
+});
+
+test('different opaque fingerprints do not receive an invented similarity score', () => {
   const generator = new NearSemanticFingerprintGenerator();
-  
-  const record = {
-    sem: createMockSem(),
-    fingerprint: 'test-fp'
-  } as any;
-  
-  const fingerprint = generator.generateFromRecord(record);
-  
-  assert.ok(fingerprint.startsWith('nfp:'));
+  const first = 'nfp:2:sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' as NearSemanticFingerprint;
+  const second = 'nfp:2:sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' as NearSemanticFingerprint;
+
+  const result = generator.compare(first, second);
+  assert.equal(result.similarity, 0);
+  assert.equal(result.similar, false);
+  assert.match(result.hardMismatchReasons?.join('\n') ?? '', /compare semantic inputs/u);
 });
 
-test('NearSemanticFingerprintGenerator compares identical fingerprints', () => {
+test('compareRecords delegates to semantic comparison', () => {
   const generator = new NearSemanticFingerprintGenerator();
-  
-  const fp1 = 'nfp:12345678';
-  const fp2 = 'nfp:12345678';
-  
-  const result = generator.compare(fp1, fp2);
-  
-  assert.strictEqual(result.similarity, 1.0);
-  assert.strictEqual(result.similar, true);
+  const result = generator.compareRecords(
+    { sem: createSem() } as never,
+    { sem: createSem() } as never
+  );
+  assert.equal(result.similarity, 1);
+  assert.equal(result.similar, true);
 });
 
-test('NearSemanticFingerprintGenerator compares different fingerprints', () => {
-  const generator = new NearSemanticFingerprintGenerator();
-  
-  const fp1 = 'nfp:12345678';
-  const fp2 = 'nfp:87654321';
-  
-  const result = generator.compare(fp1, fp2);
-  
-  assert.ok(result.similarity >= 0 && result.similarity <= 1);
-});
-
-test('NearSemanticFingerprintGenerator compares records', () => {
-  const generator = new NearSemanticFingerprintGenerator();
-  
-  const record1 = { sem: createMockSem() } as any;
-  const record2 = { sem: createMockSem() } as any;
-  
-  const result = generator.compareRecords(record1, record2);
-  
-  assert.ok(result.similarity >= 0 && result.similarity <= 1);
-});
-
-test('NearSemanticFingerprintGenerator threshold works', () => {
+test('threshold must remain in the inclusive zero-to-one range', () => {
   const generator = new NearSemanticFingerprintGenerator(0.9);
-  
-  const threshold = generator.getThreshold();
-  assert.strictEqual(threshold, 0.9);
-  
+  assert.equal(generator.getThreshold(), 0.9);
   generator.setThreshold(0.95);
-  assert.strictEqual(generator.getThreshold(), 0.95);
+  assert.equal(generator.getThreshold(), 0.95);
+  assert.throws(() => generator.setThreshold(-0.1), RangeError);
+  assert.throws(() => generator.setThreshold(1.1), RangeError);
+  assert.throws(() => new NearSemanticFingerprintGenerator(Number.NaN), RangeError);
 });
