@@ -38,6 +38,6 @@ Do not enter general rebuild mode while an orchestrator hold is active. Print th
 
 ORCHESTRATOR HOLD: all persistent worker activity remains paused by the user.
 
-Draft PRs #249, #250, and #251 are the current bounded development units for max-token support, near-semantic scoring, and pre-1.0 release-gate repairs. Do not duplicate their scope, create status-only PRs, regenerate historical evidence, or claim queue acceptance from an open branch.
+Draft PRs #249 through #252 are the current bounded development units for max-token support, near-semantic scoring, pre-1.0 release-gate repairs, and merge-control restoration. Do not duplicate their scope, create status-only PRs, regenerate historical evidence, or claim queue acceptance from an open branch.
 
 Until the user explicitly releases this hold through a reviewed repository change, print exactly `IDLE: orchestrator hold, bounded repairs under review` and stop immediately.
