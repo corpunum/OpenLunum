@@ -53,8 +53,36 @@ jobs:
           packages/core/dist/test/token-atlas.test.js
           packages/core/dist/test/token-optimization.test.js
           packages/core/dist/test/token-optimization-compat.test.js
-      - name: Run complete core test suite
-        run: pnpm --filter @corpunum/lunum test:unit
+      - name: Run core tests A-D
+        shell: bash
+        run: |
+          mapfile -t tests < <(find packages/core/dist/test -maxdepth 1 -type f -name '*.test.js' | sort | awk -F/ '$NF ~ /^[a-d]/')
+          if ((${#tests[@]})); then node --test "${tests[@]}"; fi
+      - name: Run core tests E-H
+        shell: bash
+        run: |
+          mapfile -t tests < <(find packages/core/dist/test -maxdepth 1 -type f -name '*.test.js' | sort | awk -F/ '$NF ~ /^[e-h]/')
+          if ((${#tests[@]})); then node --test "${tests[@]}"; fi
+      - name: Run core tests I-L
+        shell: bash
+        run: |
+          mapfile -t tests < <(find packages/core/dist/test -maxdepth 1 -type f -name '*.test.js' | sort | awk -F/ '$NF ~ /^[i-l]/')
+          if ((${#tests[@]})); then node --test "${tests[@]}"; fi
+      - name: Run core tests M-P
+        shell: bash
+        run: |
+          mapfile -t tests < <(find packages/core/dist/test -maxdepth 1 -type f -name '*.test.js' | sort | awk -F/ '$NF ~ /^[m-p]/')
+          if ((${#tests[@]})); then node --test "${tests[@]}"; fi
+      - name: Run core tests Q-T
+        shell: bash
+        run: |
+          mapfile -t tests < <(find packages/core/dist/test -maxdepth 1 -type f -name '*.test.js' | sort | awk -F/ '$NF ~ /^[q-t]/')
+          if ((${#tests[@]})); then node --test "${tests[@]}"; fi
+      - name: Run core tests U-Z
+        shell: bash
+        run: |
+          mapfile -t tests < <(find packages/core/dist/test -maxdepth 1 -type f -name '*.test.js' | sort | awk -F/ '$NF ~ /^[u-z]/')
+          if ((${#tests[@]})); then node --test "${tests[@]}"; fi
       - name: Run complete CLI test suite
         run: pnpm --filter @corpunum/lunum-cli test:unit
       - name: Run complete eval test suite
