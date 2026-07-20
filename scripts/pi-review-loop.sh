@@ -29,6 +29,7 @@ log() { echo "[$(date -Iseconds)] $*" | tee -a "$STATUS_LOG"; }
 # Idempotent label setup
 gh label create ready-for-merge --repo corpunum/OpenLunum --color 0e8a16 --description "Local reviewer: sound, verify green" 2>/dev/null || true
 gh label create needs-work --repo corpunum/OpenLunum --color d93f0b --description "Local reviewer: fixes required" 2>/dev/null || true
+gh label create claude-review --repo corpunum/OpenLunum --color b60205 --description "Protected paths — maintainer review required" 2>/dev/null || true
 
 ensure_worktree() {
   if [[ ! -d "$WT" ]]; then
@@ -59,7 +60,7 @@ pick_candidate() {
       return 0
     fi
   done < <(timeout 60 gh pr list --repo corpunum/OpenLunum --state open \
-      --json number,headRefOid --jq 'sort_by(.number) | .[] | "\(.number) \(.headRefOid)"' 2>/dev/null)
+      --json number,headRefOid,isDraft --jq 'sort_by(.number) | .[] | select(.isDraft == false) | "\(.number) \(.headRefOid)"' 2>/dev/null)
   return 1
 }
 
@@ -126,11 +127,18 @@ $diff_excerpt" 2>>"$STATUS_LOG")
   if echo "$pr_files" | grep -qP '^(packages/core/src/(canonicalize|fingerprint|derive|compare|types|types-schema)|schemas/|registry/)' 2>/dev/null; then
     touches_soft="yes"
   fi
+  touches_maintainer=""
+  if echo "$pr_files" | grep -qP '^(datasets/protected/|\.github/|scripts/(pi-|nightly)|packages/(core|eval)/src/|schemas/|registry/)' 2>/dev/null; then
+    touches_maintainer="yes"
+  fi
 
   # gh pr edit is broken by a projectCards GraphQL deprecation — use REST
-  if [[ "$verdict" == "READY_FOR_MERGE" ]]; then
+  if [[ "$verdict" == "READY_FOR_MERGE" && -z "$touches_maintainer" ]]; then
     timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=ready-for-merge" >/dev/null 2>&1 || true
     timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/needs-work" >/dev/null 2>&1 || true
+  elif [[ "$verdict" == "READY_FOR_MERGE" ]]; then
+    timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=claude-review" >/dev/null 2>&1 || true
+    timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
   else
     timeout 60 gh api -X POST "repos/corpunum/OpenLunum/issues/$pr/labels" -f "labels[]=needs-work" >/dev/null 2>&1 || true
     timeout 60 gh api -X DELETE "repos/corpunum/OpenLunum/issues/$pr/labels/ready-for-merge" >/dev/null 2>&1 || true
@@ -138,8 +146,12 @@ $diff_excerpt" 2>>"$STATUS_LOG")
 
   # Add LGTM-protected override when reviewer approves soft-protected PRs
   override_tag=""
-  if [[ "$verdict" == "READY_FOR_MERGE" && -n "$touches_soft" ]]; then
+  if [[ "$verdict" == "READY_FOR_MERGE" && -n "$touches_soft" && -z "$touches_maintainer" ]]; then
     override_tag=$'\n\nLGTM-protected'
+  fi
+  if [[ "$verdict" == "READY_FOR_MERGE" && -n "$touches_maintainer" ]]; then
+    verdict="ADVISORY_ONLY"
+    reason="Local review found no mechanical blocker, but maintainer-protected paths require independent review. $reason"
   fi
   timeout 60 gh pr comment "$pr" --repo corpunum/OpenLunum \
     --body "REVIEW ${sha}: ${verdict} — ${reason} _(local reviewer: ${REVIEW_MODEL}; same-machine role-separated review, not fully independent)_${override_tag}" >/dev/null 2>&1 || true

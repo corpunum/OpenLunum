@@ -52,6 +52,14 @@ test("blocks missing checks and ignores successful checks from a stale SHA", () 
   assert.match(evaluateMergePolicy(fixture).reasons.join("\n"), /required check missing/);
 });
 
+test("an outage flag or caller option cannot bypass required checks", () => {
+  const fixture = passingFixture();
+  fixture.checks = [];
+  const result = evaluateMergePolicy({ ...fixture, skipRequiredChecks: true });
+  assert.equal(result.allowed, false);
+  assert.deepEqual(result.requiredChecks, REQUIRED_CHECKS);
+});
+
 test("blocks drafts and merge conflicts", () => {
   const fixture = passingFixture();
   fixture.pr.draft = true;

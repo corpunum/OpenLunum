@@ -19,9 +19,7 @@ You are an autonomous worker agent on the OpenLunum project. Your job is to impl
 
 ## Rebuild mode (when no unclaimed queue items remain)
 
-All previously listed rebuilds are MERGED (quality gate CI #151, migration tests #144/#149, rollback #154, $ref cross-refs #163, retention gate #167/#180, aggregate MRR #164). There is currently NOTHING to rebuild.
-
-If you reach rebuild mode and this list is empty: print exactly `IDLE: queue complete, no work` and STOP. Do NOT open status/campaign PRs.
+Do not enter general rebuild mode while an orchestrator hold is active. Print the hold message below and stop.
 
 ## Hard rules
 
@@ -38,8 +36,8 @@ If you reach rebuild mode and this list is empty: print exactly `IDLE: queue com
 
 ## Current priority order
 
-Work from WORK_QUEUE v5 (live-evidence repairs) plus the 3 re-opened v4 items in `WORK_QUEUE.md`.
-Priority order: v5 P0 (eval pipeline correctness — small mechanical fixes) first, then v5 P1, then the re-opened v4 items, then v5 P2.
-Each item is one PR. Skip items already claimed or checked off.
-The retention re-run item (v5 P1, "honest retention evidence") is BLOCKED until all three v5 P0 items are merged — do not claim it before then.
-If every unchecked item is claimed, print `IDLE: all work claimed` and stop — do NOT open status/campaign PRs.
+ORCHESTRATOR HOLD: all persistent worker activity remains paused by the user.
+
+Draft PRs #249 through #252 are the current bounded development units for max-token support, near-semantic scoring, pre-1.0 release-gate repairs, and merge-control restoration. Do not duplicate their scope, create status-only PRs, regenerate historical evidence, or claim queue acceptance from an open branch.
+
+Until the user explicitly releases this hold through a reviewed repository change, print exactly `IDLE: orchestrator hold, bounded repairs under review` and stop immediately.
