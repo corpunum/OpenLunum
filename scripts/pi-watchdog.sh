@@ -3,6 +3,16 @@ set -uo pipefail
 # OpenLunum watchdog — runs every 5 min via systemd user timer.
 # Thermal monitoring + orchestrator flag management only.
 # Worker dispatch is now one-shot via pi-dispatch-once.sh — no loop restarts.
+#
+# Two-tier thermal policy (2026-07-20, new rig fan installed):
+#   HALT_TEMP (90C)     — soft pause: touch PAUSED, no pkill. Loops check PAUSED
+#                          themselves and stop dispatching new work; in-flight
+#                          calls finish naturally (bounded by their own PI_TIMEOUT).
+#   CRITICAL_TEMP (95C) — hard kill: only if temps keep climbing even with a
+#                          soft pause already active. Matches the TEMP WARNING
+#                          line pi-orchestrator.sh already uses for consistency.
+#   RESUME_TEMP (78C)   — clears both flags once cooled, ~12C buffer under
+#                          HALT_TEMP so it doesn't flap at the edge.
 
 REPO=/home/corpunum/OpenLunum
 LOGDIR="$REPO/reports/pi-loop"
@@ -18,9 +28,11 @@ notify() {
 }
 
 # ---- Thermal management -----------------------------------------------
-HALT_TEMP="${HALT_TEMP:-85}"
-RESUME_TEMP="${RESUME_TEMP:-75}"
+HALT_TEMP="${HALT_TEMP:-90}"
+CRITICAL_TEMP="${CRITICAL_TEMP:-95}"
+RESUME_TEMP="${RESUME_TEMP:-78}"
 THERMAL_FLAG="$ORCHDIR/THERMAL_HALT"
+PAUSED_FLAG="$ORCHDIR/PAUSED"
 
 read_temps() {
   local cpu=0 gpu=0 h
@@ -40,41 +52,66 @@ freq=$(awk '/cpu MHz/ {sum+=$4; n++} END {printf "%.0f", sum/n}' /proc/cpuinfo 2
 echo "$(date -Iseconds),$CPU_T,$GPU_T,$freq" >> "$TEMP_LOG"
 MAX_T=$(( CPU_T > GPU_T ? CPU_T : GPU_T ))
 
-halt_workers() {
-  echo "thermal-halt $(date -Iseconds) ${MAX_T}C" > "$THERMAL_FLAG"
-  touch "$ORCHDIR/PAUSED"
+soft_pause() {
+  echo "thermal-soft-pause $(date -Iseconds) ${MAX_T}C" > "$THERMAL_FLAG"
+  touch "$PAUSED_FLAG"
+  notify "Soft pause at ${MAX_T}C — no new dispatch, cooling to <= ${RESUME_TEMP}C. In-flight work finishes normally."
+}
+
+hard_halt() {
+  echo "thermal-hard-halt $(date -Iseconds) ${MAX_T}C" > "$THERMAL_FLAG"
+  touch "$PAUSED_FLAG"
   pkill -f 'pi-dispatch-once' 2>/dev/null || true
   pkill -f 'pi-loop\.sh' 2>/dev/null || true
+  pkill -f 'pi-loop-ally\.sh' 2>/dev/null || true
   pkill -f 'pi-review-loop\.sh' 2>/dev/null || true
   pkill -f 'pi-docs-loop\.sh' 2>/dev/null || true
   pkill -f 'pi-merge-loop\.sh' 2>/dev/null || true
   sleep 3
   pkill -f 'pi.*--print' 2>/dev/null || true
-  notify "THERMAL HALT at ${MAX_T}C — workers killed, paused until <= ${RESUME_TEMP}C"
+  notify "CRITICAL HALT at ${MAX_T}C — workers killed, paused until <= ${RESUME_TEMP}C"
 }
 
+# ---- Resume path: clears whichever tier is active once cooled -------------
 if [[ -f "$THERMAL_FLAG" ]]; then
   if (( MAX_T <= RESUME_TEMP )); then
-    rm -f "$THERMAL_FLAG" "$ORCHDIR/PAUSED"
+    rm -f "$THERMAL_FLAG" "$PAUSED_FLAG"
     notify "Cooled to ${MAX_T}C — thermal halt cleared (dispatch available)"
     log "thermal resume at ${MAX_T}C"
+  else
+    log "thermal flag held: ${MAX_T}C (resume at <= ${RESUME_TEMP}C)"
   fi
   exit 0
 fi
 
+# ---- Critical tier: hard kill, checked first so it always wins ------------
+if (( MAX_T >= CRITICAL_TEMP )); then
+  sleep 10
+  read -r CPU_T2 GPU_T2 <<< "$(read_temps)"
+  M2=$(( CPU_T2 > GPU_T2 ? CPU_T2 : GPU_T2 ))
+  if (( M2 >= CRITICAL_TEMP )); then
+    MAX_T=$M2
+    log "critical halt: ${CPU_T}/${GPU_T}C then ${M2}C (>= ${CRITICAL_TEMP}C)"
+    hard_halt
+    exit 0
+  fi
+fi
+
+# ---- Soft tier: pause dispatch, let loops finish in-flight work -----------
 if (( MAX_T >= HALT_TEMP )); then
   sleep 10
   read -r CPU_T2 GPU_T2 <<< "$(read_temps)"
   M2=$(( CPU_T2 > GPU_T2 ? CPU_T2 : GPU_T2 ))
   if (( M2 >= HALT_TEMP )); then
-    log "thermal halt: ${MAX_T}C then ${M2}C (>= ${HALT_TEMP}C)"
-    halt_workers
+    MAX_T=$M2
+    log "soft pause: ${CPU_T}/${GPU_T}C then ${M2}C (>= ${HALT_TEMP}C)"
+    soft_pause
     exit 0
   fi
 fi
 
-# Orchestrator pause: do nothing while PAUSED exists
-if [[ -f "$ORCHDIR/PAUSED" ]] || [[ -f "$LOGDIR/PAUSED" ]]; then
+# Orchestrator pause: do nothing while PAUSED exists (may be set manually too)
+if [[ -f "$PAUSED_FLAG" ]] || [[ -f "$LOGDIR/PAUSED" ]]; then
   exit 0
 fi
 

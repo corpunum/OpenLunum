@@ -68,6 +68,12 @@ log "Reviewer loop starting (model: $REVIEW_MODEL)"
 ensure_worktree
 
 while true; do
+  if [[ -f "$REPO/reports/orchestrator/PAUSED" ]]; then
+    log "paused (thermal) — waiting"
+    sleep 60
+    continue
+  fi
+
   if ! sel=$(pick_candidate); then
     log "no unreviewed PRs — sleeping ${COOLDOWN_SECONDS}s"
     sleep "$COOLDOWN_SECONDS"

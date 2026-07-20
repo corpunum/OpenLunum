@@ -35,6 +35,12 @@ log "Docs loop starting (model: $DOCS_MODEL)"
 ensure_worktree
 
 while true; do
+  if [[ -f "$REPO/reports/orchestrator/PAUSED" ]]; then
+    log "paused (thermal) — waiting"
+    sleep 60
+    continue
+  fi
+
   git -C "$WT" fetch origin main >/dev/null 2>&1
   head=$(git -C "$WT" rev-parse origin/main)
   last=$(cat "$STAMP" 2>/dev/null || echo none)
