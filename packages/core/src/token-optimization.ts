@@ -114,6 +114,10 @@ function measurementErrors(
 
   for (const profile of ['natural', 'safe', 'short', 'tight'] as const) {
     const measurement = measures[profile];
+    if (!measurement) {
+      errors.push(`${modelName}/${profile}: measurement is missing`);
+      continue;
+    }
     if (measurement.profile !== profile) errors.push(`${modelName}/${profile}: measurement is labelled ${measurement.profile}`);
     if (!Number.isSafeInteger(measurement.tokenCount) || measurement.tokenCount <= 0) {
       errors.push(`${modelName}/${profile}: tokenCount must be a positive safe integer`);
