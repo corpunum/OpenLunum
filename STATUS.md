@@ -9,7 +9,7 @@
 ## Current capabilities
 
 - Core library providing strict TypeScript reference semantics, serialization, canonicalization, and release provenance.
-- CLI tools for inspection, encoding, compilation, release verification, and pipeline adoption.
+- CLI tools for inspection, encoding, compilation, release verification, and pipeline adoption. Migrate command with bidirectional migration (0.1 ↔ 0.2), atomic writes, source/dest validation, and MigrationWarning details.
 - HTTP API reference server with OpenAPI spec and integration tests.
 - MCP (Model Context Protocol) prototype reference server and tooling for services.
 - OpenUnum compatibility package matching existing product sidecar shapes.
@@ -52,7 +52,7 @@
 | Schema migration test suite | Reference implementation | 312-line test validating 0.1→0.2 record transformation with golden vectors |
 | Comprehensive type tests for v02 | Reference implementation | 122 lines of semantic-contract type tests covering all migration paths |
 | Core library | Reference implementation | Strict TypeScript reference for semantics, serialization, canonicalization, and release provenance |
-| CLI tools | Prototype | Inspection, encoding, compilation, release verification, and pipeline adoption interfaces |
+| CLI tools | Prototype | Inspection, encoding, compilation, release verification, pipeline adoption, and bidirectional migration with atomic writes and schema validation |
 | HTTP API reference server | Prototype | REST endpoints with OpenAPI spec; third adoption path |
 | MCP reference server | Prototype | Reference implementation of Model Context Protocol tooling |
 | OpenUnum adapter | Reference contract | Matches present sidecar shape; live adoption still requires product work |
