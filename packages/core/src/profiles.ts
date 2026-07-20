@@ -32,11 +32,13 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+function trimTrailingNulls(values: unknown[]): unknown[] {
+  while (values.length > 0 && values[values.length - 1] === null) values.pop();
+  return values;
+}
+
 function shortClause(clause: LunumClause): Record<string, unknown> {
-  const encoded: Record<string, unknown> = {
-    p: clause.predicate,
-    r: clause.roles,
-  };
+  const encoded: Record<string, unknown> = { p: clause.predicate, r: clause.roles };
   if (clause.negated === true) encoded.n = true;
   if (clause.modality !== undefined) encoded.m = clause.modality;
   if (clause.time !== undefined) encoded.t = clause.time;
@@ -60,20 +62,20 @@ function shortSem(sem: LunumSem): Record<string, unknown> {
 }
 
 function tightClause(clause: LunumClause): unknown[] {
-  return [
+  return trimTrailingNulls([
     clause.predicate,
     clause.roles,
-    clause.negated === true ? 1 : 0,
+    clause.negated === true ? 1 : null,
     clause.modality ?? null,
     clause.time ?? null,
     clause.conditions?.map(tightClause) ?? null,
     clause.consequences?.map(tightClause) ?? null,
     clause.annotations ?? null,
-  ];
+  ]);
 }
 
 function tightSem(sem: LunumSem): unknown[] {
-  return [
+  return trimTrailingNulls([
     sem.schema,
     sem.world,
     sem.kind,
@@ -81,7 +83,7 @@ function tightSem(sem: LunumSem): unknown[] {
     sem.references ?? null,
     sem.provenance ?? null,
     sem.annotations ?? null,
-  ];
+  ]);
 }
 
 function decodeShortClause(value: unknown): LunumClause {
@@ -94,7 +96,7 @@ function decodeShortClause(value: unknown): LunumClause {
     negated: value.n === true,
   };
   if (value.m !== undefined) clause.modality = value.m as string | null;
-  if (value.t !== undefined) clause.time = value.t as LunumClause['time'];
+  if (value.t !== undefined) clause.time = value.t as NonNullable<LunumClause['time']>;
   if (value.i !== undefined) {
     if (!Array.isArray(value.i)) throw new TypeError('Invalid short-profile conditions');
     clause.conditions = value.i.map(decodeShortClause);
@@ -122,7 +124,7 @@ function decodeShort(value: unknown): LunumSem {
   };
   if (value.r !== undefined) {
     if (!Array.isArray(value.r)) throw new TypeError('Invalid short-profile references');
-    sem.references = value.r as LunumSem['references'];
+    sem.references = value.r as NonNullable<LunumSem['references']>;
   }
   if (value.p !== undefined) {
     if (!isObject(value.p)) throw new TypeError('Invalid short-profile provenance');
@@ -136,7 +138,7 @@ function decodeShort(value: unknown): LunumSem {
 }
 
 function decodeTightClause(value: unknown): LunumClause {
-  if (!Array.isArray(value) || value.length !== 8 || typeof value[0] !== 'string' || !isObject(value[1])) {
+  if (!Array.isArray(value) || value.length < 2 || value.length > 8 || typeof value[0] !== 'string' || !isObject(value[1])) {
     throw new TypeError('Invalid tight-profile clause');
   }
   const clause: LunumClause = {
@@ -144,17 +146,17 @@ function decodeTightClause(value: unknown): LunumClause {
     roles: value[1] as LunumClause['roles'],
     negated: value[2] === 1,
   };
-  if (value[3] !== null) clause.modality = value[3] as string;
-  if (value[4] !== null) clause.time = value[4] as LunumClause['time'];
-  if (value[5] !== null) {
+  if (value[3] !== undefined && value[3] !== null) clause.modality = value[3] as string;
+  if (value[4] !== undefined && value[4] !== null) clause.time = value[4] as NonNullable<LunumClause['time']>;
+  if (value[5] !== undefined && value[5] !== null) {
     if (!Array.isArray(value[5])) throw new TypeError('Invalid tight-profile conditions');
     clause.conditions = value[5].map(decodeTightClause);
   }
-  if (value[6] !== null) {
+  if (value[6] !== undefined && value[6] !== null) {
     if (!Array.isArray(value[6])) throw new TypeError('Invalid tight-profile consequences');
     clause.consequences = value[6].map(decodeTightClause);
   }
-  if (value[7] !== null) {
+  if (value[7] !== undefined && value[7] !== null) {
     if (!isObject(value[7])) throw new TypeError('Invalid tight-profile clause annotations');
     clause.annotations = value[7];
   }
@@ -162,7 +164,7 @@ function decodeTightClause(value: unknown): LunumClause {
 }
 
 function decodeTight(value: unknown): LunumSem {
-  if (!Array.isArray(value) || value.length !== 7 || typeof value[0] !== 'string' || typeof value[1] !== 'string' || typeof value[2] !== 'string' || !Array.isArray(value[3])) {
+  if (!Array.isArray(value) || value.length < 4 || value.length > 7 || typeof value[0] !== 'string' || typeof value[1] !== 'string' || typeof value[2] !== 'string' || !Array.isArray(value[3])) {
     throw new TypeError('Invalid tight-profile semantic payload');
   }
   const sem: LunumSem = {
@@ -171,15 +173,15 @@ function decodeTight(value: unknown): LunumSem {
     kind: value[2],
     clauses: value[3].map(decodeTightClause),
   };
-  if (value[4] !== null) {
+  if (value[4] !== undefined && value[4] !== null) {
     if (!Array.isArray(value[4])) throw new TypeError('Invalid tight-profile references');
-    sem.references = value[4] as LunumSem['references'];
+    sem.references = value[4] as NonNullable<LunumSem['references']>;
   }
-  if (value[5] !== null) {
+  if (value[5] !== undefined && value[5] !== null) {
     if (!isObject(value[5])) throw new TypeError('Invalid tight-profile provenance');
     sem.provenance = value[5];
   }
-  if (value[6] !== null) {
+  if (value[6] !== undefined && value[6] !== null) {
     if (!isObject(value[6])) throw new TypeError('Invalid tight-profile annotations');
     sem.annotations = value[6];
   }
