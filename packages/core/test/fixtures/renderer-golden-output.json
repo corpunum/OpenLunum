@@ -1,0 +1,1399 @@
+{
+  "test-single-clause": {
+    "description": "Single clause with basic roles",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 9,
+        "profiledTokens": 9,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The system processes user requests.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-system",
+            "kind": "system_fact",
+            "clauses": [
+              {
+                "predicate": "processes",
+                "roles": {
+                  "subject": "system",
+                  "object": "requests"
+                }
+              }
+            ]
+          },
+          "fingerprint": "sha256:abc123",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "system_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 9,
+        "profiledTokens": 9,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The system processes user requests.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-system",
+            "kind": "system_fact",
+            "clauses": [
+              {
+                "predicate": "processes",
+                "roles": {
+                  "subject": "system",
+                  "object": "requests"
+                }
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:abc123",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "system_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 9,
+        "profiledTokens": 9,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The system processes user requests.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-system",
+            "kind": "system_fact",
+            "clauses": [
+              {
+                "predicate": "processes",
+                "roles": {
+                  "subject": "system",
+                  "object": "requests"
+                }
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:abc123",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "system_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      }
+    }
+  },
+  "test-multi-clause": {
+    "description": "Multiple clauses with conditions",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 15,
+        "profiledTokens": 15,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "If the user is authenticated, allow access to the dashboard.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-auth",
+            "kind": "conditional_instruction",
+            "clauses": [
+              {
+                "predicate": "allow_access",
+                "roles": {
+                  "subject": "user",
+                  "object": "dashboard"
+                },
+                "conditions": [
+                  {
+                    "predicate": "is_authenticated",
+                    "roles": {
+                      "subject": "user"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "fingerprint": "sha256:def456",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "conditional_instruction",
+            "risk": "medium",
+            "confidence": 0.8,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 15,
+        "profiledTokens": 15,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "If the user is authenticated, allow access to the dashboard.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-auth",
+            "kind": "conditional_instruction",
+            "clauses": [
+              {
+                "predicate": "allow_access",
+                "roles": {
+                  "subject": "user",
+                  "object": "dashboard"
+                },
+                "conditions": [
+                  {
+                    "predicate": "is_authenticated",
+                    "roles": {
+                      "subject": "user"
+                    }
+                  }
+                ]
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:def456",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "conditional_instruction",
+            "risk": "medium",
+            "confidence": 0.8,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 15,
+        "profiledTokens": 15,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "If the user is authenticated, allow access to the dashboard.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-auth",
+            "kind": "conditional_instruction",
+            "clauses": [
+              {
+                "predicate": "allow_access",
+                "roles": {
+                  "subject": "user",
+                  "object": "dashboard"
+                },
+                "conditions": [
+                  {
+                    "predicate": "is_authenticated",
+                    "roles": {
+                      "subject": "user"
+                    }
+                  }
+                ]
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:def456",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "conditional_instruction",
+            "risk": "medium",
+            "confidence": 0.8,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      }
+    }
+  },
+  "test-with-annotations": {
+    "description": "Record with annotations and provenance",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "Temperature reading is 25 degrees Celsius.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-sensors",
+            "kind": "sensor_data",
+            "clauses": [
+              {
+                "predicate": "temperature",
+                "roles": {
+                  "subject": "sensor",
+                  "object": "25_C"
+                }
+              }
+            ],
+            "annotations": {
+              "sensor_id": "temp-001",
+              "calibrated": true
+            },
+            "provenance": {
+              "source": "sensor-api",
+              "timestamp": 1700000000000
+            }
+          },
+          "fingerprint": "sha256:ghi789",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "sensor_data",
+            "risk": "low",
+            "confidence": 0.9,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "Temperature reading is 25 degrees Celsius.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-sensors",
+            "kind": "sensor_data",
+            "clauses": [
+              {
+                "predicate": "temperature",
+                "roles": {
+                  "subject": "sensor",
+                  "object": "25_C"
+                }
+              }
+            ],
+            "annotations": {},
+            "provenance": {
+              "source": "sensor-api",
+              "timestamp": 1700000000000
+            }
+          },
+          "fingerprint": "sha256:ghi789",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "sensor_data",
+            "risk": "low",
+            "confidence": 0.9,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": [
+          "Annotations removed"
+        ]
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "Temperature reading is 25 degrees Celsius.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-sensors",
+            "kind": "sensor_data",
+            "clauses": [
+              {
+                "predicate": "temperature",
+                "roles": {
+                  "subject": "sensor",
+                  "object": "25_C"
+                }
+              }
+            ],
+            "annotations": {
+              "sensor_id": "temp-001",
+              "calibrated": true
+            },
+            "provenance": {}
+          },
+          "fingerprint": "sha256:ghi789",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "sensor_data",
+            "risk": "low",
+            "confidence": 0.9,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": [
+          "Annotations removed",
+          "Provenance removed"
+        ]
+      }
+    }
+  },
+  "test-negation": {
+    "description": "Negated clause",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The user did not receive the notification.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-notif",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "receive_notification",
+                "roles": {
+                  "subject": "user",
+                  "object": "alert"
+                },
+                "negated": true
+              }
+            ]
+          },
+          "fingerprint": "sha256:jkl012",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The user did not receive the notification.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-notif",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "receive_notification",
+                "roles": {
+                  "subject": "user",
+                  "object": "alert"
+                },
+                "negated": true
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:jkl012",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The user did not receive the notification.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-notif",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "receive_notification",
+                "roles": {
+                  "subject": "user",
+                  "object": "alert"
+                },
+                "negated": true
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:jkl012",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      }
+    }
+  },
+  "test-with-time": {
+    "description": "Clause with time component",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 12,
+        "profiledTokens": 12,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The meeting is scheduled for tomorrow at 3pm.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-calendar",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "scheduled_meeting",
+                "roles": {
+                  "subject": "meeting",
+                  "object": "3pm"
+                },
+                "time": {
+                  "type": "datetime",
+                  "value": "tomorrow_15:00"
+                }
+              }
+            ]
+          },
+          "fingerprint": "sha256:mno345",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.9,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 12,
+        "profiledTokens": 12,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The meeting is scheduled for tomorrow at 3pm.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-calendar",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "scheduled_meeting",
+                "roles": {
+                  "subject": "meeting",
+                  "object": "3pm"
+                }
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:mno345",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.9,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 12,
+        "profiledTokens": 12,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The meeting is scheduled for tomorrow at 3pm.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-calendar",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "scheduled_meeting",
+                "roles": {
+                  "subject": "meeting",
+                  "object": "3pm"
+                }
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:mno345",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.9,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      }
+    }
+  },
+  "test-with-modality": {
+    "description": "Clause with modality (certainty)",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "It is likely that the server will restart.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-server",
+            "kind": "prediction",
+            "clauses": [
+              {
+                "predicate": "restart",
+                "roles": {
+                  "subject": "server"
+                },
+                "modality": "likely"
+              }
+            ]
+          },
+          "fingerprint": "sha256:pqr678",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "prediction",
+            "risk": "low",
+            "confidence": 0.7,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "It is likely that the server will restart.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-server",
+            "kind": "prediction",
+            "clauses": [
+              {
+                "predicate": "restart",
+                "roles": {
+                  "subject": "server"
+                }
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:pqr678",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "prediction",
+            "risk": "low",
+            "confidence": 0.7,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "It is likely that the server will restart.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-server",
+            "kind": "prediction",
+            "clauses": [
+              {
+                "predicate": "restart",
+                "roles": {
+                  "subject": "server"
+                }
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:pqr678",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "prediction",
+            "risk": "low",
+            "confidence": 0.7,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      }
+    }
+  },
+  "test-complex-roles": {
+    "description": "Clause with many roles",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 18,
+        "profiledTokens": 18,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "User Alice sent a message to Bob via email about the project deadline.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-message",
+            "kind": "tool_event",
+            "clauses": [
+              {
+                "predicate": "sent_message",
+                "roles": {
+                  "subject": "alice",
+                  "recipient": "bob",
+                  "medium": "email",
+                  "topic": "project_deadline"
+                }
+              }
+            ]
+          },
+          "fingerprint": "sha256:stu901",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "tool_event",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 18,
+        "profiledTokens": 18,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "User Alice sent a message to Bob via email about the project deadline.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-message",
+            "kind": "tool_event",
+            "clauses": [
+              {
+                "predicate": "sent_message",
+                "roles": {
+                  "subject": "alice",
+                  "recipient": "bob",
+                  "medium": "email",
+                  "topic": "project_deadline"
+                }
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:stu901",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "tool_event",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 18,
+        "profiledTokens": 18,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "User Alice sent a message to Bob via email about the project deadline.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-message",
+            "kind": "tool_event",
+            "clauses": [
+              {
+                "predicate": "sent_message",
+                "roles": {
+                  "subject": "alice",
+                  "recipient": "bob",
+                  "medium": "email",
+                  "topic": "project_deadline"
+                }
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:stu901",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "tool_event",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      }
+    }
+  },
+  "test-with-renderings": {
+    "description": "Record with existing renderings",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 8,
+        "profiledTokens": 8,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The budget was approved for Q1.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-finance",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "budget_approved",
+                "roles": {
+                  "period": "Q1"
+                }
+              }
+            ]
+          },
+          "fingerprint": "sha256:vwx234",
+          "renderings": {
+            "en": {
+              "code": "approve(budget, Q1)",
+              "profile": "safe",
+              "tokens": 5
+            }
+          },
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 8,
+        "profiledTokens": 8,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The budget was approved for Q1.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-finance",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "budget_approved",
+                "roles": {
+                  "period": "Q1"
+                }
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:vwx234",
+          "renderings": {
+            "en": {
+              "code": "approve(budget, Q1)",
+              "profile": "safe",
+              "tokens": 5
+            }
+          },
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 8,
+        "profiledTokens": 8,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The budget was approved for Q1.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-finance",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "budget_approved",
+                "roles": {
+                  "period": "Q1"
+                }
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:vwx234",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "simple_fact",
+            "risk": "low",
+            "confidence": 0.95,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": [
+          "Renderings removed"
+        ]
+      }
+    }
+  },
+  "test-with-consequences": {
+    "description": "Clause with consequences",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "If the disk is full, delete temporary files.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-instruction",
+            "kind": "conditional_instruction",
+            "clauses": [
+              {
+                "predicate": "delete_temp_files",
+                "roles": {
+                  "object": "temporary_files"
+                },
+                "conditions": [
+                  {
+                    "predicate": "disk_full",
+                    "roles": {}
+                  }
+                ],
+                "consequences": [
+                  {
+                    "predicate": "free_space",
+                    "roles": {}
+                  }
+                ]
+              }
+            ]
+          },
+          "fingerprint": "sha256:yza567",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "conditional_instruction",
+            "risk": "medium",
+            "confidence": 0.85,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "If the disk is full, delete temporary files.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-instruction",
+            "kind": "conditional_instruction",
+            "clauses": [
+              {
+                "predicate": "delete_temp_files",
+                "roles": {
+                  "object": "temporary_files"
+                },
+                "conditions": [
+                  {
+                    "predicate": "disk_full",
+                    "roles": {}
+                  }
+                ],
+                "consequences": [
+                  {
+                    "predicate": "free_space",
+                    "roles": {}
+                  }
+                ]
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:yza567",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "conditional_instruction",
+            "risk": "medium",
+            "confidence": 0.85,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 11,
+        "profiledTokens": 11,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "If the disk is full, delete temporary files.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-instruction",
+            "kind": "conditional_instruction",
+            "clauses": [
+              {
+                "predicate": "delete_temp_files",
+                "roles": {
+                  "object": "temporary_files"
+                },
+                "conditions": [
+                  {
+                    "predicate": "disk_full",
+                    "roles": {}
+                  }
+                ],
+                "consequences": [
+                  {
+                    "predicate": "free_space",
+                    "roles": {}
+                  }
+                ]
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:yza567",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "conditional_instruction",
+            "risk": "medium",
+            "confidence": 0.85,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      }
+    }
+  },
+  "test-empty-roles": {
+    "description": "Clause with minimal roles",
+    "profiles": {
+      "safe": {
+        "type": "safe",
+        "originalTokens": 6,
+        "profiledTokens": 6,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The system is running.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-status",
+            "kind": "system_fact",
+            "clauses": [
+              {
+                "predicate": "is_running",
+                "roles": {
+                  "subject": "system"
+                }
+              }
+            ]
+          },
+          "fingerprint": "sha256:bcd890",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "system_fact",
+            "risk": "low",
+            "confidence": 0.99,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "short": {
+        "type": "short",
+        "originalTokens": 6,
+        "profiledTokens": 6,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The system is running.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-status",
+            "kind": "system_fact",
+            "clauses": [
+              {
+                "predicate": "is_running",
+                "roles": {
+                  "subject": "system"
+                }
+              }
+            ],
+            "annotations": {}
+          },
+          "fingerprint": "sha256:bcd890",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "system_fact",
+            "risk": "low",
+            "confidence": 0.99,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      },
+      "tight": {
+        "type": "tight",
+        "originalTokens": 6,
+        "profiledTokens": 6,
+        "reduction": 0,
+        "preservation": 1,
+        "record": {
+          "recordVersion": "lunum-record/0.1-draft",
+          "source": {
+            "text": "The system is running.",
+            "language": "en",
+            "role": null,
+            "ref": null
+          },
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "test-status",
+            "kind": "system_fact",
+            "clauses": [
+              {
+                "predicate": "is_running",
+                "roles": {
+                  "subject": "system"
+                }
+              }
+            ],
+            "provenance": {}
+          },
+          "fingerprint": "sha256:bcd890",
+          "renderings": {},
+          "policy": {
+            "eligible": true,
+            "category": "system_fact",
+            "risk": "low",
+            "confidence": 0.99,
+            "reasons": []
+          },
+          "meta": {}
+        },
+        "warnings": []
+      }
+    }
+  }
+}

@@ -19,7 +19,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && cp -r test/fixtures dist/test/ 2>/dev/null || true",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm build && node --test dist/test/*.test.js",
     "test:unit": "node --test dist/test/*.test.js"

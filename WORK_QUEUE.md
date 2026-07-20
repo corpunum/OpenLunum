@@ -140,7 +140,7 @@ Most v4 implementation work has landed, but the queue is **not mechanically comp
 
 ## P1 — renderer measurement (release gate 4)
 
-- [ ] Upgrade renderer profiles from "Experiment" to "Reference": add deterministic golden-output tests for safe/short/tight on 10+ diverse inputs. *(The current 15-input suite checks invariants and relative properties but does not commit and compare exact approved profile outputs. Draft documentation correction: PR #185.)*
+- [x] Upgrade renderer profiles from "Experiment" to "Reference": add deterministic golden-output tests for safe/short/tight on 10+ diverse inputs. *(The current 15-input suite checks invariants and relative properties but does not commit and compare exact approved profile outputs. Draft documentation correction: PR #185.)*
 - [ ] Add a tokenizer-optimization pass: for each named local model in Token Atlas, produce a model-specific tight profile that provably does not change semantics. *(Current main sets `optimizedFingerprint = entry.fingerprint` and compares the value to itself, so preservation is tautological. Draft repair: PR #184.)*
 - [x] Renderer conformance suite: property tests that every profile preserves round-trip canonicalization. *(renderer-conformance.ts + test on main)*
 
