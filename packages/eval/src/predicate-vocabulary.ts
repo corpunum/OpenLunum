@@ -22,6 +22,8 @@
  * than inventing a synonym.
  */
 export const PREDICATES: readonly string[] = Object.freeze([
+  'below',
+  'confirmed',
   'deadline',
   'delete',
   'enable',
@@ -46,7 +48,8 @@ export const ROLES: readonly string[] = Object.freeze([
   'object',
   'subject',
   'theme',
-  'time'
+  'time',
+  'value'
 ] satisfies readonly string[]);
 
 /** Set for O(1) membership tests during prompt assembly. */
@@ -82,12 +85,24 @@ export const IDENTIFIER_SET = new Set(IDENTIFIERS);
  * Allowed role `type` values in the Lunum-Sem schema.
  *
  * Every role object carries a `type` field that must be one of these
- * three strings. The model should not invent new type names.
+ * strings. The model should not invent new type names.
+ *
+ * 2026-07-20: this previously listed only 'actor', 'concept', 'object' —
+ * the gold dataset also uses 'date', 'feature', 'metric', 'project', and
+ * 'quantity' (e.g. condition clauses on conditional_instruction/
+ * safety_constraint items). Telling the model there were only 3 valid
+ * types actively steered it away from the correct output for every
+ * condition-bearing item in the dataset.
  */
 export const ROLE_TYPES: readonly string[] = Object.freeze([
   'actor',
   'concept',
-  'object'
+  'date',
+  'feature',
+  'metric',
+  'object',
+  'project',
+  'quantity'
 ] satisfies readonly string[]);
 
 /** Set for O(1) membership tests during prompt assembly. */
