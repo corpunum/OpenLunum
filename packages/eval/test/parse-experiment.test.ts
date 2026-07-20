@@ -10,6 +10,7 @@ import os from 'node:os';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
 import { sha256File } from '../src/io.js';
+import { parsePrompt } from '../src/prompts.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -428,5 +429,42 @@ test('parse-experiment CLI arg: argv[3] is the manifest, not argv[2]', async () 
   } finally {
     server.close();
     await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parsePrompt ships controlled predicate/role vocabulary', () => {
+  // The controlled vocabulary helps models use gold identifiers instead of
+  // guessing synonyms (e.g., 'delete' vs 'remove_file', 'prefer' vs 'want').
+  const item = {
+    id: 'test',
+    sourceLanguage: 'en',
+    sourceText: 'Test.',
+    goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } }, negated: false }] }
+  } as any;
+
+  const prompt = parsePrompt(item);
+
+  // Verify controlled vocabulary section exists
+  assert.ok(prompt.system.includes('Controlled vocabulary'), 'system should have vocabulary section');
+  assert.ok(prompt.system.includes('Predicates:'), 'system should list predicates');
+  assert.ok(prompt.system.includes('Roles:'), 'system should list roles');
+  assert.ok(prompt.system.includes('Role types:'), 'system should list role types');
+
+  // Verify all gold-dataset predicates are present
+  const expectedPredicates = ['deadline', 'delete', 'enable', 'prefer'];
+  for (const pred of expectedPredicates) {
+    assert.ok(prompt.system.includes(pred), `system should include predicate '${pred}'`);
+  }
+
+  // Verify all gold-dataset roles are present
+  const expectedRoles = ['agent', 'experiencer', 'object', 'subject', 'theme', 'time'];
+  for (const role of expectedRoles) {
+    assert.ok(prompt.system.includes(role), `system should include role '${role}'`);
+  }
+
+  // Verify all gold-dataset role types are present
+  const expectedTypes = ['actor', 'concept', 'date', 'feature', 'project'];
+  for (const t of expectedTypes) {
+    assert.ok(prompt.system.includes(t), `system should include role type '${t}'`);
   }
 });

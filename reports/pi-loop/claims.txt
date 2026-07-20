@@ -1,5 +1,6 @@
 - agent/coding-agent/semantic-contract/expand-semantic-structures
 - agent/docs/sync-235be01c
+- agent/docs/sync-a740caf2
 - agent/eval/scratch
 - agent/evidence/nightly-20260720
 - agent/fail-closed-outage-control
@@ -13,6 +14,9 @@
 - agent/pr220-tokenizer-repair
 - agent/qwen/ci/quality-gate-fix
 - agent/qwen/context/pr10-policy-aware-success
+- agent/qwen/eval/max-tokens-default
+- agent/qwen/eval/parse-prompt-example
+- agent/qwen/eval/parse-runner-prompts
 - agent/qwen/issue-11/false-equivalence-rebased
 - agent/qwen/repository-reliability/pr8-contract-evidence
 - agent/qwen/safety/quality-gate-ci-fix
