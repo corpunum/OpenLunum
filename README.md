@@ -156,7 +156,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Near-semantic + exact fingerprint interop: records carry both lfp: and nfp:, hybrid search exact-first with near-fallback.
 - An MCP (Model Context Protocol) reference server with parse, realize, fingerprint, retrieve, and validate tools.
 - An HTTP API reference server with OpenAPI spec and integration tests.
-- A standalone CLI pipeline (`lunum parse | lunum realize | lunum render`).
+- A standalone CLI pipeline (`lunum parse | lunum realize | lunum render`) with migrate command supporting bidirectional migration, atomic writes, and full source/destination validation.
 - Conformance reports for hook/plugin/CLI integration paths.
 - An OpenUnum compatibility adapter preserving its current sidecar return shape.
 - Historical research and measured results from Lunum 1 through 2.7.

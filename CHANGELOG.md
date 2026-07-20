@@ -23,6 +23,9 @@
 ### Changed — CLI (PR #174)
 - **CLI migrate command enhanced:** `lunum migrate` now uses proper migration utilities from `@corpunum/lunum` (`migrateForward01to02`, `migrateBackward02to01`). Supports `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward) migrations. Provides detailed results including schema versions, fingerprints, warnings, and validation status. Supports both single records and arrays of records. Adds `--dry-run` mode that reports changes without modifying files, and in-place write mode that transforms records and writes back to file. 152 lines of tests in `packages/cli/test/cli.test.ts`. (PR #174, commit d5ba255)
 
+### Changed — CLI (PR #237)
+- **CLI migration v2 — proper schema/version migration, atomic writes, and validation:** `lunum migrate` now uses `resolveVersion()` to normalize short version strings (`0.1`, `0.1-draft`, `0.2`) to full schema URIs. Validates source schema against `--from` before migrating. Uses proper migration functions with `sourceValid` and `destValid` tracking for both source and destination schema validation. Reports `MigrationWarning` details (code + message) per record. Added `--dry-run` mode that reports changes without modifying files, and in-place write mode that uses atomic writes (write to temp file → `rename`) to prevent partial writes. Better record ID resolution: uses `record.id` or `source.text` prefix for error reporting. Fail-closed: exits with error when destination validation fails in write mode. 139 lines of tests in `packages/cli/test/cli.test.ts`. (PR #237, commit 9984473)
+
 ### Docs — sync (PR #185, PR #183)
 - **Documentation syncs:** Status table and changelog entries updated for merged work through PR #185. (PR #185, PR #183)
 

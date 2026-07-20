@@ -39,8 +39,12 @@ The migrate command supports:
 - Single records or arrays of records
 - Bidirectional migration: `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward)
 - `--dry-run` mode: reports schema versions, fingerprints, warnings, and validation status without modifying files
-- In-place write mode: transforms records and writes back to file
-- Detailed results per record: old/new schema, old/new fingerprints, validation status, field-level warnings
+- In-place write mode: transforms records and writes back to file using atomic writes (temp file → rename)
+- Source schema validation: verifies records match `--from` version before migrating
+- Destination schema validation: verifies migrated records pass target schema constraints
+- MigrationWarning details: field-level warnings with codes and messages for each record
+- Fail-closed: exits with error (exit code 1) when destination validation fails in write mode
+- Better record ID resolution: uses record.id or source.text prefix for error reporting
 
 ## Usage
 
