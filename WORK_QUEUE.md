@@ -129,7 +129,7 @@ Most v4 implementation work has landed, but the queue is **not mechanically comp
 ## P0 — migration rules (release gate 2)
 
 - [x] Implement bidirectional fingerprint migration tests: 0.1→0.2 forward, 0.2→0.1 lossy backward with explicit data-loss warnings. *(PR #144, #149 merged)*
-- [ ] Add a migration CLI command: `lunum migrate <file> --from 0.1 --to 0.2` that transforms records in place with a dry-run mode. *(Current main only rewrites `sem.schema`; it does not migrate record structure/fingerprint, validate source and destination schemas, fail closed, or write atomically. Draft repair: PR #178.)*
+- [x] Add a migration CLI command: `lunum migrate <file> --from 0.1 --to 0.2` that transforms records in place with a dry-run mode. *(Current main only rewrites `sem.schema`; it does not migrate record structure/fingerprint, validate source and destination schemas, fail closed, or write atomically. Draft repair: PR #178.)*
 - [x] Golden migration vectors: add 20+ fixture pairs (0.1 input → expected 0.2 output) covering every structural change. *(golden-migration-vectors.test.ts on main)*
 
 ## P1 — multilingual retention (release gate 3)
@@ -186,7 +186,7 @@ v1–v4 are landed. v5 comes from the 2026-07-20 live test campaign (report: `lu
 
 ## P0 — eval pipeline correctness
 
-- [ ] Fix `parse-experiment` CLI arg handling: `runParseExperimentCli` reads `process.argv[2]` (the subcommand itself) instead of the manifest path — `node cli.js parse-experiment <manifest>` always fails with ENOENT. Add a regression test that invokes the subcommand through the real CLI entry.
+- [x] Fix `parse-experiment` CLI arg handling: `runParseExperimentCli` reads `process.argv[2]` (the subcommand itself) instead of the manifest path — `node cli.js parse-experiment <manifest>` always fails with ENOENT. Add a regression test that invokes the subcommand through the real CLI entry.
 - [ ] Fix parse runner prompt: `parse-experiment.ts` (~line 151) must send `parsePrompt(item).system`, not the generic "experiment runner" string that hides the task from the model. Add a test asserting the system prompt contains the schema instructions.
 - [ ] Add `max_tokens` (default 4096, profile-overridable) to `OpenAICompatibleModel.complete` in `packages/eval/src/model.ts` — thinking models consume the server default budget and return empty content.
 
