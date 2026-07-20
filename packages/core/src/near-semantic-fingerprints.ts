@@ -20,6 +20,7 @@ export interface SimilarityResult {
 }
 
 type WeightedFeatures = Map<string, { count: number; weight: number }>;
+type Primitive = null | string | number | boolean;
 
 interface HardSignature {
   world: string;
@@ -40,10 +41,18 @@ function assertThreshold(threshold: number): void {
 }
 
 function stableValue(value: unknown): string {
-  if (value === null || typeof value !== 'object') return JSON.stringify(value);
+  if (value === undefined) return '"$undefined"';
+  if (value === null || typeof value !== 'object') return JSON.stringify(value) ?? JSON.stringify(String(value));
   if (Array.isArray(value)) return `[${value.map(stableValue).join(',')}]`;
   const object = value as Record<string, unknown>;
   return `{${Object.keys(object).sort().map((key) => `${JSON.stringify(key)}:${stableValue(object[key])}`).join(',')}}`;
+}
+
+function primitiveToken(value: Primitive): string {
+  if (value === null) return 'null:null';
+  if (typeof value === 'string') return `string:${JSON.stringify(value)}`;
+  if (typeof value === 'number') return `number:${Object.is(value, -0) ? '-0' : String(value)}`;
+  return `boolean:${value}`;
 }
 
 function digest(value: string, length = 64): string {
@@ -105,9 +114,9 @@ function extractFeatures(sem: LunumSem): WeightedFeatures {
   return features;
 }
 
-function collectPrimitiveValues(value: unknown, output: Set<string>): void {
+function collectPrimitiveValues(value: unknown, output: string[]): void {
   if (value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-    output.add(String(value));
+    output.push(primitiveToken(value));
     return;
   }
   if (Array.isArray(value)) {
@@ -119,20 +128,20 @@ function collectPrimitiveValues(value: unknown, output: Set<string>): void {
   }
 }
 
-function collectHardTermLiterals(term: LunumTerm, output: Set<string>): void {
+function collectHardTermLiterals(term: LunumTerm, output: string[]): void {
   if (Array.isArray(term)) {
     for (const item of term) collectHardTermLiterals(item, output);
     return;
   }
   if (term !== null && typeof term === 'object') {
-    if (typeof term.ref === 'string') output.add(`ref:${term.ref}`);
+    if (typeof term.ref === 'string') output.push(`ref:${JSON.stringify(term.ref)}`);
     if ('value' in term) collectPrimitiveValues(term.value, output);
     return;
   }
-  output.add(String(term));
+  collectPrimitiveValues(term, output);
 }
 
-function collectHardClauseLiterals(clause: LunumClause, output: Set<string>): void {
+function collectHardClauseLiterals(clause: LunumClause, output: string[]): void {
   for (const term of Object.values(clause.roles ?? {})) collectHardTermLiterals(term, output);
   if (clause.time !== undefined) collectHardTermLiterals(clause.time, output);
   for (const condition of clause.conditions ?? []) collectHardClauseLiterals(condition, output);
@@ -140,17 +149,17 @@ function collectHardClauseLiterals(clause: LunumClause, output: Set<string>): vo
 }
 
 function hardSignature(sem: LunumSem): HardSignature {
-  const literals = new Set<string>();
+  const literals: string[] = [];
   for (const clause of sem.clauses) collectHardClauseLiterals(clause, literals);
   for (const reference of sem.references ?? []) {
-    if (typeof reference.ref === 'string') literals.add(`ref:${reference.ref}`);
+    if (typeof reference.ref === 'string') literals.push(`ref:${JSON.stringify(reference.ref)}`);
     if ('value' in reference) collectPrimitiveValues(reference.value, literals);
   }
   return {
     world: sem.world,
     kind: sem.kind,
     clauseShapes: sem.clauses.map(clauseShape).sort(),
-    literals: [...literals].sort()
+    literals: literals.sort()
   };
 }
 
@@ -168,10 +177,11 @@ function featureTokens(features: WeightedFeatures): string[] {
 function parseFingerprint(fingerprint: NearSemanticFingerprint): ParsedFingerprint | null {
   const match = fingerprint.match(/^nfp:2:sha256:([a-f0-9]{64}):([a-f0-9]{64}):(-|[a-f0-9.]+)$/u);
   if (!match) return null;
-  const integrity = match[1]!;
+  const checksum = match[1]!;
   const hardDigest = match[2]!;
   const tokenText = match[3]!;
-  if (digest(`${hardDigest}:${tokenText}`) !== integrity) return null;
+  // This is a self-checking integrity checksum, not a keyed authenticity proof.
+  if (digest(`${hardDigest}:${tokenText}`) !== checksum) return null;
   if (tokenText === '-') return { hardDigest, featureTokens: new Set() };
   const tokens = tokenText.split('.');
   if (tokens.some((token) => !/^[a-f0-9]{16}$/u.test(token))) return null;
@@ -186,21 +196,23 @@ function hardMismatchReasons(first: HardSignature, second: HardSignature): strin
     reasons.push('clause structure, negation, or modality differs');
   }
   if (stableValue(first.literals) !== stableValue(second.literals)) {
-    reasons.push('literal or reference values differ');
+    reasons.push('typed literal, reference value, or literal multiplicity differs');
   }
   return reasons;
 }
 
 function protectedLiteralMismatchReasons(first: LunumSem, second: LunumSem, options: NearSemanticComparisonOptions): string[] {
   if (!options.protectedLiterals || options.protectedLiterals.length === 0) return [];
-  const firstValues = new Set<string>();
-  const secondValues = new Set<string>();
+  const firstValues: string[] = [];
+  const secondValues: string[] = [];
   collectPrimitiveValues(first, firstValues);
   collectPrimitiveValues(second, secondValues);
+  const firstSet = new Set(firstValues);
+  const secondSet = new Set(secondValues);
   return options.protectedLiterals
-    .map(String)
-    .filter((literal) => firstValues.has(literal) !== secondValues.has(literal))
-    .map((literal) => `protected literal differs: ${literal}`);
+    .map((literal) => ({ literal, token: primitiveToken(literal) }))
+    .filter(({ token }) => firstSet.has(token) !== secondSet.has(token))
+    .map(({ literal }) => `protected literal differs: ${stableValue(literal)}`);
 }
 
 function tokenJaccard(first: Set<string>, second: Set<string>): { similarity: number; matchedWeight: number; totalWeight: number } {
@@ -222,8 +234,8 @@ export class NearSemanticFingerprintGenerator {
     const hard = digest(stableValue(hardSignature(sem)));
     const tokens = featureTokens(extractFeatures(sem));
     const tokenText = tokens.length > 0 ? tokens.join('.') : '-';
-    const integrity = digest(`${hard}:${tokenText}`);
-    return `nfp:2:sha256:${integrity}:${hard}:${tokenText}`;
+    const checksum = digest(`${hard}:${tokenText}`);
+    return `nfp:2:sha256:${checksum}:${hard}:${tokenText}`;
   }
 
   generateFromRecord(record: LunumRecord): NearSemanticFingerprint {
@@ -241,7 +253,7 @@ export class NearSemanticFingerprintGenerator {
         similar: false,
         threshold: this.threshold,
         hardCompatible: false,
-        hardMismatchReasons: ['Invalid or tampered near-semantic fingerprint'],
+        hardMismatchReasons: ['Invalid or checksum-mismatched near-semantic fingerprint'],
         matchedWeight: 0,
         totalWeight: 0
       };
