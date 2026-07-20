@@ -1,3 +1,4 @@
+import { TokenAtlas } from './token-atlas.js';
 import { runVerifiedTokenizerOptimizationPass } from './token-optimization.js';
 import type {
   AtlasEntry,
@@ -48,3 +49,6 @@ export function runTokenizerOptimizationPass(entries: AtlasEntry[]): TokenizerOp
     warnings: [...verified.warnings]
   };
 }
+
+/** Backwards-compatible aggregate export containing only the verified path. */
+export const tokenAtlasExports = [TokenAtlas, runTokenizerOptimizationPass] as const;
