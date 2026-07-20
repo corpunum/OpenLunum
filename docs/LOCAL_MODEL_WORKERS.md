@@ -46,7 +46,7 @@ $EDITOR reports/orchestrator/WORKER_ASSIGNMENT.md
 Then run:
 
 ```bash
-scripts/pi-dispatch-once.sh /home/corpunum/openlunum-workers/eval
+pnpm worker:dispatch -- /home/corpunum/openlunum-workers/eval
 ```
 
 The dispatcher:
