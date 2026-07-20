@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { fingerprintSem } from '../src/fingerprint.js';
-import { runTokenizerOptimizationPass } from '../src/index.js';
+import { runTokenizerOptimizationPass, tokenAtlasExports } from '../src/index.js';
 import type { AtlasEntry } from '../src/token-atlas.js';
 import type { LunumRecord } from '../src/types.js';
 
@@ -53,6 +53,13 @@ test('public tokenizer optimization recomputes stale fingerprints and selects on
   assert.equal(optimized.optimizedFingerprint, optimized.originalFingerprint);
   assert.equal(optimized.bestProfile, 'tight');
   assert.equal(optimized.bestTokenCount, 20);
+});
+
+test('aggregate tokenAtlasExports exposes the verified compatibility function', () => {
+  assert.equal(tokenAtlasExports[1], runTokenizerOptimizationPass);
+  const result = tokenAtlasExports[1]([entry()]);
+  assert.equal(result.allSemanticsPreserved, true);
+  assert.notEqual(result.results[0]?.originalFingerprint, entry().fingerprint);
 });
 
 test('public tokenizer optimization fails closed for empty input', () => {
