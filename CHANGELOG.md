@@ -2,6 +2,33 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Added — Ops (commits 2691dc6, 6bb0bf6)
+- **Two-tier thermal policy + restore 3 local loops + Ally worker:** `scripts/pi-watchdog.sh` and `scripts/pi-docs-loop.sh` enforce two-tier thermal governance — soft pause at 90 °C, hard kill at 95 °C (updated from 85 °C cap in 6bb0bf6). `scripts/pi-watchdog.sh` was rewritten for the one-shot dispatcher model: no loop restarts, dispatch via `pi-dispatch-once.sh`, and auto-cleanup of stale worker processes. Restored three persistent local loops (`pi-loop.sh`, `pi-review-loop.sh`, `pi-docs-loop.sh`) plus the new Ally worker loop (`pi-loop-ally.sh`) that runs review work while the primary loop handles parsing/realization. Watchdog monitors all loops, enforces thermal caps, and coordinates dispatch. (commits 2691dc6, 6bb0bf6)
+
+### Added — Ops — Detached-HEAD Worktrees (commit 1834ea8)
+- **Dispatch supports detached-HEAD worktrees:** `scripts/pi-dispatch-once.sh` now correctly handles worktrees on detached HEADs by resolving the correct branch name from the worktree config before creating the assignment branch. Prevents branch creation failures when the orchestrator's worktree is not on a branch. (commit 1834ea8)
+
+### Added — Model Profiles (commit 3c21d5d)
+- **SuperQwen AgentWorld 35B live model profile:** New profile `profiles/models/superqwen-agentworld-35b-live.json` for live evidence runs. OpenAI-compatible endpoint, llama.cpp native router, Radeon 8060S (gfx1151), 128 GB unified memory. Temperature 0, seed 42, 300 s timeout. (commit 3c21d5d)
+
+### Added — Eval (PR #250, commit 89065ee)
+- **Fail-closed near-semantic parse scoring:** `packages/core/src/near-semantic-fingerprints.ts` and `packages/eval/src/parse-experiment.ts` now score near-semantic outcomes with fail-closed semantics — a near-semantic match counts as a pass, a mismatch as a fail, and an absent result is treated as a fail (not skipped). Regression tests in `packages/core/test/near-semantic-exact-interop.test.ts`, `packages/core/test/near-semantic-fingerprints.test.ts`, `packages/core/test/near-semantic-retrieval.test.ts`, and `packages/eval/test/near-semantic-parse.test.ts`. (PR #250, commit 89065ee)
+
+### Added — Eval (PR #249, commit 2772348)
+- **Schema-aligned max token budgets:** `packages/eval/src/types.ts`, `packages/eval/src/io.ts`, and `packages/eval/src/model.ts` accept max token budgets from the model profile schema (`schemas/model-profile.schema.json`). Profiles declare per-model token budgets that the eval runner enforces. Tests in `packages/eval/test/model.test.ts`. (PR #249, commit 2772348)
+
+### Added — Ops (PR #259, commit c25b460)
+- **Local orchestrator onboarding + archive legacy campaign model:** `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md` documents the new issue-driven one-shot worker operating model. `CAMPAIGN.md` archived with legacy instructions moved to `research/archive/operating-model-pre-issue-driven/`. Updated `docs/REPOSITORY_OPERATING_MODEL.md`, `docs/AGENT_OPERATING_MODEL.md`, and `docs/LOCAL_MODEL_WORKERS.md` for the new model. `README.md`, `START_HERE.md`, `ORCHESTRATOR.md`, `ORCHESTRATOR-PROMPT.md` updated with new operating model references. (PR #259, commit c25b460)
+
+### Added — Ops (PR #254, commit 045bf0b)
+- **Issue-driven one-shot worker orchestration:** GitHub issues are now the canonical backlog, readiness, assignment, blocker, and acceptance state. Workers receive explicit assigned issues via `scripts/pi-task-prompt.md` and `scripts/pi-dispatch-once.sh`. Added `.github/ISSUE_TEMPLATE/worker-task.yml`, `scripts/WORKER_ASSIGNMENT.example.md`, updated CI workflows and `.gitignore`. `CAMPAIGN.md` and `WORK_QUEUE.md` are now archive pointers. Worker agent enforces idle when queue complete. (PR #254, commit 045bf0b)
+
+### Added — Merge Policy (PR #252, commit cd05699)
+- **Fail-closed exact-head merge controls restored:** `scripts/pi-merge-policy.mjs` and `scripts/pi-merge-loop.sh` now enforce fail-closed exact-head merge binding (`--match-head-commit`) on the exact commit that passed policy checks. `scripts/pi-task-prompt.md` updated with merge policy guidance. `reports/orchestrator/CI_OUTAGE` flag path confirmed. (PR #252, commit cd05699)
+
+### Added — Evidence Repairs (PR #251, commit e5c924e)
+- **Release-gate evidence repairs:** Reconstructed the release-gate pipeline for pre-1.0 releases. `packages/core/src/profile-selector.ts`, `packages/core/src/profiles.ts`, `packages/core/src/quality-gate-ci.ts`, `packages/core/src/renderer-conformance.ts`, `packages/core/src/token-atlas.ts`, `packages/core/src/token-optimization.ts`, and `packages/core/src/token-optimization-compat.ts` restored with proper exports in `packages/core/src/index.ts`. Golden outputs in `packages/core/test/fixtures/renderer-profile-exact-goldens.ts` and full test suite restored. Quality gate CI workflow updated. (PR #251, commit e5c924e)
+
 ### Added — Merge Policy (PR #187, commit 88017f8)
 - **Fail-closed exact-head merge policy:** `scripts/pi-merge-policy.mjs` evaluates merge eligibility against required checks (verify, schema-drift, report-validation, protected-data-boundary; quality-gates when core/eval src changes), enforces fail-closed on missing/pending/failed checks at the exact head commit, and blocks drafts, blockers, and stale reviews. `scripts/pi-merge-loop.sh` runs the auto-merge bot that picks up `ready-for-merge` and `orchestrator-approved` PRs, classifies paths as hard-protected (CI, agent infra, protected data → always require `claude-review`) or soft-protected (core types, schemas, registry → reviewer override via `LGTM-protected` comment), evaluates the merge policy before each merge, binds the merge to the exact head commit that passed policy (`--match-head-commit`), verifies main green after merge, and auto-reverts with a red-merge report when main goes red. Labels: `merge-policy-blocked`, `claude-review`, `needs-rebase`, `needs-work`, `maintainer-blocked`. Tests in `scripts/pi-merge-policy.test.mjs`. (PR #187, commit 88017f8)
 
