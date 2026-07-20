@@ -98,11 +98,24 @@ if (( MAX_T >= CRITICAL_TEMP )); then
 fi
 
 # ---- Soft tier: pause dispatch, let loops finish in-flight work -----------
+# 2026-07-20 incident: the confirm-read below used to only be compared
+# against HALT_TEMP, so a reading that climbed from below CRITICAL_TEMP on
+# the first read to AT/ABOVE it on the confirm-read (e.g. 92C -> 95C) fired
+# soft_pause() instead of hard_halt() — the critical tier never re-checked
+# after this block already claimed the temperature. Rig hit 96.9C with
+# in-flight generation still running before this was caught manually. Now
+# the confirm-read is checked against BOTH thresholds so escalation can't
+# be skipped this way.
 if (( MAX_T >= HALT_TEMP )); then
   sleep 10
   read -r CPU_T2 GPU_T2 <<< "$(read_temps)"
   M2=$(( CPU_T2 > GPU_T2 ? CPU_T2 : GPU_T2 ))
-  if (( M2 >= HALT_TEMP )); then
+  if (( M2 >= CRITICAL_TEMP )); then
+    MAX_T=$M2
+    log "critical halt (escalated from soft-tier check): ${CPU_T}/${GPU_T}C then ${M2}C (>= ${CRITICAL_TEMP}C)"
+    hard_halt
+    exit 0
+  elif (( M2 >= HALT_TEMP )); then
     MAX_T=$M2
     log "soft pause: ${CPU_T}/${GPU_T}C then ${M2}C (>= ${HALT_TEMP}C)"
     soft_pause
