@@ -20,6 +20,9 @@
 ### Added — Parse Prompt (PR #232)
 - **Parse prompt with schema shape and one-shot example:** `parsePrompt` system message now includes the expected Lunum-Sem JSON structure (schema, world, kind, clauses with predicate/roles/negated) and a canonical preference example. Live test campaign showed parse validity improving 0/16 → 14/16. Regression test in `packages/eval/test/parse-experiment.test.ts` verifies schema shape fields and example parseability. Types in `packages/eval/src/prompts.ts`. (PR #232, commit cdc3bf0)
 
+### Fixed — Eval (PR #241)
+- **Parse experiment now sends the system prompt:** `parse-experiment.ts` now passes `parsePrompt(item).system` to the model instead of the hardcoded "You are a precise Lunum experiment runner" string, so the model receives the full schema instructions and one-shot example from the parse prompt. Regression test verifies the system prompt is sent. Types in `packages/eval/src/parse-experiment.ts`. (PR #241, commit d8f89e1)
+
 ### Changed — CLI (PR #174)
 - **CLI migrate command enhanced:** `lunum migrate` now uses proper migration utilities from `@corpunum/lunum` (`migrateForward01to02`, `migrateBackward02to01`). Supports `--from 0.1 --to 0.2` (forward) and `--from 0.2 --to 0.1` (backward) migrations. Provides detailed results including schema versions, fingerprints, warnings, and validation status. Supports both single records and arrays of records. Adds `--dry-run` mode that reports changes without modifying files, and in-place write mode that transforms records and writes back to file. 152 lines of tests in `packages/cli/test/cli.test.ts`. (PR #174, commit d5ba255)
 
