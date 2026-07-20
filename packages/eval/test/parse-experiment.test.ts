@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { execFile } from 'node:child_process';
 import { runParseExperiment } from '../src/parse-experiment.js';
 import { PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES } from '../src/parse-experiment.js';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
@@ -326,6 +327,104 @@ test('parse experiment skips languages with no items', async () => {
     const idMetrics = report.languageMetrics.find(m => m.language === 'id');
     assert.strictEqual(esMetrics?.totalItems, 0);
     assert.strictEqual(idMetrics?.totalItems, 0);
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parse-experiment CLI arg: argv[3] is the manifest, not argv[2]', async () => {
+  // Regression: runParseExperimentCli read argv[2] which is the subcommand name
+  // when invoked via `node cli.js parse-experiment <manifest>`, causing ENOENT.
+  // The fix moves the manifest read to argv[3].
+  // This test spawns the real CLI process to prove the fix works end-to-end.
+  const sem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: []
+  };
+
+  let serverPort = 0;
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/chat/completions') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(sem) } }] }));
+      return;
+    }
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  serverPort = address.port;
+
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-cli-arg-'));
+  try {
+    const items = [
+      { id: 'cli-test', sourceLanguage: 'en', sourceText: 'Test CLI arg fix.', goldSem: sem }
+    ];
+
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, items.map(i => JSON.stringify(i)).join('\n') + '\n', 'utf8');
+
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(
+      profilePath,
+      JSON.stringify({
+        schema: 'openlunum-model-profile/0.1',
+        id: 'mock',
+        provider: 'openai-compatible',
+        baseUrl: `http://127.0.0.1:${serverPort}/v1`,
+        model: 'mock-local',
+        temperature: 0,
+        timeoutMs: 5000
+      }),
+      'utf8'
+    );
+
+    const manifestPath = path.join(temp, 'experiment.json');
+    const outputDir = path.join(temp, 'reports');
+    await writeFile(
+      manifestPath,
+      JSON.stringify({
+        schema: 'openlunum-experiment/0.1',
+        id: 'cli-arg-regression',
+        area: 'multilingual-parse',
+        task: 'parse',
+        hypothesis: 'CLI correctly resolves manifest from argv[3]',
+        baselineCommit: 'test',
+        dataset: { path: datasetPath, sha256: await sha256File(datasetPath) },
+        modelProfile: profilePath,
+        limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 },
+        gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false },
+        outputDirectory: outputDir
+      }),
+      'utf8'
+    );
+
+    // Invoke the real CLI: node cli.js parse-experiment <manifest>
+    const cliPath = path.join(__dirname, '..', 'src', 'cli.js');
+    const result = await new Promise<{ stdout: string; stderr: string; code: number | null }>((resolve, reject) => {
+      execFile('node', [cliPath, 'parse-experiment', manifestPath], { timeout: 15000 }, (err, stdout, stderr) => {
+        const code = err?.code != null ? Number(err.code) : 0;
+        resolve({ stdout: stdout.toString(), stderr: stderr.toString(), code });
+      });
+    });
+
+    assert.strictEqual(result.code, 0, `CLI exit code should be 0, got ${result.code}. stderr: ${result.stderr}`);
+    // stdout should be the output directory path, not an error
+    assert.ok(result.stdout.trim().length > 0, 'CLI should output the result directory path');
+    assert.ok(result.stdout.includes('reports'), 'Output path should include "reports"');
+    assert.ok(!result.stderr.includes('ENOENT'), `stderr should not contain ENOENT, got: ${result.stderr}`);
+    assert.ok(!result.stderr.includes('parse-experiment'), `stderr should not reference subcommand as manifest path, got: ${result.stderr}`);
   } finally {
     server.close();
     await rm(temp, { recursive: true, force: true });

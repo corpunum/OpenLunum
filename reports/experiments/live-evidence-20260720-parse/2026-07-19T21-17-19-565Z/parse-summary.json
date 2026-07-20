@@ -1,0 +1,117 @@
+{
+  "experimentId": "live-evidence-20260720-parse",
+  "runId": "2026-07-19T21-17-19-565Z",
+  "task": "parse",
+  "totalItems": 16,
+  "totalPassed": 0,
+  "totalFailed": 0,
+  "totalErrors": 16,
+  "overallExactRate": 0,
+  "overallFeatureRecall": 0,
+  "overallFeaturePrecision": 0,
+  "overallMeanLatencyMs": 33290.91632174999,
+  "languageMetrics": [
+    {
+      "language": "en",
+      "languageLabel": "English",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 64913.291321499986,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0
+    },
+    {
+      "language": "el",
+      "languageLabel": "Greek",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 25191.846150499972,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0
+    },
+    {
+      "language": "es",
+      "languageLabel": "Spanish",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 24783.146800749993,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0
+    },
+    {
+      "language": "id",
+      "languageLabel": "Indonesian",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 18275.381014250015,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0
+    }
+  ],
+  "crossLanguageComparison": {
+    "languagesIncluded": [
+      "en",
+      "el",
+      "es",
+      "id"
+    ],
+    "bestExactLanguage": "en",
+    "bestRecallLanguage": "en",
+    "fastestLanguage": "id",
+    "consistencyScore": 1,
+    "variance": {
+      "exactRateVariance": 0,
+      "recallVariance": 0,
+      "latencyVariance": 340854495.26422006
+    }
+  },
+  "languageBreakdown": {
+    "en": [
+      0,
+      0,
+      4,
+      4
+    ],
+    "el": [
+      0,
+      0,
+      4,
+      4
+    ],
+    "es": [
+      0,
+      0,
+      4,
+      4
+    ],
+    "id": [
+      0,
+      0,
+      4,
+      4
+    ]
+  },
+  "failureModes": {
+    "error: attempt 2: Validation failed: schema must equal lu": 16
+  }
+}

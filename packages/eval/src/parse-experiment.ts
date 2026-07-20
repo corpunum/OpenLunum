@@ -413,8 +413,9 @@ function computeVariance(values: number[]): number {
 // ── CLI entry ──────────────────────────────────────────────────────
 
 export async function runParseExperimentCli(): Promise<string> {
-  const manifestArg = process.argv[2];
-  if (!manifestArg) throw new Error('Usage: parse-experiment <manifest-path>');
+  // cli.ts passes the manifest as argv[3] (argv[2] is the subcommand 'parse-experiment')
+  const manifestArg = process.argv[3];
+  if (!manifestArg) throw new Error('Usage: node cli.js parse-experiment <manifest-path>');
   const root = await findWorkspaceRoot();
   const resolved = path.isAbsolute(manifestArg) ? manifestArg : path.join(root, manifestArg);
   const { outputDirectory } = await runParseExperiment(resolved);
