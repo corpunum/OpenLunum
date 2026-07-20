@@ -45,7 +45,7 @@
  */
 
 import { NearSemanticFingerprintGenerator } from '@corpunum/lunum';
-import type { LunumRecord } from '@corpunum/lunum';
+import type { LunumClause, LunumRecord, LunumTerm } from '@corpunum/lunum';
 import type { LanguageCode } from './multilingual-retrieval.js';
 
 // ── Closed schema ────────────────────────────────────────────────────
@@ -104,6 +104,29 @@ export interface BuildSemanticGroupIndexOptions {
    * suspect. Defaults to the project's standard near-semantic threshold.
    */
   structuralSimilarityThreshold?: number;
+  /**
+   * Optional per-record protected literals (e.g. account numbers, exact
+   * dates, proper names -- values that must survive translation verbatim)
+   * to cross-validate during structural group comparison, keyed by record
+   * object identity.
+   *
+   * Keyed by identity rather than by fingerprint or recordId for the same
+   * reason `SemanticGroupIndex.recordGroupId` is (see
+   * `SemanticGroupMember.recordId`'s doc comment): a fingerprint is an
+   * identity of MEANING, not of the dataset record, so it cannot safely
+   * key data that belongs to one specific record.
+   *
+   * There is no field on `LunumRecord` itself for this (checked
+   * `LunumRecord.meta`: unused for protected literals anywhere in this
+   * codebase). The established convention, used throughout
+   * `packages/eval/src` (e.g. `realization-runner.ts`'s
+   * `createRecordFromItem`, `protected-literal-scoring.ts`'s
+   * `ProtectedLiteralScorer.score`), is to keep `DatasetItem.protectedLiterals`
+   * as a value that travels ALONGSIDE a `LunumRecord`, not nested inside
+   * it -- this map follows that same sibling-value pattern rather than
+   * inventing a new `meta` key.
+   */
+  protectedLiteralsByRecord?: ReadonlyMap<LunumRecord, readonly (string | number | boolean)[]>;
 }
 
 /** The single well-known location a group id may be declared at. Not free-text: validated against `SemanticGroupSchema` below. */
@@ -166,6 +189,89 @@ function describeRecord(record: LunumRecord): string {
 
 function recordLanguage(record: LunumRecord): LanguageCode {
   return (record.source?.language as LanguageCode) || 'en';
+}
+
+// ── Strict role-identity cross-validation ───────────────────────────
+//
+// Rationale (issue #256 review, 2026-07-21 follow-up): the aggregate
+// weighted similarity score from `NearSemanticFingerprintGenerator`
+// (see packages/core/src/near-semantic-fingerprints.ts, collectTermFeatures
+// / addFeature / tokenJaccard) is a Jaccard ratio over many small weighted
+// feature tokens. A single differing top-level role value (e.g. only
+// `theme: concise_answers` -> `theme: detailed_answers`, everything else
+// identical) was measured -- via a throwaway script calling
+// `compareSem()` directly -- at similarity ~0.8095-0.8571 depending on how
+// many other roles exist on the clause (more matching roles dilute the one
+// mismatch further above threshold). That is comfortably above the
+// module's default 0.8 `structuralSimilarityThreshold`, so a single wrong
+// role can silently pass as "structurally equivalent". Raising the global
+// aggregate threshold to cover the worst-measured case (~0.86+) has an
+// unknown, unbounded false-positive cost against real translations with
+// more natural variation (extra optional roles, slightly different clause
+// counts) -- there's no evidence base for what a safe global cut-off is.
+//
+// A group of records is only a *genuinely* valid parallel group if it was
+// dataset-authored from the same semantic representation to begin with:
+// by construction, group members are expected to share IDENTICAL semantic
+// roles (agent/theme/experiencer/etc, by type+id/ref/value), differing
+// only in the language-specific `source.text` surface rendering, which is
+// not part of `sem` at all and never touches the token score. So checking
+// role identity exactly, in addition to (not instead of) the aggregate
+// score, is not a "stricter than needed" heuristic threshold -- it is a
+// direct check on the actual dataset-authoring invariant this module
+// exists to enforce, with zero cost against genuinely parallel groups
+// (verified against the positive 4-language fixture, which shares
+// identical role structure/identity across all four languages and remains
+// unflagged) while catching every single-role-difference case tried,
+// regardless of how many other roles are on the clause.
+
+/** Canonical identity signature of a single role term, ignoring surface language/text -- only structural identity (type + id/ref/value) is compared. */
+function termIdentitySignature(term: LunumTerm | undefined): string {
+  if (term === undefined) return '$absent';
+  if (Array.isArray(term)) {
+    return `[${term.map((item) => termIdentitySignature(item)).sort().join(',')}]`;
+  }
+  if (term !== null && typeof term === 'object') {
+    if (typeof term.ref === 'string') return `ref:${term.ref}`;
+    if ('value' in term) return `value:${JSON.stringify(term.value)}`;
+    if (typeof term.id === 'string') return `${term.type}:${term.id}`;
+    return JSON.stringify(term);
+  }
+  return `literal:${JSON.stringify(term)}`;
+}
+
+/** Role-by-role identity comparison for one pair of (already positionally-aligned) clauses. */
+function clauseRoleIdentityMismatches(clauseA: LunumClause, clauseB: LunumClause): string[] {
+  const rolesA = clauseA.roles ?? {};
+  const rolesB = clauseB.roles ?? {};
+  const roleNames = new Set([...Object.keys(rolesA), ...Object.keys(rolesB)]);
+  const mismatches: string[] = [];
+  for (const role of [...roleNames].sort()) {
+    const idA = termIdentitySignature(rolesA[role]);
+    const idB = termIdentitySignature(rolesB[role]);
+    if (idA !== idB) {
+      mismatches.push(`role "${role}" identity differs entirely: ${idA} vs ${idB}`);
+    }
+  }
+  return mismatches;
+}
+
+/**
+ * Strict structural role-identity cross-validation between two records
+ * claiming the same semantic group. Only compares clauses that positionally
+ * align (same index in each record's top-level `sem.clauses` array); a
+ * record-count mismatch itself is left to the aggregate similarity score /
+ * hard signature check, which already catches added/removed clauses.
+ */
+function recordRoleIdentityMismatches(recordA: LunumRecord, recordB: LunumRecord): string[] {
+  const clausesA = recordA.sem.clauses ?? [];
+  const clausesB = recordB.sem.clauses ?? [];
+  const pairedLength = Math.min(clausesA.length, clausesB.length);
+  const mismatches: string[] = [];
+  for (let index = 0; index < pairedLength; index += 1) {
+    mismatches.push(...clauseRoleIdentityMismatches(clausesA[index]!, clausesB[index]!));
+  }
+  return mismatches;
 }
 
 // ── Ingest / index build ────────────────────────────────────────────
@@ -258,15 +364,27 @@ export function buildSemanticGroupIndex(
       for (let j = i + 1; j < memberList.length; j += 1) {
         const a = memberList[i]!;
         const b = memberList[j]!;
-        const comparison = generator.compareRecords(a.record, b.record);
-        if (!comparison.similar) {
+
+        const protectedLiteralsA = options.protectedLiteralsByRecord?.get(a.record) ?? [];
+        const protectedLiteralsB = options.protectedLiteralsByRecord?.get(b.record) ?? [];
+        // Union of both sides' declared protected literals: compareRecords /
+        // protectedLiteralMismatchReasons checks, for each protected literal,
+        // whether it is present in one side's semantic content but not the
+        // other's -- so a literal only needs to be declared protected on
+        // EITHER member to be checked between them.
+        const protectedLiterals = [...new Set([...protectedLiteralsA, ...protectedLiteralsB])];
+
+        const comparison = generator.compareRecords(a.record, b.record, { protectedLiterals });
+        const roleIdentityMismatches = recordRoleIdentityMismatches(a.record, b.record);
+
+        if (!comparison.similar || roleIdentityMismatches.length > 0) {
           const hardReasons = comparison.hardMismatchReasons?.length
             ? ` (${comparison.hardMismatchReasons.join('; ')})`
             : '';
-          reasons.push(
-            `${a.language}/${a.recordId} vs ${b.language}/${b.recordId}: structural similarity ` +
-            `${comparison.similarity.toFixed(3)} below threshold ${threshold}${hardReasons}`
-          );
+          const similarityReason = !comparison.similar
+            ? `structural similarity ${comparison.similarity.toFixed(3)} below threshold ${threshold}${hardReasons}`
+            : `aggregate structural similarity ${comparison.similarity.toFixed(3)} met the threshold, but strict role-identity cross-validation found a mismatch (${roleIdentityMismatches.join('; ')})`;
+          reasons.push(`${a.language}/${a.recordId} vs ${b.language}/${b.recordId}: ${similarityReason}`);
         }
       }
     }

@@ -34,6 +34,7 @@ function makeRecord(
     extraClause?: boolean;
     negated?: boolean;
     modality?: string | null;
+    references?: Array<{ type: string; id: string }>;
   } = {}
 ): LunumRecord {
   const clauses: any[] = [{
@@ -61,6 +62,7 @@ function makeRecord(
       world: 'real',
       kind: 'statement',
       clauses,
+      ...(options.references ? { references: options.references } : {}),
       ...(annotations ? { annotations } : {})
     },
     fingerprint,
@@ -412,13 +414,24 @@ test('negative mutation: role content differs between "equivalent" items -> grou
   assert.equal(result.matched, false, 'a genuinely different role value must not be reported as matching');
 });
 
-test('KNOWN LIMITATION (documented, not fixed here): a single differing role value at default threshold can pass structural cross-validation', () => {
-  // Same scenario as the note above, asserted explicitly so this
-  // limitation is a visible, tracked test rather than a comment that can
-  // silently go stale. If this test starts failing because someone
-  // tightens the default threshold or scoring, that is a welcome change
-  // -- update/remove this test rather than treating the failure as a
-  // regression.
+test('FIXED (was KNOWN LIMITATION): a single differing role value is now caught by strict role-identity cross-validation', () => {
+  // Same scenario as the note above the previous mutation test. Measured
+  // (via a throwaway script calling compareSem() directly, same method
+  // used to measure the numbers already in this file) at aggregate
+  // similarity ~0.8095 -- above the module's default 0.8
+  // structuralSimilarityThreshold, so the AGGREGATE score alone still
+  // would not catch this. Fixed instead by adding a strict, separate
+  // role-identity check (see recordRoleIdentityMismatches in
+  // semantic-group-matching.ts) that requires every top-level role's
+  // identity (type+id/ref/value) to match exactly between group members,
+  // independent of the weighted aggregate score. This does not raise the
+  // global threshold (which would have unknown false-positive cost against
+  // real translation variance) -- it instead directly enforces the
+  // dataset-authoring invariant this module already assumes: valid group
+  // members share identical semantic roles, differing only in
+  // language-specific surface text, which never touches `sem` at all. The
+  // positive 4-language fixture (identical role identity across languages)
+  // remains unaffected -- see the "positive fixture" tests above.
   const en = makeRecord('en', 'The user prefers concise answers', 'fp-en-1', {
     groupId: 'greet-1',
     predicate: 'prefer',
@@ -432,9 +445,141 @@ test('KNOWN LIMITATION (documented, not fixed here): a single differing role val
 
   const index = buildSemanticGroupIndex([en, es], FOUR_LANG_SCHEMA);
 
-  // Documents actual current behavior: this group is NOT flagged suspect
-  // despite "concise" vs "detailed" being genuinely different preferences.
-  assert.ok(index.groups.has('greet-1'), 'documents: single-role-difference currently passes at the default 0.8 threshold');
+  assert.equal(index.groups.has('greet-1'), false, 'a single differing role value must now be caught, not trusted as a valid parallel group');
+  assert.ok(index.suspectGroups.has('greet-1'));
+  assert.ok(index.suspectGroups.get('greet-1')!.reasons.some((reason) => reason.includes('role-identity')));
+  assert.ok(index.ungroupedRecords.has(en));
+  assert.ok(index.ungroupedRecords.has(es));
+
+  // The key fix under test: the shared group id is no longer blindly
+  // trusted -- matching now goes through the (separate, pre-existing,
+  // unmodified) fingerprint fallback rather than a false group match.
+  const result = matchSemanticGroupOrFingerprint(en, es, index);
+  assert.equal(result.method, 'fingerprint', 'must no longer be trusted as a group match once the group is flagged suspect');
+  // NOTE: the plain fingerprint fallback itself still reports `matched:
+  // true` here (measured ~0.8095, at the module's default 0.8 threshold) --
+  // that is the SAME generic NearSemanticFingerprintGenerator default
+  // behavior used throughout this module's other fallback tests above, and
+  // is deliberately out of scope for this fix. The module's own documented
+  // design (see the file's top doc comment) treats the group signal and
+  // the fingerprint signal as separate and never combined: this fix's job
+  // is only to stop a false GROUP-level trust from occurring, which the
+  // `groups.has('greet-1') === false` / `suspectGroups` assertions above
+  // already prove. Changing the fallback fingerprint algorithm's own
+  // permissiveness is a broader, separate calibration decision (it would
+  // affect every fingerprint-only match in the codebase, not just this
+  // module) and is not attempted here.
+  assert.equal(result.fingerprintSimilarity! >= 0.8, true);
+});
+
+// ── Negative: protected-literal mismatch ────────────────────────────
+// (maintainer finding, issue #256 review, 2026-07-21 follow-up:
+// buildSemanticGroupIndex's structural cross-validation never passed
+// `protectedLiterals` through to compareRecords(), so protected-literal
+// mismatches -- e.g. two different account numbers -- between "equivalent"
+// group members went uncaught. Wired via a new
+// `BuildSemanticGroupIndexOptions.protectedLiteralsByRecord` option, keyed
+// by record object identity for the same reason `recordGroupId` is.)
+
+// NOTE on test design: the protected literal below is deliberately placed
+// on `sem.references[].id` (an account reference), not inside a top-level
+// clause role. This is what makes the test actually isolate Gap 2, rather
+// than accidentally being caught by something else already fixed/existing:
+//   - It is NOT collected into `hardSignature.literals` (that only walks
+//     `.ref`/`.value` keys, not `.id`), so it does not trip a hard mismatch
+//     on its own.
+//   - It is NOT inspected by the new strict role-identity check added for
+//     Gap 1 (that only compares `clause.roles`, not `sem.references`).
+//   - With three other matching clause roles diluting the weighted score,
+//     the measured aggregate similarity (via the same throwaway-script
+//     method used elsewhere in this file) is ~0.875 -- comfortably ABOVE
+//     the default 0.8 threshold. So before this fix, a group like this
+//     would be silently accepted as valid despite carrying two different
+//     account numbers. Only wiring `protectedLiteralsByRecord` through to
+//     `compareRecords()`'s `protectedLiterals` option catches it.
+test('negative: protected-literal mismatch between "equivalent" items is caught when declared via protectedLiteralsByRecord', () => {
+  const matchingRoles = {
+    agent: { type: 'actor', id: 'bank' },
+    experiencer: { type: 'actor', id: 'user' },
+    theme: { type: 'concept', id: 'account_credit' }
+  };
+  const en = makeRecord('en', 'Your account 4471-9982 has been credited', 'fp-en-1', {
+    groupId: 'greet-1',
+    predicate: 'credit',
+    roles: matchingRoles,
+    references: [{ type: 'account', id: 'account-4471-9982' }]
+  });
+  // Structurally identical clause shape/roles, but the account reference
+  // literal itself differs -- a translation must preserve this verbatim,
+  // so this is a genuine protected-literal mismatch, not a legitimate
+  // parallel translation.
+  const es = makeRecord('es', 'Su cuenta 4471-9983 ha sido acreditada', 'fp-es-1', {
+    groupId: 'greet-1',
+    predicate: 'credit',
+    roles: matchingRoles,
+    references: [{ type: 'account', id: 'account-4471-9983' }]
+  });
+
+  // Sanity check embedded in the test itself: without protectedLiteralsByRecord,
+  // this group would NOT be flagged suspect (proving the isolation above).
+  const indexWithoutProtection = buildSemanticGroupIndex([en, es], FOUR_LANG_SCHEMA);
+  assert.ok(indexWithoutProtection.groups.has('greet-1'), 'sanity check: without protected-literal wiring this mismatch is not caught by aggregate similarity or role-identity alone');
+
+  const protectedLiteralsByRecord = new Map<LunumRecord, readonly string[]>([
+    [en, ['account-4471-9982']],
+    [es, ['account-4471-9983']]
+  ]);
+
+  const index = buildSemanticGroupIndex([en, es], FOUR_LANG_SCHEMA, { protectedLiteralsByRecord });
+
+  assert.equal(index.groups.has('greet-1'), false, 'a protected-literal mismatch must not be trusted as a valid parallel group');
+  assert.ok(index.suspectGroups.has('greet-1'));
+  assert.ok(index.suspectGroups.get('greet-1')!.reasons.some((reason) => reason.includes('protected literal')));
+  assert.ok(index.ungroupedRecords.has(en));
+  assert.ok(index.ungroupedRecords.has(es));
+
+  // As with the role-identity fix above: the key thing under test is that
+  // the shared group id is no longer blindly trusted once a protected
+  // literal mismatch is detected -- matching falls back to the (separate,
+  // pre-existing, unmodified) fingerprint comparison, which is called here
+  // WITHOUT protectedLiteralsByRecord (matchSemanticGroupOrFingerprint's
+  // fallback path is out of scope for this fix, same reasoning as above:
+  // group and fingerprint signals are documented as separate, never
+  // combined). Its own measured aggregate similarity here (~0.875) is
+  // still above its default 0.8 threshold, so it independently reports
+  // `matched: true` -- that is expected, unrelated, pre-existing behavior.
+  const result = matchSemanticGroupOrFingerprint(en, es, index);
+  assert.equal(result.method, 'fingerprint', 'must no longer be trusted as a group match once the group is flagged suspect for a protected-literal mismatch');
+});
+
+test('positive: matching protected literals declared via protectedLiteralsByRecord do not cause a false suspect flag', () => {
+  const matchingRoles = {
+    agent: { type: 'actor', id: 'bank' },
+    experiencer: { type: 'actor', id: 'user' },
+    theme: { type: 'concept', id: 'account_credit' }
+  };
+  const en = makeRecord('en', 'Your account 4471-9982 has been credited', 'fp-en-1', {
+    groupId: 'greet-1',
+    predicate: 'credit',
+    roles: matchingRoles,
+    references: [{ type: 'account', id: 'account-4471-9982' }]
+  });
+  const es = makeRecord('es', 'Su cuenta 4471-9982 ha sido acreditada', 'fp-es-1', {
+    groupId: 'greet-1',
+    predicate: 'credit',
+    roles: matchingRoles,
+    references: [{ type: 'account', id: 'account-4471-9982' }]
+  });
+
+  const protectedLiteralsByRecord = new Map<LunumRecord, readonly string[]>([
+    [en, ['account-4471-9982']],
+    [es, ['account-4471-9982']]
+  ]);
+
+  const index = buildSemanticGroupIndex([en, es], FOUR_LANG_SCHEMA, { protectedLiteralsByRecord });
+
+  assert.ok(index.groups.has('greet-1'), 'identical protected literals across group members must not be flagged suspect');
+  assert.equal(index.suspectGroups.size, 0);
 });
 
 // ── Schema validation itself ────────────────────────────────────────
