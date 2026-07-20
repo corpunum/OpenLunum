@@ -146,9 +146,9 @@ export async function runParseExperiment(
         const started = performance.now();
         let rawOutput = '';
         try {
-          const promptText = parsePrompt(item).user;
+          const prompt = parsePrompt(item);
           calls += 1;
-          rawOutput = await model.complete('You are a precise Lunum experiment runner. Reply only with valid JSON.', promptText);
+          rawOutput = await model.complete(prompt.system, prompt.user);
 
           const parsed = extractJson(rawOutput);
           const validation = validateSem(parsed);

@@ -470,3 +470,105 @@ test('parsePrompt includes schema shape and one-shot example', () => {
   assert.ok(Array.isArray(parsed.clauses));
   assert.strictEqual(parsed.clauses[0].predicate, 'prefer');
 });
+
+test('parse experiment runner sends parsePrompt.system as the model system message', async () => {
+  // The v5 live test showed the parse runner was sending a generic
+  // "You are a precise Lunum experiment runner" string instead of
+  // parsePrompt(item).system, so the model never received the schema
+  // shape or one-shot example that made parsing credible.
+  // This test intercepts the HTTP call and verifies the system message.
+  let capturedSystem = '';
+  const sem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
+  };
+
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/chat/completions') {
+      let body = '';
+      request.on('data', chunk => { body += chunk; });
+      request.on('end', () => {
+        const parsed = JSON.parse(body) as { messages?: Array<{ role?: string; content?: string }> };
+        const sysMsg = parsed.messages?.find(m => m.role === 'system');
+        capturedSystem = sysMsg?.content ?? '';
+        response.writeHead(200, { 'content-type': 'application/json' });
+        response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(sem) } }] }));
+      });
+      return;
+    }
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-system-prompt-'));
+  try {
+    const items = [
+      { id: 'sys-test', sourceLanguage: 'en', sourceText: 'The user prefers concise answers.', goldSem: sem }
+    ];
+
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, items.map(i => JSON.stringify(i)).join('\n') + '\n', 'utf8');
+
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(
+      profilePath,
+      JSON.stringify({
+        schema: 'openlunum-model-profile/0.1',
+        id: 'mock',
+        provider: 'openai-compatible',
+        baseUrl: `http://127.0.0.1:${address.port}/v1`,
+        model: 'mock-local',
+        temperature: 0,
+        timeoutMs: 5000
+      }),
+      'utf8'
+    );
+
+    const manifestPath = path.join(temp, 'experiment.json');
+    const outputDir = path.join(temp, 'reports');
+    await writeFile(
+      manifestPath,
+      JSON.stringify({
+        schema: 'openlunum-experiment/0.1',
+        id: 'system-prompt-test',
+        area: 'multilingual-parse',
+        task: 'parse',
+        hypothesis: 'Runner sends parsePrompt.system to model',
+        baselineCommit: 'test',
+        dataset: { path: datasetPath, sha256: await sha256File(datasetPath) },
+        modelProfile: profilePath,
+        limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 },
+        gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false },
+        outputDirectory: outputDir
+      }),
+      'utf8'
+    );
+
+    await runParseExperiment(manifestPath);
+
+    // The system prompt must contain the schema shape, not just a generic runner string.
+    assert.ok(capturedSystem.length > 0, 'system message should not be empty');
+    assert.ok(capturedSystem.includes('lunum-sem/0.1-draft'), 'system should mention the schema version');
+    assert.ok(capturedSystem.includes('"schema"'), 'system should show the "schema" field name');
+    assert.ok(capturedSystem.includes('"clauses"'), 'system should show the "clauses" field name');
+    assert.ok(capturedSystem.includes('"predicate"'), 'system should show the "predicate" field name');
+    assert.ok(capturedSystem.includes('"prefer"'), 'system should include the one-shot example predicate');
+
+    // It should NOT be the old hardcoded generic string.
+    assert.notStrictEqual(capturedSystem, 'You are a precise Lunum experiment runner. Reply only with valid JSON.', 'system should not be the old hardcoded generic string');
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
