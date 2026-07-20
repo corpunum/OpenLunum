@@ -166,12 +166,13 @@ function featureTokens(features: WeightedFeatures): string[] {
 }
 
 function parseFingerprint(fingerprint: NearSemanticFingerprint): ParsedFingerprint | null {
-  const match = fingerprint.match(/^nfp:2:sha256:([a-f0-9]{64}):([a-f0-9]{64}):([a-f0-9.]+)$/u);
+  const match = fingerprint.match(/^nfp:2:sha256:([a-f0-9]{64}):([a-f0-9]{64}):(-|[a-f0-9.]+)$/u);
   if (!match) return null;
   const integrity = match[1]!;
   const hardDigest = match[2]!;
   const tokenText = match[3]!;
   if (digest(`${hardDigest}:${tokenText}`) !== integrity) return null;
+  if (tokenText === '-') return { hardDigest, featureTokens: new Set() };
   const tokens = tokenText.split('.');
   if (tokens.some((token) => !/^[a-f0-9]{16}$/u.test(token))) return null;
   return { hardDigest, featureTokens: new Set(tokens) };
@@ -219,7 +220,8 @@ export class NearSemanticFingerprintGenerator {
 
   generate(sem: LunumSem): NearSemanticFingerprint {
     const hard = digest(stableValue(hardSignature(sem)));
-    const tokenText = featureTokens(extractFeatures(sem)).join('.');
+    const tokens = featureTokens(extractFeatures(sem));
+    const tokenText = tokens.length > 0 ? tokens.join('.') : '-';
     const integrity = digest(`${hard}:${tokenText}`);
     return `nfp:2:sha256:${integrity}:${hard}:${tokenText}`;
   }
@@ -229,19 +231,6 @@ export class NearSemanticFingerprintGenerator {
   }
 
   compare(fp1: NearSemanticFingerprint, fp2: NearSemanticFingerprint): SimilarityResult {
-    if (fp1 === fp2) {
-      return {
-        fingerprint1: fp1,
-        fingerprint2: fp2,
-        similarity: 1,
-        similar: true,
-        threshold: this.threshold,
-        hardCompatible: true,
-        hardMismatchReasons: [],
-        matchedWeight: 1,
-        totalWeight: 1
-      };
-    }
     const first = parseFingerprint(fp1);
     const second = parseFingerprint(fp2);
     if (!first || !second) {
@@ -255,6 +244,19 @@ export class NearSemanticFingerprintGenerator {
         hardMismatchReasons: ['Invalid or tampered near-semantic fingerprint'],
         matchedWeight: 0,
         totalWeight: 0
+      };
+    }
+    if (fp1 === fp2) {
+      return {
+        fingerprint1: fp1,
+        fingerprint2: fp2,
+        similarity: 1,
+        similar: true,
+        threshold: this.threshold,
+        hardCompatible: true,
+        hardMismatchReasons: [],
+        matchedWeight: first.featureTokens.size,
+        totalWeight: first.featureTokens.size
       };
     }
     if (first.hardDigest !== second.hardDigest) {
