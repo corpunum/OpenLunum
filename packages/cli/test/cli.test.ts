@@ -89,6 +89,16 @@ test('CLI migrate writes a complete forward migration', async () => {
   });
 });
 
+test('CLI migrate preserves array order on a successful batch', async () => {
+  await withTempFile([record01('first'), record01('second')], async (file) => {
+    const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    const migrated = JSON.parse(await readFile(file, 'utf8')) as Array<ReturnType<typeof record01>>;
+    assert.deepEqual(migrated.map((record) => record.sem.clauses[0]?.predicate), ['first', 'second']);
+    assert.ok(migrated.every((record) => record.recordVersion === 'lunum-record/0.2'));
+  });
+});
+
 test('CLI migrate supports a complete backward migration', async () => {
   await withTempFile(record01('round_trip'), async (file) => {
     const forward = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
@@ -112,6 +122,21 @@ test('CLI migrate rejects unsupported directions without changing bytes', async 
     assert.match(result.stderr, /Unsupported migration direction/);
     assert.equal(await readFile(file, 'utf8'), before);
   });
+});
+
+test('CLI migrate rejects malformed JSON without changing bytes', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'openlunum-cli-malformed-'));
+  const file = path.join(directory, 'records.json');
+  const malformed = '{"recordVersion":';
+  await writeFile(file, malformed, 'utf8');
+  try {
+    const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
+    assert.equal(result.status, 1);
+    assert.equal(await readFile(file, 'utf8'), malformed);
+    assert.match(result.stderr, /JSON|Unexpected|position|end of JSON input/iu);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });
 
 test('CLI migrate fails the whole batch and writes nothing when any source is invalid', async () => {
