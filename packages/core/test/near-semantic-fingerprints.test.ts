@@ -22,7 +22,7 @@ function createSem(): LunumSem {
   };
 }
 
-test('near-semantic fingerprints are deterministic, verifiable, and order independent', () => {
+test('near-semantic fingerprints are deterministic, opaque, and order independent', () => {
   const generator = new NearSemanticFingerprintGenerator();
   const first = createSem();
   const second = createSem();
@@ -32,12 +32,14 @@ test('near-semantic fingerprints are deterministic, verifiable, and order indepe
   };
 
   const fingerprint = generator.generate(first);
-  assert.match(fingerprint, /^nfp:2:sha256:[a-f0-9]{64}:[A-Za-z0-9_-]+$/u);
+  assert.match(fingerprint, /^nfp:2:sha256:[a-f0-9]{64}:[a-f0-9]{64}:(?:[a-f0-9]{16}\.)*[a-f0-9]{16}$/u);
   assert.equal(generator.generate(second), fingerprint);
   assert.equal(generator.compare(fingerprint, fingerprint).similarity, 1);
+  assert.equal(fingerprint.includes('user'), false);
+  assert.equal(fingerprint.includes('concise_answers'), false);
 });
 
-test('semantic and fingerprint comparison are symmetric for identifier variation', () => {
+test('semantic and fingerprint comparison are symmetric for bounded identifier variation', () => {
   const generator = new NearSemanticFingerprintGenerator(0.8);
   const first = createSem();
   const second = createSem();
@@ -114,18 +116,21 @@ test('explicit protected literals are also enforced', () => {
   assert.match(result.hardMismatchReasons?.join('\n') ?? '', /protected literal differs/u);
 });
 
-test('opaque, legacy, or tampered fingerprints fail closed', () => {
+test('legacy, malformed, and tampered fingerprints fail closed', () => {
   const generator = new NearSemanticFingerprintGenerator();
   const first = 'nfp:12345678' as NearSemanticFingerprint;
   const second = 'nfp:87654321' as NearSemanticFingerprint;
-  const result = generator.compare(first, second);
-  assert.equal(result.similarity, 0);
-  assert.equal(result.similar, false);
-  assert.match(result.hardMismatchReasons?.join('\n') ?? '', /invalid near-semantic fingerprint/u);
+  const invalid = generator.compare(first, second);
+  assert.equal(invalid.similarity, 0);
+  assert.equal(invalid.similar, false);
+  assert.match(invalid.hardMismatchReasons?.join('\n') ?? '', /Invalid or tampered/u);
 
   const valid = generator.generate(createSem());
   const tampered = `${valid.slice(0, -1)}${valid.endsWith('a') ? 'b' : 'a'}` as NearSemanticFingerprint;
-  assert.equal(generator.compare(valid, tampered).similar, false);
+  const tamperedResult = generator.compare(valid, tampered);
+  assert.equal(tamperedResult.similarity, 0);
+  assert.equal(tamperedResult.similar, false);
+  assert.match(tamperedResult.hardMismatchReasons?.join('\n') ?? '', /Invalid or tampered/u);
 });
 
 test('compareRecords delegates to semantic comparison', () => {
