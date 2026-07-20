@@ -1,20 +1,16 @@
 /**
- * Parse experiment runner for EN/EL/ES/ID
- *
- * Runs parse experiments against local models and publishes
- * per-language metrics reports with cross-language comparisons.
+ * Parse experiment runner for EN/EL/ES/ID.
  */
 
 import { appendFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { validateSem, compareSem, fingerprintSem } from '@corpunum/lunum';
+import { compareSem, NearSemanticFingerprintGenerator, validateSem } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
-import type { ExperimentManifest, ItemResult, ModelProfile, DatasetItem, ExperimentItem } from './types.js';
+import type { DatasetItem, ExperimentManifest, ItemResult, ModelProfile } from './types.js';
 
-// Supported parse languages
 export type ParseLanguage = 'en' | 'el' | 'es' | 'id';
 export const PARSE_LANGUAGES: ParseLanguage[] = ['en', 'el', 'es', 'id'];
 export const PARSE_LANGUAGE_LABELS: Record<ParseLanguage, string> = {
@@ -24,8 +20,6 @@ export const PARSE_LANGUAGE_LABELS: Record<ParseLanguage, string> = {
   id: 'Indonesian'
 };
 
-// ── Language-specific metrics ──────────────────────────────────────
-
 export interface LanguageMetrics {
   language: ParseLanguage;
   languageLabel: string;
@@ -34,14 +28,14 @@ export interface LanguageMetrics {
   failedItems: number;
   errorItems: number;
   exactRate: number;
+  nearSemanticRate: number;
   featureRecall: number;
   featurePrecision: number;
   meanLatencyMs: number;
   fingerprintMatches: number;
   exactFingerprintCount: number;
+  nearSemanticFingerprintCount: number;
 }
-
-// ── Experiment report ──────────────────────────────────────────────
 
 export interface ParseExperimentReport {
   experimentId: string;
@@ -52,6 +46,7 @@ export interface ParseExperimentReport {
   totalFailed: number;
   totalErrors: number;
   overallExactRate: number;
+  overallNearSemanticRate: number;
   overallFeatureRecall: number;
   overallFeaturePrecision: number;
   overallMeanLatencyMs: number;
@@ -66,11 +61,9 @@ export interface CrossLanguageComparison {
   bestExactLanguage: ParseLanguage | null;
   bestRecallLanguage: ParseLanguage | null;
   fastestLanguage: ParseLanguage | null;
-  consistencyScore: number; // How consistent are results across languages
+  consistencyScore: number;
   variance: Record<string, number>;
 }
-
-// ── JSON extraction helper ─────────────────────────────────────────
 
 function extractJson(text: string): unknown {
   const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/iu)?.[1];
@@ -81,7 +74,11 @@ function extractJson(text: string): unknown {
   return JSON.parse(candidate.slice(start, end + 1));
 }
 
-// ── Run parse experiment ───────────────────────────────────────────
+function computeVariance(values: number[]): number {
+  if (values.length <= 1) return 0;
+  const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+  return values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length;
+}
 
 export async function runParseExperiment(
   manifestPath: string
@@ -89,7 +86,6 @@ export async function runParseExperiment(
   const root = await findWorkspaceRoot();
   const manifest = await readJson<ExperimentManifest>(manifestPath);
   validateManifest(manifest);
-
   if (!manifest.dataset) throw new Error('Parse experiment requires dataset');
   if (!manifest.modelProfile) throw new Error('Parse experiment requires modelProfile');
 
@@ -105,8 +101,7 @@ export async function runParseExperiment(
     throw new Error(`Dataset hash mismatch: expected ${manifest.dataset.sha256}, got ${actualHash}`);
   }
 
-  const fullDataset = (await loadDataset(datasetPath)) as DatasetItem[];
-  const items = fullDataset.slice(0, manifest.limits.maxItems);
+  const items = ((await loadDataset(datasetPath)) as DatasetItem[]).slice(0, manifest.limits.maxItems);
   const profile = await readJson<ModelProfile>(modelProfilePath);
   validateProfile(profile);
 
@@ -117,28 +112,22 @@ export async function runParseExperiment(
   const output = path.join(outputRoot, runId);
   await mkdir(output, { recursive: true });
 
-  // Group items by language
-  const byLanguage = new Map<ParseLanguage, DatasetItem[]>();
-  for (const lang of PARSE_LANGUAGES) {
-    byLanguage.set(lang, []);
-  }
+  const byLanguage = new Map<ParseLanguage, DatasetItem[]>(PARSE_LANGUAGES.map((language) => [language, []]));
   for (const item of items) {
-    const lang = item.sourceLanguage as ParseLanguage;
-    if (byLanguage.has(lang)) {
-      byLanguage.get(lang)!.push(item);
-    }
+    const language = item.sourceLanguage as ParseLanguage;
+    byLanguage.get(language)?.push(item);
   }
 
-  // Run parse experiments per language
   const languageResults = new Map<ParseLanguage, ItemResult[]>();
-  for (const [lang, langItems] of byLanguage) {
-    if (langItems.length === 0) continue;
+  const nearSemantic = new NearSemanticFingerprintGenerator(0.8);
 
+  for (const [language, languageItems] of byLanguage) {
+    if (languageItems.length === 0) continue;
     const model = new OpenAICompatibleModel(profile);
     const results: ItemResult[] = [];
     let calls = 0;
 
-    for (const item of langItems) {
+    for (const item of languageItems) {
       if (calls >= manifest.limits.maxModelCalls) break;
       let finalResult: ItemResult | null = null;
 
@@ -149,13 +138,17 @@ export async function runParseExperiment(
           const prompt = parsePrompt(item);
           calls += 1;
           rawOutput = await model.complete(prompt.system, prompt.user);
-
           const parsed = extractJson(rawOutput);
           const validation = validateSem(parsed);
           if (!validation.ok) throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
 
+          const goldSem = item.goldSem as LunumSem;
           const parsedSem = parsed as LunumSem;
-          const comparison = compareSem(item.goldSem as LunumSem, parsedSem);
+          const comparison = compareSem(goldSem, parsedSem);
+          const nearResult = nearSemantic.compareSem(goldSem, parsedSem, {
+            protectedLiterals: item.protectedLiterals ?? []
+          });
+          const nearOnly = !comparison.exactFingerprint && nearResult.similar;
 
           finalResult = {
             id: item.id,
@@ -163,12 +156,13 @@ export async function runParseExperiment(
             rawOutput,
             parsedSem,
             exact: comparison.exactFingerprint,
+            nearSemantic: nearOnly,
+            nearSemanticScore: nearResult.similarity,
             featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision,
             missingFeatures: comparison.missingFeatures,
             latencyMs: performance.now() - started
           };
-
           if (finalResult.status === 'passed') break;
         } catch (error) {
           finalResult = {
@@ -180,17 +174,16 @@ export async function runParseExperiment(
           };
         }
       }
+
       if (finalResult) results.push(finalResult);
     }
 
-    languageResults.set(lang, results);
+    languageResults.set(language, results);
   }
-
-  // ── Compute metrics ────────────────────────────────────────────
 
   const languageMetrics: LanguageMetrics[] = [];
   const languageBreakdown: Record<ParseLanguage, number[]> = {
-    en: [0, 0, 0, 0], // [passed, failed, error, total]
+    en: [0, 0, 0, 0],
     el: [0, 0, 0, 0],
     es: [0, 0, 0, 0],
     id: [0, 0, 0, 0]
@@ -201,115 +194,108 @@ export async function runParseExperiment(
   let totalFailed = 0;
   let totalErrors = 0;
   let totalExactRate = 0;
+  let totalNearSemanticRate = 0;
   let totalFeatureRecall = 0;
   let totalFeaturePrecision = 0;
   let totalLatencyMs = 0;
 
-  for (const lang of PARSE_LANGUAGES) {
-    const results = languageResults.get(lang) ?? [];
+  for (const language of PARSE_LANGUAGES) {
+    const results = languageResults.get(language) ?? [];
     const total = results.length;
-    const passed = results.filter(r => r.status === 'passed').length;
-    const failed = results.filter(r => r.status === 'failed').length;
-    const errors = results.filter(r => r.status === 'error').length;
-
-    const exactCount = results.filter(r => r.exact === true).length;
+    const passed = results.filter((result) => result.status === 'passed').length;
+    const failed = results.filter((result) => result.status === 'failed').length;
+    const errors = results.filter((result) => result.status === 'error').length;
+    const exactCount = results.filter((result) => result.exact === true).length;
+    const nearCount = results.filter((result) => result.nearSemantic === true).length;
     const exactRate = total > 0 ? exactCount / total : 0;
-    const avgRecall = total > 0 ? results.reduce((s, r) => s + (r.featureRecall ?? 0), 0) / total : 0;
-    const avgPrecision = total > 0 ? results.reduce((s, r) => s + (r.featurePrecision ?? 0), 0) / total : 0;
-    const avgLatency = total > 0 ? results.reduce((s, r) => s + r.latencyMs, 0) / total : 0;
+    const nearSemanticRate = total > 0 ? nearCount / total : 0;
+    const featureRecall = total > 0 ? results.reduce((sum, result) => sum + (result.featureRecall ?? 0), 0) / total : 0;
+    const featurePrecision = total > 0 ? results.reduce((sum, result) => sum + (result.featurePrecision ?? 0), 0) / total : 0;
+    const meanLatencyMs = total > 0 ? results.reduce((sum, result) => sum + result.latencyMs, 0) / total : 0;
 
-    const metrics: LanguageMetrics = {
-      language: lang,
-      languageLabel: PARSE_LANGUAGE_LABELS[lang],
+    languageMetrics.push({
+      language,
+      languageLabel: PARSE_LANGUAGE_LABELS[language],
       totalItems: total,
       passedItems: passed,
       failedItems: failed,
       errorItems: errors,
       exactRate,
-      featureRecall: avgRecall,
-      featurePrecision: avgPrecision,
-      meanLatencyMs: avgLatency,
+      nearSemanticRate,
+      featureRecall,
+      featurePrecision,
+      meanLatencyMs,
       fingerprintMatches: exactCount,
-      exactFingerprintCount: exactCount
-    };
-    languageMetrics.push(metrics);
+      exactFingerprintCount: exactCount,
+      nearSemanticFingerprintCount: nearCount
+    });
 
-    languageBreakdown[lang] = [passed, failed, errors, total];
+    languageBreakdown[language] = [passed, failed, errors, total];
     totalItems += total;
     totalPassed += passed;
     totalFailed += failed;
     totalErrors += errors;
     totalExactRate += exactRate;
-    totalFeatureRecall += avgRecall;
-    totalFeaturePrecision += avgPrecision;
-    totalLatencyMs += avgLatency;
+    totalNearSemanticRate += nearSemanticRate;
+    totalFeatureRecall += featureRecall;
+    totalFeaturePrecision += featurePrecision;
+    totalLatencyMs += meanLatencyMs;
 
-    // Track failure modes
     for (const result of results) {
-      if (result.status === 'failed' && result.missingFeatures && result.missingFeatures.length > 0) {
-        for (const feature of result.missingFeatures) {
+      if (result.status === 'failed') {
+        for (const feature of result.missingFeatures ?? []) {
           failureModes[feature] = (failureModes[feature] ?? 0) + 1;
         }
       }
       if (result.status === 'error') {
-        failureModes[`error: ${result.error?.slice(0, 50) ?? 'unknown'}`] =
-          (failureModes[`error: ${result.error?.slice(0, 50) ?? 'unknown'}`] ?? 0) + 1;
+        const mode = `error: ${result.error?.slice(0, 50) ?? 'unknown'}`;
+        failureModes[mode] = (failureModes[mode] ?? 0) + 1;
       }
     }
   }
 
-  // ── Cross-language comparison ──────────────────────────────────
-
-  const languagesIncluded = languageMetrics.filter(m => m.totalItems > 0).map(m => m.language);
-  const bestExact: ParseLanguage | null = languagesIncluded.length > 0
-    ? languagesIncluded.reduce<ParseLanguage>((best, lang) => {
-        const m = languageMetrics.find(l => l.language === lang)!;
-        const bestMetrics = languageMetrics.find(l => l.language === best);
-        return m.exactRate > (bestMetrics?.exactRate ?? 0) ? lang : best;
+  const languagesIncluded = languageMetrics.filter((metrics) => metrics.totalItems > 0).map((metrics) => metrics.language);
+  const bestExactLanguage = languagesIncluded.length > 0
+    ? languagesIncluded.reduce<ParseLanguage>((best, language) => {
+        const current = languageMetrics.find((metrics) => metrics.language === language)!;
+        const bestMetrics = languageMetrics.find((metrics) => metrics.language === best);
+        return current.exactRate > (bestMetrics?.exactRate ?? 0) ? language : best;
+      }, languagesIncluded[0]!)
+    : null;
+  const bestRecallLanguage = languagesIncluded.length > 0
+    ? languagesIncluded.reduce<ParseLanguage>((best, language) => {
+        const current = languageMetrics.find((metrics) => metrics.language === language)!;
+        const bestMetrics = languageMetrics.find((metrics) => metrics.language === best);
+        return current.featureRecall > (bestMetrics?.featureRecall ?? 0) ? language : best;
+      }, languagesIncluded[0]!)
+    : null;
+  const fastestLanguage = languagesIncluded.length > 0
+    ? languagesIncluded.reduce<ParseLanguage>((best, language) => {
+        const current = languageMetrics.find((metrics) => metrics.language === language)!;
+        const bestMetrics = languageMetrics.find((metrics) => metrics.language === best);
+        return current.meanLatencyMs < (bestMetrics?.meanLatencyMs ?? Infinity) ? language : best;
       }, languagesIncluded[0]!)
     : null;
 
-  const bestRecall: ParseLanguage | null = languagesIncluded.length > 0
-    ? languagesIncluded.reduce<ParseLanguage>((best, lang) => {
-        const m = languageMetrics.find(l => l.language === lang)!;
-        const bestMetrics = languageMetrics.find(l => l.language === best);
-        return m.featureRecall > (bestMetrics?.featureRecall ?? 0) ? lang : best;
-      }, languagesIncluded[0]!)
-    : null;
-
-  const fastest: ParseLanguage | null = languagesIncluded.length > 0
-    ? languagesIncluded.reduce<ParseLanguage>((best, lang) => {
-        const m = languageMetrics.find(l => l.language === lang)!;
-        const bestMetrics = languageMetrics.find(l => l.language === best);
-        return m.meanLatencyMs < (bestMetrics?.meanLatencyMs ?? Infinity) ? lang : best;
-      }, languagesIncluded[0]!)
-    : null;
-
-  // Consistency score: 1.0 if all languages have same exact rate, 0.0 if max-min spread
-  const exactRates = languageMetrics.filter(m => m.totalItems > 0).map(m => m.exactRate);
-  const consistencyScore = exactRates.length > 1
-    ? 1 - (Math.max(...exactRates) - Math.min(...exactRates))
-    : 1;
-
+  const exactRates = languageMetrics.filter((metrics) => metrics.totalItems > 0).map((metrics) => metrics.exactRate);
+  const consistencyScore = exactRates.length > 1 ? 1 - (Math.max(...exactRates) - Math.min(...exactRates)) : 1;
   const variance = languagesIncluded.length > 1
     ? {
         exactRateVariance: computeVariance(exactRates),
-        recallVariance: computeVariance(languageMetrics.filter(m => m.totalItems > 0).map(m => m.featureRecall)),
-        latencyVariance: computeVariance(languageMetrics.filter(m => m.totalItems > 0).map(m => m.meanLatencyMs))
+        recallVariance: computeVariance(languageMetrics.filter((metrics) => metrics.totalItems > 0).map((metrics) => metrics.featureRecall)),
+        latencyVariance: computeVariance(languageMetrics.filter((metrics) => metrics.totalItems > 0).map((metrics) => metrics.meanLatencyMs))
       }
     : { exactRateVariance: 0, recallVariance: 0, latencyVariance: 0 };
 
   const crossLanguageComparison: CrossLanguageComparison = {
     languagesIncluded,
-    bestExactLanguage: bestExact,
-    bestRecallLanguage: bestRecall,
-    fastestLanguage: fastest,
+    bestExactLanguage,
+    bestRecallLanguage,
+    fastestLanguage,
     consistencyScore,
     variance
   };
-
-  // ── Build report ───────────────────────────────────────────────
-
+  const languageCount = languagesIncluded.length;
   const report: ParseExperimentReport = {
     experimentId: manifest.id,
     runId,
@@ -318,49 +304,43 @@ export async function runParseExperiment(
     totalPassed,
     totalFailed,
     totalErrors,
-    overallExactRate: totalItems > 0 ? totalExactRate / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
-    overallFeatureRecall: totalItems > 0 ? totalFeatureRecall / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
-    overallFeaturePrecision: totalItems > 0 ? totalFeaturePrecision / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
-    overallMeanLatencyMs: totalItems > 0 ? totalLatencyMs / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
+    overallExactRate: languageCount > 0 ? totalExactRate / languageCount : 0,
+    overallNearSemanticRate: languageCount > 0 ? totalNearSemanticRate / languageCount : 0,
+    overallFeatureRecall: languageCount > 0 ? totalFeatureRecall / languageCount : 0,
+    overallFeaturePrecision: languageCount > 0 ? totalFeaturePrecision / languageCount : 0,
+    overallMeanLatencyMs: languageCount > 0 ? totalLatencyMs / languageCount : 0,
     languageMetrics,
     crossLanguageComparison,
     languageBreakdown,
     failureModes
   };
 
-  // ── Write outputs ──────────────────────────────────────────────
-
-  // Write per-language results
-  for (const [lang, results] of languageResults) {
-    const resultPath = path.join(output, `parse-results-${lang}.jsonl`);
+  for (const [language, results] of languageResults) {
+    const resultPath = path.join(output, `parse-results-${language}.jsonl`);
     await writeFile(resultPath, '', 'utf8');
-    for (const result of results) {
-      await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
-    }
+    for (const result of results) await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
   }
-
-  // Write cross-language summary
   await writeJson(path.join(output, 'parse-summary.json'), report);
 
-  // Write per-language markdown reports
   for (const metrics of languageMetrics) {
-    const md = `# Parse Report: ${metrics.languageLabel} (${metrics.language})
+    const markdown = `# Parse Report: ${metrics.languageLabel} (${metrics.language})
 
 - Items: ${metrics.totalItems}
 - Passed: ${metrics.passedItems}
 - Failed: ${metrics.failedItems}
 - Errors: ${metrics.errorItems}
 - Exact Rate: ${metrics.exactRate.toFixed(4)}
+- Near-Semantic-Only Rate: ${metrics.nearSemanticRate.toFixed(4)}
 - Feature Recall: ${metrics.featureRecall.toFixed(4)}
 - Feature Precision: ${metrics.featurePrecision.toFixed(4)}
 - Mean Latency: ${metrics.meanLatencyMs.toFixed(2)}ms
-- Fingerprint Matches: ${metrics.fingerprintMatches}
+- Exact Fingerprint Matches: ${metrics.exactFingerprintCount}
+- Near-Semantic-Only Matches: ${metrics.nearSemanticFingerprintCount}
 `;
-    await writeFile(path.join(output, `report-${metrics.language}.md`), md, 'utf8');
+    await writeFile(path.join(output, `report-${metrics.language}.md`), markdown, 'utf8');
   }
 
-  // Write cross-language comparison report
-  const crossMd = `# Cross-Language Parse Comparison
+  const crossMarkdown = `# Cross-Language Parse Comparison
 
 ## Overview
 - Experiment: ${manifest.id}
@@ -371,14 +351,15 @@ export async function runParseExperiment(
 - Total Errors: ${totalErrors}
 
 ## Per-Language Metrics
-| Language | Items | Passed | Exact Rate | Recall | Precision | Latency (ms) |
-|----------|-------|--------|------------|--------|-----------|--------------|
-${languageMetrics.map(m => `| ${m.languageLabel} (${m.language}) | ${m.totalItems} | ${m.passedItems} | ${m.exactRate.toFixed(4)} | ${m.featureRecall.toFixed(4)} | ${m.featurePrecision.toFixed(4)} | ${m.meanLatencyMs.toFixed(2)} |`).join('\n')}
+| Language | Items | Passed | Exact Rate | Near-Only Rate | Recall | Precision | Latency (ms) |
+|----------|-------|--------|------------|----------------|--------|-----------|--------------|
+${languageMetrics.map((metrics) => `| ${metrics.languageLabel} (${metrics.language}) | ${metrics.totalItems} | ${metrics.passedItems} | ${metrics.exactRate.toFixed(4)} | ${metrics.nearSemanticRate.toFixed(4)} | ${metrics.featureRecall.toFixed(4)} | ${metrics.featurePrecision.toFixed(4)} | ${metrics.meanLatencyMs.toFixed(2)} |`).join('\n')}
 
 ## Cross-Language Analysis
 - Best Exact Rate: ${crossLanguageComparison.bestExactLanguage ? PARSE_LANGUAGE_LABELS[crossLanguageComparison.bestExactLanguage] : 'N/A'}
 - Best Recall: ${crossLanguageComparison.bestRecallLanguage ? PARSE_LANGUAGE_LABELS[crossLanguageComparison.bestRecallLanguage] : 'N/A'}
 - Fastest: ${crossLanguageComparison.fastestLanguage ? PARSE_LANGUAGE_LABELS[crossLanguageComparison.fastestLanguage] : 'N/A'}
+- Overall Near-Semantic-Only Rate: ${report.overallNearSemanticRate.toFixed(4)}
 - Consistency Score: ${crossLanguageComparison.consistencyScore.toFixed(4)}
 
 ## Variance
@@ -389,9 +370,7 @@ ${languageMetrics.map(m => `| ${m.languageLabel} (${m.language}) | ${m.totalItem
 ## Failure Modes
 ${Object.entries(failureModes).map(([mode, count]) => `- ${mode}: ${count}`).join('\n') || '- None'}
 `;
-  await writeFile(path.join(output, 'cross-language-report.md'), crossMd, 'utf8');
-
-  // Write experiment snapshot
+  await writeFile(path.join(output, 'cross-language-report.md'), crossMarkdown, 'utf8');
   await writeJson(path.join(output, 'manifest.snapshot.json'), manifest);
   await writeJson(path.join(output, 'environment.json'), {
     node: process.version,
@@ -404,16 +383,7 @@ ${Object.entries(failureModes).map(([mode, count]) => `- ${mode}: ${count}`).joi
   return { report, outputDirectory: output };
 }
 
-function computeVariance(values: number[]): number {
-  if (values.length <= 1) return 0;
-  const mean = values.reduce((s, v) => s + v, 0) / values.length;
-  return values.reduce((s, v) => s + (v - mean) ** 2, 0) / values.length;
-}
-
-// ── CLI entry ──────────────────────────────────────────────────────
-
 export async function runParseExperimentCli(): Promise<string> {
-  // cli.ts passes the manifest as argv[3] (argv[2] is the subcommand 'parse-experiment')
   const manifestArg = process.argv[3];
   if (!manifestArg) throw new Error('Usage: node cli.js parse-experiment <manifest-path>');
   const root = await findWorkspaceRoot();
