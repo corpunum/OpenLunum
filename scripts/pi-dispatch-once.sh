@@ -60,8 +60,7 @@ fi
 
 cd "$WORKDIR"
 git fetch --prune origin main
-git checkout main
-git reset --hard origin/main
+git checkout --detach origin/main 2>/dev/null || { git checkout main && git reset --hard origin/main; }
 
 if git show-ref --verify --quiet "refs/heads/$branch"; then
   echo "BLOCKED: local branch already exists: $branch" >&2
