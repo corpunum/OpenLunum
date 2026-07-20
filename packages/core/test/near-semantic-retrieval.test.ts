@@ -94,7 +94,6 @@ test('schema, world, kind, structure, negation, modality, and typed literals are
     makeSem({ schema: 'lunum-sem/0.1-draft', literal: 'Paris' }),
     makeSem({ world: 'fiction', literal: 'Paris' }),
     makeSem({ kind: 'preference', literal: 'Paris' }),
-    makeSem({ predicate: 'price', literal: 'Paris' }),
     makeSem({ negated: true, literal: 'Paris' }),
     makeSem({ modality: 'possibility', literal: 'Paris' }),
     makeSem({ literal: 'PARIS' }),
@@ -107,6 +106,19 @@ test('schema, world, kind, structure, negation, modality, and typed literals are
     assert.equal(result.hardCompatible, false);
     assert.ok((result.hardMismatchReasons?.length ?? 0) > 0);
   }
+});
+
+test('predicate identifiers are weighted soft features but unrelated values miss the operational threshold', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.7);
+  const result = generator.compareSem(
+    makeSem({ predicate: 'location' }),
+    makeSem({ predicate: 'price' }),
+  );
+
+  assert.equal(result.hardCompatible, true);
+  assert.ok(result.similarity > 0);
+  assert.ok(result.similarity < 0.7);
+  assert.equal(result.similar, false);
 });
 
 test('fingerprints use the versioned checksum and opaque feature-sketch format', () => {
@@ -144,7 +156,7 @@ test('near-semantic retrieval improves recall only for compatible identifier var
     { id: 'near-id', sem: makeSem({ subjectId: 'city-paris' }) },
     { id: 'other-id', sem: makeSem({ subjectId: 'london' }) },
     { id: 'hard-literal-change', sem: makeSem({ subjectId: 'paris', literal: 'different' }) },
-    { id: 'hard-predicate-change', sem: makeSem({ subjectId: 'paris', predicate: 'price' }) },
+    { id: 'soft-predicate-change', sem: makeSem({ subjectId: 'paris', predicate: 'price' }) },
   ];
 
   const queryFingerprint = generator.generate(query);
@@ -158,7 +170,7 @@ test('near-semantic retrieval improves recall only for compatible identifier var
   assert.ok(nearMatches.includes('exact'));
   assert.ok(nearMatches.includes('near-id'));
   assert.equal(nearMatches.includes('hard-literal-change'), false);
-  assert.equal(nearMatches.includes('hard-predicate-change'), false);
+  assert.equal(nearMatches.includes('soft-predicate-change'), false);
   assert.ok(nearRecall > exactRecall);
 });
 
