@@ -7,8 +7,10 @@ import { PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES } from '../src/parse-experiment.
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import { createServer } from 'node:http';
+import { execFile } from 'node:child_process';
 import { once } from 'node:events';
 import { sha256File } from '../src/io.js';
+import { parsePrompt } from '../src/prompts.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -326,6 +328,214 @@ test('parse experiment skips languages with no items', async () => {
     const idMetrics = report.languageMetrics.find(m => m.language === 'id');
     assert.strictEqual(esMetrics?.totalItems, 0);
     assert.strictEqual(idMetrics?.totalItems, 0);
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parsePrompt system includes schema instructions', () => {
+  // Verifies that parsePrompt returns a system prompt with schema instructions.
+  // The runner uses parsePrompt(item).system (not a hardcoded generic string),
+  // so this test confirms the prompt contains the required directives.
+  const item = {
+    id: 'test',
+    sourceLanguage: 'en',
+    sourceText: 'Test input.',
+    goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [] }
+  } as any;
+
+  const prompt = parsePrompt(item);
+  assert.ok(prompt.system.length > 0, 'system prompt should not be empty');
+  assert.ok(prompt.system.includes('lunum-sem'), 'system should mention the schema');
+  assert.ok(prompt.system.includes('Convert'), 'system should include conversion instructions');
+  assert.ok(prompt.system.includes('lower_snake_case'), 'system should specify identifier format');
+  assert.ok(prompt.user.length > 0, 'user prompt should not be empty');
+  assert.ok(prompt.user.includes('sourceText'), 'user prompt should include source text');
+});
+
+test('parse experiment runner uses parsePrompt system for model call', async () => {
+  // Regression: the runner previously sent a hardcoded generic system string
+  // instead of parsePrompt(item).system, losing schema instructions from the model.
+  // This test verifies the full parse pipeline works when using parsePrompt.
+  const sem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise' } }, negated: false }]
+  };
+
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/chat/completions') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(sem) } }] }));
+      return;
+    }
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-prompt-sys-'));
+  try {
+    const items = [
+      { id: 'prompt-test', sourceLanguage: 'en', sourceText: 'User prefers concise output.', goldSem: sem }
+    ];
+
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, items.map(i => JSON.stringify(i)).join('\n') + '\n', 'utf8');
+
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(
+      profilePath,
+      JSON.stringify({
+        schema: 'openlunum-model-profile/0.1',
+        id: 'mock',
+        provider: 'openai-compatible',
+        baseUrl: `http://127.0.0.1:${address.port}/v1`,
+        model: 'mock-local',
+        temperature: 0,
+        timeoutMs: 5000
+      }),
+      'utf8'
+    );
+
+    const manifestPath = path.join(temp, 'experiment.json');
+    const outputDir = path.join(temp, 'reports');
+    await writeFile(
+      manifestPath,
+      JSON.stringify({
+        schema: 'openlunum-experiment/0.1',
+        id: 'prompt-system',
+        area: 'multilingual-parse',
+        task: 'parse',
+        hypothesis: 'Runner uses parsePrompt system for schema-aware parsing',
+        baselineCommit: 'test',
+        dataset: { path: datasetPath, sha256: await sha256File(datasetPath) },
+        modelProfile: profilePath,
+        limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 },
+        gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false },
+        outputDirectory: outputDir
+      }),
+      'utf8'
+    );
+
+    const { report } = await runParseExperiment(manifestPath);
+    // The mock returns gold sem, so the parse should pass
+    assert.strictEqual(report.totalPassed, 1);
+
+    // Verify parsePrompt system includes schema instructions
+    const prompt = parsePrompt(items[0] as any);
+    assert.ok(
+      prompt.system.includes('lunum-sem'),
+      'parsePrompt system should contain schema reference'
+    );
+    assert.ok(
+      prompt.system.includes('lower_snake_case'),
+      'parsePrompt system should specify identifier format'
+    );
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parse-experiment CLI arg: argv[3] is the manifest, not argv[2]', async () => {
+  // Regression: runParseExperimentCli read argv[2] which is the subcommand name
+  // when invoked via `node cli.js parse-experiment <manifest>`, causing ENOENT.
+  const sem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: []
+  };
+
+  let serverPort = 0;
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/chat/completions') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(sem) } }] }));
+      return;
+    }
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  serverPort = address.port;
+
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-cli-arg-'));
+  try {
+    const items = [
+      { id: 'cli-test', sourceLanguage: 'en', sourceText: 'Test CLI arg fix.', goldSem: sem }
+    ];
+
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, items.map(i => JSON.stringify(i)).join('\n') + '\n', 'utf8');
+
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(
+      profilePath,
+      JSON.stringify({
+        schema: 'openlunum-model-profile/0.1',
+        id: 'mock',
+        provider: 'openai-compatible',
+        baseUrl: `http://127.0.0.1:${serverPort}/v1`,
+        model: 'mock-local',
+        temperature: 0,
+        timeoutMs: 5000
+      }),
+      'utf8'
+    );
+
+    const manifestPath = path.join(temp, 'experiment.json');
+    const outputDir = path.join(temp, 'reports');
+    await writeFile(
+      manifestPath,
+      JSON.stringify({
+        schema: 'openlunum-experiment/0.1',
+        id: 'cli-arg-regression',
+        area: 'multilingual-parse',
+        task: 'parse',
+        hypothesis: 'CLI correctly resolves manifest from argv[3]',
+        baselineCommit: 'test',
+        dataset: { path: datasetPath, sha256: await sha256File(datasetPath) },
+        modelProfile: profilePath,
+        limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 },
+        gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false },
+        outputDirectory: outputDir
+      }),
+      'utf8'
+    );
+
+    const cliPath = path.join(__dirname, '..', 'src', 'cli.js');
+    const result = await new Promise<{ stdout: string; stderr: string; code: number | null }>((resolve, reject) => {
+      execFile('node', [cliPath, 'parse-experiment', manifestPath], { timeout: 15000 }, (err, stdout, stderr) => {
+        const code = err?.code != null ? Number(err.code) : 0;
+        resolve({ stdout: stdout.toString(), stderr: stderr.toString(), code });
+      });
+    });
+
+    assert.strictEqual(result.code, 0, `CLI exit code should be 0, got ${result.code}. stderr: ${result.stderr}`);
+    assert.ok(result.stdout.trim().length > 0, 'CLI should output the result directory path');
+    assert.ok(result.stdout.includes('reports'), 'Output path should include "reports"');
+    assert.ok(!result.stderr.includes('ENOENT'), `stderr should not contain ENOENT, got: ${result.stderr}`);
+    assert.ok(!result.stderr.includes('parse-experiment'), `stderr should not reference subcommand as manifest path, got: ${result.stderr}`);
   } finally {
     server.close();
     await rm(temp, { recursive: true, force: true });
