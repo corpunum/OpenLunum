@@ -1,5 +1,7 @@
+- agent/ally/253-idle
 - agent/coding-agent/semantic-contract/expand-semantic-structures
 - agent/docs/sync-235be01c
+- agent/docs/sync-8b657a3a
 - agent/docs/sync-a49fe3f1
 - agent/docs/sync-a740caf2
 - agent/eval/scratch
