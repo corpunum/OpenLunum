@@ -109,10 +109,6 @@ while true; do
       log "PR #$pr soft-protected with reviewer override — proceeding"
     fi
 
-    # The approval label is the human/reviewer gate; drafts with it are ready
-    # by definition, so undraft mechanically before the policy evaluates.
-    timeout 60 gh pr ready "$pr" --repo corpunum/OpenLunum >/dev/null 2>&1 || true
-
     # Fail closed before merge. Blockers, stale/missing reviews, and
     # missing/pending/failed/no-step checks on the exact head all stop here.
     policy_output=$(timeout 120 node "$MERGE_POLICY" --repo corpunum/OpenLunum --pr "$pr" 2>&1)
