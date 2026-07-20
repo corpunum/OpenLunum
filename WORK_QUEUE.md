@@ -187,12 +187,12 @@ v1–v4 are landed. v5 comes from the 2026-07-20 live test campaign (report: `lu
 ## P0 — eval pipeline correctness
 
 - [x] Fix `parse-experiment` CLI arg handling: `runParseExperimentCli` reads `process.argv[2]` (the subcommand itself) instead of the manifest path — `node cli.js parse-experiment <manifest>` always fails with ENOENT. Add a regression test that invokes the subcommand through the real CLI entry.
-- [ ] Fix parse runner prompt: `parse-experiment.ts` (~line 151) must send `parsePrompt(item).system`, not the generic "experiment runner" string that hides the task from the model. Add a test asserting the system prompt contains the schema instructions.
+- [x] Fix parse runner prompt: `parse-experiment.ts` (~line 151) must send `parsePrompt(item).system`, not the generic "experiment runner" string that hides the task from the model. Add a test asserting the system prompt contains the schema instructions. (PR #241 merged)
 - [ ] Add `max_tokens` (default 4096, profile-overridable) to `OpenAICompatibleModel.complete` in `packages/eval/src/model.ts` — thinking models consume the server default budget and return empty content.
 
 ## P1 — make parse prompts actually parseable
 
-- [ ] Embed the Lunum-Sem schema shape + one canonical one-shot example in `parsePrompt` (proven live: validity went 0/16 → 14/16 with the example present).
+- [x] Embed the Lunum-Sem schema shape + one canonical one-shot example in `parsePrompt` (proven live: validity went 0/16 → 14/16 with the example present). (PR #232 merged)
 - [ ] Ship a controlled predicate/role vocabulary with the parse prompt (from the gold dataset's identifier inventory) so models can hit gold identifiers instead of guessing synonyms (`remove_file` vs `delete`).
 - [ ] Score near-semantic fingerprint matches alongside exact matches in parse experiments; report both. Exact-only underreports capability when identifiers differ but semantics match.
 
