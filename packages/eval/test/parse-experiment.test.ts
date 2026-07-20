@@ -10,6 +10,7 @@ import os from 'node:os';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
 import { sha256File } from '../src/io.js';
+import { parsePrompt } from '../src/prompts.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -429,4 +430,43 @@ test('parse-experiment CLI arg: argv[3] is the manifest, not argv[2]', async () 
     server.close();
     await rm(temp, { recursive: true, force: true });
   }
+});
+
+test('parsePrompt includes schema shape and one-shot example', () => {
+  // The live test campaign showed validity improved 0/16 → 14/16 when the
+  // schema shape and one-shot example were embedded in parsePrompt.
+  const item = {
+    id: 'test',
+    sourceLanguage: 'en',
+    sourceText: 'The user prefers concise answers.',
+    goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }] }
+  } as any;
+
+  const prompt = parsePrompt(item);
+
+  // Verify schema shape is present in the system prompt
+  assert.ok(prompt.system.includes('lunum-sem/0.1-draft'), 'system should mention schema version');
+  assert.ok(prompt.system.includes('"schema"'), 'system should show schema field name');
+  assert.ok(prompt.system.includes('"world"'), 'system should show world field name');
+  assert.ok(prompt.system.includes('"kind"'), 'system should show kind field name');
+  assert.ok(prompt.system.includes('"clauses"'), 'system should show clauses field name');
+  assert.ok(prompt.system.includes('"predicate"'), 'system should show predicate field name');
+  assert.ok(prompt.system.includes('"roles"'), 'system should show roles field name');
+  assert.ok(prompt.system.includes('"negated"'), 'system should show negated field name');
+
+  // Verify one-shot example is present
+  assert.ok(prompt.system.includes('"prefer"'), 'example should contain a concrete predicate');
+  assert.ok(prompt.system.includes('"experiencer"'), 'example should show an experiencer role');
+  assert.ok(prompt.system.includes('"concept"'), 'example should show a concept type');
+
+  // Verify example output is parseable as valid Lunum-Sem
+  // Extract the JSON example (the last JSON object in the prompt)
+  const jsonMatch = prompt.system.match(/\{"schema"[\s\S]*\}$/);
+  assert.ok(jsonMatch, 'system should end with a JSON example');
+  const parsed = JSON.parse(jsonMatch![0]);
+  assert.strictEqual(parsed.schema, 'lunum-sem/0.1-draft');
+  assert.strictEqual(parsed.world, 'real');
+  assert.strictEqual(parsed.kind, 'preference');
+  assert.ok(Array.isArray(parsed.clauses));
+  assert.strictEqual(parsed.clauses[0].predicate, 'prefer');
 });

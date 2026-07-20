@@ -13,6 +13,8 @@
 - agent/pr220-tokenizer-repair
 - agent/qwen/ci/quality-gate-fix
 - agent/qwen/context/pr10-policy-aware-success
+- agent/qwen/eval/max-tokens-default
+- agent/qwen/eval/parse-runner-prompts
 - agent/qwen/issue-11/false-equivalence-rebased
 - agent/qwen/repository-reliability/pr8-contract-evidence
 - agent/qwen/safety/quality-gate-ci-fix
