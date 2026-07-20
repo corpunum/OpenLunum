@@ -6,17 +6,19 @@ import {
   deriveLunumSidecar,
   deriveSurfaceSidecar,
   fingerprintSem,
+  generateCIReport,
   migrateBackward02to01,
   migrateForward01to02,
   parseFingerprint,
   RECORD_SCHEMA,
   RECORD_SCHEMA_02,
   renderSem,
+  runQualityGates,
   SEM_SCHEMA,
   SEM_SCHEMA_02,
   validateSem,
 } from '@corpunum/lunum';
-import type { ContextMessage, LunumSem, LunumRecord, MigrationWarning } from '@corpunum/lunum';
+import type { ContextMessage, LunumSem, LunumRecord, MigrationWarning, QualityGateCIReport } from '@corpunum/lunum';
 
 type MigrationVersion = '0.1' | '0.2';
 
@@ -571,6 +573,123 @@ async function runPipelineCommand(): Promise<void> {
   else console.log(JSON.stringify(result, null, 2));
 }
 
+function detectRecordVersion(raw: unknown): MigrationVersion | null {
+  if (!isObject(raw)) return null;
+  if (raw.recordVersion === RECORD_SCHEMA) return '0.1';
+  if (raw.recordVersion === RECORD_SCHEMA_02) return '0.2';
+  return null;
+}
+
+function validateQualityGateRecord(raw: unknown, index: number): string[] {
+  const version = detectRecordVersion(raw);
+  if (!version) {
+    return [`record[${index}]: recordVersion must equal ${RECORD_SCHEMA} or ${RECORD_SCHEMA_02}`];
+  }
+  return validateRecordSchema(raw, version).map((message) => `record[${index}]: ${message}`);
+}
+
+/**
+ * Extracts a raw record array from a parsed JSON document, honoring the
+ * same "single object | array | wrapped container" conventions used
+ * elsewhere in the Lunum tooling (see scripts/run-quality-gates-ci.mjs).
+ */
+function extractRawRecords(parsed: unknown): unknown[] {
+  if (Array.isArray(parsed)) return parsed;
+  if (isObject(parsed)) {
+    for (const key of ['records', 'items', 'data']) {
+      const candidate = parsed[key];
+      if (Array.isArray(candidate)) return candidate;
+    }
+    return [parsed];
+  }
+  throw new Error('Input must be a JSON object, a JSON array of records, or a wrapped object with a records/items/data array');
+}
+
+/**
+ * Parses quality-gate input text as either a single JSON document (object,
+ * array, or wrapped container) or JSONL (one JSON record per line).
+ */
+function parseQualityGateInput(raw: string): unknown[] {
+  const trimmed = raw.trim();
+  if (!trimmed) throw new Error('input is empty');
+
+  try {
+    return extractRawRecords(JSON.parse(trimmed));
+  } catch (jsonError) {
+    const lines = trimmed.split(/\r?\n/u).filter((line) => line.trim().length > 0);
+    if (lines.length === 0) throw new Error('input is empty');
+
+    const records: unknown[] = [];
+    for (const [index, line] of lines.entries()) {
+      try {
+        records.push(JSON.parse(line));
+      } catch (lineError) {
+        throw new Error(
+          `malformed JSON input: not a single valid JSON document (${jsonError instanceof Error ? jsonError.message : String(jsonError)}) and not valid JSONL (line ${index + 1}: ${lineError instanceof Error ? lineError.message : String(lineError)})`,
+        );
+      }
+    }
+    return records;
+  }
+}
+
+async function readStdin(): Promise<string> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of process.stdin) chunks.push(Buffer.from(chunk));
+  return Buffer.concat(chunks).toString('utf8');
+}
+
+/**
+ * `lunum quality-gate` — a thin CLI shell around the existing
+ * `@corpunum/lunum` quality-gate library (`runQualityGates` /
+ * `generateCIReport`). All scoring, thresholding, and pass/warn/fail
+ * policy lives in packages/core; this function only handles flag
+ * parsing, input reading/parsing, record-shape validation, and result
+ * formatting. It never evaluates a batch that contains an invalid or
+ * malformed record (fail closed) and writes --output atomically.
+ */
+async function runQualityGateCommand(): Promise<void> {
+  try {
+    const inputPath = flag('input') ?? flag('file');
+    const outputPath = flag('output');
+    const strict = process.argv.includes('--strict');
+    const format = flag('format') ?? 'json';
+    if (format !== 'json' && format !== 'markdown') {
+      throw new Error(`--format must be "json" or "markdown", got "${format}"`);
+    }
+
+    const minPassRateRaw = flag('min-pass-rate');
+    let minimumPassRate: number | undefined;
+    if (minPassRateRaw !== undefined) {
+      minimumPassRate = Number(minPassRateRaw);
+      if (!Number.isFinite(minimumPassRate)) throw new Error(`--min-pass-rate must be a number, got "${minPassRateRaw}"`);
+    }
+
+    const rawText = inputPath && inputPath !== '-' ? await readFile(inputPath, 'utf8') : await readStdin();
+    const rawRecords = parseQualityGateInput(rawText);
+    if (rawRecords.length === 0) throw new Error('no records to evaluate (empty batch)');
+
+    const validationErrors = rawRecords.flatMap((raw, index) => validateQualityGateRecord(raw, index));
+    if (validationErrors.length > 0) {
+      throw new Error(`input contains invalid record(s); aborting without partial evaluation:\n${validationErrors.map((message) => `  ${message}`).join('\n')}`);
+    }
+
+    const records = rawRecords as unknown as LunumRecord[];
+    const report: QualityGateCIReport = runQualityGates(records, {
+      strictMode: strict,
+      ...(minimumPassRate !== undefined ? { minimumPassRate } : {}),
+    });
+
+    console.log(format === 'markdown' ? generateCIReport(report) : JSON.stringify(report, null, 2));
+    if (outputPath) await writeJsonAtomically(outputPath, report);
+
+    process.exitCode = report.exitCode;
+  } catch (error) {
+    console.error(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    process.exitCode = 2;
+  }
+}
+
 async function main(): Promise<void> {
   const command = process.argv[2];
   if (command === 'inspect') {
@@ -601,7 +720,11 @@ async function main(): Promise<void> {
     await runPipelineCommand();
     return;
   }
-  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> --from 0.1 --to 0.2 [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full]');
+  if (command === 'quality-gate') {
+    await runQualityGateCommand();
+    return;
+  }
+  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> --from 0.1 --to 0.2 [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full] | quality-gate [--input <file>|-] [--strict] [--min-pass-rate <n>] [--format json|markdown] [--output <file>]');
   process.exitCode = 2;
 }
 
