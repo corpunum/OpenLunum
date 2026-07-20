@@ -212,6 +212,7 @@ function runConformanceTests(_records: LunumRecord[]): GateResultEntry {
 function runPromptGates(records: LunumRecord[]): GateResultEntry {
   const gates = new PromptQualityGates();
   const details: string[] = [];
+  const warnings: string[] = [];
   let passed = true;
   let score = 0;
 
@@ -224,6 +225,15 @@ function runPromptGates(records: LunumRecord[]): GateResultEntry {
         passed = false;
         details.push(`Prompt gate failed for ${record.fingerprint.slice(0, 8)}: ${result.errors?.join(', ')}`);
       }
+      // Forward the per-record warnings PromptQualityGates already computes
+      // (e.g. "approaching token limit") so strict-mode consumers of
+      // GateResultEntry.warnings actually see them; this was previously
+      // dropped here even though the field exists for exactly this purpose.
+      if (result.warnings && result.warnings.length > 0) {
+        for (const warning of result.warnings) {
+          warnings.push(`${record.fingerprint.slice(0, 8)}: ${warning}`);
+        }
+      }
     } catch (error) {
       passed = false;
       details.push('Prompt gate validation threw error');
@@ -235,7 +245,8 @@ function runPromptGates(records: LunumRecord[]): GateResultEntry {
     name: 'prompt-gates',
     passed,
     score: passed ? 1 : 0,
-    details: details.length > 0 ? details : [`${records.length} prompt validations passed`]
+    details: details.length > 0 ? details : [`${records.length} prompt validations passed`],
+    ...(warnings.length > 0 ? { warnings } : {})
   };
 }
 
