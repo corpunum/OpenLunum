@@ -2,8 +2,20 @@ import type { ModelProfile } from './types.js';
 
 export const DEFAULT_MAX_TOKENS = 4096;
 
+export function resolveMaxTokens(value: number | undefined): number {
+  const resolved = value ?? DEFAULT_MAX_TOKENS;
+  if (!Number.isSafeInteger(resolved) || resolved < 1) {
+    throw new Error('maxTokens must be a positive safe integer');
+  }
+  return resolved;
+}
+
 export class OpenAICompatibleModel {
-  constructor(private readonly profile: ModelProfile) {}
+  private readonly maxTokens: number;
+
+  constructor(private readonly profile: ModelProfile) {
+    this.maxTokens = resolveMaxTokens(profile.maxTokens);
+  }
 
   private headers(): Record<string, string> {
     const headers: Record<string, string> = { 'content-type': 'application/json' };
@@ -26,7 +38,7 @@ export class OpenAICompatibleModel {
     const body: Record<string, unknown> = {
       model: this.profile.model,
       temperature: this.profile.temperature,
-      max_tokens: this.profile.maxTokens ?? DEFAULT_MAX_TOKENS,
+      max_tokens: this.maxTokens,
       messages: [{ role: 'system', content: system }, { role: 'user', content: user }]
     };
     if (this.profile.seed !== undefined) body.seed = this.profile.seed;
