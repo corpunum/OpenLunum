@@ -58,9 +58,13 @@ test('semantic and fingerprint comparison are symmetric for bounded identifier v
   assert.equal(forward.hardCompatible, true);
 });
 
-test('negation, modality, kind, and extra clauses fail closed', () => {
+test('schema, negation, modality, kind, and extra clauses fail closed', () => {
   const generator = new NearSemanticFingerprintGenerator(0.5);
   const mutations: LunumSem[] = [];
+
+  const differentSchema = createSem();
+  differentSchema.schema = 'lunum-sem/0.2';
+  mutations.push(differentSchema);
 
   const negated = createSem();
   negated.clauses[0]!.negated = true;
