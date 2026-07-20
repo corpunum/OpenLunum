@@ -58,9 +58,10 @@ async function captureCompletionBody(modelProfile: ModelProfile): Promise<Record
   }
 }
 
-test('complete sends the default max_tokens budget', async () => {
+test('complete sends the default max_tokens budget without inventing optional fields', async () => {
   const body = await captureCompletionBody(profile());
   assert.equal(body.max_tokens, DEFAULT_MAX_TOKENS);
+  assert.equal(Object.hasOwn(body, 'seed'), false);
 });
 
 test('complete uses a profile-specific max_tokens budget', async () => {
