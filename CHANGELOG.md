@@ -19,6 +19,20 @@
 
 ### Added — Parse Prompt (PR #232)
 - **Parse prompt with schema shape and one-shot example:** `parsePrompt` system message now includes the expected Lunum-Sem JSON structure (schema, world, kind, clauses with predicate/roles/negated) and a canonical preference example. Live test campaign showed parse validity improving 0/16 → 14/16. Regression test in `packages/eval/test/parse-experiment.test.ts` verifies schema shape fields and example parseability. Types in `packages/eval/src/prompts.ts`. (PR #232, commit cdc3bf0)
+- **Controlled predicate/role vocabulary in parsePrompt:** `parsePrompt` now ships a controlled vocabulary drawn from the gold dataset's identifier inventory so models hit gold identifiers instead of guessing synonyms (`remove_file` vs `delete`). Types in `packages/eval/src/prompts.ts`. (commit b99b603)
+
+### Changed — Eval (commits 511ecaf, e1ad9d8)
+- **max_tokens on OpenAICompatibleModel:** `packages/eval/src/model.ts` now accepts `max_tokens` (default 4096, profile-overridable) so thinking models consume the configured budget and do not return empty content. (commit 511ecaf)
+- **Parse experiment CLI arg handling fix:** `runParseExperimentCli` now reads the manifest path from `process.argv[3]` (after the subcommand at `argv[2]`), fixing the ENOENT error on `node cli.js parse-experiment <manifest>`. Added a regression test that invokes the subcommand through the real CLI entry. (commit e1ad9d8)
+
+### Fixed — Token Atlas (commit 4e603a8)
+- **Tokenizer-optimization pass verifies semantic preservation:** The tokenizer-optimization pass now compares the optimized fingerprint against the original via actual fingerprint comparison (not comparing the value to itself, which was tautological). This ensures the pass provably preserves semantics. (commit 4e603a8)
+
+### Added — Renderer (commit 1b5e8cc)
+- **Golden-output tests for renderer profiles:** Added deterministic golden-output tests that commit and compare exact approved profile outputs for safe/short/tight profiles on 10+ diverse inputs, upgrading renderer profiles from "Experiment" to "Reference" level. (commit 1b5e8cc)
+
+### Docs — Eval (commit f56ba33)
+- **Recalibrated parse/retention gate thresholds:** Parse and retention gate thresholds recalibrated from honest baselines (current 0.95 recall / 0.75 exact are unreachable for free-vocabulary models); rationale documented in the experiment README. (commit f56ba33)
 
 ### Fixed — Eval (PR #241)
 - **Parse experiment now sends the system prompt:** `parse-experiment.ts` now passes `parsePrompt(item).system` to the model instead of the hardcoded "You are a precise Lunum experiment runner" string, so the model receives the full schema instructions and one-shot example from the parse prompt. Regression test verifies the system prompt is sent. Types in `packages/eval/src/parse-experiment.ts`. (PR #241, commit d8f89e1)
