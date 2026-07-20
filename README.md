@@ -162,6 +162,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 - Historical research and measured results from Lunum 1 through 2.7.
 - Integration profiles for OpenUnum, Claude Code, Codex CLI, Gemini CLI/Antigravity transition, OpenCode, Pi, OpenClaw, and generic Node agents.
 - Prompt-injection resistance tests with 10 adversarial inputs.
+- Parse prompt with embedded schema shape and one-shot example: parsePrompt now includes the expected Lunum-Sem JSON structure and a canonical preference example; live test showed parse validity improving 0/16 → 14/16. Regression test in `packages/eval/test/parse-experiment.test.ts`.
 - Mixed-context quality gates for natural vs Lunum vs mixed evaluation.
 - Threat model with concrete mitigations and parser-hallucination tests.
 - Compatibility matrix for schema-package versions.
