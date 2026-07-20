@@ -126,12 +126,25 @@ fi
 
 log "Pi ally-loop starting in $WORKDIR (provider: $PI_PROVIDER, model: $PI_MODEL)"
 
+ASSIGNMENT_FILE="$REPO/reports/orchestrator/WORKER_ASSIGNMENT_ALLY.md"
+
 while true; do
   # Thermal gating is rig-only (separate physical machine, no Ally telemetry
   # available today — see header note). Only honor a manual/global PAUSED.
   if [[ -f "$REPO/reports/orchestrator/PAUSED" ]]; then
     log "paused — waiting"
     sleep 60
+    continue
+  fi
+
+  # 2026-07-21: this loop previously ran the campaign prompt unconditionally,
+  # which led Pi to write an "idle" report when it found no explicit task and
+  # auto_open_prs() would dutifully turn that into a PR (agent/ally/253-idle
+  # recurred across at least 2 closed PRs). Require an explicit assignment
+  # file before invoking Pi at all — no assignment means no branch, no PR.
+  if [[ ! -f "$ASSIGNMENT_FILE" ]]; then
+    log "no explicit assignment ($ASSIGNMENT_FILE) — idle, waiting"
+    sleep 300
     continue
   fi
 

@@ -34,10 +34,25 @@ ensure_worktree() {
 log "Docs loop starting (model: $DOCS_MODEL)"
 ensure_worktree
 
+ASSIGNMENT_FILE="$REPO/reports/orchestrator/WORKER_ASSIGNMENT_DOCS.md"
+
 while true; do
   if [[ -f "$REPO/reports/orchestrator/PAUSED" ]]; then
     log "paused (thermal) — waiting"
     sleep 60
+    continue
+  fi
+
+  # 2026-07-21: require an explicit assignment before doing a docs pass.
+  # Previously this loop auto-created a branch+PR every time main advanced
+  # with non-docs commits, with no gate — agent/docs/sync-* branches
+  # accumulated regardless of whether anyone actually wanted a docs pass
+  # right then. STAMP is intentionally not advanced here: once an
+  # assignment does appear, the pass picks up the full backlog since the
+  # last real pass, same as before.
+  if [[ ! -f "$ASSIGNMENT_FILE" ]]; then
+    log "no explicit assignment ($ASSIGNMENT_FILE) — idle, waiting"
+    sleep "$CHECK_SECONDS"
     continue
   fi
 
