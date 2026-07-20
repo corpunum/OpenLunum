@@ -8,6 +8,7 @@ Provides bounded local OpenAI-compatible parse/realization experiments with data
 
 ## Features
 
+- **Parse Experiment Runner:** Runs parse experiments against local models for EN/EL/ES/ID with per-language metrics, cross-language comparison reports, and fingerprint-based scoring. Invoked via `node cli.js parse-experiment <manifest-path>`. CLI arg handling reads `process.argv[3]` (manifest path); `process.argv[2]` is the subcommand name. 424 lines of implementation. (PR #228)
 - **Realization Runner:** Experiment runner with protected-literal scoring for multilingual realization (EN/EL/ES/ID).
 - **Token Atlas:** Cross-model, cross-profile token measurement framework for natural vs renderer profile comparison.
 - **Retention regression gate:** Baseline store with provenance (dataset/model/schema), regression detection, stale-baseline checks, and CI integration. Prevents multilingual retention quality from degrading over time.
@@ -37,7 +38,18 @@ pnpm eval:smoke
 
 # Run retention experiment
 pnpm eval:retention
+
+# Run parse experiment via CLI
+node cli.js parse-experiment experiments/<id>/experiment.json
 ```
+
+## Parse experiment
+
+```bash
+node cli.js parse-experiment experiments/live-evidence-20260720/experiment.json
+```
+
+Runs parse experiments on EN/EL/ES/ID against a configured local model. Publishes per-language metrics, cross-language comparison reports, and fingerprint-based scoring (exact + near-semantic). Supports gated experiments with configurable `minimumFeatureRecall`, `minimumExactRate`, and `requireProtectedLiteralCoverage` gates.
 
 ## Realization experiment
 

@@ -14,6 +14,7 @@
 - MCP (Model Context Protocol) prototype reference server and tooling for services.
 - OpenUnum compatibility package matching existing product sidecar shapes.
 - Profile Selection Result type for renderer profile selection.
+- Parse experiment runner for EN/EL/ES/ID with per-language metrics, cross-language comparison reports, and fingerprint-based scoring. CLI invocation via `node cli.js parse-experiment <manifest>`. (PR #228)
 - Realization runner with protected-literal scoring.
 - Token Atlas for cross-model, cross-profile token measurement.
 - API stability tests with golden snapshots for `packages/core`.

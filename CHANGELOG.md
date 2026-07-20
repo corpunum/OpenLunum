@@ -2,6 +2,15 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Fixed — Eval Pipeline (PR #228, commit 7454018)
+- **Parse-experiment CLI arg fix:** `runParseExperimentCli()` was reading `process.argv[2]` (the subcommand name 'parse-experiment') instead of `process.argv[3]` (the manifest path), causing ENOENT when invoked via `node cli.js parse-experiment <manifest>`. Fixed to read `argv[3]`. Added a regression test (spawns the real CLI process via `execFile`) that verifies end-to-end correctness. 99-line test added to `packages/eval/test/parse-experiment.test.ts`. (PR #228, commit 7454018)
+
+### Fixed — Eval Pipeline (PR #220)
+- **Parse-experiment prompt:** `parse-experiment.ts` now sends `parsePrompt(item).system` instead of the generic "experiment runner" string, ensuring the model receives schema instructions. (PR #220, merged with PR #228)
+
+### Docs — WORK_QUEUE v5 (commit 235be01)
+- **WORK_QUEUE v5 — live-evidence repairs:** New section documenting findings from the 2026-07-20 live test campaign. The parse runner had discarded its own prompt, causing every historical parse/retention result to score garbage. Items cover: parse-experiment CLI arg handling, parse runner prompt fix, `max_tokens` addition for thinking models, schema embedding in parse prompt, controlled predicate/role vocabulary, near-semantic fingerprint scoring in parse experiments, re-run of 4-language retention with honest baselines, and gate recalibration from honest baselines. (commit 235be01)
+
 ### Added — Merge Policy (PR #187, commit 88017f8)
 - **Fail-closed exact-head merge policy:** `scripts/pi-merge-policy.mjs` evaluates merge eligibility against required checks (verify, schema-drift, report-validation, protected-data-boundary; quality-gates when core/eval src changes), enforces fail-closed on missing/pending/failed checks at the exact head commit, and blocks drafts, blockers, and stale reviews. `scripts/pi-merge-loop.sh` runs the auto-merge bot that picks up `ready-for-merge` and `orchestrator-approved` PRs, classifies paths as hard-protected (CI, agent infra, protected data → always require `claude-review`) or soft-protected (core types, schemas, registry → reviewer override via `LGTM-protected` comment), evaluates the merge policy before each merge, binds the merge to the exact head commit that passed policy (`--match-head-commit`), verifies main green after merge, and auto-reverts with a red-merge report when main goes red. Labels: `merge-policy-blocked`, `claude-review`, `needs-rebase`, `needs-work`, `maintainer-blocked`. Tests in `scripts/pi-merge-policy.test.mjs`. (PR #187, commit 88017f8)
 

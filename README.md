@@ -140,6 +140,7 @@ Lunum began as an independent language and memory experiment, then a reduced sha
 ## What exists today
 
 - A strict reference implementation for Lunum-Sem, providing semantic contracts, deterministic canonicalization/fingerprint library, and release provenance.
+- A parse experiment runner for EN/EL/ES/ID with per-language metrics, cross-language comparison reports, and CLI invocation (`node cli.js parse-experiment <manifest>`). 424 lines of implementation; CLI arg fix ensures manifest is read from `argv[3]`. (PR #228)
 - A conservative reference renderer and mixed-context compiler.
 - Safe, short, and tight renderer profiles without changing semantics.
 - Tokenizer measurement framework with llama.cpp-compatible counting.
