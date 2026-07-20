@@ -1,7 +1,8 @@
 import { canonicalizeSem, stableStringify } from './canonicalize.js';
 import { fingerprintSem } from './fingerprint.js';
+import { LlamaTokenizer } from './llama-tokenizer.js';
 import { ProfileGenerator } from './profiles.js';
-import type { ProfileType } from './profiles.js';
+import type { ProfileResult, ProfileType } from './profiles.js';
 import type { AtlasEntry, ModelTokenizerProfile, ProfileKey } from './token-atlas.js';
 import type { LunumRecord } from './types.js';
 
@@ -69,6 +70,8 @@ export interface VerifiedTokenizerOptimizationPassOptions {
   sourceRendererProfile?: string;
 }
 
+const PROFILE_TYPES: readonly ProfileType[] = ['safe', 'short', 'tight'];
+
 function reductionPercentage(natural: number, optimized: number): number {
   if (natural <= 0) return 0;
   return Math.round((1 - optimized / natural) * 10000) / 100;
@@ -79,7 +82,16 @@ function artifactId(model: ModelTokenizerProfile, sourceRendererProfile: string)
   return `tight/${encode(model.name)}/${encode(model.tokenizer.model ?? 'unspecified')}/${encode(sourceRendererProfile)}`;
 }
 
-function measurementErrors(entry: AtlasEntry, modelProfile: ModelTokenizerProfile): string[] {
+function naturalMeasurementText(record: LunumRecord): string {
+  if (record.source.text) return record.source.text;
+  return Object.values(record.renderings)[0]?.code ?? '';
+}
+
+function measurementErrors(
+  entry: AtlasEntry,
+  modelProfile: ModelTokenizerProfile,
+  generated: Record<ProfileType, ProfileResult>,
+): string[] {
   const modelName = modelProfile.name;
   const measures = entry.measurements[modelName];
   if (!measures) return [`Missing measurement for model ${modelName}`];
@@ -91,6 +103,15 @@ function measurementErrors(entry: AtlasEntry, modelProfile: ModelTokenizerProfil
   } else if (stableStringify(measuredTokenizer) !== stableStringify(modelProfile.tokenizer)) {
     errors.push(`${modelName}: measured tokenizer configuration does not match artifact configuration`);
   }
+
+  const tokenizer = new LlamaTokenizer(modelProfile.tokenizer);
+  const texts: Record<ProfileKey, string> = {
+    natural: naturalMeasurementText(entry.record),
+    safe: generated.safe.record.renderings.safe?.code ?? '',
+    short: generated.short.record.renderings.short?.code ?? '',
+    tight: generated.tight.record.renderings.tight?.code ?? '',
+  };
+
   for (const profile of ['natural', 'safe', 'short', 'tight'] as const) {
     const measurement = measures[profile];
     if (measurement.profile !== profile) errors.push(`${modelName}/${profile}: measurement is labelled ${measurement.profile}`);
@@ -98,19 +119,29 @@ function measurementErrors(entry: AtlasEntry, modelProfile: ModelTokenizerProfil
       errors.push(`${modelName}/${profile}: tokenCount must be a positive safe integer`);
     }
     for (const error of measurement.errors ?? []) errors.push(`${modelName}/${profile}: ${error}`);
+
+    if (profile !== 'natural' && texts[profile].length === 0) {
+      errors.push(`${modelName}/${profile}: current renderer did not emit profile code`);
+      continue;
+    }
+    const current = tokenizer.countTokens(texts[profile]);
+    for (const error of current.errors ?? []) errors.push(`${modelName}/${profile}: current tokenizer error: ${error}`);
+    if (current.tokens !== measurement.tokenCount) {
+      errors.push(
+        `${modelName}/${profile}: measured tokenCount ${measurement.tokenCount} does not match current output count ${current.tokens}`,
+      );
+    }
   }
   return errors;
 }
 
 function candidateFor(
-  generator: ProfileGenerator,
-  entry: AtlasEntry,
+  profileResult: ProfileResult,
   profile: ProfileType,
   tokenCount: number,
   originalCanonical: string,
   originalFingerprint: string,
 ): VerifiedProfileCandidate {
-  const profileResult = generator.profile(entry.record, profile);
   const record = profileResult.record;
   const optimizedCanonical = stableStringify(canonicalizeSem(record.sem));
   const optimizedFingerprint = fingerprintSem(record.sem);
@@ -131,9 +162,10 @@ function candidateFor(
 
 /**
  * Select the lowest-token profile that independently proves semantic
- * preservation. Attached fingerprints are untrusted input and must match the
- * independently recomputed source fingerprint before any measurement can be
- * accepted into a model-specific artifact.
+ * preservation. Attached fingerprints and token measurements are untrusted:
+ * source fingerprints are recomputed, every current profile is rendered,
+ * current output is re-tokenized with the bound tokenizer, and only exact
+ * measurement matches may enter a model-specific artifact.
  */
 export function runVerifiedTokenizerOptimizationPass(
   entries: AtlasEntry[],
@@ -175,13 +207,23 @@ export function runVerifiedTokenizerOptimizationPass(
       recordFingerprints.push(originalFingerprint);
 
       if (entry.fingerprint !== originalFingerprint || entry.record.fingerprint !== originalFingerprint) {
-        artifactErrors.push(
-          `${originalFingerprint}: attached fingerprint is stale or inconsistent with canonical semantic content`,
-        );
+        artifactErrors.push(`${originalFingerprint}: attached fingerprint is stale or inconsistent with canonical semantic content`);
         continue;
       }
 
-      const invalidMeasurements = measurementErrors(entry, modelProfile);
+      let generated: Record<ProfileType, ProfileResult>;
+      try {
+        generated = {
+          safe: generator.profile(entry.record, 'safe'),
+          short: generator.profile(entry.record, 'short'),
+          tight: generator.profile(entry.record, 'tight'),
+        };
+      } catch (error) {
+        artifactErrors.push(`${originalFingerprint}: renderer generation failed: ${error instanceof Error ? error.message : String(error)}`);
+        continue;
+      }
+
+      const invalidMeasurements = measurementErrors(entry, modelProfile, generated);
       if (invalidMeasurements.length > 0) {
         artifactErrors.push(...invalidMeasurements.map((error) => `${originalFingerprint}: ${error}`));
         continue;
@@ -195,10 +237,9 @@ export function runVerifiedTokenizerOptimizationPass(
         tight: measures.tight.tokenCount,
       };
 
-      const candidates = (['safe', 'short', 'tight'] as const)
+      const candidates = PROFILE_TYPES
         .map((profile) => candidateFor(
-          generator,
-          entry,
+          generated[profile],
           profile,
           profileTokens[profile],
           originalCanonical,
