@@ -62,6 +62,13 @@ export function infrastructurePrompt(): { system: string; user: string } {
 }
 
 export function parsePrompt(item: DatasetItem): { system: string; user: string } {
+  const exampleOutput = JSON.stringify({
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
+  });
+
   return {
     system: [
       'Convert the input into Lunum-Sem JSON.',
@@ -69,8 +76,23 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       'Use schema lunum-sem/0.1-draft.',
       'Preserve entities, roles, negation, conditions, quantities, dates, time, modality, and uncertainty.',
       'Use language-neutral controlled identifiers in lower_snake_case.',
-      'Do not invent facts. If ambiguous, record an annotation warning rather than choosing silently.'
-    ].join(' '),
+      'Do not invent facts. If ambiguous, record an annotation warning rather than choosing silently.',
+      '',
+      'Expected JSON structure:',
+      '{',
+      '  "schema": "lunum-sem/0.1-draft",',
+      '  "world": "real",',
+      '  "kind": "<clause kind>",',
+      '  "clauses": [{',
+      '    "predicate": "<verb>",',
+      '    "roles": { "<role>": { "type": "<actor|concept|object>", "id": "<lower_snake_case>" }, ... },',
+      '    "negated": <true|false>',
+      '  }]',
+      '}',
+      '',
+      'Example:',
+      exampleOutput
+    ].join('\n'),
     user: JSON.stringify({ sourceLanguage: item.sourceLanguage, sourceText: item.sourceText })
   };
 }
