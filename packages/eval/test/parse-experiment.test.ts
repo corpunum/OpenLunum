@@ -470,3 +470,106 @@ test('parsePrompt includes schema shape and one-shot example', () => {
   assert.ok(Array.isArray(parsed.clauses));
   assert.strictEqual(parsed.clauses[0].predicate, 'prefer');
 });
+
+test('near-semantic matching: high feature recall counts as near-match', async () => {
+  // Near-semantic matching helps when identifiers differ but semantics match
+  // (e.g., model outputs 'remove_file' vs gold's 'delete').
+  const sem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'action',
+    clauses: [{ predicate: 'delete', roles: { agent: { type: 'actor', id: 'user' }, object: { type: 'concept', id: 'file' } }, negated: false }]
+  };
+
+  // Model output with different identifier but same structure (high feature recall)
+  const nearMatch = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'action',
+    clauses: [{ predicate: 'delete', roles: { agent: { type: 'actor', id: 'user' }, object: { type: 'concept', id: 'removed_file' } }, negated: false }]
+  };
+
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/chat/completions') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(nearMatch) } }] }));
+      return;
+    }
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-near-sem-'));
+  try {
+    const items = [
+      { id: 'near-1', sourceLanguage: 'en', sourceText: 'Delete the file.', goldSem: sem }
+    ];
+
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, items.map(i => JSON.stringify(i)).join('\n') + '\n', 'utf8');
+
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(
+      profilePath,
+      JSON.stringify({
+        schema: 'openlunum-model-profile/0.1',
+        id: 'mock',
+        provider: 'openai-compatible',
+        baseUrl: `http://127.0.0.1:${address.port}/v1`,
+        model: 'mock-local',
+        temperature: 0,
+        timeoutMs: 5000
+      }),
+      'utf8'
+    );
+
+    const manifestPath = path.join(temp, 'experiment.json');
+    const outputDir = path.join(temp, 'reports');
+    await writeFile(
+      manifestPath,
+      JSON.stringify({
+        schema: 'openlunum-experiment/0.1',
+        id: 'near-semantic-test',
+        area: 'multilingual-parse',
+        task: 'parse',
+        hypothesis: 'Near-semantic matches report both exact and near scores',
+        baselineCommit: 'test',
+        dataset: { path: datasetPath, sha256: await sha256File(datasetPath) },
+        modelProfile: profilePath,
+        limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 },
+        gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false },
+        outputDirectory: outputDir
+      }),
+      'utf8'
+    );
+
+    const { report, outputDirectory } = await runParseExperiment(manifestPath);
+
+    // Should fail exact match but pass near-semantic
+    assert.strictEqual(report.totalPassed, 0, 'No exact matches expected');
+    assert.ok(report.overallNearSemanticRate > 0, 'report should have non-zero overall near-semantic rate');
+
+    // Check per-language results
+    const resultPath = path.join(outputDirectory, 'parse-results-en.jsonl');
+    const resultLines = (await readFile(resultPath, 'utf8')).trim().split('\n');
+    assert.strictEqual(resultLines.length, 1);
+
+    const result = JSON.parse(resultLines[0]!);
+    assert.strictEqual(result.id, 'near-1');
+    assert.strictEqual(result.exact, false, 'should not be exact match');
+    assert.strictEqual(result.nearSemantic, true, 'near match should be flagged');
+    assert.ok(result.nearSemanticSimilarity! >= 0.7, 'near similarity should be >= threshold');
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});

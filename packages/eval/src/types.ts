@@ -54,6 +54,8 @@ export interface ItemResult {
   featurePrecision?: number;
   protectedLiteralCoverage?: number;
   missingFeatures?: string[];
+  nearSemantic?: boolean;
+  nearSemanticSimilarity?: number;
   result?: Record<string, unknown>;
   error?: string | undefined;
   latencyMs: number;

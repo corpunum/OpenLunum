@@ -9,6 +9,21 @@ import { appendFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { validateSem, compareSem, fingerprintSem } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
+
+// Near-semantic matching threshold: when feature recall >= this, count as near-match
+const NEAR_SEMANTIC_THRESHOLD = 0.7;
+
+/**
+ * Determine if two LunumSem records are near-semantic matches.
+ * A near-match has high feature recall but may differ in identifiers
+ * (e.g., 'delete' vs 'remove_file' for the same predicate).
+ */
+function isNearSemanticMatch(gold: LunumSem, parsed: LunumSem, comparison: ReturnType<typeof compareSem>): boolean {
+  // Already an exact match
+  if (comparison.exactFingerprint) return true;
+  // High feature recall indicates near-semantic match
+  return comparison.featureRecall >= NEAR_SEMANTIC_THRESHOLD;
+}
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
@@ -39,6 +54,8 @@ export interface LanguageMetrics {
   meanLatencyMs: number;
   fingerprintMatches: number;
   exactFingerprintCount: number;
+  nearSemanticRate: number;
+  nearSemanticMatches: number;
 }
 
 // ── Experiment report ──────────────────────────────────────────────
@@ -55,6 +72,7 @@ export interface ParseExperimentReport {
   overallFeatureRecall: number;
   overallFeaturePrecision: number;
   overallMeanLatencyMs: number;
+  overallNearSemanticRate: number;
   languageMetrics: LanguageMetrics[];
   crossLanguageComparison: CrossLanguageComparison;
   languageBreakdown: Record<ParseLanguage, number[]>;
@@ -65,6 +83,7 @@ export interface CrossLanguageComparison {
   languagesIncluded: ParseLanguage[];
   bestExactLanguage: ParseLanguage | null;
   bestRecallLanguage: ParseLanguage | null;
+  bestNearSemanticLanguage: ParseLanguage | null;
   fastestLanguage: ParseLanguage | null;
   consistencyScore: number; // How consistent are results across languages
   variance: Record<string, number>;
@@ -157,6 +176,8 @@ export async function runParseExperiment(
           const parsedSem = parsed as LunumSem;
           const comparison = compareSem(item.goldSem as LunumSem, parsedSem);
 
+          const nearMatch = isNearSemanticMatch(item.goldSem as LunumSem, parsedSem, comparison);
+
           finalResult = {
             id: item.id,
             status: comparison.exactFingerprint ? 'passed' : 'failed',
@@ -165,6 +186,8 @@ export async function runParseExperiment(
             exact: comparison.exactFingerprint,
             featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision,
+            nearSemantic: nearMatch,
+            nearSemanticSimilarity: comparison.featureRecall,
             missingFeatures: comparison.missingFeatures,
             latencyMs: performance.now() - started
           };
@@ -203,6 +226,7 @@ export async function runParseExperiment(
   let totalExactRate = 0;
   let totalFeatureRecall = 0;
   let totalFeaturePrecision = 0;
+  let totalNearSemanticRate = 0;
   let totalLatencyMs = 0;
 
   for (const lang of PARSE_LANGUAGES) {
@@ -214,6 +238,8 @@ export async function runParseExperiment(
 
     const exactCount = results.filter(r => r.exact === true).length;
     const exactRate = total > 0 ? exactCount / total : 0;
+    const nearSemCount = results.filter(r => r.nearSemantic === true).length;
+    const nearSemRate = total > 0 ? nearSemCount / total : 0;
     const avgRecall = total > 0 ? results.reduce((s, r) => s + (r.featureRecall ?? 0), 0) / total : 0;
     const avgPrecision = total > 0 ? results.reduce((s, r) => s + (r.featurePrecision ?? 0), 0) / total : 0;
     const avgLatency = total > 0 ? results.reduce((s, r) => s + r.latencyMs, 0) / total : 0;
@@ -230,7 +256,9 @@ export async function runParseExperiment(
       featurePrecision: avgPrecision,
       meanLatencyMs: avgLatency,
       fingerprintMatches: exactCount,
-      exactFingerprintCount: exactCount
+      exactFingerprintCount: exactCount,
+      nearSemanticRate: nearSemRate,
+      nearSemanticMatches: nearSemCount
     };
     languageMetrics.push(metrics);
 
@@ -242,6 +270,7 @@ export async function runParseExperiment(
     totalExactRate += exactRate;
     totalFeatureRecall += avgRecall;
     totalFeaturePrecision += avgPrecision;
+    totalNearSemanticRate += nearSemRate;
     totalLatencyMs += avgLatency;
 
     // Track failure modes
@@ -277,6 +306,14 @@ export async function runParseExperiment(
       }, languagesIncluded[0]!)
     : null;
 
+  const bestNearSemantic: ParseLanguage | null = languagesIncluded.length > 0
+    ? languagesIncluded.reduce<ParseLanguage>((best, lang) => {
+        const m = languageMetrics.find(l => l.language === lang)!;
+        const bestMetrics = languageMetrics.find(l => l.language === best);
+        return m.nearSemanticRate > (bestMetrics?.nearSemanticRate ?? 0) ? lang : best;
+      }, languagesIncluded[0]!)
+    : null;
+
   const fastest: ParseLanguage | null = languagesIncluded.length > 0
     ? languagesIncluded.reduce<ParseLanguage>((best, lang) => {
         const m = languageMetrics.find(l => l.language === lang)!;
@@ -303,6 +340,7 @@ export async function runParseExperiment(
     languagesIncluded,
     bestExactLanguage: bestExact,
     bestRecallLanguage: bestRecall,
+    bestNearSemanticLanguage: bestNearSemantic,
     fastestLanguage: fastest,
     consistencyScore,
     variance
@@ -321,6 +359,7 @@ export async function runParseExperiment(
     overallExactRate: totalItems > 0 ? totalExactRate / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
     overallFeatureRecall: totalItems > 0 ? totalFeatureRecall / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
     overallFeaturePrecision: totalItems > 0 ? totalFeaturePrecision / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
+    overallNearSemanticRate: totalItems > 0 ? totalNearSemanticRate / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
     overallMeanLatencyMs: totalItems > 0 ? totalLatencyMs / PARSE_LANGUAGES.filter(l => languageResults.has(l)).length : 0,
     languageMetrics,
     crossLanguageComparison,
@@ -371,13 +410,14 @@ export async function runParseExperiment(
 - Total Errors: ${totalErrors}
 
 ## Per-Language Metrics
-| Language | Items | Passed | Exact Rate | Recall | Precision | Latency (ms) |
-|----------|-------|--------|------------|--------|-----------|--------------|
-${languageMetrics.map(m => `| ${m.languageLabel} (${m.language}) | ${m.totalItems} | ${m.passedItems} | ${m.exactRate.toFixed(4)} | ${m.featureRecall.toFixed(4)} | ${m.featurePrecision.toFixed(4)} | ${m.meanLatencyMs.toFixed(2)} |`).join('\n')}
+| Language | Items | Passed | Exact Rate | Near-Semantic Rate | Recall | Precision | Latency (ms) |
+|----------|-------|--------|------------|-------------------|--------|-----------|--------------|
+${languageMetrics.map(m => `| ${m.languageLabel} (${m.language}) | ${m.totalItems} | ${m.passedItems} | ${m.exactRate.toFixed(4)} | ${m.nearSemanticRate.toFixed(4)} | ${m.featureRecall.toFixed(4)} | ${m.featurePrecision.toFixed(4)} | ${m.meanLatencyMs.toFixed(2)} |`).join('\n')}
 
 ## Cross-Language Analysis
 - Best Exact Rate: ${crossLanguageComparison.bestExactLanguage ? PARSE_LANGUAGE_LABELS[crossLanguageComparison.bestExactLanguage] : 'N/A'}
 - Best Recall: ${crossLanguageComparison.bestRecallLanguage ? PARSE_LANGUAGE_LABELS[crossLanguageComparison.bestRecallLanguage] : 'N/A'}
+- Best Near-Semantic Rate: ${crossLanguageComparison.bestNearSemanticLanguage ? PARSE_LANGUAGE_LABELS[crossLanguageComparison.bestNearSemanticLanguage] : 'N/A'}
 - Fastest: ${crossLanguageComparison.fastestLanguage ? PARSE_LANGUAGE_LABELS[crossLanguageComparison.fastestLanguage] : 'N/A'}
 - Consistency Score: ${crossLanguageComparison.consistencyScore.toFixed(4)}
 
