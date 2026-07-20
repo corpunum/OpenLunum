@@ -73,11 +73,24 @@ hard_halt() {
 }
 
 # ---- Resume path: clears whichever tier is active once cooled -------------
+# 2026-07-20 incident #2 (same evening as the first): once THERMAL_FLAG was
+# set by a soft pause, this branch's "still too hot to resume" case only
+# logged and exited — it never re-checked whether temps had continued
+# climbing past CRITICAL_TEMP while paused. In-flight work is deliberately
+# NOT killed on soft pause (worker/docs PI_TIMEOUT is 1800s), so a
+# generation that was already running when the pause fired could keep the
+# chip hot for up to 30 minutes with no automatic kill in between —
+# temps hit 96.6C a second time before this was caught manually. Now this
+# branch also escalates to hard_halt() if the current reading has crossed
+# CRITICAL_TEMP, on every cycle, not just the cycle that first set the flag.
 if [[ -f "$THERMAL_FLAG" ]]; then
   if (( MAX_T <= RESUME_TEMP )); then
     rm -f "$THERMAL_FLAG" "$PAUSED_FLAG"
     notify "Cooled to ${MAX_T}C — thermal halt cleared (dispatch available)"
     log "thermal resume at ${MAX_T}C"
+  elif (( MAX_T >= CRITICAL_TEMP )); then
+    log "critical halt (escalated while flag held): ${MAX_T}C (>= ${CRITICAL_TEMP}C)"
+    hard_halt
   else
     log "thermal flag held: ${MAX_T}C (resume at <= ${RESUME_TEMP}C)"
   fi
