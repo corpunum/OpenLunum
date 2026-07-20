@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { resolveMaxTokens } from './model.js';
 import type { DatasetItem, ExperimentManifest, ModelProfile } from './types.js';
 
 
@@ -58,7 +59,5 @@ export function validateProfile(value: ModelProfile): void {
   if (value.schema !== 'openlunum-model-profile/0.1') throw new Error('Unsupported model profile schema');
   if (value.provider !== 'openai-compatible') throw new Error('Only openai-compatible profiles are currently supported');
   if (!value.baseUrl || !value.model) throw new Error('baseUrl and model are required');
-  if (value.maxTokens !== undefined && (!Number.isSafeInteger(value.maxTokens) || value.maxTokens < 1)) {
-    throw new Error('maxTokens must be a positive safe integer');
-  }
+  resolveMaxTokens(value.maxTokens);
 }
