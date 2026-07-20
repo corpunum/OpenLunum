@@ -432,6 +432,48 @@ test('parse-experiment CLI arg: argv[3] is the manifest, not argv[2]', async () 
   }
 });
 
+test('parsePrompt includes controlled predicate/role vocabulary', () => {
+  // The gold dataset uses a small, fixed set of predicates, roles, and
+  // identifiers. Shipping this vocabulary in the parse prompt gives models
+  // a concrete inventory so they hit gold identifiers instead of guessing
+  // synonyms (e.g. "delete" vs "remove_file").
+  const item = {
+    id: 'test',
+    sourceLanguage: 'en',
+    sourceText: 'The user prefers concise answers.',
+    goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }] }
+  } as any;
+
+  const prompt = parsePrompt(item);
+
+  // Verify vocabulary section is present
+  assert.ok(prompt.system.includes('Controlled vocabulary'), 'system should include vocabulary section header');
+  assert.ok(prompt.system.includes('Predicates:'), 'system should list predicates');
+  assert.ok(prompt.system.includes('Roles:'), 'system should list roles');
+  assert.ok(prompt.system.includes('Identifiers:'), 'system should list identifiers');
+  assert.ok(prompt.system.includes('Role types:'), 'system should list role types');
+
+  // Verify specific predicates from the gold dataset are present
+  for (const pred of ['deadline', 'delete', 'enable', 'prefer']) {
+    assert.ok(prompt.system.includes(pred), `system should include predicate "${pred}"`);
+  }
+
+  // Verify specific roles from the gold dataset are present
+  for (const role of ['agent', 'experiencer', 'object', 'subject', 'theme', 'time']) {
+    assert.ok(prompt.system.includes(role), `system should include role "${role}"`);
+  }
+
+  // Verify specific identifiers from the gold dataset are present
+  for (const id of ['assistant', 'concise_answers', 'files', 'power_saving', 'project', 'system', 'user']) {
+    assert.ok(prompt.system.includes(id), `system should include identifier "${id}"`);
+  }
+
+  // Verify role types
+  for (const rt of ['actor', 'concept', 'object']) {
+    assert.ok(prompt.system.includes(rt), `system should include role type "${rt}"`);
+  }
+});
+
 test('parsePrompt includes schema shape and one-shot example', () => {
   // The live test campaign showed validity improved 0/16 → 14/16 when the
   // schema shape and one-shot example were embedded in parsePrompt.
@@ -460,9 +502,9 @@ test('parsePrompt includes schema shape and one-shot example', () => {
   assert.ok(prompt.system.includes('"concept"'), 'example should show a concept type');
 
   // Verify example output is parseable as valid Lunum-Sem
-  // Extract the JSON example (the last JSON object in the prompt)
-  const jsonMatch = prompt.system.match(/\{"schema"[\s\S]*\}$/);
-  assert.ok(jsonMatch, 'system should end with a JSON example');
+  // Extract the JSON example (appears before the vocabulary block)
+  const jsonMatch = prompt.system.match(/\{"schema"[\s\S]*?\}(?=\n\s*Controlled vocabulary|$)/);
+  assert.ok(jsonMatch, 'system should contain a JSON example');
   const parsed = JSON.parse(jsonMatch![0]);
   assert.strictEqual(parsed.schema, 'lunum-sem/0.1-draft');
   assert.strictEqual(parsed.world, 'real');
