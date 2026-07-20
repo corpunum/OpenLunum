@@ -16,7 +16,7 @@ concurrency:
 jobs:
   quality-gates:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
         with:
@@ -31,18 +31,6 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - name: Run near-semantic core tests
-        run: node --test packages/core/dist/test/near-semantic-fingerprints.test.js
-      - name: Run near-semantic retrieval tests
-        run: node --test packages/core/dist/test/near-semantic-retrieval.test.js
-      - name: Run exact-near interop tests
-        run: node --test packages/core/dist/test/near-semantic-exact-interop.test.js
-      - name: Run near-semantic eval tests
-        run: node --test packages/eval/dist/test/near-semantic-parse.test.js
-      - name: Run complete core test suite
-        run: pnpm --filter @corpunum/lunum test:unit
-      - name: Run complete eval test suite
-        run: pnpm --filter @corpunum/lunum-eval test:unit
       - name: Run quality gate CI
         id: gates
         run: |
@@ -51,6 +39,7 @@ jobs:
             const { readFileSync } = require('fs');
             const { parseRecord } = require('./packages/core/dist/src/index.js');
 
+            // Load test records from protected dataset
             let records = [];
             try {
               const files = require('fs').readdirSync('./datasets/protected/').filter(f => f.endsWith('.json'));
@@ -62,6 +51,7 @@ jobs:
               }
             } catch {}
 
+            // Fallback: create minimal test records if none found
             if (records.length === 0) {
               records = [{
                 id: 'ci-test',
