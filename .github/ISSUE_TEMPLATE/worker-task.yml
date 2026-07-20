@@ -1,0 +1,129 @@
+name: Bounded worker task
+description: Define one ready implementation or experiment assignment.
+title: "[Task] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for one bounded worker assignment. GitHub issues are the canonical backlog and assignment state.
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Change tier
+      options:
+        - Tier 1 — mechanical
+        - Tier 2 — normal implementation
+        - Tier 3 — semantic or evidence-sensitive
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Work area
+      options:
+        - core / semantic contract
+        - schema / migration
+        - fingerprints / retrieval
+        - rendering / tokenizer
+        - evaluation / evidence
+        - multilingual parse / realization
+        - CLI / API / MCP
+        - adapter / integration
+        - infrastructure / CI
+        - documentation / governance
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or falsifiable hypothesis
+      description: State the bounded problem and the result that would count as improvement.
+    validations:
+      required: true
+
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: Name adjacent work that this issue must not absorb.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Use objective, reviewable criteria. Separate implementation completion from evidence acceptance.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: paths
+    attributes:
+      label: Expected paths and protected boundaries
+      description: List likely code/data paths and whether protected data is involved.
+    validations:
+      required: true
+
+  - type: textarea
+    id: checks
+    attributes:
+      label: Required local and hosted checks
+      placeholder: |
+        Local:
+        - pnpm verify
+        Hosted:
+        - verify
+        - schema-drift
+        - report-validation
+        - protected-data-boundary
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and reproducibility requirements
+      description: Include datasets/hashes, profiles, model environments, report paths, evaluator requirements, and reproduction commands.
+    validations:
+      required: true
+
+  - type: textarea
+    id: budget
+    attributes:
+      label: Assignment budget and stop conditions
+      placeholder: |
+        Maximum attempts:
+        Maximum model calls:
+        Wall-clock limit:
+        Stop when:
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and blockers
+      description: Identify prerequisite issues, decisions, data, model access, or branch-protection requirements.
+
+  - type: checkboxes
+    id: readiness
+    attributes:
+      label: Ready-to-assign checklist
+      options:
+        - label: The issue contains one bounded unit of work.
+          required: true
+        - label: Success metrics and non-goals are explicit.
+          required: true
+        - label: Required evidence and checks are defined.
+          required: true
+        - label: No unresolved semantic decision is delegated to the worker.
+          required: true
+        - label: The assignment fits repository WIP limits.
+          required: true
