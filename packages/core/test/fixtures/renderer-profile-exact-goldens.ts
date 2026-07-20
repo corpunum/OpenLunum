@@ -10,8 +10,8 @@ export const approvedRendererCodes = {
       sha256: "e3f89e38f93f20f4c8ff3885c6e8f278a4766e3ed975a653c0e9a6ee0340d69f",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"fact\",[[\"like\",{\"experiencer\":\"user\",\"theme\":\"coffee\"},0,null,null,null,null,null]],null,null,null]",
-      sha256: "5ee5677914300a0b5cb1e45487b0bd60ffe45338fac7a5c5a75c744a08300bb3",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"fact\",[[\"like\",{\"experiencer\":\"user\",\"theme\":\"coffee\"}]]]",
+      sha256: "8f94baebd48f2f51339ae302304b2eaaf4ec9fb23a31bfc46d100075a9ead1a4",
     },
   },
   "negated": {
@@ -24,8 +24,8 @@ export const approvedRendererCodes = {
       sha256: "829b297f813344f2de676f26418212d5609c2182e3f1d6f543c7502a97868de8",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"fact\",[[\"accept\",{\"agent\":\"system\",\"theme\":\"token\"},1,null,null,null,null,null]],null,null,null]",
-      sha256: "0f7f6bca265b1f7dbe7f34ded46d9615cc159e34f02aeed5778a2bad113d7a32",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"fact\",[[\"accept\",{\"agent\":\"system\",\"theme\":\"token\"},1]]]",
+      sha256: "da95e09f5d4ef1c1163175422233698135e54a478f268200ce8a5164e9993c17",
     },
   },
   "conditions": {
@@ -38,8 +38,8 @@ export const approvedRendererCodes = {
       sha256: "8ed96778c5b2093482223643ec493325a6f745d77b1bfa3dc765044499fbe139",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"tool\",\"instruction\",[[\"grant\",{\"agent\":\"system\",\"target\":\"access\"},0,null,null,[[\"authenticate\",{\"agent\":\"user\"},0,null,null,null,null,null],[\"validate\",{\"subject\":\"token\"},0,null,null,null,null,null]],null,null]],null,null,null]",
-      sha256: "75122571f0b9ce3b8572b501996e6b3dee5121709aa2f31e0ba0f0f5007719d6",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"tool\",\"instruction\",[[\"grant\",{\"agent\":\"system\",\"target\":\"access\"},null,null,null,[[\"authenticate\",{\"agent\":\"user\"}],[\"validate\",{\"subject\":\"token\"}]]]]]",
+      sha256: "e49fad3958e5b23f5988a8b2d7d959b9a4829ed2a0003f7984c21bbdac7af071",
     },
   },
   "modality": {
@@ -52,8 +52,8 @@ export const approvedRendererCodes = {
       sha256: "b7c7e803dd5a7a2c57b55bf0035d6e8e58010a49ae08aab56f80942679814979",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"prediction\",[[\"rain\",{},0,\"possibility\",null,null,null,null]],null,null,null]",
-      sha256: "0b4fc75bb742fb6a390ac2e1d2df75bf1ff71bb0b2d15aead8f3afd18088b687",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"prediction\",[[\"rain\",{},null,\"possibility\"]]]",
+      sha256: "d2c60fb02d2b659d1ec23146fec1df746da644bbe0c53e135cabc34bdd544b57",
     },
   },
   "annotations": {
@@ -66,8 +66,8 @@ export const approvedRendererCodes = {
       sha256: "afe73698ba43bf8eda922b052c79428521cdce8d3ace5656ec38f1cf993404cd",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"preference\",[[\"prefer\",{\"experiencer\":\"user\",\"theme\":\"dark_mode\"},0,null,null,null,null,null]],null,null,{\"confidence\":0.95,\"tags\":[\"ui\"]}]",
-      sha256: "1582a9e7495e5ea131000c938ac720827f17e43dc1f9f38c1ed7be44c2bf0deb",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"preference\",[[\"prefer\",{\"experiencer\":\"user\",\"theme\":\"dark_mode\"}]],null,null,{\"confidence\":0.95,\"tags\":[\"ui\"]}]",
+      sha256: "af192d4474f13680e8fdfd7c1455739a1cffdf6d3a1a26f504ee6b32b5228a55",
     },
   },
   "provenance": {
@@ -80,8 +80,8 @@ export const approvedRendererCodes = {
       sha256: "6e64c33c6339162ebe3a46b9d7b09181fee3dbff8aea78797be7d133b9dbf436",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"fact\",[[\"state\",{\"source\":\"document\",\"theme\":\"fact\"},0,null,null,null,null,null]],null,{\"author\":\"alice\",\"source\":\"manual\"},null]",
-      sha256: "6fe9711b344489df88fe1ee3a25317bf02726219ff38e284d9d27c8ad0a2e2da",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"fact\",[[\"state\",{\"source\":\"document\",\"theme\":\"fact\"}]],null,{\"author\":\"alice\",\"source\":\"manual\"}]",
+      sha256: "7d8fa155555075ff7a112d389f811a4ec162f280bc86e4dc93b9654dd906ff22",
     },
   },
   "metadata-rendering": {
@@ -94,8 +94,8 @@ export const approvedRendererCodes = {
       sha256: "116e7fddc69ef8ae06de8e1765e80840acc4c391a01c5231606fc59dd8b06443",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"tool\",\"rule\",[[\"access\",{\"agent\":\"user\",\"theme\":\"resource\"},0,null,null,null,null,null]],null,{\"source\":\"spec\"},{\"confidence\":0.8}]",
-      sha256: "f3a8a19a09b670ed72e37deb3a4501a2d450c86f00afa63695db7e47da700b26",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"tool\",\"rule\",[[\"access\",{\"agent\":\"user\",\"theme\":\"resource\"}]],null,{\"source\":\"spec\"},{\"confidence\":0.8}]",
+      sha256: "d59b36811985e66b279ec3b7d0984c77fe17f29f34d938b2c33e23a5c958e201",
     },
   },
   "long-role": {
@@ -108,8 +108,8 @@ export const approvedRendererCodes = {
       sha256: "62f50b5c93c644921b4c4f656190b8627515894cfa1992b01f83d09c31637b8f",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"fact\",[[\"process\",{\"agent\":\"system\",\"subject\":\"An extremely long descriptive text that exceeds fifty characters and must be snapshotted\"},0,null,null,null,null,null]],null,null,null]",
-      sha256: "fab74b7c59f2574787320e311a0563607a8dd4ff87dc59aa2548b4a705ddab6e",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"fact\",[[\"process\",{\"agent\":\"system\",\"subject\":\"An extremely long descriptive text that exceeds fifty characters and must be snapshotted\"}]]]",
+      sha256: "6758ec3c85277d784d055e7ff440f9b383ee3352fca3cb0983a70e9f36e966e8",
     },
   },
   "references": {
@@ -122,8 +122,8 @@ export const approvedRendererCodes = {
       sha256: "291e77458f95fa84a90e21da4d2c828ef404481c91330b6a810be75f8e9faa8c",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"tool\",\"instruction\",[[\"see\",{\"agent\":\"reader\",\"theme\":\"doc\"},0,null,null,null,null,null]],[{\"ref\":\"docs\",\"type\":\"source\",\"value\":\"Manual\"}],null,null]",
-      sha256: "8c1ffc53f3ff02d33643fd24d39f41d41f806c4a6d960cd3b7df412e67ac3948",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"tool\",\"instruction\",[[\"see\",{\"agent\":\"reader\",\"theme\":\"doc\"}]],[{\"ref\":\"docs\",\"type\":\"source\",\"value\":\"Manual\"}]]",
+      sha256: "5b0cf41624c1ddeeeefe09d746b411ea4ca5148538648b07fdca669a08f4b3a2",
     },
   },
   "multiple-clauses": {
@@ -136,8 +136,8 @@ export const approvedRendererCodes = {
       sha256: "e9243edb2bdfe38d2bb95ab00384ba377775a35a80d685dbf6a889bfc84951fd",
     },
     tight: {
-      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"statement\",[[\"like\",{\"experiencer\":\"alice\",\"theme\":\"coffee\"},0,null,null,null,null,null],[\"prefer\",{\"experiencer\":\"bob\",\"theme\":\"tea\"},0,null,null,null,null,null]],null,null,null]",
-      sha256: "dd64cccb50435ac8c61a59f7e3eea87b5da6070ad4dcda2fd2d752453b5c3e19",
+      code: "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"statement\",[[\"like\",{\"experiencer\":\"alice\",\"theme\":\"coffee\"}],[\"prefer\",{\"experiencer\":\"bob\",\"theme\":\"tea\"}]]]",
+      sha256: "90e7bbe7f98c3cb73e848206bd6d8364daf3e53c0b655fda8fece0c8edcfff69",
     },
   },
 } as const;
