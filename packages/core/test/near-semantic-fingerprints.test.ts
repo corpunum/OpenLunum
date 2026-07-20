@@ -32,7 +32,7 @@ test('near-semantic fingerprints are deterministic, opaque, and order independen
   };
 
   const fingerprint = generator.generate(first);
-  assert.match(fingerprint, /^nfp:2:sha256:[a-f0-9]{64}:[a-f0-9]{64}:(?:[a-f0-9]{16}\.)*[a-f0-9]{16}$/u);
+  assert.match(fingerprint, /^nfp:2:sha256:[a-f0-9]{64}:[a-f0-9]{64}:(?:-|(?:[a-f0-9]{16}\.)*[a-f0-9]{16})$/u);
   assert.equal(generator.generate(second), fingerprint);
   assert.equal(generator.compare(fingerprint, fingerprint).similarity, 1);
   assert.equal(fingerprint.includes('user'), false);
@@ -116,14 +116,16 @@ test('explicit protected literals are also enforced', () => {
   assert.match(result.hardMismatchReasons?.join('\n') ?? '', /protected literal differs/u);
 });
 
-test('legacy, malformed, and tampered fingerprints fail closed', () => {
+test('legacy, malformed, identical malformed, and tampered fingerprints fail closed', () => {
   const generator = new NearSemanticFingerprintGenerator();
   const first = 'nfp:12345678' as NearSemanticFingerprint;
   const second = 'nfp:87654321' as NearSemanticFingerprint;
-  const invalid = generator.compare(first, second);
-  assert.equal(invalid.similarity, 0);
-  assert.equal(invalid.similar, false);
-  assert.match(invalid.hardMismatchReasons?.join('\n') ?? '', /Invalid or tampered/u);
+  for (const [left, right] of [[first, second], [first, first]] as const) {
+    const invalid = generator.compare(left, right);
+    assert.equal(invalid.similarity, 0);
+    assert.equal(invalid.similar, false);
+    assert.match(invalid.hardMismatchReasons?.join('\n') ?? '', /Invalid or tampered/u);
+  }
 
   const valid = generator.generate(createSem());
   const tampered = `${valid.slice(0, -1)}${valid.endsWith('a') ? 'b' : 'a'}` as NearSemanticFingerprint;
@@ -131,6 +133,23 @@ test('legacy, malformed, and tampered fingerprints fail closed', () => {
   assert.equal(tamperedResult.similarity, 0);
   assert.equal(tamperedResult.similar, false);
   assert.match(tamperedResult.hardMismatchReasons?.join('\n') ?? '', /Invalid or tampered/u);
+});
+
+test('empty semantic feature sketches remain valid and comparable', () => {
+  const generator = new NearSemanticFingerprintGenerator();
+  const empty: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'fact',
+    clauses: []
+  };
+  const fingerprint = generator.generate(empty);
+  assert.match(fingerprint, /:-$/u);
+  const result = generator.compare(fingerprint, fingerprint);
+  assert.equal(result.similar, true);
+  assert.equal(result.similarity, 1);
+  assert.equal(result.matchedWeight, 0);
+  assert.equal(result.totalWeight, 0);
 });
 
 test('compareRecords delegates to semantic comparison', () => {
