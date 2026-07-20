@@ -37,25 +37,25 @@ This report compares the parse performance of two local language models on the m
 
 ## Model 2: SuperQwen AgentWorld 35B A3B
 - Profile: profiles/models/superqwen-agentworld-35b-live.json
-- Results: reports/experiments/multilingual-parse-baselines/superqwen-agentworld-35b-a3b/2026-07-20T15-26-50-880Z/
+- Results: reports/experiments/multilingual-parse-baselines/superqwen-agentworld-35b-a3b/2026-07-20T15-33-48-065Z/
 
 ### Overall Metrics
 - Total Items: 16
-- Passed: 0 (0%)
+- Passed: 1 (6.25%)
 - Failed: 0 (0%)
-- Errors: 16 (100%)
-- Exact Match Rate: 0.0000 (0.0%)
-- Feature Recall: 0.0000 (0.0%)
-- Feature Precision: 0.0000 (0.0%)
-- Mean Latency: 1879.0 ms
+- Errors: 15 (93.75%)
+- Exact Match Rate: 0.0625 (6.25%)
+- Feature Recall: 0.0625 (6.25%)
+- Feature Precision: 0.0625 (6.25%)
+- Mean Latency: 12999.9 ms
 
 ### Per-Language Results
 | Language | Total | Passed | Failed | Errors | Exact Rate | Feature Recall | Feature Precision | Mean Latency (ms) |
 |----------|-------|--------|--------|--------|------------|----------------|-------------------|-------------------|
-| English  | 4     | 0      | 0      | 4      | 0.0000     | 0.0000         | 0.0000            | 3770.0            |
-| Greek    | 4     | 0      | 0      | 4      | 0.0000     | 0.0000         | 0.0000            | 6.3               |
-| Spanish  | 4     | 0      | 0      | 4      | 0.0000     | 0.0000         | 0.0000            | 1.3               |
-| Indonesian| 4    | 0      | 0      | 4      | 0.0000     | 0.0000         | 0.0000            | 1.1               |
+| English  | 4     | 1      | 0      | 3      | 0.2500     | 0.2500         | 0.2500            | 51996.3           |
+| Greek    | 4     | 0      | 0      | 4      | 0.0000     | 0.0000         | 0.0000            | 1.2               |
+| Spanish  | 4     | 0      | 0      | 4      | 0.0000     | 0.0000         | 0.0000            | 1.2               |
+| Indonesian| 4    | 0      | 0      | 4      | 0.0000     | 0.0000         | 0.0000            | 0.7               |
 
 ### Failure Modes
 - "error: attempt 1: Expected double-quoted property name in": 1
@@ -65,23 +65,23 @@ This report compares the parse performance of two local language models on the m
 
 ### Exact Match Rate
 - Qwen 3.6 35B A3B: 12.5%
-- SuperQwen AgentWorld 35B A3B: 0.0%
+- SuperQwen AgentWorld 35B A3B: 6.25%
 - **Winner**: Qwen 3.6 35B A3B
 
 ### Feature Recall
 - Qwen 3.6 35B A3B: 16.67%
-- SuperQwen AgentWorld 35B A3B: 0.0%
+- SuperQwen AgentWorld 35B A3B: 6.25%
 - **Winner**: Qwen 3.6 35B A3B
 
 ### Feature Precision
 - Qwen 3.6 35B a3b: 16.67%
-- SuperQwen AgentWorld 35B A3B: 0.0%
+- SuperQwen AgentWorld 35B A3B: 6.25%
 - **Winner**: Qwen 3.6 35B A3B
 
 ### Speed (Mean Latency)
 - Qwen 3.6 35B A3B: 17515.8 ms
-- SuperQwen AgentWorld 35B A3B: 1879.0 ms
-- **Winner**: SuperQwen AgentWorld 35B A3B (9.3x faster)
+- SuperQwen AgentWorld 35B A3B: 12999.9 ms
+- **Note**: SuperQwen's apparent speed advantage is misleading. Most fast responses (14 of 15 errors) were HTTP 500 proxy errors returning instantly (~1-40 ms) rather than genuine inference. The single successful parse on English took 89.6 seconds. When excluding immediate proxy errors, SuperQwen's actual inference latency is slower than Qwen 3.6.
 
 ### Language Coverage
 Both models attempted all 4 languages (English, Greek, Spanish, Indonesian).
@@ -97,8 +97,8 @@ Both models attempted all 4 languages (English, Greek, Spanish, Indonesian).
 
 ## Notes
 1. Both models experienced significant HTTP 500 proxy errors, suggesting server-side issues with the llama-router when handling these specific models.
-2. The Qwen model showed some ability to generate valid JSON output (2 successful parses), while the SuperQwen model struggled with JSON formatting.
-3. The SuperQwen model was significantly faster when it did respond quickly (mostly failing fast with JSON parse errors).
+2. The Qwen model achieved 2 successful parses across the dataset, while SuperQwen achieved 1 successful parse (English: "preference" parse succeeded). Both models fell well short of the assignment gates (30% exact rate, 50% feature recall).
+3. The SuperQwen model's apparent speed advantage is an artifact of connection failures: 14 of 15 errors were immediate HTTP 500 proxy errors returning in 1-40 ms, not genuine inference failures. The one successful SuperQwen parse took ~89.6 seconds—significantly longer than Qwen's successful parses. When accounting for actual inference latency (not error-fast-path), SuperQwen is slower.
 4. These results represent honest baselines as requested in the assignment - they show the current performance level without any threshold tuning or optimization.
 
 ## Files Generated
