@@ -76,6 +76,7 @@ export interface ModelProfileSchema01 {
   apiKeyEnv?: string;
   temperature: number;
   seed?: number;
+  maxTokens?: number;
   timeoutMs: number;
   metadata?: Record<string, unknown>;
 }
