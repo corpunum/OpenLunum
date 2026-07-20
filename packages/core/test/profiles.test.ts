@@ -1,115 +1,92 @@
-import { test } from 'node:test';
-import assert from 'node:assert';
-import { ProfileGenerator } from '../src/profiles.js';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { canonicalizeSem } from '../src/canonicalize.js';
+import {
+  decodeProfileSem,
+  encodeProfileSem,
+  ProfileGenerator,
+  type ProfileType,
+} from '../src/profiles.js';
+import type { LunumRecord } from '../src/types.js';
 
-// Helper to create mock records
-const createMockRecord = (text: string, fingerprint: string) => ({
-  recordVersion: 'lunum-record/0.1-draft',
-  source: { text, language: 'en', role: null, ref: null },
-  sem: { 
-    schema: 'lunum-sem/0.1-draft', 
-    world: 'test', 
-    kind: 'test', 
-    clauses: [{ predicate: 'test', roles: { subject: 'test' } }],
-    annotations: { key: 'value' },
-    provenance: { source: 'test' }
-  },
-  fingerprint,
-  renderings: { en: { code: 'test', tokens: 10, profile: 'test' } as any },
-  policy: { eligible: true, category: 'test', risk: 'low' as const, confidence: 0.9, reasons: [] },
-  meta: {}
-});
+function createMockRecord(text = 'Hello world'): LunumRecord {
+  return {
+    recordVersion: 'lunum-record/0.1-draft',
+    source: { text, language: 'en', role: null, ref: null },
+    sem: {
+      schema: 'lunum-sem/0.1-draft',
+      world: 'test',
+      kind: 'test',
+      clauses: [{ predicate: 'test', roles: { subject: 'test' } }],
+      annotations: { key: 'value' },
+      provenance: { source: 'test' },
+    },
+    fingerprint: 'test-fp',
+    renderings: { en: { code: 'test', tokens: 10, profile: 'test' } },
+    policy: { eligible: true, category: 'test', risk: 'low', confidence: 0.9, reasons: [] },
+    meta: {},
+  };
+}
 
-test('ProfileGenerator profiles safe', () => {
+test('ProfileGenerator emits distinct reversible renderings and preserves the record wrapper', () => {
   const generator = new ProfileGenerator();
-  
-  const record = createMockRecord('Hello world', 'test-fp');
-  const result = generator.profileSafe(record);
-  
-  assert.strictEqual(result.type, 'safe');
-  assert.ok(result.originalTokens > 0);
-  assert.ok(result.profiledTokens >= 0);
-  assert.ok(result.preservation >= 0 && result.preservation <= 1);
-});
+  const record = createMockRecord();
+  const codes = new Set<string>();
 
-test('ProfileGenerator profiles short', () => {
-  const generator = new ProfileGenerator();
-  
-  const record = createMockRecord('Hello world', 'test-fp');
-  const result = generator.profileShort(record);
-  
-  assert.strictEqual(result.type, 'short');
-  assert.ok(result.reduction >= 0);
-});
-
-test('ProfileGenerator profiles tight', () => {
-  const generator = new ProfileGenerator();
-  
-  const record = createMockRecord('Hello world', 'test-fp');
-  const result = generator.profileTight(record);
-  
-  assert.strictEqual(result.type, 'tight');
-  assert.ok(result.reduction >= 0);
-});
-
-test('ProfileGenerator generates warnings', () => {
-  const generator = new ProfileGenerator();
-  
-  const record = createMockRecord('Hello world', 'test-fp');
-  const result = generator.profileTight(record);
-  
-  assert.ok(result.warnings);
-  assert.ok(result.warnings!.length > 0);
-});
-
-test('ProfileGenerator gets config', () => {
-  const generator = new ProfileGenerator();
-  
-  const config = generator.getConfig('safe');
-  
-  assert.strictEqual(config.type, 'safe');
-  assert.strictEqual(config.preserveAnnotations, true);
-});
-
-test('ProfileGenerator sets config', () => {
-  const generator = new ProfileGenerator();
-  
-  generator.setConfig('safe', { preserveAnnotations: false });
-  
-  const config = generator.getConfig('safe');
-  assert.strictEqual(config.preserveAnnotations, false);
-});
-test('ProfileGenerator: all profiles default to Reference level', () => {
-  const generator = new ProfileGenerator();
-  
-  for (const type of ['safe', 'short', 'tight'] as const) {
-    const config = generator.getConfig(type);
-    assert.strictEqual(config.level, 'Reference', `${type} profile level is Reference`);
-    assert.strictEqual(generator.isReferenceLevel(type), true, `${type} is reference level`);
+  for (const profile of ['safe', 'short', 'tight'] as ProfileType[]) {
+    const result = generator.profile(record, profile);
+    const rendering = result.record.renderings[profile];
+    assert.ok(rendering);
+    assert.equal(result.type, profile);
+    assert.equal(rendering.profile, `${profile}/0.1`);
+    assert.equal(result.profiledTokens, rendering.tokens);
+    assert.equal(result.preservation, 1);
+    assert.deepEqual(result.warnings, []);
+    assert.deepEqual(decodeProfileSem(rendering.code, profile), canonicalizeSem(record.sem));
+    assert.deepEqual(result.record.source, record.source);
+    assert.deepEqual(result.record.sem, record.sem);
+    assert.equal(result.record.fingerprint, record.fingerprint);
+    assert.deepEqual(result.record.policy, record.policy);
+    assert.deepEqual(result.record.meta, record.meta);
+    assert.deepEqual(result.record.renderings.en, record.renderings.en);
+    codes.add(rendering.code);
   }
+
+  assert.equal(codes.size, 3);
 });
 
-test('ProfileGenerator: allProfilesReference returns true', () => {
-  const generator = new ProfileGenerator();
-  
-  assert.strictEqual(generator.allProfilesReference(), true);
+test('safe, short, and tight encodings become progressively more compact', () => {
+  const record = createMockRecord('A deliberately long natural-language source sentence used to compare the three renderer encodings.');
+  const safe = encodeProfileSem(record.sem, 'safe');
+  const short = encodeProfileSem(record.sem, 'short');
+  const tight = encodeProfileSem(record.sem, 'tight');
+
+  assert.ok(short.length < safe.length, `short=${short.length}, safe=${safe.length}`);
+  assert.ok(tight.length < short.length, `tight=${tight.length}, short=${short.length}`);
 });
 
-test('ProfileGenerator: setConfig preserves level', () => {
+test('ProfileGenerator rejects semantic-loss configuration', () => {
   const generator = new ProfileGenerator();
-  
-  generator.setConfig('safe', { preserveAnnotations: false });
-  
-  const config = generator.getConfig('safe');
-  assert.strictEqual(config.level, 'Reference', 'level preserved after setConfig');
-  assert.strictEqual(config.preserveAnnotations, false);
+  assert.throws(() => generator.setConfig('safe', { preserveAnnotations: false }), /cannot discard canonical semantics or provenance/u);
+  assert.throws(() => generator.setConfig('tight', { preserveProvenance: false }), /cannot discard canonical semantics or provenance/u);
 });
 
-test('ProfileGenerator: isReferenceLevel returns false when set to Experiment', () => {
+test('all profiles default to Reference and retain level across non-semantic configuration changes', () => {
   const generator = new ProfileGenerator();
-  
-  generator.setConfig('safe', { level: 'Experiment' as any });
-  
-  assert.strictEqual(generator.isReferenceLevel('safe'), false);
-  assert.strictEqual(generator.allProfilesReference(), false);
+  for (const type of ['safe', 'short', 'tight'] as ProfileType[]) {
+    assert.equal(generator.getConfig(type).level, 'Reference');
+    assert.equal(generator.isReferenceLevel(type), true);
+  }
+  assert.equal(generator.allProfilesReference(), true);
+
+  generator.setConfig('safe', { maxTokenReduction: 0.2 });
+  assert.equal(generator.getConfig('safe').level, 'Reference');
+  assert.equal(generator.getConfig('safe').maxTokenReduction, 0.2);
+});
+
+test('Reference status is explicit configuration rather than inferred from the type name', () => {
+  const generator = new ProfileGenerator();
+  generator.setConfig('safe', { level: 'Experiment' });
+  assert.equal(generator.isReferenceLevel('safe'), false);
+  assert.equal(generator.allProfilesReference(), false);
 });

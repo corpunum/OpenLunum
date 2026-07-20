@@ -110,8 +110,10 @@ function runDownstreamQualityGates(records: LunumRecord[]): GateResultEntry {
           details.push(`Gate "${result.gateName}" failed: score ${result.score} below minimum ${result.minimumScore}`);
         }
       }
-    } catch {
+    } catch (error) {
+      passed = false;
       details.push('Downstream quality evaluation threw error');
+      details.push(error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -141,8 +143,10 @@ function runMixedContextGates(records: LunumRecord[]): GateResultEntry {
         passed = false;
         details.push(`Mixed-context gates failed for record ${record.fingerprint.slice(0, 8)}`);
       }
-    } catch {
+    } catch (error) {
+      passed = false;
       details.push('Mixed-context evaluation threw error');
+      details.push(error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -220,8 +224,10 @@ function runPromptGates(records: LunumRecord[]): GateResultEntry {
         passed = false;
         details.push(`Prompt gate failed for ${record.fingerprint.slice(0, 8)}: ${result.errors?.join(', ')}`);
       }
-    } catch {
+    } catch (error) {
+      passed = false;
       details.push('Prompt gate validation threw error');
+      details.push(error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -242,42 +248,87 @@ export function runQualityGates(
   records: LunumRecord[],
   config: QualityGateCIConfig = {}
 ): QualityGateCIReport {
-  const cfg = { ...DEFAULT_CONFIG, ...config };
+  const cfg = {
+    runDownstreamQuality: config.runDownstreamQuality ?? DEFAULT_CONFIG.runDownstreamQuality,
+    runMixedContext: config.runMixedContext ?? DEFAULT_CONFIG.runMixedContext,
+    runInjectionTests: config.runInjectionTests ?? DEFAULT_CONFIG.runInjectionTests,
+    runConformanceSuite: config.runConformanceSuite ?? DEFAULT_CONFIG.runConformanceSuite,
+    runPromptGates: config.runPromptGates ?? DEFAULT_CONFIG.runPromptGates,
+    strictMode: config.strictMode ?? DEFAULT_CONFIG.strictMode,
+  };
+  const minimumPassRate: number = config.minimumPassRate ?? 0.8;
   const gates: GateResultEntry[] = [];
   const warnings: string[] = [];
 
+  if (!Number.isFinite(minimumPassRate) || minimumPassRate < 0 || minimumPassRate > 1) {
+    gates.push({
+      name: 'configuration',
+      passed: false,
+      score: 0,
+      details: ['minimumPassRate must be a finite number between 0 and 1']
+    });
+  }
+
+  if (records.length === 0) {
+    gates.push({
+      name: 'input-records',
+      passed: false,
+      score: 0,
+      details: ['At least one quality-gate record is required']
+    });
+  }
+
+  const runGate = (name: string, gate: () => GateResultEntry): void => {
+    try {
+      gates.push(gate());
+    } catch (error) {
+      gates.push({
+        name,
+        passed: false,
+        score: 0,
+        details: [`Gate threw: ${error instanceof Error ? error.message : String(error)}`]
+      });
+    }
+  };
+
   if (cfg.runDownstreamQuality) {
-    gates.push(runDownstreamQualityGates(records));
+    runGate('downstream-quality', () => runDownstreamQualityGates(records));
   }
 
   if (cfg.runMixedContext) {
-    gates.push(runMixedContextGates(records));
+    runGate('mixed-context', () => runMixedContextGates(records));
   }
 
   if (cfg.runInjectionTests) {
-    gates.push(runInjectionTests(records));
+    runGate('injection-resistance', () => runInjectionTests(records));
   }
 
   if (cfg.runConformanceSuite) {
-    gates.push(runConformanceTests(records));
+    runGate('renderer-conformance', () => runConformanceTests(records));
   }
 
   if (cfg.runPromptGates) {
-    gates.push(runPromptGates(records));
+    runGate('prompt-gates', () => runPromptGates(records));
   }
 
   // Calculate overall score
   const totalScore = gates.reduce((sum, g) => sum + g.score, 0);
   const overallScore = totalScore / Math.max(gates.length, 1);
-  const allPassed = gates.every(g => g.passed);
   const anyFailed = gates.some(g => !g.passed);
+  const belowMinimumPassRate = overallScore < minimumPassRate;
 
   // Determine exit code
   let exitCode: GateExitCode = 0;
-  if (anyFailed) {
+  if (anyFailed || belowMinimumPassRate) {
     exitCode = 2;
-  } else if (cfg.strictMode && gates.some(g => g.warnings)) {
+  } else if (cfg.strictMode && gates.some(g => (g.warnings?.length ?? 0) > 0)) {
     exitCode = 1;
+  }
+
+  if (belowMinimumPassRate) {
+    warnings.push(
+      `Overall score ${(overallScore * 100).toFixed(1)}% is below minimum pass rate ${(minimumPassRate * 100).toFixed(1)}%`
+    );
   }
 
   // Collect warnings

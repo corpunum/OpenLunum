@@ -1,102 +1,249 @@
-/**
- * Safe, short, and tight profiles for rendering
- * 
- * This module provides three profile types that reduce token usage
- * while preserving semantic meaning and accuracy.
- * 
- * Profile level: 'Reference' — deterministic golden-output tests
- * exist for all profiles on 15+ diverse inputs (renderer-golden-output.test.ts).
- */
-
-import type { LunumSem, LunumRecord, LunumClause, LunumRendering } from './types.js';
-
-// ── Profile Type ───────────────────────────────────────────────────
+import { canonicalizeSem, stableStringify } from './canonicalize.js';
+import type { LunumClause, LunumRecord, LunumSem } from './types.js';
 
 export type ProfileType = 'safe' | 'short' | 'tight';
-
-/** Profile maturity level */
 export type ProfileLevel = 'Experiment' | 'Reference';
 
-// ── Profile Configuration ──────────────────────────────────────────
-
 export interface ProfileConfig {
-  /** Profile type */
   type: ProfileType;
-  /** Profile maturity level */
   level?: ProfileLevel;
-  /** Whether to preserve all annotations */
   preserveAnnotations?: boolean;
-  /** Whether to preserve provenance */
   preserveProvenance?: boolean;
-  /** Maximum token reduction ratio */
   maxTokenReduction?: number;
 }
 
-// ── Profile Result ─────────────────────────────────────────────────
-
 export interface ProfileResult {
-  /** Profile type */
   type: ProfileType;
-  /** Original token count */
   originalTokens: number;
-  /** Profiled token count */
   profiledTokens: number;
-  /** Token reduction percentage */
   reduction: number;
-  /** Semantic preservation score */
   preservation: number;
-  /** Profiled record */
   record: LunumRecord;
-  /** Warnings about potential loss */
   warnings?: string[];
 }
 
-// ── Profile Generator ──────────────────────────────────────────────
+const PROFILE_PREFIXES: Record<ProfileType, string> = {
+  safe: 'LUNUM-SAFE/0.1:',
+  short: 'LUNUM-SHORT/0.1:',
+  tight: 'LUNUM-TIGHT/0.1:',
+};
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function trimTrailingNulls(values: unknown[]): unknown[] {
+  while (values.length > 0 && values[values.length - 1] === null) values.pop();
+  return values;
+}
+
+function shortClause(clause: LunumClause): Record<string, unknown> {
+  const encoded: Record<string, unknown> = { p: clause.predicate, r: clause.roles };
+  if (clause.negated === true) encoded.n = true;
+  if (clause.modality !== undefined) encoded.m = clause.modality;
+  if (clause.time !== undefined) encoded.t = clause.time;
+  if (clause.conditions !== undefined) encoded.i = clause.conditions.map(shortClause);
+  if (clause.consequences !== undefined) encoded.o = clause.consequences.map(shortClause);
+  if (clause.annotations !== undefined) encoded.a = clause.annotations;
+  return encoded;
+}
+
+function shortSem(sem: LunumSem): Record<string, unknown> {
+  const encoded: Record<string, unknown> = {
+    s: sem.schema,
+    w: sem.world,
+    k: sem.kind,
+    c: sem.clauses.map(shortClause),
+  };
+  if (sem.references !== undefined) encoded.r = sem.references;
+  if (sem.provenance !== undefined) encoded.p = sem.provenance;
+  if (sem.annotations !== undefined) encoded.a = sem.annotations;
+  return encoded;
+}
+
+function tightClause(clause: LunumClause): unknown[] {
+  return trimTrailingNulls([
+    clause.predicate,
+    clause.roles,
+    clause.negated === true ? 1 : null,
+    clause.modality ?? null,
+    clause.time ?? null,
+    clause.conditions?.map(tightClause) ?? null,
+    clause.consequences?.map(tightClause) ?? null,
+    clause.annotations ?? null,
+  ]);
+}
+
+function tightSem(sem: LunumSem): unknown[] {
+  return trimTrailingNulls([
+    sem.schema,
+    sem.world,
+    sem.kind,
+    sem.clauses.map(tightClause),
+    sem.references ?? null,
+    sem.provenance ?? null,
+    sem.annotations ?? null,
+  ]);
+}
+
+function decodeShortClause(value: unknown): LunumClause {
+  if (!isObject(value) || typeof value.p !== 'string' || !isObject(value.r)) {
+    throw new TypeError('Invalid short-profile clause');
+  }
+  const clause: LunumClause = {
+    predicate: value.p,
+    roles: value.r as LunumClause['roles'],
+    negated: value.n === true,
+  };
+  if (value.m !== undefined) clause.modality = value.m as string | null;
+  if (value.t !== undefined) clause.time = value.t as NonNullable<LunumClause['time']>;
+  if (value.i !== undefined) {
+    if (!Array.isArray(value.i)) throw new TypeError('Invalid short-profile conditions');
+    clause.conditions = value.i.map(decodeShortClause);
+  }
+  if (value.o !== undefined) {
+    if (!Array.isArray(value.o)) throw new TypeError('Invalid short-profile consequences');
+    clause.consequences = value.o.map(decodeShortClause);
+  }
+  if (value.a !== undefined) {
+    if (!isObject(value.a)) throw new TypeError('Invalid short-profile clause annotations');
+    clause.annotations = value.a;
+  }
+  return clause;
+}
+
+function decodeShort(value: unknown): LunumSem {
+  if (!isObject(value) || typeof value.s !== 'string' || typeof value.w !== 'string' || typeof value.k !== 'string' || !Array.isArray(value.c)) {
+    throw new TypeError('Invalid short-profile semantic payload');
+  }
+  const sem: LunumSem = {
+    schema: value.s,
+    world: value.w,
+    kind: value.k,
+    clauses: value.c.map(decodeShortClause),
+  };
+  if (value.r !== undefined) {
+    if (!Array.isArray(value.r)) throw new TypeError('Invalid short-profile references');
+    sem.references = value.r as NonNullable<LunumSem['references']>;
+  }
+  if (value.p !== undefined) {
+    if (!isObject(value.p)) throw new TypeError('Invalid short-profile provenance');
+    sem.provenance = value.p;
+  }
+  if (value.a !== undefined) {
+    if (!isObject(value.a)) throw new TypeError('Invalid short-profile annotations');
+    sem.annotations = value.a;
+  }
+  return sem;
+}
+
+function decodeTightClause(value: unknown): LunumClause {
+  if (!Array.isArray(value) || value.length < 2 || value.length > 8 || typeof value[0] !== 'string' || !isObject(value[1])) {
+    throw new TypeError('Invalid tight-profile clause');
+  }
+  const clause: LunumClause = {
+    predicate: value[0],
+    roles: value[1] as LunumClause['roles'],
+    negated: value[2] === 1,
+  };
+  if (value[3] !== undefined && value[3] !== null) clause.modality = value[3] as string;
+  if (value[4] !== undefined && value[4] !== null) clause.time = value[4] as NonNullable<LunumClause['time']>;
+  if (value[5] !== undefined && value[5] !== null) {
+    if (!Array.isArray(value[5])) throw new TypeError('Invalid tight-profile conditions');
+    clause.conditions = value[5].map(decodeTightClause);
+  }
+  if (value[6] !== undefined && value[6] !== null) {
+    if (!Array.isArray(value[6])) throw new TypeError('Invalid tight-profile consequences');
+    clause.consequences = value[6].map(decodeTightClause);
+  }
+  if (value[7] !== undefined && value[7] !== null) {
+    if (!isObject(value[7])) throw new TypeError('Invalid tight-profile clause annotations');
+    clause.annotations = value[7];
+  }
+  return clause;
+}
+
+function decodeTight(value: unknown): LunumSem {
+  if (!Array.isArray(value) || value.length < 4 || value.length > 7 || typeof value[0] !== 'string' || typeof value[1] !== 'string' || typeof value[2] !== 'string' || !Array.isArray(value[3])) {
+    throw new TypeError('Invalid tight-profile semantic payload');
+  }
+  const sem: LunumSem = {
+    schema: value[0],
+    world: value[1],
+    kind: value[2],
+    clauses: value[3].map(decodeTightClause),
+  };
+  if (value[4] !== undefined && value[4] !== null) {
+    if (!Array.isArray(value[4])) throw new TypeError('Invalid tight-profile references');
+    sem.references = value[4] as NonNullable<LunumSem['references']>;
+  }
+  if (value[5] !== undefined && value[5] !== null) {
+    if (!isObject(value[5])) throw new TypeError('Invalid tight-profile provenance');
+    sem.provenance = value[5];
+  }
+  if (value[6] !== undefined && value[6] !== null) {
+    if (!isObject(value[6])) throw new TypeError('Invalid tight-profile annotations');
+    sem.annotations = value[6];
+  }
+  return sem;
+}
+
+export function encodeProfileSem(sem: LunumSem, profile: ProfileType): string {
+  const canonical = canonicalizeSem(sem);
+  const payload = profile === 'safe'
+    ? canonical
+    : profile === 'short'
+      ? shortSem(canonical)
+      : tightSem(canonical);
+  return `${PROFILE_PREFIXES[profile]}${stableStringify(payload)}`;
+}
+
+export function decodeProfileSem(code: string, expectedProfile?: ProfileType): LunumSem {
+  const profile = (Object.keys(PROFILE_PREFIXES) as ProfileType[]).find((candidate) => code.startsWith(PROFILE_PREFIXES[candidate]));
+  if (!profile) throw new TypeError('Unknown renderer-profile encoding');
+  if (expectedProfile !== undefined && profile !== expectedProfile) {
+    throw new TypeError(`Expected ${expectedProfile} renderer profile, received ${profile}`);
+  }
+  const payload = JSON.parse(code.slice(PROFILE_PREFIXES[profile].length)) as unknown;
+  const decoded = profile === 'safe'
+    ? payload as LunumSem
+    : profile === 'short'
+      ? decodeShort(payload)
+      : decodeTight(payload);
+  return canonicalizeSem(decoded);
+}
+
+function estimatedTokens(text: string): number {
+  return Math.max(1, Math.ceil(text.length / 4));
+}
 
 export class ProfileGenerator {
   private configs: Map<ProfileType, Required<ProfileConfig>>;
 
   constructor() {
-    this.configs = new Map([
-      ['safe', {
-        type: 'safe',
-        level: 'Reference',
-        preserveAnnotations: true,
-        preserveProvenance: true,
-        maxTokenReduction: 0.3
-      }],
-      ['short', {
-        type: 'short',
-        level: 'Reference',
-        preserveAnnotations: false,
-        preserveProvenance: true,
-        maxTokenReduction: 0.5
-      }],
-      ['tight', {
-        type: 'tight',
-        level: 'Reference',
-        preserveAnnotations: false,
-        preserveProvenance: false,
-        maxTokenReduction: 0.7
-      }]
-    ]);
+    this.configs = new Map((Object.entries(DEFAULT_PROFILE_CONFIGS) as Array<[ProfileType, Required<ProfileConfig>]>).map(([type, config]) => [type, { ...config }]));
   }
 
-  /**
-   * Apply a profile to a record
-   */
   profile(record: LunumRecord, type: ProfileType = 'safe'): ProfileResult {
     const config = this.configs.get(type);
-    if (!config) {
-      throw new Error(`Unknown profile type: ${type}`);
-    }
+    if (!config) throw new Error(`Unknown profile type: ${type}`);
 
-    const originalTokens = this.countTokens(record);
-    const profiledRecord = this.applyProfile(record, config);
-    const profiledTokens = this.countTokens(profiledRecord);
+    const code = encodeProfileSem(record.sem, type);
+    const originalText = record.source.text || stableStringify(canonicalizeSem(record.sem));
+    const originalTokens = estimatedTokens(originalText);
+    const profiledTokens = estimatedTokens(code);
+    const profiledRecord: LunumRecord = {
+      ...record,
+      sem: record.sem,
+      renderings: {
+        ...record.renderings,
+        [type]: { code, profile: `${type}/0.1`, tokens: profiledTokens },
+      },
+    };
+    const originalCanonical = stableStringify(canonicalizeSem(record.sem));
+    const decodedCanonical = stableStringify(decodeProfileSem(code, type));
+    const preservation = originalCanonical === decodedCanonical ? 1 : 0;
     const reduction = originalTokens > 0 ? 1 - profiledTokens / originalTokens : 0;
-    const preservation = this.calculatePreservation(record, profiledRecord);
-    const warnings = this.generateWarnings(record, profiledRecord, config);
 
     return {
       type,
@@ -105,229 +252,70 @@ export class ProfileGenerator {
       reduction,
       preservation,
       record: profiledRecord,
-      warnings
+      warnings: [],
     };
   }
 
-  /**
-   * Apply safe profile
-   */
   profileSafe(record: LunumRecord): ProfileResult {
     return this.profile(record, 'safe');
   }
 
-  /**
-   * Apply short profile
-   */
   profileShort(record: LunumRecord): ProfileResult {
     return this.profile(record, 'short');
   }
 
-  /**
-   * Apply tight profile
-   */
   profileTight(record: LunumRecord): ProfileResult {
     return this.profile(record, 'tight');
   }
 
-  /**
-   * Apply profile to record
-   */
-  private applyProfile(record: LunumRecord, config: Required<ProfileConfig>): LunumRecord {
-    const profiled = { ...record };
-
-    // Preserve or remove annotations based on config
-    if (!config.preserveAnnotations) {
-      profiled.sem = {
-        ...record.sem,
-        annotations: {}
-      };
-    }
-
-    // Preserve or remove provenance based on config
-    if (!config.preserveProvenance) {
-      profiled.sem = {
-        ...record.sem,
-        provenance: {}
-      };
-    }
-
-    // Shorten clauses for short and tight profiles
-    if (config.type === 'short' || config.type === 'tight') {
-      profiled.sem = {
-        ...profiled.sem,
-        clauses: this.shortenClauses(profiled.sem.clauses, config)
-      };
-    }
-
-    // Remove renderings for tight profile
-    if (config.type === 'tight') {
-      profiled.renderings = {};
-    }
-
-    return profiled;
-  }
-
-  /**
-   * Shorten clauses
-   */
-  private shortenClauses(clauses: LunumClause[], config: Required<ProfileConfig>): LunumClause[] {
-    return clauses.map(clause => {
-      const shortened = {
-        predicate: clause.predicate,
-        roles: {},
-        negated: clause.negated,
-        conditions: clause.conditions,
-        consequences: clause.consequences
-      } as LunumClause;
-
-      // Shorten roles based on profile type
-      for (const [role, value] of Object.entries(clause.roles ?? {})) {
-        if (typeof value === 'string' && (config.type === 'tight' || (config.type === 'short' && value.length > 50))) {
-          shortened.roles[role] = value.substring(0, 50) + (value.length > 50 ? '...' : '');
-        } else {
-          shortened.roles[role] = value;
-        }
-      }
-
-      return shortened;
-    });
-  }
-
-  /**
-   * Count tokens in a record
-   */
-  private countTokens(record: LunumRecord): number {
-    // Estimate tokens based on text length
-    const text = record.source.text || '';
-    return Math.ceil(text.length / 4);
-  }
-
-  /**
-   * Calculate semantic preservation
-   */
-  private calculatePreservation(original: LunumRecord, profiled: LunumRecord): number {
-    let score = 1.0;
-
-    // Check if predicates are preserved
-    const originalPredicates = new Set(original.sem.clauses.map(c => c.predicate));
-    const profiledPredicates = new Set(profiled.sem.clauses.map(c => c.predicate));
-    
-    for (const predicate of originalPredicates) {
-      if (!profiledPredicates.has(predicate)) {
-        score -= 0.2;
-      }
-    }
-
-    // Check if annotations are preserved
-    if (!this.configs.get('safe')!.preserveAnnotations && original.sem.annotations && Object.keys(original.sem.annotations).length > 0) {
-      if (!profiled.sem.annotations || Object.keys(profiled.sem.annotations).length === 0) {
-        score -= 0.1;
-      }
-    }
-
-    // Check if provenance is preserved
-    if (!this.configs.get('safe')!.preserveProvenance && original.sem.provenance && Object.keys(original.sem.provenance).length > 0) {
-      if (!profiled.sem.provenance || Object.keys(profiled.sem.provenance).length === 0) {
-        score -= 0.1;
-      }
-    }
-
-    return Math.max(0, score);
-  }
-
-  /**
-   * Generate warnings
-   */
-  private generateWarnings(original: LunumRecord, profiled: LunumRecord, config: Required<ProfileConfig>): string[] {
-    const warnings: string[] = [];
-
-    if (!config.preserveAnnotations && original.sem.annotations && Object.keys(original.sem.annotations).length > 0) {
-      warnings.push('Annotations removed');
-    }
-
-    if (!config.preserveProvenance && original.sem.provenance && Object.keys(original.sem.provenance).length > 0) {
-      warnings.push('Provenance removed');
-    }
-
-    if (config.type === 'tight' && original.renderings && Object.keys(original.renderings).length > 0) {
-      warnings.push('Renderings removed');
-    }
-
-    return warnings;
-  }
-
-  /**
-   * Get profile configuration
-   */
   getConfig(type: ProfileType): Required<ProfileConfig> {
     const config = this.configs.get(type);
-    if (!config) {
-      throw new Error(`Unknown profile type: ${type}`);
-    }
+    if (!config) throw new Error(`Unknown profile type: ${type}`);
     return { ...config };
   }
 
-  /**
-   * Set profile configuration
-   */
   setConfig(type: ProfileType, config: Partial<ProfileConfig>): void {
     const existing = this.configs.get(type);
-    if (!existing) {
-      throw new Error(`Unknown profile type: ${type}`);
+    if (!existing) throw new Error(`Unknown profile type: ${type}`);
+    if (config.preserveAnnotations === false || config.preserveProvenance === false) {
+      throw new Error('Renderer profiles cannot discard canonical semantics or provenance');
     }
     this.configs.set(type, { ...existing, ...config } as Required<ProfileConfig>);
   }
 
-  /**
-   * Check if a profile is at Reference level (deterministic golden outputs exist).
-   */
   isReferenceLevel(type: ProfileType): boolean {
-    const config = this.configs.get(type);
-    return config?.level === 'Reference';
+    return this.configs.get(type)?.level === 'Reference';
   }
 
-  /**
-   * Check if all profiles are at Reference level.
-   */
   allProfilesReference(): boolean {
-    return ['safe', 'short', 'tight'].every(type => this.isReferenceLevel(type as ProfileType));
+    return PROFILE_TYPES.every((type) => this.isReferenceLevel(type));
   }
 }
 
-// ── Export ─────────────────────────────────────────────────────────
-
-export const profileExports = [
-  ProfileGenerator
-] as const;
-
-/** All supported profile types */
+export const profileExports = [ProfileGenerator, encodeProfileSem, decodeProfileSem] as const;
 export const PROFILE_TYPES: readonly ProfileType[] = ['safe', 'short', 'tight'] as const;
-
-/** All profile maturity levels */
 export const PROFILE_LEVELS: readonly ProfileLevel[] = ['Experiment', 'Reference'] as const;
 
-/** Default profile configurations at Reference level */
 export const DEFAULT_PROFILE_CONFIGS: Record<ProfileType, Required<ProfileConfig>> = {
   safe: {
     type: 'safe',
     level: 'Reference',
     preserveAnnotations: true,
     preserveProvenance: true,
-    maxTokenReduction: 0.3
+    maxTokenReduction: 0.3,
   },
   short: {
     type: 'short',
     level: 'Reference',
-    preserveAnnotations: false,
+    preserveAnnotations: true,
     preserveProvenance: true,
-    maxTokenReduction: 0.5
+    maxTokenReduction: 0.5,
   },
   tight: {
     type: 'tight',
     level: 'Reference',
-    preserveAnnotations: false,
-    preserveProvenance: false,
-    maxTokenReduction: 0.7
-  }
+    preserveAnnotations: true,
+    preserveProvenance: true,
+    maxTokenReduction: 0.7,
+  },
 };

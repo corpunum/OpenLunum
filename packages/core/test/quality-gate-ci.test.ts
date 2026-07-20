@@ -52,10 +52,17 @@ describe('quality-gate-ci', () => {
   });
 
   it('runQualityGates respects minimumPassRate config', () => {
-    const records = [makeRecord('test-1')];
-    const report = runQualityGates(records, { minimumPassRate: 0.5 });
+    const report = runQualityGates([makeRecord('test-1')], {
+      runDownstreamQuality: false,
+      runInjectionTests: false,
+      runConformanceSuite: false,
+      runPromptGates: false,
+      minimumPassRate: 0.5
+    });
 
-    assert.ok(report.overallScore >= 0.5 || report.exitCode === 0);
+    assert.equal(report.overallScore, 0);
+    assert.equal(report.exitCode, 2);
+    assert.match(report.warnings.join('\n'), /below minimum pass rate/);
   });
 
   it('checkQualityGates returns valid exit code', () => {
@@ -75,11 +82,35 @@ describe('quality-gate-ci', () => {
     assert.ok(md.includes('| Gate |'));
   });
 
-  it('runQualityGates with empty records returns valid report', () => {
+  it('runQualityGates fails closed with empty records', () => {
     const report = runQualityGates([]);
 
-    assert.ok(report.gates.length > 0);
-    assert.ok(report.overallScore >= 0);
+    assert.equal(report.exitCode, 2);
+    assert.equal(report.gates.find(gate => gate.name === 'input-records')?.passed, false);
+  });
+
+  it('runQualityGates fails closed for an invalid minimum pass rate', () => {
+    const report = runQualityGates([makeRecord('test-1')], { minimumPassRate: Number.NaN });
+
+    assert.equal(report.exitCode, 2);
+    assert.equal(report.gates.find(gate => gate.name === 'configuration')?.passed, false);
+  });
+
+  it('runQualityGates treats gate exceptions as failures', () => {
+    const record = makeRecord('throws');
+    Object.defineProperty(record, 'fingerprint', {
+      get() { throw new Error('fixture getter failed'); }
+    });
+    const report = runQualityGates([record], {
+      runInjectionTests: false,
+      runConformanceSuite: false,
+      runPromptGates: false
+    });
+
+    assert.equal(report.exitCode, 2);
+    const gate = report.gates.find(entry => entry.name === 'downstream-quality');
+    assert.equal(gate?.passed, false);
+    assert.match(gate?.details?.join('\n') ?? '', /fixture getter failed/);
   });
 
   it('runQualityGates with strict mode', () => {

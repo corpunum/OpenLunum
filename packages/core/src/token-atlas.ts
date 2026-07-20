@@ -60,6 +60,8 @@ export interface AtlasEntry {
   sourceLength: number;
   /** Measurements keyed by model name, then profile */
   measurements: Record<string, AtlasProfileMeasures>;
+  /** Exact tokenizer configuration used for each named measurement. */
+  tokenizerProfiles: Record<string, LlamaTokenizerConfig>;
   /** Timestamp of the atlas run */
   measuredAt: number;
 }
@@ -160,6 +162,9 @@ export class TokenAtlas {
       fingerprint,
       sourceLength,
       measurements,
+      tokenizerProfiles: Object.fromEntries(
+        this.profiles.map((profile) => [profile.name, { ...profile.tokenizer }])
+      ),
       measuredAt: Date.now()
     };
 
