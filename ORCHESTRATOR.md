@@ -1,261 +1,258 @@
-# OpenLunum Orchestrator Handover
+# OpenLunum orchestrator runbook
 
-This document enables any LLM (Claude, GPT, Gemini, local Qwen) to take over as orchestrator of the OpenLunum autonomous pipeline. Read this ENTIRE document before doing anything.
+This document is the stable operational runbook for a human or strong-model orchestrator. It is not an append-only activity diary. Durable decisions belong in issues, pull requests, architecture decision records, and accepted evidence.
 
-**MANDATORY: Update the "Current State" section at the bottom of this file on EVERY check-in, before you finish.** Push the update from the review worktree. This is how the next orchestrator (or your next session) knows what happened.
+Read `docs/REPOSITORY_OPERATING_MODEL.md` before dispatching work.
 
-## Architecture: 6-Layer Stack
+## Mission
 
-```
-Layer 5: Cloud Orchestrator (this role) — strategic decisions, audit responses, prompt updates
-Layer 4: Watchdog (systemd timer, every 5min) — restarts dead loops, thermal management
-Layer 3: Local Orchestrator (systemd timer, every 3h) — health checks, STUCK auto-fix, LLM diagnosis
-Layer 2: Reviewer (AgentWorld-35B) — reviews PRs, posts LGTM or fix requests
-Layer 1: Worker (Qwen 35B MTP) — implements queue items, opens draft PRs
-Layer 0: Merge Bot (bash) — merges approved PRs, auto-reverts if main breaks
-         Docs Loop (Qwen 4B on ROG Ally) — syncs documentation after merges
-```
+The orchestrator turns the Lunum vision into bounded, independently reviewable work while protecting semantic correctness, reproducibility, safety, and repository health.
 
-Layers 0-4 are fully automated. Layer 3 includes LLM-assisted diagnosis — it asks Qwen3 35B (with thinking/reasoning) for a fix before escalating to cloud. Layer 5 (you) is needed only when both bash auto-fix AND LLM diagnosis fail.
+The orchestrator is not responsible for keeping workers constantly busy. Idle is correct when no issue is ready.
 
-## Key Paths
+## Canonical state
 
-| What | Path |
+Use these sources in order:
+
+1. GitHub issues — backlog, readiness, assignment, blockers, and acceptance.
+2. GitHub milestones — roadmap and release grouping.
+3. Pull requests — active candidates and review state.
+4. Exact-head checks and evaluation reports — verification evidence.
+5. `STATUS.md` — periodically reconciled summary.
+6. `WORK_QUEUE.md` — historical roadmap only.
+
+Do not infer current work from old branches, old claims files, dashboard counts, or unchecked markdown entries without comparing them to GitHub issues and current `main`.
+
+## Local paths
+
+| Purpose | Path |
 |---|---|
-| Repo | `/home/corpunum/OpenLunum` |
-| Review worktree | `/home/corpunum/openlunum-workers/review` (safe from worker resets) |
-| Worker loop | `scripts/pi-loop.sh` |
-| Reviewer loop | `scripts/pi-review-loop.sh` |
-| Merge bot | `scripts/pi-merge-loop.sh` |
-| Docs loop | `scripts/pi-docs-loop.sh` |
-| Watchdog | `scripts/pi-watchdog.sh` (timer: `openlunum-watchdog.timer`) |
-| Local orchestrator | `scripts/pi-orchestrator.sh` (timer: `openlunum-orchestrator.timer`) |
-| Worker task prompt | `scripts/pi-task-prompt.md` — controls what the worker builds |
-| Work queue | `WORK_QUEUE.md` — checklist of items, worker reads this |
-| Dashboard | `/home/corpunum/openlunum-dashboard/` (port 3847, systemd service) |
-| Flags | `reports/pi-loop/{STUCK,ESCALATED,THERMAL_HALT,PAUSED}` |
-| NEEDS_CLOUD flag | `reports/orchestrator/NEEDS_CLOUD` — your trigger |
-| Orchestrator logs | `reports/orchestrator/status.log` |
-| LLM advice log | `reports/orchestrator/last-llm-advice.txt` |
-| Stale PR log | `reports/orchestrator/stale-prs.log` |
-| Velocity CSV | `reports/orchestrator/velocity.csv` |
-| Merge logs | `reports/pi-merge/merge-status.log` |
-| Temps | `reports/pi-loop/temps.csv` (ts,cpu,gpu,freq) |
-| LLM router | `llama-qwen36.service` (port 8080, llama.cpp native router) |
-| Models config | `/home/corpunum/models-preset.ini` |
-| Eval results | `reports/agent-eval/tier1-results.json` |
-| This document | `ORCHESTRATOR.md` — YOU MUST UPDATE THIS EVERY CHECK-IN |
+| Primary checkout | `/home/corpunum/OpenLunum` |
+| Review/orchestrator worktree | `/home/corpunum/openlunum-workers/review` |
+| Suggested core worker | `/home/corpunum/openlunum-workers/core` |
+| Suggested eval worker | `/home/corpunum/openlunum-workers/eval` |
+| Suggested integration worker | `/home/corpunum/openlunum-workers/integration` |
+| Worker dispatcher/legacy loop | `scripts/pi-loop.sh` |
+| Worker task prompt | `scripts/pi-task-prompt.md` |
+| Merge policy | `scripts/pi-merge-policy.mjs` |
+| Merge automation | `scripts/pi-merge-loop.sh` |
+| Local health orchestrator | `scripts/pi-orchestrator.sh` |
+| Worker flags and logs | `reports/pi-loop/` |
+| Orchestrator flags and logs | `reports/orchestrator/` |
+| Experiment reports | `reports/experiments/` |
 
-## Hardware
+The primary checkout may be reset by local automation. Perform orchestrator edits from the review worktree or a dedicated temporary worktree.
 
-- **Main rig**: Bosgame BeyondMax, Ryzen AI MAX+ 395, 128GB unified RAM, 2TB NVMe, Ubuntu 24.04
-- **ROG Ally**: Docs loop runs here via SSH tunnel (port 18084)
-- **GPU**: Radeon 8060S (gfx1151), ROCm via TheRock wheels
-- **Thermal**: CPU/GPU typically 85-92°C under load. Watchdog halts at 101°C sustained, resumes at 88°C
+## Default repository limits
 
-## How the Worker Loop Works
+- At most three active implementation pull requests repository-wide.
+- At most one active implementation pull request per worker.
+- One issue per branch and one branch per issue.
+- Use `work/<worker>/<issue-number>-<short-name>`.
+- Squash merge accepted work.
+- Delete branches after merge or explicit rejection.
+- Never create campaign, status, sync, completion, or idle branches.
 
-1. Worker starts, runs `pnpm verify` on main
-2. Reads `WORK_QUEUE.md`, finds first unchecked `[ ]` item not already claimed
-3. Creates `agent/qwen/<area>/<name>` branch from main
-4. Implements the item, runs verify, pushes branch, opens draft PR
-5. Reviewer picks it up, posts review comments or LGTM
-6. Merge bot merges LGTM'd PRs, auto-reverts if main breaks
-7. If worker hits 3 consecutive verify failures → writes STUCK file → orchestrator resolves
-8. When all queue items are claimed, worker switches to **rebuild mode** (see `scripts/pi-task-prompt.md`)
+The orchestrator may lower the work-in-progress limit whenever active work overlaps or review/evaluation becomes the bottleneck.
 
-## Two-Tier Protected Paths
+## Roles
 
-- **Hard-protected** (CI, agent scripts, protected data): merge bot adds `claude-review` label and skips. The reviewer's READY_FOR_MERGE verdict is logged but insufficient for hard-protected merges — a cloud orchestrator must explicitly approve via `gh pr edit --add-label orchestrator-approved`.
-- **Soft-protected** (core semantics, schemas, registry): auto-merge if reviewer posts `LGTM-protected`
+### Vision owner
 
-Configured in `scripts/pi-merge-loop.sh` via `HARD_PROTECTED_RE` and `SOFT_PROTECTED_RE`.
+Chooses milestone priorities, acceptable tradeoffs, and compute/review allocation.
 
-## Escalation Path
+### Orchestrator
 
-```
-Bash watchdog (5min) → fixes simple loop deaths (restart processes)
-    ↓ if not a simple restart
-Local orchestrator (3h) → bash auto-fix (git pull + clean dist + rebuild)
-    ↓ if bash fix fails
-Local orchestrator → LLM diagnosis (Qwen3 35B with thinking enabled)
-    ↓ if LLM says ESCALATE or its fix doesn't work
-NEEDS_CLOUD flag → YOU (cloud orchestrator) review + fix
-    ↓ if you can't fix
-User notification → desktop notify-send for critical issues
-```
+Selects ready issues, assigns bounded work, prevents overlap, chooses the change tier, requests evaluation, and decides whether a candidate may proceed to acceptance checks.
 
-### LLM Diagnosis Details
+### Worker
 
-The `llm_diagnose` function in `pi-orchestrator.sh`:
-- Sends error context + focused question to Qwen3 35B via `localhost:8080/v1/chat/completions`
-- Model has thinking/reasoning enabled (uses ~3-6K chars of chain-of-thought before answering)
-- System prompt asks for concrete bash fix (3 commands max) or "ESCALATE" if unsure
-- `llm_try_fix` extracts commands, filters against blocklist, caps at 3, logs everything
-- Advice saved to `reports/orchestrator/last-llm-advice.txt`
-- Triggers on: verify failures, git pull failures, loop crashes, high revert rates
+Implements or experiments on one assigned issue, publishes failures and limitations, opens one draft pull request for a coherent candidate, and exits.
 
-## When You're Needed (Layer 5)
+### Independent evaluator
 
-1. **`NEEDS_CLOUD` flag exists** — read it, read `status.log` and `last-llm-advice.txt` for context
-2. **`claude-review` PRs piling up** — review the diff, approve good ones (see below)
-3. **External audit** — someone provides a review that needs task prompt or queue updates
-4. **Strategic decisions** — CI changes, protection tier updates, model swaps
-5. **Queue refills** — writing WORK_QUEUE v5+ when v4 is done
-6. **Novel failures** — something the automated layers can't diagnose
+Evaluates a fixed candidate SHA on appropriate holdout, protected, or product data and reports reproducible results without modifying the candidate.
 
-### Approving claude-review PRs
+### Maintainer and merge steward
 
-Since all PRs are authored by the repo owner, GitHub blocks self-approval. To unblock:
+Controls `main`, protected data, releases, schema/fingerprint promotion, credentials, final support claims, and branch cleanup.
+
+## Orchestrator check-in
+
+Perform these steps in order.
+
+### 1. Synchronize read-only state
+
 ```bash
-# Review the diff, then if it's good:
-gh pr edit <N> --repo corpunum/OpenLunum --remove-label "claude-review" --add-label "orchestrator-approved"
-# The merge bot will pick it up on next cycle (within 2 minutes)
+cd /home/corpunum/openlunum-workers/review
+git fetch --prune origin
+git reset --hard origin/main
 ```
 
-## Common Operations
+Then inspect:
 
-### Full health check
 ```bash
-cd /home/corpunum/OpenLunum
-
-# Flags
-for f in ESCALATED THERMAL_HALT PAUSED STUCK; do
-  [ -f "reports/pi-loop/$f" ] && echo "FLAG $f: $(cat reports/pi-loop/$f)" || echo "$f: clear"
-done
-[ -f "reports/orchestrator/NEEDS_CLOUD" ] && echo "NEEDS_CLOUD: $(cat reports/orchestrator/NEEDS_CLOUD)" || echo "NEEDS_CLOUD: clear"
-
-# Loops
-for p in 'pi-loop\.sh' 'pi-review-loop\.sh' 'pi-merge-loop\.sh' 'pi-docs-loop\.sh'; do
-  pgrep -af "$p" | grep -v pgrep | head -1 || echo "$p: DOWN"
-done
-
-# Temps
-tail -1 reports/pi-loop/temps.csv
-
-# Recent merges
-tail -10 reports/pi-merge/merge-status.log
-
-# Open PRs
 gh pr list --repo corpunum/OpenLunum --state open
-
-# Queue progress
-echo "Done: $(grep -c '\[x\]' WORK_QUEUE.md) / Todo: $(grep -c '\[ \]' WORK_QUEUE.md)"
+gh issue list --repo corpunum/OpenLunum --state open --limit 100
+git branch -r --merged origin/main
 ```
 
-### Fix a STUCK worker
+Read any `reports/orchestrator/NEEDS_CLOUD`, `reports/pi-loop/STUCK`, `ESCALATED`, `THERMAL_HALT`, or `PAUSED` flags if the local filesystem is available.
+
+### 2. Reconcile active work
+
+For each open pull request verify:
+
+- linked issue and assignment;
+- branch follows the task naming convention;
+- no other branch duplicates the issue or scope;
+- candidate head SHA;
+- draft/ready state;
+- blocking feedback;
+- exact-head workflow status;
+- whether independent evaluation is required.
+
+If the repository already has three active implementation pull requests, do not dispatch another implementation worker.
+
+### 3. Select work
+
+A worker may be dispatched only when an issue is marked ready and includes:
+
+- a defined problem or falsifiable hypothesis;
+- non-goals;
+- acceptance criteria;
+- required checks and evidence;
+- a risk tier;
+- iteration/model-call/time budgets where applicable;
+- no unresolved semantic decision that the worker is expected to invent.
+
+Assign one issue to one worker. Include the issue number and target outcome in the dispatch instruction.
+
+### 4. Classify the change
+
+#### Tier 1 — mechanical
+
+Non-semantic documentation, spelling, test organization, and low-risk tooling cleanup.
+
+#### Tier 2 — normal implementation
+
+CLI, API, MCP, adapter, reporting, and internal implementation work.
+
+#### Tier 3 — semantic or evidence-sensitive
+
+Schema, canonicalization, fingerprints, parser scoring, protected data, safety policy, renderer preservation, and support/maturity claims.
+
+Tier 3 requires independent evaluation and an orchestrator evidence decision before merge.
+
+### 5. Dispatch once
+
+A worker run must be bounded and one-shot. It exits with:
+
+- `candidate` — a coherent draft pull request exists;
+- `blocked` — a specific dependency or decision is missing;
+- `no-improvement` — the bounded attempt did not produce an acceptable candidate.
+
+Do not immediately redispatch a worker after `blocked` or `no-improvement`. Resolve the issue definition, evidence, or strategy first.
+
+### 6. Review and evaluate
+
+For every candidate:
+
+- review the complete diff;
+- verify local-check commands and results;
+- inspect failed cases and exclusions;
+- reject unsupported support, maturity, or production claims;
+- bind reviews and evaluations to the current head SHA;
+- use a different evaluator model/configuration where practical.
+
+A worker's own tests are necessary but not sufficient evidence for Tier 3 acceptance.
+
+### 7. Use hosted CI at the acceptance boundary
+
+Workers iterate locally. Full hosted checks should run when the candidate is coherent and ready for review.
+
+- Do not create diagnostic commits merely to trigger Actions.
+- Re-run only invalidated or failed jobs where possible.
+- Never remove or weaken a required check to save budget.
+- Do not accept stale checks from another commit.
+
+The merge policy requires successful exact-head checks and head-bound approval evidence.
+
+### 8. Merge or reject
+
+Before merge confirm:
+
+- the pull request targets `main`;
+- it is not draft;
+- the head SHA has not changed since the final review/evaluation;
+- all required checks passed on that exact head;
+- no blocking labels or unresolved current-head findings remain;
+- issue acceptance criteria are satisfied;
+- protected implementation and protected data are not co-edited.
+
+Use squash merge and an expected-head guard. After merge:
+
+- close or update the linked issue;
+- delete the remote task branch;
+- prune local worktrees/branches;
+- reconcile `STATUS.md` only when accepted capabilities changed;
+- record accepted evidence references for support or maturity claims.
+
+Reject and delete branches that are obsolete and contain no unique work worth preserving.
+
+## Branch cleanup procedure
+
+Safe automatic cleanup includes branches attached to merged pull requests and branches fully contained in `main`.
+
 ```bash
-cd /home/corpunum/OpenLunum
-git checkout -- .
-git pull --ff-only origin main
-find packages -name dist -type d -exec rm -rf {} +
-pnpm build && pnpm verify
-rm -f reports/pi-loop/STUCK reports/pi-loop/ESCALATED
-# Watchdog restarts the worker within 5 minutes
+repo="corpunum/OpenLunum"
+
+gh pr list \
+  --repo "$repo" \
+  --state closed \
+  --search "is:merged" \
+  --limit 500 \
+  --json headRefName,isCrossRepository \
+  --jq '.[] | select(.isCrossRepository == false) | .headRefName' |
+sort -u |
+while IFS= read -r branch; do
+  [[ -z "$branch" || "$branch" == "main" ]] && continue
+  gh api --method DELETE "repos/$repo/git/refs/heads/$branch" 2>/dev/null || true
+done
 ```
 
-### Clear NEEDS_CLOUD after resolving
+For closed-unmerged branches, first inspect unique commits:
+
 ```bash
-rm -f reports/orchestrator/NEEDS_CLOUD
+git fetch --prune origin
+for ref in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/ | grep -v '^origin/main$'); do
+  count=$(git rev-list --count "origin/main..$ref")
+  printf '%5s %s\n' "$count" "$ref"
+done
 ```
 
-### Update worker priorities
-```bash
-cd ~/openlunum-workers/review
-git fetch origin main && git reset --hard origin/main
-# Edit scripts/pi-task-prompt.md
-git add scripts/pi-task-prompt.md
-ALLOW_MAIN_COMMIT=1 git commit -m "fix(worker): update priorities"
-ALLOW_MAIN_PUSH=1 git push origin HEAD:main
-```
+Do not delete a closed-unmerged branch with unique commits until the maintainer confirms abandonment or preservation elsewhere.
 
-### Close stale PRs
-```bash
-gh pr close <N> --repo corpunum/OpenLunum --comment "Closing: <reason>"
-```
+## Local health boundaries
 
-### Restart a dead loop
-```bash
-PI_MODEL="openai/qwen3.6-35b-a3b" nohup bash scripts/pi-loop.sh /home/corpunum/OpenLunum > reports/pi-loop/nohup.log 2>&1 &
-```
+Local watchdogs may restart dead infrastructure and report failures, but they are not authorized to invent work, merge semantic changes, bypass required checks, or convert stale branches into new pull requests.
 
-### Update this document (MANDATORY every check-in)
-```bash
-cd ~/openlunum-workers/review
-git fetch origin main && git reset --hard origin/main
-# Edit ORCHESTRATOR.md — update the "Current State" section
-git add ORCHESTRATOR.md
-ALLOW_MAIN_COMMIT=1 git commit -m "docs: orchestrator check-in $(date +%Y-%m-%d)"
-ALLOW_MAIN_PUSH=1 git push origin HEAD:main
-```
+Never restart shared GPU services such as OpenUnum, ComfyUI, or TTS merely to free resources for a worker. Check for active model traffic before loading another large model. Avoid loading two 35B-class models simultaneously on the current hardware.
 
-## Models
+## Current strategic priority
 
-| Model | Role | Size | Router ID |
-|---|---|---|---|
-| Qwen 3.6 35B MTP | Worker + LLM diagnosis | 28GB | `openai/qwen3.6-35b-a3b` |
-| SuperQwen AgentWorld 35B | Reviewer | 35GB | `openai/superqwen-agentworld-35b-a3b` |
-| Qwen 4B | Docs (ROG Ally) | 4GB | via SSH tunnel |
-| OpenUnum Brain 1.7B | Chat (co-hosted) | 1.7GB | contract3 lanes |
+Issue #253 is the current bounded evidence milestone: run honest EN/EL/ES/ID parse and retention baselines after the repaired prompt, token-budget, controlled-vocabulary, and near-semantic paths.
 
-All served via llama.cpp native router on port 8080. Config: `/home/corpunum/models-preset.ini`. Max 3 models co-loaded (`--models-max 3`). LRU eviction. **Never load two 35B+ models simultaneously** — ComfyUI shares GPU memory and will OOM.
+Historical runs from the broken parse path are not accepted baselines. Threshold calibration follows accepted baseline evidence; it does not precede it.
 
-## Eval Harness
+Persistent worker activity should remain off until the local orchestrator implements assignment-driven one-shot dispatch. A worker with no explicit issue assignment must exit without invoking an implementation campaign.
 
-Results at `reports/agent-eval/tier1-results.json`. Two tiers:
-- **Tier 1**: 12 single-turn coding prompts, scored mechanically
-- **Tier 2**: 3 full agent runs in isolated worktrees
+## Escalate to the vision owner when
 
-Run manually: `node scripts/agent-eval/run-eval.mjs`
-
-## Dashboard
-
-Port 3847, systemd service `openlunum-dashboard`. Backend: `server.mjs` (Node.js, no deps). Frontend: pure CSS, no canvas/charts library. Shows: loop status, flags, temps, merge history, eval results, hero progress bar, queue breakdown.
-
-## Critical Rules
-
-1. **Never edit files in `~/OpenLunum` directly** — the worker wipes them with `git reset --hard` every cycle. Always use the review worktree at `~/openlunum-workers/review`.
-2. **Never restart `openunum.service`, `comfyui.service`, or `orpheus-tts.service`** — they share the GPU and auto-recover.
-3. **One large model at a time** during evals — two 35B models = OOM.
-4. **Port 8080 is shared** — check for in-flight LLM turns before heavy operations.
-5. **`ALLOW_MAIN_COMMIT=1` and `ALLOW_MAIN_PUSH=1`** env vars bypass git hooks for infra commits only.
-6. **Update this document** on every check-in — update the Current State section below and push.
-7. **Be quota-conscious** — the user pays for cloud LLM usage. Keep responses short when nominal.
-
-## CI Status
-
-GitHub Actions currently fails every job before recording a workflow step, consistent with an account billing/spending or runner-allocation refusal. Local work and review can continue, but protected `main` cannot merge without successful exact-head required checks. Do not describe the release pipeline as fully operational and do not relax protection to work around this external failure.
-
----
-
-## Current State (2026-07-19)
-
-**Last updated by**: GPT-5 Codex (cloud orchestrator)
-**Timestamp**: 2026-07-19T20:12+03:00
-
-- **Incident #188**: confirmed. With no branch protection, the old merge bot ignored GitHub checks and blockers, unconditionally converted drafts to ready, and merged #185, #186, #187, and #190 after failed/no-step Actions jobs.
-- **Merge control repair**: `88017f8` is on `main`. The bot now fails closed on drafts, conflicts, blocking labels, unresolved current-head `NEEDS_WORK`, stale approvals, missing/non-successful exact-head checks, and checks with zero recorded steps. Merges use `--match-head-commit`. Fourteen policy tests and full `pnpm verify` pass.
-- **GitHub protection**: `main` now requires exact contexts `verify`, `schema-drift`, `report-validation`, and `protected-data-boundary`, with strict updates, admin enforcement, conversation resolution, and force-push/deletion disabled. There are no bypasses for `orchestrator-approved`; that label only satisfies protected-path review when paired with a reason bound to the current head.
-- **Deployment**: the repaired merge bot is live and has mechanically blocked #181 and #184. The temporary `PAUSED` guard was moved to `/tmp/openlunum-PAUSED-issue-188`; worker, reviewer, docs, watchdog, and model services remain active.
-- **CI blocker**: Actions jobs currently fail before steps because account payments/spending limits prevent runners from starting. This now blocks every merge as intended. Fix billing/runner availability; do not relax required checks.
-- **Open PR audit**: #189, #184, #181, and #178 are `NEEDS_WORK` and must be rebuilt from current `main`; #191 is a new draft migration-CLI candidate requiring independent review. Re-check the live PR list because the worker remains active.
-- **Post-merge audit**: keep #187's three reopened gates. Repair #185/#190 claims: renderer conformance is only 7/10, there are no exact committed renderer goldens, tokenizer preservation is tautological, and no named-model retention report was published. Downgrade Reference/established wording until evidence exists.
-- **Urgent #186 repair**: draft PR #193 adds containment-safe filenames, unique model IDs, retained model/settings identity, no-winner handling for all-error runs, explicit ties, and negative tests. Local `pnpm verify` passes. Keep it draft until the protected exact-head checks run successfully; a protocol-compliant experiment is still required before claiming maturity.
-- **Dashboard repair**: port 3847 is active via `openlunum-dashboard.service`. Its backend/frontend now use `origin/main` plus live GitHub PR/check data, expose drafts and blocked state, detect no-step Actions failures, distinguish fresh telemetry from mere HTTP availability, deduplicate merge throughput, and stop inventing release completion from weighted maturity labels. Current authoritative display: 69/72 accepted queue entries, 3 open v4 gates, 7 open PRs, 4 drafts, and 7 blocked PRs. The worker checkout was synchronized to `88017f8` at this check-in.
-- **ETA**: scope estimates to the defined v4/pre-1.0 queue, not the open-ended project vision. While Actions cannot start jobs, merge/release ETA is unbounded. After service restoration: best case 8–16 productive hours (~1 day), likely 2–4 calendar days, conservative 1–2 weeks if another semantic audit/rebuild cycle is needed. Do not call completion until all three reopened gates have independent evidence on `main`, #193 is resolved, exact-head checks pass, and #188 closes with control proof.
-- **Handover note**: the quoted audit referenced a canonical `HANDOVER.md`, but no such file exists on current `main`. This `ORCHESTRATOR.md` remains the repository's mandated handover record.
-
----
-
-## Current State (2026-07-19, late evening)
-
-**Last updated by**: Claude (cloud orchestrator)
-**Timestamp**: 2026-07-19T23:20+03:00
-
-- **CI outage override (USER-APPROVED)**: Actions quota is exhausted and renews only with the billing cycle — the previous entry's "do not relax required checks" stance would have frozen the repo for weeks. With the user's explicit approval: (1) `pi-merge-policy.mjs` now skips hosted-check requirements while the COMMITTED flag `reports/orchestrator/CI_OUTAGE` exists; (2) required status checks were removed from branch protection; (3) the merge bot runs `gh pr ready` on labeled PRs before policy. All other policy gates (head-bound reviews, blocking labels, NEEDS_WORK, mergeable, TOCTOU match-head) remain fail-closed. Local `pnpm verify` + auto-revert is the operative gate. **When billing renews: delete CI_OUTAGE via commit, re-add the four required contexts, and restore strict mode.**
-- **Merges verified post-fix**: #195, #198, #210 merged, main green each time.
-- **Queue**: WORK_QUEUE shows 72/72 checked. CAVEAT: the previous entry's audit re-opened 3 evidence gates (renderer goldens, tokenizer preservation proof, named-model retention report) — checkbox-done is not evidence-done. A v5 queue should start from those gates.
-- **PR cleanup**: ~25 duplicate/spam PRs closed (worker was rebuilding merged items and spamming campaign-status PRs). Task prompt now enforces `IDLE: queue complete, no work` when no unchecked items remain (commit a516912).
-- **Open PRs**: #196, #214 — CI workflow fixes on `claude-review`, parked until Actions billing renews (untestable without runners).
-- **Health**: all flags clear, all 4 loops UP, temps ~90°C, single merge-bot instance (duplicate killed).
-- **Next actions**: (1) billing renews → restore strict CI mode, review #196/#214; (2) write WORK_QUEUE v5 starting from the 3 re-opened evidence gates.
+- the semantic interpretation cannot be decided mechanically;
+- protected data or release policy must change;
+- a milestone tradeoff is required;
+- evidence is contradictory or cannot be reproduced;
+- budget must be increased beyond the issue limits;
+- a support or maturity declaration is proposed;
+- branch protection or merge-control guarantees cannot be verified.
