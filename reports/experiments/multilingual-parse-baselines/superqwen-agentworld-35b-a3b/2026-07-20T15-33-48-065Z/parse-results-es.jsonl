@@ -1,0 +1,4 @@
+{"id":"preference-es","status":"error","rawOutput":"","error":"attempt 1: Model call failed: HTTP 500 proxy error: Could not establish connection","latencyMs":1.5731110000051558}
+{"id":"delete-es","status":"error","rawOutput":"","error":"attempt 1: Model call failed: HTTP 500 proxy error: Could not establish connection","latencyMs":1.2074850000208244}
+{"id":"battery-es","status":"error","rawOutput":"","error":"attempt 1: Model call failed: HTTP 500 proxy error: Could not establish connection","latencyMs":1.403667000005953}
+{"id":"deadline-es","status":"error","rawOutput":"","error":"attempt 1: Model call failed: HTTP 500 proxy error: Could not establish connection","latencyMs":0.7124140000087209}

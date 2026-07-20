@@ -1,0 +1,19 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "modelProfile": {
+    "schema": "openlunum-model-profile/0.1",
+    "id": "superqwen-agentworld-35b-live",
+    "provider": "openai-compatible",
+    "baseUrl": "http://127.0.0.1:8080/v1",
+    "model": "openai/superqwen-agentworld-35b-a3b",
+    "temperature": 0,
+    "seed": 42,
+    "timeoutMs": 300000,
+    "metadata": {
+      "purpose": "Live evidence run: SuperQwen AgentWorld 35B A3B, llama.cpp native router, Radeon 8060S gfx1151, 128GB unified"
+    }
+  },
+  "startedAt": "2026-07-20T15:37:16.066Z"
+}

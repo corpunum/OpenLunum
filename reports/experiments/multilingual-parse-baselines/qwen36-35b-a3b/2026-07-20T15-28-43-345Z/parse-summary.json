@@ -1,0 +1,129 @@
+{
+  "experimentId": "multilingual-parse-baselines-qwen36",
+  "runId": "2026-07-20T15-28-43-345Z",
+  "task": "parse",
+  "totalItems": 16,
+  "totalPassed": 2,
+  "totalFailed": 1,
+  "totalErrors": 13,
+  "overallExactRate": 0.125,
+  "overallNearSemanticRate": 0,
+  "overallFeatureRecall": 0.16666666666666666,
+  "overallFeaturePrecision": 0.16666666666666666,
+  "overallMeanLatencyMs": 17515.84493956249,
+  "languageMetrics": [
+    {
+      "language": "en",
+      "languageLabel": "English",
+      "totalItems": 4,
+      "passedItems": 1,
+      "failedItems": 1,
+      "errorItems": 2,
+      "exactRate": 0.25,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.41666666666666663,
+      "featurePrecision": 0.41666666666666663,
+      "meanLatencyMs": 49903.379266,
+      "fingerprintMatches": 1,
+      "exactFingerprintCount": 1,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "el",
+      "languageLabel": "Greek",
+      "totalItems": 4,
+      "passedItems": 1,
+      "failedItems": 0,
+      "errorItems": 3,
+      "exactRate": 0.25,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.25,
+      "featurePrecision": 0.25,
+      "meanLatencyMs": 20156.833636499978,
+      "fingerprintMatches": 1,
+      "exactFingerprintCount": 1,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "es",
+      "languageLabel": "Spanish",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 2.0411404999904335,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "id",
+      "languageLabel": "Indonesian",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 1.1257152499892982,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0
+    }
+  ],
+  "crossLanguageComparison": {
+    "languagesIncluded": [
+      "en",
+      "el",
+      "es",
+      "id"
+    ],
+    "bestExactLanguage": "en",
+    "bestRecallLanguage": "en",
+    "fastestLanguage": "id",
+    "consistencyScore": 0.75,
+    "variance": {
+      "exactRateVariance": 0.015625,
+      "recallVariance": 0.031249999999999997,
+      "latencyVariance": 417356478.51551944
+    }
+  },
+  "languageBreakdown": {
+    "en": [
+      1,
+      1,
+      2,
+      4
+    ],
+    "el": [
+      1,
+      0,
+      3,
+      4
+    ],
+    "es": [
+      0,
+      0,
+      4,
+      4
+    ],
+    "id": [
+      0,
+      0,
+      4,
+      4
+    ]
+  },
+  "failureModes": {
+    "error: attempt 1: No JSON object found in model output": 2,
+    "kind:project_state": 1,
+    "role:0:time:2026-09-30": 1,
+    "error: attempt 1: Model call failed: HTTP 500 proxy error": 11
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "experimentId": "multilingual-parse-baselines-superqwen",
+  "runId": "2026-07-20T15-33-48-065Z",
+  "task": "parse",
+  "totalItems": 16,
+  "totalPassed": 1,
+  "totalFailed": 0,
+  "totalErrors": 15,
+  "overallExactRate": 0.0625,
+  "overallNearSemanticRate": 0,
+  "overallFeatureRecall": 0.0625,
+  "overallFeaturePrecision": 0.0625,
+  "overallMeanLatencyMs": 12999.8576929375,
+  "languageMetrics": [
+    {
+      "language": "en",
+      "languageLabel": "English",
+      "totalItems": 4,
+      "passedItems": 1,
+      "failedItems": 0,
+      "errorItems": 3,
+      "exactRate": 0.25,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.25,
+      "featurePrecision": 0.25,
+      "meanLatencyMs": 51996.2539375,
+      "fingerprintMatches": 1,
+      "exactFingerprintCount": 1,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "el",
+      "languageLabel": "Greek",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 1.244168749988603,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "es",
+      "languageLabel": "Spanish",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 1.2241692500101635,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "id",
+      "languageLabel": "Indonesian",
+      "totalItems": 4,
+      "passedItems": 0,
+      "failedItems": 0,
+      "errorItems": 4,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0,
+      "featurePrecision": 0,
+      "meanLatencyMs": 0.7084962500011898,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0
+    }
+  ],
+  "crossLanguageComparison": {
+    "languagesIncluded": [
+      "en",
+      "el",
+      "es",
+      "id"
+    ],
+    "bestExactLanguage": "en",
+    "bestRecallLanguage": "en",
+    "fastestLanguage": "id",
+    "consistencyScore": 0.75,
+    "variance": {
+      "exactRateVariance": 0.01171875,
+      "recallVariance": 0.01171875,
+      "latencyVariance": 506906306.733748
+    }
+  },
+  "languageBreakdown": {
+    "en": [
+      1,
+      0,
+      3,
+      4
+    ],
+    "el": [
+      0,
+      0,
+      4,
+      4
+    ],
+    "es": [
+      0,
+      0,
+      4,
+      4
+    ],
+    "id": [
+      0,
+      0,
+      4,
+      4
+    ]
+  },
+  "failureModes": {
+    "error: attempt 1: Expected double-quoted property name in": 1,
+    "error: attempt 1: Model call failed: HTTP 500 proxy error": 14
+  }
+}
