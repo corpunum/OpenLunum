@@ -3,9 +3,13 @@ name: quality-gate
 on:
   pull_request:
     paths:
+      - 'packages/cli/src/**'
+      - 'packages/cli/test/**'
       - 'packages/core/src/**'
+      - 'packages/core/test/**'
       - 'packages/eval/src/**'
       - 'scripts/run-quality-gates-ci.mjs'
+      - 'scripts/run-quality-gates-ci.test.mjs'
       - '.github/workflows/quality-gate.yml'
   workflow_dispatch:
 
@@ -19,7 +23,7 @@ concurrency:
 jobs:
   quality-gates:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
         with:
@@ -34,6 +38,21 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      - name: Verify migration CLI release gate
+        run: node --test packages/cli/dist/test/cli.test.js
+      - name: Verify renderer reference gate
+        run: >-
+          node --test
+          packages/core/dist/test/profiles.test.js
+          packages/core/dist/test/renderer-conformance.test.js
+          packages/core/dist/test/renderer-golden-output.test.js
+          packages/core/dist/test/renderer-profile-exact-goldens.test.js
+      - name: Verify tokenizer optimization gate
+        run: >-
+          node --test
+          packages/core/dist/test/token-atlas.test.js
+          packages/core/dist/test/token-optimization.test.js
+          packages/core/dist/test/token-optimization-compat.test.js
       - name: Run quality gate CI
         id: gates
         env:
