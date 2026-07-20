@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { once } from 'node:events';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import Ajv from 'ajv';
+import AjvModule from 'ajv/dist/ajv.js';
 import { findWorkspaceRoot, validateProfile } from '../src/io.js';
 import { DEFAULT_MAX_TOKENS, OpenAICompatibleModel } from '../src/model.js';
 import type { ModelProfile } from '../src/types.js';
@@ -94,7 +94,7 @@ test('model construction rejects invalid maxTokens even without separate profile
 test('model profile schema accepts maxTokens and rejects invalid budgets', async () => {
   const root = await findWorkspaceRoot();
   const schema = JSON.parse(await readFile(path.join(root, 'schemas/model-profile.schema.json'), 'utf8')) as object;
-  const validate = new Ajv({ strict: true }).compile(schema);
+  const validate = new AjvModule.Ajv({ strict: true }).compile(schema);
 
   assert.equal(validate(profile({ maxTokens: 4096 })), true, JSON.stringify(validate.errors));
   assert.equal(validate(profile({ maxTokens: Number.MAX_SAFE_INTEGER })), true, JSON.stringify(validate.errors));
