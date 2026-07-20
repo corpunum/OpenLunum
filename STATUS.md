@@ -81,9 +81,19 @@ The parse experiment path was repaired after discovering that historical live-mo
 - embedded schema shape and canonical example;
 - controlled predicate/role vocabulary;
 - profile-overridable model token budgets;
+- fail-closed exact and near-semantic outcome scoring;
+- CLI pipeline qualitative sanity check confirming it is a heuristic surface telegraph (not a real parser) — report at `reports/lunum-qualitative-sanity-check.md`.
+- delivery of the full parse system prompt;
+- embedded schema shape and canonical example;
+- controlled predicate/role vocabulary;
+- profile-overridable model token budgets;
 - fail-closed exact and near-semantic outcome scoring.
 
 Historical parse and retention reports produced before these repairs are not accepted baselines.
+
+### CLI pipeline — not doing semantic parsing
+
+A qualitative sanity check (July 2026, report at `reports/lunum-qualitative-sanity-check.md`) confirms: the CLI `pipeline` command does not perform semantic parsing. It always emits `kind: surface_telegraph` with one flat clause, regardless of input complexity. Category and risk are hardcoded CLI flag defaults. The real parse logic in `policy-classifier.ts` is dead code in the CLI pipeline path. Any "feature recall" or "exact match" metrics against this pipeline are computed against a fixed stopword-strip transform, not a semantic parse. This is consistent with the honest boundary statement that a production-approved parser is not yet provided.
 
 ### Immediate evidence milestone
 

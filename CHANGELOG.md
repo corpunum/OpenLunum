@@ -2,6 +2,18 @@
 
 ## Since 0.2.1 (Documentation Sync)
 
+### Fixed — Ops — Thermal Watchdog (commits e12c65f, ea12eb5)
+- **Two thermal watchdog critical-tier gap fixes (SAFETY):** The rig hit 96.9 °C GPU with in-flight generation above the hard-kill line because the critical-tier check only fired if the first temperature read was ≥ 95 °C. Fix (e12c65f): soft-tier confirm-read now checks CRITICAL_TEMP first and escalates to `hard_halt()` if crossed. A second gap (ea12eb5): a held `THERMAL_FLAG` from a soft pause only logged on subsequent cycles without re-checking CRITICAL_TEMP, allowing temps to climb past the hard-kill line for ~30 minutes. Fix: the flag-held branch now checks CRITICAL_TEMP on every cycle. Both caught by manual monitoring; kill action is fast-acting (~90 s to 60-70 °C). (commits e12c65f, ea12eb5)
+
+### Added — Ops (commit ba2963c)
+- **Serialize rig GPU generation across worker/reviewer/docs loops:** Added shared flock (`/tmp/openlunum-rig-gpu.lock`) around `pi --print` in each of the three rig loops so at most one generates at a time. Previously, concurrent generation across all three loops drove the rig to 96 °C+. (commit ba2963c)
+
+### Fixed — Ops (commit 8b657a3)
+- **Restore executable bit on pi-docs-loop.sh:** The file lost its executable permission, preventing it from running as a loop. Restored. (commit 8b657a3)
+
+### Added — Eval (commit 50a308a)
+- **Qualitative sanity check of CLI pipeline:** Hand-run qualitative evaluation of `lunum pipeline --text` on 10 diverse inputs (preference, conditional, destructive-delete, deadline, question, SSN request, multi-clause, one-word, vague). Verdict: the CLI pipeline does NOT do semantic parsing — it always emits `kind: surface_telegraph`, one flat clause with `predicate: surface`, and stopword-stripped text. Category/risk are hardcoded CLI flag defaults (simple_fact/low) from `policy-classifier.ts`, never derived from input. Three actions like "Book flight, cancel hotel, email confirmation" collapse into one undifferentiated clause. Report at `reports/lunum-qualitative-sanity-check.md`. (commit 50a308a)
+
 ### Added — Ops (commits 2691dc6, 6bb0bf6)
 - **Two-tier thermal policy + restore 3 local loops + Ally worker:** `scripts/pi-watchdog.sh` and `scripts/pi-docs-loop.sh` enforce two-tier thermal governance — soft pause at 90 °C, hard kill at 95 °C (updated from 85 °C cap in 6bb0bf6). `scripts/pi-watchdog.sh` was rewritten for the one-shot dispatcher model: no loop restarts, dispatch via `pi-dispatch-once.sh`, and auto-cleanup of stale worker processes. Restored three persistent local loops (`pi-loop.sh`, `pi-review-loop.sh`, `pi-docs-loop.sh`) plus the new Ally worker loop (`pi-loop-ally.sh`) that runs review work while the primary loop handles parsing/realization. Watchdog monitors all loops, enforces thermal caps, and coordinates dispatch. (commits 2691dc6, 6bb0bf6)
 
@@ -40,6 +52,9 @@
 
 ### Changed — Worker Agent (commit a516912)
 - **Idle when queue complete:** `scripts/pi-task-prompt.md` now enforces `IDLE: queue complete, no work` when WORK_QUEUE.md has zero unchecked `[ ]` items. Worker stops creating branches, opening PRs, or writing campaign-status reports when the queue is complete. Campaign-status PR spam stopped. (commit a516912)
+
+### Changed — Merge Policy (commit e21ebc9)
+- **Docs/changelog sync — 13 merged commits:** Changelog updated to reflect the 13 commits merged since the previous sync (including ops, eval, model profiles, and merge policy work). (commit e21ebc9)
 
 ### Docs — Campaign Complete (commit 2f685df)
 - **WORK_QUEUE v4 complete:** 72/72 items checked. Campaign tracking reports updated. (~25 duplicate/spam PRs closed by cleanup). (commit 2f685df)

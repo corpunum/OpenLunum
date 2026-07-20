@@ -109,6 +109,8 @@ $ lunum pipeline --text "The budget was approved for Q1."
 }
 ```
 
+**Note:** The `lunumCode` here is stopword-stripped text, not parsed roles/predicate. The output shape is structurally identical to a multi-action command like "Book flight, cancel hotel, email confirmation" — see `reports/lunum-qualitative-sanity-check.md` for details.
+
 ### Example 2: Conditional Instruction
 
 ```bash
@@ -187,7 +189,7 @@ Input (text/JSON) → Parse (deriveSidecar) → Realize (createRecord) → Rende
 
 1. **Parse** — `deriveLunumSidecar()` creates a sidecar with lunumCode and fingerprint
    - Uses surface telegraph for unstructured text
-   - Classifies category, risk, confidence
+   - Category and risk are **not classified from input** — they are hardcoded CLI flag defaults (`--category simple_fact --risk low`) that echo straight through (see `reports/lunum-qualitative-sanity-check.md`)
 
 2. **Realize** — `createRecord()` creates a full LunumRecord
    - Canonicalizes the sem structure
@@ -219,9 +221,23 @@ The CLI pipeline can be used in CI/CD for:
 - No automatic language detection
 - Policy classification uses simple rules
 
+### Known: CLI pipeline is not doing semantic parsing
+
+A qualitative sanity check (July 2026, report at `reports/lunum-qualitative-sanity-check.md`) confirms:
+
+- **The CLI `pipeline` command produces `kind: surface_telegraph` with one flat clause and `predicate: surface` for every input** — from simple facts to multi-action commands — regardless of input complexity.
+- **Category and risk are hardcoded CLI flag defaults** (`--category simple_fact --risk low`), never derived from the input text. Passing `--category command --risk high` just echoes those values back.
+- **Multi-clause inputs collapse into one clause:** "Book flight, cancel hotel, email confirmation" produces a single undifferentiated clause, not three.
+- **The real parse logic in `packages/core/src/policy-classifier.ts`** (which defines `preference`, `conditional_instruction`, `safety_constraint`, `command`, `ambiguous` categories with sensible risk levels) **is dead code in the CLI pipeline path** — nothing calls it on input text.
+- **Root cause:** `deriveLunumSidecar()` in `packages/core/src/derive.ts` only produces structured output if a `sem` object is already supplied. The CLI pipeline never constructs or passes one, so every call routes to `deriveSurfaceSidecar()` — the stopword-stripping fallback.
+
+**Practical implication:** Any "feature recall" or "exact match" metrics computed against this pipeline are being computed against a fixed stopword-strip transform, not a semantic parse. The metrics are not trustworthy evidence of parsing ability. Before trusting further metrics, the CLI pipeline should be wired to actually construct a `sem` object and call the existing policy classifier.
+
 ## References
 
 - WORK_QUEUE v4: Release gate 6 — adoption paths
 - `packages/cli/src/cli.ts` — CLI implementation
 - `packages/core/src/derive.ts` — deriveLunumSidecar, createRecord
 - `packages/core/src/render.ts` — renderSem
+- `reports/lunum-qualitative-sanity-check.md` — CLI pipeline qualitative sanity check (July 2026)
+- `docs/THREAT-MODEL.md` — threat model and parser-hallucination considerations
