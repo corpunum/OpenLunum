@@ -108,6 +108,22 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       }]
     }]
   });
+  // Real gold record (deadline-en). Added 2026-07-20 after a re-run with
+  // the conditional/safety examples above showed every model still gets
+  // project_state wrong in two consistent ways: emitting kind "statement"
+  // instead of "project_state", and using "id" instead of "value" for the
+  // date role (dates/quantities carry a "value", not an "id" — "id" is
+  // only for named entities that need a stable lower_snake_case handle).
+  const projectStateExample = JSON.stringify({
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'project_state',
+    clauses: [{
+      predicate: 'deadline',
+      roles: { subject: { type: 'project', id: 'project' }, time: { type: 'date', value: '2026-09-30' } },
+      negated: false
+    }]
+  });
 
   return {
     system: [
@@ -123,6 +139,11 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       '"conditions" array on the clause — never flatten a threshold or confirmation requirement into',
       'the main clause\'s roles. A negated main clause ("do not delete... unless confirmed") plus a',
       '"conditions" entry for the confirmation is the correct shape; do not drop the conditions array.',
+      '',
+      'Deadlines, due dates, and other project/schedule facts MUST use "kind": "project_state"',
+      '(not "statement" or "fact"). Dates and quantities carry a "value" field ("value": "2026-09-30"',
+      'or "value": 20, "unit": "percent") — do NOT put a date or number in the "id" field. "id" is',
+      'only for named entities that need a stable lower_snake_case handle (e.g. "battery_level", "files").',
       '',
       'Expected JSON structure:',
       '{',
@@ -145,6 +166,9 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       '',
       'Example (safety_constraint — confirmation requirement, note negated:true on the main clause):',
       safetyExample,
+      '',
+      'Example (project_state — deadline/schedule fact, note "value" not "id" on the date role):',
+      projectStateExample,
       '',
       vocabularyBlock()
     ].join('\n'),
