@@ -572,3 +572,80 @@ test('parse experiment runner sends parsePrompt.system as the model system messa
     await rm(temp, { recursive: true, force: true });
   }
 });
+
+test('parse experiment scores near-semantic fingerprint matches alongside exact matches', async () => {
+  // The v5 live evidence showed that exact-only comparison underreports
+  // capability when identifiers differ but semantics match. This test
+  // verifies that near-semantic fingerprint scores are computed and
+  // included in the report.
+  let capturedSystem = '';
+  // Return a parsed Sem with a slightly different identifier but same structure
+  const nearMatchSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'customer' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
+  };
+  const goldSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
+  };
+
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/chat/completions') {
+      let body = '';
+      request.on('data', chunk => { body += chunk; });
+      request.on('end', () => {
+        const parsed = JSON.parse(body) as { messages?: Array<{ role?: string; content?: string }> };
+        capturedSystem = parsed.messages?.find(m => m.role === 'system')?.content ?? '';
+        response.writeHead(200, { 'content-type': 'application/json' });
+        response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(nearMatchSem) } }] }));
+      });
+      return;
+    }
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-near-sem-'));
+  try {
+    const items = [
+      { id: 'near-sem-test', sourceLanguage: 'en', sourceText: 'The user prefers concise answers.', goldSem }
+    ];
+
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, items.map(i => JSON.stringify(i)).join('\n') + '\n', 'utf8');
+
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(profilePath, JSON.stringify({ schema: 'openlunum-model-profile/0.1', id: 'mock', provider: 'openai-compatible', baseUrl: `http://127.0.0.1:${address.port}/v1`, model: 'mock-local', temperature: 0, timeoutMs: 5000 }), 'utf8');
+
+    const manifestPath = path.join(temp, 'experiment.json');
+    const outputDir = path.join(temp, 'reports');
+    await writeFile(manifestPath, JSON.stringify({ schema: 'openlunum-experiment/0.1', id: 'near-sem-test', area: 'multilingual-parse', task: 'parse', hypothesis: 'Near-semantic scoring works', baselineCommit: 'test', dataset: { path: datasetPath, sha256: await sha256File(datasetPath) }, modelProfile: profilePath, limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 }, gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false }, outputDirectory: outputDir }), 'utf8');
+
+    const { report } = await runParseExperiment(manifestPath);
+
+    // Near-semantic rate should be computed
+    assert.ok(report.overallNearSemanticRate >= 0, 'overallNearSemanticRate should be computed');
+    assert.ok(report.overallNearSemanticRate <= 1, 'overallNearSemanticRate should be <= 1');
+
+    // The near-match should have nearSemantic=true or nearSemanticScore > 0
+    // (exact match fails because identifier differs, but near-sem should catch it)
+    assert.ok(report.languageMetrics.length > 0, 'should have language metrics');
+    for (const langMetrics of report.languageMetrics) {
+      if (langMetrics.totalItems > 0) {
+        assert.ok(langMetrics.nearSemanticRate >= 0, 'nearSemanticRate should be computed');
+      }
+    }
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});

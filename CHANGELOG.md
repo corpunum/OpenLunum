@@ -19,7 +19,7 @@
 
 ### Added — Parse Prompt (PR #232)
 - **Parse prompt with schema shape and one-shot example:** `parsePrompt` system message now includes the expected Lunum-Sem JSON structure (schema, world, kind, clauses with predicate/roles/negated) and a canonical preference example. Live test campaign showed parse validity improving 0/16 → 14/16. Regression test in `packages/eval/test/parse-experiment.test.ts` verifies schema shape fields and example parseability. Types in `packages/eval/src/prompts.ts`. (PR #232, commit cdc3bf0)
-- **Controlled predicate/role vocabulary in parsePrompt:** `parsePrompt` now ships a controlled vocabulary drawn from the gold dataset's identifier inventory so models hit gold identifiers instead of guessing synonyms (`remove_file` vs `delete`). Types in `packages/eval/src/prompts.ts`. (commit b99b603)
+- **Controlled predicate/role vocabulary in parsePrompt:** `parsePrompt` ships a controlled vocabulary (predicates, roles, identifiers, role types) extracted from the gold dataset's identifier inventory so models hit gold identifiers instead of guessing synonyms (`remove_file` vs `delete`, `prefer` vs `want`). Vocabulary module at `packages/eval/src/predicate-vocabulary.ts` with `PREDICATES`, `ROLES`, `IDENTIFIERS`, `ROLE_TYPES` arrays and a `vocabularyBlock()` function for prompt assembly. Regression test verifies all vocabulary items are present in the generated prompt. (PR #247, commits b99b603/15880e6)
 
 ### Changed — Eval (commits 511ecaf, e1ad9d8)
 - **max_tokens on OpenAICompatibleModel:** `packages/eval/src/model.ts` now accepts `max_tokens` (default 4096, profile-overridable) so thinking models consume the configured budget and do not return empty content. (commit 511ecaf)
