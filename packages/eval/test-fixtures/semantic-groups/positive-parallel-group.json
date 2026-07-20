@@ -1,0 +1,10 @@
+{
+  "description": "A single semantic group with one member per supported language (EN/EL/ES/ID), all semantically equivalent greetings. Should ingest cleanly and be usable for group-based matching.",
+  "expect": "ok",
+  "records": [
+    { "fingerprint": "sgfx:pos:en-1", "language": "en", "text": "Hello, welcome!", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } },
+    { "fingerprint": "sgfx:pos:el-1", "language": "el", "text": "Γεια σου, καλώς όρισες!", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } },
+    { "fingerprint": "sgfx:pos:es-1", "language": "es", "text": "¡Hola, bienvenido!", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } },
+    { "fingerprint": "sgfx:pos:id-1", "language": "id", "text": "Halo, selamat datang!", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } }
+  ]
+}

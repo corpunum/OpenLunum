@@ -1,0 +1,9 @@
+{
+  "description": "Two records share a group id but one has an extra clause the other lacks -- they are not actually semantically equivalent despite the shared group id. Structural cross-validation must catch this: the group is downgraded to suspect and excluded from group-based matching (its members fall back to fingerprint matching individually, which must also report them as non-matching).",
+  "expect": "suspect",
+  "expectedSuspectGroupId": "greet-1",
+  "records": [
+    { "fingerprint": "sgfx:neg:mismatch-en-1", "language": "en", "text": "Hello, welcome!", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } },
+    { "fingerprint": "sgfx:neg:mismatch-es-1", "language": "es", "text": "¡Hola, bienvenido! Ten cuidado.", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } }, "extraClause": true }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "description": "One record has no group id annotation at all. It must be excluded from group-based matching and routed to the existing fingerprint fallback, without breaking ingest for the rest of the dataset.",
+  "expect": "ok",
+  "records": [
+    { "fingerprint": "sgfx:neg:missing-en-1", "language": "en", "text": "Hello, welcome!", "groupId": null, "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } },
+    { "fingerprint": "sgfx:neg:missing-es-1", "language": "es", "text": "¡Hola, bienvenido!", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } }
+  ]
+}
