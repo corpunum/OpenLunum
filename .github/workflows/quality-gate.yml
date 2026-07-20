@@ -5,6 +5,9 @@ on:
     paths:
       - 'packages/core/src/**'
       - 'packages/eval/src/**'
+      - 'scripts/run-quality-gates-ci.mjs'
+      - '.github/workflows/quality-gate.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -33,42 +36,10 @@ jobs:
       - run: pnpm build
       - name: Run quality gate CI
         id: gates
-        run: |
-          EXIT_CODE=$(node -e "
-            const { runQualityGates, generateCIReport } = require('./packages/core/dist/src/quality-gate-ci.js');
-            const { readFileSync } = require('fs');
-            const { parseRecord } = require('./packages/core/dist/src/index.js');
-
-            // Load test records from protected dataset
-            let records = [];
-            try {
-              const files = require('fs').readdirSync('./datasets/protected/').filter(f => f.endsWith('.json'));
-              for (const file of files) {
-                try {
-                  const data = JSON.parse(readFileSync('./datasets/protected/' + file, 'utf8'));
-                  records.push(data);
-                } catch {}
-              }
-            } catch {}
-
-            // Fallback: create minimal test records if none found
-            if (records.length === 0) {
-              records = [{
-                id: 'ci-test',
-                type: 'record',
-                version: '0.2',
-                semantic: {
-                  identity: { fingerprint: 'test', modality: 'text' },
-                  content: { proposition: { predicate: 'test', arguments: [] } }
-                },
-                provenance: { source: 'ci', timestamp: Date.now() }
-              }];
-            }
-
-            const report = runQualityGates(records, { minimumPassRate: 0.8 });
-            console.log(generateCIReport(report));
-            process.exit(report.exitCode);
-          ") || true
-          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+        env:
+          QUALITY_GATE_STRICT: '0'
+        # The repository currently has no committed protected record fixtures.
+        # Keep this synthetic smoke mode explicit; remove it when fixtures land.
+        run: node scripts/run-quality-gates-ci.mjs --fallback-only
       - name: Quality gate result
-        run: echo "Quality gates completed"
+        run: echo "Quality gates completed with gate exit code ${{ steps.gates.outputs.gate_exit_code }} over ${{ steps.gates.outputs.record_count }} record(s)"

@@ -8,6 +8,7 @@ import {
   runTokenizerOptimizationPass
 } from '../src/token-atlas.js';
 import type { LunumRecord } from '../src/types.js';
+import { runVerifiedTokenizerOptimizationPass } from '../src/token-optimization.js';
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -82,6 +83,11 @@ test('measure returns an AtlasEntry with all profiles', () => {
   assert.strictEqual(entry.fingerprint, record.fingerprint);
   assert.strictEqual(entry.sourceLength, record.source.text!.length);
   assert.ok(entry.measuredAt > 0);
+  assert.deepStrictEqual(entry.tokenizerProfiles['test-model-1'], {
+    model: 'test-model-1',
+    addBos: true,
+    addEos: true
+  });
 
   const models = atlas.getModels();
   for (const model of models) {
@@ -319,6 +325,30 @@ test('AtlasEntry contains fingerprint and sourceLength', () => {
   assert.strictEqual(entry.fingerprint, record.fingerprint);
   assert.strictEqual(entry.sourceLength, record.source.text!.length);
   assert.ok(entry.measuredAt > 0);
+});
+
+test('measured named models produce bound model-specific profile artifacts', () => {
+  const atlas = TokenAtlas.withCommonModels();
+  const entries = atlas.measureBatch([
+    createMockRecord('A complete measured record without hidden model assumptions.'),
+  ]);
+  const result = runVerifiedTokenizerOptimizationPass(entries, {
+    modelProfiles: atlas.getModels(),
+    sourceRendererProfile: 'generic-en-pivot/0.1',
+  });
+
+  assert.strictEqual(result.allSemanticsPreserved, true);
+  assert.strictEqual(result.artifacts.length, atlas.getModelCount());
+  for (const artifact of result.artifacts) {
+    assert.strictEqual(artifact.valid, true);
+    assert.strictEqual(artifact.expectedRecordCount, 1);
+    assert.strictEqual(artifact.verifiedRecordCount, 1);
+    assert.strictEqual(artifact.selections.length, 1);
+    assert.deepStrictEqual(
+      artifact.tokenizer,
+      entries[0]?.tokenizerProfiles[artifact.modelName]
+    );
+  }
 });
 
 // ── Tokenizer-Optimization Pass ───────────────────────────────────

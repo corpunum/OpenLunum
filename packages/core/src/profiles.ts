@@ -8,7 +8,7 @@
  * exist for all profiles on 15+ diverse inputs (renderer-golden-output.test.ts).
  */
 
-import type { LunumSem, LunumRecord, LunumClause, LunumRendering } from './types.js';
+import type { LunumRecord } from './types.js';
 
 // ── Profile Type ───────────────────────────────────────────────────
 
@@ -24,9 +24,9 @@ export interface ProfileConfig {
   type: ProfileType;
   /** Profile maturity level */
   level?: ProfileLevel;
-  /** Whether to preserve all annotations */
+  /** Whether to preserve all semantic annotations (must remain true) */
   preserveAnnotations?: boolean;
-  /** Whether to preserve provenance */
+  /** Whether to preserve provenance evidence (must remain true) */
   preserveProvenance?: boolean;
   /** Maximum token reduction ratio */
   maxTokenReduction?: number;
@@ -68,15 +68,15 @@ export class ProfileGenerator {
       ['short', {
         type: 'short',
         level: 'Reference',
-        preserveAnnotations: false,
+        preserveAnnotations: true,
         preserveProvenance: true,
         maxTokenReduction: 0.5
       }],
       ['tight', {
         type: 'tight',
         level: 'Reference',
-        preserveAnnotations: false,
-        preserveProvenance: false,
+        preserveAnnotations: true,
+        preserveProvenance: true,
         maxTokenReduction: 0.7
       }]
     ]);
@@ -136,29 +136,11 @@ export class ProfileGenerator {
   private applyProfile(record: LunumRecord, config: Required<ProfileConfig>): LunumRecord {
     const profiled = { ...record };
 
-    // Preserve or remove annotations based on config
-    if (!config.preserveAnnotations) {
-      profiled.sem = {
-        ...record.sem,
-        annotations: {}
-      };
-    }
-
-    // Preserve or remove provenance based on config
-    if (!config.preserveProvenance) {
-      profiled.sem = {
-        ...record.sem,
-        provenance: {}
-      };
-    }
-
-    // Shorten clauses for short and tight profiles
-    if (config.type === 'short' || config.type === 'tight') {
-      profiled.sem = {
-        ...profiled.sem,
-        clauses: this.shortenClauses(profiled.sem.clauses, config)
-      };
-    }
+    // Renderer profiles are representations of canonical semantics. They may
+    // compact model-facing renderings, but must never rewrite the Lunum-Sem
+    // record that establishes semantic identity. In particular, annotations,
+    // provenance, modality, time, and full role values all remain intact.
+    profiled.sem = record.sem;
 
     // Remove renderings for tight profile
     if (config.type === 'tight') {
@@ -166,32 +148,6 @@ export class ProfileGenerator {
     }
 
     return profiled;
-  }
-
-  /**
-   * Shorten clauses
-   */
-  private shortenClauses(clauses: LunumClause[], config: Required<ProfileConfig>): LunumClause[] {
-    return clauses.map(clause => {
-      const shortened = {
-        predicate: clause.predicate,
-        roles: {},
-        negated: clause.negated,
-        conditions: clause.conditions,
-        consequences: clause.consequences
-      } as LunumClause;
-
-      // Shorten roles based on profile type
-      for (const [role, value] of Object.entries(clause.roles ?? {})) {
-        if (typeof value === 'string' && (config.type === 'tight' || (config.type === 'short' && value.length > 50))) {
-          shortened.roles[role] = value.substring(0, 50) + (value.length > 50 ? '...' : '');
-        } else {
-          shortened.roles[role] = value;
-        }
-      }
-
-      return shortened;
-    });
   }
 
   /**
@@ -219,20 +175,6 @@ export class ProfileGenerator {
       }
     }
 
-    // Check if annotations are preserved
-    if (!this.configs.get('safe')!.preserveAnnotations && original.sem.annotations && Object.keys(original.sem.annotations).length > 0) {
-      if (!profiled.sem.annotations || Object.keys(profiled.sem.annotations).length === 0) {
-        score -= 0.1;
-      }
-    }
-
-    // Check if provenance is preserved
-    if (!this.configs.get('safe')!.preserveProvenance && original.sem.provenance && Object.keys(original.sem.provenance).length > 0) {
-      if (!profiled.sem.provenance || Object.keys(profiled.sem.provenance).length === 0) {
-        score -= 0.1;
-      }
-    }
-
     return Math.max(0, score);
   }
 
@@ -241,14 +183,6 @@ export class ProfileGenerator {
    */
   private generateWarnings(original: LunumRecord, profiled: LunumRecord, config: Required<ProfileConfig>): string[] {
     const warnings: string[] = [];
-
-    if (!config.preserveAnnotations && original.sem.annotations && Object.keys(original.sem.annotations).length > 0) {
-      warnings.push('Annotations removed');
-    }
-
-    if (!config.preserveProvenance && original.sem.provenance && Object.keys(original.sem.provenance).length > 0) {
-      warnings.push('Provenance removed');
-    }
 
     if (config.type === 'tight' && original.renderings && Object.keys(original.renderings).length > 0) {
       warnings.push('Renderings removed');
@@ -275,6 +209,9 @@ export class ProfileGenerator {
     const existing = this.configs.get(type);
     if (!existing) {
       throw new Error(`Unknown profile type: ${type}`);
+    }
+    if (config.preserveAnnotations === false || config.preserveProvenance === false) {
+      throw new Error('Renderer profiles cannot discard canonical semantics or provenance');
     }
     this.configs.set(type, { ...existing, ...config } as Required<ProfileConfig>);
   }
@@ -319,15 +256,15 @@ export const DEFAULT_PROFILE_CONFIGS: Record<ProfileType, Required<ProfileConfig
   short: {
     type: 'short',
     level: 'Reference',
-    preserveAnnotations: false,
+    preserveAnnotations: true,
     preserveProvenance: true,
     maxTokenReduction: 0.5
   },
   tight: {
     type: 'tight',
     level: 'Reference',
-    preserveAnnotations: false,
-    preserveProvenance: false,
+    preserveAnnotations: true,
+    preserveProvenance: true,
     maxTokenReduction: 0.7
   }
 };
