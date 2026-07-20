@@ -166,11 +166,15 @@ function featureTokens(features: WeightedFeatures): string[] {
 }
 
 function parseFingerprint(fingerprint: NearSemanticFingerprint): ParsedFingerprint | null {
-  const match = fingerprint.match(/^nfp:2:sha256:([a-f0-9]{64}):([a-f0-9.]+)$/u);
+  const match = fingerprint.match(/^nfp:2:sha256:([a-f0-9]{64}):([a-f0-9]{64}):([a-f0-9.]+)$/u);
   if (!match) return null;
-  const tokens = match[2]!.split('.');
+  const integrity = match[1]!;
+  const hardDigest = match[2]!;
+  const tokenText = match[3]!;
+  if (digest(`${hardDigest}:${tokenText}`) !== integrity) return null;
+  const tokens = tokenText.split('.');
   if (tokens.some((token) => !/^[a-f0-9]{16}$/u.test(token))) return null;
-  return { hardDigest: match[1]!, featureTokens: new Set(tokens) };
+  return { hardDigest, featureTokens: new Set(tokens) };
 }
 
 function hardMismatchReasons(first: HardSignature, second: HardSignature): string[] {
@@ -215,8 +219,9 @@ export class NearSemanticFingerprintGenerator {
 
   generate(sem: LunumSem): NearSemanticFingerprint {
     const hard = digest(stableValue(hardSignature(sem)));
-    const tokens = featureTokens(extractFeatures(sem));
-    return `nfp:2:sha256:${hard}:${tokens.join('.')}`;
+    const tokenText = featureTokens(extractFeatures(sem)).join('.');
+    const integrity = digest(`${hard}:${tokenText}`);
+    return `nfp:2:sha256:${integrity}:${hard}:${tokenText}`;
   }
 
   generateFromRecord(record: LunumRecord): NearSemanticFingerprint {
@@ -247,7 +252,7 @@ export class NearSemanticFingerprintGenerator {
         similar: false,
         threshold: this.threshold,
         hardCompatible: false,
-        hardMismatchReasons: ['Invalid near-semantic fingerprint format'],
+        hardMismatchReasons: ['Invalid or tampered near-semantic fingerprint'],
         matchedWeight: 0,
         totalWeight: 0
       };
