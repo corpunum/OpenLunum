@@ -1,4 +1,5 @@
 import type { DatasetItem } from './types.js';
+import { vocabularyBlock } from './predicate-vocabulary.js';
 
 export function renderPrompt(item: DatasetItem): { system: string; user: string } {
   return {
@@ -91,7 +92,9 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       '}',
       '',
       'Example:',
-      exampleOutput
+      exampleOutput,
+      '',
+      vocabularyBlock()
     ].join('\n'),
     user: JSON.stringify({ sourceLanguage: item.sourceLanguage, sourceText: item.sourceText })
   };
