@@ -23,7 +23,7 @@ concurrency:
 jobs:
   quality-gates:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v7
         with:
@@ -53,6 +53,12 @@ jobs:
           packages/core/dist/test/token-atlas.test.js
           packages/core/dist/test/token-optimization.test.js
           packages/core/dist/test/token-optimization-compat.test.js
+      - name: Run complete core test suite
+        run: pnpm --filter @corpunum/lunum test:unit
+      - name: Run complete CLI test suite
+        run: pnpm --filter @corpunum/lunum-cli test:unit
+      - name: Run complete eval test suite
+        run: pnpm --filter @corpunum/lunum-eval test:unit
       - name: Run quality gate CI
         id: gates
         env:
