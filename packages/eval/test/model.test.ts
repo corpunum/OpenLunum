@@ -81,6 +81,15 @@ test('validateProfile accepts positive integer maxTokens and rejects invalid val
   }
 });
 
+test('model construction rejects invalid maxTokens even without separate profile validation', () => {
+  for (const maxTokens of [0, -1, 1.5, Number.MAX_SAFE_INTEGER + 1]) {
+    assert.throws(
+      () => new OpenAICompatibleModel(profile({ maxTokens })),
+      /maxTokens must be a positive safe integer/u
+    );
+  }
+});
+
 test('model profile schema accepts maxTokens and rejects invalid budgets', async () => {
   const root = await findWorkspaceRoot();
   const schema = JSON.parse(await readFile(path.join(root, 'schemas/model-profile.schema.json'), 'utf8')) as object;
