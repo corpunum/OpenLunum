@@ -8,31 +8,24 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { runParseExperiment } from '../src/parse-experiment.js';
 import { sha256File } from '../src/io.js';
 
-test('parse experiment reports a non-exact near-semantic identifier match', async () => {
-  const goldSem = {
-    schema: 'lunum-sem/0.1-draft',
-    world: 'real',
-    kind: 'preference',
-    clauses: [{
-      predicate: 'prefer',
-      roles: {
-        experiencer: { type: 'actor', id: 'user' },
-        theme: { type: 'concept', id: 'concise_answers' }
-      },
-      negated: false
-    }]
-  };
-  const modelSem = {
-    ...goldSem,
-    clauses: [{
-      ...goldSem.clauses[0],
-      roles: {
-        ...goldSem.clauses[0]!.roles,
-        experiencer: { type: 'actor', id: 'customer' }
-      }
-    }]
-  };
+const goldSem = {
+  schema: 'lunum-sem/0.1-draft',
+  world: 'real',
+  kind: 'preference',
+  clauses: [{
+    predicate: 'prefer',
+    roles: {
+      experiencer: { type: 'actor', id: 'user' },
+      theme: { type: 'concept', id: 'concise_answers' }
+    },
+    negated: false
+  }]
+};
 
+async function runCase(modelSem: unknown): Promise<{
+  report: Awaited<ReturnType<typeof runParseExperiment>>['report'];
+  result: { exact?: boolean; nearSemantic?: boolean; nearSemanticScore?: number };
+}> {
   const server = createServer((request, response) => {
     if (request.url === '/v1/chat/completions') {
       response.writeHead(200, { 'content-type': 'application/json' });
@@ -90,17 +83,43 @@ test('parse experiment reports a non-exact near-semantic identifier match', asyn
     }), 'utf8');
 
     const { report, outputDirectory: runDirectory } = await runParseExperiment(manifestPath);
-    assert.equal(report.overallExactRate, 0);
-    assert.equal(report.overallNearSemanticRate, 1);
-    assert.equal(report.languageMetrics.find((entry) => entry.language === 'en')?.nearSemanticRate, 1);
-
     const resultText = await readFile(path.join(runDirectory, 'parse-results-en.jsonl'), 'utf8');
-    const result = JSON.parse(resultText.trim()) as { exact?: boolean; nearSemantic?: boolean; nearSemanticScore?: number };
-    assert.equal(result.exact, false);
-    assert.equal(result.nearSemantic, true);
-    assert.ok((result.nearSemanticScore ?? 0) >= 0.8);
+    return {
+      report,
+      result: JSON.parse(resultText.trim()) as { exact?: boolean; nearSemantic?: boolean; nearSemanticScore?: number }
+    };
   } finally {
-    server.close();
+    await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     await rm(temp, { recursive: true, force: true });
   }
+}
+
+test('parse experiment reports a non-exact near-semantic identifier match', async () => {
+  const modelSem = {
+    ...goldSem,
+    clauses: [{
+      ...goldSem.clauses[0],
+      roles: {
+        ...goldSem.clauses[0]!.roles,
+        experiencer: { type: 'actor', id: 'customer' }
+      }
+    }]
+  };
+
+  const { report, result } = await runCase(modelSem);
+  assert.equal(report.overallExactRate, 0);
+  assert.equal(report.overallNearSemanticRate, 1);
+  assert.equal(report.languageMetrics.find((entry) => entry.language === 'en')?.nearSemanticRate, 1);
+  assert.equal(result.exact, false);
+  assert.equal(result.nearSemantic, true);
+  assert.ok((result.nearSemanticScore ?? 0) >= 0.8);
+});
+
+test('exact matches are not double-counted as near-semantic-only', async () => {
+  const { report, result } = await runCase(goldSem);
+  assert.equal(report.overallExactRate, 1);
+  assert.equal(report.overallNearSemanticRate, 0);
+  assert.equal(result.exact, true);
+  assert.equal(result.nearSemantic, false);
+  assert.equal(result.nearSemanticScore, 1);
 });
