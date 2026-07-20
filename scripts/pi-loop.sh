@@ -159,7 +159,15 @@ while true; do
 
   # Run Pi with the campaign prompt, non-interactive (with timeout).
   # Daily session id gives Pi within-day memory of what it already did.
+  # 2026-07-20: rig hit 96C+ twice in one evening with worker/reviewer/docs
+  # generating concurrently. GPU_LOCK serializes only the actual inference
+  # call across the 3 rig loops (git/verify/PR bookkeeping stays concurrent)
+  # so at most one heavy generation runs at a time, cutting peak load.
   session_id="openlunum-campaign-$(date +%Y%m%d%H)"
+  log "waiting for rig GPU lock"
+  exec 8>/tmp/openlunum-rig-gpu.lock
+  flock 8
+  log "rig GPU lock acquired — starting Pi generation"
   timeout "$PI_TIMEOUT_SECONDS" pi --print \
     --provider local-llama \
     --model "$PI_MODEL" \
@@ -172,6 +180,8 @@ while true; do
     "Continue the OpenLunum campaign. You are in $WORKDIR. Follow the task prompt instructions exactly. Do not work on tasks listed in the claims file." \
     2>&1 | tee "$logfile"
   pi_exit=${PIPESTATUS[0]}
+  flock -u 8
+  log "rig GPU lock released"
   if [[ $pi_exit -eq 124 ]]; then
     log "Pi run TIMED OUT after ${PI_TIMEOUT_SECONDS}s — killing and continuing"
   fi

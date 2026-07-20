@@ -99,7 +99,14 @@ $(grep -E 'error TS|# fail [1-9]|Failed|ERR_' "$LOGDIR/verify-pr$pr.log" | head 
 
   diff_excerpt=$(git -C "$WT" diff "origin/main...$sha" | head -c 6000)
 
-  # Judgment part: the model sees diff + verify, replies with a verdict
+  # Judgment part: the model sees diff + verify, replies with a verdict.
+  # 2026-07-20: GPU_LOCK serializes the actual inference call across the 3
+  # rig loops (worker/reviewer/docs) so at most one heavy generation runs
+  # at a time — see pi-loop.sh for the incident this responds to.
+  log "waiting for rig GPU lock"
+  exec 8>/tmp/openlunum-rig-gpu.lock
+  flock 8
+  log "rig GPU lock acquired — starting Pi review"
   review_out=$(timeout "$PI_TIMEOUT" pi --print --no-tools --no-session \
     --provider local-llama --model "$REVIEW_MODEL" \
     --system-prompt "You are a strict code reviewer for OpenLunum. Rules: verify must pass for READY_FOR_MERGE; semantic-contract changes (packages/core types/schemas/canonicalize/fingerprint) REQUIRE tests in the diff — no tests means NEEDS_WORK even if verify passes; broken imports or compile errors mean NEEDS_WORK; docs/experiment scaffolding with green verify is mergeable. Reply in exactly this format:
@@ -112,6 +119,8 @@ $verify_result
 
 Diff (truncated):
 $diff_excerpt" 2>>"$STATUS_LOG")
+  flock -u 8
+  log "rig GPU lock released"
 
   verdict=$(echo "$review_out" | grep -oE 'VERDICT:\s*(READY_FOR_MERGE|NEEDS_WORK)' | head -1 | sed 's/VERDICT:\s*//')
   reason=$(echo "$review_out" | grep -E '^REASON:' | head -1 | sed 's/^REASON:\s*//' | head -c 400)

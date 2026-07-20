@@ -74,6 +74,13 @@ while true; do
     changes="(first docs pass — audit everything)"
   fi
 
+  # 2026-07-20: GPU_LOCK serializes the actual inference call across the 3
+  # rig loops (worker/reviewer/docs) so at most one heavy generation runs
+  # at a time — see pi-loop.sh for the incident this responds to.
+  log "waiting for rig GPU lock"
+  exec 8>/tmp/openlunum-rig-gpu.lock
+  flock 8
+  log "rig GPU lock acquired — starting docs pass"
   (cd "$WT" && timeout "$PI_TIMEOUT" pi --print --no-session \
     --provider "$DOCS_PROVIDER" --model "$DOCS_MODEL" --thinking high \
     "You are the documentation maintainer for OpenLunum. You are on branch agent/docs/sync-${head:0:8} in $WT.
@@ -91,6 +98,8 @@ Your job — TOUCH ONLY *.md FILES:
 7. When done: git add the .md files only, commit 'docs: sync documentation with merged work', push with git push -u origin agent/docs/sync-${head:0:8}, then open a draft PR with gh pr create --draft.
 8. If documentation is already accurate, say so and stop without committing." \
     2>&1 | tee "$LOGDIR/docs-run-$(date +%Y%m%dT%H%M%S).log") || true
+  flock -u 8
+  log "rig GPU lock released"
 
   # Mechanical enforcement: strip any non-.md staged/committed changes
   cd "$WT"
