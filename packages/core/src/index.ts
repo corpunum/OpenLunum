@@ -9,7 +9,7 @@ export * from './derive.js';
 export * from './context.js';
 export * from './compare.js';
 export * from './profile-selector.js';
-export { TokenAtlas, tokenAtlasExports } from './token-atlas.js';
+export { TokenAtlas } from './token-atlas.js';
 export type {
   ProfileType,
   ProfileKey,
