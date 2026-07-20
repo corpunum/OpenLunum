@@ -1,5 +1,7 @@
 import type { ModelProfile } from './types.js';
 
+export const DEFAULT_MAX_TOKENS = 4096;
+
 export class OpenAICompatibleModel {
   constructor(private readonly profile: ModelProfile) {}
 
@@ -21,9 +23,17 @@ export class OpenAICompatibleModel {
   }
 
   async complete(system: string, user: string): Promise<string> {
+    const body: Record<string, unknown> = {
+      model: this.profile.model,
+      temperature: this.profile.temperature,
+      max_tokens: this.profile.maxTokens ?? DEFAULT_MAX_TOKENS,
+      messages: [{ role: 'system', content: system }, { role: 'user', content: user }]
+    };
+    if (this.profile.seed !== undefined) body.seed = this.profile.seed;
+
     const response = await fetch(this.url('chat/completions'), {
       method: 'POST', headers: this.headers(), signal: AbortSignal.timeout(this.profile.timeoutMs),
-      body: JSON.stringify({ model: this.profile.model, temperature: this.profile.temperature, seed: this.profile.seed, messages: [{ role: 'system', content: system }, { role: 'user', content: user }] })
+      body: JSON.stringify(body)
     });
     if (!response.ok) throw new Error(`Model call failed: HTTP ${response.status} ${await response.text()}`);
     const payload = await response.json() as { choices?: Array<{ message?: { content?: string } }> };
