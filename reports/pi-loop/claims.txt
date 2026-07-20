@@ -1,5 +1,4 @@
 - agent/coding-agent/semantic-contract/expand-semantic-structures
-- agent/docs/sync-10fbaa1f
 - agent/docs/sync-235be01c
 - agent/docs/sync-a740caf2
 - agent/eval/scratch
@@ -19,6 +18,7 @@
 - agent/qwen/eval/parse-near-semantic
 - agent/qwen/eval/parse-prompt-vocab
 - agent/qwen/eval/parse-runner-prompts
+- agent/qwen/eval/recalibrate-gate-thresholds
 - agent/qwen/issue-11/false-equivalence-rebased
 - agent/qwen/renderer/golden-profiles
 - agent/qwen/repository-reliability/pr8-contract-evidence
