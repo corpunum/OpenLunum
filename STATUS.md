@@ -48,6 +48,7 @@
 - Controlled predicate/role vocabulary in parsePrompt: `parsePrompt` ships a controlled vocabulary drawn from the gold dataset's identifier inventory so models hit gold identifiers instead of guessing synonyms (`remove_file` vs `delete`). Types in `packages/eval/src/prompts.ts`.
 - Eval max_tokens: `OpenAICompatibleModel.complete` in `packages/eval/src/model.ts` now accepts `max_tokens` (default 4096, profile-overridable) so thinking models consume the configured budget and do not return empty content.
 - Eval parse-experiment CLI fix: `runParseExperimentCli` now reads manifest path from `process.argv[3]` (after subcommand at `argv[2]`), fixing ENOENT error. Regression test invokes subcommand through real CLI entry.
+- Parse experiment now sends the system prompt: `parse-experiment.ts` passes `parsePrompt(item).system` to the model instead of the hardcoded "You are a precise Lunum experiment runner" string, so the model receives the full schema instructions and one-shot example from the parse prompt. Regression test verifies the system prompt is sent. Types in `packages/eval/src/parse-experiment.ts`. (PR #241)
 - Tokenizer-optimization pass verification: Pass compares optimized fingerprint against original via actual fingerprint comparison (not tautological self-comparison), ensuring the pass provably preserves semantics.
 - Recalibrated parse/retention gate thresholds: Parse and retention gate thresholds recalibrated from honest baselines (0.95 recall / 0.75 exact are unreachable for free-vocabulary models); rationale documented.
 
