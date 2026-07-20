@@ -63,6 +63,15 @@ export interface SemanticGroupDefinition {
 export type SemanticGroupSchema = readonly SemanticGroupDefinition[];
 
 export interface SemanticGroupMember {
+  /**
+   * Human-readable label only (derived from the record's fingerprint) --
+   * NOT used for uniqueness. See SemanticGroupIndex.recordGroupId, which
+   * keys by the LunumRecord object itself. A semantic fingerprint is an
+   * identity of MEANING, not of the dataset record: intentionally
+   * parallel multilingual records may share one, and two independently
+   * curated groups could too, so it cannot safely disambiguate distinct
+   * records here (2026-07-21, corrected per issue #256 review).
+   */
   recordId: string;
   language: LanguageCode;
   record: LunumRecord;
@@ -75,10 +84,15 @@ export interface SemanticGroupSuspectInfo {
 export interface SemanticGroupIndex {
   /** groupId -> language -> member, for groups that passed schema and structural validation. */
   readonly groups: ReadonlyMap<string, ReadonlyMap<LanguageCode, SemanticGroupMember>>;
-  /** record id -> groupId, reverse lookup for records in `groups`. */
-  readonly recordGroupId: ReadonlyMap<string, string>;
-  /** Record ids with no group id, or whose group was downgraded to suspect. These must use fingerprint fallback. */
-  readonly ungroupedRecordIds: ReadonlySet<string>;
+  /**
+   * record object identity -> groupId, reverse lookup for records in
+   * `groups`. Keyed by the LunumRecord object reference itself, not by
+   * fingerprint or any string id -- see SemanticGroupMember.recordId for
+   * why a fingerprint cannot be used as the key.
+   */
+  readonly recordGroupId: ReadonlyMap<LunumRecord, string>;
+  /** Records (by object identity) with no group id, or whose group was downgraded to suspect. These must use fingerprint fallback. */
+  readonly ungroupedRecords: ReadonlySet<LunumRecord>;
   /** Groups that referenced a real schema group but failed structural cross-validation; excluded from `groups`. */
   readonly suspectGroups: ReadonlyMap<string, SemanticGroupSuspectInfo>;
 }
@@ -174,9 +188,12 @@ export function buildSemanticGroupIndex(
   const schemaById = new Map(schema.map((definition) => [definition.groupId, definition] as const));
 
   const provisional = new Map<string, Map<LanguageCode, SemanticGroupMember>>();
-  const ungrouped = new Set<string>();
+  const ungrouped = new Set<LunumRecord>();
 
   for (const record of records) {
+    // recordId is a DISPLAY label only (error messages) -- object identity
+    // (the `record` reference itself) is what actually keys the indices
+    // below, since fingerprint is not guaranteed unique per record.
     const recordId = record.fingerprint;
     if (!recordId) {
       throw new Error('Semantic group ingest: record is missing a fingerprint, cannot be indexed');
@@ -184,7 +201,7 @@ export function buildSemanticGroupIndex(
 
     const groupId = extractGroupId(record); // throws on malformed
     if (groupId === undefined) {
-      ungrouped.add(recordId);
+      ungrouped.add(record);
       continue;
     }
 
@@ -230,7 +247,7 @@ export function buildSemanticGroupIndex(
   // other ungrouped record.
   const generator = new NearSemanticFingerprintGenerator(threshold);
   const groups = new Map<string, ReadonlyMap<LanguageCode, SemanticGroupMember>>();
-  const recordGroupId = new Map<string, string>();
+  const recordGroupId = new Map<LunumRecord, string>();
   const suspectGroups = new Map<string, SemanticGroupSuspectInfo>();
 
   for (const [groupId, members] of provisional) {
@@ -256,15 +273,15 @@ export function buildSemanticGroupIndex(
 
     if (reasons.length > 0) {
       suspectGroups.set(groupId, { reasons });
-      for (const member of memberList) ungrouped.add(member.recordId);
+      for (const member of memberList) ungrouped.add(member.record);
       continue;
     }
 
     groups.set(groupId, members);
-    for (const member of memberList) recordGroupId.set(member.recordId, groupId);
+    for (const member of memberList) recordGroupId.set(member.record, groupId);
   }
 
-  return { groups, recordGroupId, ungroupedRecordIds: ungrouped, suspectGroups };
+  return { groups, recordGroupId, ungroupedRecords: ungrouped, suspectGroups };
 }
 
 // ── Matching ─────────────────────────────────────────────────────────
@@ -299,8 +316,8 @@ export function matchSemanticGroupOrFingerprint(
   index: SemanticGroupIndex,
   fingerprintGenerator: NearSemanticFingerprintGenerator = new NearSemanticFingerprintGenerator()
 ): SemanticMatchResult {
-  const groupIdA = a.fingerprint ? index.recordGroupId.get(a.fingerprint) : undefined;
-  const groupIdB = b.fingerprint ? index.recordGroupId.get(b.fingerprint) : undefined;
+  const groupIdA = index.recordGroupId.get(a);
+  const groupIdB = index.recordGroupId.get(b);
 
   if (groupIdA !== undefined && groupIdB !== undefined) {
     return groupIdA === groupIdB

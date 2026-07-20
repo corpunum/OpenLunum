@@ -168,13 +168,19 @@ test('fixture: negative-missing-group-fallback.json ingests OK, missing-group re
   const records = fixture.records.map(toLunumRecord);
   const index = buildSemanticGroupIndex(records, schema);
 
+  // .find() by fingerprint locates the object reference to test identity-
+  // based membership with -- fingerprint is fine to READ here, it's only
+  // unsafe to use AS the index's map/set key (see semantic-group-matching.ts).
+  const missingEn = records.find((r) => r.fingerprint === 'sgfx:neg:missing-en-1')!;
+  const missingEs = records.find((r) => r.fingerprint === 'sgfx:neg:missing-es-1')!;
+
   // The ungrouped EN record must not appear in any group.
-  assert.ok(index.ungroupedRecordIds.has('sgfx:neg:missing-en-1'));
-  assert.equal(index.recordGroupId.has('sgfx:neg:missing-en-1'), false);
+  assert.ok(index.ungroupedRecords.has(missingEn));
+  assert.equal(index.recordGroupId.has(missingEn), false);
 
   // The grouped ES record with no EN peer forms a (partial) group entry --
   // it is still a real, schema-valid group membership on its own.
-  assert.ok(index.recordGroupId.has('sgfx:neg:missing-es-1'));
+  assert.ok(index.recordGroupId.has(missingEs));
 });
 
 test('fixture: negative-structural-mismatch.json flags the group as suspect and excludes it', async () => {
@@ -185,8 +191,11 @@ test('fixture: negative-structural-mismatch.json flags the group as suspect and 
   const records = fixture.records.map(toLunumRecord);
   const index = buildSemanticGroupIndex(records, schema);
 
+  const mismatchEn = records.find((r) => r.fingerprint === 'sgfx:neg:mismatch-en-1')!;
+  const mismatchEs = records.find((r) => r.fingerprint === 'sgfx:neg:mismatch-es-1')!;
+
   assert.equal(index.groups.has(fixture.expectedSuspectGroupId!), false);
   assert.ok(index.suspectGroups.has(fixture.expectedSuspectGroupId!));
-  assert.ok(index.ungroupedRecordIds.has('sgfx:neg:mismatch-en-1'));
-  assert.ok(index.ungroupedRecordIds.has('sgfx:neg:mismatch-es-1'));
+  assert.ok(index.ungroupedRecords.has(mismatchEn));
+  assert.ok(index.ungroupedRecords.has(mismatchEs));
 });
