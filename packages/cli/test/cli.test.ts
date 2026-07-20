@@ -54,6 +54,21 @@ test('CLI inspect returns a non-semantic surface record', () => {
   assert.equal(value.lunumMeta.semantic, false);
 });
 
+test('CLI migrate requires an explicit source and destination version', async () => {
+  await withTempFile(record01('explicit'), async (file) => {
+    const before = await readFile(file, 'utf8');
+    const missingBoth = spawnSync(process.execPath, [cli, 'migrate', file], { encoding: 'utf8' });
+    assert.equal(missingBoth.status, 1);
+    assert.match(missingBoth.stderr, /--from <version> is required/u);
+    assert.equal(await readFile(file, 'utf8'), before);
+
+    const missingTo = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1'], { encoding: 'utf8' });
+    assert.equal(missingTo.status, 1);
+    assert.match(missingTo.stderr, /--to <version> is required/u);
+    assert.equal(await readFile(file, 'utf8'), before);
+  });
+});
+
 test('CLI migrate dry-run reports a full migration without changing bytes', async () => {
   await withTempFile(record01('dry_run'), async (file) => {
     const before = await readFile(file, 'utf8');
@@ -65,14 +80,17 @@ test('CLI migrate dry-run reports a full migration without changing bytes', asyn
       dryRun: boolean;
       migrated: number;
       failed: number;
-      results: Array<{ newRecordVersion: string; newSchema: string; newFingerprint: string }>;
+      warnings: number;
+      results: Array<{ newRecordVersion: string; newSchema: string; newFingerprint: string; warnings: Array<{ field: string }> }>;
     };
     assert.equal(report.dryRun, true);
     assert.equal(report.migrated, 1);
     assert.equal(report.failed, 0);
+    assert.ok(report.warnings >= 1);
     assert.equal(report.results[0]?.newRecordVersion, 'lunum-record/0.2');
     assert.equal(report.results[0]?.newSchema, 'lunum-sem/0.2');
     assert.match(report.results[0]?.newFingerprint ?? '', /^lfp:0\.2:sha256:/);
+    assert.ok(report.results[0]?.warnings.some((warning) => warning.field === 'policy.category'));
   });
 });
 
@@ -81,11 +99,28 @@ test('CLI migrate writes a complete forward migration', async () => {
     const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
     assert.equal(result.status, 0, result.stderr);
 
-    const migrated = JSON.parse(await readFile(file, 'utf8')) as ReturnType<typeof record01>;
+    const migrated = JSON.parse(await readFile(file, 'utf8')) as Record<string, any>;
     assert.equal(migrated.recordVersion, 'lunum-record/0.2');
     assert.equal(migrated.sem.schema, 'lunum-sem/0.2');
     assert.match(migrated.fingerprint, /^lfp:0\.2:sha256:/);
     assert.equal(migrated.sem.clauses[0]?.predicate, 'forward');
+    assert.equal(migrated.policy.category, undefined);
+    assert.equal(migrated.meta.schemaVersion, '0.2');
+  });
+});
+
+test('CLI migrate maps a legacy renderer key to the source language with a warning', async () => {
+  const source = record01('renderer') as Record<string, any>;
+  source.renderings = {
+    'generic-en-pivot/0.1': { code: 'remember(subject:entity)', profile: 'generic-en-pivot/0.1', tokens: 3 },
+  };
+  await withTempFile(source, async (file) => {
+    const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    const report = JSON.parse(result.stdout) as { results: Array<{ warnings: Array<{ code: string }> }> };
+    assert.ok(report.results[0]?.warnings.some((warning) => warning.code === 'RENDERING_KEY_MAPPED'));
+    const migrated = JSON.parse(await readFile(file, 'utf8')) as Record<string, any>;
+    assert.deepEqual(Object.keys(migrated.renderings), ['en']);
   });
 });
 
@@ -173,7 +208,7 @@ test('CLI migrate rejects a stale source fingerprint digest and leaves the sourc
     const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
     assert.equal(result.status, 1);
     assert.equal(await readFile(file, 'utf8'), before);
-    assert.match(result.stderr, /fingerprint digest does not match canonical semantic content/);
+    assert.match(result.stderr, /source fingerprint digest does not match canonical semantic content/);
   });
 });
 
@@ -185,6 +220,19 @@ test('CLI migrate rejects a source fingerprint from the wrong version and leaves
     const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
     assert.equal(result.status, 1);
     assert.equal(await readFile(file, 'utf8'), before);
-    assert.match(result.stderr, /fingerprint version must equal 0\.1/);
+    assert.match(result.stderr, /source fingerprint version must equal 0\.1/);
+  });
+});
+
+test('CLI migrate rejects a destination that cannot satisfy the frozen 0.2 schema', async () => {
+  const invalidReference = record01('invalid_reference') as Record<string, any>;
+  invalidReference.sem.references = [{ type: 'source', ref: 'docs', value: 'Manual' }];
+  invalidReference.fingerprint = fingerprintSem(invalidReference.sem);
+  await withTempFile(invalidReference, async (file) => {
+    const before = await readFile(file, 'utf8');
+    const result = spawnSync(process.execPath, [cli, 'migrate', file, '--from', '0.1', '--to', '0.2'], { encoding: 'utf8' });
+    assert.equal(result.status, 1);
+    assert.equal(await readFile(file, 'utf8'), before);
+    assert.match(result.stderr, /record\.sem\.references\[0\]\.(?:id|url)/u);
   });
 });
