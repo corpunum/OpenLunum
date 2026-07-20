@@ -50,6 +50,8 @@ export interface ItemResult {
   parsedSem?: LunumSem;
   realizedText?: string;
   exact?: boolean;
+  nearSemantic?: boolean;
+  nearSemanticScore?: number;
   featureRecall?: number;
   featurePrecision?: number;
   protectedLiteralCoverage?: number;
