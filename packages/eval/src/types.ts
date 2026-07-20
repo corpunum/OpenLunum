@@ -12,6 +12,7 @@ export interface ModelProfile {
   apiKeyEnv?: string;
   temperature: number;
   seed?: number;
+  maxTokens?: number;       // defaults to 4096; thinking models need explicit budget
   timeoutMs: number;
   metadata?: Record<string, unknown>;
 }
