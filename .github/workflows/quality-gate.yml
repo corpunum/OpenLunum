@@ -23,7 +23,7 @@ concurrency:
 jobs:
   quality-gates:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
         with:
@@ -87,6 +87,8 @@ jobs:
         run: pnpm --filter @corpunum/lunum-cli test:unit
       - name: Run complete eval test suite
         run: pnpm --filter @corpunum/lunum-eval test:unit
+      - name: Run strict repository verification
+        run: pnpm verify:strict
       - name: Run quality gate CI
         id: gates
         env:
