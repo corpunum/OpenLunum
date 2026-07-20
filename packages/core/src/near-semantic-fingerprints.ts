@@ -23,6 +23,7 @@ type WeightedFeatures = Map<string, { count: number; weight: number }>;
 type Primitive = null | string | number | boolean;
 
 interface HardSignature {
+  schema: string;
   world: string;
   kind: string;
   clauseShapes: string[];
@@ -156,6 +157,7 @@ function hardSignature(sem: LunumSem): HardSignature {
     if ('value' in reference) collectPrimitiveValues(reference.value, literals);
   }
   return {
+    schema: sem.schema,
     world: sem.world,
     kind: sem.kind,
     clauseShapes: sem.clauses.map(clauseShape).sort(),
@@ -190,6 +192,7 @@ function parseFingerprint(fingerprint: NearSemanticFingerprint): ParsedFingerpri
 
 function hardMismatchReasons(first: HardSignature, second: HardSignature): string[] {
   const reasons: string[] = [];
+  if (first.schema !== second.schema) reasons.push(`schema differs: ${first.schema} != ${second.schema}`);
   if (first.world !== second.world) reasons.push(`world differs: ${first.world} != ${second.world}`);
   if (first.kind !== second.kind) reasons.push(`kind differs: ${first.kind} != ${second.kind}`);
   if (stableValue(first.clauseShapes) !== stableValue(second.clauseShapes)) {
