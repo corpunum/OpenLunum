@@ -85,7 +85,7 @@ Create a local one-shot assignment:
 ```bash
 cp scripts/WORKER_ASSIGNMENT.example.md reports/orchestrator/WORKER_ASSIGNMENT.md
 $EDITOR reports/orchestrator/WORKER_ASSIGNMENT.md
-scripts/pi-dispatch-once.sh /home/corpunum/openlunum-workers/eval
+pnpm worker:dispatch -- /home/corpunum/openlunum-workers/eval
 ```
 
 The dispatcher refuses to run without a valid assignment, rejects reused branches, invokes the worker once, archives local runtime evidence, and exits.
