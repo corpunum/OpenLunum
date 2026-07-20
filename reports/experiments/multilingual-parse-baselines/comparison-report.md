@@ -1,5 +1,19 @@
 # Multilingual Parse Baselines Comparison Report
 
+> **STATUS: REJECTED — non-baseline, diagnostic-only evidence.**
+> Maintainer review (issue #253, PR #260 head 88a4c58) found these runs
+> are dominated by infrastructure failure, not model performance: Qwen
+> 3.6 had 13/16 items error (mostly HTTP 500 proxy errors), SuperQwen had
+> 15/16. A run where 81-94% of items never reached the model cannot
+> establish a model baseline — it establishes that the router/proxy path
+> was unstable during this run. These artifacts are preserved as failed-
+> run diagnostic evidence (useful for investigating the HTTP 500/proxy
+> instability itself) and must NOT be used for threshold calibration or
+> cited as "Qwen 3.6 scores 12.5% exact / SuperQwen scores 6.25% exact"
+> claims about model capability. A real baseline requires the HTTP 500
+> path stabilized first, then the immutable matrix rerun from a fresh
+> issue branch off current main without silent exclusions.
+
 ## Experiment Overview
 This report compares the parse performance of two local language models on the multilingual core dataset (16 items: 4 languages × 4 items per language).
 
@@ -99,7 +113,7 @@ Both models attempted all 4 languages (English, Greek, Spanish, Indonesian).
 1. Both models experienced significant HTTP 500 proxy errors, suggesting server-side issues with the llama-router when handling these specific models.
 2. The Qwen model achieved 2 successful parses across the dataset, while SuperQwen achieved 1 successful parse (English: "preference" parse succeeded). Both models fell well short of the assignment gates (30% exact rate, 50% feature recall).
 3. The SuperQwen model's apparent speed advantage is an artifact of connection failures: 14 of 15 errors were immediate HTTP 500 proxy errors returning in 1-40 ms, not genuine inference failures. The one successful SuperQwen parse took ~89.6 seconds—significantly longer than Qwen's successful parses. When accounting for actual inference latency (not error-fast-path), SuperQwen is slower.
-4. These results represent honest baselines as requested in the assignment - they show the current performance level without any threshold tuning or optimization.
+4. **Correction (maintainer review, issue #253):** these results do NOT represent established model baselines, honest or otherwise. With 81.25% and 93.75% of items erroring before reaching the model, the runs measure router/proxy stability, not parse capability. They are preserved as rejected diagnostic evidence only — see the status notice at the top of this file. A real baseline requires the infrastructure fixed first and the full matrix (parse + retention, exact/near-only separation, mutation review, hashes, latency percentiles, worktree-cleanliness evidence) rerun unchanged from a fresh branch.
 
 ## Files Generated
 All experiment artifacts are stored under:
