@@ -40,12 +40,6 @@ export interface VerifiedTightProfileSelection {
   profileTokens: Record<ProfileKey, number>;
 }
 
-/**
- * Reproducible output of one model-specific optimization pass.  This is an
- * evidence artifact, rather than an assertion inferred from a model name: it
- * binds the selected renderer behavior to the tokenizer configuration and to
- * every record that was measured.
- */
 export interface VerifiedModelSpecificTightProfileArtifact {
   schema: 'openlunum-model-specific-tight-profile/0.1';
   id: string;
@@ -71,9 +65,7 @@ export interface VerifiedTokenizerOptimizationPassResult {
 
 export interface VerifiedTokenizerOptimizationPassOptions {
   profileGenerator?: ProfileGenerator;
-  /** Named tokenizer configurations that the generated artifacts bind to. */
   modelProfiles: ModelTokenizerProfile[];
-  /** Renderer version from which candidates are derived. */
   sourceRendererProfile?: string;
 }
 
@@ -101,15 +93,11 @@ function measurementErrors(entry: AtlasEntry, modelProfile: ModelTokenizerProfil
   }
   for (const profile of ['natural', 'safe', 'short', 'tight'] as const) {
     const measurement = measures[profile];
-    if (measurement.profile !== profile) {
-      errors.push(`${modelName}/${profile}: measurement is labelled ${measurement.profile}`);
-    }
+    if (measurement.profile !== profile) errors.push(`${modelName}/${profile}: measurement is labelled ${measurement.profile}`);
     if (!Number.isSafeInteger(measurement.tokenCount) || measurement.tokenCount <= 0) {
       errors.push(`${modelName}/${profile}: tokenCount must be a positive safe integer`);
     }
-    for (const error of measurement.errors ?? []) {
-      errors.push(`${modelName}/${profile}: ${error}`);
-    }
+    for (const error of measurement.errors ?? []) errors.push(`${modelName}/${profile}: ${error}`);
   }
   return errors;
 }
@@ -143,9 +131,9 @@ function candidateFor(
 
 /**
  * Select the lowest-token profile that independently proves semantic
- * preservation. Attached fingerprints are treated as untrusted metadata:
- * both the source and profiled fingerprints are recomputed from semantic
- * content, and canonical semantic forms must also match.
+ * preservation. Attached fingerprints are untrusted input and must match the
+ * independently recomputed source fingerprint before any measurement can be
+ * accepted into a model-specific artifact.
  */
 export function runVerifiedTokenizerOptimizationPass(
   entries: AtlasEntry[],
@@ -162,9 +150,7 @@ export function runVerifiedTokenizerOptimizationPass(
 
   if (entries.length === 0) passWarnings.push('Optimization requires at least one measured record');
   if (modelNames.length === 0) passWarnings.push('Optimization requires at least one named model profile');
-  if (duplicateModels.length > 0) {
-    passWarnings.push(`Duplicate model profiles: ${[...new Set(duplicateModels)].join(', ')}`);
-  }
+  if (duplicateModels.length > 0) passWarnings.push(`Duplicate model profiles: ${[...new Set(duplicateModels)].join(', ')}`);
 
   const configuredModels = new Set(modelNames);
   for (const entry of entries) {
@@ -187,6 +173,14 @@ export function runVerifiedTokenizerOptimizationPass(
       const originalCanonical = stableStringify(canonicalizeSem(entry.record.sem));
       const originalFingerprint = fingerprintSem(entry.record.sem);
       recordFingerprints.push(originalFingerprint);
+
+      if (entry.fingerprint !== originalFingerprint || entry.record.fingerprint !== originalFingerprint) {
+        artifactErrors.push(
+          `${originalFingerprint}: attached fingerprint is stale or inconsistent with canonical semantic content`,
+        );
+        continue;
+      }
+
       const invalidMeasurements = measurementErrors(entry, modelProfile);
       if (invalidMeasurements.length > 0) {
         artifactErrors.push(...invalidMeasurements.map((error) => `${originalFingerprint}: ${error}`));
@@ -218,7 +212,7 @@ export function runVerifiedTokenizerOptimizationPass(
         .map((candidate) => `${candidate.profile} rejected: canonicalMatch=${candidate.canonicalMatch}, fingerprintMatch=${candidate.fingerprintMatch}`);
 
       if (!selected) {
-        const warning = `Model ${modelName}: no measured profile preserved semantics for ${entry.fingerprint.slice(0, 24)}`;
+        const warning = `Model ${modelName}: no measured profile preserved semantics for ${originalFingerprint.slice(0, 24)}`;
         warnings.push(warning);
         passWarnings.push(warning);
       }
@@ -253,9 +247,7 @@ export function runVerifiedTokenizerOptimizationPass(
     }
 
     const uniqueFingerprints = new Set(recordFingerprints);
-    if (uniqueFingerprints.size !== recordFingerprints.length) {
-      artifactErrors.push('Record coverage contains duplicate canonical fingerprints');
-    }
+    if (uniqueFingerprints.size !== recordFingerprints.length) artifactErrors.push('Record coverage contains duplicate canonical fingerprints');
 
     artifacts.push({
       schema: 'openlunum-model-specific-tight-profile/0.1',
