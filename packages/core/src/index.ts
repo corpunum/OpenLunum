@@ -9,6 +9,20 @@ export * from './derive.js';
 export * from './context.js';
 export * from './compare.js';
 export * from './profile-selector.js';
+export {
+  ProfileGenerator,
+  encodeProfileSem,
+  decodeProfileSem,
+  PROFILE_TYPES,
+  PROFILE_LEVELS,
+  DEFAULT_PROFILE_CONFIGS,
+} from './profiles.js';
+export type {
+  ProfileType as RendererProfileType,
+  ProfileLevel,
+  ProfileConfig,
+  ProfileResult,
+} from './profiles.js';
 export { TokenAtlas } from './token-atlas.js';
 export type {
   ProfileType,
