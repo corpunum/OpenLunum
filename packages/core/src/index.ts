@@ -9,8 +9,21 @@ export * from './derive.js';
 export * from './context.js';
 export * from './compare.js';
 export * from './profile-selector.js';
-export * from './token-atlas.js';
+export { TokenAtlas, tokenAtlasExports } from './token-atlas.js';
+export type {
+  ProfileType,
+  ProfileKey,
+  ModelTokenizerProfile,
+  ProfileTokenMeasurement,
+  AtlasEntry,
+  AtlasProfileMeasures,
+  AtlasReport,
+  AtlasModelAggregates,
+  ModelOptimizationResult,
+  TokenizerOptimizationPassResult
+} from './token-atlas.js';
 export * from './token-optimization.js';
+export * from './token-optimization-compat.js';
 export * from './agent-state.js';
 export * from './native-model.js';
 export * from './error-observability.js';
