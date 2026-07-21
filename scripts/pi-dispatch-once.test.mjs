@@ -82,3 +82,41 @@ test("rejects a branch whose issue or worker segment does not match", async () =
     assert.match(result.stderr, /branch must match/);
   });
 });
+
+test("pi-loop-ally.sh exits idle when no assignment exists", async () => {
+  await withTempRepo(async (workdir) => {
+    const allyScript = path.resolve("scripts/pi-loop-ally.sh");
+    const result = spawnSync("bash", [allyScript, workdir], {
+      cwd: path.resolve("."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OPENLUNUM_ASSIGNMENT_FILE: path.join(
+          workdir,
+          "reports/orchestrator/WORKER_ASSIGNMENT.md",
+        ),
+      },
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /IDLE: no explicit worker assignment/);
+  });
+});
+
+test("pi-docs-loop.sh exits idle when no assignment exists", async () => {
+  await withTempRepo(async (workdir) => {
+    const docsScript = path.resolve("scripts/pi-docs-loop.sh");
+    const result = spawnSync("bash", [docsScript, workdir], {
+      cwd: path.resolve("."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OPENLUNUM_ASSIGNMENT_FILE: path.join(
+          workdir,
+          "reports/orchestrator/WORKER_ASSIGNMENT.md",
+        ),
+      },
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /IDLE: no explicit worker assignment/);
+  });
+});
