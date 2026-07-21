@@ -2,6 +2,7 @@
 
 All breaking changes to Lunum schemas, with migration instructions.
 
+
 ---
 
 ## 0.2 — Frozen (2026-07-18)
