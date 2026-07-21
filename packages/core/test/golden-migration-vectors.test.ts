@@ -119,7 +119,7 @@ function isValid(data: unknown, schema: any): { ok: boolean; errors: string[] } 
 // Load the 0.2 schema once
 // ===========================================================================
 
-const LUNUM_SEM_02_SCHEMA_PATH = path.join(WORKSPACE_ROOT, 'schemas', 'lunum-sem.schema.json');
+const LUNUM_SEM_02_SCHEMA_PATH = path.join(WORKSPACE_ROOT, 'schemas', 'lunum-sem-v02.schema.json');
 
 // Load the 0.2 schema from the freeze commit via git
 let _sem02Schema: any | null = null;
