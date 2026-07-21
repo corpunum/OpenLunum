@@ -1,0 +1,14 @@
+{
+  "experimentId": "live-evidence-20260720",
+  "runId": "2026-07-21T00-16-21-213Z",
+  "task": "integration",
+  "deterministic": false,
+  "items": 16,
+  "calls": 16,
+  "passed": 16,
+  "failed": 0,
+  "exactRate": 0,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "gatesPassed": false
+}

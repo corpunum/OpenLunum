@@ -1,0 +1,14 @@
+{
+  "experimentId": "profile-selection",
+  "runId": "2026-07-21T00-25-00-843Z",
+  "task": "render",
+  "deterministic": true,
+  "items": 2,
+  "calls": 0,
+  "passed": 2,
+  "failed": 0,
+  "exactRate": 1,
+  "featureRecall": 1,
+  "protectedLiteralCoverage": 1,
+  "gatesPassed": true
+}

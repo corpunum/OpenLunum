@@ -1,0 +1,10 @@
+{"id":"experiment.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.267949999999999}
+{"id":"lunum-record-v02.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.17648399999999853}
+{"id":"lunum-record.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.13094500000000053}
+{"id":"lunum-sem-v02.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.14996400000000065}
+{"id":"lunum-sem.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.18232400000000126}
+{"id":"model-profile.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.12710500000000025}
+{"id":"protected-eval.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.16395400000000038}
+{"id":"renderer-profile.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.1433649999999993}
+{"id":"report-validation.schema.json","status":"passed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":true},"exact":true,"latencyMs":0.14944399999999902}
+{"id":"shared.schema.json","status":"failed","rawOutput":"","result":{"hasId":true,"hasSchema":true,"hasType":false},"exact":false,"latencyMs":0.1453249999999997}
