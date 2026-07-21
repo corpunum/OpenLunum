@@ -1,0 +1,8 @@
+{
+  "description": "A record referencing a group id that does not exist anywhere in the closed dataset schema. Must be rejected with a hard validation error, not silently accepted as an arbitrary annotation string.",
+  "expect": "error",
+  "expectedErrorPattern": "Unknown semantic group id",
+  "records": [
+    { "fingerprint": "sgfx:neg:forged-1", "language": "en", "text": "Hello", "groupId": "totally-forged-group-not-in-schema", "predicate": "greet", "roles": {} }
+  ]
+}

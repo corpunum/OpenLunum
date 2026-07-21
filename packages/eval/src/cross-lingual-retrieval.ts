@@ -11,6 +11,8 @@ import * as path from 'node:path';
 import { parseFingerprint } from '@corpunum/lunum';
 import type { LunumRecord, LunumSem } from '@corpunum/lunum';
 import type { LanguageCode } from './multilingual-retrieval.js';
+import { buildSemanticGroupIndex } from './semantic-group-matching.js';
+import type { SemanticGroupIndex, SemanticGroupSchema } from './semantic-group-matching.js';
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -440,6 +442,41 @@ export function createCrossLingualQueries(
   }
 
   return queries;
+}
+
+// ── Semantic-Group-Based Query Generation ──────────────────────────
+
+/**
+ * Build cross-lingual query fixtures from a semantic-group-validated
+ * dataset (see semantic-group-matching.ts), supplementing the
+ * fingerprint-based matching above with a dataset-authored equivalence
+ * signal.
+ *
+ * Records are validated at ingest against the closed `schema`: unknown,
+ * malformed, or duplicated group references raise a hard error (see
+ * `buildSemanticGroupIndex`). Only groups that survive validation
+ * (including structural cross-validation across their members) are
+ * turned into `ParallelRecordGroup`s here.
+ *
+ * Records with no group id, or whose group was downgraded to suspect,
+ * are intentionally omitted from the returned groups -- they are not
+ * silently treated as equivalent. Existing fingerprint-based matching
+ * (`CrossLingualIndex`, `NearSemanticFingerprintGenerator`) remains the
+ * secondary path for those records and is unaffected by this function.
+ */
+export function buildParallelRecordGroupsFromSchema(
+  records: LunumRecord[],
+  schema: SemanticGroupSchema
+): { groups: ParallelRecordGroup[]; index: SemanticGroupIndex } {
+  const index = buildSemanticGroupIndex(records, schema);
+  const groups: ParallelRecordGroup[] = [];
+  for (const [groupId, members] of index.groups) {
+    groups.push({
+      groupId,
+      records: [...members.values()].map((member) => member.record)
+    });
+  }
+  return { groups, index };
 }
 
 // ── CLI Helper ─────────────────────────────────────────────────────

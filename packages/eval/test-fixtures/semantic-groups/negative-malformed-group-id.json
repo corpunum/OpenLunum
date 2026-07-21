@@ -1,0 +1,8 @@
+{
+  "description": "A record whose group id annotation is present but malformed (wrong type). Must hard-fail at validation time rather than being silently skipped or coerced.",
+  "expect": "error",
+  "expectedErrorPattern": "Malformed semantic group id",
+  "records": [
+    { "fingerprint": "sgfx:neg:malformed-1", "language": "en", "text": "Hello", "groupId": 12345, "predicate": "greet", "roles": {} }
+  ]
+}

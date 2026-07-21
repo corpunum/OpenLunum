@@ -1,0 +1,6 @@
+{
+  "groups": [
+    { "groupId": "greet-1", "languages": ["en", "el", "es", "id"] },
+    { "groupId": "farewell-1", "languages": ["en", "el", "es", "id"] }
+  ]
+}

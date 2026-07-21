@@ -1,0 +1,10 @@
+{
+  "description": "Two different EN records claim membership in the same semantic group. Two items in the same language cannot both be the EN member of a parallel group -- dataset corruption, must hard-fail.",
+  "expect": "error",
+  "expectedErrorPattern": "Duplicate semantic group membership",
+  "records": [
+    { "fingerprint": "sgfx:neg:dup-en-1", "language": "en", "text": "Hello, welcome!", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } },
+    { "fingerprint": "sgfx:neg:dup-en-2", "language": "en", "text": "A totally unrelated English sentence.", "groupId": "greet-1", "predicate": "state", "roles": { "agent": { "type": "actor", "id": "narrator" } } },
+    { "fingerprint": "sgfx:neg:dup-es-1", "language": "es", "text": "¡Hola, bienvenido!", "groupId": "greet-1", "predicate": "greet", "roles": { "agent": { "type": "actor", "id": "speaker" }, "theme": { "type": "concept", "id": "welcome" } } }
+  ]
+}
