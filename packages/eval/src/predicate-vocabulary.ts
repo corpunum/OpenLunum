@@ -87,7 +87,12 @@ export const IDENTIFIER_SET = new Set(IDENTIFIERS);
 export const ROLE_TYPES: readonly string[] = Object.freeze([
   'actor',
   'concept',
-  'object'
+  'date',
+  'feature',
+  'metric',
+  'object',
+  'project',
+  'quantity'
 ] satisfies readonly string[]);
 
 /** Set for O(1) membership tests during prompt assembly. */

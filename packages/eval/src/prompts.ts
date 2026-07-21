@@ -63,11 +63,46 @@ export function infrastructurePrompt(): { system: string; user: string } {
 }
 
 export function parsePrompt(item: DatasetItem): { system: string; user: string } {
-  const exampleOutput = JSON.stringify({
+  const examplePreference = JSON.stringify({
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
     kind: 'preference',
-    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'dark_mode' } }, negated: false }]
+  });
+
+  const exampleConditional = JSON.stringify({
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'conditional_instruction',
+    clauses: [{
+      predicate: 'activate',
+      roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'concept', id: 'cooling_system' } },
+      negated: false,
+      conditions: [{ predicate: 'exceeds', roles: { subject: { type: 'metric', id: 'cpu_usage' }, value: { type: 'quantity', value: 90, unit: 'percent' } }, negated: false }]
+    }]
+  });
+
+  const exampleSafety = JSON.stringify({
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'safety_constraint',
+    clauses: [{
+      predicate: 'transmit',
+      roles: { agent: { type: 'actor', id: 'assistant' }, object: { type: 'concept', id: 'credentials' } },
+      negated: true,
+      conditions: [{ predicate: 'approved', roles: { agent: { type: 'actor', id: 'administrator' } }, negated: false }]
+    }]
+  });
+
+  const exampleProjectState = JSON.stringify({
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'project_state',
+    clauses: [{
+      predicate: 'scheduled',
+      roles: { subject: { type: 'concept', id: 'quarterly_review' }, time: { type: 'date', value: '2027-04-15' } },
+      negated: false
+    }]
   });
 
   return {
@@ -83,16 +118,20 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       '{',
       '  "schema": "lunum-sem/0.1-draft",',
       '  "world": "real",',
-      '  "kind": "<clause kind>",',
+      '  "kind": "<preference|conditional_instruction|safety_constraint|project_state>",',
       '  "clauses": [{',
       '    "predicate": "<verb>",',
-      '    "roles": { "<role>": { "type": "<actor|concept|object>", "id": "<lower_snake_case>" }, ... },',
-      '    "negated": <true|false>',
+      '    "roles": { "<role>": { "type": "<actor|concept|object|metric|feature|project|quantity|date>", "id": "<lower_snake_case>" }, ... },',
+      '    "negated": <true|false>,',
+      '    "conditions": [...]',
       '  }]',
       '}',
       '',
-      'Example:',
-      exampleOutput,
+      'Synthetic Examples for tested kinds:',
+      `Preference: ${examplePreference}`,
+      `Conditional Instruction: ${exampleConditional}`,
+      `Safety Constraint: ${exampleSafety}`,
+      `Project State: ${exampleProjectState}`,
       '',
       vocabularyBlock()
     ].join('\n'),

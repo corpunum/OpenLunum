@@ -503,7 +503,7 @@ test('parsePrompt includes schema shape and one-shot example', () => {
 
   // Verify example output is parseable as valid Lunum-Sem
   // Extract the JSON example (appears before the vocabulary block)
-  const jsonMatch = prompt.system.match(/\{"schema"[\s\S]*?\}(?=\n\s*Controlled vocabulary|$)/);
+  const jsonMatch = prompt.system.match(/\{"schema":\s*"lunum-sem\/0\.1-draft"[^\n]*\}/);
   assert.ok(jsonMatch, 'system should contain a JSON example');
   const parsed = JSON.parse(jsonMatch![0]);
   assert.strictEqual(parsed.schema, 'lunum-sem/0.1-draft');
