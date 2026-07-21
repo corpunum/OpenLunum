@@ -508,9 +508,9 @@ async function runPipelineCommand(): Promise<void> {
     return;
   }
 
-  // Derive category/risk from input text unless explicitly overridden by caller.
-  // classifyByCategory uses the policy taxonomy's typicalRisk for the matched category,
-  // so the output reflects the content — not a hardcoded default.
+  // The pipeline CLI command is a surface-only heuristic stub.
+  // It does NOT perform text-based semantic category/risk classification.
+  // Category and risk default to 'simple_fact' and 'low' unless explicitly passed via CLI flags.
   const classifiedCategory = categoryFlag ?? 'simple_fact';
   const classified = classifyByCategory(classifiedCategory, 0.5, inputText.trim());
   const category: string = categoryFlag ?? classifiedCategory;
@@ -534,7 +534,7 @@ async function runPipelineCommand(): Promise<void> {
         confidence: Number(sidecar.lunumMeta.confidence) || 0.9,
       })
     : (() => {
-        surfaceWarning = 'Heuristic surface record: no LLM-derived sem available. Category/risk are keyword-derived estimates only. Do not use for safety gating.';
+        surfaceWarning = "Surface-only heuristic pipeline: category and risk are CLI flag defaults ('simple_fact'/'low'), NOT inferred from input text. This stub has no category/risk inference authority and MUST NOT be used for safety gating.";
         return createRecord({
           sourceText: inputText,
           sourceLanguage: language,
