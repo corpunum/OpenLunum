@@ -28,12 +28,8 @@ deadline=$(( $(date +%s) + WINDOW_BUDGET_SECONDS ))
 time_left() { echo $(( deadline - $(date +%s) )); }
 
 resume() {
-  log "resuming loops"
+  log "nightly window cleanup complete"
   rm -f "$LOOPDIR/PAUSED"
-  PI_MODEL="$WORKER_MODEL" nohup bash "$REPO/scripts/pi-loop.sh" "$REPO" > "$LOOPDIR/nohup.log" 2>&1 &
-  REVIEW_MODEL="$REVIEWER_MODEL" nohup bash "$REPO/scripts/pi-review-loop.sh" > "$REPO/reports/pi-review/nohup.log" 2>&1 &
-  DOCS_MODEL="$WORKER_MODEL" nohup bash "$REPO/scripts/pi-docs-loop.sh" > "$REPO/reports/pi-docs/nohup.log" 2>&1 &
-  log "nightly window done"
 }
 trap resume EXIT
 
