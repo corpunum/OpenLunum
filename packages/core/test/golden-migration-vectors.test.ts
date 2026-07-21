@@ -119,9 +119,9 @@ function isValid(data: unknown, schema: any): { ok: boolean; errors: string[] } 
 // Load the 0.2 schema once
 // ===========================================================================
 
-const LUNUM_SEM_02_SCHEMA_PATH = path.join(WORKSPACE_ROOT, 'schemas', 'lunum-sem-v02.schema.json');
+const LUNUM_SEM_02_FREEZE_SCHEMA_PATH = path.join(__dirname, 'fixtures', 'lunum-sem-0.2-freeze.schema.json');
 
-// Load the 0.2 schema from the freeze commit via git
+// Load the 0.2 schema from the freeze commit via git (with local fixture fallback for shallow clones)
 let _sem02Schema: any | null = null;
 
 async function loadSem02Schema(): Promise<any> {
@@ -135,7 +135,7 @@ async function loadSem02Schema(): Promise<any> {
     return _sem02Schema;
   } catch {
     const fs = await import('node:fs');
-    const content = fs.readFileSync(LUNUM_SEM_02_SCHEMA_PATH, 'utf8');
+    const content = fs.readFileSync(LUNUM_SEM_02_FREEZE_SCHEMA_PATH, 'utf8');
     _sem02Schema = JSON.parse(content);
     return _sem02Schema;
   }
