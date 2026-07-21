@@ -48,3 +48,17 @@ export * from './quality-gate-ci.js';
 export * from './prompt-injection.js';
 export * from './renderer-conformance.js';
 export * from './compatibility-matrix.js';
+export {
+  classifyContent,
+  classifyByCategory,
+  CATEGORY_METADATA,
+  ELIGIBLE_CATEGORIES,
+  NATURAL_ONLY_CATEGORIES,
+  ALL_CATEGORIES,
+  RISK_LEVELS,
+} from './policy-classifier.js';
+export type {
+  PolicyClassificationInput,
+  RiskLevel,
+  CategoryMetadata,
+} from './policy-classifier.js';
