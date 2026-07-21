@@ -73,6 +73,10 @@ if [[ "$branch" != "work/$worker/"* ]]; then
 fi
 
 cd "$WORKDIR"
+if [[ -n "$(git status --porcelain=v1 --untracked-files=all)" ]]; then
+  fail_blocked "dirty starting worktree"
+fi
+
 git fetch --prune origin main
 
 if git show-ref --verify --quiet "refs/heads/$branch"; then
@@ -121,6 +125,13 @@ timeout "$PI_TIMEOUT_SECONDS" pi --print \
 pi_exit=${PIPESTATUS[0]}
 set -e
 
+{
+  echo
+  echo "dispatch_completed_utc: $(date -u -Iseconds)"
+  echo "dispatch_exit_code: $pi_exit"
+  echo "dispatch_log: $log_file"
+} >> "$archive_file"
+
 current_branch="$(git branch --show-current)"
 if [[ "$current_branch" != "$branch" ]]; then
   fail_blocked "branch switched during worker dispatch: expected $branch, found ${current_branch:-detached}"
@@ -136,13 +147,6 @@ fi
 if ! diff -u "$pre_remote_refs" "$post_remote_refs" >/dev/null; then
   fail_blocked "unauthorized remote branch mutation detected"
 fi
-
-{
-  echo
-  echo "dispatch_completed_utc: $(date -u -Iseconds)"
-  echo "dispatch_exit_code: $pi_exit"
-  echo "dispatch_log: $log_file"
-} >> "$archive_file"
 
 if [[ $pi_exit -eq 124 ]]; then
   fail_blocked "worker dispatch timed out after ${PI_TIMEOUT_SECONDS}s"

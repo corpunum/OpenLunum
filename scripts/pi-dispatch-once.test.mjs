@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -50,7 +50,23 @@ async function setupGitRepo(root) {
   runGit(['config', 'user.name', 'OpenLunum Test'], workdir);
   runGit(['config', 'user.email', 'test@example.com'], workdir);
   await writeFile(path.join(workdir, 'README.md'), 'openlunum\n', 'utf8');
+  await writeFile(
+    path.join(workdir, '.gitignore'),
+    [
+      'reports/orchestrator/WORKER_ASSIGNMENT.md',
+      'reports/orchestrator/assignments/',
+      'reports/orchestrator/worker-runs/',
+      'reports/orchestrator/status.log',
+      'reports/orchestrator/last-llm-advice.txt',
+      'reports/orchestrator/stale-prs.log',
+      'reports/orchestrator/velocity.csv',
+      'reports/orchestrator/NEEDS_CLOUD',
+      '',
+    ].join('\n'),
+    'utf8',
+  );
   runGit(['add', 'README.md'], workdir);
+  runGit(['add', '.gitignore'], workdir);
   runGit(['commit', '-m', 'initial commit'], workdir);
   runGit(['remote', 'add', 'origin', origin], workdir);
   runGit(['push', '-u', 'origin', 'main'], workdir);
@@ -106,6 +122,18 @@ ${body}
   return { binDir, marker };
 }
 
+async function readArchivedAssignment(workdir) {
+  const archiveDir = path.join(workdir, 'reports/orchestrator/assignments');
+  const entries = await readdir(archiveDir, { withFileTypes: true });
+  const file = entries.find(
+    (entry) => entry.isFile() && entry.name.startsWith('dispatch-296-') && entry.name.endsWith('.md'),
+  );
+
+  assert.ok(file, `expected archived assignment in ${archiveDir}`);
+
+  return readFile(path.join(archiveDir, file.name), 'utf8');
+}
+
 function dispatch(workdir, env = {}) {
   return spawnSync('bash', [script, workdir], {
     cwd: path.resolve('.'),
@@ -134,6 +162,24 @@ test('fails closed when the assigned branch is invalid', async () => {
     const result = dispatch(workdir);
     assert.equal(result.status, 2);
     assert.match(result.stderr, /branch must match/);
+  });
+});
+
+test('fails closed before branch creation when the starting worktree is dirty', async () => {
+  await withTempDir(async (root) => {
+    const { workdir } = await setupGitRepo(root);
+    await writeFile(path.join(workdir, 'dirty.txt'), 'dirty\n', 'utf8');
+    await writeAssignment(workdir);
+    const { binDir, marker } = await writeFakePi(root, 'echo "unexpected pi invocation" >&2\nexit 88\n');
+
+    const result = dispatch(workdir, {
+      PATH: `${binDir}:${process.env.PATH}`,
+      FAKE_PI_MARKER: marker,
+    });
+
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /dirty starting worktree/);
+    await assert.rejects(readFile(marker, 'utf8'));
   });
 });
 
@@ -226,6 +272,9 @@ test('fails closed when pi switches to a different branch', async () => {
     assert.equal(result.status, 2);
     assert.match(result.stderr, /branch switched during worker dispatch/);
     assert.equal(await readFile(marker, 'utf8'), '');
+    const archive = await readArchivedAssignment(workdir);
+    assert.match(archive, /dispatch_exit_code: 0/);
+    assert.match(archive, /dispatch_log: .*worker-runs\/dispatch-296-/);
   });
 });
 
@@ -248,6 +297,9 @@ test('fails closed on unauthorized local branch mutation', async () => {
     assert.equal(result.status, 2);
     assert.match(result.stderr, /unauthorized local branch mutation detected/);
     assert.equal(await readFile(marker, 'utf8'), '');
+    const archive = await readArchivedAssignment(workdir);
+    assert.match(archive, /dispatch_exit_code: 0/);
+    assert.match(archive, /dispatch_log: .*worker-runs\/dispatch-296-/);
   });
 });
 
@@ -288,5 +340,8 @@ test('fails closed on practical remote mutation', async () => {
     assert.equal(result.status, 2);
     assert.match(result.stderr, /unauthorized remote branch mutation detected/);
     assert.equal(await readFile(marker, 'utf8'), '');
+    const archive = await readArchivedAssignment(workdir);
+    assert.match(archive, /dispatch_exit_code: 0/);
+    assert.match(archive, /dispatch_log: .*worker-runs\/dispatch-296-/);
   });
 });
