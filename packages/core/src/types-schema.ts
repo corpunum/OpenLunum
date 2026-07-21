@@ -77,6 +77,7 @@ export interface ModelProfileSchema01 {
   temperature: number;
   seed?: number;
   maxTokens?: number;
+  noThink?: boolean;
   timeoutMs: number;
   metadata?: Record<string, unknown>;
 }

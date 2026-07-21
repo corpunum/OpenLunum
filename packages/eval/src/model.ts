@@ -35,11 +35,12 @@ export class OpenAICompatibleModel {
   }
 
   async complete(system: string, user: string): Promise<string> {
+    const effectiveSystem = this.profile.noThink ? `/no_think\n${system}` : system;
     const body: Record<string, unknown> = {
       model: this.profile.model,
       temperature: this.profile.temperature,
       max_tokens: this.maxTokens,
-      messages: [{ role: 'system', content: system }, { role: 'user', content: user }]
+      messages: [{ role: 'system', content: effectiveSystem }, { role: 'user', content: user }]
     };
     if (this.profile.seed !== undefined) body.seed = this.profile.seed;
 

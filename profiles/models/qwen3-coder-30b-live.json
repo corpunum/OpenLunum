@@ -1,0 +1,14 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "qwen3-coder-30b-live",
+  "provider": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:48127/v1",
+  "model": "openai/qwen3-coder-30b-a3b",
+  "temperature": 0,
+  "seed": 42,
+  "maxTokens": 512,
+  "timeoutMs": 300000,
+  "metadata": {
+    "purpose": "Live baseline evidence run 2026-07-21: Qwen 3 Coder 30B A3B, port 48127, direct llama-server"
+  }
+}

@@ -102,3 +102,29 @@ test('model profile schema accepts maxTokens and rejects invalid budgets', async
     assert.equal(validate(profile({ maxTokens })), false, `schema should reject maxTokens=${maxTokens}`);
   }
 });
+
+test('complete with noThink prepends /no_think to system message', async () => {
+  const body = await captureCompletionBody(profile({ noThink: true }));
+  const messages = body.messages as Array<{ role: string; content: string }>;
+  const first = messages[0];
+  assert.ok(first, 'messages[0] must exist');
+  assert.equal(first.role, 'system');
+  assert.ok(first.content.startsWith('/no_think\n'), `Expected /no_think prefix, got: ${first.content.slice(0, 40)}`);
+});
+
+test('complete without noThink leaves system message unchanged', async () => {
+  const body = await captureCompletionBody(profile({ noThink: false }));
+  const messages = body.messages as Array<{ role: string; content: string }>;
+  const first = messages[0];
+  assert.ok(first, 'messages[0] must exist');
+  assert.ok(!first.content.startsWith('/no_think'), 'Should not have /no_think prefix');
+});
+
+test('model profile schema accepts noThink boolean', async () => {
+  const root = await findWorkspaceRoot();
+  const schema = JSON.parse(await readFile(path.join(root, 'schemas/model-profile.schema.json'), 'utf8')) as object;
+  const validate = new Ajv2020Module.Ajv2020({ strict: true }).compile(schema);
+  assert.equal(validate(profile({ noThink: true })), true, JSON.stringify(validate.errors));
+  assert.equal(validate(profile({ noThink: false })), true, JSON.stringify(validate.errors));
+  assert.equal(validate(profile({})), true, 'noThink should be optional');
+});

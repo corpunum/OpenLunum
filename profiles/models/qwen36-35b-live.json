@@ -6,8 +6,10 @@
   "model": "openai/qwen3.6-35b-a3b",
   "temperature": 0,
   "seed": 42,
+  "maxTokens": 4096,
+  "noThink": true,
   "timeoutMs": 300000,
   "metadata": {
-    "purpose": "Live evidence run 2026-07-20: Qwen 3.6 35B A3B MTP, llama.cpp native router, Radeon 8060S gfx1151, 128GB unified"
+    "purpose": "Live baseline evidence run 2026-07-21: Qwen 3.6 35B A3B MTP, main router port 8080, noThink=true, maxTokens=4096 (thinking model needs room for think block)"
   }
 }
