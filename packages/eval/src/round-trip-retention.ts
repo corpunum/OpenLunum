@@ -274,25 +274,35 @@ export async function runRoundTripRetentionExperiment(
 
         try {
           // Step 1: Realize gold Sem to target language via model
-          const realizePromptText = realizePrompt(
+          const realizeP = realizePrompt(
             { sourceText, goldSem, targetLanguage: lang, protectedLiterals: literals } as any,
             lang === 'en' ? 'English' : lang === 'el' ? 'Greek' : lang === 'es' ? 'Spanish' : 'Indonesian'
-          ).user;
+          );
 
-          const realizedText = await models[mIdx]!.complete(
-            'You are a precise Lunum realization engine. Reply only with valid JSON containing the realized text.',
-            realizePromptText
+          const rawRealizeOutput = await models[mIdx]!.complete(
+            realizeP.system,
+            realizeP.user
           ).catch(err => { throw new Error(`realize: ${err.message}`); });
 
+          let cleanRealizedText = rawRealizeOutput.trim();
+          try {
+            const json = extractJson(cleanRealizedText) as any;
+            if (json && typeof json === 'object') {
+              cleanRealizedText = String(json.realizedText ?? json.text ?? json.result ?? cleanRealizedText).trim();
+            }
+          } catch {
+            // Not JSON, use rawRealizeOutput
+          }
+
           // Step 2: Parse back the realized text via model
-          const parsePromptText = parsePrompt({
-            sourceText: realizedText,
+          const parseP = parsePrompt({
+            sourceText: cleanRealizedText,
             sourceLanguage: lang
-          } as any).user;
+          } as any);
 
           const parsedRaw = await models[mIdx]!.complete(
-            'You are a precise Lunum parser. Reply only with valid Lunum-Sem JSON.',
-            parsePromptText
+            parseP.system,
+            parseP.user
           ).catch(err => { throw new Error(`parse: ${err.message}`); });
 
           const parsedJson = extractJson(parsedRaw);
@@ -304,7 +314,7 @@ export async function runRoundTripRetentionExperiment(
           const comparison = compareSem(goldSem, parsedBack);
           const predicateMatch = comparison.featureRecall ?? 0;
           const roleMatch = scoreRoleMatch(goldSem, parsedBack);
-          const literalPreservation = scoreLiteralPreservation(literals, realizedText, sourceText);
+          const literalPreservation = scoreLiteralPreservation(literals, cleanRealizedText, sourceText);
 
           // Pass threshold: predicate match >= 0.8, role match >= 0.7, literal preservation >= 0.6
           const retention = predicateMatch >= 0.8 && roleMatch >= 0.7 && literalPreservation >= 0.6;
@@ -324,7 +334,7 @@ export async function runRoundTripRetentionExperiment(
             status: retention ? 'passed' : 'failed',
             sourceText,
             goldSemSchema: goldSem.schema ?? 'unknown',
-            realizedText: realizedText.trim(),
+            realizedText: cleanRealizedText,
             parsedBackSem: parsedBack,
             predicateMatch,
             roleMatch,
