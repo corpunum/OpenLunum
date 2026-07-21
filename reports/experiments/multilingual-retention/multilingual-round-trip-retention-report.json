@@ -1,0 +1,230 @@
+{
+  "experimentId": "multilingual-round-trip-retention",
+  "runId": "2026-07-21T15-51-49-990Z",
+  "languages": [
+    "en",
+    "el",
+    "es",
+    "id"
+  ],
+  "models": [
+    "qwen3-coder-30b-live",
+    "qwen36-35b-live"
+  ],
+  "totalItems": 8,
+  "totalPassed": 8,
+  "totalFailed": 0,
+  "totalErrors": 0,
+  "overallRetentionRate": 1,
+  "languageMetrics": {
+    "en": {
+      "language": "en",
+      "totalItems": 2,
+      "passedItems": 2,
+      "failedItems": 0,
+      "errorItems": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 18114.527768499996
+    },
+    "el": {
+      "language": "el",
+      "totalItems": 2,
+      "passedItems": 2,
+      "failedItems": 0,
+      "errorItems": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 25041.095939
+    },
+    "es": {
+      "language": "es",
+      "totalItems": 2,
+      "passedItems": 2,
+      "failedItems": 0,
+      "errorItems": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 19312.429235500007
+    },
+    "id": {
+      "language": "id",
+      "totalItems": 2,
+      "passedItems": 2,
+      "failedItems": 0,
+      "errorItems": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 18826.296916500003
+    }
+  },
+  "modelProfiles": {
+    "qwen3-coder-30b-live": {
+      "modelId": "qwen3-coder-30b-live",
+      "modelName": "openai/qwen3-coder-30b-a3b",
+      "settings": {
+        "temperature": 0,
+        "seed": 42,
+        "timeoutMs": 300000
+      },
+      "totalItems": 4,
+      "totalPassed": 4,
+      "totalFailed": 0,
+      "totalErrors": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 2782.0504595000007,
+      "languageBreakdown": {
+        "en": {
+          "language": "en",
+          "totalItems": 1,
+          "passedItems": 1,
+          "failedItems": 0,
+          "errorItems": 0,
+          "retentionRate": 1,
+          "avgPredicateMatch": 1,
+          "avgRoleMatch": 1,
+          "avgProtectedLiteralPreservation": 1,
+          "meanLatencyMs": 2573.552609
+        },
+        "el": {
+          "language": "el",
+          "totalItems": 1,
+          "passedItems": 1,
+          "failedItems": 0,
+          "errorItems": 0,
+          "retentionRate": 1,
+          "avgPredicateMatch": 1,
+          "avgRoleMatch": 1,
+          "avgProtectedLiteralPreservation": 1,
+          "meanLatencyMs": 3090.977528000003
+        },
+        "es": {
+          "language": "es",
+          "totalItems": 1,
+          "passedItems": 1,
+          "failedItems": 0,
+          "errorItems": 0,
+          "retentionRate": 1,
+          "avgPredicateMatch": 1,
+          "avgRoleMatch": 1,
+          "avgProtectedLiteralPreservation": 1,
+          "meanLatencyMs": 2691.4684540000017
+        },
+        "id": {
+          "language": "id",
+          "totalItems": 1,
+          "passedItems": 1,
+          "failedItems": 0,
+          "errorItems": 0,
+          "retentionRate": 1,
+          "avgPredicateMatch": 1,
+          "avgRoleMatch": 1,
+          "avgProtectedLiteralPreservation": 1,
+          "meanLatencyMs": 2772.2032469999976
+        }
+      },
+      "passesBaseline": true
+    },
+    "qwen36-35b-live": {
+      "modelId": "qwen36-35b-live",
+      "modelName": "openai/qwen3.6-35b-a3b",
+      "settings": {
+        "temperature": 0,
+        "seed": 42,
+        "timeoutMs": 300000
+      },
+      "totalItems": 4,
+      "totalPassed": 4,
+      "totalFailed": 0,
+      "totalErrors": 0,
+      "retentionRate": 1,
+      "avgPredicateMatch": 1,
+      "avgRoleMatch": 1,
+      "avgProtectedLiteralPreservation": 1,
+      "meanLatencyMs": 37865.124470250004,
+      "languageBreakdown": {
+        "en": {
+          "language": "en",
+          "totalItems": 1,
+          "passedItems": 1,
+          "failedItems": 0,
+          "errorItems": 0,
+          "retentionRate": 1,
+          "avgPredicateMatch": 1,
+          "avgRoleMatch": 1,
+          "avgProtectedLiteralPreservation": 1,
+          "meanLatencyMs": 33655.502927999994
+        },
+        "el": {
+          "language": "el",
+          "totalItems": 1,
+          "passedItems": 1,
+          "failedItems": 0,
+          "errorItems": 0,
+          "retentionRate": 1,
+          "avgPredicateMatch": 1,
+          "avgRoleMatch": 1,
+          "avgProtectedLiteralPreservation": 1,
+          "meanLatencyMs": 46991.214349999995
+        },
+        "es": {
+          "language": "es",
+          "totalItems": 1,
+          "passedItems": 1,
+          "failedItems": 0,
+          "errorItems": 0,
+          "retentionRate": 1,
+          "avgPredicateMatch": 1,
+          "avgRoleMatch": 1,
+          "avgProtectedLiteralPreservation": 1,
+          "meanLatencyMs": 35933.39001700001
+        },
+        "id": {
+          "language": "id",
+          "totalItems": 1,
+          "passedItems": 1,
+          "failedItems": 0,
+          "errorItems": 0,
+          "retentionRate": 1,
+          "avgPredicateMatch": 1,
+          "avgRoleMatch": 1,
+          "avgProtectedLiteralPreservation": 1,
+          "meanLatencyMs": 34880.39058600001
+        }
+      },
+      "passesBaseline": true
+    }
+  },
+  "bestModelsByLanguage": {
+    "en": [
+      "qwen3-coder-30b-live",
+      "qwen36-35b-live"
+    ],
+    "el": [
+      "qwen3-coder-30b-live",
+      "qwen36-35b-live"
+    ],
+    "es": [
+      "qwen3-coder-30b-live",
+      "qwen36-35b-live"
+    ],
+    "id": [
+      "qwen3-coder-30b-live",
+      "qwen36-35b-live"
+    ]
+  },
+  "baselineThreshold": 0.25,
+  "regressionDetected": false,
+  "generatedAt": 1784649109990
+}
