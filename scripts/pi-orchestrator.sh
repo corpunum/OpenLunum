@@ -30,26 +30,16 @@ for f in ESCALATED THERMAL_HALT PAUSED STUCK; do
 done
 $flags_ok && log "FLAGS: all clear"
 
-# ---- 2. Loop health -------------------------------------------------------
-loops_ok=true
-declare -A LOOP_PATTERNS=(
-  [worker]='pi-loop\.sh'
-  [reviewer]='pi-review-loop\.sh'
-  [merge]='pi-merge-loop\.sh'
-  [docs]='pi-docs-loop\.sh'
-)
-for name in worker reviewer merge docs; do
-  if ! pgrep -f "${LOOP_PATTERNS[$name]}" >/dev/null 2>&1; then
-    log "LOOP DOWN: $name"
-    loops_ok=false
-  fi
-done
+# ---- 2. Health & Tunnel Check --------------------------------------------
+# Note (Issues #276, #275, #271): Persistent model and merge loops are retired.
+# Orchestrator monitors health-safe infrastructure and tunnels only.
 
-# Tunnel check
 tunnel_active=$(systemctl --user is-active openlunum-rog-tunnel 2>/dev/null || echo "inactive")
-[[ "$tunnel_active" != "active" ]] && log "TUNNEL: inactive" || true
-
-$loops_ok && log "LOOPS: all running"
+if [[ "$tunnel_active" != "active" ]]; then
+  log "TUNNEL: inactive (openlunum-rog-tunnel)"
+else
+  log "TUNNEL: active"
+fi
 
 # ---- 3. Temps --------------------------------------------------------------
 if [[ -f "$LOOP_DIR/temps.csv" ]]; then
