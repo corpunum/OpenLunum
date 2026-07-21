@@ -126,12 +126,19 @@ let _sem02Schema: any | null = null;
 
 async function loadSem02Schema(): Promise<any> {
   if (_sem02Schema) return _sem02Schema;
-  const { execSync } = await import('node:child_process');
-  const content = execSync('git show 8e3d4e8:schemas/lunum-sem.schema.json', {
-    cwd: WORKSPACE_ROOT, encoding: 'utf8'
-  });
-  _sem02Schema = JSON.parse(content);
-  return _sem02Schema;
+  try {
+    const { execSync } = await import('node:child_process');
+    const content = execSync('git show 8e3d4e8:schemas/lunum-sem.schema.json', {
+      cwd: WORKSPACE_ROOT, encoding: 'utf8'
+    });
+    _sem02Schema = JSON.parse(content);
+    return _sem02Schema;
+  } catch {
+    const fs = await import('node:fs');
+    const content = fs.readFileSync(LUNUM_SEM_02_SCHEMA_PATH, 'utf8');
+    _sem02Schema = JSON.parse(content);
+    return _sem02Schema;
+  }
 }
 
 // ===========================================================================
