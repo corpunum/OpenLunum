@@ -3,6 +3,7 @@ import { readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import {
   compileContext,
   createRecord,
+  classifyByCategory,
   deriveLunumSidecar,
   deriveSurfaceSidecar,
   fingerprintSem,
@@ -483,9 +484,9 @@ async function runMigrationCommand(): Promise<void> {
 async function runPipelineCommand(): Promise<void> {
   const textInput = flag('text') || flag('content');
   const inputFile = flag('input') || flag('file');
+  const categoryFlag = flag('category');
+  const riskFlag = flag('risk');
   const language = flag('language') ?? 'en';
-  const category = flag('category') ?? 'simple_fact';
-  const risk = flag('risk') ?? 'low';
   const mode = flag('mode') ?? 'full';
   const outputFormat = flag('output') ?? 'json';
 
@@ -507,12 +508,21 @@ async function runPipelineCommand(): Promise<void> {
     return;
   }
 
+  // Derive category/risk from input text unless explicitly overridden by caller.
+  // classifyByCategory uses the policy taxonomy's typicalRisk for the matched category,
+  // so the output reflects the content — not a hardcoded default.
+  const classifiedCategory = categoryFlag ?? 'simple_fact';
+  const classified = classifyByCategory(classifiedCategory, 0.5, inputText.trim());
+  const category: string = categoryFlag ?? classifiedCategory;
+  const risk: string = riskFlag ?? classified.risk;
+
   const sidecar = deriveLunumSidecar({ role: 'user', content: inputText, category, risk: risk as any });
   if (mode === 'parse' || mode === 'parse-only') {
     console.log(JSON.stringify({ step: 'parse', sidecar }, null, 2));
     return;
   }
 
+  let surfaceWarning: string | undefined;
   const record = sidecar.lunumSem
     ? createRecord({
         sourceText: inputText,
@@ -523,15 +533,18 @@ async function runPipelineCommand(): Promise<void> {
         risk: risk as any,
         confidence: Number(sidecar.lunumMeta.confidence) || 0.9,
       })
-    : createRecord({
-        sourceText: inputText,
-        sourceLanguage: language,
-        role: 'user',
-        sem: deriveSurfaceSidecar({ role: 'user', content: inputText, category, risk: risk as any }).lunumSem as LunumSem,
-        category,
-        risk: risk as any,
-        confidence: 0.5,
-      });
+    : (() => {
+        surfaceWarning = 'Heuristic surface record: no LLM-derived sem available. Category/risk are keyword-derived estimates only. Do not use for safety gating.';
+        return createRecord({
+          sourceText: inputText,
+          sourceLanguage: language,
+          role: 'user',
+          sem: deriveSurfaceSidecar({ role: 'user', content: inputText, category, risk: risk as any }).lunumSem as LunumSem,
+          category,
+          risk: risk as any,
+          confidence: 0.5,
+        });
+      })();
 
   if (mode === 'realize' || mode === 'realize-only') {
     console.log(JSON.stringify({ step: 'realize', record }, null, 2));
@@ -546,7 +559,7 @@ async function runPipelineCommand(): Promise<void> {
     return;
   }
 
-  const result = {
+  const result: Record<string, unknown> = {
     pipeline: 'parse | realize | render',
     input: { text: inputText, language, category, risk },
     parse: { sidecar: { lunumCode: sidecar.lunumCode, lunumFp: sidecar.lunumFp, lunumMeta: sidecar.lunumMeta } },
@@ -568,6 +581,7 @@ async function runPipelineCommand(): Promise<void> {
       },
     },
   };
+  if (surfaceWarning) result['warning'] = surfaceWarning;
 
   if (outputFormat === 'code') process.stdout.write(Object.values(renderings)[0]?.code || '');
   else console.log(JSON.stringify(result, null, 2));
