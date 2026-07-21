@@ -120,3 +120,22 @@ test("pi-docs-loop.sh exits idle when no assignment exists", async () => {
     assert.match(result.stdout, /IDLE: no explicit worker assignment/);
   });
 });
+
+test("pi-loop.sh exits idle when no assignment exists", async () => {
+  await withTempRepo(async (workdir) => {
+    const loopScript = path.resolve("scripts/pi-loop.sh");
+    const result = spawnSync("bash", [loopScript, workdir], {
+      cwd: path.resolve("."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        OPENLUNUM_ASSIGNMENT_FILE: path.join(
+          workdir,
+          "reports/orchestrator/WORKER_ASSIGNMENT.md",
+        ),
+      },
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /IDLE: no explicit worker assignment/);
+  });
+});
