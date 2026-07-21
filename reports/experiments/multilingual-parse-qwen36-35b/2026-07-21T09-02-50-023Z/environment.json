@@ -1,0 +1,21 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "modelProfile": {
+    "schema": "openlunum-model-profile/0.1",
+    "id": "qwen36-35b-live",
+    "provider": "openai-compatible",
+    "baseUrl": "http://127.0.0.1:8080/v1",
+    "model": "openai/qwen3.6-35b-a3b",
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 4096,
+    "noThink": true,
+    "timeoutMs": 300000,
+    "metadata": {
+      "purpose": "Live baseline evidence run 2026-07-21: Qwen 3.6 35B A3B MTP, main router port 8080, noThink=true, maxTokens=4096 (thinking model needs room for think block)"
+    }
+  },
+  "startedAt": "2026-07-21T09:12:08.750Z"
+}

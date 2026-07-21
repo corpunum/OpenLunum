@@ -13,6 +13,7 @@ export interface ModelProfile {
   temperature: number;
   seed?: number;
   maxTokens?: number;
+  noThink?: boolean;
   timeoutMs: number;
   metadata?: Record<string, unknown>;
 }

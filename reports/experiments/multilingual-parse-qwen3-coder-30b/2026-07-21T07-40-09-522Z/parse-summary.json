@@ -1,0 +1,132 @@
+{
+  "experimentId": "multilingual-parse-qwen3-coder-30b",
+  "runId": "2026-07-21T07-40-09-522Z",
+  "task": "parse",
+  "totalItems": 16,
+  "totalPassed": 4,
+  "totalFailed": 12,
+  "totalErrors": 0,
+  "overallExactRate": 0.25,
+  "overallNearSemanticRate": 0,
+  "overallFeatureRecall": 0.8298611111111112,
+  "overallFeaturePrecision": 0.8215277777777779,
+  "overallMeanLatencyMs": 2663.7111924375004,
+  "languageMetrics": [
+    {
+      "language": "en",
+      "languageLabel": "English",
+      "totalItems": 4,
+      "passedItems": 1,
+      "failedItems": 3,
+      "errorItems": 0,
+      "exactRate": 0.25,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.85,
+      "featurePrecision": 0.8333333333333334,
+      "meanLatencyMs": 2823.2845115,
+      "fingerprintMatches": 1,
+      "exactFingerprintCount": 1,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "el",
+      "languageLabel": "Greek",
+      "totalItems": 4,
+      "passedItems": 1,
+      "failedItems": 3,
+      "errorItems": 0,
+      "exactRate": 0.25,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.8222222222222223,
+      "featurePrecision": 0.8222222222222223,
+      "meanLatencyMs": 2645.0029097499996,
+      "fingerprintMatches": 1,
+      "exactFingerprintCount": 1,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "es",
+      "languageLabel": "Spanish",
+      "totalItems": 4,
+      "passedItems": 1,
+      "failedItems": 3,
+      "errorItems": 0,
+      "exactRate": 0.25,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.8222222222222223,
+      "featurePrecision": 0.8222222222222223,
+      "meanLatencyMs": 2541.559951,
+      "fingerprintMatches": 1,
+      "exactFingerprintCount": 1,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "id",
+      "languageLabel": "Indonesian",
+      "totalItems": 4,
+      "passedItems": 1,
+      "failedItems": 3,
+      "errorItems": 0,
+      "exactRate": 0.25,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.8250000000000001,
+      "featurePrecision": 0.8083333333333335,
+      "meanLatencyMs": 2644.997397500001,
+      "fingerprintMatches": 1,
+      "exactFingerprintCount": 1,
+      "nearSemanticFingerprintCount": 0
+    }
+  ],
+  "crossLanguageComparison": {
+    "languagesIncluded": [
+      "en",
+      "el",
+      "es",
+      "id"
+    ],
+    "bestExactLanguage": "en",
+    "bestRecallLanguage": "en",
+    "fastestLanguage": "es",
+    "consistencyScore": 1,
+    "variance": {
+      "exactRateVariance": 0,
+      "recallVariance": 0.00013647762345678915,
+      "latencyVariance": 10271.193975855747
+    }
+  },
+  "languageBreakdown": {
+    "en": [
+      1,
+      3,
+      0,
+      4
+    ],
+    "el": [
+      1,
+      3,
+      0,
+      4
+    ],
+    "es": [
+      1,
+      3,
+      0,
+      4
+    ],
+    "id": [
+      1,
+      3,
+      0,
+      4
+    ]
+  },
+  "failureModes": {
+    "negated:0.condition.0:false": 4,
+    "negated:0:true": 4,
+    "role:0:agent:assistant": 4,
+    "predicate:0.condition.0:below": 4,
+    "predicate:0:deadline": 4,
+    "role:0.condition.0:agent:user": 2,
+    "predicate:0.condition.0:confirmed": 1
+  }
+}
