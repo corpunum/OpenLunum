@@ -43,7 +43,8 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
           : parsePrompt(item as any).user;
 
         calls += 1;
-        rawOutput = await model.complete('You are a precise Lunum experiment runner. Reply only with valid JSON.', promptText);
+        const completion = await model.complete('You are a precise Lunum experiment runner. Reply only with valid JSON.', promptText);
+        rawOutput = completion.content;
 
         if (manifest.task === 'parse') {
           // Missing goldSem must fail, not self-pass
@@ -57,7 +58,7 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
           // Use actual goldSem as reference, not the parsed result
           const comparison = compareSem((item as any).goldSem as any, parsedSem);
           finalResult = {
-            id: item.id, status: comparison.exactFingerprint ? 'passed' : 'failed', rawOutput, parsedSem,
+            id: item.id, status: comparison.exactFingerprint ? 'passed' : 'failed', rawOutput, completion, parsedSem,
             exact: comparison.exactFingerprint, featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision, missingFeatures: comparison.missingFeatures,
             latencyMs: performance.now() - started
@@ -65,7 +66,7 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
         } else if (manifest.task === 'realize') {
           const coverage = literalCoverage(rawOutput, item.protectedLiterals ?? []);
           finalResult = {
-            id: item.id, status: coverage === 1 ? 'passed' : 'failed', rawOutput,
+            id: item.id, status: coverage === 1 ? 'passed' : 'failed', rawOutput, completion,
             realizedText: rawOutput.trim(), exact: coverage === 1, featureRecall: coverage,
             featurePrecision: coverage, protectedLiteralCoverage: coverage, latencyMs: performance.now() - started
           };
@@ -77,7 +78,7 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
           const resultIsValid = result && typeof result === 'object' && !('error' in result);
           const status = (hasOutput && resultIsValid) ? 'passed' : 'failed';
           finalResult = {
-            id: item.id, status, rawOutput, result, latencyMs: performance.now() - started
+            id: item.id, status, rawOutput, completion, result, latencyMs: performance.now() - started
           };
         }
 

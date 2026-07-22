@@ -18,6 +18,20 @@ export interface ModelProfile {
   metadata?: Record<string, unknown>;
 }
 
+export interface CompletionUsage {
+  promptTokens: number | null;
+  completionTokens: number | null;
+  totalTokens: number | null;
+  cachedTokens: number | null;
+  reasoningTokens: number | null;
+}
+
+export interface ModelCompletion {
+  content: string;
+  finishReason: string | null;
+  usage: CompletionUsage | null;
+}
+
 export interface ExperimentManifest {
   schema: 'openlunum-experiment/0.1';
   id: string;
@@ -49,6 +63,7 @@ export interface ItemResult {
   id: string;
   status: 'passed' | 'failed' | 'error';
   rawOutput: string;
+  completion?: ModelCompletion;
   parsedSem?: LunumSem;
   realizedText?: string;
   exact?: boolean;

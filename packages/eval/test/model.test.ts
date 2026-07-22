@@ -22,7 +22,10 @@ function profile(overrides: Partial<ModelProfile> = {}): ModelProfile {
   };
 }
 
-async function captureCompletionBody(modelProfile: ModelProfile): Promise<Record<string, unknown>> {
+async function captureCompletionExchange(
+  modelProfile: ModelProfile,
+  responseBody: Record<string, unknown>
+): Promise<{ body: Record<string, unknown>; completion: Awaited<ReturnType<OpenAICompatibleModel['complete']>> }> {
   let captured: Record<string, unknown> | undefined;
   const server = createServer((request, response) => {
     if (request.url !== '/v1/chat/completions') {
@@ -36,7 +39,7 @@ async function captureCompletionBody(modelProfile: ModelProfile): Promise<Record
     request.on('end', () => {
       captured = JSON.parse(body) as Record<string, unknown>;
       response.writeHead(200, { 'content-type': 'application/json' });
-      response.end(JSON.stringify({ choices: [{ message: { content: '{}' } }] }));
+      response.end(JSON.stringify(responseBody));
     });
   });
 
@@ -50,22 +53,22 @@ async function captureCompletionBody(modelProfile: ModelProfile): Promise<Record
       ...modelProfile,
       baseUrl: `http://127.0.0.1:${address.port}/v1`
     });
-    await model.complete('System prompt', 'User prompt');
+    const completion = await model.complete('System prompt', 'User prompt');
     assert.ok(captured);
-    return captured;
+    return { body: captured, completion };
   } finally {
     await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
   }
 }
 
 test('complete sends the default max_tokens budget without inventing optional fields', async () => {
-  const body = await captureCompletionBody(profile());
+  const { body } = await captureCompletionExchange(profile(), { choices: [{ message: { content: '{}' } }] });
   assert.equal(body.max_tokens, DEFAULT_MAX_TOKENS);
   assert.equal(Object.hasOwn(body, 'seed'), false);
 });
 
 test('complete uses a profile-specific max_tokens budget', async () => {
-  const body = await captureCompletionBody(profile({ maxTokens: 8192, seed: 7 }));
+  const { body } = await captureCompletionExchange(profile({ maxTokens: 8192, seed: 7 }), { choices: [{ message: { content: '{}' } }] });
   assert.equal(body.max_tokens, 8192);
   assert.equal(body.seed, 7);
 });
@@ -104,7 +107,7 @@ test('model profile schema accepts maxTokens and rejects invalid budgets', async
 });
 
 test('complete with noThink prepends /no_think to system message', async () => {
-  const body = await captureCompletionBody(profile({ noThink: true }));
+  const { body } = await captureCompletionExchange(profile({ noThink: true }), { choices: [{ message: { content: '{}' } }] });
   const messages = body.messages as Array<{ role: string; content: string }>;
   const first = messages[0];
   assert.ok(first, 'messages[0] must exist');
@@ -113,11 +116,107 @@ test('complete with noThink prepends /no_think to system message', async () => {
 });
 
 test('complete without noThink leaves system message unchanged', async () => {
-  const body = await captureCompletionBody(profile({ noThink: false }));
+  const { body } = await captureCompletionExchange(profile({ noThink: false }), { choices: [{ message: { content: '{}' } }] });
   const messages = body.messages as Array<{ role: string; content: string }>;
   const first = messages[0];
   assert.ok(first, 'messages[0] must exist');
   assert.ok(!first.content.startsWith('/no_think'), 'Should not have /no_think prefix');
+});
+
+test('complete preserves content, usage, and finish reason when the server exposes them', async () => {
+  const { completion } = await captureCompletionExchange(profile(), {
+    choices: [{
+      finish_reason: 'stop',
+      message: { content: 'answer' }
+    }],
+    usage: {
+      prompt_tokens: 11,
+      completion_tokens: 7,
+      total_tokens: 18,
+      prompt_tokens_details: { cached_tokens: 4 },
+      completion_tokens_details: { reasoning_tokens: 3 }
+    }
+  });
+
+  assert.deepStrictEqual(completion, {
+    content: 'answer',
+    finishReason: 'stop',
+    usage: {
+      promptTokens: 11,
+      completionTokens: 7,
+      totalTokens: 18,
+      cachedTokens: 4,
+      reasoningTokens: 3
+    }
+  });
+});
+
+test('complete returns explicit null finish reason and usage when the server does not expose them', async () => {
+  const { completion } = await captureCompletionExchange(profile(), {
+    choices: [{ message: { content: 'answer' } }]
+  });
+
+  assert.deepStrictEqual(completion, {
+    content: 'answer',
+    finishReason: null,
+    usage: null
+  });
+});
+
+test('complete expands partial usage into the full nullable shape', async () => {
+  const { completion } = await captureCompletionExchange(profile(), {
+    choices: [{ message: { content: 'answer' } }],
+    usage: {
+      prompt_tokens: 11,
+      completion_tokens_details: { reasoning_tokens: 3 }
+    }
+  });
+
+  assert.deepStrictEqual(completion, {
+    content: 'answer',
+    finishReason: null,
+    usage: {
+      promptTokens: 11,
+      completionTokens: null,
+      totalTokens: null,
+      cachedTokens: null,
+      reasoningTokens: 3
+    }
+  });
+});
+
+test('complete preserves zero values in usage', async () => {
+  const { completion } = await captureCompletionExchange(profile(), {
+    choices: [{ message: { content: 'answer' } }],
+    usage: {
+      prompt_tokens: 0,
+      completion_tokens: 0,
+      total_tokens: 0,
+      prompt_tokens_details: { cached_tokens: 0 },
+      completion_tokens_details: { reasoning_tokens: 0 }
+    }
+  });
+
+  assert.deepStrictEqual(completion, {
+    content: 'answer',
+    finishReason: null,
+    usage: {
+      promptTokens: 0,
+      completionTokens: 0,
+      totalTokens: 0,
+      cachedTokens: 0,
+      reasoningTokens: 0
+    }
+  });
+});
+
+test('complete rejects reasoning-only responses without final content', async () => {
+  await assert.rejects(
+    () => captureCompletionExchange(profile(), {
+      choices: [{ message: { reasoning_content: 'chain of thought only' } }]
+    }),
+    /choices\[0\]\.message\.content/u
+  );
 });
 
 test('model profile schema accepts noThink boolean', async () => {
