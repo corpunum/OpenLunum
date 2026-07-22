@@ -176,11 +176,13 @@ elif [[ "$post_remote_branch_oid" != "$local_branch_head" ]]; then
 fi
 
 if [[ $pi_exit -eq 124 ]]; then
-  fail_blocked "worker dispatch timed out after ${PI_TIMEOUT_SECONDS}s"
+  echo "BLOCKED: worker dispatch timed out after ${PI_TIMEOUT_SECONDS}s" >&2
+  exit 124
 fi
 
 if [[ $pi_exit -ne 0 ]]; then
-  fail_blocked "worker dispatch exited with code $pi_exit"
+  echo "BLOCKED: worker dispatch exited with code $pi_exit" >&2
+  exit "$pi_exit"
 fi
 
 echo "DISPATCH COMPLETE: assignment=$assignment_id issue=$issue branch=$branch"

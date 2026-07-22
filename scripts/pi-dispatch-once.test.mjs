@@ -357,9 +357,12 @@ test('fails closed when worker exits nonzero and refs stay unchanged', async () 
       PI_TIMEOUT_SECONDS: '30',
     });
 
-    assert.equal(result.status, 2);
+    assert.equal(result.status, 7);
     assert.match(result.stderr, /worker dispatch exited with code 7/);
     assert.equal(await readFile(marker, 'utf8'), '');
+    const archive = await readArchivedAssignment(workdir);
+    assert.match(archive, /dispatch_exit_code: 7/);
+    assert.match(archive, /dispatch_log: .*worker-runs\/dispatch-296-/);
   });
 });
 
