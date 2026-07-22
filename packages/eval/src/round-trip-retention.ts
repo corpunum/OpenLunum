@@ -279,10 +279,11 @@ export async function runRoundTripRetentionExperiment(
             lang === 'en' ? 'English' : lang === 'el' ? 'Greek' : lang === 'es' ? 'Spanish' : 'Indonesian'
           );
 
-          const rawRealizeOutput = await models[mIdx]!.complete(
+          const realizeCompletion = await models[mIdx]!.complete(
             realizeP.system,
             realizeP.user
           ).catch(err => { throw new Error(`realize: ${err.message}`); });
+          const rawRealizeOutput = realizeCompletion.content;
 
           let cleanRealizedText = rawRealizeOutput.trim();
           try {
@@ -300,10 +301,11 @@ export async function runRoundTripRetentionExperiment(
             sourceLanguage: lang
           } as any);
 
-          const parsedRaw = await models[mIdx]!.complete(
+          const parsedCompletion = await models[mIdx]!.complete(
             parseP.system,
             parseP.user
           ).catch(err => { throw new Error(`parse: ${err.message}`); });
+          const parsedRaw = parsedCompletion.content;
 
           const parsedJson = extractJson(parsedRaw);
           const parsedBack = parsedJson as LunumSem;

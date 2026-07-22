@@ -137,7 +137,8 @@ export async function runParseExperiment(
         try {
           const prompt = parsePrompt(item);
           calls += 1;
-          rawOutput = await model.complete(prompt.system, prompt.user);
+          const completion = await model.complete(prompt.system, prompt.user);
+          rawOutput = completion.content;
           const parsed = extractJson(rawOutput);
           const validation = validateSem(parsed);
           if (!validation.ok) throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
@@ -161,6 +162,7 @@ export async function runParseExperiment(
             featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision,
             missingFeatures: comparison.missingFeatures,
+            completion,
             latencyMs: performance.now() - started
           };
           if (finalResult.status === 'passed') break;
