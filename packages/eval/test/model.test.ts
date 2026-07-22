@@ -151,14 +151,72 @@ test('complete preserves content, usage, and finish reason when the server expos
   });
 });
 
-test('complete omits finish reason and usage when the server does not expose them', async () => {
+test('complete returns explicit null finish reason and usage when the server does not expose them', async () => {
   const { completion } = await captureCompletionExchange(profile(), {
     choices: [{ message: { content: 'answer' } }]
   });
 
-  assert.deepStrictEqual(completion, { content: 'answer' });
-  assert.equal(Object.hasOwn(completion, 'finishReason'), false);
-  assert.equal(Object.hasOwn(completion, 'usage'), false);
+  assert.deepStrictEqual(completion, {
+    content: 'answer',
+    finishReason: null,
+    usage: null
+  });
+});
+
+test('complete expands partial usage into the full nullable shape', async () => {
+  const { completion } = await captureCompletionExchange(profile(), {
+    choices: [{ message: { content: 'answer' } }],
+    usage: {
+      prompt_tokens: 11,
+      completion_tokens_details: { reasoning_tokens: 3 }
+    }
+  });
+
+  assert.deepStrictEqual(completion, {
+    content: 'answer',
+    finishReason: null,
+    usage: {
+      promptTokens: 11,
+      completionTokens: null,
+      totalTokens: null,
+      cachedTokens: null,
+      reasoningTokens: 3
+    }
+  });
+});
+
+test('complete preserves zero values in usage', async () => {
+  const { completion } = await captureCompletionExchange(profile(), {
+    choices: [{ message: { content: 'answer' } }],
+    usage: {
+      prompt_tokens: 0,
+      completion_tokens: 0,
+      total_tokens: 0,
+      prompt_tokens_details: { cached_tokens: 0 },
+      completion_tokens_details: { reasoning_tokens: 0 }
+    }
+  });
+
+  assert.deepStrictEqual(completion, {
+    content: 'answer',
+    finishReason: null,
+    usage: {
+      promptTokens: 0,
+      completionTokens: 0,
+      totalTokens: 0,
+      cachedTokens: 0,
+      reasoningTokens: 0
+    }
+  });
+});
+
+test('complete rejects reasoning-only responses without final content', async () => {
+  await assert.rejects(
+    () => captureCompletionExchange(profile(), {
+      choices: [{ message: { reasoning_content: 'chain of thought only' } }]
+    }),
+    /choices\[0\]\.message\.content/u
+  );
 });
 
 test('model profile schema accepts noThink boolean', async () => {

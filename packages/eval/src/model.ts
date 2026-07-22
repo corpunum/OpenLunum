@@ -6,8 +6,8 @@ function readNumber(value: unknown): number | undefined {
   return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
 }
 
-function normalizeUsage(usage: unknown): CompletionUsage | undefined {
-  if (!usage || typeof usage !== 'object') return undefined;
+function normalizeUsage(usage: unknown): CompletionUsage | null {
+  if (!usage || typeof usage !== 'object') return null;
   const rawUsage = usage as Record<string, unknown>;
   const promptTokens = readNumber(rawUsage.prompt_tokens);
   const completionTokens = readNumber(rawUsage.completion_tokens);
@@ -21,22 +21,12 @@ function normalizeUsage(usage: unknown): CompletionUsage | undefined {
     ? readNumber((completionDetails as Record<string, unknown>).reasoning_tokens)
     : undefined;
 
-  if (
-    promptTokens === undefined &&
-    completionTokens === undefined &&
-    totalTokens === undefined &&
-    cachedTokens === undefined &&
-    reasoningTokens === undefined
-  ) {
-    return undefined;
-  }
-
   return {
-    ...(promptTokens !== undefined ? { promptTokens } : {}),
-    ...(completionTokens !== undefined ? { completionTokens } : {}),
-    ...(totalTokens !== undefined ? { totalTokens } : {}),
-    ...(cachedTokens !== undefined ? { cachedTokens } : {}),
-    ...(reasoningTokens !== undefined ? { reasoningTokens } : {})
+    promptTokens: promptTokens ?? null,
+    completionTokens: completionTokens ?? null,
+    totalTokens: totalTokens ?? null,
+    cachedTokens: cachedTokens ?? null,
+    reasoningTokens: reasoningTokens ?? null
   };
 }
 
@@ -95,16 +85,13 @@ export class OpenAICompatibleModel {
       usage?: unknown;
     };
     const choice = payload.choices?.[0];
-    const content = choice?.message?.content ?? choice?.message?.reasoning_content;
+    const content = choice?.message?.content;
     if (typeof content !== 'string') throw new Error('Model response did not contain choices[0].message.content');
 
-    const completion: ModelCompletion = { content };
-    const finishReason = choice && typeof choice.finish_reason === 'string' ? choice.finish_reason : undefined;
-    if (finishReason !== undefined) completion.finishReason = finishReason;
-
-    const usage = normalizeUsage(payload.usage);
-    if (usage) completion.usage = usage;
-
-    return completion;
+    return {
+      content,
+      finishReason: choice && typeof choice.finish_reason === 'string' ? choice.finish_reason : null,
+      usage: normalizeUsage(payload.usage)
+    };
   }
 }

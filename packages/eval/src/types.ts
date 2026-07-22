@@ -19,17 +19,17 @@ export interface ModelProfile {
 }
 
 export interface CompletionUsage {
-  promptTokens?: number;
-  completionTokens?: number;
-  totalTokens?: number;
-  cachedTokens?: number;
-  reasoningTokens?: number;
+  promptTokens: number | null;
+  completionTokens: number | null;
+  totalTokens: number | null;
+  cachedTokens: number | null;
+  reasoningTokens: number | null;
 }
 
 export interface ModelCompletion {
   content: string;
-  finishReason?: string;
-  usage?: CompletionUsage;
+  finishReason: string | null;
+  usage: CompletionUsage | null;
 }
 
 export interface ExperimentManifest {
