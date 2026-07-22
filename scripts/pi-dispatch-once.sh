@@ -43,6 +43,18 @@ remote_branch_snapshot() {
   git ls-remote --heads origin | sort
 }
 
+remote_branch_snapshot_without_assigned() {
+  local branch="$1"
+  git ls-remote --heads origin \
+    | awk -v branch="refs/heads/$branch" '$2 != branch' \
+    | sort
+}
+
+remote_branch_oid() {
+  local branch="$1"
+  git ls-remote --heads origin "$branch" | awk '{ print $1; exit }'
+}
+
 assignment_id="$(read_field assignment_id)"
 issue="$(read_field issue)"
 worker="$(read_field worker)"
@@ -96,12 +108,15 @@ fi
 
 pre_local_refs="$(mktemp "$RUNTIME_DIR/.pi-dispatch-local-XXXXXX")"
 pre_remote_refs="$(mktemp "$RUNTIME_DIR/.pi-dispatch-remote-XXXXXX")"
+pre_remote_refs_without_assigned="$(mktemp "$RUNTIME_DIR/.pi-dispatch-remote-XXXXXX")"
 post_local_refs="$(mktemp "$RUNTIME_DIR/.pi-dispatch-local-XXXXXX")"
 post_remote_refs="$(mktemp "$RUNTIME_DIR/.pi-dispatch-remote-XXXXXX")"
-trap 'rm -f "$pre_local_refs" "$pre_remote_refs" "$post_local_refs" "$post_remote_refs"' EXIT
+post_remote_refs_without_assigned="$(mktemp "$RUNTIME_DIR/.pi-dispatch-remote-XXXXXX")"
+trap 'rm -f "$pre_local_refs" "$pre_remote_refs" "$pre_remote_refs_without_assigned" "$post_local_refs" "$post_remote_refs" "$post_remote_refs_without_assigned"' EXIT
 
 local_branch_snapshot "$branch" >"$pre_local_refs"
 remote_branch_snapshot >"$pre_remote_refs"
+remote_branch_snapshot_without_assigned "$branch" >"$pre_remote_refs_without_assigned"
 
 timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
 log_file="$LOG_DIR/${assignment_id}-${timestamp}.log"
@@ -139,12 +154,24 @@ fi
 
 local_branch_snapshot "$branch" >"$post_local_refs"
 remote_branch_snapshot >"$post_remote_refs"
+remote_branch_snapshot_without_assigned "$branch" >"$post_remote_refs_without_assigned"
+local_branch_head="$(git rev-parse --verify "$branch^{commit}")"
+pre_remote_branch_oid="$(awk -v branch="refs/heads/$branch" '$2 == branch { print $1; exit }' "$pre_remote_refs")"
+post_remote_branch_oid="$(remote_branch_oid "$branch")"
 
 if ! diff -u "$pre_local_refs" "$post_local_refs" >/dev/null; then
   fail_blocked "unauthorized local branch mutation detected"
 fi
 
-if ! diff -u "$pre_remote_refs" "$post_remote_refs" >/dev/null; then
+if ! diff -u "$pre_remote_refs_without_assigned" "$post_remote_refs_without_assigned" >/dev/null; then
+  fail_blocked "unauthorized remote branch mutation detected"
+fi
+
+if [[ -z "$post_remote_branch_oid" ]]; then
+  if [[ -n "$pre_remote_branch_oid" ]]; then
+    fail_blocked "unauthorized remote branch mutation detected"
+  fi
+elif [[ "$post_remote_branch_oid" != "$local_branch_head" ]]; then
   fail_blocked "unauthorized remote branch mutation detected"
 fi
 

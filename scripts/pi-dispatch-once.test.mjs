@@ -217,6 +217,48 @@ fi
   });
 });
 
+test('allows a committed push of the assigned branch when the remote tip matches the final local head', async () => {
+  await withTempDir(async (root) => {
+    const { workdir } = await setupGitRepo(root);
+    await writeAssignment(workdir);
+    const { binDir, marker } = await writeFakePi(
+      root,
+      `cat > worker-update.txt <<'EOF'
+worker update
+EOF
+git add worker-update.txt
+git commit -m "worker update" >/dev/null
+git push origin HEAD:refs/heads/$EXPECTED_BRANCH >/dev/null
+`,
+    );
+
+    const result = dispatch(workdir, {
+      PATH: `${binDir}:${process.env.PATH}`,
+      FAKE_PI_MARKER: marker,
+      EXPECTED_BRANCH: assignedBranch,
+      PI_TIMEOUT_SECONDS: '30',
+    });
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /DISPATCH COMPLETE/);
+    assert.equal(await readFile(marker, 'utf8'), '');
+
+    const localHead = spawnSync('git', ['rev-parse', 'HEAD'], {
+      cwd: workdir,
+      encoding: 'utf8',
+    }).stdout.trim();
+    const remote = spawnSync('git', ['ls-remote', 'origin', `refs/heads/${assignedBranch}`], {
+      cwd: workdir,
+      encoding: 'utf8',
+    });
+
+    assert.equal(remote.status, 0, remote.stderr);
+    const [remoteOid, remoteRef] = remote.stdout.trim().split(/\s+/);
+    assert.equal(remoteOid, localHead);
+    assert.equal(remoteRef, `refs/heads/${assignedBranch}`);
+  });
+});
+
 test('fails closed when a local branch already exists', async () => {
   await withTempDir(async (root) => {
     const { workdir } = await setupGitRepo(root);
