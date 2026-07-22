@@ -83,6 +83,7 @@ async function writeAssignment(workdir, overrides = {}) {
     worker: 'dispatcher',
     branch: assignedBranch,
     tier: '2',
+    pi_model: 'openai/qwen3.6-35b-a3b',
     ...overrides,
   };
 
@@ -94,6 +95,7 @@ async function writeAssignment(workdir, overrides = {}) {
       `worker: ${assignment.worker}`,
       `branch: ${assignment.branch}`,
       `tier: ${assignment.tier}`,
+      ...(assignment.pi_model === undefined || assignment.pi_model === null ? [] : [`pi_model: ${assignment.pi_model}`]),
       '',
     ].join('\n'),
     'utf8',
@@ -113,6 +115,9 @@ async function writeFakePi(root, body) {
 set -euo pipefail
 if [[ -n "\${FAKE_PI_MARKER:-}" ]]; then
   : >"$FAKE_PI_MARKER"
+fi
+if [[ -n "\${FAKE_PI_ARGS_FILE:-}" ]]; then
+  printf '%s\n' "$@" >"$FAKE_PI_ARGS_FILE"
 fi
 ${body}
 `,
@@ -153,6 +158,7 @@ test('exits idle without invoking git or a model when no assignment exists', asy
     const result = dispatch(workdir);
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /IDLE: no explicit worker assignment/);
+    await assert.rejects(readdir(path.join(workdir, 'reports')));
   });
 });
 
@@ -162,6 +168,78 @@ test('fails closed when the assigned branch is invalid', async () => {
     const result = dispatch(workdir);
     assert.equal(result.status, 2);
     assert.match(result.stderr, /branch must match/);
+  });
+});
+
+test('uses the assigned pi_model when invoking pi and archives the declared invocation metadata', async () => {
+  await withTempDir(async (root) => {
+    const { workdir } = await setupGitRepo(root);
+    await writeAssignment(workdir, { pi_model: 'assigned/model-1' });
+    const argsFile = path.join(root, 'pi-args.txt');
+    const { binDir, marker } = await writeFakePi(root, 'exit 0\n');
+
+    const result = dispatch(workdir, {
+      PATH: `${binDir}:${process.env.PATH}`,
+      FAKE_PI_MARKER: marker,
+      FAKE_PI_ARGS_FILE: argsFile,
+      PI_MODEL: 'ignored/model',
+      PI_TIMEOUT_SECONDS: '30',
+    });
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /DISPATCH COMPLETE/);
+    assert.equal(await readFile(marker, 'utf8'), '');
+    const args = (await readFile(argsFile, 'utf8')).trim().split('\n');
+    const modelIndex = args.indexOf('--model');
+    assert.ok(modelIndex >= 0, `expected --model in ${args.join(' ')}`);
+    assert.equal(args[modelIndex + 1], 'assigned/model-1');
+    assert.equal(args[args.indexOf('--provider') + 1], 'local-llama');
+    assert.equal(args[args.indexOf('--thinking') + 1], 'high');
+    assert.equal(args[args.indexOf('--session-id') + 1], 'openlunum-dispatch-296');
+    const archive = await readArchivedAssignment(workdir);
+    assert.match(archive, /pi_model: assigned\/model-1/);
+    assert.match(archive, /dispatch_pi_model_declared: assigned\/model-1/);
+    assert.match(archive, /dispatch_pi_model_argument: assigned\/model-1/);
+    assert.match(archive, /dispatch_pi_provider: local-llama/);
+    assert.match(archive, /dispatch_pi_thinking: high/);
+    assert.match(archive, /dispatch_pi_session_id: openlunum-dispatch-296/);
+    assert.match(archive, /dispatch_pi_timeout_seconds: 30/);
+  });
+});
+
+test('fails closed before invoking pi when pi_model is missing', async () => {
+  await withTempDir(async (root) => {
+    const { workdir } = await setupGitRepo(root);
+    await writeAssignment(workdir, { pi_model: null });
+    const { binDir, marker } = await writeFakePi(root, 'exit 0\n');
+
+    const result = dispatch(workdir, {
+      PATH: `${binDir}:${process.env.PATH}`,
+      FAKE_PI_MARKER: marker,
+    });
+
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /assignment is missing .*pi_model/);
+    await assert.rejects(readFile(marker, 'utf8'));
+    await assert.rejects(readdir(path.join(workdir, 'reports/orchestrator/assignments')));
+  });
+});
+
+test('fails closed before invoking pi when pi_model is malformed', async () => {
+  await withTempDir(async (root) => {
+    const { workdir } = await setupGitRepo(root);
+    await writeAssignment(workdir, { pi_model: 'bad model' });
+    const { binDir, marker } = await writeFakePi(root, 'exit 0\n');
+
+    const result = dispatch(workdir, {
+      PATH: `${binDir}:${process.env.PATH}`,
+      FAKE_PI_MARKER: marker,
+    });
+
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /assignment pi_model must not contain whitespace/);
+    await assert.rejects(readFile(marker, 'utf8'));
+    await assert.rejects(readdir(path.join(workdir, 'reports/orchestrator/assignments')));
   });
 });
 

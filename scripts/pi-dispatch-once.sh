@@ -3,13 +3,7 @@ set -euo pipefail
 
 WORKDIR="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
 ASSIGNMENT_FILE="${OPENLUNUM_ASSIGNMENT_FILE:-$WORKDIR/reports/orchestrator/WORKER_ASSIGNMENT.md}"
-RUNTIME_DIR="$WORKDIR/reports/orchestrator"
-ARCHIVE_DIR="$RUNTIME_DIR/assignments"
-LOG_DIR="$RUNTIME_DIR/worker-runs"
 PI_TIMEOUT_SECONDS="${PI_TIMEOUT_SECONDS:-14400}"
-PI_MODEL="${PI_MODEL:-openai/qwen3.6-35b-a3b}"
-
-mkdir -p "$RUNTIME_DIR" "$ARCHIVE_DIR" "$LOG_DIR"
 
 exec 9>"/tmp/openlunum-pi-dispatch-once.lock"
 if ! flock -n 9; then
@@ -21,6 +15,10 @@ if [[ ! -f "$ASSIGNMENT_FILE" ]]; then
   echo "IDLE: no explicit worker assignment"
   exit 0
 fi
+
+RUNTIME_DIR="$WORKDIR/reports/orchestrator"
+ARCHIVE_DIR="$RUNTIME_DIR/assignments"
+LOG_DIR="$RUNTIME_DIR/worker-runs"
 
 read_field() {
   local key="$1"
@@ -60,9 +58,10 @@ issue="$(read_field issue)"
 worker="$(read_field worker)"
 branch="$(read_field branch)"
 tier="$(read_field tier)"
+pi_model="$(read_field pi_model)"
 
-if [[ -z "$assignment_id" || -z "$issue" || -z "$worker" || -z "$branch" || -z "$tier" ]]; then
-  echo "BLOCKED: assignment is missing assignment_id, issue, worker, branch, or tier" >&2
+if [[ -z "$assignment_id" || -z "$issue" || -z "$worker" || -z "$branch" || -z "$tier" || -z "$pi_model" ]]; then
+  echo "BLOCKED: assignment is missing assignment_id, issue, worker, branch, tier, or pi_model" >&2
   exit 2
 fi
 
@@ -74,6 +73,14 @@ fi
 if [[ ! "$tier" =~ ^[123]$ ]]; then
   echo "BLOCKED: tier must be 1, 2, or 3" >&2
   exit 2
+fi
+
+if [[ "$pi_model" =~ [[:space:][:cntrl:]] ]]; then
+  fail_blocked "assignment pi_model must not contain whitespace or control characters"
+fi
+
+if [[ ! "$pi_model" =~ ^[A-Za-z0-9._/@:+-]+$ ]]; then
+  fail_blocked "assignment pi_model is malformed"
 fi
 
 if [[ ! "$branch" =~ ^work/[a-zA-Z0-9._-]+/${issue}-[a-zA-Z0-9._-]+$ ]]; then
@@ -88,6 +95,8 @@ cd "$WORKDIR"
 if [[ -n "$(git status --porcelain=v1 --untracked-files=all)" ]]; then
   fail_blocked "dirty starting worktree"
 fi
+
+mkdir -p "$RUNTIME_DIR" "$ARCHIVE_DIR" "$LOG_DIR"
 
 git fetch --prune origin main
 
@@ -121,16 +130,20 @@ remote_branch_snapshot_without_assigned "$branch" >"$pre_remote_refs_without_ass
 timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
 log_file="$LOG_DIR/${assignment_id}-${timestamp}.log"
 archive_file="$ARCHIVE_DIR/${assignment_id}-${timestamp}.md"
+pi_provider="local-llama"
+pi_thinking="high"
+pi_session_id="openlunum-${assignment_id}"
+pi_model_argument="$pi_model"
 
 cp "$ASSIGNMENT_FILE" "$archive_file"
 rm -f "$ASSIGNMENT_FILE"
 
 set +e
 timeout "$PI_TIMEOUT_SECONDS" pi --print \
-  --provider local-llama \
-  --model "$PI_MODEL" \
-  --thinking high \
-  --session-id "openlunum-${assignment_id}" \
+  --provider "$pi_provider" \
+  --model "$pi_model_argument" \
+  --thinking "$pi_thinking" \
+  --session-id "$pi_session_id" \
   --append-system-prompt "@$WORKDIR/AGENTS.md" \
   --append-system-prompt "@$WORKDIR/docs/REPOSITORY_OPERATING_MODEL.md" \
   --append-system-prompt "@$WORKDIR/scripts/pi-task-prompt.md" \
@@ -145,6 +158,12 @@ set -e
   echo "dispatch_completed_utc: $(date -u -Iseconds)"
   echo "dispatch_exit_code: $pi_exit"
   echo "dispatch_log: $log_file"
+  echo "dispatch_pi_model_declared: $pi_model"
+  echo "dispatch_pi_model_argument: $pi_model_argument"
+  echo "dispatch_pi_provider: $pi_provider"
+  echo "dispatch_pi_thinking: $pi_thinking"
+  echo "dispatch_pi_session_id: $pi_session_id"
+  echo "dispatch_pi_timeout_seconds: $PI_TIMEOUT_SECONDS"
 } >> "$archive_file"
 
 current_branch="$(git branch --show-current)"
