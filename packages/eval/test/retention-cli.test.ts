@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
@@ -9,6 +10,7 @@ import { planRetentionExecution, validateRetentionManifest } from '../src/retent
 import {
   recomputeRetentionSummary,
   runRetentionCli,
+  type RetentionCliSummary,
   type RetentionStageClient,
   type RetentionStageRawRecord
 } from '../src/retention-cli.js';
@@ -19,11 +21,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const FIXTURE_ROOT = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retention');
+const BUILT_CLI = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'dist', 'src', 'cli.js');
 
 type CompletionQueueItem = {
-  content: string;
-  finishReason: string | null;
-  usage: CompletionUsage | null;
+  content?: string;
+  finishReason?: string | null;
+  usage?: CompletionUsage | null;
+  error?: string;
 };
 
 function mockClient(queue: Array<CompletionQueueItem | Error>): RetentionStageClient {
@@ -33,10 +37,16 @@ function mockClient(queue: Array<CompletionQueueItem | Error>): RetentionStageCl
       const next = queue[index++];
       if (!next) throw new Error('mock client exhausted');
       if (next instanceof Error) throw next;
+      if (typeof next.error === 'string' && next.error.trim()) {
+        throw new Error(next.error);
+      }
+      if (typeof next.content !== 'string') {
+        throw new Error(`mock client item ${index} must provide content or error`);
+      }
       return {
         content: next.content,
-        finishReason: next.finishReason,
-        usage: next.usage
+        finishReason: next.finishReason ?? null,
+        usage: next.usage ?? null
       };
     }
   };
@@ -67,56 +77,11 @@ test('retention CLI writes raw stage JSONL and recomputes aggregates from it', a
   const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-retention-cli-'));
   const relativeOutputRoot = path.join('reports', 'retention', `mock-cli-${Date.now()}`);
   const resolvedOutputRoot = path.join(WORKSPACE_ROOT, relativeOutputRoot);
+  const mockFixture = await readJson<CompletionQueueItem[]>(path.join(FIXTURE_ROOT, 'mock-responses.json'));
 
   try {
     const manifestPath = path.join(FIXTURE_ROOT, 'coverage-manifest.json');
-    const client = mockClient([
-      {
-        content: JSON.stringify({ realizedText: 'The user prefers concise answers.' }),
-        finishReason: null,
-        usage: null
-      },
-      {
-        content: JSON.stringify({ parsedText: 'The user prefers concise answers.' }),
-        finishReason: 'stop',
-        usage: {
-          promptTokens: 9,
-          completionTokens: 3,
-          totalTokens: 12,
-          cachedTokens: 0,
-          reasoningTokens: 0
-        }
-      },
-      {
-        content: 'Faithful rewrite for item b',
-        finishReason: 'stop',
-        usage: {
-          promptTokens: 7,
-          completionTokens: 2,
-          totalTokens: 9,
-          cachedTokens: 0,
-          reasoningTokens: 0
-        }
-      },
-      {
-        content: JSON.stringify({ parsedText: 'Faithful rewrite for item b' }),
-        finishReason: 'stop',
-        usage: {
-          promptTokens: 8,
-          completionTokens: 2,
-          totalTokens: 10,
-          cachedTokens: 0,
-          reasoningTokens: 0
-        }
-      },
-      {
-        content: 'Faithful rewrite for item c',
-        finishReason: null,
-        usage: null
-      },
-      new Error('HTTP 503 upstream'),
-      new Error('HTTP 503 upstream')
-    ]);
+    const client = mockClient(mockFixture);
 
     const { outputDirectory, summary } = await runRetentionCli(manifestPath, {
       root: WORKSPACE_ROOT,
@@ -159,6 +124,76 @@ test('retention CLI writes raw stage JSONL and recomputes aggregates from it', a
     await rm(temp, { recursive: true, force: true });
     await rm(resolvedOutputRoot, { recursive: true, force: true });
   }
+});
+
+test('retention CLI command path uses the committed mock fixture without a live profile', async () => {
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-retention-cli-cmd-'));
+  const relativeOutputRoot = path.join('reports', 'retention', `mock-cli-cmd-${Date.now()}`);
+  const resolvedOutputRoot = path.join(WORKSPACE_ROOT, relativeOutputRoot);
+  const manifestPath = path.join(FIXTURE_ROOT, 'coverage-manifest.json');
+  const mockFixturePath = path.join(FIXTURE_ROOT, 'mock-responses.json');
+
+  try {
+    const result = spawnSync(process.execPath, [
+      BUILT_CLI,
+      'retention',
+      '--manifest',
+      manifestPath,
+      '--mock-fixture',
+      mockFixturePath,
+      '--output-root',
+      relativeOutputRoot
+    ], { encoding: 'utf8' });
+
+    assert.equal(result.status, 0, result.stderr);
+    const parsed = JSON.parse(result.stdout) as {
+      outputDirectory: string;
+      summary: RetentionCliSummary;
+    };
+
+    assert.ok(parsed.outputDirectory.startsWith(resolvedOutputRoot), 'output directory must stay within the requested root');
+
+    const realizationRecords = await readJsonl<RetentionStageRawRecord>(path.join(parsed.outputDirectory, 'raw', 'realization.jsonl'));
+    const parseBackRecords = await readJsonl<RetentionStageRawRecord>(path.join(parsed.outputDirectory, 'raw', 'parse-back.jsonl'));
+    const allRecords = [...realizationRecords, ...parseBackRecords];
+    assert.strictEqual(realizationRecords.length, 4);
+    assert.strictEqual(parseBackRecords.length, 3);
+
+    const recomputed = recomputeRetentionSummary(allRecords, {
+      runId: parsed.summary.runId,
+      manifestId: parsed.summary.manifestId,
+      baselineCommit: parsed.summary.baselineCommit,
+      datasetSha256: parsed.summary.datasetSha256,
+      plannedItemCount: parsed.summary.plannedItemCount,
+      realizationCalls: parsed.summary.realizationCalls,
+      parseBackCalls: parsed.summary.parseBackCalls,
+      totalModelCalls: parsed.summary.totalModelCalls
+    });
+
+    assert.deepStrictEqual({ ...recomputed, generatedAt: parsed.summary.generatedAt }, parsed.summary);
+    assert.strictEqual(parsed.summary.itemCount, 3);
+    assert.strictEqual(parsed.summary.passedItems, 2);
+    assert.strictEqual(parsed.summary.failedItems, 0);
+    assert.strictEqual(parsed.summary.errorItems, 1);
+    assert.strictEqual(parsed.summary.errorTaxonomy.http, 2);
+    assert.strictEqual(parsed.summary.unavailableFields.finishReason, 4);
+    assert.strictEqual(parsed.summary.unavailableFields.usage, 4);
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+    await rm(resolvedOutputRoot, { recursive: true, force: true });
+  }
+});
+
+test('retention CLI command path still requires an explicit live profile without the mock fixture', async () => {
+  const result = spawnSync(process.execPath, [
+    BUILT_CLI,
+    'retention',
+    '--manifest',
+    path.join(FIXTURE_ROOT, 'coverage-manifest.json')
+  ], { encoding: 'utf8' });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /requires --profile <model-profile>/u);
 });
 
 test('retention CLI rejects output roots that escape the workspace', async () => {

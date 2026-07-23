@@ -68,17 +68,22 @@ async function main(): Promise<void> {
     const manifest = flag('manifest') ?? process.argv[3];
     if (!manifest) throw new Error('retention requires --manifest <path> or a positional manifest path');
     const profile = flag('profile');
+    const mockFixture = flag('mock-fixture');
+    if (profile && mockFixture) {
+      throw new Error('retention accepts either --profile <file> or test-only --mock-fixture <file>, not both');
+    }
     const outputRoot = flag('output-root');
     const root = await findWorkspaceRoot();
     const resolvedManifest = path.isAbsolute(manifest) ? manifest : path.join(root, manifest);
     const options: NonNullable<Parameters<typeof runRetentionCli>[1]> = { root };
     if (profile) options.modelProfilePath = profile;
+    if (mockFixture) options.mockFixturePath = mockFixture;
     if (outputRoot) options.outputRoot = outputRoot;
     const result = await runRetentionCli(resolvedManifest, options);
     console.log(JSON.stringify({ outputDirectory: result.outputDirectory, summary: result.summary }, null, 2));
     return;
   }
-  throw new Error('Commands: smoke | status | doctor --profile <file> | create --id <id> --area <area> --task <task> | run --manifest <file> | parse-experiment <manifest> | retention --manifest <file> --profile <file> [--output-root <dir>]');
+  throw new Error('Commands: smoke | status | doctor --profile <file> | create --id <id> --area <area> --task <task> | run --manifest <file> | parse-experiment <manifest> | retention --manifest <file> --profile <file> [--output-root <dir>] [--mock-fixture <file>]');
 }
 
 main().catch((error: unknown) => { console.error(error instanceof Error ? error.message : String(error)); process.exitCode = 1; });

@@ -1,0 +1,51 @@
+[
+  {
+    "content": "{\"realizedText\":\"The user prefers concise answers.\"}",
+    "finishReason": null,
+    "usage": null
+  },
+  {
+    "content": "{\"parsedText\":\"The user prefers concise answers.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 9,
+      "completionTokens": 3,
+      "totalTokens": 12,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "Faithful rewrite for item b",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 7,
+      "completionTokens": 2,
+      "totalTokens": 9,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"Faithful rewrite for item b\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 8,
+      "completionTokens": 2,
+      "totalTokens": 10,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "Faithful rewrite for item c",
+    "finishReason": null,
+    "usage": null
+  },
+  {
+    "error": "HTTP 503 upstream"
+  },
+  {
+    "error": "HTTP 503 upstream"
+  }
+]
