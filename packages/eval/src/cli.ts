@@ -7,6 +7,7 @@ import { OpenAICompatibleModel } from './model.js';
 import { runExperiment } from './runner.js';
 import { runSmoke } from './smoke.js';
 import { runParseExperimentCli } from './parse-experiment.js';
+import { runRetentionCli } from './retention-cli.js';
 import type { ExperimentManifest, ExperimentTask, ModelProfile, WorkArea } from './types.js';
 
 function flag(name: string): string | undefined {
@@ -63,7 +64,21 @@ async function main(): Promise<void> {
   }
   if (command === 'report') throw new Error('Reports are generated automatically by experiment:run in 0.2.0');
   if (command === 'parse-experiment') { await runParseExperimentCli(); return; }
-  throw new Error('Commands: smoke | status | doctor --profile <file> | create --id <id> --area <area> --task <task> | run --manifest <file> | parse-experiment <manifest>');
+  if (command === 'retention') {
+    const manifest = flag('manifest') ?? process.argv[3];
+    if (!manifest) throw new Error('retention requires --manifest <path> or a positional manifest path');
+    const profile = flag('profile');
+    const outputRoot = flag('output-root');
+    const root = await findWorkspaceRoot();
+    const resolvedManifest = path.isAbsolute(manifest) ? manifest : path.join(root, manifest);
+    const options: NonNullable<Parameters<typeof runRetentionCli>[1]> = { root };
+    if (profile) options.modelProfilePath = profile;
+    if (outputRoot) options.outputRoot = outputRoot;
+    const result = await runRetentionCli(resolvedManifest, options);
+    console.log(JSON.stringify({ outputDirectory: result.outputDirectory, summary: result.summary }, null, 2));
+    return;
+  }
+  throw new Error('Commands: smoke | status | doctor --profile <file> | create --id <id> --area <area> --task <task> | run --manifest <file> | parse-experiment <manifest> | retention --manifest <file> --profile <file> [--output-root <dir>]');
 }
 
 main().catch((error: unknown) => { console.error(error instanceof Error ? error.message : String(error)); process.exitCode = 1; });

@@ -18,6 +18,7 @@
     "test:worker-dispatch": "node --test scripts/pi-dispatch-once.test.mjs",
     "test:nightly-window": "node --test scripts/nightly-evidence-runner.test.mjs",
     "eval:smoke": "pnpm --filter @corpunum/lunum-eval eval:smoke",
+    "eval:retention": "pnpm --filter @corpunum/lunum-eval eval:retention",
     "verify": "pnpm typecheck && pnpm test && pnpm eval:smoke",
     "verify:strict": "pnpm build && pnpm -r --sort typecheck && pnpm -r --sort test:unit && pnpm eval:smoke && pnpm --filter @corpunum/lunum-eval verify:strict",
     "agent:status": "pnpm --filter @corpunum/lunum-eval agent:status",
