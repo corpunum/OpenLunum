@@ -18,6 +18,7 @@
     "experiment:run": "pnpm build && node dist/src/cli.js run",
     "report:generate": "pnpm build && node dist/src/cli.js report",
     "test:unit": "node --test dist/test/*.test.js",
+    "eval:retention": "pnpm build && node dist/src/cli.js retention",
     "verify:strict": "pnpm build && node --test dist/test/*.test.js && pnpm eval:smoke && pnpm typecheck"
   },
   "devDependencies": {
