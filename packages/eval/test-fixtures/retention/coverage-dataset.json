@@ -1,0 +1,20 @@
+[
+  {
+    "id": "retention-item-a",
+    "sourceLanguage": "en",
+    "sourceText": "The user prefers concise answers.",
+    "protectedLiterals": ["user", "concise"]
+  },
+  {
+    "id": "retention-item-b",
+    "sourceLanguage": "el",
+    "sourceText": "Ο χρήστης προτιμά σύντομες απαντήσεις.",
+    "protectedLiterals": ["user"]
+  },
+  {
+    "id": "retention-item-c",
+    "sourceLanguage": "es",
+    "sourceText": "El usuario prefiere respuestas concisas.",
+    "protectedLiterals": ["user"]
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "schema": "openlunum-retention-manifest/0.1",
+  "id": "retention-coverage-contract",
+  "baselineCommit": "833b883b2fb0ff7f9d5ef1b4cfd8ed8ac1f18f5e",
+  "dataset": {
+    "path": "packages/eval/test-fixtures/retention/coverage-dataset.json",
+    "sha256": "c7d2b0c8a7d1f0f7e16d8c10ffbe4c78f1cda81d5f4a4a8f5f4f0cb0f3f80d83"
+  },
+  "expectedItemIds": [
+    "retention-item-a",
+    "retention-item-b",
+    "retention-item-c"
+  ],
+  "limits": {
+    "maxItems": 3,
+    "maxAttemptsPerItem": 2,
+    "maxModelCalls": 12
+  }
+}
