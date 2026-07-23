@@ -85,6 +85,7 @@ interface RetentionCliOptions {
   outputRoot?: string;
   client?: RetentionStageClient;
   modelProfilePath?: string;
+  mockFixturePath?: string;
 }
 
 interface RetentionModelProfile {
@@ -99,6 +100,13 @@ interface RetentionModelProfile {
   noThink?: boolean;
   timeoutMs: number;
   metadata?: Record<string, unknown>;
+}
+
+interface RetentionMockFixtureResponse {
+  content?: string;
+  finishReason?: string | null;
+  usage?: CompletionUsage | null;
+  error?: string;
 }
 
 function sha256Text(value: string): string {
@@ -226,7 +234,7 @@ function readDatasetItems(file: string): Promise<ExperimentItem[]> {
 
 async function createDefaultClient(root: string, modelProfilePath?: string): Promise<RetentionStageClient> {
   if (!modelProfilePath || !modelProfilePath.trim()) {
-    throw new Error('retention CLI requires --profile <model-profile> when no mock client is provided');
+    throw new Error('retention CLI requires --profile <model-profile> when no test-only mock fixture is provided');
   }
 
   const resolvedProfile = path.isAbsolute(modelProfilePath)
@@ -234,6 +242,38 @@ async function createDefaultClient(root: string, modelProfilePath?: string): Pro
     : path.join(root, modelProfilePath);
   const profile = await readJson<RetentionModelProfile>(resolvedProfile);
   return new OpenAICompatibleModel(profile);
+}
+
+async function createMockClient(root: string, mockFixturePath: string): Promise<RetentionStageClient> {
+  const resolvedFixture = assertContainedPath(
+    root,
+    path.isAbsolute(mockFixturePath) ? mockFixturePath : path.join(root, mockFixturePath),
+    'mock fixture'
+  );
+  const responses = await readJson<RetentionMockFixtureResponse[]>(resolvedFixture);
+  if (!Array.isArray(responses) || responses.length === 0) {
+    throw new Error(`mock fixture must be a non-empty JSON array: ${resolvedFixture}`);
+  }
+
+  let index = 0;
+  return {
+    async complete(): Promise<ModelCompletion> {
+      const next = responses[index++] as RetentionMockFixtureResponse | undefined;
+      if (!next) throw new Error('mock client exhausted');
+      if (typeof next.error === 'string' && next.error.trim()) {
+        throw new Error(next.error);
+      }
+      if (typeof next.content !== 'string') {
+        throw new Error(`mock fixture entry ${index} must provide a content string or an error`);
+      }
+
+      return {
+        content: next.content,
+        finishReason: typeof next.finishReason === 'string' ? next.finishReason : null,
+        usage: next.usage ?? null
+      };
+    }
+  };
 }
 
 function buildAttemptMap(records: RetentionStageRawRecord[]): Map<string, Map<number, AttemptRecord>> {
@@ -374,7 +414,8 @@ export async function runRetentionCli(
   const rawDirectory = path.join(outputDirectory, 'raw');
   await mkdir(rawDirectory, { recursive: true });
 
-  const client = options.client ?? await createDefaultClient(root, options.modelProfilePath);
+  const client = options.client
+    ?? (options.mockFixturePath ? await createMockClient(root, options.mockFixturePath) : await createDefaultClient(root, options.modelProfilePath));
 
   const rawRecords: RetentionStageRawRecord[] = [];
   const recordLine = async (stage: RetentionStageRawRecord): Promise<void> => {
