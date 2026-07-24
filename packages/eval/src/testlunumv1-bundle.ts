@@ -273,7 +273,13 @@ function countByLanguage(records: readonly TestLunumV1SyntheticRawRecord[]): Rec
   return counts;
 }
 
-function percentile(values: number[], fraction: number): number {
+/**
+ * Nearest-rank percentile over `values` (fraction in `[0, 1]`). Exported so
+ * the real-bundle generator (#315) computes percentiles with the exact same
+ * rounding convention as the synthetic bundle path instead of maintaining a
+ * second implementation.
+ */
+export function percentile(values: number[], fraction: number): number {
   if (values.length === 0) return 0;
   const sorted = [...values].sort((a, b) => a - b);
   const index = Math.min(sorted.length - 1, Math.max(0, Math.ceil(sorted.length * fraction) - 1));
@@ -511,7 +517,17 @@ export function buildTestLunumV1SemanticKindInventory(
   return counts;
 }
 
-function csvRows(headers: string[], rows: Array<Array<string | number | null | undefined>>): string {
+/**
+ * Renders a CSV document from headers and rows. `null`/`undefined` cells
+ * render as an empty string -- callers that need to distinguish "missing
+ * instrumentation" from "empty" must pass the literal string `'N/A'`
+ * explicitly rather than `null`/`undefined` (see `testlunumv1-real-bundle.ts`
+ * for the real-bundle path, which always does this for unavailable fields).
+ * Exported so the real-bundle generator (#315) reuses the exact same CSV
+ * escaping/quoting rules as the synthetic bundle path instead of
+ * reimplementing them.
+ */
+export function csvRows(headers: string[], rows: Array<Array<string | number | null | undefined>>): string {
   const escape = (value: string | number | null | undefined): string => {
     if (value === null || value === undefined) return '';
     const text = String(value);
@@ -520,11 +536,19 @@ function csvRows(headers: string[], rows: Array<Array<string | number | null | u
   return [headers.map(escape).join(','), ...rows.map((row) => row.map(escape).join(','))].join('\n') + '\n';
 }
 
-function markdownList(lines: string[]): string {
+/** Exported so the real-bundle generator (#315) reuses the same markdown-file rendering convention as the synthetic path. */
+export function markdownList(lines: string[]): string {
   return lines.join('\n') + '\n';
 }
 
-function sortRecordKeys<T extends Record<string, unknown>>(value: T): T {
+/** Exported so the real-bundle generator (#315) reuses the same total/passed/failed/error ratio rendering as the synthetic path. */
+export function formatRatio(counts: { total: number; passed: number; failed: number; error: number }): string {
+  const passRate = counts.total > 0 ? counts.passed / counts.total : 0;
+  return `${counts.total} (${counts.passed} passed, ${counts.failed} failed, ${counts.error} error, ${passRate.toFixed(3)} pass)`;
+}
+
+/** Exported so the real-bundle generator (#315) writes deterministic, key-sorted JSON with the same convention as the synthetic path. */
+export function sortRecordKeys<T extends Record<string, unknown>>(value: T): T {
   const sorted = {} as Record<string, unknown>;
   for (const key of Object.keys(value).sort()) {
     sorted[key] = value[key];
@@ -578,11 +602,6 @@ function deriveSummary(
     totalCallBudget: computeTestLunumV1CallBudget(manifests).total,
     generatedAt: input.generatedAt
   };
-}
-
-function formatRatio(counts: { total: number; passed: number; failed: number; error: number }): string {
-  const passRate = counts.total > 0 ? counts.passed / counts.total : 0;
-  return `${counts.total} (${counts.passed} passed, ${counts.failed} failed, ${counts.error} error, ${passRate.toFixed(3)} pass)`;
 }
 
 function suiteSummaryMarkdown(manifest: TestLunumV1SuiteManifest, counts: { total: number; passed: number; failed: number; error: number }): string {
