@@ -1,0 +1,178 @@
+[
+  {
+    "id": "canon-en-01",
+    "sourceLanguage": "en",
+    "sourceText": "The user prefers concise answers.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "preference",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-en-02",
+    "sourceLanguage": "en",
+    "sourceText": "The release is scheduled for Friday.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "statement",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-en-03",
+    "sourceLanguage": "en",
+    "sourceText": "Where is the service running?",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "query",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-en-04",
+    "sourceLanguage": "en",
+    "sourceText": "Do not share the secret token.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "safety_constraint",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-el-01",
+    "sourceLanguage": "el",
+    "sourceText": "Ο χρήστης προτιμά σύντομες απαντήσεις.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "preference",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-el-02",
+    "sourceLanguage": "el",
+    "sourceText": "Η έκδοση έχει προγραμματιστεί για την Παρασκευή.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "instruction",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-el-03",
+    "sourceLanguage": "el",
+    "sourceText": "Το σύστημα αναφέρεται στην αναζήτηση.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "report",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-el-04",
+    "sourceLanguage": "el",
+    "sourceText": "Η κατάσταση του έργου είναι έτοιμη.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "project_state",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-es-01",
+    "sourceLanguage": "es",
+    "sourceText": "El usuario prefiere respuestas concisas.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "preference",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-es-02",
+    "sourceLanguage": "es",
+    "sourceText": "El informe incluye el resultado final.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "fact",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-es-03",
+    "sourceLanguage": "es",
+    "sourceText": "Si llega el correo, responde de inmediato.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "conditional_instruction",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-es-04",
+    "sourceLanguage": "es",
+    "sourceText": "La medición terminó a las 08:00.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "measurement",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-id-01",
+    "sourceLanguage": "id",
+    "sourceText": "Pengguna lebih menyukai jawaban yang ringkas.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "preference",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-id-02",
+    "sourceLanguage": "id",
+    "sourceText": "Laporan itu mencatat peristiwa utama.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "event",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-id-03",
+    "sourceLanguage": "id",
+    "sourceText": "Jangan bagikan token rahasia.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "rule",
+      "clauses": []
+    }
+  },
+  {
+    "id": "canon-id-04",
+    "sourceLanguage": "id",
+    "sourceText": "Apakah layanan berjalan sekarang?",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "query",
+      "clauses": []
+    }
+  }
+]
