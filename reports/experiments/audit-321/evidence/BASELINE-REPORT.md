@@ -96,8 +96,16 @@ surviving into the parsed semantic output.
 | qwen36-35b | 8 | 0 | 0.0% |
 | qwen3-coder-30b | 8 | 0 | 0.0% |
 
-Both models preserved every protected literal. Note this is a narrow result: the parse manifests set
-`requireProtectedLiteralCoverage: false`, and only 8 items exercise it.
+Both models preserved every protected literal. Two caveats, both material:
+
+- **Small N and not gated**: only 8 items exercise this, and the parse manifests set
+  `requireProtectedLiteralCoverage: false`.
+- **The matching method tests presence, not placement.** It checks whether the literal string occurs
+  in the serialised parsed output. A substring test would credit a model that emitted `120` or `200`
+  as having preserved `20`, or that placed the literal in the wrong semantic role. On manual inspection
+  of all 16 cases the values are in fact correctly placed (`20` with `unit: percent`, `2026-09-30` in
+  the `time` role), so the reported 0/8 is accurate for this data — but the metric as implemented is
+  weaker than the number suggests and should be tightened before it is relied on as a gate.
 
 ## 4. Latency is reported as NON-COMPARABLE across models
 
@@ -128,12 +136,17 @@ The p50/p95 figures are recorded because #253 requires them, not because they li
 
 1. **TTFT/TPOT unavailable** without a streaming client change, not introduced mid-audit.
 2. **Sequential execution** retains a thermal-drift bias toward whichever model runs first. Disclosed rather than corrected; this is part of why latency is labelled non-comparable.
-3. **Prefix caching active** at ~45% of prompt tokens, as measured above.
+3. **Prefix caching active**, and dominant on the parse runs: 95.1% / 89.6% of prompt tokens served
+   from cache for parse, 43.1% / 46.9% for retention. See Section 3 for the per-task table.
 4. **Preflight can fail for cold weights.** After a router restart the 35B's first probe took 27.2s against a 30s curl timeout; warm it is ~177ms. A preflight failure is therefore ambiguous between 'cold weights' and 'wrong endpoint'. Fail-closed remains correct, but the ambiguity is real.
 5. **Model-file hashing not performed for this run.** `--hash-weights` exists but was not used; identity rests on the `/v1/models` assertion plus weights path, size and mtime.
 6. **Probe success does not establish model identity.** A probe sent to an endpoint not serving the requested model still returned a completion — llama-server silently ignores the model field.
 7. **#253 acceptance item "False-positive review samples include negation, modality, extra-clause, literal, and role mutations" is NOT satisfied and cannot be satisfied by this dataset.** `multilingual-core-v1.jsonl`'s 16 items are tagged only by category (`preference`, `delete`, `battery`, `deadline`) and language; they carry no mutation-type tags. The only mutation-tagged corpus in the repository, `datasets/adversarial/semantic-traps-v1.jsonl`, holds 2 English-only items (`nested-negation-en`, `quantity-unit-en`) tagged `negation`/`quantity` — no modality, extra-clause, or role mutations, and no non-English coverage. Closing #253 therefore requires either building that corpus or explicitly amending the acceptance criterion. This is recorded as unmet rather than quietly skipped.
 8. **Run-time commit is asserted, not instrumented.** The report records HEAD as `e97eef38` at generation, but the runner writes only the manifest's `baselineCommit` (`4e52d1da`, a real ancestor 3 commits back) into `manifest.snapshot.json`. The frozen manifest and the executed snapshot are byte-identical, so there is no drift — but no artifact independently corroborates the run-time HEAD.
+
+9. **Router `-np 3` is asserted, not evidenced in this bundle.** No router startup log or systemd unit
+   file is committed here, so the distinction between the router-level slot flag and the per-model preset
+   `parallel = 1` is architecturally plausible but not independently verifiable from these artifacts alone.
 
 ## 7. Provenance of the run matrix
 
