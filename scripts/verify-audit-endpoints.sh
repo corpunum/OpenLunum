@@ -340,10 +340,12 @@ except:
         fi
 
         # Step 4: Send minimal probe completion (max 8 tokens)
-        local probe_start probe_end
-        probe_start=$(date +%s%N)
+        # GATE: Only send probe if model was actually present on the endpoint
+        if [[ "$model_present" == "true" ]]; then
+          local probe_start probe_end
+          probe_start=$(date +%s%N)
 
-        probe_request=$(cat <<'PROBE_EOF'
+          probe_request=$(cat <<'PROBE_EOF'
 {
   "model": "PROBE_MODEL",
   "messages": [
@@ -357,30 +359,36 @@ except:
 }
 PROBE_EOF
 )
-        # Replace placeholder with actual model id
-        probe_request="${probe_request//PROBE_MODEL/$model_id}"
+          # Replace placeholder with actual model id
+          probe_request="${probe_request//PROBE_MODEL/$model_id}"
 
-        local completion_url="$base_url/chat/completions"
-        probe_response=$(curl -s -m 30 \
-          -H "Content-Type: application/json" \
-          -d "$probe_request" \
-          "$completion_url" 2>/dev/null || echo "")
+          local completion_url="$base_url/chat/completions"
+          probe_response=$(curl -s -m 30 \
+            -H "Content-Type: application/json" \
+            -d "$probe_request" \
+            "$completion_url" 2>/dev/null || echo "")
 
-        probe_end=$(date +%s%N)
-        probe_latency=$(( (probe_end - probe_start) / 1000000 ))  # Convert to milliseconds
+          probe_end=$(date +%s%N)
+          probe_latency=$(( (probe_end - probe_start) / 1000000 ))  # Convert to milliseconds
 
-        if [[ -z "$probe_response" ]]; then
-          log_error "Probe request failed or timed out"
-          profile_ok=false
-          probe_latency="N/A"
-        else
-          # Check if response contains choices/content (basic validation)
-          if echo "$probe_response" | grep -q "\"content\"" || echo "$probe_response" | grep -q "\"choices\""; then
-            log_info "  Probe request successful (${probe_latency}ms)"
-          else
-            log_error "Probe response invalid"
+          if [[ -z "$probe_response" ]]; then
+            log_error "Probe request failed or timed out"
             profile_ok=false
+            probe_latency="N/A"
+          else
+            # Check if response contains choices/content (basic validation)
+            if echo "$probe_response" | grep -q "\"content\"" || echo "$probe_response" | grep -q "\"choices\""; then
+              log_info "  Probe request successful (${probe_latency}ms)"
+            else
+              log_error "Probe response invalid"
+              profile_ok=false
+            fi
           fi
+        else
+          # Model not present on endpoint, skip probe
+          probe_latency="N/A (skipped: model not present)"
+          probe_response=""
+          log_info "  Probe skipped (model not present on endpoint)"
         fi
       fi
     fi
@@ -451,6 +459,9 @@ print("## Summary\n")
 print("This report verifies that model profiles reference endpoints that are actually present,")
 print("correctly configured, and responding as expected.\n")
 
+passed_count = 0
+failed_count = 0
+
 for p in profiles:
     print("\n### " + p.get("profile", "N/A") + "\n")
     print("- **Model ID**: `" + p.get("model", "N/A") + "`")
@@ -459,10 +470,10 @@ for p in profiles:
     print("- **Version Info**: `" + p.get("version_info", "N/A") + "`")
     print("- **Build Info**: `" + p.get("build_info", "N/A") + "`")
     lat = p.get("probe_latency_ms", "N/A")
-    if lat not in ("null", "N/A"):
+    if lat not in ("null", "N/A") and not str(lat).startswith("N/A"):
         print("- **Probe Latency**: " + str(lat) + "ms")
     else:
-        print("- **Probe Latency**: N/A")
+        print("- **Probe Latency**: " + str(lat))
     print("\n#### Model Weights\n")
     print("- **Model Path**: `" + p.get("model_path", "N/A") + "`")
     fs = p.get("file_size_bytes", "N/A")
@@ -476,14 +487,30 @@ for p in profiles:
     else:
         print("- **File mtime**: N/A")
     print("- **File SHA-256**: `" + p.get("file_sha256", "N/A") + "`\n")
-    print("- **Status**: " + ("✓ PASS" if p.get("ok") else "✗ FAIL") + "\n")
+    status = "✓ PASS" if p.get("ok") else "✗ FAIL"
+    print("- **Status**: " + status + "\n")
+    if p.get("ok"):
+        passed_count += 1
+    else:
+        failed_count += 1
     preset = p.get("preset_section", "")
     if preset:
         print("#### Preset Configuration\n```ini\n[" + p.get("model", "N/A") + "]\n" + preset.strip() + "\n```\n")
 
 print("\n## Overall Status\n")
-print("If all profiles show ✓ PASS, endpoint identity verification succeeded.")
-print("If any profile shows ✗ FAIL, the audit is blocked until the endpoint is corrected.")
+print("**Profiles verified**: " + str(passed_count) + " passed, " + str(failed_count) + " failed\n")
+if failed_count == 0:
+    print("**OVERALL: PASS** - All profiles verified successfully. Endpoint identity is confirmed.")
+else:
+    print("**OVERALL: FAIL** - One or more profiles failed verification. Audit is blocked.")
+print("\n### Caveat: Probe Success is Liveness Only\n")
+print("The probe completion test confirms endpoint liveness and measures request latency,")
+print("but **does not establish model identity**. Model identity depends solely on:\n")
+print("- Model ID presence in `/v1/models` endpoint response, AND")
+print("- Weights file path, file size, and (if requested) SHA-256 hash verification.\n")
+print("A successful probe on a model that `/v1/models` claims absent (e.g., due to a typo")
+print("or misconfigured model id) proves the endpoint answered, not that the correct weights")
+print("were loaded. Trust the `/v1/models` assertion and weights facts.")
 EOF
 
   # Run the Python script and redirect output to the report file
