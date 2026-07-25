@@ -1,0 +1,146 @@
+{
+  "runId": "2026-07-25T18-16-09-570Z",
+  "manifestId": "false-positive-review-332-qwen36-35b",
+  "baselineCommit": "106ed90f8db5118ab32de870a0f4a2e7a8c778a3",
+  "mutationDatasetSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+  "sourceDatasetSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+  "systemPromptSha256": "b3286081cf4f65e4f92f16d4aad28d0842d38edd820c4ce061e696b846071165",
+  "itemCount": 20,
+  "plannedItemCount": 20,
+  "parseCalls": 20,
+  "totalModelCalls": 20,
+  "parsedItems": 20,
+  "invalidItems": 0,
+  "falsePositiveCount": 1,
+  "falsePositiveRate": 0.05,
+  "ownGoldMatchedCount": 13,
+  "ownGoldMatchRate": 0.65,
+  "outcomeCounts": {
+    "correct": 12,
+    "false_positive": 0,
+    "false_positive_and_own_matched": 1,
+    "lost": 7
+  },
+  "byMutationType": [
+    {
+      "key": "extra-clause",
+      "totalItems": 4,
+      "parsedItems": 4,
+      "invalidItems": 0,
+      "falsePositiveCount": 0,
+      "falsePositiveRate": 0,
+      "ownGoldExactCount": 0,
+      "ownGoldNearOnlyCount": 0,
+      "ownGoldMatchedCount": 0,
+      "ownGoldMatchRate": 0
+    },
+    {
+      "key": "literal",
+      "totalItems": 4,
+      "parsedItems": 4,
+      "invalidItems": 0,
+      "falsePositiveCount": 0,
+      "falsePositiveRate": 0,
+      "ownGoldExactCount": 4,
+      "ownGoldNearOnlyCount": 0,
+      "ownGoldMatchedCount": 4,
+      "ownGoldMatchRate": 1
+    },
+    {
+      "key": "modality",
+      "totalItems": 4,
+      "parsedItems": 4,
+      "invalidItems": 0,
+      "falsePositiveCount": 0,
+      "falsePositiveRate": 0,
+      "ownGoldExactCount": 0,
+      "ownGoldNearOnlyCount": 4,
+      "ownGoldMatchedCount": 4,
+      "ownGoldMatchRate": 1
+    },
+    {
+      "key": "negation",
+      "totalItems": 4,
+      "parsedItems": 4,
+      "invalidItems": 0,
+      "falsePositiveCount": 0,
+      "falsePositiveRate": 0,
+      "ownGoldExactCount": 4,
+      "ownGoldNearOnlyCount": 0,
+      "ownGoldMatchedCount": 4,
+      "ownGoldMatchRate": 1
+    },
+    {
+      "key": "role",
+      "totalItems": 4,
+      "parsedItems": 4,
+      "invalidItems": 0,
+      "falsePositiveCount": 1,
+      "falsePositiveRate": 0.25,
+      "ownGoldExactCount": 0,
+      "ownGoldNearOnlyCount": 1,
+      "ownGoldMatchedCount": 1,
+      "ownGoldMatchRate": 0.25
+    }
+  ],
+  "byLanguage": [
+    {
+      "key": "el",
+      "totalItems": 5,
+      "parsedItems": 5,
+      "invalidItems": 0,
+      "falsePositiveCount": 0,
+      "falsePositiveRate": 0,
+      "ownGoldExactCount": 2,
+      "ownGoldNearOnlyCount": 1,
+      "ownGoldMatchedCount": 3,
+      "ownGoldMatchRate": 0.6
+    },
+    {
+      "key": "en",
+      "totalItems": 5,
+      "parsedItems": 5,
+      "invalidItems": 0,
+      "falsePositiveCount": 0,
+      "falsePositiveRate": 0,
+      "ownGoldExactCount": 2,
+      "ownGoldNearOnlyCount": 1,
+      "ownGoldMatchedCount": 3,
+      "ownGoldMatchRate": 0.6
+    },
+    {
+      "key": "es",
+      "totalItems": 5,
+      "parsedItems": 5,
+      "invalidItems": 0,
+      "falsePositiveCount": 1,
+      "falsePositiveRate": 0.2,
+      "ownGoldExactCount": 2,
+      "ownGoldNearOnlyCount": 2,
+      "ownGoldMatchedCount": 4,
+      "ownGoldMatchRate": 0.8
+    },
+    {
+      "key": "id",
+      "totalItems": 5,
+      "parsedItems": 5,
+      "invalidItems": 0,
+      "falsePositiveCount": 0,
+      "falsePositiveRate": 0,
+      "ownGoldExactCount": 2,
+      "ownGoldNearOnlyCount": 1,
+      "ownGoldMatchedCount": 3,
+      "ownGoldMatchRate": 0.6
+    }
+  ],
+  "latencyMs": {
+    "count": 20,
+    "minMs": 26493.794502,
+    "p50Ms": 40957.492777999956,
+    "p95Ms": 62213.137889999896,
+    "maxMs": 63048.10144300002,
+    "meanMs": 42100.65118889999
+  },
+  "errorTaxonomy": {},
+  "generatedAt": 1785004211659
+}

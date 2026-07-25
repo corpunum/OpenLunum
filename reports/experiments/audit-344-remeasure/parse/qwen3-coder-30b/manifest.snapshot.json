@@ -1,0 +1,25 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "audit-321-parse-qwen3-coder-30b",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "deterministic": false,
+  "hypothesis": "Qwen 3 Coder 30B A3B (openai/qwen3-coder-30b-a3b) parses the full EN/EL/ES/ID slice of multilingual-core-v1 into valid Lunum-Sem, meeting the #253 baseline parse gates. The runner's native per-language grouping in packages/eval/src/parse-experiment.ts produces report-en.md / report-el.md / report-es.md / report-id.md from this single manifest run -- that is the per-language-per-model evidence #253 requires, with no per-language manifest duplication and no redundant model calls.",
+  "baselineCommit": "4e52d1daff1e60ea9a4b8f38eb482e9865df6b6c",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "modelProfile": "profiles/models/qwen3-coder-30b-live.json",
+  "limits": {
+    "maxItems": 16,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 16
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": false
+  },
+  "outputDirectory": "reports/experiments/audit-321/parse/qwen3-coder-30b"
+}
