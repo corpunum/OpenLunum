@@ -72,6 +72,16 @@ export interface ItemResult {
   featureRecall?: number;
   featurePrecision?: number;
   protectedLiteralCoverage?: number;
+  /** Placement-aware protected literal checks (see protected-literal-placement.ts). Diagnostic only, not a gate input. */
+  protectedLiteralPlacement?: Array<{
+    literal: string;
+    status: 'placed' | 'wrong-role' | 'missing' | 'literal-not-in-gold';
+    expectedPaths: string[];
+    candidatePaths: string[];
+    satisfied: boolean;
+  }>;
+  /** Fraction of protectedLiteralPlacement checks with status 'placed'; 1 when there are none. */
+  protectedLiteralPlacementCoverage?: number;
   missingFeatures?: string[];
   result?: Record<string, unknown>;
   error?: string | undefined;

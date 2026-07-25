@@ -9,6 +9,7 @@ import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
+import { checkProtectedLiteralPlacement, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
 import type { DatasetItem, ExperimentManifest, ItemResult, ModelProfile } from './types.js';
 
 export type ParseLanguage = 'en' | 'el' | 'es' | 'id';
@@ -151,6 +152,12 @@ export async function runParseExperiment(
           });
           const nearOnly = !comparison.exactFingerprint && nearResult.similar;
 
+          // Placement-aware protected literal check (issue #329): verifies each
+          // declared protectedLiteral lands in the same structural role it
+          // occupies in goldSem, not merely anywhere in the serialised output.
+          // Diagnostic only - does not affect status/exact/gates.
+          const literalPlacement = checkProtectedLiteralPlacement(goldSem, parsedSem, item.protectedLiterals ?? []);
+
           finalResult = {
             id: item.id,
             status: comparison.exactFingerprint ? 'passed' : 'failed',
@@ -162,6 +169,8 @@ export async function runParseExperiment(
             featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision,
             missingFeatures: comparison.missingFeatures,
+            protectedLiteralPlacement: literalPlacement,
+            protectedLiteralPlacementCoverage: protectedLiteralPlacementCoverage(literalPlacement),
             completion,
             latencyMs: performance.now() - started
           };
