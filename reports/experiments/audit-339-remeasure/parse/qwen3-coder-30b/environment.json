@@ -1,0 +1,39 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "modelProfile": {
+    "schema": "openlunum-model-profile/0.1",
+    "id": "qwen3-coder-30b-live",
+    "provider": "openai-compatible",
+    "baseUrl": "http://127.0.0.1:8080/v1",
+    "model": "openai/qwen3-coder-30b-a3b",
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 4096,
+    "timeoutMs": 300000,
+    "metadata": {
+      "purpose": "Live baseline evidence run 2026-07-21: Qwen 3 Coder 30B A3B, port 48127, direct llama-server",
+      "issue253Comparability": {
+        "baseUrlChangedForIssue253": true,
+        "previousBaseUrl": "http://127.0.0.1:48127/v1",
+        "maxTokensEqualizedForIssue253": true,
+        "previousMaxTokens": 512,
+        "note": "For #253 pairing with qwen36-35b-live.json (maxTokens=4096, baseUrl 8080), baseUrl was moved from the standalone direct llama-server on port 48127 to the shared router on port 8080 (which also serves openai/qwen3.6-35b-a3b per models-preset.ini and llama-qwen36.service), and maxTokens was raised from 512 to 4096 so neither model is disadvantaged by a smaller output budget. Both changes hold server configuration and output budget constant across the two audited models so any parse-rate difference is attributable to the model, not the harness."
+      },
+      "noThinkIsIntentionalAsymmetry": "No noThink field is set: qwen3-coder-30b is a non-reasoning model and has no think block to bound. This mirrors the presence of noThink=true on qwen36-35b-live.json, which IS a reasoning model. This asymmetry is intentional and model-intrinsic, not an uncontrolled variable.",
+      "modelPreset": {
+        "source": "/home/corpunum/models-preset.ini",
+        "section": "[openai/qwen3-coder-30b-a3b]",
+        "ggufPath": "/home/corpunum/models/Qwen3-Coder-30B-A3B-Instruct-Q6_K.gguf",
+        "gpuLayers": 999,
+        "ctxSize": 262144,
+        "flashAttn": "on",
+        "cacheTypeK": "q8_0",
+        "cacheTypeV": "q8_0",
+        "parallel": 1
+      }
+    }
+  },
+  "startedAt": "2026-07-25T17:25:08.376Z"
+}
