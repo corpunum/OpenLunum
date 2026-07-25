@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parsePrompt } from '../src/prompts.js';
-import { PREDICATE_SET, ROLE_SET, IDENTIFIER_SET } from '../src/predicate-vocabulary.js';
+import { PREDICATE_SET, ROLE_SET, IDENTIFIER_SET, MODALITY_VALUES, MODALITY_VALUE_SET, vocabularyBlock } from '../src/predicate-vocabulary.js';
 
 /**
  * Regression coverage for #337: parsePrompt's worked examples must never
@@ -27,6 +27,7 @@ interface ExampleClauseCondition {
 
 interface ExampleClause {
   predicate: string;
+  modality?: string;
   roles: Record<string, { type: string; id: string }>;
   conditions?: ExampleClauseCondition[];
 }
@@ -58,7 +59,8 @@ function buildExamples(): Record<string, ExampleSem> {
     preference: extractExample(prompt.system, 'Preference'),
     conditional_instruction: extractExample(prompt.system, 'Conditional Instruction'),
     safety_constraint: extractExample(prompt.system, 'Safety Constraint'),
-    project_state: extractExample(prompt.system, 'Project State')
+    project_state: extractExample(prompt.system, 'Project State'),
+    permission: extractExample(prompt.system, 'Permission')
   };
 }
 
@@ -140,4 +142,89 @@ test('every worked example predicate/role/identifier that overlaps the controlle
       }
     }
   }
+});
+
+/**
+ * Regression coverage for #341: the parse prompt must document a modality
+ * controlled vocabulary and demonstrate a schema-valid `modality` value in
+ * at least one worked example.
+ *
+ * #332/#335's false-positive review found that neither audited model
+ * reliably emitted the canonical `permission` modality value, because
+ * vocabularyBlock() never documented modality values and no worked example
+ * in parsePrompt showed a `modality` field. The mutation-false-positive
+ * gold corpus (datasets/adversarial/mutation-false-positive-v1.jsonl,
+ * `modality-*` items) uses `modality: 'permission'` on a permissive
+ * "you may enable X" clause; these tests assert the fix stays in place.
+ */
+
+const EXPECTED_MODALITY_TYPES = [
+  'fact',
+  'opinion',
+  'belief',
+  'possibility',
+  'necessity',
+  'obligation',
+  'permission',
+  'ability',
+  'intention',
+  'certainty'
+];
+
+test('MODALITY_VALUES contains "permission" and matches the ModalityType set exactly', () => {
+  // ModalityType is defined in packages/core/src/typed-structures.ts. This
+  // list is hard-coded here (see the comment in predicate-vocabulary.ts for
+  // why) and must be kept byte-for-byte in sync with that enum.
+  assert.ok(MODALITY_VALUE_SET.has('permission'), 'MODALITY_VALUE_SET should include "permission"');
+  assert.deepStrictEqual(
+    [...MODALITY_VALUES].sort(),
+    [...EXPECTED_MODALITY_TYPES].sort(),
+    'MODALITY_VALUES must exactly match the ModalityType union in packages/core/src/typed-structures.ts'
+  );
+});
+
+test('vocabularyBlock() renders a Modality values line covering every MODALITY_VALUES entry', () => {
+  const block = vocabularyBlock();
+  assert.match(block, /Modality values:/, 'vocabularyBlock() should render a "Modality values:" line');
+  for (const value of MODALITY_VALUES) {
+    assert.ok(block.includes(value), `vocabularyBlock() should mention modality value "${value}"`);
+  }
+});
+
+test('parsePrompt includes at least one worked example with a schema-valid modality value', () => {
+  const examples = buildExamples();
+  const allClauses: ExampleClause[] = Object.values(examples).flatMap(ex => ex.clauses);
+  const modalityClauses = allClauses.filter(clause => typeof clause.modality === 'string');
+
+  assert.ok(modalityClauses.length > 0, 'at least one worked example clause should carry a modality field');
+  for (const clause of modalityClauses) {
+    assert.ok(
+      MODALITY_VALUE_SET.has(clause.modality!),
+      `worked example modality "${clause.modality}" must be a schema-valid ModalityType value`
+    );
+  }
+});
+
+test('examplePermission demonstrates the canonical "permission" modality on a scenario distinct from the core dataset', () => {
+  // #341 follow-up: the modality demo must NOT live on exampleConditional,
+  // because that scenario (enable power_saving when battery below 20%) is
+  // structurally identical to the core dataset's battery-en/el/es/id items
+  // in datasets/dev/multilingual-core-v1.jsonl, whose gold has no modality
+  // field. Models copy example vocabulary verbatim (the #253/#337 finding),
+  // so showing modality: 'permission' on that exact scenario risked
+  // regressing #339's 4/4 exact-match result on the core battery items.
+  // The dedicated "share the report with the team" example below carries
+  // the modality demonstration instead, on a scenario with no core-dataset
+  // collision.
+  const examples = buildExamples();
+  const clause = examples.permission!.clauses[0]!;
+
+  assert.strictEqual(clause.modality, 'permission', 'examplePermission clause should demonstrate modality: "permission"');
+});
+
+test('exampleConditional no longer carries a modality field (must stay a plain-imperative match for the core battery items)', () => {
+  const examples = buildExamples();
+  const clause = examples.conditional_instruction!.clauses[0]!;
+
+  assert.strictEqual(clause.modality, undefined, 'exampleConditional must not carry modality — it mirrors the core dataset\'s no-modality battery-* gold');
 });

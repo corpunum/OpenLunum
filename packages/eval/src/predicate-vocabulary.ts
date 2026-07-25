@@ -100,6 +100,35 @@ export const ROLE_TYPES: readonly string[] = Object.freeze([
 /** Set for O(1) membership tests during prompt assembly. */
 export const ROLE_TYPE_SET = new Set(ROLE_TYPES);
 
+// ── Modality values ───────────────────────────────────────────────────
+
+/**
+ * Allowed clause-level `modality` values.
+ *
+ * `ModalityType` is defined in `packages/core/src/typed-structures.ts` but
+ * is not re-exported from `@corpunum/lunum`'s public entrypoint (`index.ts`
+ * only re-exports selected modules, and `typed-structures.ts` is not among
+ * them), so it cannot be imported here. This array is hard-coded and MUST
+ * be kept in sync with `ModalityType` in `packages/core/src/typed-structures.ts`
+ * by hand; do not add, remove, or reorder values here without updating that
+ * enum (and vice versa).
+ */
+export const MODALITY_VALUES: readonly string[] = Object.freeze([
+  'fact',
+  'opinion',
+  'belief',
+  'possibility',
+  'necessity',
+  'obligation',
+  'permission',
+  'ability',
+  'intention',
+  'certainty'
+] satisfies readonly string[]);
+
+/** Set for O(1) membership tests during prompt assembly. */
+export const MODALITY_VALUE_SET = new Set(MODALITY_VALUES);
+
 // ── Prompt fragments ────────────────────────────────────────────────────
 
 /**
@@ -112,6 +141,7 @@ export function vocabularyBlock(): string {
   const roles = ROLES.join(', ');
   const identifiers = IDENTIFIERS.join(', ');
   const roleTypes = ROLE_TYPES.join(', ');
+  const modalityValues = MODALITY_VALUES.join(', ');
 
   return [
     'Controlled vocabulary (prefer these terms):',
@@ -120,8 +150,11 @@ export function vocabularyBlock(): string {
     `  Roles: ${roles}`,
     `  Identifiers: ${identifiers}`,
     `  Role types: ${roleTypes}`,
+    `  Modality values: ${modalityValues}`,
     '',
     'If a term from your source text maps to one of these, use it.',
-    'Otherwise invent a lower_snake_case identifier that is consistent'
+    'Otherwise invent a lower_snake_case identifier that is consistent',
+    '',
+    'When the source expresses a modal meaning — permission, obligation, possibility, etc. — set the clause `modality` to the matching value from the modality values above; omit `modality` when the source is a plain non-modal statement.'
   ].join('\n');
 }
