@@ -1,0 +1,10 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "runId": "2026-07-25T18-16-09-570Z",
+  "manifestId": "false-positive-review-332-qwen36-35b",
+  "outputRoot": "/home/corpunum/worktrees/openlunum-344-measure/reports/experiments/audit-344-remeasure/false-positive/qwen36-35b",
+  "modelProfile": "profiles/models/qwen36-35b-live.json",
+  "startedAt": "2026-07-25T18:30:11.661Z"
+}

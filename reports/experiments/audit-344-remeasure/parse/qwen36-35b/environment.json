@@ -1,0 +1,38 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "modelProfile": {
+    "schema": "openlunum-model-profile/0.1",
+    "id": "qwen36-35b-live",
+    "provider": "openai-compatible",
+    "baseUrl": "http://127.0.0.1:8080/v1",
+    "model": "openai/qwen3.6-35b-a3b",
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 4096,
+    "noThink": true,
+    "timeoutMs": 300000,
+    "metadata": {
+      "purpose": "Live baseline evidence run 2026-07-21: Qwen 3.6 35B A3B MTP, main router port 8080, noThink=true, maxTokens=4096 (thinking model needs room for think block)",
+      "issue253Comparability": {
+        "maxTokensEqualizedForIssue253": false,
+        "note": "maxTokens was already 4096; no change required to equalize with the coder-30b profile for #253 pairing (see qwen3-coder-30b-live.json, which was raised from 512 to 4096)."
+      },
+      "noThinkIsIntentionalAsymmetry": "noThink=true is preserved intentionally: qwen3.6-35b is a reasoning model that requires the /no_think directive to bound its think block within maxTokens, whereas qwen3-coder-30b is a non-reasoning model and carries no noThink field. This is a known, model-intrinsic difference between the two #253 profiles, not an uncontrolled variable.",
+      "modelPreset": {
+        "source": "/home/corpunum/models-preset.ini",
+        "section": "[openai/qwen3.6-35b-a3b]",
+        "ggufPath": "/home/corpunum/models/Qwen3.6-35B-A3B-uncensored-heretic-MTP-Q6_K.gguf",
+        "mmproj": "/home/corpunum/models/mmproj-BF16.gguf",
+        "gpuLayers": 999,
+        "ctxSize": 98304,
+        "flashAttn": "on",
+        "cacheTypeK": "q4_0",
+        "cacheTypeV": "q4_0",
+        "parallel": 1
+      }
+    }
+  },
+  "startedAt": "2026-07-25T18:06:11.743Z"
+}
