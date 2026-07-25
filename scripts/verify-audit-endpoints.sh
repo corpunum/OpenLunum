@@ -395,7 +395,7 @@ PROBE_EOF
   fi
 
   # Escape values for JSON output
-  local version_escaped build_escaped preset_escaped
+  local version_escaped build_escaped preset_escaped probe_latency_escaped
   version_escaped=$(echo -n "$version_info" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   build_escaped=$(echo -n "$build_info" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   preset_escaped=$(echo -n "$preset_section" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
@@ -403,6 +403,7 @@ PROBE_EOF
   model_escaped=$(echo -n "$model_id" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   model_path_escaped=$(echo -n "$model_path" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   file_sha256_escaped=$(echo -n "$file_sha256" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
+  probe_latency_escaped=$(echo -n "$probe_latency" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
 
   # Return results as JSON for aggregation
   cat <<EOF
@@ -418,7 +419,7 @@ PROBE_EOF
   "file_size_bytes": $file_size_bytes,
   "file_mtime": $file_mtime,
   "file_sha256": $file_sha256_escaped,
-  "probe_latency_ms": ${probe_latency:-"null"},
+  "probe_latency_ms": $probe_latency_escaped,
   "probe_response_valid": $(if [[ "$probe_response" != "" ]]; then echo "true"; else echo "false"; fi),
   "ok": $profile_ok
 }
@@ -470,10 +471,11 @@ for p in profiles:
     print("- **Version Info**: `" + p.get("version_info", "N/A") + "`")
     print("- **Build Info**: `" + p.get("build_info", "N/A") + "`")
     lat = p.get("probe_latency_ms", "N/A")
-    if lat not in ("null", "N/A") and not str(lat).startswith("N/A"):
-        print("- **Probe Latency**: " + str(lat) + "ms")
+    lat_str = str(lat)
+    if lat_str.startswith("N/A"):
+        print("- **Probe Latency**: " + lat_str)
     else:
-        print("- **Probe Latency**: " + str(lat))
+        print("- **Probe Latency**: " + lat_str + "ms")
     print("\n#### Model Weights\n")
     print("- **Model Path**: `" + p.get("model_path", "N/A") + "`")
     fs = p.get("file_size_bytes", "N/A")
