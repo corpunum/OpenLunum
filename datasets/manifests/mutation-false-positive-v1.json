@@ -1,0 +1,22 @@
+{
+  "id": "mutation-false-positive-v1",
+  "path": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+  "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+  "items": 20,
+  "languages": [
+    "en",
+    "el",
+    "es",
+    "id"
+  ],
+  "mutationTypes": [
+    "negation",
+    "modality",
+    "extra-clause",
+    "literal",
+    "role"
+  ],
+  "sourceDataset": "datasets/dev/multilingual-core-v1.jsonl",
+  "status": "adversarial",
+  "warning": "False-positive review corpus for #328: every item is a minimally mutated variant whose meaning genuinely differs from its source item. A near-semantic scorer that accepts an item here as matching its source item is producing a false positive."
+}
