@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import path from 'node:path';
 import { parsePrompt } from '../src/prompts.js';
 import { PREDICATE_SET, ROLE_SET, IDENTIFIER_SET, MODALITY_VALUES, MODALITY_VALUE_SET, vocabularyBlock } from '../src/predicate-vocabulary.js';
+import { findWorkspaceRoot, loadDataset } from '../src/io.js';
 
 /**
  * Regression coverage for #337: parsePrompt's worked examples must never
@@ -227,4 +229,74 @@ test('exampleConditional no longer carries a modality field (must stay a plain-i
   const clause = examples.conditional_instruction!.clauses[0]!;
 
   assert.strictEqual(clause.modality, undefined, 'exampleConditional must not carry modality — it mirrors the core dataset\'s no-modality battery-* gold');
+});
+
+/**
+ * Regression coverage for #345: examplePermission's "confirmed" condition
+ * demonstrated a `subject` role, but the delete-* gold in
+ * datasets/dev/multilingual-core-v1.jsonl uses `confirmed` with an `agent`
+ * role (`agent: { type: 'actor', id: 'user' }`). Since `confirmed` is a
+ * shared controlled predicate, the mismatched example taught models to
+ * emit the wrong role structure when they reused it — #344's measurement
+ * showed qwen3.6-35b copy the `subject` role verbatim onto delete-el,
+ * dropping parse recall. This is the same example-vs-gold contradiction
+ * class #337 was built to eliminate, just on the `confirmed` predicate's
+ * *role key* rather than its predicate name.
+ */
+
+test('examplePermission\'s "confirmed" condition uses the "agent" role, not "subject"', () => {
+  const examples = buildExamples();
+  const clause = examples.permission!.clauses[0]!;
+  const condition = clause.conditions?.[0];
+
+  assert.ok(condition, 'permission example should have a condition clause');
+  assert.strictEqual(condition!.predicate, 'confirmed', 'examplePermission condition predicate should be "confirmed"');
+  assert.ok(condition!.roles.agent, 'examplePermission\'s confirmed condition should have an "agent" role');
+  assert.ok(!('subject' in condition!.roles), 'examplePermission\'s confirmed condition must not regress to a "subject" role');
+  assert.ok(ROLE_SET.has('agent'), '"agent" must be in the controlled ROLE_SET');
+});
+
+test('every worked example\'s use of a gold-shared controlled predicate uses the same role key the gold dataset uses for it', async () => {
+  // General sweep: for any condition predicate in a worked example that
+  // also appears as a condition predicate in the delete/safety gold items
+  // (multilingual-core-v1.jsonl), the example must use the same role key(s)
+  // the gold uses. This generalizes the specific "confirmed"/"agent"
+  // assertion above so a future worked example reusing "confirmed" (or any
+  // other shared condition predicate) can't silently reintroduce a
+  // contradicting role structure.
+  const workspaceRoot = await findWorkspaceRoot();
+  const dataset = await loadDataset(path.join(workspaceRoot, 'datasets', 'dev', 'multilingual-core-v1.jsonl'));
+
+  // Build a map of condition predicate -> set of role keys used for it in
+  // the gold dataset (e.g. "confirmed" -> {"agent"}).
+  const goldConditionRoleKeys = new Map<string, Set<string>>();
+  for (const item of dataset) {
+    for (const clause of item.goldSem.clauses ?? []) {
+      for (const condition of (clause as { conditions?: Array<{ predicate: string; roles: Record<string, unknown> }> }).conditions ?? []) {
+        const roleKeys = goldConditionRoleKeys.get(condition.predicate) ?? new Set<string>();
+        for (const roleKey of Object.keys(condition.roles)) {
+          roleKeys.add(roleKey);
+        }
+        goldConditionRoleKeys.set(condition.predicate, roleKeys);
+      }
+    }
+  }
+
+  assert.ok(goldConditionRoleKeys.get('confirmed')?.has('agent'), 'sanity check: gold dataset should use "confirmed" with an "agent" role');
+
+  const examples = buildExamples();
+  const allClauses: ExampleClause[] = Object.values(examples).flatMap(ex => ex.clauses);
+
+  for (const clause of allClauses) {
+    for (const condition of clause.conditions ?? []) {
+      const goldRoleKeys = goldConditionRoleKeys.get(condition.predicate);
+      if (!goldRoleKeys) continue; // predicate not shared with the gold dataset's conditions; nothing to compare
+      for (const roleKey of Object.keys(condition.roles)) {
+        assert.ok(
+          goldRoleKeys.has(roleKey),
+          `worked example condition predicate "${condition.predicate}" uses role key "${roleKey}", but the gold dataset only uses ${JSON.stringify([...goldRoleKeys])} for that predicate`
+        );
+      }
+    }
+  }
 });

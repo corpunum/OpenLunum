@@ -122,7 +122,7 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
         object: { type: 'actor', id: 'team' }
       },
       negated: false,
-      conditions: [{ predicate: 'confirmed', roles: { subject: { type: 'concept', id: 'report' } }, negated: false }]
+      conditions: [{ predicate: 'confirmed', roles: { agent: { type: 'actor', id: 'user' } }, negated: false }]
     }]
   });
 
