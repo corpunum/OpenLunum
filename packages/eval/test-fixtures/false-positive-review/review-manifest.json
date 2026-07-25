@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-false-positive-review-manifest/0.1",
+  "id": "false-positive-review-fixture",
+  "baselineCommit": "833b883b2fb0ff7f9d5ef1b4cfd8ed8ac1f18f5e",
+  "mutationDataset": {
+    "path": "packages/eval/test-fixtures/false-positive-review/mutation-dataset.jsonl",
+    "sha256": "a05dca14b0bdd196e21da32acdfe6cd51b479700a702f4ef72b83f29bb35ad9c"
+  },
+  "sourceDataset": {
+    "path": "packages/eval/test-fixtures/false-positive-review/source-dataset.jsonl",
+    "sha256": "30ff6ecdd1e5254f2b7b28f54af048f62eabae637589874a5b1f794ac6fee21c"
+  },
+  "expectedItemIds": [
+    "fp-correct-en",
+    "fp-false-positive-en",
+    "fp-role-both-en",
+    "fp-invalid-output-en"
+  ],
+  "limits": {
+    "maxItems": 4,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 4
+  }
+}
