@@ -396,12 +396,15 @@ PROBE_EOF
 
   # Escape values for JSON output
   local version_escaped build_escaped preset_escaped probe_latency_escaped
+  local file_size_escaped file_mtime_escaped
   version_escaped=$(echo -n "$version_info" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   build_escaped=$(echo -n "$build_info" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   preset_escaped=$(echo -n "$preset_section" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   base_url_escaped=$(echo -n "$base_url" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   model_escaped=$(echo -n "$model_id" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   model_path_escaped=$(echo -n "$model_path" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
+  file_size_escaped=$(echo -n "$file_size_bytes" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
+  file_mtime_escaped=$(echo -n "$file_mtime" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   file_sha256_escaped=$(echo -n "$file_sha256" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   probe_latency_escaped=$(echo -n "$probe_latency" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
 
@@ -416,8 +419,8 @@ PROBE_EOF
   "build_info": $build_escaped,
   "preset_section": $preset_escaped,
   "model_path": $model_path_escaped,
-  "file_size_bytes": $file_size_bytes,
-  "file_mtime": $file_mtime,
+  "file_size_bytes": $file_size_escaped,
+  "file_mtime": $file_mtime_escaped,
   "file_sha256": $file_sha256_escaped,
   "probe_latency_ms": $probe_latency_escaped,
   "probe_response_valid": $(if [[ "$probe_response" != "" ]]; then echo "true"; else echo "false"; fi),
@@ -516,8 +519,9 @@ print("were loaded. Trust the `/v1/models` assertion and weights facts.")
 EOF
 
   # Run the Python script and redirect output to the report file
-  if ! python3 "$tmp_py" "$tmp_json" > "$out_file" 2>/dev/null; then
+  if ! python3 "$tmp_py" "$tmp_json" > "$out_file" 2>&1; then
     log_error "Failed to generate report"
+    log_error "Python stderr/stdout: $(cat "$out_file" 2>/dev/null | head -200)"
     # Keep temp files for debugging
   else
     # Clean up temp files only on success
@@ -548,16 +552,13 @@ main() {
       results_json+=","
     fi
 
-    profile_result=$(verify_profile "$profile_path" "$HASH_WEIGHTS")
-    if [[ $? -ne 0 ]]; then
-      # If verify_profile failed, output should still be valid JSON from the function
-      # The function outputs JSON even on failure, so just use that
-      :
-    fi
+    profile_result=$(verify_profile "$profile_path" "$HASH_WEIGHTS" || true)
     results_json+="$profile_result"
   done
 
   results_json+="]"
+
+  log_info "About to call generate_report with results_json of length ${#results_json}"
 
   # Generate report
   if ! generate_report "$results_json" "$OUT_PATH"; then
