@@ -75,10 +75,10 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     world: 'real',
     kind: 'conditional_instruction',
     clauses: [{
-      predicate: 'activate',
-      roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'concept', id: 'cooling_system' } },
+      predicate: 'enable',
+      roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'feature', id: 'power_saving' } },
       negated: false,
-      conditions: [{ predicate: 'exceeds', roles: { subject: { type: 'metric', id: 'cpu_usage' }, value: { type: 'quantity', value: 90, unit: 'percent' } }, negated: false }]
+      conditions: [{ predicate: 'below', roles: { subject: { type: 'metric', id: 'battery_level' }, value: { type: 'quantity', value: 20, unit: 'percent' } }, negated: false }]
     }]
   });
 
@@ -87,10 +87,10 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     world: 'real',
     kind: 'safety_constraint',
     clauses: [{
-      predicate: 'transmit',
-      roles: { agent: { type: 'actor', id: 'assistant' }, object: { type: 'concept', id: 'credentials' } },
+      predicate: 'delete',
+      roles: { agent: { type: 'actor', id: 'assistant' }, object: { type: 'concept', id: 'files' } },
       negated: true,
-      conditions: [{ predicate: 'approved', roles: { agent: { type: 'actor', id: 'administrator' } }, negated: false }]
+      conditions: [{ predicate: 'confirmed', roles: { agent: { type: 'actor', id: 'user' } }, negated: false }]
     }]
   });
 
@@ -99,8 +99,8 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     world: 'real',
     kind: 'project_state',
     clauses: [{
-      predicate: 'scheduled',
-      roles: { subject: { type: 'concept', id: 'quarterly_review' }, time: { type: 'date', value: '2027-04-15' } },
+      predicate: 'deadline',
+      roles: { subject: { type: 'project', id: 'project' }, time: { type: 'date', value: '2027-04-15' } },
       negated: false
     }]
   });

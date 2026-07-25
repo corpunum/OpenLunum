@@ -22,6 +22,8 @@
  * than inventing a synonym.
  */
 export const PREDICATES: readonly string[] = Object.freeze([
+  'below',
+  'confirmed',
   'deadline',
   'delete',
   'enable',
