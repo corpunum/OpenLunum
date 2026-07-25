@@ -66,17 +66,38 @@ model failure, not an infrastructure error. It was not retried and not excluded.
 
 ## 3. Prefix-cache reuse — measured, not assumed absent
 
-The router runs `-np 3` and the client does not send `cache_prompt`, so llama.cpp prefix caching
-is active and uncontrolled. Reported here rather than left invisible:
+The router runs with `-np 3` (a server-level parallel-slot flag, distinct from the per-model
+`parallel = 1` recorded in each preset block) and the client does not send `cache_prompt`, so
+llama.cpp prefix caching is active and uncontrolled. Reported per task, since the two differ sharply:
 
-| model | cached prompt tokens | total prompt tokens | share |
+| task | model | cached prompt tokens | total prompt tokens | share |
+|---|---|---|---|---|
+| parse | qwen36-35b | 10864 | 11429 | **95.1%** |
+| parse | qwen3-coder-30b | 9931 | 11084 | **89.6%** |
+| retention | qwen36-35b | 1095 | 2541 | **43.1%** |
+| retention | qwen3-coder-30b | 1185 | 2525 | **46.9%** |
+
+On the parse runs roughly **90-95% of prompt tokens were served from cache** — nearly the entire
+prompt, since all 16 items share one long system prompt and differ only in the trailing user text.
+Retention is lower because its two stages use different system prompts.
+
+Latency figures are therefore substantially cache-hit timings, not cold inference. This does not
+affect correctness metrics (exact, near-semantic, recall): a cached prefix yields the same KV state
+as recomputation. It does further undermine cross-model latency comparison — see Section 4.
+
+## 3a. Protected-literal failures
+
+Required by #253 and omitted from the first version of this report. 8 of the 16 dataset items carry
+`protectedLiterals` (`battery-*`: `"20"`; `deadline-*`: `"2026-09-30"`). A failure is the literal not
+surviving into the parsed semantic output.
+
+| model | literals checked | failures | failure rate |
 |---|---|---|---|
-| qwen36-35b | 1095 | 2541 | **43.1%** |
-| qwen3-coder-30b | 1185 | 2525 | **46.9%** |
+| qwen36-35b | 8 | 0 | 0.0% |
+| qwen3-coder-30b | 8 | 0 | 0.0% |
 
-Roughly 43-47% of prompt tokens were served from cache. Latency figures are therefore partly
-cache-hit timings, not clean cold inference. This does not affect correctness metrics (exact,
-near-semantic, recall) since cached prefixes produce the same KV state as recomputation.
+Both models preserved every protected literal. Note this is a narrow result: the parse manifests set
+`requireProtectedLiteralCoverage: false`, and only 8 items exercise it.
 
 ## 4. Latency is reported as NON-COMPARABLE across models
 
@@ -89,8 +110,15 @@ The p50/p95 figures are recorded because #253 requires them, not because they li
 ## 5. Execution integrity
 
 - Every run used the built CLI entrypoint (`node packages/eval/dist/src/cli.js`), never an in-process shortcut
-- Endpoint identity verified via `scripts/verify-audit-endpoints.sh` before each run: model id present in
-  `/v1/models`, weights path/size/mtime recorded, `OVERALL: PASS`
+- Endpoint identity verified via `scripts/verify-audit-endpoints.sh` **before** each run: model id present
+  in `/v1/models`, weights path/size/mtime recorded, `OVERALL: PASS`. Timing, with both clocks normalised
+  to UTC (the committed preflight reports stamp local EEST = UTC+3, and run-ID directories stamp UTC —
+  an ambiguity that misread as "preflight ran after the run" on independent review):
+
+  | preflight (local EEST) | preflight (UTC) | run started (UTC) | lead time |
+  |---|---|---|---|
+  | 09:05:43 | 06:05:43Z | 06:09:46Z (parse) | 4m 03s before |
+  | 10:20:30 | 07:20:30Z | 07:20:44Z (retention) | 14s before |
 - Router restarted between model runs to purge KV and allocation carry-over; endpoint re-verified after each restart
 - Zero infrastructure errors across all four runs, so the invalidate-the-matrix rule never triggered
 - `attempt` is `1` on every record in both retention runs: no retry masking
@@ -104,6 +132,8 @@ The p50/p95 figures are recorded because #253 requires them, not because they li
 4. **Preflight can fail for cold weights.** After a router restart the 35B's first probe took 27.2s against a 30s curl timeout; warm it is ~177ms. A preflight failure is therefore ambiguous between 'cold weights' and 'wrong endpoint'. Fail-closed remains correct, but the ambiguity is real.
 5. **Model-file hashing not performed for this run.** `--hash-weights` exists but was not used; identity rests on the `/v1/models` assertion plus weights path, size and mtime.
 6. **Probe success does not establish model identity.** A probe sent to an endpoint not serving the requested model still returned a completion — llama-server silently ignores the model field.
+7. **#253 acceptance item "False-positive review samples include negation, modality, extra-clause, literal, and role mutations" is NOT satisfied and cannot be satisfied by this dataset.** `multilingual-core-v1.jsonl`'s 16 items are tagged only by category (`preference`, `delete`, `battery`, `deadline`) and language; they carry no mutation-type tags. The only mutation-tagged corpus in the repository, `datasets/adversarial/semantic-traps-v1.jsonl`, holds 2 English-only items (`nested-negation-en`, `quantity-unit-en`) tagged `negation`/`quantity` — no modality, extra-clause, or role mutations, and no non-English coverage. Closing #253 therefore requires either building that corpus or explicitly amending the acceptance criterion. This is recorded as unmet rather than quietly skipped.
+8. **Run-time commit is asserted, not instrumented.** The report records HEAD as `e97eef38` at generation, but the runner writes only the manifest's `baselineCommit` (`4e52d1da`, a real ancestor 3 commits back) into `manifest.snapshot.json`. The frozen manifest and the executed snapshot are byte-identical, so there is no drift — but no artifact independently corroborates the run-time HEAD.
 
 ## 7. Provenance of the run matrix
 
