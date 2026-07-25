@@ -76,6 +76,7 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     kind: 'conditional_instruction',
     clauses: [{
       predicate: 'enable',
+      modality: 'permission',
       roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'feature', id: 'power_saving' } },
       negated: false,
       conditions: [{ predicate: 'below', roles: { subject: { type: 'metric', id: 'battery_level' }, value: { type: 'quantity', value: 20, unit: 'percent' } }, negated: false }]
@@ -121,6 +122,7 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       '  "kind": "<preference|conditional_instruction|safety_constraint|project_state>",',
       '  "clauses": [{',
       '    "predicate": "<verb>",',
+      '    "modality": "<optional; see Modality values below — omit for plain non-modal statements>",',
       '    "roles": { "<role>": { "type": "<actor|concept|object|metric|feature|project|quantity|date>", "id": "<lower_snake_case>" }, ... },',
       '    "negated": <true|false>,',
       '    "conditions": [...]',
