@@ -1,0 +1,10 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "runId": "2026-07-25T10-57-20-709Z",
+  "manifestId": "false-positive-review-332-qwen3-coder-30b",
+  "outputRoot": "/home/corpunum/OpenLunum/.claude/worktrees/agent-aee525bea0eb2741f/reports/experiments/false-positive-review-332/qwen3-coder-30b",
+  "modelProfile": "profiles/models/qwen3-coder-30b-live.json",
+  "startedAt": "2026-07-25T10:58:20.128Z"
+}

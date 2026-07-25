@@ -1,0 +1,22 @@
+[
+  {
+    "content": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"user\"},\"theme\":{\"type\":\"concept\",\"id\":\"concise_answers\"}},\"negated\":true}]}",
+    "finishReason": "stop",
+    "usage": { "promptTokens": 40, "completionTokens": 20, "totalTokens": 60, "cachedTokens": 0, "reasoningTokens": 0 }
+  },
+  {
+    "content": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"theme\":{\"type\":\"feature\",\"id\":\"power_saving\"}},\"negated\":false,\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type\":\"metric\",\"id\":\"battery_level\"},\"value\":{\"type\":\"quantity\",\"value\":20,\"unit\":\"percent\"}},\"negated\":false}]}]}",
+    "finishReason": "stop",
+    "usage": { "promptTokens": 42, "completionTokens": 18, "totalTokens": 60, "cachedTokens": 0, "reasoningTokens": 0 }
+  },
+  {
+    "content": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"user\"},\"object\":{\"type\":\"concept\",\"id\":\"files\"}},\"negated\":true,\"conditions\":[{\"predicate\":\"confirmed\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"assistant\"}},\"negated\":false}]}]}",
+    "finishReason": "stop",
+    "usage": { "promptTokens": 44, "completionTokens": 22, "totalTokens": 66, "cachedTokens": 0, "reasoningTokens": 0 }
+  },
+  {
+    "content": "I cannot produce structured output for this request.",
+    "finishReason": "stop",
+    "usage": { "promptTokens": 30, "completionTokens": 8, "totalTokens": 38, "cachedTokens": 0, "reasoningTokens": 0 }
+  }
+]

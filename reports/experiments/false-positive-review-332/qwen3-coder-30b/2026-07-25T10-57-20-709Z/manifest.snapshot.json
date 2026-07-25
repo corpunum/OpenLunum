@@ -1,0 +1,45 @@
+{
+  "schema": "openlunum-false-positive-review-manifest/0.1",
+  "id": "false-positive-review-332-qwen3-coder-30b",
+  "baselineCommit": "106ed90f8db5118ab32de870a0f4a2e7a8c778a3",
+  "mutationDataset": {
+    "path": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+    "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16"
+  },
+  "sourceDataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "expectedItemIds": [
+    "negation-preference-en",
+    "negation-preference-el",
+    "negation-preference-es",
+    "negation-preference-id",
+    "modality-battery-en",
+    "modality-battery-el",
+    "modality-battery-es",
+    "modality-battery-id",
+    "extra-clause-deadline-en",
+    "extra-clause-deadline-el",
+    "extra-clause-deadline-es",
+    "extra-clause-deadline-id",
+    "literal-battery-en",
+    "literal-battery-el",
+    "literal-battery-es",
+    "literal-battery-id",
+    "role-delete-en",
+    "role-delete-el",
+    "role-delete-es",
+    "role-delete-id"
+  ],
+  "limits": {
+    "maxItems": 20,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 20
+  },
+  "deterministic": false,
+  "intendedModelProfile": "profiles/models/qwen3-coder-30b-live.json",
+  "intendedModelId": "openai/qwen3-coder-30b-a3b",
+  "outputDirectory": "reports/experiments/false-positive-review-332/qwen3-coder-30b",
+  "executionNote": "Companion to experiments/audit-321-freeze/{parse,retention}-qwen3-coder-30b.json (#253/#321). Scores the #328 mutation corpus (datasets/adversarial/mutation-false-positive-v1.jsonl) against BOTH the source item's goldSem (a match there is a false positive, per #332) and the mutation's own goldSem (diagnostic: did the scorer correctly track the change). Run with: node packages/eval/dist/src/cli.js false-positive-review --manifest experiments/false-positive-review-332/review-qwen3-coder-30b.json --profile profiles/models/qwen3-coder-30b-live.json --output-root reports/experiments/false-positive-review-332/qwen3-coder-30b"
+}

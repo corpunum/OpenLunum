@@ -8,6 +8,7 @@ import { runExperiment } from './runner.js';
 import { runSmoke } from './smoke.js';
 import { runParseExperimentCli } from './parse-experiment.js';
 import { runRetentionCli } from './retention-cli.js';
+import { runFalsePositiveReviewCliEntrypoint } from './false-positive-review-cli.js';
 import type { ExperimentManifest, ExperimentTask, ModelProfile, WorkArea } from './types.js';
 
 function flag(name: string): string | undefined {
@@ -83,7 +84,13 @@ async function main(): Promise<void> {
     console.log(JSON.stringify({ outputDirectory: result.outputDirectory, summary: result.summary }, null, 2));
     return;
   }
-  throw new Error('Commands: smoke | status | doctor --profile <file> | create --id <id> --area <area> --task <task> | run --manifest <file> | parse-experiment <manifest> | retention --manifest <file> --profile <file> [--output-root <dir>] [--mock-fixture <file>]');
+  if (command === 'false-positive-review') {
+    const root = await findWorkspaceRoot();
+    const { outputDirectory, summary } = await runFalsePositiveReviewCliEntrypoint(process.argv.slice(3), root);
+    console.log(JSON.stringify({ outputDirectory, summary }, null, 2));
+    return;
+  }
+  throw new Error('Commands: smoke | status | doctor --profile <file> | create --id <id> --area <area> --task <task> | run --manifest <file> | parse-experiment <manifest> | retention --manifest <file> --profile <file> [--output-root <dir>] [--mock-fixture <file>] | false-positive-review --manifest <file> --profile <file> [--output-root <dir>] [--mock-fixture <file>]');
 }
 
 main().catch((error: unknown) => { console.error(error instanceof Error ? error.message : String(error)); process.exitCode = 1; });
