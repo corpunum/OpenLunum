@@ -74,31 +74,38 @@ function clauseShape(clause: LunumClause): string {
   });
 }
 
-function collectTermFeatures(features: WeightedFeatures, role: string, term: LunumTerm): void {
+// `clauseContext` binds role-filler features to the clause they belong to, so the same
+// role/id pair filling two different clauses (e.g. a role-swap mutation across a root
+// clause and its condition) is not collapsed into an identical feature multiset. The
+// context is the clause's `predicate` (e.g. "delete", "confirmed"); the key format is
+// `role-<kind>:<predicate>:<role>:<...>`. Plain clauses without a predicate (defensive
+// fallback) use the literal string "-" as context so the key shape stays stable.
+function collectTermFeatures(features: WeightedFeatures, clauseContext: string, role: string, term: LunumTerm): void {
   if (Array.isArray(term)) {
-    addFeature(features, `role-cardinality:${role}:${term.length}`, 1);
-    for (const item of term) collectTermFeatures(features, role, item);
+    addFeature(features, `role-cardinality:${clauseContext}:${role}:${term.length}`, 1);
+    for (const item of term) collectTermFeatures(features, clauseContext, role, item);
     return;
   }
   if (term !== null && typeof term === 'object') {
-    addFeature(features, `role-type:${role}:${term.type}`, 2);
-    if (typeof term.id === 'string') addFeature(features, `role-id:${role}:${term.id}`, 2);
-    if (typeof term.ref === 'string') addFeature(features, `role-ref:${role}:${term.ref}`, 2);
-    if (typeof term.language === 'string') addFeature(features, `role-language:${role}:${term.language}`, 1);
-    if ('value' in term) addFeature(features, `role-value:${role}:${stableValue(term.value)}`, 2);
+    addFeature(features, `role-type:${clauseContext}:${role}:${term.type}`, 2);
+    if (typeof term.id === 'string') addFeature(features, `role-id:${clauseContext}:${role}:${term.id}`, 2);
+    if (typeof term.ref === 'string') addFeature(features, `role-ref:${clauseContext}:${role}:${term.ref}`, 2);
+    if (typeof term.language === 'string') addFeature(features, `role-language:${clauseContext}:${role}:${term.language}`, 1);
+    if ('value' in term) addFeature(features, `role-value:${clauseContext}:${role}:${stableValue(term.value)}`, 2);
     return;
   }
-  addFeature(features, `role-value:${role}:${stableValue(term)}`, 2);
+  addFeature(features, `role-value:${clauseContext}:${role}:${stableValue(term)}`, 2);
 }
 
 function collectClauseFeatures(features: WeightedFeatures, clause: LunumClause, relation: string): void {
   addFeature(features, `relation:${relation}`, 1);
   addFeature(features, `predicate:${clause.predicate}`, 4);
+  const clauseContext = typeof clause.predicate === 'string' && clause.predicate.length > 0 ? clause.predicate : '-';
   for (const role of Object.keys(clause.roles ?? {}).sort()) {
     addFeature(features, `role:${role}`, 3);
-    collectTermFeatures(features, role, clause.roles[role]!);
+    collectTermFeatures(features, clauseContext, role, clause.roles[role]!);
   }
-  if (clause.time !== undefined) collectTermFeatures(features, 'time', clause.time);
+  if (clause.time !== undefined) collectTermFeatures(features, clauseContext, 'time', clause.time);
   for (const condition of clause.conditions ?? []) collectClauseFeatures(features, condition, 'condition');
   for (const consequence of clause.consequences ?? []) collectClauseFeatures(features, consequence, 'consequence');
 }
