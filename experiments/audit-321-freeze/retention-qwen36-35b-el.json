@@ -1,0 +1,25 @@
+{
+  "schema": "openlunum-retention-manifest/0.1",
+  "id": "audit-321-retention-qwen36-35b-el",
+  "baselineCommit": "4e52d1daff1e60ea9a4b8f38eb482e9865df6b6c",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "expectedItemIds": [
+    "preference-el",
+    "delete-el",
+    "battery-el",
+    "deadline-el"
+  ],
+  "limits": {
+    "maxItems": 4,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 8
+  },
+  "deterministic": false,
+  "intendedModelProfile": "profiles/models/qwen36-35b-live.json",
+  "intendedModelId": "openai/qwen3.6-35b-a3b",
+  "targetLanguage": "el",
+  "outputDirectory": "reports/experiments/audit-321/retention/qwen36-35b/el"
+}
