@@ -14,33 +14,46 @@ const MATRIX_DIR = path.join(WORKSPACE_ROOT, 'experiments', 'audit-321-freeze');
 
 const MODEL_SLUGS = ['qwen36-35b', 'qwen3-coder-30b'] as const;
 const LANGUAGES = ['en', 'el', 'es', 'id'] as const;
-const TASKS = ['parse', 'retention'] as const;
 const ITEM_GROUPS = ['preference', 'delete', 'battery', 'deadline'] as const;
 
-type Task = (typeof TASKS)[number];
 type ModelSlug = (typeof MODEL_SLUGS)[number];
 type Language = (typeof LANGUAGES)[number];
 
-interface MatrixEntry {
-  task: Task;
-  modelSlug: ModelSlug;
-  language: Language;
-  file: string;
+// Matrix shape (post-review): parse-experiment.ts (packages/eval/src/parse-experiment.ts,
+// ~lines 115-130 and ~204-235) buckets the loaded dataset by sourceLanguage natively and
+// emits report-{lang}.md / parse-results-{lang}.jsonl for every language present in a single
+// run. It has no per-language dataset filter. One parse manifest per model (covering the full
+// 16-item dataset) therefore already yields all 4 per-language parse reports per model -- 4
+// per-language parse manifests would only multiply model calls 4x for identical evidence, so
+// there are 2 parse manifests total (one per model), not 8.
+//
+// Retention manifests use `expectedItemIds` for genuine per-language isolation via
+// planRetentionExecution, so the 2 models x 4 languages = 8 retention manifests remain
+// per-language, one file per model-language pair.
+const EXPECTED_PARSE_FILE_COUNT = MODEL_SLUGS.length; // 2
+const EXPECTED_RETENTION_FILE_COUNT = MODEL_SLUGS.length * LANGUAGES.length; // 8
+const EXPECTED_TOTAL_FILE_COUNT = EXPECTED_PARSE_FILE_COUNT + EXPECTED_RETENTION_FILE_COUNT; // 10
+
+function parseParseFileName(file: string): { modelSlug: ModelSlug } | null {
+  const base = file.replace(/\.json$/u, '');
+  if (!base.startsWith('parse-')) return null;
+  const modelSlug = base.slice('parse-'.length);
+  if ((MODEL_SLUGS as readonly string[]).includes(modelSlug)) {
+    return { modelSlug: modelSlug as ModelSlug };
+  }
+  return null;
 }
 
-function parseFileName(file: string): MatrixEntry | null {
+function parseRetentionFileName(file: string): { modelSlug: ModelSlug; language: Language } | null {
   const base = file.replace(/\.json$/u, '');
-  for (const task of TASKS) {
-    const prefix = `${task}-`;
-    if (!base.startsWith(prefix)) continue;
-    const rest = base.slice(prefix.length);
-    for (const modelSlug of MODEL_SLUGS) {
-      const modelPrefix = `${modelSlug}-`;
-      if (!rest.startsWith(modelPrefix)) continue;
-      const language = rest.slice(modelPrefix.length);
-      if ((LANGUAGES as readonly string[]).includes(language)) {
-        return { task, modelSlug, language: language as Language, file };
-      }
+  if (!base.startsWith('retention-')) return null;
+  const rest = base.slice('retention-'.length);
+  for (const modelSlug of MODEL_SLUGS) {
+    const prefix = `${modelSlug}-`;
+    if (!rest.startsWith(prefix)) continue;
+    const language = rest.slice(prefix.length);
+    if ((LANGUAGES as readonly string[]).includes(language)) {
+      return { modelSlug, language: language as Language };
     }
   }
   return null;
@@ -51,46 +64,61 @@ async function listMatrixFiles(): Promise<string[]> {
   return entries.filter((entry) => entry.endsWith('.json')).sort();
 }
 
-test('audit-321-freeze matrix directory contains exactly the expected 16 files', async () => {
+test('audit-321-freeze matrix directory contains exactly the expected 10 files (2 parse + 8 retention)', async () => {
   const files = await listMatrixFiles();
-  assert.strictEqual(files.length, MODEL_SLUGS.length * LANGUAGES.length * TASKS.length);
+  assert.strictEqual(files.length, EXPECTED_TOTAL_FILE_COUNT);
 
-  const parsed = files.map(parseFileName);
-  for (const [index, entry] of parsed.entries()) {
-    assert.ok(entry, `file ${files[index]} does not match the deterministic <task>-<model>-<lang>.json naming scheme`);
+  const parseFiles = files.filter((file) => file.startsWith('parse-'));
+  const retentionFiles = files.filter((file) => file.startsWith('retention-'));
+  assert.strictEqual(parseFiles.length, EXPECTED_PARSE_FILE_COUNT);
+  assert.strictEqual(retentionFiles.length, EXPECTED_RETENTION_FILE_COUNT);
+  assert.strictEqual(parseFiles.length + retentionFiles.length, files.length);
+
+  for (const file of parseFiles) {
+    assert.ok(parseParseFileName(file), `parse file ${file} does not match the <task>-<model>.json naming scheme`);
+  }
+  for (const file of retentionFiles) {
+    assert.ok(parseRetentionFileName(file), `retention file ${file} does not match the <task>-<model>-<lang>.json naming scheme`);
   }
 });
 
-test('audit-321-freeze matrix has no missing or duplicate model-language-task combination', async () => {
+test('audit-321-freeze matrix has no missing or duplicate model (parse) or model-language (retention) combination', async () => {
   const files = await listMatrixFiles();
-  const parsed = files.map(parseFileName).filter((entry): entry is MatrixEntry => entry !== null);
 
-  const seen = new Set<string>();
-  for (const entry of parsed) {
-    const key = `${entry.task}|${entry.modelSlug}|${entry.language}`;
-    assert.strictEqual(seen.has(key), false, `duplicate combination: ${key}`);
-    seen.add(key);
+  const parseSeen = new Set<string>();
+  for (const file of files.filter((file) => file.startsWith('parse-'))) {
+    const entry = parseParseFileName(file);
+    assert.ok(entry);
+    const key = entry!.modelSlug;
+    assert.strictEqual(parseSeen.has(key), false, `duplicate parse combination: ${key}`);
+    parseSeen.add(key);
   }
+  assert.deepStrictEqual(parseSeen, new Set(MODEL_SLUGS));
 
-  const expectedKeys = new Set<string>();
-  for (const task of TASKS) {
-    for (const modelSlug of MODEL_SLUGS) {
-      for (const language of LANGUAGES) {
-        expectedKeys.add(`${task}|${modelSlug}|${language}`);
-      }
+  const retentionSeen = new Set<string>();
+  for (const file of files.filter((file) => file.startsWith('retention-'))) {
+    const entry = parseRetentionFileName(file);
+    assert.ok(entry);
+    const key = `${entry!.modelSlug}|${entry!.language}`;
+    assert.strictEqual(retentionSeen.has(key), false, `duplicate retention combination: ${key}`);
+    retentionSeen.add(key);
+  }
+  const expectedRetentionKeys = new Set<string>();
+  for (const modelSlug of MODEL_SLUGS) {
+    for (const language of LANGUAGES) {
+      expectedRetentionKeys.add(`${modelSlug}|${language}`);
     }
   }
-
-  assert.deepStrictEqual(seen, expectedKeys);
+  assert.deepStrictEqual(retentionSeen, expectedRetentionKeys);
 });
 
 test('every parse manifest in the audit-321-freeze matrix loads through the real experiment validator', async () => {
   const files = await listMatrixFiles();
   const parseFiles = files.filter((file) => file.startsWith('parse-'));
-  assert.strictEqual(parseFiles.length, MODEL_SLUGS.length * LANGUAGES.length);
+  assert.strictEqual(parseFiles.length, EXPECTED_PARSE_FILE_COUNT);
 
   for (const file of parseFiles) {
-    const entry = parseFileName(file);
+    const entry = parseParseFileName(file);
     assert.ok(entry);
     const manifest = await readJson<ExperimentManifest>(path.join(MATRIX_DIR, file));
 
@@ -98,10 +126,13 @@ test('every parse manifest in the audit-321-freeze matrix loads through the real
     assert.doesNotThrow(() => validateManifest(manifest));
 
     assert.strictEqual(manifest.deterministic, false);
-    assert.ok(manifest.limits && manifest.limits.maxItems > 0 && manifest.limits.maxAttemptsPerItem > 0 && manifest.limits.maxModelCalls > 0);
+    assert.strictEqual(manifest.limits.maxItems, 16);
+    assert.strictEqual(manifest.limits.maxAttemptsPerItem, 1);
+    assert.strictEqual(manifest.limits.maxModelCalls, 16);
     assert.ok(manifest.outputDirectory.includes(entry!.modelSlug));
-    assert.ok(manifest.outputDirectory.includes(entry!.language));
-    assert.strictEqual(manifest.targetLanguage, entry!.language);
+    // One manifest covers all 4 languages natively (parse-experiment.ts buckets by
+    // sourceLanguage); there is no single targetLanguage to freeze here.
+    assert.strictEqual(manifest.targetLanguage, undefined);
 
     // Dataset hash actually matches the committed dataset file on disk (not just regex-shaped).
     assert.ok(manifest.dataset);
@@ -119,15 +150,15 @@ test('every parse manifest in the audit-321-freeze matrix loads through the real
   }
 });
 
-test('every retention manifest in the audit-321-freeze matrix loads through the real retention validator and plans cleanly', async () => {
+test('every retention manifest in the audit-321-freeze matrix loads through the real retention validator, plans cleanly, and allows no retries', async () => {
   const files = await listMatrixFiles();
   const retentionFiles = files.filter((file) => file.startsWith('retention-'));
-  assert.strictEqual(retentionFiles.length, MODEL_SLUGS.length * LANGUAGES.length);
+  assert.strictEqual(retentionFiles.length, EXPECTED_RETENTION_FILE_COUNT);
 
   const fullDataset = await loadDataset(path.join(WORKSPACE_ROOT, 'datasets', 'dev', 'multilingual-core-v1.jsonl'));
 
   for (const file of retentionFiles) {
-    const entry = parseFileName(file);
+    const entry = parseRetentionFileName(file);
     assert.ok(entry);
     const manifest = await readJson<RetentionCoverageManifest>(path.join(MATRIX_DIR, file));
 
@@ -136,6 +167,12 @@ test('every retention manifest in the audit-321-freeze matrix loads through the 
 
     const expectedIds = ITEM_GROUPS.map((group) => `${group}-${entry!.language}`);
     assert.deepStrictEqual(validated.expectedItemIds, expectedIds);
+
+    // No silent retry/exclusion of failed items: exactly one attempt per item, one realization
+    // call and one parse-back call each (4 items x 1 attempt x 2 stages = 8).
+    assert.strictEqual(validated.limits.maxItems, 4);
+    assert.strictEqual(validated.limits.maxAttemptsPerItem, 1);
+    assert.strictEqual(validated.limits.maxModelCalls, 8);
 
     // Dataset hash actually matches the committed dataset file on disk.
     const datasetPath = path.join(WORKSPACE_ROOT, manifest.dataset.path);
@@ -150,6 +187,7 @@ test('every retention manifest in the audit-321-freeze matrix loads through the 
     const plan = planRetentionExecution(validated, scopedDataset as any);
     assert.deepStrictEqual(plan.plannedItemIds, expectedIds);
     assert.strictEqual(plan.totalModelCalls, validated.limits.maxModelCalls);
+    assert.strictEqual(plan.totalModelCalls, 8);
 
     // Audit-tracking-only fields (not part of the openlunum-retention-manifest/0.1 schema).
     assert.strictEqual((manifest as any).targetLanguage, entry!.language);

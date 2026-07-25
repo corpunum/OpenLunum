@@ -14,8 +14,8 @@
   ],
   "limits": {
     "maxItems": 4,
-    "maxAttemptsPerItem": 2,
-    "maxModelCalls": 16
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 8
   },
   "deterministic": false,
   "intendedModelProfile": "profiles/models/qwen36-35b-live.json",
