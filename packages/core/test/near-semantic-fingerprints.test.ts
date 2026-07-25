@@ -199,6 +199,66 @@ test('compareRecords delegates to semantic comparison', () => {
   assert.equal(result.similar, true);
 });
 
+function createRoleSwapSem(agentAssistantFirst: boolean): LunumSem {
+  const assistant = { type: 'actor', id: 'assistant' };
+  const user = { type: 'actor', id: 'user' };
+  return {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'command',
+    clauses: [{
+      predicate: 'delete',
+      roles: {
+        agent: agentAssistantFirst ? assistant : user,
+        theme: { type: 'concept', id: 'files' }
+      },
+      negated: false,
+      conditions: [{
+        predicate: 'confirmed',
+        roles: {
+          agent: agentAssistantFirst ? user : assistant
+        },
+        negated: false
+      }]
+    }]
+  };
+}
+
+test('near-semantic score is bound to clause context and detects agent-role swaps', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.8);
+  const base = createRoleSwapSem(true);
+  const swapped = createRoleSwapSem(false);
+
+  // Identical sems still score a perfect match.
+  const identical = generator.compareSem(base, base);
+  assert.equal(identical.similarity, 1);
+
+  // Swapping which actor fills `agent` in the root clause vs. the condition clause
+  // must now be detectable: previously the role-filler features were not bound to
+  // their clause, so `role-id:agent:assistant` / `role-id:agent:user` formed an
+  // identical multiset regardless of which clause each id belonged to, and this
+  // scored a perfect 1.0 match. With clause-context binding
+  // (`role-id:<predicate>:<role>:<id>`), the swap produces different feature keys.
+  const swappedResult = generator.compareSem(base, swapped);
+  assert.ok(
+    swappedResult.similarity < 1,
+    `expected role swap to be detectable (similarity < 1), got ${swappedResult.similarity}`
+  );
+
+  // A near-match that does NOT swap roles across clauses (just changes an unrelated
+  // id) should still score reasonably high, showing the fix did not globally wreck
+  // the metric's tolerance for minor identifier variation.
+  const near = createRoleSwapSem(true);
+  const theme = near.clauses[0]!.roles.theme;
+  assert.ok(theme && typeof theme === 'object' && !Array.isArray(theme));
+  theme.id = 'documents';
+  const nearResult = generator.compareSem(base, near);
+  assert.ok(
+    nearResult.similarity >= 0.8,
+    `expected unrelated near-match to remain high, got ${nearResult.similarity}`
+  );
+});
+
 test('threshold must remain in the inclusive zero-to-one range', () => {
   const generator = new NearSemanticFingerprintGenerator(0.9);
   assert.equal(generator.getThreshold(), 0.9);

@@ -81,7 +81,7 @@ test('false-positive review CLI writes raw per-item JSONL and recomputes a repor
     assert.strictEqual(records.length, 4);
     assert.deepStrictEqual(records.map((r) => r.itemId), ['fp-correct-en', 'fp-false-positive-en', 'fp-role-both-en', 'fp-invalid-output-en']);
     assert.deepStrictEqual(records.map((r) => r.status), ['passed', 'passed', 'passed', 'failed']);
-    assert.deepStrictEqual(records.map((r) => r.outcome), ['correct', 'false_positive', 'false_positive_and_own_matched', null]);
+    assert.deepStrictEqual(records.map((r) => r.outcome), ['correct', 'false_positive', 'correct', null]);
 
     // fp-correct-en: model correctly detected the negation. Matches its OWN
     // gold, not the source's -- the scorer correctly tracked the change.
@@ -99,16 +99,23 @@ test('false-positive review CLI writes raw per-item JSONL and recomputes a repor
     assert.strictEqual(falsePositive.ownGoldMatched, false);
     assert.strictEqual(falsePositive.sourceMatch?.exact, true);
 
-    // fp-role-both-en: the role-swap mutation's own gold is ALSO a
-    // near-semantic match against the source gold under the unmodified
-    // 0.8 threshold (verified independently against the real #328 corpus
-    // item this fixture is copied from: role-delete-en/delete-en score
-    // 1.0 near-similarity). So the model matching its own gold exactly
-    // still counts as a false positive against source.
+    // fp-role-both-en: the role-swap mutation's own gold used to ALSO
+    // register as a near-semantic match against the source gold under the
+    // 0.8 threshold, because the near-semantic scorer's role-filler
+    // features were not bound to their clause (issue #346) -- verified
+    // against the real #328 corpus item this fixture is copied from:
+    // role-delete-en/delete-en scored 1.0 near-similarity despite the
+    // swapped agent/confirmer roles. With #346's clause-context binding,
+    // that near-semantic collision is gone (source exact match is already
+    // false via the path-aware exact fingerprint), so the model correctly
+    // parsing the swap now correctly registers as `correct`, not a false
+    // positive.
     const both = records[2]!;
-    assert.strictEqual(both.falsePositive, true);
+    assert.strictEqual(both.falsePositive, false);
     assert.strictEqual(both.ownGoldMatched, true);
     assert.strictEqual(both.ownMatch?.exact, true);
+    assert.strictEqual(both.sourceMatch?.exact, false);
+    assert.strictEqual(both.sourceMatch?.nearSemanticOnly, false);
 
     // fp-invalid-output-en: model produced no JSON object at all -- a
     // genuine model failure, not infrastructure. Does not abort the run.
@@ -134,14 +141,14 @@ test('false-positive review CLI writes raw per-item JSONL and recomputes a repor
     assert.strictEqual(summary.itemCount, 4);
     assert.strictEqual(summary.parsedItems, 3);
     assert.strictEqual(summary.invalidItems, 1);
-    assert.strictEqual(summary.falsePositiveCount, 2);
-    assert.strictEqual(summary.falsePositiveRate, 2 / 3);
+    assert.strictEqual(summary.falsePositiveCount, 1);
+    assert.strictEqual(summary.falsePositiveRate, 1 / 3);
     assert.strictEqual(summary.ownGoldMatchedCount, 2);
     assert.strictEqual(summary.ownGoldMatchRate, 2 / 3);
     assert.deepStrictEqual(summary.outcomeCounts, {
-      correct: 1,
+      correct: 2,
       false_positive: 1,
-      false_positive_and_own_matched: 1,
+      false_positive_and_own_matched: 0,
       lost: 0
     });
 
@@ -156,7 +163,7 @@ test('false-positive review CLI writes raw per-item JSONL and recomputes a repor
     assert.strictEqual(summary.byLanguage[0]!.key, 'en');
     assert.strictEqual(summary.byLanguage[0]!.totalItems, 4);
     assert.strictEqual(summary.byLanguage[0]!.parsedItems, 3);
-    assert.strictEqual(summary.byLanguage[0]!.falsePositiveCount, 2);
+    assert.strictEqual(summary.byLanguage[0]!.falsePositiveCount, 1);
 
     assert.ok(summary.latencyMs.count === 4);
 
@@ -194,7 +201,7 @@ test('false-positive review CLI command path uses the committed mock fixture wit
     const records = await readJsonl<FalsePositiveReviewRawRecord>(path.join(parsed.outputDirectory, 'raw', 'items.jsonl'));
     assert.strictEqual(records.length, 4);
     assert.strictEqual(parsed.summary.parsedItems, 3);
-    assert.strictEqual(parsed.summary.falsePositiveCount, 2);
+    assert.strictEqual(parsed.summary.falsePositiveCount, 1);
   } finally {
     await rm(resolvedOutputRoot, { recursive: true, force: true });
   }
