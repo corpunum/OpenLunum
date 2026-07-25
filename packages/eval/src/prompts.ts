@@ -76,7 +76,6 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     kind: 'conditional_instruction',
     clauses: [{
       predicate: 'enable',
-      modality: 'permission',
       roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'feature', id: 'power_saving' } },
       negated: false,
       conditions: [{ predicate: 'below', roles: { subject: { type: 'metric', id: 'battery_level' }, value: { type: 'quantity', value: 20, unit: 'percent' } }, negated: false }]
@@ -103,6 +102,27 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       predicate: 'deadline',
       roles: { subject: { type: 'project', id: 'project' }, time: { type: 'date', value: '2027-04-15' } },
       negated: false
+    }]
+  });
+
+  // Deliberately distinct from the four core dataset scenarios (dark_mode
+  // preference, battery/power_saving conditional, file deletion safety,
+  // project deadline) so this permissive-modality pattern cannot bleed
+  // into a core item whose gold has no modality field. See #341.
+  const examplePermission = JSON.stringify({
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'conditional_instruction',
+    clauses: [{
+      predicate: 'share',
+      modality: 'permission',
+      roles: {
+        agent: { type: 'actor', id: 'assistant' },
+        theme: { type: 'concept', id: 'report' },
+        object: { type: 'actor', id: 'team' }
+      },
+      negated: false,
+      conditions: [{ predicate: 'confirmed', roles: { subject: { type: 'concept', id: 'report' } }, negated: false }]
     }]
   });
 
@@ -134,6 +154,7 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       `Conditional Instruction: ${exampleConditional}`,
       `Safety Constraint: ${exampleSafety}`,
       `Project State: ${exampleProjectState}`,
+      `Permission: ${examplePermission}`,
       '',
       vocabularyBlock()
     ].join('\n'),

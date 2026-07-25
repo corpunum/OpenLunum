@@ -59,7 +59,8 @@ function buildExamples(): Record<string, ExampleSem> {
     preference: extractExample(prompt.system, 'Preference'),
     conditional_instruction: extractExample(prompt.system, 'Conditional Instruction'),
     safety_constraint: extractExample(prompt.system, 'Safety Constraint'),
-    project_state: extractExample(prompt.system, 'Project State')
+    project_state: extractExample(prompt.system, 'Project State'),
+    permission: extractExample(prompt.system, 'Permission')
   };
 }
 
@@ -204,12 +205,26 @@ test('parsePrompt includes at least one worked example with a schema-valid modal
   }
 });
 
-test('exampleConditional demonstrates the canonical "permission" modality on a permissive "you may enable" scenario', () => {
-  // Mirrors the gold pattern in datasets/adversarial/mutation-false-positive-v1.jsonl
-  // (modality-battery-*): predicate "enable", theme "power_saving", condition
-  // "below" 20 percent battery_level, modality "permission".
+test('examplePermission demonstrates the canonical "permission" modality on a scenario distinct from the core dataset', () => {
+  // #341 follow-up: the modality demo must NOT live on exampleConditional,
+  // because that scenario (enable power_saving when battery below 20%) is
+  // structurally identical to the core dataset's battery-en/el/es/id items
+  // in datasets/dev/multilingual-core-v1.jsonl, whose gold has no modality
+  // field. Models copy example vocabulary verbatim (the #253/#337 finding),
+  // so showing modality: 'permission' on that exact scenario risked
+  // regressing #339's 4/4 exact-match result on the core battery items.
+  // The dedicated "share the report with the team" example below carries
+  // the modality demonstration instead, on a scenario with no core-dataset
+  // collision.
+  const examples = buildExamples();
+  const clause = examples.permission!.clauses[0]!;
+
+  assert.strictEqual(clause.modality, 'permission', 'examplePermission clause should demonstrate modality: "permission"');
+});
+
+test('exampleConditional no longer carries a modality field (must stay a plain-imperative match for the core battery items)', () => {
   const examples = buildExamples();
   const clause = examples.conditional_instruction!.clauses[0]!;
 
-  assert.strictEqual(clause.modality, 'permission', 'exampleConditional clause should demonstrate modality: "permission"');
+  assert.strictEqual(clause.modality, undefined, 'exampleConditional must not carry modality — it mirrors the core dataset\'s no-modality battery-* gold');
 });
