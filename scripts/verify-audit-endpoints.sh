@@ -386,10 +386,17 @@ PROBE_EOF
             fi
           fi
         else
-          # Model not present on endpoint, skip probe
-          probe_latency="N/A (skipped: model not present)"
+          # Probe skipped. Report the actual reason: the gate above covers two
+          # distinct failures, and a report claiming "model not present" while
+          # also showing "Model Present: yes" contradicts itself as evidence.
           probe_response=""
-          log_info "  Probe skipped (model not present on endpoint)"
+          if [[ "$model_present" != "true" ]]; then
+            probe_latency="N/A (skipped: model not present on endpoint)"
+            log_info "  Probe skipped (model not present on endpoint)"
+          else
+            probe_latency="N/A (skipped: earlier verification failed for this profile)"
+            log_info "  Probe skipped (earlier verification failed for this profile)"
+          fi
         fi
       fi
     fi
