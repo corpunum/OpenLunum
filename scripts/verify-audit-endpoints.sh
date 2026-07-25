@@ -326,8 +326,8 @@ except:
 
         # Step 3a: Verify model weights and get file metadata
         if [[ "$profile_ok" == "true" ]]; then
-          local weights_info=$(verify_model_weights "$model_id" "$hash_requested")
-          if [[ $? -ne 0 ]]; then
+          local weights_info=$(verify_model_weights "$model_id" "$hash_requested" || true)
+          if [[ -z "$weights_info" ]] || ! echo "$weights_info" | python3 -c "import json, sys; json.load(sys.stdin)" 2>/dev/null; then
             log_error "Model weights verification failed for: $model_id"
             profile_ok=false
           else
@@ -341,7 +341,8 @@ except:
 
         # Step 4: Send minimal probe completion (max 8 tokens)
         # GATE: Only send probe if model was actually present on the endpoint
-        if [[ "$model_present" == "true" ]]; then
+        # AND if all previous checks (preset, weights) passed
+        if [[ "$model_present" == "true" ]] && [[ "$profile_ok" == "true" ]]; then
           local probe_start probe_end
           probe_start=$(date +%s%N)
 
@@ -519,9 +520,8 @@ print("were loaded. Trust the `/v1/models` assertion and weights facts.")
 EOF
 
   # Run the Python script and redirect output to the report file
-  if ! python3 "$tmp_py" "$tmp_json" > "$out_file" 2>&1; then
+  if ! python3 "$tmp_py" "$tmp_json" > "$out_file" 2>/dev/null; then
     log_error "Failed to generate report"
-    log_error "Python stderr/stdout: $(cat "$out_file" 2>/dev/null | head -200)"
     # Keep temp files for debugging
   else
     # Clean up temp files only on success
@@ -557,8 +557,6 @@ main() {
   done
 
   results_json+="]"
-
-  log_info "About to call generate_report with results_json of length ${#results_json}"
 
   # Generate report
   if ! generate_report "$results_json" "$OUT_PATH"; then
