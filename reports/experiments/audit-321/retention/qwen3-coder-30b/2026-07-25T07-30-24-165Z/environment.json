@@ -1,0 +1,9 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "runId": "2026-07-25T07-30-24-165Z",
+  "manifestId": "audit-321-retention-qwen3-coder-30b",
+  "outputRoot": "/home/corpunum/OpenLunum/reports/experiments/audit-321/retention/qwen3-coder-30b",
+  "startedAt": "2026-07-25T07:30:45.817Z"
+}
