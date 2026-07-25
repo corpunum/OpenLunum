@@ -61,6 +61,37 @@ success condition; obligation/permission collapse is a direct violation of it.
 Negation is handled well by contrast: 0 false positives for both models, and 4/4 own-gold matches for
 both, meaning the models parsed the negation correctly *and* the scorer registered the difference.
 
+## The obligation/permission blindness is present in BOTH models
+
+Independent review established this more sharply than the original framing. `qwen3-coder-30b` records
+zero false positives on modality, but that is a threshold artifact, not sensitivity. Its four modality
+items score against source gold at:
+
+| item | source near-semantic score | own gold matched | own-gold missing feature |
+|---|---|---|---|
+| `modality-battery-en` | 0.727 | no | `modality:0:permission` |
+| `modality-battery-el` | 0.652 | no | `modality:0:permission` |
+| `modality-battery-es` | 0.727 | no | `modality:0:permission` |
+| `modality-battery-id` | 0.727 | no | `modality:0:permission` |
+
+All four sit just **under** the 0.8 threshold, and all four **also fail to register the obligation ->
+permission shift** — the identical blindness seen in the 35b. The difference is that coder-30b's
+unrelated vocabulary mismatches (it emits `is_below`, and `agent:system` differently from the schema's
+expected wording) depress its source-comparison score by roughly 0.05-0.15, landing it below the
+threshold for reasons that have nothing to do with modality.
+
+So the correct reading is not "one model is modality-blind." **Both models fail to encode the
+obligation/permission distinction; only one of them scores highly enough for that failure to surface as
+a false positive.** A threshold change alone would convert coder-30b's zeros into false positives
+without any change in model behaviour.
+
+### Scorer mechanics behind the two surfaced false positives
+In both 35b false positives the parsed output genuinely contains `"modality": "permissive"` — the model
+*did* parse the mutation correctly. The near-semantic score against source gold stays high because the
+source gold is a bare imperative with **no** `modality` field, and the scorer does not penalise an extra
+field absent from the expected set. Only one missing role feature is counted against it. The failure is
+in the comparison, not the parse.
+
 ## Why 0% is not better than 10%
 
 `qwen3-coder-30b` recorded zero false positives, but matched **neither** gold on 16 of 20 items, versus
@@ -82,7 +113,7 @@ weakness; the coder-30b mostly fails earlier, before the scorer gets a chance to
 
 ## Limits
 
-1. **n=4 per mutation category per model.** A 50% rate is 2 of 4 items. Directionally meaningful, not precise.
+1. **n=4 per mutation category per model.** A 50% rate is 2 of 4 items. The modality finding is presented as two individually inspected instances of a specific scoring gap, corroborated by all four of the other model's modality items showing the same missing feature — not as a population rate.
 2. **One item flagged on language grounds**: `negation-preference-id` negates *liking* rather than *preferring* (see #328). It produced no false positive for either model.
 3. **The high 'lost' rates dominate both results** and limit what the false-positive rates can be said to measure.
 4. Latency is not reported here — it is not the question this run asks, and cross-model latency remains non-comparable per the #253 bundle.
