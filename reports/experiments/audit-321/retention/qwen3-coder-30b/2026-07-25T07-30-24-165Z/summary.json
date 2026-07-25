@@ -1,0 +1,47 @@
+{
+  "runId": "2026-07-25T07-30-24-165Z",
+  "manifestId": "audit-321-retention-qwen3-coder-30b",
+  "baselineCommit": "4e52d1daff1e60ea9a4b8f38eb482e9865df6b6c",
+  "datasetSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+  "itemCount": 16,
+  "plannedItemCount": 16,
+  "realizationCalls": 16,
+  "parseBackCalls": 16,
+  "totalModelCalls": 32,
+  "passedItems": 16,
+  "failedItems": 0,
+  "errorItems": 0,
+  "itemLatencyMs": {
+    "count": 16,
+    "minMs": 839.9795099999997,
+    "p50Ms": 1278.890987,
+    "p90Ms": 1726.9704550000006,
+    "p95Ms": 2042.8964700000033,
+    "p99Ms": 2042.8964700000033,
+    "maxMs": 2042.8964700000033,
+    "meanMs": 1351.2613976250007
+  },
+  "realizationLatencyMs": {
+    "count": 16,
+    "minMs": 430.6342990000003,
+    "p50Ms": 638.722878,
+    "p90Ms": 815.383914,
+    "p95Ms": 982.5550470000017,
+    "p99Ms": 982.5550470000017,
+    "maxMs": 982.5550470000017,
+    "meanMs": 655.4331992500003
+  },
+  "parseBackLatencyMs": {
+    "count": 16,
+    "minMs": 386.53055099999983,
+    "p50Ms": 688.6402330000001,
+    "p90Ms": 911.5865410000006,
+    "p95Ms": 1060.3414230000017,
+    "p99Ms": 1060.3414230000017,
+    "maxMs": 1060.3414230000017,
+    "meanMs": 695.8281983750003
+  },
+  "errorTaxonomy": {},
+  "unavailableFields": {},
+  "generatedAt": 1784964645816
+}

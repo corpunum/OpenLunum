@@ -1,0 +1,37 @@
+{
+  "schema": "openlunum-retention-manifest/0.1",
+  "id": "audit-321-retention-qwen3-coder-30b",
+  "baselineCommit": "4e52d1daff1e60ea9a4b8f38eb482e9865df6b6c",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "expectedItemIds": [
+    "preference-en",
+    "preference-el",
+    "preference-es",
+    "preference-id",
+    "delete-en",
+    "delete-el",
+    "delete-es",
+    "delete-id",
+    "battery-en",
+    "battery-el",
+    "battery-es",
+    "battery-id",
+    "deadline-en",
+    "deadline-el",
+    "deadline-es",
+    "deadline-id"
+  ],
+  "limits": {
+    "maxItems": 16,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 32
+  },
+  "deterministic": false,
+  "intendedModelProfile": "profiles/models/qwen3-coder-30b-live.json",
+  "intendedModelId": "openai/qwen3-coder-30b-a3b",
+  "outputDirectory": "reports/experiments/audit-321/retention/qwen3-coder-30b",
+  "executionNote": "expectedItemIds must cover the entire loaded dataset: planRetentionExecution (packages/eval/src/retention-manifest.ts) rejects any dataset item not listed and asserts equal lengths, so per-language retention manifests cannot execute. Per-language retention evidence is derived at aggregation time from the language suffix on each item id, not by splitting at manifest level. See #325."
+}
