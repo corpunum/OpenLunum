@@ -80,17 +80,54 @@ unrelated vocabulary mismatches (it emits `is_below`, and `agent:system` differe
 expected wording) depress its source-comparison score by roughly 0.05-0.15, landing it below the
 threshold for reasons that have nothing to do with modality.
 
-So the correct reading is not "one model is modality-blind." **Both models fail to encode the
-obligation/permission distinction; only one of them scores highly enough for that failure to surface as
-a false positive.** A threshold change alone would convert coder-30b's zeros into false positives
-without any change in model behaviour.
+So the correct reading is not "one model is modality-blind." **Both models fail to emit the expected
+`permission` value; only one of them scores highly enough for that failure to surface as a false
+positive.** `qwen3-coder-30b` omits modality on all four items — the same omission that produced the
+35b's two false positives — yet stays under threshold because unrelated vocabulary mismatches depress
+its score. A threshold change alone would convert those zeros into false positives without any change
+in model behaviour.
 
-### Scorer mechanics behind the two surfaced false positives
-In both 35b false positives the parsed output genuinely contains `"modality": "permissive"` — the model
-*did* parse the mutation correctly. The near-semantic score against source gold stays high because the
-source gold is a bare imperative with **no** `modality` field, and the scorer does not penalise an extra
-field absent from the expected set. Only one missing role feature is counted against it. The failure is
-in the comparison, not the parse.
+### CORRECTION (supersedes the mechanism previously stated here)
+
+An earlier version of this section claimed that in both surfaced false positives the parsed output
+"genuinely contains `modality: permissive`" and concluded that "the failure is in the comparison, not
+the parse." **Both halves of that claim are false.** It was written from a reviewer's assertion without
+checking `parsedSem`, and is corrected here. No measured value changes; only the explanation does.
+
+What the raw records actually show, for all eight modality items:
+
+| model | lang | modality emitted | source score | false positive |
+|---|---|---|---|---|
+| qwen36-35b | en | `permissive` | **0.000** | no |
+| qwen36-35b | el | `possible` | **0.000** | no |
+| qwen36-35b | es | *(none)* | **0.900** | **yes** |
+| qwen36-35b | id | *(none)* | **0.810** | **yes** |
+| qwen3-coder-30b | en | *(none)* | 0.727 | no |
+| qwen3-coder-30b | el | *(none)* | 0.652 | no |
+| qwen3-coder-30b | es | *(none)* | 0.727 | no |
+| qwen3-coder-30b | id | *(none)* | 0.727 | no |
+
+The relationship is exact and runs the opposite way to the earlier claim:
+
+- **When a modality field is emitted at all, the score against the bare-imperative source drops to
+  0.000.** The scorer does *not* ignore an unexpected extra field — it penalises it decisively. The
+  scorer behaved correctly in every one of these eight cases.
+- **False positives occur precisely where the model omitted modality entirely**, so the parse collapsed
+  into the source meaning and scored 0.90 / 0.81.
+
+**The failure is in the parse, not the comparison.** The corrective work is on the model/prompt side —
+getting models to emit the controlled-vocabulary value — not on the scorer.
+
+### What both models actually get wrong
+
+No item in either model produced the expected controlled-vocabulary value `permission`:
+
+- `qwen3.6-35b` emitted **non-canonical vocabulary** on 2 of 4 (`permissive`, `possible`) and **dropped
+  modality entirely** on the other 2.
+- `qwen3-coder-30b` **dropped modality on all 4**.
+
+So the obligation/permission distinction is unreliably encoded by both models — but via two distinct
+failures (wrong vocabulary vs omission) that the earlier text conflated into a single scorer defect.
 
 ## Why 0% is not better than 10%
 
