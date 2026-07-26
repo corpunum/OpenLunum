@@ -1,9 +1,13 @@
 # Lunum readiness and evidence tracker
 
-> **Status:** candidate baseline pending independent validation under [issue #351](https://github.com/corpunum/OpenLunum/issues/351)  
-> **Last reconciled:** 2026-07-26  
-> **Repository baseline:** `b2a1b4ab6255226fd6acbb218154bf3ecabf5394`  
-> **Current product maturity:** pre-1.0 research-to-reference implementation  
+> **Status:** candidate baseline pending independent validation under [issue #351](https://github.com/corpunum/OpenLunum/issues/351)
+>
+> **Last reconciled:** 2026-07-26
+>
+> **Repository baseline:** `b2a1b4ab6255226fd6acbb218154bf3ecabf5394`
+>
+> **Current product maturity:** pre-1.0 research-to-reference implementation
+>
 > **General production-ready:** **No**
 
 This is the living readiness reference for Lunum. It records what is implemented, what has been measured, what remains unproven, and the actions required to raise each readiness area.
@@ -354,6 +358,7 @@ For failed or rejected actions, append the same evidence detail and preserve the
 | Date | Area | Previous | New | Accepted evidence or correction | What worked | What did not / limitation | Reviewer |
 |---|---|---:|---:|---|---|---|---|
 | 2026-07-26 | Initial tracker baseline | — | See tables | Issue #351 candidate based on repository evidence through `b2a1b4a` | Consolidated architecture, implementation, live evals and known gaps | Percentages remain estimates pending independent local-orchestrator validation | Pending |
+| 2026-07-26 | Orchestrator validation (Tier 3) | See tables | Unchanged | Local-orchestrator review at PR #352; whitespace-only Markdown correction; evidence-ledger numbers verified against committed reports | Ledger figures matched primary evidence; summary/detail percentages consistent; onboarding wiring and path references correct | No score changed; retention-vs-parsing ordering and safety-critical enforcement noted for owner/evaluator attention; independent evaluator verdict still pending | Claude Opus 5 (local orchestrator) |
 
 ## Current recommended sequence
 
