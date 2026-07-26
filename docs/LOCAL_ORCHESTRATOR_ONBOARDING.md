@@ -6,7 +6,7 @@ The local orchestrator may inspect the repository, maintain worktrees, create ex
 
 Give the orchestrator this instruction:
 
-> Read `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md` and `ORCHESTRATOR-PROMPT.md`, synchronize the review worktree to `origin/main`, reconcile GitHub issues and pull requests, complete branch cleanup issue #255 before creating unnecessary branches, then continue only with explicit ready issues under the one-shot worker model.
+> Read `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md`, `docs/LUNUM_READINESS.md`, and `ORCHESTRATOR-PROMPT.md`, synchronize the review worktree to `origin/main`, reconcile GitHub issues and pull requests, then continue only with explicit ready issues under the one-shot worker model.
 
 ## Required reading order
 
@@ -14,13 +14,16 @@ Before taking action, read:
 
 1. `VISION.md`
 2. `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md`
-3. `docs/REPOSITORY_OPERATING_MODEL.md`
-4. `ORCHESTRATOR.md`
-5. `ORCHESTRATOR-PROMPT.md`
-6. `AGENTS.md`
-7. `docs/EXPERIMENT_PROTOCOL.md`
-8. `docs/EVALUATION_PROTOCOL.md`
-9. the selected GitHub issue and its discussion
+3. `docs/LUNUM_READINESS.md`
+4. `docs/REPOSITORY_OPERATING_MODEL.md`
+5. `ORCHESTRATOR.md`
+6. `ORCHESTRATOR-PROMPT.md`
+7. `AGENTS.md`
+8. `docs/EXPERIMENT_PROTOCOL.md`
+9. `docs/EVALUATION_PROTOCOL.md`
+10. the selected GitHub issue and its discussion
+
+`docs/LUNUM_READINESS.md` is the living support, maturity and evidence tracker. Read it before proposing or accepting production, language, model, tokenizer, compaction, safety or adoption claims. Any score change is Tier 3 and requires linked accepted evidence plus independent validation.
 
 `CAMPAIGN.md` and `WORK_QUEUE.md` are archive pointers. They are not schedulers or current state.
 
@@ -171,6 +174,7 @@ Run this logic in order:
 11. Use hosted Actions once at the acceptance boundary.
 12. Merge or reject, update the issue/evidence state, and delete the branch.
 13. Reconcile `STATUS.md` only when accepted capabilities or honest limitations changed.
+14. Reconcile `docs/LUNUM_READINESS.md` only when linked accepted evidence changes a readiness score, action status or support boundary.
 
 Idle is correct whenever no issue passes this sequence.
 
@@ -330,16 +334,12 @@ After squash merge or rejection:
 3. delete the remote task branch;
 4. prune local branches/worktrees;
 5. update `STATUS.md` only if accepted capability state changed;
-6. verify the remote branch count remains within budget.
+6. update `docs/LUNUM_READINESS.md` only when the accepted evidence changes a score, action, support boundary or evidence ledger;
+7. verify the remote branch count remains within budget.
 
 ## Current ordered priorities
 
-Unless the vision owner changes priority, process these in this order:
-
-1. **Issue #255 — branch hygiene.** Remove reviewed superseded closed-unmerged refs and post the remaining branch count and exception list.
-2. **Issue #253 — honest EN/EL/ES/ID evidence.** Confirm two named local OpenAI-compatible model endpoints, then run the bounded parse and retention matrix. Do not calibrate thresholds first.
-3. **Issue #188 — live merge-control proof.** Keep open until branch protection/ruleset evidence proves exact current contexts, stale-SHA rejection, failed/missing/no-step blocking, and controlled override behavior.
-4. **Issues #256 and #257 — proposal decisions.** Accept or reject the preserved cross-lingual semantic-group and public quality-gate CLI ideas. Rebuild accepted work from current `main`; never revive the old branch directly.
+Unless the vision owner changes priority, process explicit ready GitHub issues in owner-approved order. Do not infer current priority from historical prose in this file; reconcile live issue and PR state first.
 
 Do not create work merely to maintain activity. New issues should advance the vision, close an evidence gap, reduce operational risk, or remove a confirmed blocker.
 
@@ -356,4 +356,5 @@ A newly onboarded orchestrator has completed onboarding when it can report:
 - whether branch/PR budgets permit a new dispatch;
 - the next ready issue and why it is ready;
 - the exact local checks and Actions boundary for that issue;
+- the current readiness areas affected by that issue;
 - any decision that must be escalated to the vision owner.
