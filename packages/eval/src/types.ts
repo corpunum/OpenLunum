@@ -32,6 +32,23 @@ export interface ModelCompletion {
   usage: CompletionUsage | null;
 }
 
+/**
+ * Result of an opt-in streaming completion (see OpenAICompatibleModel.completeStreaming).
+ * Extends ModelCompletion with timing instrumentation only obtainable by observing
+ * server-sent-event chunk arrival: time-to-first-token, total generation wall time,
+ * and time-per-output-token derived from the two. R14.1.
+ */
+export interface StreamingModelCompletion extends ModelCompletion {
+  /** Milliseconds from request start to the first content-bearing chunk. Null if no content chunk was ever received. */
+  ttftMs: number | null;
+  /** Milliseconds from request start to stream completion (last chunk / [DONE]). */
+  totalMs: number;
+  /** Milliseconds per output token after the first, i.e. (totalMs - ttftMs) / (tokenCount - 1). Null when it cannot be computed (fewer than 2 tokens, or no TTFT). */
+  tpotMs: number | null;
+  /** Number of output tokens the timing was derived from: server-reported usage.completionTokens when available, else the count of content-bearing SSE chunks. */
+  tokenCount: number;
+}
+
 export interface ExperimentManifest {
   schema: 'openlunum-experiment/0.1';
   id: string;
