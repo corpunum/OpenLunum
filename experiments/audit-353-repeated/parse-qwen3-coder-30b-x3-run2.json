@@ -1,0 +1,25 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "audit-353-repeated-parse-qwen3-coder-30b-run2",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "deterministic": false,
+  "hypothesis": "Qwen 3 Coder 30B A3B (openai/qwen3-coder-30b-a3b) parses the full EN/EL/ES/ID slice of multilingual-core-v1 into valid Lunum-Sem. This is run 2 of 3 independent single-attempt (maxAttemptsPerItem=1) passes over the SAME frozen #321 dataset and the SAME model profile as experiments/audit-321-freeze/parse-qwen3-coder-30b.json, issued as 3 separate manifests writing to distinct outputDirectory paths (run1/run2/run3). This is the manifest-level mechanism for repeated-sampling variance measurement (#353, R2.6): the runner in packages/eval/src/parse-experiment.ts has no native repetition-count concept -- its only multi-attempt lever, limits.maxAttemptsPerItem, is a retry-after-failure loop that breaks on the first passing attempt and keeps only the final attempt's ItemResult (see the 'if (finalResult.status === \"passed\") break;' at parse-experiment.ts:177), so raising it would NOT collect N independent samples per item -- it would silently discard samples after the first pass and conflate retry-recovery with sampling variance. Three separate single-attempt manifests, each producing its own untouched parse-summary.json under its own run{N} directory, is the correct way to get 3 honest, independent per-item samples with the existing schema and runner, unmodified. Aggregating the 3 output directories into per-item and cross-run variance is deferred to the execution follow-up issue; no aggregation code exists yet (see #353 final report).",
+  "baselineCommit": "aeb23fa604d98acf1c1db3130055f6fe4f424578",
+  "dataset": {
+    "path": "datasets/dev/multilingual-core-v1.jsonl",
+    "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+  },
+  "modelProfile": "profiles/models/qwen3-coder-30b-live.json",
+  "limits": {
+    "maxItems": 16,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 16
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": false
+  },
+  "outputDirectory": "reports/experiments/audit-353-repeated/parse/qwen3-coder-30b/run2"
+}
