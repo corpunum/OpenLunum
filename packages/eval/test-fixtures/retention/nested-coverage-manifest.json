@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-retention-manifest/0.1",
+  "id": "retention-nested-coverage-contract",
+  "baselineCommit": "aeb23fa604d98acf1c1db3130055f6fe4f424578",
+  "dataset": {
+    "path": "packages/eval/test-fixtures/retention/nested-dataset.json",
+    "sha256": "6556b3f617176337b93b41013f3baa06c4e803b103bfaa437db417fad242c61c"
+  },
+  "expectedItemIds": [
+    "nested-deadline-escalation-en",
+    "nested-deadline-escalation-el",
+    "nested-deadline-escalation-es",
+    "nested-deadline-escalation-id",
+    "nested-funds-approval-en",
+    "nested-funds-approval-el",
+    "nested-funds-approval-es",
+    "nested-funds-approval-id"
+  ],
+  "limits": {
+    "maxItems": 8,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 16
+  }
+}

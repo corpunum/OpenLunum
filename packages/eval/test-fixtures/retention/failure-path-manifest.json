@@ -1,0 +1,19 @@
+{
+  "schema": "openlunum-retention-manifest/0.1",
+  "id": "retention-failure-path-contract",
+  "baselineCommit": "aeb23fa604d98acf1c1db3130055f6fe4f424578",
+  "dataset": {
+    "path": "packages/eval/test-fixtures/retention/failure-path-dataset.json",
+    "sha256": "04b96fbd9ebbcc8464732839ca91ff0e3acd6dfee5b4cbfcb3c97fb5ae55e4e3"
+  },
+  "expectedItemIds": [
+    "failure-path-item-a",
+    "failure-path-item-b",
+    "failure-path-item-c"
+  ],
+  "limits": {
+    "maxItems": 3,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 6
+  }
+}

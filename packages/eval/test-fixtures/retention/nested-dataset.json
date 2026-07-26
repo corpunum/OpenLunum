@@ -1,0 +1,398 @@
+[
+  {
+    "id": "nested-deadline-escalation-en",
+    "semanticGroup": "nested-deadline-escalation",
+    "sourceLanguage": "en",
+    "sourceText": "If the project deadline of 2026-09-30 passes without delivery, notify the project manager; if the project manager has not approved an extension within 3 days, escalate to the director.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "escalation_policy",
+      "clauses": [
+        {
+          "predicate": "notify",
+          "roles": {
+            "agent": { "type": "actor", "id": "system" },
+            "target": { "type": "actor", "id": "project_manager" }
+          },
+          "negated": false,
+          "conditions": [
+            {
+              "predicate": "missed",
+              "roles": {
+                "subject": { "type": "project", "id": "project" },
+                "theme": { "type": "concept", "id": "delivery" }
+              },
+              "negated": false,
+              "time": { "type": "date", "value": "2026-09-30" }
+            }
+          ],
+          "consequences": [
+            {
+              "predicate": "escalate",
+              "roles": {
+                "agent": { "type": "actor", "id": "system" },
+                "target": { "type": "actor", "id": "director" }
+              },
+              "negated": false,
+              "conditions": [
+                {
+                  "predicate": "approved",
+                  "roles": {
+                    "agent": { "type": "actor", "id": "project_manager" },
+                    "theme": { "type": "concept", "id": "extension" }
+                  },
+                  "negated": true,
+                  "time": { "type": "duration", "value": 3, "unit": "days" }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "protectedLiterals": ["2026-09-30", "3"],
+    "tags": ["nested", "escalation", "en"]
+  },
+  {
+    "id": "nested-deadline-escalation-el",
+    "semanticGroup": "nested-deadline-escalation",
+    "sourceLanguage": "el",
+    "sourceText": "Αν η προθεσμία του έργου στις 2026-09-30 παρέλθει χωρίς παράδοση, ειδοποίησε τον υπεύθυνο έργου· αν ο υπεύθυνος έργου δεν έχει εγκρίνει παράταση εντός 3 ημερών, κλιμάκωσε στον διευθυντή.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "escalation_policy",
+      "clauses": [
+        {
+          "predicate": "notify",
+          "roles": {
+            "agent": { "type": "actor", "id": "system" },
+            "target": { "type": "actor", "id": "project_manager" }
+          },
+          "negated": false,
+          "conditions": [
+            {
+              "predicate": "missed",
+              "roles": {
+                "subject": { "type": "project", "id": "project" },
+                "theme": { "type": "concept", "id": "delivery" }
+              },
+              "negated": false,
+              "time": { "type": "date", "value": "2026-09-30" }
+            }
+          ],
+          "consequences": [
+            {
+              "predicate": "escalate",
+              "roles": {
+                "agent": { "type": "actor", "id": "system" },
+                "target": { "type": "actor", "id": "director" }
+              },
+              "negated": false,
+              "conditions": [
+                {
+                  "predicate": "approved",
+                  "roles": {
+                    "agent": { "type": "actor", "id": "project_manager" },
+                    "theme": { "type": "concept", "id": "extension" }
+                  },
+                  "negated": true,
+                  "time": { "type": "duration", "value": 3, "unit": "days" }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "protectedLiterals": ["2026-09-30", "3"],
+    "tags": ["nested", "escalation", "el"]
+  },
+  {
+    "id": "nested-deadline-escalation-es",
+    "semanticGroup": "nested-deadline-escalation",
+    "sourceLanguage": "es",
+    "sourceText": "Si la fecha límite del proyecto del 2026-09-30 pasa sin entrega, notifica al gerente de proyecto; si el gerente de proyecto no ha aprobado una prórroga en un plazo de 3 días, escala al director.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "escalation_policy",
+      "clauses": [
+        {
+          "predicate": "notify",
+          "roles": {
+            "agent": { "type": "actor", "id": "system" },
+            "target": { "type": "actor", "id": "project_manager" }
+          },
+          "negated": false,
+          "conditions": [
+            {
+              "predicate": "missed",
+              "roles": {
+                "subject": { "type": "project", "id": "project" },
+                "theme": { "type": "concept", "id": "delivery" }
+              },
+              "negated": false,
+              "time": { "type": "date", "value": "2026-09-30" }
+            }
+          ],
+          "consequences": [
+            {
+              "predicate": "escalate",
+              "roles": {
+                "agent": { "type": "actor", "id": "system" },
+                "target": { "type": "actor", "id": "director" }
+              },
+              "negated": false,
+              "conditions": [
+                {
+                  "predicate": "approved",
+                  "roles": {
+                    "agent": { "type": "actor", "id": "project_manager" },
+                    "theme": { "type": "concept", "id": "extension" }
+                  },
+                  "negated": true,
+                  "time": { "type": "duration", "value": 3, "unit": "days" }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "protectedLiterals": ["2026-09-30", "3"],
+    "tags": ["nested", "escalation", "es"]
+  },
+  {
+    "id": "nested-deadline-escalation-id",
+    "semanticGroup": "nested-deadline-escalation",
+    "sourceLanguage": "id",
+    "sourceText": "Jika tenggat proyek pada 2026-09-30 terlewati tanpa penyerahan, beri tahu manajer proyek; jika manajer proyek belum menyetujui perpanjangan dalam waktu 3 hari, eskalasikan ke direktur.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "escalation_policy",
+      "clauses": [
+        {
+          "predicate": "notify",
+          "roles": {
+            "agent": { "type": "actor", "id": "system" },
+            "target": { "type": "actor", "id": "project_manager" }
+          },
+          "negated": false,
+          "conditions": [
+            {
+              "predicate": "missed",
+              "roles": {
+                "subject": { "type": "project", "id": "project" },
+                "theme": { "type": "concept", "id": "delivery" }
+              },
+              "negated": false,
+              "time": { "type": "date", "value": "2026-09-30" }
+            }
+          ],
+          "consequences": [
+            {
+              "predicate": "escalate",
+              "roles": {
+                "agent": { "type": "actor", "id": "system" },
+                "target": { "type": "actor", "id": "director" }
+              },
+              "negated": false,
+              "conditions": [
+                {
+                  "predicate": "approved",
+                  "roles": {
+                    "agent": { "type": "actor", "id": "project_manager" },
+                    "theme": { "type": "concept", "id": "extension" }
+                  },
+                  "negated": true,
+                  "time": { "type": "duration", "value": 3, "unit": "days" }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "protectedLiterals": ["2026-09-30", "3"],
+    "tags": ["nested", "escalation", "id"]
+  },
+  {
+    "id": "nested-funds-approval-en",
+    "semanticGroup": "nested-funds-approval",
+    "sourceLanguage": "en",
+    "sourceText": "Do not release funds to the user unless the manager has approved the request when the amount exceeds 1000 USD.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "safety_constraint",
+      "clauses": [
+        {
+          "predicate": "release",
+          "roles": {
+            "agent": { "type": "actor", "id": "system" },
+            "theme": { "type": "concept", "id": "funds" },
+            "target": { "type": "actor", "id": "user" }
+          },
+          "negated": true,
+          "conditions": [
+            {
+              "predicate": "approved",
+              "roles": {
+                "agent": { "type": "actor", "id": "manager" },
+                "theme": { "type": "concept", "id": "request" }
+              },
+              "negated": true,
+              "conditions": [
+                {
+                  "predicate": "exceeds",
+                  "roles": {
+                    "subject": { "type": "quantity", "id": "amount" },
+                    "threshold": { "type": "quantity", "value": 1000, "unit": "USD" }
+                  },
+                  "negated": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "protectedLiterals": ["1000"],
+    "tags": ["nested", "safety", "en"]
+  },
+  {
+    "id": "nested-funds-approval-el",
+    "semanticGroup": "nested-funds-approval",
+    "sourceLanguage": "el",
+    "sourceText": "Μην απελευθερώνεις κεφάλαια στον χρήστη εκτός αν ο διευθυντής έχει εγκρίνει το αίτημα όταν το ποσό υπερβαίνει τα 1000 USD.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "safety_constraint",
+      "clauses": [
+        {
+          "predicate": "release",
+          "roles": {
+            "agent": { "type": "actor", "id": "system" },
+            "theme": { "type": "concept", "id": "funds" },
+            "target": { "type": "actor", "id": "user" }
+          },
+          "negated": true,
+          "conditions": [
+            {
+              "predicate": "approved",
+              "roles": {
+                "agent": { "type": "actor", "id": "manager" },
+                "theme": { "type": "concept", "id": "request" }
+              },
+              "negated": true,
+              "conditions": [
+                {
+                  "predicate": "exceeds",
+                  "roles": {
+                    "subject": { "type": "quantity", "id": "amount" },
+                    "threshold": { "type": "quantity", "value": 1000, "unit": "USD" }
+                  },
+                  "negated": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "protectedLiterals": ["1000"],
+    "tags": ["nested", "safety", "el"]
+  },
+  {
+    "id": "nested-funds-approval-es",
+    "semanticGroup": "nested-funds-approval",
+    "sourceLanguage": "es",
+    "sourceText": "No liberes fondos al usuario a menos que el gerente haya aprobado la solicitud cuando el monto supere los 1000 USD.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "safety_constraint",
+      "clauses": [
+        {
+          "predicate": "release",
+          "roles": {
+            "agent": { "type": "actor", "id": "system" },
+            "theme": { "type": "concept", "id": "funds" },
+            "target": { "type": "actor", "id": "user" }
+          },
+          "negated": true,
+          "conditions": [
+            {
+              "predicate": "approved",
+              "roles": {
+                "agent": { "type": "actor", "id": "manager" },
+                "theme": { "type": "concept", "id": "request" }
+              },
+              "negated": true,
+              "conditions": [
+                {
+                  "predicate": "exceeds",
+                  "roles": {
+                    "subject": { "type": "quantity", "id": "amount" },
+                    "threshold": { "type": "quantity", "value": 1000, "unit": "USD" }
+                  },
+                  "negated": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "protectedLiterals": ["1000"],
+    "tags": ["nested", "safety", "es"]
+  },
+  {
+    "id": "nested-funds-approval-id",
+    "semanticGroup": "nested-funds-approval",
+    "sourceLanguage": "id",
+    "sourceText": "Jangan mencairkan dana kepada pengguna kecuali manajer telah menyetujui permintaan ketika jumlahnya melebihi 1000 USD.",
+    "goldSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "safety_constraint",
+      "clauses": [
+        {
+          "predicate": "release",
+          "roles": {
+            "agent": { "type": "actor", "id": "system" },
+            "theme": { "type": "concept", "id": "funds" },
+            "target": { "type": "actor", "id": "user" }
+          },
+          "negated": true,
+          "conditions": [
+            {
+              "predicate": "approved",
+              "roles": {
+                "agent": { "type": "actor", "id": "manager" },
+                "theme": { "type": "concept", "id": "request" }
+              },
+              "negated": true,
+              "conditions": [
+                {
+                  "predicate": "exceeds",
+                  "roles": {
+                    "subject": { "type": "quantity", "id": "amount" },
+                    "threshold": { "type": "quantity", "value": 1000, "unit": "USD" }
+                  },
+                  "negated": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "protectedLiterals": ["1000"],
+    "tags": ["nested", "safety", "id"]
+  }
+]
