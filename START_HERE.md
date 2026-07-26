@@ -4,18 +4,21 @@ This is the entry point for humans and coding agents. OpenLunum is a research-an
 
 Local orchestrators should start at `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md`.
 
+Read `docs/LUNUM_READINESS.md` before proposing production, support, language, model, tokenizer, compaction, safety, or maturity claims.
+
 ## 1. Understand the architecture and operating model
 
 Read in this order:
 
 1. `VISION.md`
-2. `docs/ARCHITECTURE.md`
-3. `docs/MULTILINGUAL_MODEL.md`
-4. `docs/REPOSITORY_OPERATING_MODEL.md`
-5. `docs/AGENT_OPERATING_MODEL.md`
-6. `docs/EXPERIMENT_PROTOCOL.md`
-7. `docs/EVALUATION_PROTOCOL.md`
-8. the assigned GitHub issue
+2. `docs/LUNUM_READINESS.md`
+3. `docs/ARCHITECTURE.md`
+4. `docs/MULTILINGUAL_MODEL.md`
+5. `docs/REPOSITORY_OPERATING_MODEL.md`
+6. `docs/AGENT_OPERATING_MODEL.md`
+7. `docs/EXPERIMENT_PROTOCOL.md`
+8. `docs/EVALUATION_PROTOCOL.md`
+9. the assigned GitHub issue
 
 `CAMPAIGN.md` and `WORK_QUEUE.md` are archive pointers. GitHub issues are the canonical backlog and assignment state.
 
