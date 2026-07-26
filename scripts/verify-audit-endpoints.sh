@@ -223,6 +223,15 @@ verify_profile() {
   local probe_request=""
   local probe_response=""
   local probe_latency="N/A"
+  # preflight_state disambiguates *why* a probe did not yield a validated response
+  # (R14.2). It stays "N/A" when the probe was skipped, becomes "pass" on a valid
+  # response, and otherwise takes exactly one of:
+  #   absent - model id was not present in /v1/models at all
+  #   cold   - model id WAS present, but the probe request itself failed/timed out
+  #            (weights likely still loading after a router restart)
+  #   error  - model id was present, probe returned quickly, but the response body
+  #            was malformed/invalid (a genuine configuration problem)
+  local preflight_state="N/A"
   local model_path="N/A"
   local file_size_bytes="N/A"
   local file_mtime="N/A"
@@ -264,6 +273,7 @@ verify_profile() {
         if [[ "$models_response" == "N/A" ]]; then
           log_error "Failed to connect to /v1/models"
           profile_ok=false
+          preflight_state="absent"
         else
           # Check if model id is present in the response
           if echo "$models_response" | grep -q "\"id\".*\"$model_id\""; then
@@ -272,6 +282,7 @@ verify_profile() {
           else
             log_error "Model ID not found in /v1/models response"
             profile_ok=false
+            preflight_state="absent"
           fi
         fi
 
@@ -373,16 +384,30 @@ PROBE_EOF
           probe_latency=$(( (probe_end - probe_start) / 1000000 ))  # Convert to milliseconds
 
           if [[ -z "$probe_response" ]]; then
-            log_error "Probe request failed or timed out"
+            # Model id WAS confirmed present in /v1/models (the gate above already
+            # requires model_present == true to reach here), but the probe request
+            # itself failed or timed out. This is the R14.2 "cold weights" case: a
+            # 35B model's first probe after a router restart took 27+ seconds
+            # against a 30s timeout and was reported as a bare FAIL even though the
+            # model was correctly configured and warmed up fine seconds later.
+            # Do NOT collapse this into the same bucket as a genuinely absent or
+            # misconfigured endpoint.
+            log_error "Probe request failed or timed out (model present in /v1/models; weights may still be loading)"
             profile_ok=false
-            probe_latency="N/A"
+            preflight_state="cold"
+            probe_latency="N/A (cold: probe failed/timed out, model present in /v1/models)"
           else
             # Check if response contains choices/content (basic validation)
             if echo "$probe_response" | grep -q "\"content\"" || echo "$probe_response" | grep -q "\"choices\""; then
               log_info "  Probe request successful (${probe_latency}ms)"
+              preflight_state="pass"
             else
+              # Model id was present and the probe returned promptly, but the
+              # response body itself is malformed/invalid: a genuine
+              # configuration problem, distinct from a cold-weights timeout.
               log_error "Probe response invalid"
               profile_ok=false
+              preflight_state="error"
             fi
           fi
         else
@@ -392,6 +417,7 @@ PROBE_EOF
           probe_response=""
           if [[ "$model_present" != "true" ]]; then
             probe_latency="N/A (skipped: model not present on endpoint)"
+            preflight_state="absent"
             log_info "  Probe skipped (model not present on endpoint)"
           else
             probe_latency="N/A (skipped: earlier verification failed for this profile)"
@@ -404,7 +430,7 @@ PROBE_EOF
 
   # Escape values for JSON output
   local version_escaped build_escaped preset_escaped probe_latency_escaped
-  local file_size_escaped file_mtime_escaped
+  local file_size_escaped file_mtime_escaped preflight_state_escaped
   version_escaped=$(echo -n "$version_info" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   build_escaped=$(echo -n "$build_info" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   preset_escaped=$(echo -n "$preset_section" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
@@ -415,6 +441,7 @@ PROBE_EOF
   file_mtime_escaped=$(echo -n "$file_mtime" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   file_sha256_escaped=$(echo -n "$file_sha256" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
   probe_latency_escaped=$(echo -n "$probe_latency" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
+  preflight_state_escaped=$(echo -n "$preflight_state" | python3 -c "import json, sys; print(json.dumps(sys.stdin.read()))")
 
   # Return results as JSON for aggregation
   cat <<EOF
@@ -432,6 +459,7 @@ PROBE_EOF
   "file_sha256": $file_sha256_escaped,
   "probe_latency_ms": $probe_latency_escaped,
   "probe_response_valid": $(if [[ "$probe_response" != "" ]]; then echo "true"; else echo "false"; fi),
+  "preflight_state": $preflight_state_escaped,
   "ok": $profile_ok
 }
 EOF
@@ -473,6 +501,9 @@ print("correctly configured, and responding as expected.\n")
 
 passed_count = 0
 failed_count = 0
+cold_count = 0
+absent_count = 0
+error_count = 0
 
 for p in profiles:
     print("\n### " + p.get("profile", "N/A") + "\n")
@@ -502,20 +533,47 @@ for p in profiles:
     print("- **File SHA-256**: `" + p.get("file_sha256", "N/A") + "`\n")
     status = "✓ PASS" if p.get("ok") else "✗ FAIL"
     print("- **Status**: " + status + "\n")
+    # R14.2: preflight_state disambiguates *why* a profile is not a clean PASS.
+    # This is additive detail only - it does not change the PASS/FAIL status above
+    # or the overall exit-code contract below.
+    preflight_state = p.get("preflight_state", "N/A")
+    preflight_labels = {
+        "pass": "✓ pass (probe responded and validated)",
+        "cold": "⏳ cold (model present in /v1/models, but the probe request failed/timed out - weights likely still loading; retry once warm before treating this as a real failure)",
+        "absent": "✗ absent (model id was not present in /v1/models at all)",
+        "error": "✗ error (model id was present and the probe returned promptly, but the response was malformed/invalid - a genuine configuration problem)"
+    }
+    print("- **Preflight State**: " + preflight_labels.get(preflight_state, preflight_state) + "\n")
     if p.get("ok"):
         passed_count += 1
     else:
         failed_count += 1
+        if preflight_state == "cold":
+            cold_count += 1
+        elif preflight_state == "absent":
+            absent_count += 1
+        elif preflight_state == "error":
+            error_count += 1
     preset = p.get("preset_section", "")
     if preset:
         print("#### Preset Configuration\n```ini\n[" + p.get("model", "N/A") + "]\n" + preset.strip() + "\n```\n")
 
 print("\n## Overall Status\n")
 print("**Profiles verified**: " + str(passed_count) + " passed, " + str(failed_count) + " failed\n")
+if failed_count > 0:
+    print("**Failure breakdown**: " + str(cold_count) + " cold, " + str(absent_count) + " absent, "
+          + str(error_count) + " error, " + str(failed_count - cold_count - absent_count - error_count)
+          + " other\n")
 if failed_count == 0:
     print("**OVERALL: PASS** - All profiles verified successfully. Endpoint identity is confirmed.")
 else:
     print("**OVERALL: FAIL** - One or more profiles failed verification. Audit is blocked.")
+if cold_count > 0:
+    print("\n**Note**: " + str(cold_count) + " profile(s) failed with preflight_state=cold. This means the")
+    print("model id WAS found in /v1/models but the probe request itself failed or timed out - typically")
+    print("because weights are still loading after a router restart. Warm the model and re-run this script")
+    print("before treating a `cold` result as a genuine endpoint misconfiguration. `absent` and `error`")
+    print("results are not subject to this caveat and indicate real problems.")
 print("\n### Caveat: Probe Success is Liveness Only\n")
 print("The probe completion test confirms endpoint liveness and measures request latency,")
 print("but **does not establish model identity**. Model identity depends solely on:\n")

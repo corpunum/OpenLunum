@@ -1,4 +1,4 @@
-import type { CompletionUsage, ModelCompletion, ModelProfile } from './types.js';
+import type { CompletionUsage, ModelCompletion, ModelProfile, StreamingModelCompletion } from './types.js';
 
 export const DEFAULT_MAX_TOKENS = 4096;
 
@@ -92,6 +92,110 @@ export class OpenAICompatibleModel {
       content,
       finishReason: choice && typeof choice.finish_reason === 'string' ? choice.finish_reason : null,
       usage: normalizeUsage(payload.usage)
+    };
+  }
+
+  /**
+   * Opt-in streaming alternative to complete() (R14.1). Sends the same request shape as
+   * complete() plus `stream: true`, and reconstructs the completion by reading the
+   * server-sent-event chunks as they arrive. Captures time-to-first-token (TTFT), total
+   * generation wall time, and time-per-output-token (TPOT) alongside the same
+   * content/finishReason/usage fields complete() returns.
+   *
+   * This method is entirely additive: complete() is untouched, and no existing caller's
+   * behavior or request shape changes unless it explicitly switches to this method.
+   */
+  async completeStreaming(system: string, user: string): Promise<StreamingModelCompletion> {
+    const effectiveSystem = this.profile.noThink ? `/no_think\n${system}` : system;
+    const body: Record<string, unknown> = {
+      model: this.profile.model,
+      temperature: this.profile.temperature,
+      max_tokens: this.maxTokens,
+      messages: [{ role: 'system', content: effectiveSystem }, { role: 'user', content: user }],
+      stream: true,
+      stream_options: { include_usage: true }
+    };
+    if (this.profile.seed !== undefined) body.seed = this.profile.seed;
+
+    const startedAt = performance.now();
+    const response = await fetch(this.url('chat/completions'), {
+      method: 'POST', headers: this.headers(), signal: AbortSignal.timeout(this.profile.timeoutMs),
+      body: JSON.stringify(body)
+    });
+    if (!response.ok) throw new Error(`Model call failed: HTTP ${response.status} ${await response.text()}`);
+    if (!response.body) throw new Error('Streaming model response had no body');
+
+    // Mutable accumulator object (rather than separate `let` bindings) so the nested
+    // per-event handler below can update state without relying on cross-closure
+    // control-flow narrowing.
+    const state: {
+      content: string;
+      finishReason: string | null;
+      usage: CompletionUsage | null;
+      ttftMs: number | null;
+      tokenCount: number;
+      done: boolean;
+    } = { content: '', finishReason: null, usage: null, ttftMs: null, tokenCount: 0, done: false };
+
+    const handleEvent = (data: string): void => {
+      if (data === '[DONE]') { state.done = true; return; }
+      let parsed: { choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>; usage?: unknown };
+      try {
+        parsed = JSON.parse(data) as typeof parsed;
+      } catch {
+        return;
+      }
+      const choice = parsed.choices?.[0];
+      const deltaContent = choice?.delta?.content;
+      if (typeof deltaContent === 'string' && deltaContent.length > 0) {
+        if (state.ttftMs === null) state.ttftMs = performance.now() - startedAt;
+        state.content += deltaContent;
+        state.tokenCount += 1;
+      }
+      if (choice && typeof choice.finish_reason === 'string') state.finishReason = choice.finish_reason;
+      if (parsed.usage) state.usage = normalizeUsage(parsed.usage);
+    };
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    try {
+      while (!state.done) {
+        const { done: streamDone, value } = await reader.read();
+        if (streamDone) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        let boundary = buffer.indexOf('\n\n');
+        while (boundary !== -1) {
+          const rawEvent = buffer.slice(0, boundary);
+          buffer = buffer.slice(boundary + 2);
+          for (const line of rawEvent.split('\n')) {
+            const trimmed = line.trim();
+            if (!trimmed.startsWith('data:')) continue;
+            handleEvent(trimmed.slice('data:'.length).trim());
+          }
+          if (state.done) break;
+          boundary = buffer.indexOf('\n\n');
+        }
+      }
+    } finally {
+      reader.releaseLock();
+    }
+
+    const totalMs = performance.now() - startedAt;
+    const effectiveTokenCount = state.usage?.completionTokens ?? state.tokenCount;
+    const tpotMs = state.ttftMs !== null && effectiveTokenCount > 1
+      ? (totalMs - state.ttftMs) / (effectiveTokenCount - 1)
+      : null;
+
+    return {
+      content: state.content,
+      finishReason: state.finishReason,
+      usage: state.usage,
+      ttftMs: state.ttftMs,
+      totalMs,
+      tpotMs,
+      tokenCount: effectiveTokenCount
     };
   }
 }
