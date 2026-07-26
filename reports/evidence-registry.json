@@ -1,0 +1,452 @@
+{
+  "$schema": "n/a",
+  "registryVersion": 1,
+  "generated": "2026-07-26",
+  "source": "docs/LUNUM_READINESS.md#evidence-and-evaluation-ledger (24 rows, PR #294 through PR #350, docs/MIXED_CONTEXT_QUALITY.md, issue #342)",
+  "verificationMethod": "Every mergeCommitSha was checked against `gh pr view <n> --json mergeCommit` AND `git cat-file -t <sha>` in this repository. Every evidencePath and datasetSha256 was checked by reading the file / hashing it with sha256sum. No field was transcribed from tracker prose without independent verification.",
+  "entries": [
+    {
+      "ledgerRowId": 1,
+      "ledgerText": "PR #294 / issue #293",
+      "prNumbers": [294],
+      "issueNumbers": [293],
+      "mergeCommits": [{ "pr": 294, "sha": "1cdbd7ed735bd3f2f624896e3ea09ad3ad39e9f1", "verified": true }],
+      "evidencePaths": [
+        "docs/evaluation/testLunumv1/testLunumv1.md",
+        "docs/evaluation/testLunumv1/CHANGELOG.md",
+        "reports/evaluations/testLunumv1/README.md"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Added the versioned testLunumv1 evaluation protocol document, its changelog, and the immutable result-directory layout README under reports/evaluations/testLunumv1/.",
+      "limitations": "Protocol presence did not itself provide live evidence",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 2,
+      "ledgerText": "PR #303 / issue #298",
+      "prNumbers": [303],
+      "issueNumbers": [298],
+      "mergeCommits": [{ "pr": 303, "sha": "833b8838c42e5c317c0f4f7609bb34310502bffe", "verified": true }],
+      "evidencePaths": ["packages/eval/src/model.ts"],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Preserved nullable usage and finish-reason completion metadata from the model client instead of dropping it; reasoning-only output now fails closed rather than silently passing through.",
+      "limitations": "Metadata may remain unavailable when endpoint omits it",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 3,
+      "ledgerText": "PR #304 / issue #299",
+      "prNumbers": [304],
+      "issueNumbers": [299],
+      "mergeCommits": [{ "pr": 304, "sha": "d142493d4f2ae7a8497cca0023f6983d8cabf715", "verified": true }],
+      "evidencePaths": [
+        "packages/eval/src/retention-manifest.ts",
+        "packages/eval/test/retention-manifest.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Added a deterministic retention coverage-contract planner with fail-closed call-budget and expected-item-id planning logic.",
+      "limitations": "Planning only; no live model proof",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 4,
+      "ledgerText": "PR #305 / issue #300",
+      "prNumbers": [305],
+      "issueNumbers": [300],
+      "mergeCommits": [{ "pr": 305, "sha": "a09fc1ecfd0e55b320f6b4c2a14c1758dc6a54f4", "verified": true }],
+      "evidencePaths": [
+        "packages/eval/src/retention-cli.ts",
+        "packages/eval/test/retention-cli.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Added the manifest-driven retention CLI producing per-stage JSONL raw output and deterministic recomputation of retention pass/fail.",
+      "limitations": "Initial implementation tests used mock transport",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 5,
+      "ledgerText": "PR #307 / issue #306",
+      "prNumbers": [307],
+      "issueNumbers": [306],
+      "mergeCommits": [{ "pr": 307, "sha": "806787c90e736d5150e7a81b80846627fc5ac51c", "verified": true }],
+      "evidencePaths": [
+        "packages/eval/src/retention-cli.ts",
+        "packages/eval/test/retention-cli.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Added a built-CLI mock fixture transport enabling real CLI integration testing without live model calls.",
+      "limitations": "Test-only transport",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 6,
+      "ledgerText": "PRs #312, #318, #319, #320",
+      "prNumbers": [312, 318, 319, 320],
+      "issueNumbers": [311, 313, 314, 315],
+      "mergeCommits": [
+        { "pr": 312, "sha": "75af75e702f37e426da524104850cacb0bdecae8", "verified": true },
+        { "pr": 318, "sha": "b40a7b90a81ae3ca218fb00f58fd24f0af03f37a", "verified": true },
+        { "pr": 319, "sha": "5e93dd5defe7fe8da6a67ad8a3404b97b4d71bc6", "verified": true },
+        { "pr": 320, "sha": "4e52d1daff1e60ea9a4b8f38eb482e9865df6b6c", "verified": true }
+      ],
+      "evidencePaths": [
+        "packages/eval/src/testlunumv1-audit-plan.ts",
+        "packages/eval/src/testlunumv1-audit-executor.ts",
+        "packages/eval/src/testlunumv1-audit-records.ts",
+        "packages/eval/src/testlunumv1-real-bundle.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Built the canonical audit inventory/plan module (#312, issue #311), the built-CLI audit executor (#318, issue #313), the protocol-facing JSONL record adapter (#319, issue #314), and the complete real-evidence bundle generator (#320, issue #315) -- together a full deterministic audit pipeline with no target-model calls baked into the infrastructure itself.",
+      "limitations": "Infrastructure correctness is distinct from model quality",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 7,
+      "ledgerText": "PR #323 / issue #321",
+      "prNumbers": [323],
+      "issueNumbers": [321],
+      "mergeCommits": [{ "pr": 323, "sha": "e6e9dba0772a0e4885a2a77c6366898a23631c5c", "verified": true }],
+      "evidencePaths": [
+        "experiments/audit-321-freeze",
+        "packages/eval/test/audit-321-freeze-matrix.test.ts"
+      ],
+      "datasetSha256": [
+        { "dataset": "datasets/dev/multilingual-core-v1.jsonl", "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873", "verifiedBy": "sha256sum against committed file" }
+      ],
+      "evaluatorVerdict": null,
+      "resultSummary": "Froze #253's dataset hash, equalized the two model profiles, and authored the full 2x4x2 frozen experiment-manifest matrix for comparable live audit inputs.",
+      "limitations": "Original per-language retention shape was later found unrunnable",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 8,
+      "ledgerText": "PR #326 / issue #325",
+      "prNumbers": [326],
+      "issueNumbers": [325],
+      "mergeCommits": [{ "pr": 326, "sha": "e97eef3817cb36b1764256051ace59936306976b", "verified": true }],
+      "evidencePaths": [
+        "experiments/audit-321-freeze",
+        "packages/eval/test/audit-321-freeze-matrix.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Corrected the 8 per-language retention manifests frozen by #321 (all 8 were unrunnable because planRetentionExecution requires expectedItemIds to match the full loaded dataset) by collapsing to 2 manifests, one per model, covering all 16 items; the guarding test now plans against the full dataset exactly as the CLI does.",
+      "limitations": "Shows why mock/planner tests must match real CLI call shape",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 9,
+      "ledgerText": "PR #324 / issue #322",
+      "prNumbers": [324],
+      "issueNumbers": [322],
+      "mergeCommits": [{ "pr": 324, "sha": "252b513a8b7c5e2d7cfbcd19d4adfad446e9b954", "verified": true }],
+      "evidencePaths": [
+        "scripts/verify-audit-endpoints.sh",
+        "reports/experiments/audit-321/evidence/PREFLIGHT-endpoints-parse.md",
+        "reports/experiments/audit-321/evidence/PREFLIGHT-endpoints-retention.md"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Added scripts/verify-audit-endpoints.sh: fail-closed probing of /v1/models, weights path/size/mtime capture, and a minimal probe completion, exiting non-zero on any verification failure.",
+      "limitations": "Probe success alone did not prove model identity; `/models` and weight facts were required",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 10,
+      "ledgerText": "PR #327 / issue #253",
+      "prNumbers": [327],
+      "issueNumbers": [253],
+      "mergeCommits": [{ "pr": 327, "sha": "6a8c398b45a05efdbf49fd77a0672783993b5b6d", "verified": true }],
+      "evidencePaths": [
+        "reports/experiments/audit-321/evidence/BASELINE-REPORT.md",
+        "reports/experiments/audit-321/parse/qwen36-35b",
+        "reports/experiments/audit-321/parse/qwen3-coder-30b",
+        "reports/experiments/audit-321/retention/qwen36-35b",
+        "reports/experiments/audit-321/retention/qwen3-coder-30b"
+      ],
+      "datasetSha256": [
+        { "dataset": "datasets/dev/multilingual-core-v1.jsonl", "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873", "verifiedBy": "sha256sum against committed file, also cited in BASELINE-REPORT.md" }
+      ],
+      "evaluatorVerdict": null,
+      "resultSummary": "Initial honest live parse and retention baseline recomputed from raw per-item JSONL: parse exact 56.25% (qwen36-35b) / 25% (qwen3-coder-30b), recall 0.9319 / 0.8299, retention 31/32 / 32/32. Both models fail both declared gates (minimumExactRate 0.75, minimumFeatureRecall 0.95). No threshold adjusted.",
+      "limitations": "Same small 16-item corpus; both models failed declared parse gates at that SHA",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 11,
+      "ledgerText": "PR #336",
+      "prNumbers": [336],
+      "issueNumbers": [253],
+      "mergeCommits": [{ "pr": 336, "sha": "07d6a1fceeb6c4823c786c7a9026aa41599570d5", "verified": true }],
+      "evidencePaths": ["reports/evaluator/253-VERDICT.md"],
+      "datasetSha256": [],
+      "evaluatorVerdict": {
+        "verdict": "PASS",
+        "path": "reports/evaluator/253-VERDICT.md",
+        "boundEvidenceSha": "534edb8f7fa38d889aab157244e3bf6380b719d4",
+        "note": "boundEvidenceSha matches PR #335's merge commit SHA exactly, confirming the verdict is bound to the corrected (post-#335) evidence state, not PR #336's own merge SHA."
+      },
+      "resultSummary": "Independent evaluator (orchestrator-synthesized, after 3 infra-failed dispatch rounds against a local sub-evaluator) issued PASS bound to evidence SHA 534edb8f, certifying #253's evidence bundle as complete, internally consistent and honestly reported.",
+      "limitations": "PASS certified evidence integrity, not that models met quality targets; local evaluator infrastructure had failures disclosed in verdict",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 12,
+      "ledgerText": "PR #330 / issue #328",
+      "prNumbers": [330],
+      "issueNumbers": [328],
+      "mergeCommits": [{ "pr": 330, "sha": "5d29a2d77b2350a802c209c94fb924b70e506940", "verified": true }],
+      "evidencePaths": [
+        "datasets/adversarial/mutation-false-positive-v1.jsonl",
+        "datasets/manifests/mutation-false-positive-v1.json",
+        "packages/eval/test/mutation-false-positive-coverage.test.ts"
+      ],
+      "datasetSha256": [
+        { "dataset": "datasets/adversarial/mutation-false-positive-v1.jsonl", "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16", "verifiedBy": "sha256sum against committed file" }
+      ],
+      "evaluatorVerdict": null,
+      "resultSummary": "Added a 20-item mutation false-positive corpus (5 mutation categories x 4 languages), each item a minimally mutated variant whose gold genuinely differs from its source, plus a coverage test asserting the full 5x4 matrix and real loadDataset compatibility.",
+      "limitations": "n=4 per mutation category/model; one Indonesian wording caveat retained",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 13,
+      "ledgerText": "PR #331 / issue #329",
+      "prNumbers": [331],
+      "issueNumbers": [329],
+      "mergeCommits": [{ "pr": 331, "sha": "106ed90f8db5118ab32de870a0f4a2e7a8c778a3", "verified": true }],
+      "evidencePaths": [
+        "packages/eval/src/protected-literal-placement.ts",
+        "packages/eval/test/protected-literal-placement.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Added checkProtectedLiteralPlacement, a structural role-path check that verifies a protected literal reappears at the same semantic role path as gold (not merely anywhere in the serialized output). Offline re-scoring of the committed #253 raw records reproduced the previously reported 0/8 failures for all 16 checks (8 items x 2 models).",
+      "limitations": "Predicate identity was intentionally excluded from placement path and remains an owner-level interpretation choice",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 14,
+      "ledgerText": "PR #333 / issue #332",
+      "prNumbers": [333],
+      "issueNumbers": [332],
+      "mergeCommits": [{ "pr": 333, "sha": "b20155d9f33cfe8ba8f291cd0f6bc5ac3fecfc6e", "verified": true }],
+      "evidencePaths": [
+        "reports/experiments/false-positive-review-332/evidence/FALSE-POSITIVE-REPORT.md",
+        "reports/experiments/false-positive-review-332/qwen36-35b/2026-07-25T10-41-05-173Z",
+        "reports/experiments/false-positive-review-332/qwen3-coder-30b/2026-07-25T10-57-20-709Z"
+      ],
+      "datasetSha256": [
+        { "dataset": "datasets/adversarial/mutation-false-positive-v1.jsonl", "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16", "verifiedBy": "sha256sum against committed file, matches value cited in the report" },
+        { "dataset": "datasets/dev/multilingual-core-v1.jsonl", "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873", "verifiedBy": "sha256sum against committed file, matches value cited in the report" }
+      ],
+      "evaluatorVerdict": null,
+      "resultSummary": "Executed the mutation false-positive corpus against both #253 models: qwen36-35b 2/20 false positives (10.0%), qwen3-coder-30b 0/20 (0.0%), with the report noting the 0% rate is not comparable quality since coder-30b matches neither gold on 16/20 items.",
+      "limitations": "Original modality mechanism interpretation was corrected by PR #335",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 15,
+      "ledgerText": "PR #335",
+      "prNumbers": [335],
+      "issueNumbers": [332],
+      "mergeCommits": [{ "pr": 335, "sha": "534edb8f7fa38d889aab157244e3bf6380b719d4", "verified": true }],
+      "evidencePaths": ["reports/experiments/false-positive-review-332/evidence/FALSE-POSITIVE-REPORT.md"],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Corrected the false-positive report's stated mechanism: the two surfaced false positives occur because modality was OMITTED by the model (parse collapsed to source meaning), not because the scorer ignored an emitted `modality: permissive` value -- the scorer in fact drives an emitted-but-wrong modality field to score 0.000. Verified in the report's own CORRECTION section, which shows the raw per-item table (emitted permissive/possible -> score 0.000; emitted nothing -> score 0.900/0.810 -> false positive).",
+      "limitations": "Supersedes the incorrect mechanistic statement in earlier report text, not its raw measurements",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 16,
+      "ledgerText": "PR #338 / issue #337",
+      "prNumbers": [338],
+      "issueNumbers": [337],
+      "mergeCommits": [{ "pr": 338, "sha": "3e61142d6265325f25582f65e2c79a42d885e1d9", "verified": true }],
+      "evidencePaths": [
+        "packages/eval/src/prompts.ts",
+        "packages/eval/src/predicate-vocabulary.ts",
+        "packages/eval/test/prompts-vocabulary-consistency.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Fixed parsePrompt's worked examples (exampleProjectState, exampleConditional, exampleSafety) that used predicates/roles contradicting the controlled vocabulary and gold patterns, and added the missing canonical terms 'below'/'confirmed' to PREDICATES. New regression test verified to fail pre-fix (via git stash) and pass post-fix.",
+      "limitations": "Prompt change required independent remeasurement",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 17,
+      "ledgerText": "PR #340 / issue #339",
+      "prNumbers": [340],
+      "issueNumbers": [339],
+      "mergeCommits": [{ "pr": 340, "sha": "5952a29378af5a85d8f2679908c4c206084c6cfe", "verified": true }],
+      "evidencePaths": ["reports/experiments/audit-339-remeasure/evidence/REMEASURE-REPORT.md"],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Post-#337 parse remeasurement on the identical #253 corpus: exact 93.75% (qwen36-35b) / 100% (qwen3-coder-30b), recall 1.0 / 1.0. Both models now pass both declared gates on this measurement.",
+      "limitations": "Same 16-item corpus, single run, not held-out generalization evidence",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 18,
+      "ledgerText": "PR #343 / issue #341",
+      "prNumbers": [343],
+      "issueNumbers": [341],
+      "mergeCommits": [{ "pr": 343, "sha": "b517f36df07448ec9c0fd25f89d1d63a1141bb55", "verified": true }],
+      "evidencePaths": [
+        "packages/eval/src/prompts.ts",
+        "packages/eval/test/prompts-vocabulary-consistency.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Added MODALITY_VALUES/MODALITY_VALUE_SET controlled vocabulary to vocabularyBlock() and demonstrated `modality: 'permission'` on a dedicated worked example (moved off exampleConditional to avoid corrupting the already-correct battery-item pattern), extending the #337 regression test.",
+      "limitations": "Exposed schema inconsistency tracked in #342",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 19,
+      "ledgerText": "PR #347 / issue #344",
+      "prNumbers": [347],
+      "issueNumbers": [344],
+      "mergeCommits": [{ "pr": 347, "sha": "1801e101c7b77dc0b5f8b37eee9dc5f8c182cabc", "verified": true }],
+      "evidencePaths": ["reports/experiments/audit-344-remeasure/evidence/REMEASURE-REPORT.md"],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Post-#337/#341 remeasurement: modality false positives eliminated (2->0 qwen36-35b, 0->0 qwen3-coder-30b); exact 93.75% / 81.25%; retention 30/32 / 32/32. Also exposed a pre-existing near-semantic scorer blind spot to role swaps (filed separately, fixed by #349).",
+      "limitations": "Single-run nondeterminism demonstrated; small same corpus",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 20,
+      "ledgerText": "PR #348 / issue #345",
+      "prNumbers": [348],
+      "issueNumbers": [345],
+      "mergeCommits": [{ "pr": 348, "sha": "6861ec71304f8b19c6814ce1a026b02e3a784c61", "verified": true }],
+      "evidencePaths": [
+        "packages/eval/src/prompts.ts",
+        "packages/eval/test/prompts-vocabulary-consistency.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Fixed examplePermission's 'confirmed' condition role from 'subject' to 'agent' to match delete-* gold, and extended the regression test with a general sweep cross-checking every worked example's condition role keys against gold role keys for shared predicates.",
+      "limitations": "Effect awaits future measurement if needed",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 21,
+      "ledgerText": "PR #349 / issue #346",
+      "prNumbers": [349],
+      "issueNumbers": [346],
+      "mergeCommits": [{ "pr": 349, "sha": "228faddc6fd38b839b3aa08e9d39b9606303b95e", "verified": true }],
+      "evidencePaths": [
+        "packages/eval/test/false-positive-review-cli.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Bound near-semantic role-filler features to their clause predicate (e.g. `role-id:<predicate>:<role>:<id>`) so an identical role/id pair filling two different clauses is no longer collapsed into one feature; restored scorer visibility of role-swap mutations. Test fixture fp-role-both-en, copied from the real #328 corpus item that exposed the bug, updated to reflect the fix.",
+      "limitations": "Threshold unchanged; broader calibration remains an owner decision",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 22,
+      "ledgerText": "PR #350",
+      "prNumbers": [350],
+      "issueNumbers": [346],
+      "mergeCommits": [{ "pr": 350, "sha": "b2a1b4ab6255226fd6acbb218154bf3ecabf5394", "verified": true }],
+      "evidencePaths": ["reports/experiments/audit-346-rescore/evidence/RESCORE-REPORT.md"],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Re-scored the committed #253/#344 raw model outputs with the #346 scorer (zero model calls): all 3 role-swap false positives eliminated (1.000->0.771, 0.816->0.643), #253 gate metrics (exact 9/16, 4/16) provably unchanged, zero classification flips on post-#337 parse data.",
+      "limitations": "Re-scoring cannot prove behaviour on unseen data",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 23,
+      "ledgerText": "`docs/MIXED_CONTEXT_QUALITY.md`",
+      "prNumbers": [],
+      "issueNumbers": [],
+      "mergeCommits": [],
+      "evidencePaths": [
+        "docs/MIXED_CONTEXT_QUALITY.md",
+        "packages/core/src/mixed-context-quality.ts",
+        "packages/core/test/mixed-context-quality.test.ts",
+        "packages/core/src/downstream-quality.ts",
+        "packages/core/src/context.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Natural/Lunum/mixed context quality framework: MixedContextQualityGate compares accuracy/semantic-similarity/token-efficiency across context modes and task types, producing structured pass/warn/fail gate reports.",
+      "limitations": "Current quality scoring is heuristic and token counting is approximate; not production compaction proof",
+      "limitationsSource": "tracker",
+      "discrepancy": "None found: docs/MIXED_CONTEXT_QUALITY.md's own 'Limitations' section states 'Quality estimation is heuristic-based ... Token counting uses character-based estimation (~4 chars per token)', which matches the tracker's summary closely; no correction needed.",
+      "verificationStatus": "verified"
+    },
+    {
+      "ledgerRowId": 24,
+      "ledgerText": "Issue #342",
+      "prNumbers": [],
+      "issueNumbers": [342],
+      "mergeCommits": [],
+      "evidencePaths": [],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Open issue: ModalityType (10 values, includes 'permission') disagrees with the v02Clause modality enum (4 values, excludes 'permission' and others); v01Clause.modality is an unconstrained free string. The mutation-false-positive-v1 gold uses modality:'permission', which is valid under v01 but not under the v02 enum.",
+      "limitations": "Open owner/architecture decision; no dataset/evidence mutation should precede it",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified",
+      "note": "No merge SHA applicable -- issue #342 is OPEN, not resolved by a PR, confirmed via `gh issue view 342 --json state` returning state=OPEN."
+    }
+  ]
+}
