@@ -1,0 +1,66 @@
+{
+  "schema": "openlunum-retention-repeated-pass-plan/0.1",
+  "id": "retention-nested-repeated-pass-v1",
+  "description": "Two-pass drift-measurement plan for R3.3: pass 1 realizes and parses-back the nested fixture items (see nested-coverage-manifest.json); pass 2 realizes and parses-back the ITEMS PRODUCED BY PASS 1 (each item's pass-1 parsedText becomes pass-2's sourceText), so drift across two full round trips can be measured by diffing pass-1 vs pass-2 parsedText per item.",
+  "totalPasses": 2,
+  "chainingAutomated": false,
+  "chainingGapNote": "The retention manifest schema (openlunum-retention-manifest/0.1, see retention-manifest.ts) and runRetentionCli (retention-cli.ts) have NO mechanism to feed one pass's output into the next pass's input. runRetentionCli's realizationPrompt() always reads item.sourceText from the STATIC dataset named in manifest.dataset.path; the 'attempt' dimension (limits.maxAttemptsPerItem) is a same-input RETRY loop that breaks on the first passed attempt, not a chain -- attempt 2 re-realizes the ORIGINAL item, it never sees attempt 1's parsedText. Automating real chaining would require: (1) a `pass` field on RetentionStageRawRecord distinct from `attempt`, so per-pass records are queryable without conflating retries and chained passes; (2) a manifest-level `passes: number` (or an explicit list of per-pass dataset refs) validated by validateRetentionManifest; (3) runtime logic in runRetentionCli that, after a passed parse-back in pass N, derives pass N+1's per-item sourceText from pass N's parsedText instead of re-reading the static dataset, and re-validates that derived input before use; (4) NO new scoring/threshold logic is required for the chaining mechanism itself -- drift measurement (diffing pass-1 vs pass-2 parsedText) is a separate, later analysis step over the raw JSONL and is explicitly out of this issue's scope (R3.3 constraints: do not touch retention scoring logic). This gap is why pass 2 below is a VALIDATED TEMPLATE, not an executable chain: its dataset currently points at the same static pass-1 input as a schema-valid placeholder. Before pass 2 can measure real drift, its dataset.path/dataset.sha256 must be replaced by regenerating a dataset file from pass 1's actual reports/evaluations/retention/<run>/raw/parse-back.jsonl output (mapping each item's parsedText to the next dataset's sourceText) -- a manual or scripted step that does not yet exist and is NOT implemented by this issue, per instruction to report rather than build undescribed pipeline behavior.",
+  "passes": [
+    {
+      "passNumber": 1,
+      "inputSource": "static: packages/eval/test-fixtures/retention/nested-dataset.json (original fixture items)",
+      "manifest": {
+        "schema": "openlunum-retention-manifest/0.1",
+        "id": "retention-nested-repeated-pass-v1-pass1",
+        "baselineCommit": "aeb23fa604d98acf1c1db3130055f6fe4f424578",
+        "dataset": {
+          "path": "packages/eval/test-fixtures/retention/nested-dataset.json",
+          "sha256": "6556b3f617176337b93b41013f3baa06c4e803b103bfaa437db417fad242c61c"
+        },
+        "expectedItemIds": [
+          "nested-deadline-escalation-en",
+          "nested-deadline-escalation-el",
+          "nested-deadline-escalation-es",
+          "nested-deadline-escalation-id",
+          "nested-funds-approval-en",
+          "nested-funds-approval-el",
+          "nested-funds-approval-es",
+          "nested-funds-approval-id"
+        ],
+        "limits": {
+          "maxItems": 8,
+          "maxAttemptsPerItem": 1,
+          "maxModelCalls": 16
+        }
+      }
+    },
+    {
+      "passNumber": 2,
+      "inputSource": "PLACEHOLDER: must be regenerated from pass 1's raw parse-back.jsonl output before this pass can be executed for real (see chainingGapNote) -- currently repeats the pass-1 static dataset so this manifest is schema-valid and independently runnable, not so it measures real second-pass drift",
+      "manifest": {
+        "schema": "openlunum-retention-manifest/0.1",
+        "id": "retention-nested-repeated-pass-v1-pass2",
+        "baselineCommit": "aeb23fa604d98acf1c1db3130055f6fe4f424578",
+        "dataset": {
+          "path": "packages/eval/test-fixtures/retention/nested-dataset.json",
+          "sha256": "6556b3f617176337b93b41013f3baa06c4e803b103bfaa437db417fad242c61c"
+        },
+        "expectedItemIds": [
+          "nested-deadline-escalation-en",
+          "nested-deadline-escalation-el",
+          "nested-deadline-escalation-es",
+          "nested-deadline-escalation-id",
+          "nested-funds-approval-en",
+          "nested-funds-approval-el",
+          "nested-funds-approval-es",
+          "nested-funds-approval-id"
+        ],
+        "limits": {
+          "maxItems": 8,
+          "maxAttemptsPerItem": 1,
+          "maxModelCalls": 16
+        }
+      }
+    }
+  ]
+}

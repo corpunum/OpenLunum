@@ -1,0 +1,178 @@
+[
+  {
+    "content": "{\"realizedText\":\"If the project deadline of 2026-09-30 passes without delivery, notify the project manager; if the project manager has not approved an extension within 3 days, escalate to the director.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"If the project deadline of 2026-09-30 passes without delivery, notify the project manager; if the project manager has not approved an extension within 3 days, escalate to the director.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"realizedText\":\"Αν η προθεσμία του έργου στις 2026-09-30 παρέλθει χωρίς παράδοση, ειδοποίησε τον υπεύθυνο έργου· αν ο υπεύθυνος έργου δεν έχει εγκρίνει παράταση εντός 3 ημερών, κλιμάκωσε στον διευθυντή.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"Αν η προθεσμία του έργου στις 2026-09-30 παρέλθει χωρίς παράδοση, ειδοποίησε τον υπεύθυνο έργου· αν ο υπεύθυνος έργου δεν έχει εγκρίνει παράταση εντός 3 ημερών, κλιμάκωσε στον διευθυντή.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"realizedText\":\"Si la fecha límite del proyecto del 2026-09-30 pasa sin entrega, notifica al gerente de proyecto; si el gerente de proyecto no ha aprobado una prórroga en un plazo de 3 días, escala al director.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"Si la fecha límite del proyecto del 2026-09-30 pasa sin entrega, notifica al gerente de proyecto; si el gerente de proyecto no ha aprobado una prórroga en un plazo de 3 días, escala al director.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"realizedText\":\"Jika tenggat proyek pada 2026-09-30 terlewati tanpa penyerahan, beri tahu manajer proyek; jika manajer proyek belum menyetujui perpanjangan dalam waktu 3 hari, eskalasikan ke direktur.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"Jika tenggat proyek pada 2026-09-30 terlewati tanpa penyerahan, beri tahu manajer proyek; jika manajer proyek belum menyetujui perpanjangan dalam waktu 3 hari, eskalasikan ke direktur.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"realizedText\":\"Do not release funds to the user unless the manager has approved the request when the amount exceeds 1000 USD.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"Do not release funds to the user unless the manager has approved the request when the amount exceeds 1000 USD.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"realizedText\":\"Μην απελευθερώνεις κεφάλαια στον χρήστη εκτός αν ο διευθυντής έχει εγκρίνει το αίτημα όταν το ποσό υπερβαίνει τα 1000 USD.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"Μην απελευθερώνεις κεφάλαια στον χρήστη εκτός αν ο διευθυντής έχει εγκρίνει το αίτημα όταν το ποσό υπερβαίνει τα 1000 USD.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"realizedText\":\"No liberes fondos al usuario a menos que el gerente haya aprobado la solicitud cuando el monto supere los 1000 USD.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"No liberes fondos al usuario a menos que el gerente haya aprobado la solicitud cuando el monto supere los 1000 USD.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"realizedText\":\"Jangan mencairkan dana kepada pengguna kecuali manajer telah menyetujui permintaan ketika jumlahnya melebihi 1000 USD.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  },
+  {
+    "content": "{\"parsedText\":\"Jangan mencairkan dana kepada pengguna kecuali manajer telah menyetujui permintaan ketika jumlahnya melebihi 1000 USD.\"}",
+    "finishReason": "stop",
+    "usage": {
+      "promptTokens": 10,
+      "completionTokens": 10,
+      "totalTokens": 20,
+      "cachedTokens": 0,
+      "reasoningTokens": 0
+    }
+  }
+]
