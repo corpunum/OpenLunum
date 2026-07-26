@@ -1,0 +1,49 @@
+{
+  "id": "mutation-false-positive-v2",
+  "path": "datasets/adversarial/mutation-false-positive-v2.jsonl",
+  "sha256": "933e8ed78843cb2526be78e159d2192b2f9b204d3f61ed2c1513f1ee3b3e14d1",
+  "items": 80,
+  "languages": [
+    "en",
+    "el",
+    "es",
+    "id"
+  ],
+  "mutationTypes": [
+    "negation",
+    "modality",
+    "extra-clause",
+    "literal",
+    "role"
+  ],
+  "sourceDataset": "datasets/dev/synthetic-mutation-sources-v1.jsonl",
+  "combinesWith": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+  "status": "adversarial",
+  "warning": "Expansion of the #328 mutation-false-positive corpus for #356 (readiness R5.2). This is a NEW, SEPARATE file -- the original mutation-false-positive-v1.jsonl (20 items, #328/#332/#346's evidence base) is left byte-for-byte unmodified, so all prior evidence built on it (#332, #335, #344, #346, #349, #350) remains reproducible against an unchanged input. Every item here is a minimally mutated variant whose meaning genuinely differs from its source item -- a near-semantic scorer that accepts one of these as matching its source is producing a false positive, exactly as in v1. Unlike v1, every sourceItemId here resolves against datasets/dev/synthetic-mutation-sources-v1.jsonl (NEW synthetic sources authored for this issue), NOT against the frozen datasets/dev/multilingual-core-v1.jsonl -- this was a deliberate choice to add predicates ('remind', 'approve', 'share', 'believe') and scenarios beyond the four multilingual-core-v1.jsonl source groups (preference, delete, battery, deadline) without touching the frozen #253 input. Combined with v1 (4 items/category) this file (16 items/category, 4 semantic groups x 4 languages) brings total corpus coverage to 20 items per mutation category across the same 4 languages, well past #356's n>=10-per-category target. Every item's goldSem is two levels deep in clause nesting inherited from its synthetic source (a condition with its own nested condition) -- one level deeper than v1's single-clause-with-one-condition items -- and the extra-clause category items go a further, third level deep, adding a clause absent from the source at the deepest point. Language confidence: EN and ES items are authored with full confidence. EL and ID items reuse validated vocabulary from multilingual-core-v1.jsonl / mutation-false-positive-v1.jsonl wherever possible for the original 'remind'/'approve' groups (e.g. Greek 'apenergopoiisei'/Spanish 'desactivado' as the negated form of the already-validated 'energopoiisei'/'activar'; 'epibebaiosei'/'mengonfirmasi' reusing the validated delete-pattern confirmation vocabulary; 'pano apo'/'di atas' as the direct antonym of the validated 'kato apo'/'di bawah'). Within that original 40-item batch, the exceptions, flagged explicitly and individually below per the #328 discipline, are the four extra-clause items that had to introduce genuinely new vocabulary ('urgent', 'recurring vendor') with no equivalent already validated in the corpus: extra-clause-remind-el, extra-clause-approve-el, extra-clause-remind-id, extra-clause-approve-id. A second authoring pass added two new semantic groups ('share'/'believe', 40 more items) to push the corpus beyond just 'remind'/'approve' predicates per #356's guidance to diversify predicates; EL and ID sourceText for these two groups is entirely new vocabulary with no prior domain to reuse from, so all 20 EL/ID items across both new groups are flagged below-full-confidence for native-speaker review (listed in flaggedLowerConfidenceItems below alongside the four original flags). EN and ES items in the new groups are authored with full confidence, same standard as the rest of the corpus. All 60 non-flagged items (40 original + 20 new EN/ES) are reported without reservation. IMPORTANT MEASURED FINDING (see reports/experiments/threshold-sweep/ for full data): scoring these items with the current (#346-fixed) near-semantic scorer at the frozen 0.8 threshold shows the role-remind-* and role-approve-* items (8 items, deeper 2-level-nested clause) still score ABOVE 0.8 (0.829 and 0.852 similarity) and are therefore still-live false positives, unlike v1's role-delete-* items (single-level nesting, #346-fixed to 0.771, below threshold) and this file's own role-share-*/role-believe-* items (0.592/0.613, below threshold). This is disclosed as R5.4 measurement data, not remediated -- neither near-semantic-fingerprints.ts/compare.ts nor the 0.8 threshold were touched per #356's constraints.",
+  "flaggedLowerConfidenceItems": [
+    "extra-clause-remind-el",
+    "extra-clause-approve-el",
+    "extra-clause-remind-id",
+    "extra-clause-approve-id",
+    "negation-share-el",
+    "negation-share-id",
+    "negation-believe-el",
+    "negation-believe-id",
+    "modality-share-el",
+    "modality-share-id",
+    "modality-believe-el",
+    "modality-believe-id",
+    "extra-clause-share-el",
+    "extra-clause-share-id",
+    "extra-clause-believe-el",
+    "extra-clause-believe-id",
+    "literal-share-el",
+    "literal-share-id",
+    "literal-believe-el",
+    "literal-believe-id",
+    "role-share-el",
+    "role-share-id",
+    "role-believe-el",
+    "role-believe-id"
+  ]
+}

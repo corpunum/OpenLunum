@@ -1,0 +1,16 @@
+{
+  "id": "scorer-eval-heldout-v1",
+  "path": "datasets/dev/scorer-eval-heldout-v1.jsonl",
+  "sha256": "81346f423d24047906a4023d74d428067feacc82d4a198bc6270ae562114d7a5",
+  "items": 16,
+  "positiveItems": 8,
+  "negativeItems": 8,
+  "languages": [
+    "en",
+    "el",
+    "es",
+    "id"
+  ],
+  "status": "eval-pairs",
+  "warning": "For #356 (readiness R5.3). A held-out gold-labeled positive/negative pair set for measuring the near-semantic scorer's (packages/core/src/near-semantic-fingerprints.ts) GENERAL matching behavior -- NOT derived from, or targeted at, #346's role-binding fix. Each item is a self-contained pair of hand-authored LunumSem structures (semA/semB, NOT raw model output) with a gold expectedSimilar label and rationale; there is no sourceItemId pointing at any other corpus file in this repository, and no item exercises a role swap (the specific #346 target). Positive items (expectedSimilar=true) are genuine near-duplicate parse variants -- same predicate, same core roles, same hard signature (negation/modality/clause shape/typed literals unchanged) -- differing only in one low-weight surface detail (an added minor role, a differently-named-but-equivalent concept id, sibling-condition reordering, or an id casing convention) diluted inside a large enough clause that the difference should register as a near-match. Negative items (expectedSimilar=false) use difference mechanisms distinct from the five mutation-corpus categories: predicate substitution (different action), world mismatch (real vs hypothetical), kind mismatch (instruction vs question), a required role dropped entirely, and one fully unrelated statement pair as a sanity check. All 16 items were verified against the actual, unmodified NearSemanticFingerprintGenerator at the frozen 0.8 threshold (see reports/experiments/threshold-sweep/) and every gold label matches the scorer's real output at that threshold -- these are measured facts about the current scorer's behavior on this set, not aspirational assertions. No live model was called to build or verify this dataset."
+}

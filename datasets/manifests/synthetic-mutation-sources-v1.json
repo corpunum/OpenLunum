@@ -1,0 +1,20 @@
+{
+  "id": "synthetic-mutation-sources-v1",
+  "path": "datasets/dev/synthetic-mutation-sources-v1.jsonl",
+  "sha256": "0a9df9daf3c76d663e0e67c5b57cbfd8bc25fda2325e164956ccaca2ee9e7039",
+  "items": 16,
+  "languages": [
+    "en",
+    "el",
+    "es",
+    "id"
+  ],
+  "semanticGroups": [
+    "reminder",
+    "purchase-approval",
+    "sharing",
+    "belief"
+  ],
+  "status": "synthetic-source",
+  "warning": "For #356 (readiness R5.2). These are NEW, hand-authored source sentences -- they are NOT part of the frozen `datasets/dev/multilingual-core-v1.jsonl` #253 input and were never reviewed or accepted as part of #253. Their sole purpose is to serve as sourceItemId targets for datasets/adversarial/mutation-false-positive-v2.jsonl, giving that corpus predicates ('remind', 'approve', 'share', 'believe') and scenarios beyond the four multilingual-core-v1.jsonl source groups (preference, delete, battery, deadline). Each item's clause structure is two levels deep (a condition with its own nested condition), one level deeper than multilingual-core-v1.jsonl's items, to support #356's nesting-depth requirement in the mutations built from them. multilingual-core-v1.jsonl and its manifest are untouched by this file. The 'sharing' and 'belief' groups (sharing-*, belief-*, 8 items) were added in a second authoring pass to push the corpus beyond the original 'remind'/'approve' predicates; their EL and ID sourceText is entirely new vocabulary (no equivalent domain existed previously in this corpus) and is reported as below-full-confidence for native-speaker review, same as the corresponding mutation items flagged in mutation-false-positive-v2.json. EN and ES items across all four groups are authored with full confidence."
+}
