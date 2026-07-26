@@ -1,0 +1,11 @@
+{"threshold":0.5,"truePositive":8,"falsePositive":22,"falseNegative":0,"trueNegative":86,"precision":0.26666666666666666,"recall":1,"f1":0.4210526315789474,"accuracy":0.8103448275862069}
+{"threshold":0.55,"truePositive":8,"falsePositive":22,"falseNegative":0,"trueNegative":86,"precision":0.26666666666666666,"recall":1,"f1":0.4210526315789474,"accuracy":0.8103448275862069}
+{"threshold":0.6,"truePositive":8,"falsePositive":18,"falseNegative":0,"trueNegative":90,"precision":0.3076923076923077,"recall":1,"f1":0.47058823529411764,"accuracy":0.8448275862068966}
+{"threshold":0.65,"truePositive":8,"falsePositive":14,"falseNegative":0,"trueNegative":94,"precision":0.36363636363636365,"recall":1,"f1":0.5333333333333333,"accuracy":0.8793103448275862}
+{"threshold":0.7,"truePositive":8,"falsePositive":14,"falseNegative":0,"trueNegative":94,"precision":0.36363636363636365,"recall":1,"f1":0.5333333333333333,"accuracy":0.8793103448275862}
+{"threshold":0.75,"truePositive":8,"falsePositive":12,"falseNegative":0,"trueNegative":96,"precision":0.4,"recall":1,"f1":0.5714285714285715,"accuracy":0.896551724137931}
+{"threshold":0.8,"truePositive":8,"falsePositive":8,"falseNegative":0,"trueNegative":100,"precision":0.5,"recall":1,"f1":0.6666666666666666,"accuracy":0.9310344827586207}
+{"threshold":0.85,"truePositive":6,"falsePositive":4,"falseNegative":2,"trueNegative":104,"precision":0.6,"recall":0.75,"f1":0.6666666666666665,"accuracy":0.9482758620689655}
+{"threshold":0.9,"truePositive":1,"falsePositive":0,"falseNegative":7,"trueNegative":108,"precision":1,"recall":0.125,"f1":0.2222222222222222,"accuracy":0.9396551724137931}
+{"threshold":0.95,"truePositive":1,"falsePositive":0,"falseNegative":7,"trueNegative":108,"precision":1,"recall":0.125,"f1":0.2222222222222222,"accuracy":0.9396551724137931}
+{"threshold":1,"truePositive":1,"falsePositive":0,"falseNegative":7,"trueNegative":108,"precision":1,"recall":0.125,"f1":0.2222222222222222,"accuracy":0.9396551724137931}
