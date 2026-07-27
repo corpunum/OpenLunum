@@ -45,6 +45,7 @@ export * from './agent-state.js';
 export * from './native-model.js';
 export * from './model-identity.js';
 export * from './model-renderer-profiles.js';
+export * from './schema-freeze.js';
 export * from './error-observability.js';
 export * from './downstream-quality.js';
 export * from './mixed-context-quality.js';
