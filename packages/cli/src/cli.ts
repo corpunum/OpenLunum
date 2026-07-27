@@ -741,11 +741,65 @@ async function main(): Promise<void> {
     await runQualityGateCommand();
     return;
   }
-  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> --from 0.1 --to 0.2 [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full] | quality-gate [--input <file>|-] [--strict] [--min-pass-rate <n>] [--format json|markdown] [--output <file>]');
+  if (command === 'process-jsonl') {
+    await runProcessJsonlCommand();
+    return;
+  }
+  if (command === 'contract') {
+    const { getContractManifest } = await import('./cli-contract.js');
+    console.log(JSON.stringify(getContractManifest(), null, 2));
+    return;
+  }
+  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | compile --messages <file> [--mode mixed] | migrate <file> --from 0.1 --to 0.2 [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full] | quality-gate [--input <file>|-] [--strict] [--min-pass-rate <n>] [--format json|markdown] [--output <file>] | process-jsonl --input <file> --operation validate|fingerprint|classify [--output <file>] | contract');
   process.exitCode = 2;
 }
 
-main().catch((error: unknown) => {
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exitCode = 1;
+async function runProcessJsonlCommand(): Promise<void> {
+  const { processJsonlStream } = await import('./streaming-jsonl.js');
+  const { formatStructuredError, EXIT_CODES } = await import('./cli-contract.js');
+
+  const input = flag('input');
+  const operation = flag('operation');
+
+  if (!input || !operation) {
+    const err = formatStructuredError('USAGE_ERROR', '--input and --operation are required', { command: 'process-jsonl', exitCode: EXIT_CODES.USAGE_ERROR });
+    console.error(JSON.stringify(err));
+    process.exitCode = EXIT_CODES.USAGE_ERROR;
+    return;
+  }
+
+  const validOps = new Set(['validate', 'fingerprint', 'classify']);
+  if (!validOps.has(operation)) {
+    const err = formatStructuredError('USAGE_ERROR', `Invalid operation: ${operation}. Must be validate, fingerprint, or classify`, { command: 'process-jsonl', exitCode: EXIT_CODES.USAGE_ERROR });
+    console.error(JSON.stringify(err));
+    process.exitCode = EXIT_CODES.USAGE_ERROR;
+    return;
+  }
+
+  const outputPath = flag('output');
+  const { writeFile: writeFileAsync } = await import('node:fs/promises');
+  const lines: string[] = [];
+
+  const writeLine = outputPath
+    ? (json: string) => { lines.push(json); }
+    : (json: string) => { console.log(json); };
+
+  const summary = await processJsonlStream(input, operation as 'validate' | 'fingerprint' | 'classify', writeLine);
+
+  if (outputPath) {
+    await writeFileAsync(outputPath, lines.join('\n') + '\n', 'utf8');
+  }
+
+  console.error(JSON.stringify({ summary }));
+
+  if (summary.errorCount > 0) {
+    process.exitCode = EXIT_CODES.INPUT_VALIDATION_ERROR;
+  }
+}
+
+main().catch(async (error: unknown) => {
+  const { formatStructuredError, EXIT_CODES } = await import('./cli-contract.js');
+  const err = formatStructuredError('RUNTIME_ERROR', error instanceof Error ? error.message : String(error), { exitCode: EXIT_CODES.RUNTIME_ERROR });
+  console.error(JSON.stringify(err));
+  process.exitCode = EXIT_CODES.RUNTIME_ERROR;
 });
