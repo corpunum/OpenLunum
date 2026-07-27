@@ -1,13 +1,19 @@
 {
   "id": "multilingual-extended-v1",
   "path": "datasets/dev/multilingual-extended-v1.jsonl",
-  "sha256": "4084a775feaacfe011c6c9467fcee18d0d01fea49c56445d050004e9005b4e8e",
-  "items": 16,
+  "sha256": "bfe2edada088738f0f0a1ad191dfe3940a30c58471cec64afac5f74371b32b31",
+  "items": 40,
   "languages": [
     "en",
     "el",
     "es",
-    "id"
+    "id",
+    "fr",
+    "de",
+    "ja",
+    "zh",
+    "pt",
+    "ar"
   ],
   "status": "development",
   "warning": "Visible bootstrap dataset; not a protected support benchmark. Held-out extension of multilingual-core-v1 (issue #353): new semantic groups only (reminder, consent, belief, plan), disjoint from the frozen core dataset's groups (preference, delete, battery, deadline)."
