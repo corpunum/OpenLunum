@@ -1,16 +1,26 @@
 {
   "$schema": "n/a",
   "registryVersion": 1,
-  "generated": "2026-07-26",
-  "source": "docs/LUNUM_READINESS.md#evidence-and-evaluation-ledger (24 rows, PR #294 through PR #350, docs/MIXED_CONTEXT_QUALITY.md, issue #342)",
+  "generated": "2026-07-27",
+  "source": "Backfilled from docs/LUNUM_READINESS.md evidence ledger (30 rows as of 2026-07-27 Phase 1 reconciliation)",
   "verificationMethod": "Every mergeCommitSha was checked against `gh pr view <n> --json mergeCommit` AND `git cat-file -t <sha>` in this repository. Every evidencePath and datasetSha256 was checked by reading the file / hashing it with sha256sum. No field was transcribed from tracker prose without independent verification.",
   "entries": [
     {
       "ledgerRowId": 1,
       "ledgerText": "PR #294 / issue #293",
-      "prNumbers": [294],
-      "issueNumbers": [293],
-      "mergeCommits": [{ "pr": 294, "sha": "1cdbd7ed735bd3f2f624896e3ea09ad3ad39e9f1", "verified": true }],
+      "prNumbers": [
+        294
+      ],
+      "issueNumbers": [
+        293
+      ],
+      "mergeCommits": [
+        {
+          "pr": 294,
+          "sha": "1cdbd7ed735bd3f2f624896e3ea09ad3ad39e9f1",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "docs/evaluation/testLunumv1/testLunumv1.md",
         "docs/evaluation/testLunumv1/CHANGELOG.md",
@@ -27,10 +37,22 @@
     {
       "ledgerRowId": 2,
       "ledgerText": "PR #303 / issue #298",
-      "prNumbers": [303],
-      "issueNumbers": [298],
-      "mergeCommits": [{ "pr": 303, "sha": "833b8838c42e5c317c0f4f7609bb34310502bffe", "verified": true }],
-      "evidencePaths": ["packages/eval/src/model.ts"],
+      "prNumbers": [
+        303
+      ],
+      "issueNumbers": [
+        298
+      ],
+      "mergeCommits": [
+        {
+          "pr": 303,
+          "sha": "833b8838c42e5c317c0f4f7609bb34310502bffe",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "packages/eval/src/model.ts"
+      ],
       "datasetSha256": [],
       "evaluatorVerdict": null,
       "resultSummary": "Preserved nullable usage and finish-reason completion metadata from the model client instead of dropping it; reasoning-only output now fails closed rather than silently passing through.",
@@ -42,9 +64,19 @@
     {
       "ledgerRowId": 3,
       "ledgerText": "PR #304 / issue #299",
-      "prNumbers": [304],
-      "issueNumbers": [299],
-      "mergeCommits": [{ "pr": 304, "sha": "d142493d4f2ae7a8497cca0023f6983d8cabf715", "verified": true }],
+      "prNumbers": [
+        304
+      ],
+      "issueNumbers": [
+        299
+      ],
+      "mergeCommits": [
+        {
+          "pr": 304,
+          "sha": "d142493d4f2ae7a8497cca0023f6983d8cabf715",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "packages/eval/src/retention-manifest.ts",
         "packages/eval/test/retention-manifest.test.ts"
@@ -60,9 +92,19 @@
     {
       "ledgerRowId": 4,
       "ledgerText": "PR #305 / issue #300",
-      "prNumbers": [305],
-      "issueNumbers": [300],
-      "mergeCommits": [{ "pr": 305, "sha": "a09fc1ecfd0e55b320f6b4c2a14c1758dc6a54f4", "verified": true }],
+      "prNumbers": [
+        305
+      ],
+      "issueNumbers": [
+        300
+      ],
+      "mergeCommits": [
+        {
+          "pr": 305,
+          "sha": "a09fc1ecfd0e55b320f6b4c2a14c1758dc6a54f4",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "packages/eval/src/retention-cli.ts",
         "packages/eval/test/retention-cli.test.ts"
@@ -78,9 +120,19 @@
     {
       "ledgerRowId": 5,
       "ledgerText": "PR #307 / issue #306",
-      "prNumbers": [307],
-      "issueNumbers": [306],
-      "mergeCommits": [{ "pr": 307, "sha": "806787c90e736d5150e7a81b80846627fc5ac51c", "verified": true }],
+      "prNumbers": [
+        307
+      ],
+      "issueNumbers": [
+        306
+      ],
+      "mergeCommits": [
+        {
+          "pr": 307,
+          "sha": "806787c90e736d5150e7a81b80846627fc5ac51c",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "packages/eval/src/retention-cli.ts",
         "packages/eval/test/retention-cli.test.ts"
@@ -96,13 +148,39 @@
     {
       "ledgerRowId": 6,
       "ledgerText": "PRs #312, #318, #319, #320",
-      "prNumbers": [312, 318, 319, 320],
-      "issueNumbers": [311, 313, 314, 315],
+      "prNumbers": [
+        312,
+        318,
+        319,
+        320
+      ],
+      "issueNumbers": [
+        311,
+        313,
+        314,
+        315
+      ],
       "mergeCommits": [
-        { "pr": 312, "sha": "75af75e702f37e426da524104850cacb0bdecae8", "verified": true },
-        { "pr": 318, "sha": "b40a7b90a81ae3ca218fb00f58fd24f0af03f37a", "verified": true },
-        { "pr": 319, "sha": "5e93dd5defe7fe8da6a67ad8a3404b97b4d71bc6", "verified": true },
-        { "pr": 320, "sha": "4e52d1daff1e60ea9a4b8f38eb482e9865df6b6c", "verified": true }
+        {
+          "pr": 312,
+          "sha": "75af75e702f37e426da524104850cacb0bdecae8",
+          "verified": true
+        },
+        {
+          "pr": 318,
+          "sha": "b40a7b90a81ae3ca218fb00f58fd24f0af03f37a",
+          "verified": true
+        },
+        {
+          "pr": 319,
+          "sha": "5e93dd5defe7fe8da6a67ad8a3404b97b4d71bc6",
+          "verified": true
+        },
+        {
+          "pr": 320,
+          "sha": "4e52d1daff1e60ea9a4b8f38eb482e9865df6b6c",
+          "verified": true
+        }
       ],
       "evidencePaths": [
         "packages/eval/src/testlunumv1-audit-plan.ts",
@@ -121,15 +199,29 @@
     {
       "ledgerRowId": 7,
       "ledgerText": "PR #323 / issue #321",
-      "prNumbers": [323],
-      "issueNumbers": [321],
-      "mergeCommits": [{ "pr": 323, "sha": "e6e9dba0772a0e4885a2a77c6366898a23631c5c", "verified": true }],
+      "prNumbers": [
+        323
+      ],
+      "issueNumbers": [
+        321
+      ],
+      "mergeCommits": [
+        {
+          "pr": 323,
+          "sha": "e6e9dba0772a0e4885a2a77c6366898a23631c5c",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "experiments/audit-321-freeze",
         "packages/eval/test/audit-321-freeze-matrix.test.ts"
       ],
       "datasetSha256": [
-        { "dataset": "datasets/dev/multilingual-core-v1.jsonl", "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873", "verifiedBy": "sha256sum against committed file" }
+        {
+          "dataset": "datasets/dev/multilingual-core-v1.jsonl",
+          "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "verifiedBy": "sha256sum against committed file"
+        }
       ],
       "evaluatorVerdict": null,
       "resultSummary": "Froze #253's dataset hash, equalized the two model profiles, and authored the full 2x4x2 frozen experiment-manifest matrix for comparable live audit inputs.",
@@ -141,9 +233,19 @@
     {
       "ledgerRowId": 8,
       "ledgerText": "PR #326 / issue #325",
-      "prNumbers": [326],
-      "issueNumbers": [325],
-      "mergeCommits": [{ "pr": 326, "sha": "e97eef3817cb36b1764256051ace59936306976b", "verified": true }],
+      "prNumbers": [
+        326
+      ],
+      "issueNumbers": [
+        325
+      ],
+      "mergeCommits": [
+        {
+          "pr": 326,
+          "sha": "e97eef3817cb36b1764256051ace59936306976b",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "experiments/audit-321-freeze",
         "packages/eval/test/audit-321-freeze-matrix.test.ts"
@@ -159,9 +261,19 @@
     {
       "ledgerRowId": 9,
       "ledgerText": "PR #324 / issue #322",
-      "prNumbers": [324],
-      "issueNumbers": [322],
-      "mergeCommits": [{ "pr": 324, "sha": "252b513a8b7c5e2d7cfbcd19d4adfad446e9b954", "verified": true }],
+      "prNumbers": [
+        324
+      ],
+      "issueNumbers": [
+        322
+      ],
+      "mergeCommits": [
+        {
+          "pr": 324,
+          "sha": "252b513a8b7c5e2d7cfbcd19d4adfad446e9b954",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "scripts/verify-audit-endpoints.sh",
         "reports/experiments/audit-321/evidence/PREFLIGHT-endpoints-parse.md",
@@ -178,9 +290,19 @@
     {
       "ledgerRowId": 10,
       "ledgerText": "PR #327 / issue #253",
-      "prNumbers": [327],
-      "issueNumbers": [253],
-      "mergeCommits": [{ "pr": 327, "sha": "6a8c398b45a05efdbf49fd77a0672783993b5b6d", "verified": true }],
+      "prNumbers": [
+        327
+      ],
+      "issueNumbers": [
+        253
+      ],
+      "mergeCommits": [
+        {
+          "pr": 327,
+          "sha": "6a8c398b45a05efdbf49fd77a0672783993b5b6d",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "reports/experiments/audit-321/evidence/BASELINE-REPORT.md",
         "reports/experiments/audit-321/parse/qwen36-35b",
@@ -189,7 +311,11 @@
         "reports/experiments/audit-321/retention/qwen3-coder-30b"
       ],
       "datasetSha256": [
-        { "dataset": "datasets/dev/multilingual-core-v1.jsonl", "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873", "verifiedBy": "sha256sum against committed file, also cited in BASELINE-REPORT.md" }
+        {
+          "dataset": "datasets/dev/multilingual-core-v1.jsonl",
+          "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "verifiedBy": "sha256sum against committed file, also cited in BASELINE-REPORT.md"
+        }
       ],
       "evaluatorVerdict": null,
       "resultSummary": "Initial honest live parse and retention baseline recomputed from raw per-item JSONL: parse exact 56.25% (qwen36-35b) / 25% (qwen3-coder-30b), recall 0.9319 / 0.8299, retention 31/32 / 32/32. Both models fail both declared gates (minimumExactRate 0.75, minimumFeatureRecall 0.95). No threshold adjusted.",
@@ -201,10 +327,22 @@
     {
       "ledgerRowId": 11,
       "ledgerText": "PR #336",
-      "prNumbers": [336],
-      "issueNumbers": [253],
-      "mergeCommits": [{ "pr": 336, "sha": "07d6a1fceeb6c4823c786c7a9026aa41599570d5", "verified": true }],
-      "evidencePaths": ["reports/evaluator/253-VERDICT.md"],
+      "prNumbers": [
+        336
+      ],
+      "issueNumbers": [
+        253
+      ],
+      "mergeCommits": [
+        {
+          "pr": 336,
+          "sha": "07d6a1fceeb6c4823c786c7a9026aa41599570d5",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "reports/evaluator/253-VERDICT.md"
+      ],
       "datasetSha256": [],
       "evaluatorVerdict": {
         "verdict": "PASS",
@@ -221,16 +359,30 @@
     {
       "ledgerRowId": 12,
       "ledgerText": "PR #330 / issue #328",
-      "prNumbers": [330],
-      "issueNumbers": [328],
-      "mergeCommits": [{ "pr": 330, "sha": "5d29a2d77b2350a802c209c94fb924b70e506940", "verified": true }],
+      "prNumbers": [
+        330
+      ],
+      "issueNumbers": [
+        328
+      ],
+      "mergeCommits": [
+        {
+          "pr": 330,
+          "sha": "5d29a2d77b2350a802c209c94fb924b70e506940",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "datasets/adversarial/mutation-false-positive-v1.jsonl",
         "datasets/manifests/mutation-false-positive-v1.json",
         "packages/eval/test/mutation-false-positive-coverage.test.ts"
       ],
       "datasetSha256": [
-        { "dataset": "datasets/adversarial/mutation-false-positive-v1.jsonl", "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16", "verifiedBy": "sha256sum against committed file" }
+        {
+          "dataset": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+          "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "verifiedBy": "sha256sum against committed file"
+        }
       ],
       "evaluatorVerdict": null,
       "resultSummary": "Added a 20-item mutation false-positive corpus (5 mutation categories x 4 languages), each item a minimally mutated variant whose gold genuinely differs from its source, plus a coverage test asserting the full 5x4 matrix and real loadDataset compatibility.",
@@ -242,9 +394,19 @@
     {
       "ledgerRowId": 13,
       "ledgerText": "PR #331 / issue #329",
-      "prNumbers": [331],
-      "issueNumbers": [329],
-      "mergeCommits": [{ "pr": 331, "sha": "106ed90f8db5118ab32de870a0f4a2e7a8c778a3", "verified": true }],
+      "prNumbers": [
+        331
+      ],
+      "issueNumbers": [
+        329
+      ],
+      "mergeCommits": [
+        {
+          "pr": 331,
+          "sha": "106ed90f8db5118ab32de870a0f4a2e7a8c778a3",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "packages/eval/src/protected-literal-placement.ts",
         "packages/eval/test/protected-literal-placement.test.ts"
@@ -260,17 +422,35 @@
     {
       "ledgerRowId": 14,
       "ledgerText": "PR #333 / issue #332",
-      "prNumbers": [333],
-      "issueNumbers": [332],
-      "mergeCommits": [{ "pr": 333, "sha": "b20155d9f33cfe8ba8f291cd0f6bc5ac3fecfc6e", "verified": true }],
+      "prNumbers": [
+        333
+      ],
+      "issueNumbers": [
+        332
+      ],
+      "mergeCommits": [
+        {
+          "pr": 333,
+          "sha": "b20155d9f33cfe8ba8f291cd0f6bc5ac3fecfc6e",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "reports/experiments/false-positive-review-332/evidence/FALSE-POSITIVE-REPORT.md",
         "reports/experiments/false-positive-review-332/qwen36-35b/2026-07-25T10-41-05-173Z",
         "reports/experiments/false-positive-review-332/qwen3-coder-30b/2026-07-25T10-57-20-709Z"
       ],
       "datasetSha256": [
-        { "dataset": "datasets/adversarial/mutation-false-positive-v1.jsonl", "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16", "verifiedBy": "sha256sum against committed file, matches value cited in the report" },
-        { "dataset": "datasets/dev/multilingual-core-v1.jsonl", "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873", "verifiedBy": "sha256sum against committed file, matches value cited in the report" }
+        {
+          "dataset": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+          "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "verifiedBy": "sha256sum against committed file, matches value cited in the report"
+        },
+        {
+          "dataset": "datasets/dev/multilingual-core-v1.jsonl",
+          "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "verifiedBy": "sha256sum against committed file, matches value cited in the report"
+        }
       ],
       "evaluatorVerdict": null,
       "resultSummary": "Executed the mutation false-positive corpus against both #253 models: qwen36-35b 2/20 false positives (10.0%), qwen3-coder-30b 0/20 (0.0%), with the report noting the 0% rate is not comparable quality since coder-30b matches neither gold on 16/20 items.",
@@ -282,10 +462,22 @@
     {
       "ledgerRowId": 15,
       "ledgerText": "PR #335",
-      "prNumbers": [335],
-      "issueNumbers": [332],
-      "mergeCommits": [{ "pr": 335, "sha": "534edb8f7fa38d889aab157244e3bf6380b719d4", "verified": true }],
-      "evidencePaths": ["reports/experiments/false-positive-review-332/evidence/FALSE-POSITIVE-REPORT.md"],
+      "prNumbers": [
+        335
+      ],
+      "issueNumbers": [
+        332
+      ],
+      "mergeCommits": [
+        {
+          "pr": 335,
+          "sha": "534edb8f7fa38d889aab157244e3bf6380b719d4",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "reports/experiments/false-positive-review-332/evidence/FALSE-POSITIVE-REPORT.md"
+      ],
       "datasetSha256": [],
       "evaluatorVerdict": null,
       "resultSummary": "Corrected the false-positive report's stated mechanism: the two surfaced false positives occur because modality was OMITTED by the model (parse collapsed to source meaning), not because the scorer ignored an emitted `modality: permissive` value -- the scorer in fact drives an emitted-but-wrong modality field to score 0.000. Verified in the report's own CORRECTION section, which shows the raw per-item table (emitted permissive/possible -> score 0.000; emitted nothing -> score 0.900/0.810 -> false positive).",
@@ -297,9 +489,19 @@
     {
       "ledgerRowId": 16,
       "ledgerText": "PR #338 / issue #337",
-      "prNumbers": [338],
-      "issueNumbers": [337],
-      "mergeCommits": [{ "pr": 338, "sha": "3e61142d6265325f25582f65e2c79a42d885e1d9", "verified": true }],
+      "prNumbers": [
+        338
+      ],
+      "issueNumbers": [
+        337
+      ],
+      "mergeCommits": [
+        {
+          "pr": 338,
+          "sha": "3e61142d6265325f25582f65e2c79a42d885e1d9",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "packages/eval/src/prompts.ts",
         "packages/eval/src/predicate-vocabulary.ts",
@@ -316,10 +518,22 @@
     {
       "ledgerRowId": 17,
       "ledgerText": "PR #340 / issue #339",
-      "prNumbers": [340],
-      "issueNumbers": [339],
-      "mergeCommits": [{ "pr": 340, "sha": "5952a29378af5a85d8f2679908c4c206084c6cfe", "verified": true }],
-      "evidencePaths": ["reports/experiments/audit-339-remeasure/evidence/REMEASURE-REPORT.md"],
+      "prNumbers": [
+        340
+      ],
+      "issueNumbers": [
+        339
+      ],
+      "mergeCommits": [
+        {
+          "pr": 340,
+          "sha": "5952a29378af5a85d8f2679908c4c206084c6cfe",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "reports/experiments/audit-339-remeasure/evidence/REMEASURE-REPORT.md"
+      ],
       "datasetSha256": [],
       "evaluatorVerdict": null,
       "resultSummary": "Post-#337 parse remeasurement on the identical #253 corpus: exact 93.75% (qwen36-35b) / 100% (qwen3-coder-30b), recall 1.0 / 1.0. Both models now pass both declared gates on this measurement.",
@@ -331,9 +545,19 @@
     {
       "ledgerRowId": 18,
       "ledgerText": "PR #343 / issue #341",
-      "prNumbers": [343],
-      "issueNumbers": [341],
-      "mergeCommits": [{ "pr": 343, "sha": "b517f36df07448ec9c0fd25f89d1d63a1141bb55", "verified": true }],
+      "prNumbers": [
+        343
+      ],
+      "issueNumbers": [
+        341
+      ],
+      "mergeCommits": [
+        {
+          "pr": 343,
+          "sha": "b517f36df07448ec9c0fd25f89d1d63a1141bb55",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "packages/eval/src/prompts.ts",
         "packages/eval/test/prompts-vocabulary-consistency.test.ts"
@@ -349,10 +573,22 @@
     {
       "ledgerRowId": 19,
       "ledgerText": "PR #347 / issue #344",
-      "prNumbers": [347],
-      "issueNumbers": [344],
-      "mergeCommits": [{ "pr": 347, "sha": "1801e101c7b77dc0b5f8b37eee9dc5f8c182cabc", "verified": true }],
-      "evidencePaths": ["reports/experiments/audit-344-remeasure/evidence/REMEASURE-REPORT.md"],
+      "prNumbers": [
+        347
+      ],
+      "issueNumbers": [
+        344
+      ],
+      "mergeCommits": [
+        {
+          "pr": 347,
+          "sha": "1801e101c7b77dc0b5f8b37eee9dc5f8c182cabc",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "reports/experiments/audit-344-remeasure/evidence/REMEASURE-REPORT.md"
+      ],
       "datasetSha256": [],
       "evaluatorVerdict": null,
       "resultSummary": "Post-#337/#341 remeasurement: modality false positives eliminated (2->0 qwen36-35b, 0->0 qwen3-coder-30b); exact 93.75% / 81.25%; retention 30/32 / 32/32. Also exposed a pre-existing near-semantic scorer blind spot to role swaps (filed separately, fixed by #349).",
@@ -364,9 +600,19 @@
     {
       "ledgerRowId": 20,
       "ledgerText": "PR #348 / issue #345",
-      "prNumbers": [348],
-      "issueNumbers": [345],
-      "mergeCommits": [{ "pr": 348, "sha": "6861ec71304f8b19c6814ce1a026b02e3a784c61", "verified": true }],
+      "prNumbers": [
+        348
+      ],
+      "issueNumbers": [
+        345
+      ],
+      "mergeCommits": [
+        {
+          "pr": 348,
+          "sha": "6861ec71304f8b19c6814ce1a026b02e3a784c61",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "packages/eval/src/prompts.ts",
         "packages/eval/test/prompts-vocabulary-consistency.test.ts"
@@ -382,9 +628,19 @@
     {
       "ledgerRowId": 21,
       "ledgerText": "PR #349 / issue #346",
-      "prNumbers": [349],
-      "issueNumbers": [346],
-      "mergeCommits": [{ "pr": 349, "sha": "228faddc6fd38b839b3aa08e9d39b9606303b95e", "verified": true }],
+      "prNumbers": [
+        349
+      ],
+      "issueNumbers": [
+        346
+      ],
+      "mergeCommits": [
+        {
+          "pr": 349,
+          "sha": "228faddc6fd38b839b3aa08e9d39b9606303b95e",
+          "verified": true
+        }
+      ],
       "evidencePaths": [
         "packages/eval/test/false-positive-review-cli.test.ts"
       ],
@@ -399,10 +655,22 @@
     {
       "ledgerRowId": 22,
       "ledgerText": "PR #350",
-      "prNumbers": [350],
-      "issueNumbers": [346],
-      "mergeCommits": [{ "pr": 350, "sha": "b2a1b4ab6255226fd6acbb218154bf3ecabf5394", "verified": true }],
-      "evidencePaths": ["reports/experiments/audit-346-rescore/evidence/RESCORE-REPORT.md"],
+      "prNumbers": [
+        350
+      ],
+      "issueNumbers": [
+        346
+      ],
+      "mergeCommits": [
+        {
+          "pr": 350,
+          "sha": "b2a1b4ab6255226fd6acbb218154bf3ecabf5394",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "reports/experiments/audit-346-rescore/evidence/RESCORE-REPORT.md"
+      ],
       "datasetSha256": [],
       "evaluatorVerdict": null,
       "resultSummary": "Re-scored the committed #253/#344 raw model outputs with the #346 scorer (zero model calls): all 3 role-swap false positives eliminated (1.000->0.771, 0.816->0.643), #253 gate metrics (exact 9/16, 4/16) provably unchanged, zero classification flips on post-#337 parse data.",
@@ -436,7 +704,9 @@
       "ledgerRowId": 24,
       "ledgerText": "Issue #342",
       "prNumbers": [],
-      "issueNumbers": [342],
+      "issueNumbers": [
+        342
+      ],
       "mergeCommits": [],
       "evidencePaths": [],
       "datasetSha256": [],
@@ -447,6 +717,208 @@
       "discrepancy": null,
       "verificationStatus": "verified",
       "note": "No merge SHA applicable -- issue #342 is OPEN, not resolved by a PR, confirmed via `gh issue view 342 --json state` returning state=OPEN."
+    },
+    {
+      "ledgerRowId": 25,
+      "ledgerText": "PR #359 / issue #355",
+      "prNumbers": [
+        359
+      ],
+      "issueNumbers": [
+        355
+      ],
+      "mergeCommits": [
+        {
+          "pr": 359,
+          "sha": "26a0943040b2f4beb9d643a8fb98329e10727a7e",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "packages/core/test/identity-property-fuzz.test.ts",
+        "packages/core/test/identity-collision-corpus.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Property/fuzz tests (6 properties x 250 random sems) and 22 curated near-identical collision pairs; zero collisions observed. Found two real canonicalization inconsistencies: time:null vs omission and explicit undefined role vs omission canonicalize differently.",
+      "limitations": "Real canonicalization inconsistencies filed as #360 (open, unresolved); collision corpus is 22 curated pairs, not yet a large corpus",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified",
+      "note": "Negative finding: #360 canonicalization inconsistency is a real defect, not hypothetical."
+    },
+    {
+      "ledgerRowId": 26,
+      "ledgerText": "PR #361 / issue #353",
+      "prNumbers": [
+        361
+      ],
+      "issueNumbers": [
+        353
+      ],
+      "mergeCommits": [
+        {
+          "pr": 361,
+          "sha": "867f31620ed28111697c26a3c028853615bffe2f",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "datasets/dev/multilingual-extended-v1.jsonl",
+        "datasets/manifests/multilingual-extended-v1.json",
+        "experiments/audit-353-repeated/parse-qwen36-35b-x3-run1.json",
+        "experiments/audit-353-repeated/parse-qwen36-35b-x3-run2.json",
+        "experiments/audit-353-repeated/parse-qwen36-35b-x3-run3.json",
+        "experiments/audit-353-repeated/parse-qwen3-coder-30b-x3-run1.json",
+        "experiments/audit-353-repeated/parse-qwen3-coder-30b-x3-run2.json",
+        "experiments/audit-353-repeated/parse-qwen3-coder-30b-x3-run3.json",
+        "packages/eval/test/multilingual-extended-v1.test.ts"
+      ],
+      "datasetSha256": [
+        "4084a775feaacfe011c6c9467fcee18d0d01fea49c56445d050004e9005b4e8e"
+      ],
+      "evaluatorVerdict": null,
+      "resultSummary": "16-item extended EN/EL/ES/ID held-out corpus with four new semantic groups (reminder, consent, belief, plan); immutable manifest with SHA-256; six repeated-run parse manifests (2 models x 3 runs).",
+      "limitations": "No live model execution yet; EL/ID translations require native review; several held-out predicates (remind, share, believe, send, finish) are not in the controlled parse vocabulary; repeated-run manifests are infrastructure, not results",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified",
+      "note": null
+    },
+    {
+      "ledgerRowId": 27,
+      "ledgerText": "PR #362 / issue #354",
+      "prNumbers": [
+        362
+      ],
+      "issueNumbers": [
+        354
+      ],
+      "mergeCommits": [
+        {
+          "pr": 362,
+          "sha": "d97f01b34768e5b90dd52fb0d2664882bf23bb1a",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "packages/eval/test-fixtures/retention/nested-dataset.json",
+        "packages/eval/test-fixtures/retention/nested-coverage-manifest.json",
+        "packages/eval/test-fixtures/retention/nested-mock-responses.json",
+        "packages/eval/test-fixtures/retention/failure-path-dataset.json",
+        "packages/eval/test-fixtures/retention/failure-path-manifest.json",
+        "packages/eval/test-fixtures/retention/repeated-pass-plan.json",
+        "packages/eval/test/retention-failure-paths.test.ts",
+        "packages/eval/test/retention-nested-fixtures.test.ts",
+        "packages/eval/test/retention-repeated-pass-plan.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Eight nested retention fixtures (three-level nesting, multiple roles, time fields, four languages); three deterministic failure-path mock tests (timeout, malformed output, HTTP error); repeated-pass plan document.",
+      "limitations": "No live retention model evidence produced; repeated-pass chaining is a documented plan/workaround rather than native execution support; failure-path tests used mock transport only",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified",
+      "note": null
+    },
+    {
+      "ledgerRowId": 28,
+      "ledgerText": "PR #363 / issue #358",
+      "prNumbers": [
+        363
+      ],
+      "issueNumbers": [
+        358
+      ],
+      "mergeCommits": [
+        {
+          "pr": 363,
+          "sha": "6594f4b76202f75681006f66fb88e2e6ba362492",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "reports/evidence-registry.json",
+        "packages/eval/test/evidence-registry-consistency.test.ts"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Machine-readable evidence registry with 24 historical entries verified against committed sources; automated consistency check between tracker ledger and registry.",
+      "limitations": "One historical evidence-path discrepancy was corrected during registry creation; registry describes evidence at time of creation and requires updates as new evidence is accepted",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified",
+      "note": "Registry entry count was 24 at creation; updated to 30 after Phase 1 reconciliation."
+    },
+    {
+      "ledgerRowId": 29,
+      "ledgerText": "PR #364 / issue #357",
+      "prNumbers": [
+        364
+      ],
+      "issueNumbers": [
+        357
+      ],
+      "mergeCommits": [
+        {
+          "pr": 364,
+          "sha": "f665e10df264d52bc5a768b10360ebf1778c62b9",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "packages/eval/src/model.ts",
+        "packages/eval/src/types.ts",
+        "packages/eval/test/model-streaming.test.ts",
+        "scripts/verify-audit-endpoints.sh",
+        "scripts/verify-audit-endpoints.test.mjs"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Opt-in streaming completion path with TTFT/TPOT timing; endpoint preflight states split into pass/cold/absent/error; connection-reset and timeout recovery tests via mock server.",
+      "limitations": "Existing non-streaming completion unchanged; tests used mock HTTP transport; no sustained load, failover or declared SLO evidence; crash, router restart, disk pressure and partial-output recovery remain unproven",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified",
+      "note": null
+    },
+    {
+      "ledgerRowId": 30,
+      "ledgerText": "PR #365 / issue #356",
+      "prNumbers": [
+        365
+      ],
+      "issueNumbers": [
+        356
+      ],
+      "mergeCommits": [
+        {
+          "pr": 365,
+          "sha": "5e05a56879a7feea646db422d8844420a4d2ddb4",
+          "verified": true
+        }
+      ],
+      "evidencePaths": [
+        "datasets/adversarial/mutation-false-positive-v2.jsonl",
+        "datasets/dev/scorer-eval-heldout-v1.jsonl",
+        "datasets/dev/synthetic-mutation-sources-v1.jsonl",
+        "datasets/manifests/mutation-false-positive-v2.json",
+        "datasets/manifests/scorer-eval-heldout-v1.json",
+        "datasets/manifests/synthetic-mutation-sources-v1.json",
+        "packages/eval/src/threshold-sweep.ts",
+        "reports/experiments/threshold-sweep/2026-07-26T15-56-41-813Z/pairs.jsonl",
+        "reports/experiments/threshold-sweep/2026-07-26T15-56-41-813Z/report.md",
+        "reports/experiments/threshold-sweep/2026-07-26T15-56-41-813Z/summary.json",
+        "reports/experiments/threshold-sweep/2026-07-26T15-56-41-813Z/sweep.jsonl"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "80-item mutation corpus across 8 predicates and 4 languages; 16-item held-out scorer eval set (8 positive, 8 negative); deterministic threshold sweep on 116 pairs at frozen 0.8: TP 8, FP 8, FN 0, TN 100, precision 0.500, recall 1.000, F1 0.667. Eight deep-nested role-swap mutations score above 0.8.",
+      "limitations": "Eight false-positive role swaps across EN/EL/ES/ID; at 0.85: four false positives and two false negatives remain; no threshold or scorer change occurred; no live model call occurred; negative evidence",
+      "limitationsSource": "tracker",
+      "discrepancy": null,
+      "verificationStatus": "verified",
+      "note": "Negative evidence: precision 0.500 at frozen 0.8 threshold is a confirmed deficiency, not a calibration suggestion."
     }
   ]
 }
