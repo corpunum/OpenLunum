@@ -1,4 +1,4 @@
-import { roughTokenCount } from './derive.js';
+import { ROUGH_TOKEN_COUNTER, type TokenCounter } from './derive.js';
 import type { ContextMessage, EligibilityDecision } from './types.js';
 
 export type ContextMode = 'natural' | 'lunum' | 'mixed' | 'shadow_mixed';
@@ -14,20 +14,22 @@ function normalizeMessage(message: ContextMessage): { role: string; natural: str
   };
 }
 
-export function compileContext(messages: ContextMessage[], options: { mode?: ContextMode } = {}) {
+export function compileContext(messages: ContextMessage[], options: { mode?: ContextMode; tokenCounter?: TokenCounter } = {}) {
   const mode = options.mode ?? 'mixed';
+  const counter = options.tokenCounter ?? ROUGH_TOKEN_COUNTER;
+  const counterLabel = options.tokenCounter ? 'exact' : 'estimate/char4';
   const normalized = messages.map(normalizeMessage);
   const naturalMessages = normalized.map((message) => ({ role: message.role, content: message.natural }));
   const lunumMessages = normalized.map((message) => ({ role: message.role, content: message.code ?? message.natural }));
   const mixedMessages = normalized.map((message) => ({ role: message.role, content: message.code && message.meta.eligible === true ? message.code : message.natural }));
   const selectedMessages = mode === 'natural' || mode === 'shadow_mixed' ? naturalMessages : mode === 'lunum' ? lunumMessages : mixedMessages;
-  const sum = (rows: Array<{ content: string }>) => rows.reduce((total, row) => total + roughTokenCount(row.content), 0);
+  const sum = (rows: Array<{ content: string }>) => rows.reduce((total, row) => total + counter(row.content), 0);
   const naturalTokens = sum(naturalMessages);
   const lunumTokens = sum(lunumMessages);
   const mixedTokens = sum(mixedMessages);
   const selectedTokens = mode === 'lunum' ? lunumTokens : mode === 'natural' ? naturalTokens : mixedTokens;
   return {
-    version: 'lunum-context/0.1-draft', mode, tokenCounter: 'estimate/char4', selectedMessages, naturalMessages, lunumMessages, mixedMessages,
+    version: 'lunum-context/0.1-draft', mode, tokenCounter: counterLabel, selectedMessages, naturalMessages, lunumMessages, mixedMessages,
     naturalTokens, lunumTokens, mixedTokens,
     ratio: naturalTokens ? selectedTokens / naturalTokens : 1,
     estimatedSavings: naturalTokens ? 1 - selectedTokens / naturalTokens : 0

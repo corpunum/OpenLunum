@@ -7,8 +7,23 @@ import type { LunumRecord, LunumSem, LunumSidecar, Risk } from './types.js';
 
 const EN_STOP = new Set('the a an is are was were be been being to of and or for in on at with from by this that these those it its as do does did have has had'.split(' '));
 
+export type TokenCounter = (text: string) => number;
+
 export function roughTokenCount(text: unknown): number {
   return Math.max(1, Math.ceil(String(text ?? '').length / 4));
+}
+
+export const ROUGH_TOKEN_COUNTER: TokenCounter = (text: string) => roughTokenCount(text);
+
+export function createTokenCounter(
+  encode: (text: string) => { length: number } | number[] | readonly number[]
+): TokenCounter {
+  return (text: string) => {
+    const result = encode(text);
+    if (Array.isArray(result)) return result.length;
+    if ('length' in result && typeof result.length === 'number') return result.length;
+    return roughTokenCount(text);
+  };
 }
 
 export function surfaceTelegraph(text: unknown): string {
