@@ -39,7 +39,7 @@ const CORE_GROUPS = ['preference', 'delete', 'battery', 'deadline'] as const;
 const EXTENDED_DATASET_PATH = path.join(WORKSPACE_ROOT, 'datasets', 'dev', 'multilingual-extended-v1.jsonl');
 const EXTENDED_MANIFEST_PATH = path.join(WORKSPACE_ROOT, 'datasets', 'manifests', 'multilingual-extended-v1.json');
 const EXTENDED_GROUPS = ['reminder', 'consent', 'belief', 'plan'] as const;
-const LANGUAGES = ['en', 'el', 'es', 'id'] as const;
+const LANGUAGES = ['en', 'el', 'es', 'id', 'fr', 'de', 'ja', 'zh', 'pt', 'ar'] as const;
 
 interface DatasetManifest {
   id: string;
@@ -58,7 +58,7 @@ test('#353 part 1: the frozen core dataset hash is untouched', async () => {
 
 test('#353 part 1: multilingual-extended-v1.jsonl loads via the real loadDataset', async () => {
   const items = await loadDataset(EXTENDED_DATASET_PATH);
-  assert.strictEqual(items.length, 16, 'expected 4 new groups x 4 languages = 16 items');
+  assert.strictEqual(items.length, 40, 'expected 4 new groups x 10 languages = 40 items');
 });
 
 test('#353 part 1: every extended-dataset item has a schema-valid goldSem per the real validateSem', async () => {
@@ -128,8 +128,8 @@ test('#353 part 1: extended-dataset manifest matches the committed conventions a
   const manifest = await readJson<DatasetManifest>(EXTENDED_MANIFEST_PATH);
   assert.strictEqual(manifest.id, 'multilingual-extended-v1');
   assert.strictEqual(manifest.path, 'datasets/dev/multilingual-extended-v1.jsonl');
-  assert.strictEqual(manifest.items, 16);
-  assert.deepStrictEqual(manifest.languages, ['en', 'el', 'es', 'id']);
+  assert.strictEqual(manifest.items, 40);
+  assert.deepStrictEqual(manifest.languages, ['en', 'el', 'es', 'id', 'fr', 'de', 'ja', 'zh', 'pt', 'ar']);
   assert.strictEqual(manifest.status, 'development');
   assert.ok(manifest.warning.length > 0);
 
