@@ -32,12 +32,28 @@ function extractFillerId(term: LunumTerm | undefined): string | undefined {
   return typeof term.id === 'string' ? term.id : undefined;
 }
 
+const PROTECTED_LITERAL_TYPES = new Set(['quantity', 'date', 'identifier', 'range', 'url', 'path']);
+
 function extractProtectedLiteral(term: LunumTerm | undefined): { type: string; token: string } | undefined {
   if (!isTermObject(term)) return undefined;
-  const type = (term as Record<string, unknown>).type;
-  if (type !== 'quantity' && type !== 'date') return undefined;
-  const unit = 'unit' in (term as Record<string, unknown>) ? (term as Record<string, unknown>).unit : undefined;
-  return { type: String(type), token: JSON.stringify({ value: (term as Record<string, unknown>).value, unit: unit ?? null }) };
+  const obj = term as Record<string, unknown>;
+  const type = obj.type;
+  if (typeof type !== 'string' || !PROTECTED_LITERAL_TYPES.has(type)) return undefined;
+  switch (type) {
+    case 'quantity':
+      return { type, token: JSON.stringify({ value: obj.value, unit: obj.unit ?? null }) };
+    case 'date':
+      return { type, token: JSON.stringify({ value: obj.value }) };
+    case 'identifier':
+      return { type, token: JSON.stringify({ id: obj.id ?? null, value: obj.value ?? null }) };
+    case 'range':
+      return { type, token: JSON.stringify({ min: obj.min ?? obj.value, max: obj.max ?? null, unit: obj.unit ?? null }) };
+    case 'url':
+    case 'path':
+      return { type, token: JSON.stringify({ value: obj.value ?? obj.ref ?? null }) };
+    default:
+      return undefined;
+  }
 }
 
 function walkClauses(clauses: LunumClause[] | undefined, pathPrefix: string, visit: (path: string, clause: LunumClause) => void): void {
