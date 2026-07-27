@@ -149,7 +149,10 @@ function migrateSem01to02(sem: unknown): unknown {
 
       // Lock modality to enum if present
       if (c.modality !== undefined) {
-        const validModalities = ['certainty', 'possibility', 'necessity', 'obligation', null];
+        const validModalities = [
+          'fact', 'opinion', 'belief', 'possibility', 'necessity',
+          'obligation', 'permission', 'ability', 'intention', 'certainty', null
+        ];
         if (typeof c.modality === 'string' && !validModalities.includes(c.modality as string)) {
           (upgraded.modality as string) = 'certainty';
         }
@@ -269,15 +272,21 @@ test('both 0.1 and 0.2 schemas have additionalProperties: false', () => {
   assert.strictEqual(record02.additionalProperties, false);
 });
 
-test('0.2 clause has locked modality enum', () => {
+test('0.2 clause has modality enum covering the full ModalityType vocabulary', () => {
   const semSchema = JSON.parse(fs.readFileSync(path.join(WORKSPACE_ROOT, 'schemas', 'lunum-sem-v02.schema.json'), 'utf-8'));
   const modalityDef = semSchema.$defs?.clause?.properties?.modality;
   assert.ok(modalityDef, '0.2 clause must define modality');
   assert.ok(Array.isArray(modalityDef.enum), 'modality must be an enum');
-  assert.ok(modalityDef.enum.includes('certainty'));
+  assert.ok(modalityDef.enum.includes('fact'));
+  assert.ok(modalityDef.enum.includes('opinion'));
+  assert.ok(modalityDef.enum.includes('belief'));
   assert.ok(modalityDef.enum.includes('possibility'));
   assert.ok(modalityDef.enum.includes('necessity'));
   assert.ok(modalityDef.enum.includes('obligation'));
+  assert.ok(modalityDef.enum.includes('permission'));
+  assert.ok(modalityDef.enum.includes('ability'));
+  assert.ok(modalityDef.enum.includes('intention'));
+  assert.ok(modalityDef.enum.includes('certainty'));
   assert.ok(modalityDef.enum.includes(null));
 });
 

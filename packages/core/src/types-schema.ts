@@ -52,7 +52,7 @@ export interface LunumSemSchema02 {
 
 export type v02Term = Record<string, unknown>;
 export type v02Reference = {     id: string,     url: string,     title?: string,     type?: string };
-export type v02Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: "certainty" | "possibility" | "necessity" | "obligation" | null,     time?: unknown,     conditions?: v02Clause[],     consequences?: v02Clause[],     annotations?: {     confidence?: Confidence,     evidence?: string } };
+export type v02Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: "fact" | "opinion" | "belief" | "possibility" | "necessity" | "obligation" | "permission" | "ability" | "intention" | "certainty" | null,     time?: unknown,     conditions?: v02Clause[],     consequences?: v02Clause[],     annotations?: {     confidence?: Confidence,     evidence?: string } };
 
 export interface LunumSemSchema01 {
   schema: "lunum-sem/0.1-draft";

@@ -131,7 +131,10 @@ function validateClause(value: unknown, location: string, version: MigrationVers
   if (value.negated !== undefined && typeof value.negated !== 'boolean') errors.push(`${location}.negated must be a boolean`);
   if (value.modality !== undefined && value.modality !== null) {
     if (typeof value.modality !== 'string') errors.push(`${location}.modality must be a string or null`);
-    if (version === '0.2' && !['certainty', 'possibility', 'necessity', 'obligation'].includes(String(value.modality))) {
+    if (version === '0.2' && ![
+      'fact', 'opinion', 'belief', 'possibility', 'necessity',
+      'obligation', 'permission', 'ability', 'intention', 'certainty'
+    ].includes(String(value.modality))) {
       errors.push(`${location}.modality is not valid for Lunum-Sem 0.2`);
     }
   }

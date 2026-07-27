@@ -62,7 +62,7 @@ All of the following must be accepted:
 
 | Capability | Readiness | What works now | Main gap | Key accepted evidence |
 |---|---:|---|---|---|
-| Canonical semantic layer | **86%** | Strict TypeScript semantic structures, canonicalization, provenance, versioned 0.1/0.2 schemas and migration tooling | Pre-1.0 contract and unresolved modality enum inconsistency in #342 | `README.md`, `STATUS.md`, migration/conformance tests, #342 |
+| Canonical semantic layer | **86%** | Strict TypeScript semantic structures, canonicalization, provenance, versioned 0.1/0.2 schemas and migration tooling; modality enum widened to full `ModalityType` vocabulary (#368) | Pre-1.0 contract | `README.md`, `STATUS.md`, migration/conformance tests, #342, #368 |
 | Multilingual parsing | **74%** | Real built-CLI EN/EL/ES/ID runs on two named local models; controlled vocabulary and schema-bearing prompts; extended 32-item corpus and repeated-run manifests | Small same-corpus evidence, four languages, two models, demonstrated single-run variance; extended corpus predicates not in controlled vocabulary; EL/ID translations need native review; repeated-run manifests exist but measurements have not run | #253/#327, #337/#338, #339/#340, #341/#343, #344/#347, #353/#361 |
 | Round-trip semantic retention | **80%** | Manifest-driven realization plus parse-back, raw per-stage evidence, fail-closed coverage, deterministic aggregation, nested three-level fixtures and deterministic failure-path tests | Small narrow matrix; validation failures still occur; little long-context/domain evidence; repeated-pass chaining is a documented plan, not native execution; no live retention model evidence from new fixtures | #299/#304, #300/#305, #306/#307, #253/#327, #344/#347, #354/#362 |
 | Exact semantic identity | **86%** | Canonical serialization, exact fingerprints, path-aware comparison, migration checks, property/fuzz tests (6 properties × 250 random sems) and 22 curated collision pairs | Pre-1.0 contract; #360 canonicalization inconsistency (`time: null` vs omission, explicit undefined role vs omission); cross-implementation conformance still absent | `packages/core`, golden/conformance tests, `STATUS.md`, #355/#359, #360 |
@@ -87,7 +87,7 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 
 **100% definition:** A stable Lunum 1.0 semantic contract exists for a declared scope, with authoritative vocabulary, migration paths, independent conformance and a published compatibility window.
 
-- [ ] **R1.1 Resolve #342.** Decide whether v0.2 modality widens to the full `ModalityType` vocabulary or deliberately remains narrow with documented mappings.
+- [x] **R1.1 Resolve #342** — accepted. Owner decision: v0.2 `clauses[].modality` widens to the full `ModalityType` vocabulary (`fact`, `opinion`, `belief`, `possibility`, `necessity`, `obligation`, `permission`, `ability`, `intention`, `certainty`, `null`), matching `packages/core/src/typed-structures.ts` and `MODALITY_VALUES` in `packages/eval/src/predicate-vocabulary.ts`. v0.1 free-string modality is unchanged. Status: accepted — issue #368
 - [ ] **R1.2 Freeze the 1.0 schema.** Publish versioned JSON Schema, generated TypeScript, normative examples and prohibited ambiguities.
 - [ ] **R1.3 Freeze canonicalization and exact fingerprint versions.** Any future change must use a new version and migration policy.
 - [ ] **R1.4 Add a large migration/conformance corpus.** Cover forward/backward migration, lossy mappings, unknown fields and failure cases.

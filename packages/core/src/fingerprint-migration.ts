@@ -281,8 +281,8 @@ export function migrateForward01to02(
 
       if (upgraded.modality !== undefined && upgraded.modality !== null) {
         const validModalities = [
-          'certainty', 'possibility', 'necessity',
-          'obligation', 'permission', null
+          'fact', 'opinion', 'belief', 'possibility', 'necessity',
+          'obligation', 'permission', 'ability', 'intention', 'certainty', null
         ];
         if (typeof upgraded.modality === 'string' && !validModalities.includes(upgraded.modality)) {
           warnings.push({

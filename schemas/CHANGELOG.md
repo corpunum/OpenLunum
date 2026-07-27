@@ -5,6 +5,18 @@ All breaking changes to Lunum schemas, with migration instructions.
 
 ---
 
+## 0.2 — Modality vocabulary widened (2026-07-27)
+
+### lunum-sem/0.2
+
+| Change | Type | Details |
+|--------|------|---------|
+| `clauses[].modality` | Non-breaking widening | Enum widened from `["certainty", "possibility", "necessity", "obligation", null]` to the full `ModalityType` vocabulary: `["fact", "opinion", "belief", "possibility", "necessity", "obligation", "permission", "ability", "intention", "certainty", null]`, matching `packages/core/src/typed-structures.ts`. Resolves #342 per owner decision (#368). Values outside this set must still be mapped to `certainty` during migration. |
+
+**Migration:** No action required for existing valid 0.2 records — all previously-valid modality values remain valid. Records produced by tooling can now emit any `ModalityType` value directly instead of pre-mapping to the narrow 4-value set.
+
+---
+
 ## 0.2 — Frozen (2026-07-18)
 
 ### lunum-sem/0.2
