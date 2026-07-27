@@ -176,6 +176,98 @@ test('protected-literal invariant: does not fire when quantity/date values match
   assert.deepEqual(checkProtectedLiteralInvariant(a, b), []);
 });
 
+test('protected-literal invariant: fires when identifier id differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.target = { type: 'identifier', id: 'ticket-1234' } as never;
+  b.clauses[0]!.roles.target = { type: 'identifier', id: 'ticket-5678' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.equal(firings[0]!.code, 'protected-literal');
+  assert.match(firings[0]!.detail, /identifier/u);
+});
+
+test('protected-literal invariant: fires when identifier value differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.ref = { type: 'identifier', value: 'ABC-100' } as never;
+  b.clauses[0]!.roles.ref = { type: 'identifier', value: 'ABC-200' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+});
+
+test('protected-literal invariant: does not fire when identifier matches', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.target = { type: 'identifier', id: 'ticket-1234' } as never;
+  b.clauses[0]!.roles.target = { type: 'identifier', id: 'ticket-1234' } as never;
+  assert.deepEqual(checkProtectedLiteralInvariant(a, b), []);
+});
+
+test('protected-literal invariant: fires when range min/max differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.band = { type: 'range', min: 10, max: 50, unit: 'km' } as never;
+  b.clauses[0]!.roles.band = { type: 'range', min: 10, max: 100, unit: 'km' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.match(firings[0]!.detail, /range/u);
+});
+
+test('protected-literal invariant: fires when range unit differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.band = { type: 'range', min: 0, max: 100, unit: 'km' } as never;
+  b.clauses[0]!.roles.band = { type: 'range', min: 0, max: 100, unit: 'mi' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+});
+
+test('protected-literal invariant: does not fire when range matches', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.band = { type: 'range', min: 0, max: 100, unit: 'km' } as never;
+  b.clauses[0]!.roles.band = { type: 'range', min: 0, max: 100, unit: 'km' } as never;
+  assert.deepEqual(checkProtectedLiteralInvariant(a, b), []);
+});
+
+test('protected-literal invariant: fires when url value differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.link = { type: 'url', value: 'https://example.com/a' } as never;
+  b.clauses[0]!.roles.link = { type: 'url', value: 'https://example.com/b' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.match(firings[0]!.detail, /url/u);
+});
+
+test('protected-literal invariant: fires when path value differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.file = { type: 'path', value: '/home/user/doc.pdf' } as never;
+  b.clauses[0]!.roles.file = { type: 'path', value: '/home/user/other.pdf' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.match(firings[0]!.detail, /path/u);
+});
+
+test('protected-literal invariant: url via ref field also fires on mismatch', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.link = { type: 'url', ref: 'https://example.com/a' } as never;
+  b.clauses[0]!.roles.link = { type: 'url', ref: 'https://example.com/b' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+});
+
+test('protected-literal invariant: does not fire for non-protected types like actor', () => {
+  const a = baseSem();
+  const b = baseSem();
+  (a.clauses[0]!.roles.agent as Record<string, unknown>).value = 'old';
+  (b.clauses[0]!.roles.agent as Record<string, unknown>).value = 'new';
+  assert.deepEqual(checkProtectedLiteralInvariant(a, b), []);
+});
+
 test('checkHardInvariants: identical sems fire nothing', () => {
   const result = checkHardInvariants(baseSem(), baseSem());
   assert.deepEqual(result, { hardMismatch: false, invariants: [] });
