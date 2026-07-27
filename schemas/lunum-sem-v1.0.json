@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.org/schemas/lunum-sem/1.0",
+  "title": "Lunum-Sem 1.0",
+  "description": "Frozen 1.0 release of the Lunum semantic representation schema. This schema is immutable; future changes require a new version number.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "world", "kind", "clauses"],
+  "properties": {
+    "schema": {
+      "description": "Schema identifier. Must be 'lunum-sem/0.1-draft' for backward compatibility with existing data, or 'lunum-sem/1.0' for new data.",
+      "enum": ["lunum-sem/0.1-draft", "lunum-sem/1.0"]
+    },
+    "world": {
+      "description": "The world in which the semantic content holds (e.g. 'real', 'hypothetical', 'counterfactual').",
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "description": "The semantic kind of the content (e.g. 'simple_fact', 'obligation', 'preference', 'belief_state', 'safety_constraint', 'tool_event', 'plan_instruction').",
+      "type": "string",
+      "minLength": 1
+    },
+    "clauses": {
+      "description": "One or more semantic clauses forming the content. Order is significant for multi-clause content.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/clause" }
+    },
+    "references": {
+      "description": "External references associated with this semantic content.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/termObject" }
+    },
+    "provenance": {
+      "description": "Provenance metadata (source, author, timestamp, license).",
+      "type": "object"
+    },
+    "annotations": {
+      "description": "Freeform annotations for confidence, tags, notes.",
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "termObject": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "description": "Term type discriminator (e.g. 'actor', 'concept', 'identifier', 'quantity', 'date', 'path', 'url', 'range')." },
+        "id": { "type": "string", "description": "Stable identifier for the term." },
+        "value": { "description": "The term's value, type depends on the term type." },
+        "language": { "type": "string", "description": "Language tag (BCP 47) when the term carries natural language." },
+        "ref": { "type": "string", "description": "Cross-reference to another term or entity." }
+      },
+      "additionalProperties": true
+    },
+    "term": {
+      "description": "A semantic term: a primitive (string, number, boolean, null), a term object, or an array of terms.",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "null" },
+        { "$ref": "#/$defs/termObject" },
+        { "type": "array", "items": { "$ref": "#/$defs/term" } }
+      ]
+    },
+    "clause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate", "roles"],
+      "description": "A single semantic clause with a predicate, role bindings, and optional modifiers.",
+      "properties": {
+        "predicate": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The predicate verb (e.g. 'prefer', 'encrypt', 'deploy', 'believe')."
+        },
+        "roles": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/term" },
+          "description": "Named role bindings mapping role names to terms (e.g. agent, theme, recipient, instrument)."
+        },
+        "negated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this clause is negated."
+        },
+        "modality": {
+          "type": ["string", "null"],
+          "description": "Deontic or epistemic modality (e.g. 'must', 'should', 'may', 'must_not', 'shall_not', 'belief')."
+        },
+        "time": {
+          "$ref": "#/$defs/term",
+          "description": "Temporal anchoring for the clause."
+        },
+        "conditions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/clause" },
+          "description": "Preconditions that must hold for this clause to apply."
+        },
+        "consequences": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/clause" },
+          "description": "Consequences that follow from this clause."
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Clause-level annotations (confidence, evidence)."
+        }
+      }
+    }
+  }
+}
