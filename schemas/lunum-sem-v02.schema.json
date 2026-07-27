@@ -103,8 +103,8 @@
         },
         "modality": {
           "type": ["string", "null"],
-          "enum": ["certainty", "possibility", "necessity", "obligation", null],
-          "description": "Modality type — locked enum for 0.2"
+          "enum": ["fact", "opinion", "belief", "possibility", "necessity", "obligation", "permission", "ability", "intention", "certainty", null],
+          "description": "Modality type — full ModalityType vocabulary for 0.2 (widened per #368)"
         },
         "time": {
           "oneOf": [
