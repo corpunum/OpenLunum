@@ -1,0 +1,11 @@
+{"threshold":0.5,"truePositive":8,"falsePositive":6,"falseNegative":0,"trueNegative":102,"precision":0.5714285714285714,"recall":1,"f1":0.7272727272727273,"accuracy":0.9482758620689655}
+{"threshold":0.55,"truePositive":8,"falsePositive":6,"falseNegative":0,"trueNegative":102,"precision":0.5714285714285714,"recall":1,"f1":0.7272727272727273,"accuracy":0.9482758620689655}
+{"threshold":0.6,"truePositive":8,"falsePositive":6,"falseNegative":0,"trueNegative":102,"precision":0.5714285714285714,"recall":1,"f1":0.7272727272727273,"accuracy":0.9482758620689655}
+{"threshold":0.65,"truePositive":8,"falsePositive":2,"falseNegative":0,"trueNegative":106,"precision":0.8,"recall":1,"f1":0.888888888888889,"accuracy":0.9827586206896551}
+{"threshold":0.7,"truePositive":8,"falsePositive":2,"falseNegative":0,"trueNegative":106,"precision":0.8,"recall":1,"f1":0.888888888888889,"accuracy":0.9827586206896551}
+{"threshold":0.75,"truePositive":8,"falsePositive":0,"falseNegative":0,"trueNegative":108,"precision":1,"recall":1,"f1":1,"accuracy":1}
+{"threshold":0.8,"truePositive":8,"falsePositive":0,"falseNegative":0,"trueNegative":108,"precision":1,"recall":1,"f1":1,"accuracy":1}
+{"threshold":0.85,"truePositive":6,"falsePositive":0,"falseNegative":2,"trueNegative":108,"precision":1,"recall":0.75,"f1":0.8571428571428571,"accuracy":0.9827586206896551}
+{"threshold":0.9,"truePositive":1,"falsePositive":0,"falseNegative":7,"trueNegative":108,"precision":1,"recall":0.125,"f1":0.2222222222222222,"accuracy":0.9396551724137931}
+{"threshold":0.95,"truePositive":1,"falsePositive":0,"falseNegative":7,"trueNegative":108,"precision":1,"recall":0.125,"f1":0.2222222222222222,"accuracy":0.9396551724137931}
+{"threshold":1,"truePositive":1,"falsePositive":0,"falseNegative":7,"trueNegative":108,"precision":1,"recall":0.125,"f1":0.2222222222222222,"accuracy":0.9396551724137931}
