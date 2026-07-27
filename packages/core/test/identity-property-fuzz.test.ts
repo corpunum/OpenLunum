@@ -265,19 +265,15 @@ test('property: large numbers canonicalize deterministically over repeated calls
 // ---------------------------------------------------------------------------
 // Property 5 — null/undefined handling for optional fields
 //
-// FINDING: behavior is INCONSISTENT across optional fields, and this test
-// asserts the actual current behavior rather than an idealized one:
-//   - clause.modality: `!= null` check treats both omitted and explicit
-//     null/undefined the same way (field dropped from canonical output).
-//   - clause.time: `!== undefined` check means an explicit `time: null`
-//     DOES appear in canonical output (`time: null`), while an omitted
-//     `time` key does NOT appear at all. These two are NOT equivalent.
-//   - clause.roles[key]: an explicit `undefined` role value is coerced to
-//     `null` via `?? null` and appears in the output (`roleName: null`),
-//     while omitting the role key entirely leaves it absent from `roles`.
-//     These two are also NOT equivalent.
-// These divergences are reported here, not fixed (canonicalize.ts is
-// off-limits for this issue).
+// Fixed for #369 (resolves #360): null/undefined are treated as "absent"
+// consistently across all optional fields:
+//   - clause.modality: omitted and explicit null/undefined all drop the
+//     field from canonical output.
+//   - clause.time: omitted, explicit null, and explicit undefined all drop
+//     the field from canonical output — they are now equivalent.
+//   - clause.roles[key]: an explicit `undefined` role value is now stripped
+//     entirely (same as an absent key), while an explicit `null` role value
+//     is still preserved as a distinguishable value (`roleName: null`).
 // ---------------------------------------------------------------------------
 
 test('property: omitted modality vs explicit null modality canonicalize identically', () => {
@@ -292,7 +288,7 @@ test('property: omitted modality vs explicit null modality canonicalize identica
   assert.equal(stableStringify(canonicalizeSem(withNull)), stableStringify(canonicalizeSem(omitted)));
 });
 
-test('FINDING: omitted clause.time vs explicit clause.time=null do NOT canonicalize identically', () => {
+test('FIXED (#369/#360): omitted clause.time vs explicit clause.time=null canonicalize identically', () => {
   const withNull: LunumSem = {
     schema: SEM_SCHEMA, world: 'real', kind: 'instruction',
     clauses: [{ predicate: 'enable', roles: {}, time: null }]
@@ -303,12 +299,24 @@ test('FINDING: omitted clause.time vs explicit clause.time=null do NOT canonical
   };
   const withNullOut = stableStringify(canonicalizeSem(withNull));
   const omittedOut = stableStringify(canonicalizeSem(omitted));
-  assert.notEqual(withNullOut, omittedOut, 'expected divergence: canonicalize.ts uses `!== undefined` for time, so explicit null survives as "time":null while omission drops the key entirely');
-  assert.match(withNullOut, /"time":null/);
+  assert.equal(withNullOut, omittedOut, 'clause.time: null must canonicalize identically to an omitted time key');
+  assert.doesNotMatch(withNullOut, /"time"/);
   assert.doesNotMatch(omittedOut, /"time"/);
 });
 
-test('FINDING: omitted role key vs role value explicitly set to undefined do NOT canonicalize identically', () => {
+test('FIXED (#369/#360): omitted clause.time vs explicit clause.time=undefined canonicalize identically', () => {
+  const withUndefined: LunumSem = {
+    schema: SEM_SCHEMA, world: 'real', kind: 'instruction',
+    clauses: [{ predicate: 'enable', roles: {}, time: undefined as unknown as LunumTerm }]
+  };
+  const omitted: LunumSem = {
+    schema: SEM_SCHEMA, world: 'real', kind: 'instruction',
+    clauses: [{ predicate: 'enable', roles: {} }]
+  };
+  assert.equal(stableStringify(canonicalizeSem(withUndefined)), stableStringify(canonicalizeSem(omitted)));
+});
+
+test('FIXED (#369/#360): omitted role key vs role value explicitly set to undefined canonicalize identically', () => {
   const explicitUndefined: LunumSem = {
     schema: SEM_SCHEMA, world: 'real', kind: 'instruction',
     clauses: [{ predicate: 'enable', roles: { theme: undefined as unknown as LunumTerm } }]
@@ -319,7 +327,23 @@ test('FINDING: omitted role key vs role value explicitly set to undefined do NOT
   };
   const explicitOut = stableStringify(canonicalizeSem(explicitUndefined));
   const omittedOut = stableStringify(canonicalizeSem(omitted));
-  assert.notEqual(explicitOut, omittedOut, 'expected divergence: `clause.roles[key] ?? null` coerces an explicit undefined role value into a literal null role, whereas an absent key never enters `roles` at all');
+  assert.equal(explicitOut, omittedOut, 'role value undefined must canonicalize identically to an absent role key');
+  assert.match(explicitOut, /"roles":\{\}/);
+  assert.match(omittedOut, /"roles":\{\}/);
+});
+
+test('role value explicitly null remains distinguishable and is preserved (not stripped)', () => {
+  const explicitNull: LunumSem = {
+    schema: SEM_SCHEMA, world: 'real', kind: 'instruction',
+    clauses: [{ predicate: 'enable', roles: { theme: null as unknown as LunumTerm } }]
+  };
+  const omitted: LunumSem = {
+    schema: SEM_SCHEMA, world: 'real', kind: 'instruction',
+    clauses: [{ predicate: 'enable', roles: {} }]
+  };
+  const explicitOut = stableStringify(canonicalizeSem(explicitNull));
+  const omittedOut = stableStringify(canonicalizeSem(omitted));
+  assert.notEqual(explicitOut, omittedOut, 'an explicit null role value is a real value and must remain distinguishable from an absent role key');
   assert.match(explicitOut, /"roles":\{"theme":null\}/);
   assert.match(omittedOut, /"roles":\{\}/);
 });
