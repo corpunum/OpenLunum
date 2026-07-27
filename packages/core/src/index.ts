@@ -9,6 +9,7 @@ export * from './derive.js';
 export * from './context.js';
 export * from './compare.js';
 export * from './semantic-invariants.js';
+export * from './fallback-policy.js';
 export * from './near-semantic-fingerprints.js';
 export * from './profile-selector.js';
 export {
