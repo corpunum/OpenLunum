@@ -87,6 +87,101 @@ export interface AgentState {
   updatedAt: string;
 }
 
+export const AGENT_STATE_SCHEMA = 'agent-state/0.1' as const;
+
+export const AGENT_STATE_SUPPORTED_VERSIONS = ['agent-state/0.1'] as const;
+
+export type AgentStateVersion = typeof AGENT_STATE_SUPPORTED_VERSIONS[number];
+
+export interface AgentStateMigrationResult {
+  state: AgentState;
+  migrated: boolean;
+  fromVersion: string;
+  toVersion: AgentStateVersion;
+}
+
+export function migrateAgentState(state: AgentState): AgentStateMigrationResult {
+  const from = state.stateVersion;
+  if ((AGENT_STATE_SUPPORTED_VERSIONS as readonly string[]).includes(from)) {
+    return { state, migrated: false, fromVersion: from, toVersion: from as AgentStateVersion };
+  }
+  throw new Error(`unsupported agent-state version: ${from}; supported: ${AGENT_STATE_SUPPORTED_VERSIONS.join(', ')}`);
+}
+
+export function isAgentStateVersionSupported(version: string): version is AgentStateVersion {
+  return (AGENT_STATE_SUPPORTED_VERSIONS as readonly string[]).includes(version);
+}
+
+export type ReplayStatus = 'replayed' | 'skipped' | 'error';
+
+export interface ReplayResult {
+  stepId: string;
+  status: ReplayStatus;
+  originalStatus: StepStatus;
+  error?: string;
+}
+
+export function replaySteps(state: AgentState): ReplayResult[] {
+  const results: ReplayResult[] = [];
+  for (const step of state.steps) {
+    if (step.status === 'completed') {
+      results.push({ stepId: step.id, status: 'replayed', originalStatus: step.status });
+    } else if (step.status === 'failed' || step.status === 'abandoned') {
+      results.push({ stepId: step.id, status: 'skipped', originalStatus: step.status });
+    } else if (step.status === 'running') {
+      results.push({ stepId: step.id, status: 'skipped', originalStatus: step.status });
+    } else {
+      results.push({ stepId: step.id, status: 'skipped', originalStatus: step.status });
+    }
+  }
+  return results;
+}
+
+export interface RecoveryResult {
+  recovered: boolean;
+  interruptedSteps: string[];
+  resumableSteps: string[];
+  abandonedSteps: string[];
+}
+
+export function recoverFromInterruption(state: AgentState): { result: RecoveryResult; recoveredState: AgentState } {
+  const interrupted: string[] = [];
+  const resumable: string[] = [];
+  const abandoned: string[] = [];
+  const recoveredSteps: AgentPlanStep[] = [];
+
+  for (const step of state.steps) {
+    if (step.status === 'running') {
+      interrupted.push(step.id);
+      if (step.results.length > 0 && step.results[step.results.length - 1]!.success) {
+        resumable.push(step.id);
+        recoveredSteps.push({ ...step, status: 'pending' });
+      } else {
+        abandoned.push(step.id);
+        recoveredSteps.push({ ...step, status: 'abandoned' });
+      }
+    } else {
+      recoveredSteps.push(step);
+    }
+  }
+
+  const recoveredState: AgentState = {
+    ...state,
+    steps: recoveredSteps,
+    updatedAt: new Date().toISOString(),
+  };
+
+  return {
+    result: {
+      recovered: interrupted.length > 0,
+      interruptedSteps: interrupted,
+      resumableSteps: resumable,
+      abandonedSteps: abandoned,
+    },
+    recoveredState,
+  };
+}
+
 /** Validate an agent state snapshot. */
 export function validateAgentState(state: AgentState): { ok: boolean; errors: string[] } {
   const errors: string[] = [];
