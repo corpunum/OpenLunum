@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { checkHardInvariants } from './semantic-invariants.js';
 import type { LunumClause, LunumRecord, LunumSem, LunumTerm } from './types.js';
 
 export type NearSemanticFingerprint = string;
@@ -14,6 +15,7 @@ export interface SimilarityResult {
   similar: boolean;
   threshold: number;
   hardCompatible?: boolean;
+  hardMismatch?: boolean;
   hardMismatchReasons?: string[];
   matchedWeight?: number;
   totalWeight?: number;
@@ -263,6 +265,7 @@ export class NearSemanticFingerprintGenerator {
         similar: false,
         threshold: this.threshold,
         hardCompatible: false,
+        hardMismatch: true,
         hardMismatchReasons: ['Invalid or checksum-mismatched near-semantic fingerprint'],
         matchedWeight: 0,
         totalWeight: 0
@@ -276,6 +279,7 @@ export class NearSemanticFingerprintGenerator {
         similar: true,
         threshold: this.threshold,
         hardCompatible: true,
+        hardMismatch: false,
         hardMismatchReasons: [],
         matchedWeight: first.featureTokens.size,
         totalWeight: first.featureTokens.size
@@ -289,6 +293,7 @@ export class NearSemanticFingerprintGenerator {
         similar: false,
         threshold: this.threshold,
         hardCompatible: false,
+        hardMismatch: true,
         hardMismatchReasons: ['Hard semantic signature differs'],
         matchedWeight: 0,
         totalWeight: 0
@@ -302,6 +307,7 @@ export class NearSemanticFingerprintGenerator {
       similar: score.similarity >= this.threshold,
       threshold: this.threshold,
       hardCompatible: true,
+      hardMismatch: false,
       hardMismatchReasons: [],
       matchedWeight: score.matchedWeight,
       totalWeight: score.totalWeight
@@ -311,9 +317,11 @@ export class NearSemanticFingerprintGenerator {
   compareSem(first: LunumSem, second: LunumSem, options: NearSemanticComparisonOptions = {}): SimilarityResult {
     const fingerprint1 = this.generate(first);
     const fingerprint2 = this.generate(second);
+    const invariantResult = checkHardInvariants(first, second);
     const reasons = [
       ...hardMismatchReasons(hardSignature(first), hardSignature(second)),
-      ...protectedLiteralMismatchReasons(first, second, options)
+      ...protectedLiteralMismatchReasons(first, second, options),
+      ...invariantResult.invariants.map((firing) => `${firing.code} at ${firing.path}: ${firing.detail}`)
     ];
     if (reasons.length > 0) {
       return {
@@ -323,6 +331,7 @@ export class NearSemanticFingerprintGenerator {
         similar: false,
         threshold: this.threshold,
         hardCompatible: false,
+        hardMismatch: true,
         hardMismatchReasons: reasons,
         matchedWeight: 0,
         totalWeight: 0

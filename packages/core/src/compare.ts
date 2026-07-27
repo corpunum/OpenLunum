@@ -1,5 +1,6 @@
 import { canonicalizeSem, stableStringify } from './canonicalize.js';
 import { fingerprintSem } from './fingerprint.js';
+import { checkHardInvariants, type InvariantFiring } from './semantic-invariants.js';
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 
 function scalar(term: LunumTerm | undefined): string {
@@ -30,6 +31,8 @@ export interface SemanticComparison {
   featurePrecision: number;
   missingFeatures: string[];
   extraFeatures: string[];
+  hardMismatch: boolean;
+  hardInvariants: InvariantFiring[];
 }
 
 export function compareSem(expected: LunumSem, actual: LunumSem): SemanticComparison {
@@ -40,12 +43,15 @@ export function compareSem(expected: LunumSem, actual: LunumSem): SemanticCompar
   const missingFeatures = [...expectedFeatures].filter((feature) => !actualFeatures.has(feature)).sort();
   const extraFeatures = [...actualFeatures].filter((feature) => !expectedFeatures.has(feature)).sort();
   const intersection = expectedFeatures.size - missingFeatures.length;
+  const invariantResult = checkHardInvariants(left, right);
   return {
     exactFingerprint: fingerprintSem(left) === fingerprintSem(right),
     exactCanonical: stableStringify(left) === stableStringify(right),
     featureRecall: expectedFeatures.size ? intersection / expectedFeatures.size : 1,
     featurePrecision: actualFeatures.size ? intersection / actualFeatures.size : 1,
     missingFeatures,
-    extraFeatures
+    extraFeatures,
+    hardMismatch: invariantResult.hardMismatch,
+    hardInvariants: invariantResult.invariants
   };
 }
