@@ -19,6 +19,58 @@ test('canonicalization is idempotent', () => {
   assert.equal(stableStringify(canonicalizeSem(once)), stableStringify(once));
 });
 
+// Golden cases for #369 (resolves #360): null/undefined must canonicalize
+// identically to an omitted field.
+test('golden: clause.time null, undefined, and omitted all canonicalize identically', () => {
+  const base = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'instruction' } as const;
+  const withNullTime: LunumSem = { ...base, clauses: [{ predicate: 'enable', roles: {}, time: null }] };
+  const withUndefinedTime: LunumSem = { ...base, clauses: [{ predicate: 'enable', roles: {}, time: undefined as never }] };
+  const omittedTime: LunumSem = { ...base, clauses: [{ predicate: 'enable', roles: {} }] };
+
+  const nullOut = stableStringify(canonicalizeSem(withNullTime));
+  const undefinedOut = stableStringify(canonicalizeSem(withUndefinedTime));
+  const omittedOut = stableStringify(canonicalizeSem(omittedTime));
+
+  assert.equal(nullOut, omittedOut);
+  assert.equal(undefinedOut, omittedOut);
+  assert.doesNotMatch(omittedOut, /"time"/);
+  assert.equal(fingerprintSem(withNullTime), fingerprintSem(omittedTime));
+  assert.equal(fingerprintSem(withUndefinedTime), fingerprintSem(omittedTime));
+});
+
+test('golden: role value undefined and omitted role key canonicalize identically', () => {
+  const base = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'instruction' } as const;
+  const withUndefinedRole: LunumSem = { ...base, clauses: [{ predicate: 'enable', roles: { theme: undefined as never } }] };
+  const omittedRole: LunumSem = { ...base, clauses: [{ predicate: 'enable', roles: {} }] };
+
+  const undefinedOut = stableStringify(canonicalizeSem(withUndefinedRole));
+  const omittedOut = stableStringify(canonicalizeSem(omittedRole));
+
+  assert.equal(undefinedOut, omittedOut);
+  assert.match(omittedOut, /"roles":\{\}/);
+  assert.equal(fingerprintSem(withUndefinedRole), fingerprintSem(omittedRole));
+});
+
+test('golden: role value explicitly null is preserved and distinguishable from an omitted role key', () => {
+  const base = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'instruction' } as const;
+  const withNullRole: LunumSem = { ...base, clauses: [{ predicate: 'enable', roles: { theme: null as never } }] };
+  const omittedRole: LunumSem = { ...base, clauses: [{ predicate: 'enable', roles: {} }] };
+
+  const nullOut = stableStringify(canonicalizeSem(withNullRole));
+  const omittedOut = stableStringify(canonicalizeSem(omittedRole));
+
+  assert.notEqual(nullOut, omittedOut);
+  assert.match(nullOut, /"roles":\{"theme":null\}/);
+  assert.notEqual(fingerprintSem(withNullRole), fingerprintSem(omittedRole));
+});
+
+test('golden: fingerprints for valid sems without null/undefined are unaffected by the fix', () => {
+  const withTime: LunumSem = { ...sem, clauses: [{ ...sem.clauses[0]!, time: { type: 'instant', value: '2026-01-01' } }] };
+  const withTimeAgain: LunumSem = { ...sem, clauses: [{ ...sem.clauses[0]!, time: { type: 'instant', value: '2026-01-01' } }] };
+  assert.equal(fingerprintSem(withTime), fingerprintSem(withTimeAgain));
+  assert.match(fingerprintSem(sem), /^lfp:0\.1:sha256:/);
+});
+
 test('reference renderer follows world and preferred role order', () => {
   assert.equal(renderSem(sem).code, 'R prefer user concise_answers');
 });

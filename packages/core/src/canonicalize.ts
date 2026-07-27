@@ -35,14 +35,18 @@ function canonicalTerm(term: LunumTerm): LunumTerm {
 
 function canonicalClause(clause: LunumClause): LunumClause {
   const roles: Record<string, LunumTerm> = {};
-  for (const key of Object.keys(clause.roles ?? {}).sort()) roles[normalizeIdentifier(key)] = canonicalTerm(clause.roles[key] ?? null);
+  for (const key of Object.keys(clause.roles ?? {}).sort()) {
+    const item = clause.roles[key];
+    if (item === undefined) continue;
+    roles[normalizeIdentifier(key)] = canonicalTerm(item);
+  }
   const out: LunumClause = {
     predicate: normalizeIdentifier(clause.predicate),
     roles,
     negated: clause.negated === true
   };
   if (clause.modality != null) out.modality = normalizeIdentifier(clause.modality);
-  if (clause.time !== undefined) out.time = canonicalTerm(clause.time);
+  if (clause.time != null) out.time = canonicalTerm(clause.time);
   if (clause.conditions?.length) out.conditions = clause.conditions.map(canonicalClause);
   if (clause.consequences?.length) out.consequences = clause.consequences.map(canonicalClause);
   if (clause.annotations && Object.keys(clause.annotations).length) out.annotations = canonicalUnknown(clause.annotations) as Record<string, unknown>;
