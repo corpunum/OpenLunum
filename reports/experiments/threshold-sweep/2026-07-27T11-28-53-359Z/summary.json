@@ -1,0 +1,988 @@
+{
+  "runId": "2026-07-27T11-28-53-359Z",
+  "generatedAt": "2026-07-27T11:28:53.359Z",
+  "baselineCommit": "d114f481cb3435a0d7c1898a76752b63998cd826",
+  "datasets": [
+    {
+      "path": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+      "sha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+      "items": 20
+    },
+    {
+      "path": "datasets/dev/multilingual-core-v1.jsonl",
+      "sha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+      "items": 16
+    },
+    {
+      "path": "datasets/adversarial/mutation-false-positive-v2.jsonl",
+      "sha256": "933e8ed78843cb2526be78e159d2192b2f9b204d3f61ed2c1513f1ee3b3e14d1",
+      "items": 80
+    },
+    {
+      "path": "datasets/dev/synthetic-mutation-sources-v1.jsonl",
+      "sha256": "0a9df9daf3c76d663e0e67c5b57cbfd8bc25fda2325e164956ccaca2ee9e7039",
+      "items": 16
+    },
+    {
+      "path": "datasets/dev/scorer-eval-heldout-v1.jsonl",
+      "sha256": "81346f423d24047906a4023d74d428067feacc82d4a198bc6270ae562114d7a5",
+      "items": 16
+    }
+  ],
+  "pairCounts": {
+    "total": 116,
+    "positive": 8,
+    "negative": 108
+  },
+  "sweep": [
+    {
+      "threshold": 0.5,
+      "truePositive": 8,
+      "falsePositive": 6,
+      "falseNegative": 0,
+      "trueNegative": 102,
+      "precision": 0.5714285714285714,
+      "recall": 1,
+      "f1": 0.7272727272727273,
+      "accuracy": 0.9482758620689655
+    },
+    {
+      "threshold": 0.55,
+      "truePositive": 8,
+      "falsePositive": 6,
+      "falseNegative": 0,
+      "trueNegative": 102,
+      "precision": 0.5714285714285714,
+      "recall": 1,
+      "f1": 0.7272727272727273,
+      "accuracy": 0.9482758620689655
+    },
+    {
+      "threshold": 0.6,
+      "truePositive": 8,
+      "falsePositive": 6,
+      "falseNegative": 0,
+      "trueNegative": 102,
+      "precision": 0.5714285714285714,
+      "recall": 1,
+      "f1": 0.7272727272727273,
+      "accuracy": 0.9482758620689655
+    },
+    {
+      "threshold": 0.65,
+      "truePositive": 8,
+      "falsePositive": 2,
+      "falseNegative": 0,
+      "trueNegative": 106,
+      "precision": 0.8,
+      "recall": 1,
+      "f1": 0.888888888888889,
+      "accuracy": 0.9827586206896551
+    },
+    {
+      "threshold": 0.7,
+      "truePositive": 8,
+      "falsePositive": 2,
+      "falseNegative": 0,
+      "trueNegative": 106,
+      "precision": 0.8,
+      "recall": 1,
+      "f1": 0.888888888888889,
+      "accuracy": 0.9827586206896551
+    },
+    {
+      "threshold": 0.75,
+      "truePositive": 8,
+      "falsePositive": 0,
+      "falseNegative": 0,
+      "trueNegative": 108,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "accuracy": 1
+    },
+    {
+      "threshold": 0.8,
+      "truePositive": 8,
+      "falsePositive": 0,
+      "falseNegative": 0,
+      "trueNegative": 108,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "accuracy": 1
+    },
+    {
+      "threshold": 0.85,
+      "truePositive": 6,
+      "falsePositive": 0,
+      "falseNegative": 2,
+      "trueNegative": 108,
+      "precision": 1,
+      "recall": 0.75,
+      "f1": 0.8571428571428571,
+      "accuracy": 0.9827586206896551
+    },
+    {
+      "threshold": 0.9,
+      "truePositive": 1,
+      "falsePositive": 0,
+      "falseNegative": 7,
+      "trueNegative": 108,
+      "precision": 1,
+      "recall": 0.125,
+      "f1": 0.2222222222222222,
+      "accuracy": 0.9396551724137931
+    },
+    {
+      "threshold": 0.95,
+      "truePositive": 1,
+      "falsePositive": 0,
+      "falseNegative": 7,
+      "trueNegative": 108,
+      "precision": 1,
+      "recall": 0.125,
+      "f1": 0.2222222222222222,
+      "accuracy": 0.9396551724137931
+    },
+    {
+      "threshold": 1,
+      "truePositive": 1,
+      "falsePositive": 0,
+      "falseNegative": 7,
+      "trueNegative": 108,
+      "precision": 1,
+      "recall": 0.125,
+      "f1": 0.2222222222222222,
+      "accuracy": 0.9396551724137931
+    }
+  ],
+  "frozenThreshold": {
+    "threshold": 0.8,
+    "metrics": {
+      "threshold": 0.8,
+      "truePositive": 8,
+      "falsePositive": 0,
+      "falseNegative": 0,
+      "trueNegative": 108,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "accuracy": 1
+    }
+  },
+  "pairs": [
+    {
+      "id": "negation-preference-en",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-preference-el",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-preference-es",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-preference-id",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-battery-en",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-battery-el",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-battery-es",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-battery-id",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-deadline-en",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-deadline-el",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-deadline-es",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-deadline-id",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-battery-en",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-battery-el",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-battery-es",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-battery-id",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-delete-en",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-delete-el",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-delete-es",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-delete-id",
+      "source": "mutation-false-positive-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-remind-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-approve-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-remind-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-approve-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-remind-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-approve-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-remind-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-approve-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-remind-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-approve-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-remind-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-approve-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-remind-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-approve-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-remind-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-approve-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-remind-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-approve-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-remind-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-approve-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-remind-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-approve-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-remind-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-approve-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-remind-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-approve-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-remind-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-approve-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-remind-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-approve-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-remind-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-approve-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-remind-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-approve-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-remind-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-approve-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-remind-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-approve-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-remind-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-approve-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-share-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-share-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-share-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-share-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-share-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-share-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-share-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-share-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-share-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-share-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-share-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-share-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-share-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-share-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-share-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-share-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-share-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-share-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-share-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-share-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-believe-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-believe-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-believe-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "negation-believe-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-believe-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-believe-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-believe-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "modality-believe-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-believe-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-believe-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-believe-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "extra-clause-believe-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-believe-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-believe-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-believe-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "literal-believe-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "role-believe-en",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0.6129032258064516,
+      "hardCompatible": true
+    },
+    {
+      "id": "role-believe-el",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0.6129032258064516,
+      "hardCompatible": true
+    },
+    {
+      "id": "role-believe-es",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0.6129032258064516,
+      "hardCompatible": true
+    },
+    {
+      "id": "role-believe-id",
+      "source": "mutation-false-positive-v2",
+      "label": "negative",
+      "similarity": 0.6129032258064516,
+      "hardCompatible": true
+    },
+    {
+      "id": "share-manner-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "positive",
+      "similarity": 0.890625,
+      "hardCompatible": true
+    },
+    {
+      "id": "translate-lang-id-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "positive",
+      "similarity": 0.8571428571428571,
+      "hardCompatible": true
+    },
+    {
+      "id": "share-inner-note-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "positive",
+      "similarity": 0.890625,
+      "hardCompatible": true
+    },
+    {
+      "id": "archive-condition-order-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "positive",
+      "similarity": 1,
+      "hardCompatible": true
+    },
+    {
+      "id": "summarize-lang-id-es",
+      "source": "scorer-eval-heldout-v1",
+      "label": "positive",
+      "similarity": 0.8095238095238095,
+      "hardCompatible": true
+    },
+    {
+      "id": "share-manner-el",
+      "source": "scorer-eval-heldout-v1",
+      "label": "positive",
+      "similarity": 0.890625,
+      "hardCompatible": true
+    },
+    {
+      "id": "share-inner-note-id",
+      "source": "scorer-eval-heldout-v1",
+      "label": "positive",
+      "similarity": 0.890625,
+      "hardCompatible": true
+    },
+    {
+      "id": "archive-casing-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "positive",
+      "similarity": 0.8095238095238095,
+      "hardCompatible": true
+    },
+    {
+      "id": "schedule-vs-cancel-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "negative",
+      "similarity": 0.23809523809523808,
+      "hardCompatible": true
+    },
+    {
+      "id": "notify-world-mismatch-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "archive-kind-mismatch-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "share-missing-recipient-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "negative",
+      "similarity": 0.7307692307692307,
+      "hardCompatible": true
+    },
+    {
+      "id": "unrelated-preference-vs-deadline-en",
+      "source": "scorer-eval-heldout-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "approve-vs-reject-es",
+      "source": "scorer-eval-heldout-v1",
+      "label": "negative",
+      "similarity": 0.22580645161290322,
+      "hardCompatible": true
+    },
+    {
+      "id": "delete-kind-mismatch-el",
+      "source": "scorer-eval-heldout-v1",
+      "label": "negative",
+      "similarity": 0,
+      "hardCompatible": false
+    },
+    {
+      "id": "translate-missing-theme-id",
+      "source": "scorer-eval-heldout-v1",
+      "label": "negative",
+      "similarity": 0.7307692307692307,
+      "hardCompatible": true
+    }
+  ]
+}

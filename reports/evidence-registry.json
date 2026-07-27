@@ -919,6 +919,30 @@
       "discrepancy": null,
       "verificationStatus": "verified",
       "note": "Negative evidence: precision 0.500 at frozen 0.8 threshold is a confirmed deficiency, not a calibration suggestion."
+    },
+    {
+      "ledgerRowId": 31,
+      "ledgerText": "Issue #374",
+      "prNumbers": [],
+      "issueNumbers": [
+        374
+      ],
+      "mergeCommits": [],
+      "evidencePaths": [
+        "reports/calibration/threshold-v1.md",
+        "reports/experiments/threshold-sweep/2026-07-27T11-28-53-359Z/summary.json",
+        "reports/experiments/threshold-sweep/2026-07-27T11-28-53-359Z/report.md",
+        "reports/experiments/threshold-sweep/2026-07-27T11-28-53-359Z/sweep.jsonl",
+        "reports/experiments/threshold-sweep/2026-07-27T11-28-53-359Z/pairs.jsonl"
+      ],
+      "datasetSha256": [],
+      "evaluatorVerdict": null,
+      "resultSummary": "Post-invariant threshold sweep on 116 pairs at frozen 0.80: precision 1.000, recall 1.000, F1 1.000, 0 false positives. Owner decision: threshold confirmed at 0.80 with documented rationale.",
+      "limitations": "Corpus is 116 pairs — future expansion may shift the optimal threshold. Calibration should be re-run after significant corpus additions.",
+      "limitationsSource": "calibration",
+      "discrepancy": null,
+      "verificationStatus": "verified",
+      "note": "R5.5 calibration confirmation. Supersedes row 30's negative evidence — the 8 false positives are now eliminated by hard invariants (#370)."
     }
   ]
 }

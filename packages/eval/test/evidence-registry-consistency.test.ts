@@ -79,8 +79,8 @@ test('evidence registry: every ledger row has exactly one registry entry, and vi
 
   assert.equal(
     ledgerRowTexts.length,
-    30,
-    `Expected 30 ledger rows (PR #294 through PR #365 plus MIXED_CONTEXT_QUALITY.md and issue #342), found ${ledgerRowTexts.length}. ` +
+    31,
+    `Expected 31 ledger rows (PR #294 through PR #365 plus MIXED_CONTEXT_QUALITY.md, issue #342 and issue #374), found ${ledgerRowTexts.length}. ` +
       'If the tracker legitimately grew a new row, add a matching reports/evidence-registry.json entry and update this count.'
   );
 
