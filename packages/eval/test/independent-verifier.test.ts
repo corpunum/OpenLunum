@@ -107,6 +107,19 @@ describe('Python verifier result', () => {
   });
 });
 
+describe('Node.js independent verifier result (agy/Gemini-generated)', () => {
+  const nodeResultPath = path.join(WORKSPACE_ROOT, 'verifiers', 'node-independent', 'replication-result.json');
+
+  it('agy-generated Node.js verifier result exists and shows 100% pass', async () => {
+    const raw = await readFile(nodeResultPath, 'utf-8');
+    const result = JSON.parse(raw) as { totalVectors: number; passCount: number; failCount: number; discrepancies: unknown[] };
+    assert.ok(result.totalVectors >= 100, `expected >=100 vectors, got ${result.totalVectors}`);
+    assert.strictEqual(result.failCount, 0, `Node.js verifier had ${result.failCount} failures`);
+    assert.strictEqual(result.passCount, result.totalVectors);
+    assert.strictEqual(result.discrepancies.length, 0);
+  });
+});
+
 describe('normalization edge cases', () => {
   it('case-insensitive identifiers produce same fingerprint', () => {
     const bundle = generateGoldenVectors('test');
