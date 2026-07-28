@@ -1,0 +1,72 @@
+{
+  "schema": "openlunum-neutrality-audit/0.1",
+  "version": "0.1.0",
+  "findings": [
+    {
+      "id": "type-definitions-neutrality",
+      "category": "type-definitions",
+      "target": "packages/core/src/types.ts",
+      "passed": true,
+      "message": "No product-specific strings found in core schema type definitions (LunumSem, LunumClause, LunumTerm).",
+      "details": {
+        "leakedTerms": []
+      }
+    },
+    {
+      "id": "schema-constants-naming",
+      "category": "constants",
+      "target": "packages/core/src/constants.ts",
+      "passed": true,
+      "message": "Schema constants follow generic naming patterns and contain generic schema values.",
+      "details": {
+        "missingConstants": [],
+        "invalidNaming": [],
+        "leakedInValues": []
+      }
+    },
+    {
+      "id": "exported-function-signatures-neutrality",
+      "category": "function-signatures",
+      "target": "packages/core/src/index.ts",
+      "passed": true,
+      "message": "Exported function signatures do not reference product-specific concepts.",
+      "details": {
+        "leakedInSignatures": []
+      }
+    },
+    {
+      "id": "type-fields-semantic-names",
+      "category": "type-fields",
+      "target": "packages/core/src/types.ts (LunumSem, LunumClause, LunumTerm)",
+      "passed": true,
+      "message": "Type fields use generic semantic names rather than product-specific ones.",
+      "details": {
+        "missingGenericFields": [],
+        "nonGenericFieldLeaks": []
+      }
+    },
+    {
+      "id": "eligibility-logic-structural",
+      "category": "eligibility",
+      "target": "packages/core/src/policy.ts & policy-classifier.ts",
+      "passed": true,
+      "message": "Eligibility decisions are based on structural properties (category, risk, confidence, semantics) rather than product-specific rules.",
+      "details": {
+        "missingStructuralChecks": [],
+        "hardcodedProductRules": []
+      }
+    },
+    {
+      "id": "renderer-profile-schema-generic",
+      "category": "renderer-profile-schema",
+      "target": "packages/core/src/model-renderer-profiles.ts",
+      "passed": true,
+      "message": "Renderer profile schema (AcceptedRendererProfile) is generic and model-agnostic.",
+      "details": {
+        "missingProfileSchemaFields": []
+      }
+    }
+  ],
+  "verdict": "pass",
+  "sha": "a3504e69224bd5f54255a12f9d5b4d468970074e4ac64b32ef1fc4f737bed648"
+}
