@@ -1,0 +1,510 @@
+{
+  "schema": "openlunum-model-family-bundle/0.1",
+  "version": "0.1.0",
+  "families": [
+    "gemma",
+    "llama",
+    "qwen"
+  ],
+  "results": [
+    {
+      "schema": "openlunum-model-family-eval/0.1",
+      "version": "0.1.0",
+      "runId": "family-eval-qwen3-coder-30b-live-1785228285814",
+      "runTimestamp": "2026-07-28T08:44:45.814Z",
+      "model": {
+        "profileId": "qwen3-coder-30b-live",
+        "family": "qwen",
+        "displayName": "Qwen3 Coder 30B A3B",
+        "architecture": "qwen2",
+        "quantization": "Q6_K",
+        "parameterCount": "30B-A3B",
+        "profilePath": "profiles/models/qwen3-coder-30b-live.json",
+        "profileSha256": "349a6dcaefe7f78493c231994fca7f69365c39d2bdbe7f7482e4c0b1f2be01d1"
+      },
+      "dataset": {
+        "path": "datasets/retention-expanded-v1.jsonl",
+        "sha256": "4e1e288631f195009dc25c4958aa75eff4913cc5390e74b58a3d319aa81c743a",
+        "itemCount": 10
+      },
+      "samples": [
+        {
+          "itemId": "ret-simple-001",
+          "sourceText": "The user prefers dark mode.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"preference\",\n  \"clauses\": [\n    {\n      \"predicate\": \"prefer\",\n      \"roles\": {\n        \"experiencer\": {\n          \"type\": \"actor\",\n          \"id\": \"user\"\n        },\n        \"theme\": {\n          \"type\": \"concept\",\n          \"id\": \"dark_mode\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 2280
+        },
+        {
+          "itemId": "ret-neg-021",
+          "sourceText": "The system does not share personal data.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"share\",\n      \"roles\": {\n        \"agent\": {\n          \"type\": \"actor\",\n          \"id\": \"system\"\n        },\n        \"theme\": {\n          \"type\": \"concept\",\n          \"id\": \"personal_data\"\n        }\n      },\n      \"negated\": true\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 1703
+        },
+        {
+          "itemId": "ret-modal-036",
+          "sourceText": "The system must encrypt data at rest.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"safety_constraint\",\n  \"clauses\": [\n    {\n      \"predicate\": \"encrypt\",\n      \"roles\": {\n        \"agent\": {\n          \"type\": \"actor\",\n          \"id\": \"system\"\n        },\n        \"theme\": {\n          \"type\": \"data\",\n          \"id\": \"data_at_rest\"\n        }\n      },\n      \"negated\": false,\n      \"modality\": \"mandatory\"\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 1870
+        },
+        {
+          "itemId": "ret-cond-051",
+          "sourceText": "If the user is authenticated, grant access to the dashboard.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"conditional_instruction\",\n  \"clauses\": [\n    {\n      \"predicate\": \"grant_access\",\n      \"roles\": {\n        \"recipient\": {\n          \"type\": \"actor\",\n          \"id\": \"user\"\n        },\n        \"theme\": {\n          \"type\": \"feature\",\n          \"id\": \"dashboard\"\n        }\n      },\n      \"negated\": false,\n      \"conditions\": [\n        {\n          \"predicate\": \"authenticated\",\n          \"roles\": {\n            \"subject\": {\n              \"type\": \"actor\",\n              \"id\": \"user\"\n            }\n          },\n          \"negated\": false\n        }\n      ]\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 2514
+        },
+        {
+          "itemId": "ret-multi-071",
+          "sourceText": "The admin sends the report to the manager via email.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"send\",\n      \"roles\": {\n        \"agent\": {\n          \"type\": \"actor\",\n          \"id\": \"admin\"\n        },\n        \"theme\": {\n          \"type\": \"document\",\n          \"id\": \"report\"\n        },\n        \"recipient\": {\n          \"type\": \"actor\",\n          \"id\": \"manager\"\n        },\n        \"medium\": {\n          \"type\": \"medium\",\n          \"id\": \"email\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 2404
+        },
+        {
+          "itemId": "ret-temp-086",
+          "sourceText": "The report is due on 2025-06-15.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"due\",\n      \"roles\": {\n        \"subject\": {\n          \"type\": \"document\",\n          \"id\": \"report\"\n        },\n        \"time\": {\n          \"type\": \"date\",\n          \"value\": \"2025-06-15\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 1930
+        },
+        {
+          "itemId": "ret-quant-101",
+          "sourceText": "The server has 64 GB of RAM.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"have\",\n      \"roles\": {\n        \"experiencer\": {\n          \"type\": \"entity\",\n          \"id\": \"server\"\n        },\n        \"theme\": {\n          \"type\": \"quantity\",\n          \"value\": 64,\n          \"unit\": \"gigabyte\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 1956
+        },
+        {
+          "itemId": "ret-mclause-116",
+          "sourceText": "The system encrypts data at rest and in transit.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"encrypt\",\n      \"roles\": {\n        \"agent\": {\n          \"type\": \"actor\",\n          \"id\": \"system\"\n        },\n        \"theme\": {\n          \"type\": \"concept\",\n          \"id\": \"data\"\n        }\n      },\n      \"negated\": false,\n      \"conditions\": [\n        {\n          \"predicate\": \"at_rest\",\n          \"roles\": {},\n          \"negated\": false\n        },\n        {\n          \"predicate\": \"in_transit\",\n          \"roles\": {},\n          \"negated\": false\n        }\n      ]\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 2614
+        },
+        {
+          "itemId": "ret-belief-161",
+          "sourceText": "The user believes the meeting was cancelled.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"believe\",\n      \"roles\": {\n        \"experiencer\": {\n          \"type\": \"actor\",\n          \"id\": \"user\"\n        },\n        \"theme\": {\n          \"type\": \"concept\",\n          \"id\": \"meeting_cancelled\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 1847
+        },
+        {
+          "itemId": "ret-pref-201",
+          "sourceText": "The user prefers Python over JavaScript.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"preference\",\n  \"clauses\": [\n    {\n      \"predicate\": \"prefer\",\n      \"roles\": {\n        \"experiencer\": {\n          \"type\": \"actor\",\n          \"id\": \"user\"\n        },\n        \"theme\": {\n          \"type\": \"concept\",\n          \"id\": \"python\"\n        },\n        \"contrast\": {\n          \"type\": \"concept\",\n          \"id\": \"javascript\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 2134
+        }
+      ],
+      "summary": {
+        "totalItems": 10,
+        "parsedCount": 10,
+        "validSchemaCount": 10,
+        "parseRate": 1,
+        "validSchemaRate": 1,
+        "meanLatencyMs": 2125.2,
+        "medianLatencyMs": 2045
+      }
+    },
+    {
+      "schema": "openlunum-model-family-eval/0.1",
+      "version": "0.1.0",
+      "runId": "family-eval-qwen36-35b-live-1785228626668",
+      "runTimestamp": "2026-07-28T08:50:26.668Z",
+      "model": {
+        "profileId": "qwen36-35b-live",
+        "family": "qwen",
+        "displayName": "Qwen 3.6 35B A3B MTP",
+        "architecture": "qwen2",
+        "quantization": "Q6_K",
+        "parameterCount": "35B-A3B",
+        "profilePath": "profiles/models/qwen36-35b-live.json",
+        "profileSha256": "a230b4603a87a91e056a581fbffba80e1cd339e1d23d0d79841ac34292e79803"
+      },
+      "dataset": {
+        "path": "datasets/retention-expanded-v1.jsonl",
+        "sha256": "4e1e288631f195009dc25c4958aa75eff4913cc5390e74b58a3d319aa81c743a",
+        "itemCount": 10
+      },
+      "samples": [
+        {
+          "itemId": "ret-simple-001",
+          "sourceText": "The user prefers dark mode.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"user\"},\"theme\":{\"type\":\"concept\",\"id\":\"dark_mode\"}},\"negated\":false}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 18777
+        },
+        {
+          "itemId": "ret-neg-021",
+          "sourceText": "The system does not share personal data.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"fact\",\"clauses\":[{\"predicate\":\"share\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"theme\":{\"type\":\"concept\",\"id\":\"personal_data\"}},\"negated\":true}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 11378
+        },
+        {
+          "itemId": "ret-modal-036",
+          "sourceText": "The system must encrypt data at rest.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"encrypt\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"theme\":{\"type\":\"concept\",\"id\":\"data_at_rest\"}},\"negated\":false,\"modality\":\"obligation\"}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 44175
+        },
+        {
+          "itemId": "ret-cond-051",
+          "sourceText": "If the user is authenticated, grant access to the dashboard.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"grant_access\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"theme\":{\"type\":\"concept\",\"id\":\"access\"},\"recipient\":{\"type\":\"actor\",\"id\":\"user\"},\"target\":{\"type\":\"concept\",\"id\":\"dashboard\"}},\"negated\":false,\"conditions\":[{\"predicate\":\"is_authenticated\",\"roles\":{\"subject\":{\"type\":\"actor\",\"id\":\"user\"}},\"negated\":false}]}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 27229
+        },
+        {
+          "itemId": "ret-multi-071",
+          "sourceText": "The admin sends the report to the manager via email.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"fact\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"admin\"},\"theme\":{\"type\":\"concept\",\"id\":\"report\"},\"recipient\":{\"type\":\"actor\",\"id\":\"manager\"},\"medium\":{\"type\":\"concept\",\"id\":\"email\"}},\"negated\":false}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 16738
+        },
+        {
+          "itemId": "ret-temp-086",
+          "sourceText": "The report is due on 2025-06-15.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"deadline\",\n      \"roles\": {\n        \"subject\": {\n          \"type\": \"entity\",\n          \"id\": \"report\"\n        },\n        \"date\": {\n          \"type\": \"date\",\n          \"value\": \"2025-06-15\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 23005
+        },
+        {
+          "itemId": "ret-quant-101",
+          "sourceText": "The server has 64 GB of RAM.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"fact\",\"clauses\":[{\"predicate\":\"has\",\"roles\":{\"subject\":{\"type\":\"entity\",\"id\":\"server\"},\"object\":{\"type\":\"concept\",\"id\":\"ram\"},\"quantity\":{\"type\":\"quantity\",\"value\":64,\"unit\":\"gb\"}},\"negated\":false}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 19257
+        },
+        {
+          "itemId": "ret-mclause-116",
+          "sourceText": "The system encrypts data at rest and in transit.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"encrypt\",\n      \"roles\": {\n        \"agent\": {\n          \"type\": \"actor\",\n          \"id\": \"system\"\n        },\n        \"theme\": {\n          \"type\": \"concept\",\n          \"id\": \"data\"\n        }\n      },\n      \"negated\": false,\n      \"conditions\": [\n        {\n          \"predicate\": \"state\",\n          \"roles\": {\n            \"subject\": {\n              \"type\": \"concept\",\n              \"id\": \"data\"\n            },\n            \"value\": {\n              \"type\": \"state\",\n              \"id\": \"at_rest\"\n            }\n          },\n          \"negated\": false\n        },\n        {\n          \"predicate\": \"state\",\n          \"roles\": {\n            \"subject\": {\n              \"type\": \"concept\",\n              \"id\": \"data\"\n            },\n            \"value\": {\n              \"type\": \"state\",\n              \"id\": \"in_transit\"\n            }\n          },\n          \"negated\": false\n        }\n      ]\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 23804
+        },
+        {
+          "itemId": "ret-belief-161",
+          "sourceText": "The user believes the meeting was cancelled.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"fact\",\"clauses\":[{\"predicate\":\"believe\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"user\"},\"theme\":{\"predicate\":\"cancel\",\"roles\":{\"patient\":{\"type\":\"event\",\"id\":\"meeting\"}},\"negated\":false}},\"negated\":false}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 63355
+        },
+        {
+          "itemId": "ret-pref-201",
+          "sourceText": "The user prefers Python over JavaScript.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"user\"},\"theme\":{\"type\":\"concept\",\"id\":\"python\"},\"alternative\":{\"type\":\"concept\",\"id\":\"javascript\"}},\"negated\":false}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 16887
+        }
+      ],
+      "summary": {
+        "totalItems": 10,
+        "parsedCount": 10,
+        "validSchemaCount": 10,
+        "parseRate": 1,
+        "validSchemaRate": 1,
+        "meanLatencyMs": 26460.5,
+        "medianLatencyMs": 21131
+      }
+    },
+    {
+      "schema": "openlunum-model-family-eval/0.1",
+      "version": "0.1.0",
+      "runId": "family-eval-supergemma4-e4b-live-1785229258529",
+      "runTimestamp": "2026-07-28T09:00:58.529Z",
+      "model": {
+        "profileId": "supergemma4-e4b-live",
+        "family": "gemma",
+        "displayName": "SuperGemma4 E4B",
+        "architecture": "gemma2",
+        "quantization": "Q4_K_M",
+        "parameterCount": "E4B",
+        "profilePath": "profiles/models/supergemma4-e4b-live.json",
+        "profileSha256": "60dee96d972fa6be913b357687d8f665e24cc186d0df9e2b0d9102904128186c"
+      },
+      "dataset": {
+        "path": "datasets/retention-expanded-v1.jsonl",
+        "sha256": "4e1e288631f195009dc25c4958aa75eff4913cc5390e74b58a3d319aa81c743a",
+        "itemCount": 10
+      },
+      "samples": [
+        {
+          "itemId": "ret-simple-001",
+          "sourceText": "The user prefers dark mode.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"user\"},\"theme\":{\"type\":\"concept\",\"id\":\"dark_mode\"}},\"negated\":false}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 22056
+        },
+        {
+          "itemId": "ret-neg-021",
+          "sourceText": "The system does not share personal data.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"share\",\n      \"roles\": {\n        \"agent\": {\n          \"type\": \"actor\",\n          \"id\": \"system\"\n        },\n        \"theme\": {\n          \"type\": \"concept\",\n          \"id\": \"personal_data\"\n        }\n      },\n      \"negated\": true\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 32368
+        },
+        {
+          "itemId": "ret-modal-036",
+          "sourceText": "The system must encrypt data at rest.",
+          "sourceLanguage": "en",
+          "rawOutput": "",
+          "parsedSuccessfully": false,
+          "hasValidSchema": false,
+          "latencyMs": 76642
+        },
+        {
+          "itemId": "ret-cond-051",
+          "sourceText": "If the user is authenticated, grant access to the dashboard.",
+          "sourceLanguage": "en",
+          "rawOutput": "",
+          "parsedSuccessfully": false,
+          "hasValidSchema": false,
+          "latencyMs": 76729
+        },
+        {
+          "itemId": "ret-multi-071",
+          "sourceText": "The admin sends the report to the manager via email.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"send\",\n      \"roles\": {\n        \"agent\": {\n          \"type\": \"actor\",\n          \"id\": \"admin\"\n        },\n        \"theme\": {\n          \"type\": \"concept\",\n          \"id\": \"report\"\n        },\n        \"recipient\": {\n          \"type\": \"actor\",\n          \"id\": \"manager\"\n        },\n        \"instrument\": {\n          \"type\": \"method\",\n          \"id\": \"email\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 57954
+        },
+        {
+          "itemId": "ret-temp-086",
+          "sourceText": "The report is due on 2025-06-15.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"be_due\",\n      \"roles\": {\n        \"theme\": {\n          \"type\": \"document\",\n          \"id\": \"report\"\n        },\n        \"time\": {\n          \"type\": \"date\",\n          \"id\": \"due_date\",\n          \"value\": \"2025-06-15\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 73987
+        },
+        {
+          "itemId": "ret-quant-101",
+          "sourceText": "The server has 64 GB of RAM.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"have\",\n      \"roles\": {\n        \"possessor\": {\n          \"type\": \"actor\",\n          id\": \"server\"\n        },\n        \"theme\": {\n          \"type\": \"resource\",\n          \"id\": \"ram\"\n        },\n        \"quantity\": {\n          \"type\": \"quantity\",\n          \"value\": 64,\n          \"unit\": \"GB\"\n        }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": false,
+          "hasValidSchema": false,
+          "latencyMs": 75572
+        },
+        {
+          "itemId": "ret-mclause-116",
+          "sourceText": "The system encrypts data at rest and in transit.",
+          "sourceLanguage": "en",
+          "rawOutput": "",
+          "parsedSuccessfully": false,
+          "hasValidSchema": false,
+          "latencyMs": 76819
+        },
+        {
+          "itemId": "ret-belief-161",
+          "sourceText": "The user believes the meeting was cancelled.",
+          "sourceLanguage": "en",
+          "rawOutput": "",
+          "parsedSuccessfully": false,
+          "hasValidSchema": false,
+          "latencyMs": 76852
+        },
+        {
+          "itemId": "ret-pref-201",
+          "sourceText": "The user prefers Python over JavaScript.",
+          "sourceLanguage": "en",
+          "rawOutput": "{ \"schema\": \"lunum-sem/0.1-draft\", \"world\": \"real\", \"kind\": \"preference\", \"clauses\": [{ \"predicate\": \"prefer\", \"roles\": { \"agent\": { \"type\": \"actor\", \"id\": \"user\" }, \"theme\": { \"type\": \"concept\", \"id\": \"python\" }, \"comparison_target\": { \"type\": \"concept\", \"id\": \"javascript\" } }, \"negated\": false }] }",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 43821
+        }
+      ],
+      "summary": {
+        "totalItems": 10,
+        "parsedCount": 5,
+        "validSchemaCount": 5,
+        "parseRate": 0.5,
+        "validSchemaRate": 0.5,
+        "meanLatencyMs": 61280,
+        "medianLatencyMs": 74779.5
+      }
+    },
+    {
+      "schema": "openlunum-model-family-eval/0.1",
+      "version": "0.1.0",
+      "runId": "family-eval-nemotron-super-120b-nim-1785229329624",
+      "runTimestamp": "2026-07-28T09:02:09.624Z",
+      "model": {
+        "profileId": "nemotron-super-120b-nim",
+        "family": "llama",
+        "displayName": "SuperNemotron 120B (NIM)",
+        "architecture": "llama",
+        "quantization": "cloud-fp8",
+        "parameterCount": "120B-A12B",
+        "profilePath": "profiles/models/nemotron-super-120b-nim.json",
+        "profileSha256": "34dad1a9be6e53cdead708bbb989c70ca01aa27f166583935ace304a705aa52c"
+      },
+      "dataset": {
+        "path": "datasets/retention-expanded-v1.jsonl",
+        "sha256": "4e1e288631f195009dc25c4958aa75eff4913cc5390e74b58a3d319aa81c743a",
+        "itemCount": 10
+      },
+      "samples": [
+        {
+          "itemId": "ret-simple-001",
+          "sourceText": "The user prefers dark mode.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"user\"},\"theme\":{\"type\":\"concept\",\"id\":\"dark_mode\"}},\"negated\":false}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 4745
+        },
+        {
+          "itemId": "ret-neg-021",
+          "sourceText": "The system does not share personal data.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"safety_constraint\",\n  \"clauses\": [\n    {\n      \"predicate\": \"share\",\n      \"roles\": {\n        \"agent\": { \"type\": \"actor\", \"id\": \"system\" },\n        \"theme\": { \"type\": \"concept\", \"id\": \"personal_data\" }\n      },\n      \"negated\": true\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 15589
+        },
+        {
+          "itemId": "ret-modal-036",
+          "sourceText": "The system must encrypt data at rest.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"safety_constraint\",\n  \"clauses\": [\n    {\n      \"predicate\": \"encrypt\",\n      \"roles\": {\n        \"agent\": { \"type\": \"actor\", \"id\": \"system\" },\n        \"theme\": { \"type\": \"concept\", \"id\": \"data_at_rest\" }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 8995
+        },
+        {
+          "itemId": "ret-cond-051",
+          "sourceText": "If the user is authenticated, grant access to the dashboard.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"conditional_instruction\",\n  \"clauses\": [\n    {\n      \"predicate\": \"grant\",\n      \"roles\": {\n        \"agent\": { \"type\": \"actor\", \"id\": \"system\" },\n        \"recipient\": { \"type\": \"actor\", \"id\": \"user\" },\n        \"theme\": { \"type\": \"concept\", \"id\": \"access\" },\n        \"location\": { \"type\": \"concept\", \"id\": \"dashboard\" }\n      },\n      \"negated\": false,\n      \"conditions\": [\n        {\n          \"predicate\": \"authenticated\",\n          \"roles\": {\n            \"subject\": { \"type\": \"actor\", \"id\": \"user\" }\n          },\n          \"negated\": false\n        }\n      ]\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 21763
+        },
+        {
+          "itemId": "ret-multi-071",
+          "sourceText": "The admin sends the report to the manager via email.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"send\",\n      \"roles\": {\n        \"agent\": { \"type\": \"actor\", \"id\": \"admin\" },\n        \"theme\": { \"type\": \"document\", \"id\": \"report\" },\n        \"recipient\": { \"type\": \"actor\", \"id\": \"manager\" },\n        \"instrument\": { \"type\": \"artifact\", \"id\": \"email\" }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 6734
+        },
+        {
+          "itemId": "ret-temp-086",
+          "sourceText": "The report is due on 2025-06-15.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\n  \"schema\": \"lunum-sem/0.1-draft\",\n  \"world\": \"real\",\n  \"kind\": \"fact\",\n  \"clauses\": [\n    {\n      \"predicate\": \"due\",\n      \"roles\": {\n        \"theme\": { \"type\": \"document\", \"id\": \"report\" },\n        \"time\": { \"type\": \"date\", \"value\": \"2025-06-15\" }\n      },\n      \"negated\": false\n    }\n  ]\n}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 7656
+        },
+        {
+          "itemId": "ret-quant-101",
+          "sourceText": "The server has 64 GB of RAM.",
+          "sourceLanguage": "en",
+          "rawOutput": "",
+          "parsedSuccessfully": false,
+          "hasValidSchema": false,
+          "latencyMs": 568
+        },
+        {
+          "itemId": "ret-mclause-116",
+          "sourceText": "The system encrypts data at rest and in transit.",
+          "sourceLanguage": "en",
+          "rawOutput": "",
+          "parsedSuccessfully": false,
+          "hasValidSchema": false,
+          "latencyMs": 347
+        },
+        {
+          "itemId": "ret-belief-161",
+          "sourceText": "The user believes the meeting was cancelled.",
+          "sourceLanguage": "en",
+          "rawOutput": "",
+          "parsedSuccessfully": false,
+          "hasValidSchema": false,
+          "latencyMs": 311
+        },
+        {
+          "itemId": "ret-pref-201",
+          "sourceText": "The user prefers Python over JavaScript.",
+          "sourceLanguage": "en",
+          "rawOutput": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"user\"},\"theme\":{\"type\":\"concept\",\"id\":\"python\"},\"alternative\":{\"type\":\"concept\",\"id\":\"javascript\"}},\"negated\":false}]}",
+          "parsedSuccessfully": true,
+          "hasValidSchema": true,
+          "latencyMs": 4380
+        }
+      ],
+      "summary": {
+        "totalItems": 10,
+        "parsedCount": 7,
+        "validSchemaCount": 7,
+        "parseRate": 0.7,
+        "validSchemaRate": 0.7,
+        "meanLatencyMs": 7108.8,
+        "medianLatencyMs": 5739.5
+      }
+    }
+  ],
+  "coverage": {
+    "familiesTested": 3,
+    "familiesRequired": 3,
+    "quantizationsPerFamily": {
+      "qwen": 1,
+      "gemma": 1,
+      "llama": 1
+    },
+    "allFamiliesCovered": true,
+    "multipleQuantizations": false
+  }
+}

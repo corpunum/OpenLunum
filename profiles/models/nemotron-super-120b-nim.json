@@ -1,0 +1,19 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "nemotron-super-120b-nim",
+  "provider": "openai-compatible",
+  "baseUrl": "https://integrate.api.nvidia.com/v1",
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "apiKeyEnv": "NIM_API_KEY",
+  "temperature": 0,
+  "seed": 42,
+  "maxTokens": 4096,
+  "timeoutMs": 60000,
+  "metadata": {
+    "purpose": "Model family eval R2.5: SuperNemotron 120B (Llama family), NIM cloud API",
+    "family": "llama",
+    "architecture": "llama",
+    "quantization": "cloud-fp8",
+    "note": "Llama-3.3 based Nemotron via NVIDIA NIM. Quantization handled server-side."
+  }
+}
