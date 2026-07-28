@@ -1,0 +1,9 @@
+{
+  "schema": "openlunum-verifier-result/0.1",
+  "version": "0.1.0",
+  "verifiedAt": "",
+  "totalVectors": 101,
+  "passCount": 101,
+  "failCount": 0,
+  "discrepancies": []
+}

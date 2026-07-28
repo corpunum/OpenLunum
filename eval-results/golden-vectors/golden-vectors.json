@@ -1,0 +1,2793 @@
+{
+  "schema": "openlunum-golden-vectors/0.1",
+  "version": "0.1.0",
+  "generatedAt": "2026-07-28T09:47:57.307Z",
+  "generatorCommit": "a64804e",
+  "fpVersion": "0.1",
+  "semSchema": "lunum-sem/0.1-draft",
+  "vectors": [
+    {
+      "id": "pref-dark_mode",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "dark_mode"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"dark_mode\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "4ffec0b182b8b5b6d5f83445e9413f29a4469eea541b001ecc77437e4415061e",
+      "fingerprint": "lfp:0.1:sha256:4ffec0b182b8b5b6d5f83445e9413f29"
+    },
+    {
+      "id": "pref-light_mode",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "light_mode"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"light_mode\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "2960c4186966e9aa25e400f1d48da195bac48aef69f7cd6338cb113f221e07bd",
+      "fingerprint": "lfp:0.1:sha256:2960c4186966e9aa25e400f1d48da195"
+    },
+    {
+      "id": "pref-high_contrast",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "high_contrast"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"high_contrast\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "0e7a350affb8f7582867fffd1274c5b200fe09daf9283a42ab964b37302fd7ce",
+      "fingerprint": "lfp:0.1:sha256:0e7a350affb8f7582867fffd1274c5b2"
+    },
+    {
+      "id": "pref-compact_view",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "compact_view"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"compact_view\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "bff35c5cdd4f1004caf7c2170c5cb59469272b56835d960e0ac9adc2f5de956f",
+      "fingerprint": "lfp:0.1:sha256:bff35c5cdd4f1004caf7c2170c5cb594"
+    },
+    {
+      "id": "pref-notifications_off",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "notifications_off"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"notifications_off\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "abea77a0d388026714a9ef10effd25161b8465e821da271f2ad145936379a979",
+      "fingerprint": "lfp:0.1:sha256:abea77a0d388026714a9ef10effd2516"
+    },
+    {
+      "id": "lang-en",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "Hello world",
+                "language": "en"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"en\",\"type\":\"literal\",\"value\":\"Hello world\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "827346eb9af3ad9aad1d9dbb9497942eeec4ff68e73f6236d7f174bf703fa308",
+      "fingerprint": "lfp:0.1:sha256:827346eb9af3ad9aad1d9dbb9497942e",
+      "surfaceText": "Hello world",
+      "surfaceFingerprint": "lsf:0.1:sha256:b94d27b9934d3e08a52e52d7"
+    },
+    {
+      "id": "lang-el",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "Καλημέρα κόσμε",
+                "language": "el"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"el\",\"type\":\"literal\",\"value\":\"Καλημέρα κόσμε\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "fd207e908bffbf965e8df2807a319c6b6601cd9ff04a34d0cf1f755b89018f00",
+      "fingerprint": "lfp:0.1:sha256:fd207e908bffbf965e8df2807a319c6b",
+      "surfaceText": "Καλημέρα κόσμε",
+      "surfaceFingerprint": "lsf:0.1:sha256:6de7ecac9a886c9e177bcfad"
+    },
+    {
+      "id": "lang-ja",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "こんにちは世界",
+                "language": "ja"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"ja\",\"type\":\"literal\",\"value\":\"こんにちは世界\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "694ccb3f2df94fc6bcc4fc3f628855d736c78d4de40437db0f84e45f3246c38f",
+      "fingerprint": "lfp:0.1:sha256:694ccb3f2df94fc6bcc4fc3f628855d7",
+      "surfaceText": "こんにちは世界",
+      "surfaceFingerprint": "lsf:0.1:sha256:c6a304536826fb57e1b1896f"
+    },
+    {
+      "id": "lang-ar",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "مرحبا بالعالم",
+                "language": "ar"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"ar\",\"type\":\"literal\",\"value\":\"مرحبا بالعالم\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "ed6701d3bb860f3d980710b7cedbe18b374a75b15b575518704f944644742904",
+      "fingerprint": "lfp:0.1:sha256:ed6701d3bb860f3d980710b7cedbe18b",
+      "surfaceText": "مرحبا بالعالم",
+      "surfaceFingerprint": "lsf:0.1:sha256:9262a0a791605071a500c1a1"
+    },
+    {
+      "id": "lang-zh",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "你好世界",
+                "language": "zh"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"zh\",\"type\":\"literal\",\"value\":\"你好世界\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "7711c308c01d4cd17a1428eaa3f48ca2502e13d80136d4d02a21ff0b8f387740",
+      "fingerprint": "lfp:0.1:sha256:7711c308c01d4cd17a1428eaa3f48ca2",
+      "surfaceText": "你好世界",
+      "surfaceFingerprint": "lsf:0.1:sha256:beca6335b20ff57ccc47403e"
+    },
+    {
+      "id": "lang-ko",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "안녕하세요 세계",
+                "language": "ko"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"ko\",\"type\":\"literal\",\"value\":\"안녕하세요 세계\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "04dddc0428baea9b911f08fa5ae039f87ad06f9933dd0ddab66b1b7ae43f5f96",
+      "fingerprint": "lfp:0.1:sha256:04dddc0428baea9b911f08fa5ae039f8",
+      "surfaceText": "안녕하세요 세계",
+      "surfaceFingerprint": "lsf:0.1:sha256:a6271561508893c087688418"
+    },
+    {
+      "id": "lang-de",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "Über das Gelände",
+                "language": "de"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"de\",\"type\":\"literal\",\"value\":\"Über das Gelände\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "7df4cfd6cc494c62f397d4288ef33238c569f7c57899305c222456ed9f280a94",
+      "fingerprint": "lfp:0.1:sha256:7df4cfd6cc494c62f397d4288ef33238",
+      "surfaceText": "Über das Gelände",
+      "surfaceFingerprint": "lsf:0.1:sha256:935f993d8c833a621c866a66"
+    },
+    {
+      "id": "lang-fr",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "Café crème",
+                "language": "fr"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"fr\",\"type\":\"literal\",\"value\":\"Café crème\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "ee73752962a79275954b22a9b3c7687529a2f30b3bf2d2c0c0053dd378520933",
+      "fingerprint": "lfp:0.1:sha256:ee73752962a79275954b22a9b3c76875",
+      "surfaceText": "Café crème",
+      "surfaceFingerprint": "lsf:0.1:sha256:5288430a4d36c49e5dd666c0"
+    },
+    {
+      "id": "lang-es",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "El niño pequeño",
+                "language": "es"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"es\",\"type\":\"literal\",\"value\":\"El niño pequeño\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "8754c79c0aafb203425bd7b02f0ffea4a8836cd1fe96ce434677ce2eda7d2318",
+      "fingerprint": "lfp:0.1:sha256:8754c79c0aafb203425bd7b02f0ffea4",
+      "surfaceText": "El niño pequeño",
+      "surfaceFingerprint": "lsf:0.1:sha256:9590e5a308b59cff9b54382b"
+    },
+    {
+      "id": "lang-ru",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              },
+              "content": {
+                "type": "literal",
+                "value": "Привет мир",
+                "language": "ru"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"content\":{\"language\":\"ru\",\"type\":\"literal\",\"value\":\"Привет мир\"},\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "78d8019ea7a0c890e117cec8043fd8154f28576f4d0fec8cd0c9bf948544aeb2",
+      "fingerprint": "lfp:0.1:sha256:78d8019ea7a0c890e117cec8043fd815",
+      "surfaceText": "Привет мир",
+      "surfaceFingerprint": "lsf:0.1:sha256:527c01ee137e87eaba739dc5"
+    },
+    {
+      "id": "neg-false",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "feature_x"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"feature_x\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "0f138881d79576b350a1cb90548fc19983acdfebdbd15af9384a957ce5db2f83",
+      "fingerprint": "lfp:0.1:sha256:0f138881d79576b350a1cb90548fc199"
+    },
+    {
+      "id": "neg-true",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "feature_x"
+              }
+            },
+            "negated": true
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":true,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"feature_x\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "b3153eea654c0fdf449ef05b602f81e615fbf457bb2f858eeb5d5051535bd8d2",
+      "fingerprint": "lfp:0.1:sha256:b3153eea654c0fdf449ef05b602f81e6"
+    },
+    {
+      "id": "multi-clause-2",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "compound",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "theme": {
+                "type": "concept",
+                "id": "dark_mode"
+              }
+            },
+            "negated": false
+          },
+          {
+            "predicate": "use",
+            "roles": {
+              "instrument": {
+                "type": "tool",
+                "id": "keyboard"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"theme\":{\"id\":\"dark_mode\",\"type\":\"concept\"}}},{\"negated\":false,\"predicate\":\"use\",\"roles\":{\"instrument\":{\"id\":\"keyboard\",\"type\":\"tool\"}}}],\"kind\":\"compound\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "41333689372cb302d953ec9205ffed6310525c92e43677c379b8baffbd7d2aa8",
+      "fingerprint": "lfp:0.1:sha256:41333689372cb302d953ec9205ffed63"
+    },
+    {
+      "id": "multi-clause-3",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "compound",
+        "clauses": [
+          {
+            "predicate": "read",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "document",
+                "id": "report"
+              }
+            },
+            "negated": false
+          },
+          {
+            "predicate": "review",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "reviewer"
+              },
+              "theme": {
+                "type": "document",
+                "id": "report"
+              }
+            },
+            "negated": false
+          },
+          {
+            "predicate": "approve",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "manager"
+              },
+              "theme": {
+                "type": "document",
+                "id": "report"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"read\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"report\",\"type\":\"document\"}}},{\"negated\":false,\"predicate\":\"review\",\"roles\":{\"agent\":{\"id\":\"reviewer\",\"type\":\"actor\"},\"theme\":{\"id\":\"report\",\"type\":\"document\"}}},{\"negated\":false,\"predicate\":\"approve\",\"roles\":{\"agent\":{\"id\":\"manager\",\"type\":\"actor\"},\"theme\":{\"id\":\"report\",\"type\":\"document\"}}}],\"kind\":\"compound\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "533429cb42e7835e97ed46d3a0127b3a4f43a4f2cd7fc7fd599053ba2175ffcd",
+      "fingerprint": "lfp:0.1:sha256:533429cb42e7835e97ed46d3a0127b3a"
+    },
+    {
+      "id": "ws-tabs",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "hello\t\tworld\t\t!",
+                "language": "en"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"en\",\"type\":\"literal\",\"value\":\"hello world !\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "26346afda1d2d1e3a839ccc7c5e1761e3fbce411203168772006344f4685d387",
+      "fingerprint": "lfp:0.1:sha256:26346afda1d2d1e3a839ccc7c5e1761e",
+      "surfaceText": "hello\t\tworld\t\t!",
+      "surfaceFingerprint": "lsf:0.1:sha256:a4bf1f6be616bf6a0de2ff62"
+    },
+    {
+      "id": "ws-newlines",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "line1\n\nline2\n\nline3",
+                "language": "en"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"en\",\"type\":\"literal\",\"value\":\"line1 line2 line3\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "c50ae24bcd3dd0316c3b78f5c2ef781e1e7f84b8c1b4adaa1c11c52a4d2a4720",
+      "fingerprint": "lfp:0.1:sha256:c50ae24bcd3dd0316c3b78f5c2ef781e",
+      "surfaceText": "line1\n\nline2\n\nline3",
+      "surfaceFingerprint": "lsf:0.1:sha256:22f75635c73c7f4fb766b0b4"
+    },
+    {
+      "id": "ws-mixed",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "  mixed \t spaces \n and \r\n newlines  ",
+                "language": "en"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"en\",\"type\":\"literal\",\"value\":\"mixed spaces and newlines\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "08db407d5529f09ae1d18a5b2a274ae092e9735858ea58d435e59005f94029bd",
+      "fingerprint": "lfp:0.1:sha256:08db407d5529f09ae1d18a5b2a274ae0",
+      "surfaceText": "  mixed \t spaces \n and \r\n newlines  ",
+      "surfaceFingerprint": "lsf:0.1:sha256:a0981f3c270825b7413340e2"
+    },
+    {
+      "id": "case-upper",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "PREFER",
+            "roles": {
+              "experiencer": {
+                "type": "ACTOR",
+                "id": "USER"
+              },
+              "theme": {
+                "type": "CONCEPT",
+                "id": "DARK_MODE"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"dark_mode\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "4ffec0b182b8b5b6d5f83445e9413f29a4469eea541b001ecc77437e4415061e",
+      "fingerprint": "lfp:0.1:sha256:4ffec0b182b8b5b6d5f83445e9413f29"
+    },
+    {
+      "id": "case-mixed",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "PrEfEr",
+            "roles": {
+              "experiencer": {
+                "type": "AcToR",
+                "id": "UsEr"
+              },
+              "theme": {
+                "type": "CoNcEpT",
+                "id": "DaRk_MoDe"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"dark_mode\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "4ffec0b182b8b5b6d5f83445e9413f29a4469eea541b001ecc77437e4415061e",
+      "fingerprint": "lfp:0.1:sha256:4ffec0b182b8b5b6d5f83445e9413f29"
+    },
+    {
+      "id": "modality-might",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "speculation",
+        "clauses": [
+          {
+            "predicate": "cause",
+            "roles": {
+              "agent": {
+                "type": "event",
+                "id": "storm"
+              },
+              "patient": {
+                "type": "state",
+                "id": "outage"
+              }
+            },
+            "negated": false,
+            "modality": "might"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"modality\":\"might\",\"negated\":false,\"predicate\":\"cause\",\"roles\":{\"agent\":{\"id\":\"storm\",\"type\":\"event\"},\"patient\":{\"id\":\"outage\",\"type\":\"state\"}}}],\"kind\":\"speculation\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "911d9e1cdb26f78e2858a2b0aaca57b385a81ae348b26e7ea7a45e71c2836ab3",
+      "fingerprint": "lfp:0.1:sha256:911d9e1cdb26f78e2858a2b0aaca57b3"
+    },
+    {
+      "id": "time-simple",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "occur",
+            "roles": {
+              "theme": {
+                "type": "event",
+                "id": "meeting"
+              }
+            },
+            "negated": false,
+            "time": {
+              "type": "temporal",
+              "id": "2026-01-15"
+            }
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"occur\",\"roles\":{\"theme\":{\"id\":\"meeting\",\"type\":\"event\"}},\"time\":{\"id\":\"2026-01-15\",\"type\":\"temporal\"}}],\"kind\":\"event\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "f6f04be5694c598eab7d8a5c1852623b7f71cc12658386d77cf56073070cd781",
+      "fingerprint": "lfp:0.1:sha256:f6f04be5694c598eab7d8a5c1852623b"
+    },
+    {
+      "id": "conditional",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "rule",
+        "clauses": [
+          {
+            "predicate": "trigger",
+            "roles": {
+              "agent": {
+                "type": "system",
+                "id": "alarm"
+              }
+            },
+            "negated": false,
+            "conditions": [
+              {
+                "predicate": "exceed",
+                "roles": {
+                  "theme": {
+                    "type": "metric",
+                    "id": "temperature"
+                  },
+                  "threshold": {
+                    "type": "value",
+                    "value": 90
+                  }
+                },
+                "negated": false
+              }
+            ],
+            "consequences": [
+              {
+                "predicate": "alert",
+                "roles": {
+                  "recipient": {
+                    "type": "actor",
+                    "id": "operator"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"conditions\":[{\"negated\":false,\"predicate\":\"exceed\",\"roles\":{\"theme\":{\"id\":\"temperature\",\"type\":\"metric\"},\"threshold\":{\"type\":\"value\",\"value\":90}}}],\"consequences\":[{\"negated\":false,\"predicate\":\"alert\",\"roles\":{\"recipient\":{\"id\":\"operator\",\"type\":\"actor\"}}}],\"negated\":false,\"predicate\":\"trigger\",\"roles\":{\"agent\":{\"id\":\"alarm\",\"type\":\"system\"}}}],\"kind\":\"rule\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "02b5c2082312bb28e9ee2a5481990a02c91c00c51999d3de7fa5c92696903ffb",
+      "fingerprint": "lfp:0.1:sha256:02b5c2082312bb28e9ee2a5481990a02"
+    },
+    {
+      "id": "annotations-basic",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "test",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "annotations": {
+          "source": "test",
+          "confidence": 0.95,
+          "tags": [
+            "a",
+            "b",
+            "c"
+          ]
+        }
+      },
+      "canonicalBytes": "{\"annotations\":{\"confidence\":0.95,\"source\":\"test\",\"tags\":[\"a\",\"b\",\"c\"]},\"clauses\":[{\"negated\":false,\"predicate\":\"test\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "5a97d718d4831ea0a241753e214c27d980128c99360601829b7a8a9f2fb5c43a",
+      "fingerprint": "lfp:0.1:sha256:5a97d718d4831ea0a241753e214c27d9"
+    },
+    {
+      "id": "provenance-basic",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "test",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "provenance": {
+          "tool": "unit-test",
+          "version": "1.0",
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"test\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"provenance\":{\"timestamp\":\"2026-01-01T00:00:00Z\",\"tool\":\"unit-test\",\"version\":\"1.0\"},\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "adab013cf234c7367831a7da9a67fd2d1e9d2f03fef8ed68b87aa48e7550442e",
+      "fingerprint": "lfp:0.1:sha256:adab013cf234c7367831a7da9a67fd2d"
+    },
+    {
+      "id": "references-basic",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "test",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "references": [
+          {
+            "type": "document",
+            "id": "doc-001",
+            "ref": "https://example.com/doc"
+          },
+          {
+            "type": "actor",
+            "id": "author-001"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"test\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"references\":[{\"id\":\"doc-001\",\"ref\":\"https://example.com/doc\",\"type\":\"document\"},{\"id\":\"author-001\",\"type\":\"actor\"}],\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "0f3f822557655c8ff61a1ca4c6670c3b15a8ba05333dae9c0dae17ce47e9baf8",
+      "fingerprint": "lfp:0.1:sha256:0f3f822557655c8ff61a1ca4c6670c3b"
+    },
+    {
+      "id": "unicode-composed",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "éèêë",
+                "language": "fr"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"fr\",\"type\":\"literal\",\"value\":\"éèêë\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "08bb8b3aee956f5abe8fea0221ce2624152b6533c154d098e21abc6791894a54",
+      "fingerprint": "lfp:0.1:sha256:08bb8b3aee956f5abe8fea0221ce2624",
+      "surfaceText": "éèêë",
+      "surfaceFingerprint": "lsf:0.1:sha256:65637d39590fe757f1e239e5"
+    },
+    {
+      "id": "unicode-decomposed",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "éèêë",
+                "language": "fr"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"fr\",\"type\":\"literal\",\"value\":\"éèêë\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "08bb8b3aee956f5abe8fea0221ce2624152b6533c154d098e21abc6791894a54",
+      "fingerprint": "lfp:0.1:sha256:08bb8b3aee956f5abe8fea0221ce2624",
+      "surfaceText": "éèêë",
+      "surfaceFingerprint": "lsf:0.1:sha256:65637d39590fe757f1e239e5"
+    },
+    {
+      "id": "unicode-fullwidth",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "Ｈｅｌｌｏ",
+                "language": "en"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"en\",\"type\":\"literal\",\"value\":\"Hello\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "e5587f4c8d8351cbc303f66f191abd18e1490a4774c0d099dfc3aadafa109f59",
+      "fingerprint": "lfp:0.1:sha256:e5587f4c8d8351cbc303f66f191abd18",
+      "surfaceText": "Ｈｅｌｌｏ",
+      "surfaceFingerprint": "lsf:0.1:sha256:2cf24dba5fb0a30e26e83b2a"
+    },
+    {
+      "id": "empty-string-value",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "",
+                "language": "en"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"describe\",\"roles\":{\"content\":{\"language\":\"en\",\"type\":\"literal\",\"value\":\"\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "d9357c5d477fd7fa859a2edc4b6ab34971f614a23c48b51e87639ae105962be0",
+      "fingerprint": "lfp:0.1:sha256:d9357c5d477fd7fa859a2edc4b6ab349"
+    },
+    {
+      "id": "numeric-value",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "measurement",
+        "clauses": [
+          {
+            "predicate": "measure",
+            "roles": {
+              "instrument": {
+                "type": "sensor",
+                "id": "thermometer"
+              },
+              "result": 42.5
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"measure\",\"roles\":{\"instrument\":{\"id\":\"thermometer\",\"type\":\"sensor\"},\"result\":42.5}}],\"kind\":\"measurement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "113e846438a35a0c4b6600841a216d347faaedfc8c8266d930ccfa6a2e87e344",
+      "fingerprint": "lfp:0.1:sha256:113e846438a35a0c4b6600841a216d34"
+    },
+    {
+      "id": "boolean-value",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "state",
+        "clauses": [
+          {
+            "predicate": "is",
+            "roles": {
+              "subject": {
+                "type": "system",
+                "id": "server"
+              },
+              "property": true
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"is\",\"roles\":{\"property\":true,\"subject\":{\"id\":\"server\",\"type\":\"system\"}}}],\"kind\":\"state\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "301836ecc7f59c3686ec648ed680003efbc501530067bfd861e0d4118f102e9f",
+      "fingerprint": "lfp:0.1:sha256:301836ecc7f59c3686ec648ed680003e"
+    },
+    {
+      "id": "null-value",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "state",
+        "clauses": [
+          {
+            "predicate": "is",
+            "roles": {
+              "subject": {
+                "type": "system",
+                "id": "server"
+              },
+              "property": null
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"is\",\"roles\":{\"property\":null,\"subject\":{\"id\":\"server\",\"type\":\"system\"}}}],\"kind\":\"state\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "161f4419fa5feac2f89d5f6baa2361f42d49793b0ab5c4c9c0af8a941aec3109",
+      "fingerprint": "lfp:0.1:sha256:161f4419fa5feac2f89d5f6baa2361f4"
+    },
+    {
+      "id": "deep-nesting",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "test",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "annotations": {
+          "level1": {
+            "level2": {
+              "level3": {
+                "value": "deep",
+                "count": 3
+              }
+            }
+          }
+        }
+      },
+      "canonicalBytes": "{\"annotations\":{\"level1\":{\"level2\":{\"level3\":{\"count\":3,\"value\":\"deep\"}}}},\"clauses\":[{\"negated\":false,\"predicate\":\"test\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "228df426dde9196293df0a33a8e5febdbb83f670f543b461e3f5f554e46ba5d8",
+      "fingerprint": "lfp:0.1:sha256:228df426dde9196293df0a33a8e5febd"
+    },
+    {
+      "id": "role-ordering",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "transfer",
+            "roles": {
+              "zebra": {
+                "type": "actor",
+                "id": "z-user"
+              },
+              "alpha": {
+                "type": "actor",
+                "id": "a-user"
+              },
+              "middle": {
+                "type": "object",
+                "id": "m-item"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"transfer\",\"roles\":{\"alpha\":{\"id\":\"a-user\",\"type\":\"actor\"},\"middle\":{\"id\":\"m-item\",\"type\":\"object\"},\"zebra\":{\"id\":\"z-user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "0f0df0342f4e0a543bdd343d179197948fda0a31483ba65ff34fae0d0a469c6b",
+      "fingerprint": "lfp:0.1:sha256:0f0df0342f4e0a543bdd343d17919794"
+    },
+    {
+      "id": "world-real",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "narrator"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"assert\",\"roles\":{\"agent\":{\"id\":\"narrator\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "992c9e8140449d01d1bd2028ce6e1dfa389fdb22f54184f530f1f7970d0cff7f",
+      "fingerprint": "lfp:0.1:sha256:992c9e8140449d01d1bd2028ce6e1dfa"
+    },
+    {
+      "id": "world-hypothetical",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "narrator"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"assert\",\"roles\":{\"agent\":{\"id\":\"narrator\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "e564c76435f1a1dce7b53250791b19956bb5c527969d9a825f99c174aa2b4603",
+      "fingerprint": "lfp:0.1:sha256:e564c76435f1a1dce7b53250791b1995"
+    },
+    {
+      "id": "world-fictional",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "fictional",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "narrator"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"assert\",\"roles\":{\"agent\":{\"id\":\"narrator\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"fictional\"}",
+      "canonicalSha256": "ba0b1f9378ed90122dbd3b1de7d425d75e60e9e5d5ab37352d39323fc8353ef3",
+      "fingerprint": "lfp:0.1:sha256:ba0b1f9378ed90122dbd3b1de7d425d7"
+    },
+    {
+      "id": "world-simulated",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "simulated",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "narrator"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"assert\",\"roles\":{\"agent\":{\"id\":\"narrator\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"simulated\"}",
+      "canonicalSha256": "91d813496cf2ac1e7d3d9bfcf57eeee7bd8ba6e646fa0168a4b9ffca6618ca51",
+      "fingerprint": "lfp:0.1:sha256:91d813496cf2ac1e7d3d9bfcf57eeee7"
+    },
+    {
+      "id": "kind-preference",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "822ae8576769fbfa344dffb1f6260273b1aaa5be80f8370596950cbefbc0802c",
+      "fingerprint": "lfp:0.1:sha256:822ae8576769fbfa344dffb1f6260273"
+    },
+    {
+      "id": "kind-statement",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "d0adeaa0de84ba65fe2db494e646adcaac42cb64fbc4127d1ca74a0984440dd4",
+      "fingerprint": "lfp:0.1:sha256:d0adeaa0de84ba65fe2db494e646adca"
+    },
+    {
+      "id": "kind-question",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "question",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"question\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "75143128e2063c0eb785025908554c481548eb6df3e5b866f855d5ca4420a702",
+      "fingerprint": "lfp:0.1:sha256:75143128e2063c0eb785025908554c48"
+    },
+    {
+      "id": "kind-command",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "command",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"command\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "91672034d31fda59c8f57f4f83f0d33d5454c6787d4fc2ff03021ab22c250468",
+      "fingerprint": "lfp:0.1:sha256:91672034d31fda59c8f57f4f83f0d33d"
+    },
+    {
+      "id": "kind-exclamation",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "exclamation",
+        "clauses": [
+          {
+            "predicate": "express",
+            "roles": {
+              "speaker": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"express\",\"roles\":{\"speaker\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"exclamation\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "4f1cad096d33816b02591df1b8357c4c203858549a82ecb17be5410817118506",
+      "fingerprint": "lfp:0.1:sha256:4f1cad096d33816b02591df1b8357c4c"
+    },
+    {
+      "id": "clause-annotations",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "claim",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false,
+            "annotations": {
+              "confidence": 0.8,
+              "source": "inference"
+            }
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"annotations\":{\"confidence\":0.8,\"source\":\"inference\"},\"negated\":false,\"predicate\":\"claim\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "1bbbf3b3a2a11920bb568695573457e4bc126a7e484be888859ea8a480de96c2",
+      "fingerprint": "lfp:0.1:sha256:1bbbf3b3a2a11920bb568695573457e4"
+    },
+    {
+      "id": "complex-multi",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "narrative",
+        "clauses": [
+          {
+            "predicate": "observe",
+            "roles": {
+              "observer": {
+                "type": "actor",
+                "id": "scientist"
+              },
+              "phenomenon": {
+                "type": "event",
+                "id": "eclipse"
+              },
+              "location": {
+                "type": "place",
+                "id": "observatory"
+              }
+            },
+            "negated": false
+          },
+          {
+            "predicate": "record",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "scientist"
+              },
+              "data": {
+                "type": "dataset",
+                "id": "measurements"
+              }
+            },
+            "negated": false,
+            "time": {
+              "type": "temporal",
+              "id": "2026-03-15T14:30:00Z"
+            }
+          }
+        ],
+        "provenance": {
+          "method": "direct_observation",
+          "instrument": "telescope_4m"
+        },
+        "annotations": {
+          "priority": "high",
+          "reviewed": true
+        }
+      },
+      "canonicalBytes": "{\"annotations\":{\"priority\":\"high\",\"reviewed\":true},\"clauses\":[{\"negated\":false,\"predicate\":\"observe\",\"roles\":{\"location\":{\"id\":\"observatory\",\"type\":\"place\"},\"observer\":{\"id\":\"scientist\",\"type\":\"actor\"},\"phenomenon\":{\"id\":\"eclipse\",\"type\":\"event\"}}},{\"negated\":false,\"predicate\":\"record\",\"roles\":{\"agent\":{\"id\":\"scientist\",\"type\":\"actor\"},\"data\":{\"id\":\"measurements\",\"type\":\"dataset\"}},\"time\":{\"id\":\"2026-03-15t14:30:00z\",\"type\":\"temporal\"}}],\"kind\":\"narrative\",\"provenance\":{\"instrument\":\"telescope_4m\",\"method\":\"direct_observation\"},\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "baa17b572aadfdd9ede2060761fa4e94581288575d5b2c5752326ede816e6d76",
+      "fingerprint": "lfp:0.1:sha256:baa17b572aadfdd9ede2060761fa4e94"
+    },
+    {
+      "id": "special-chars-id",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "entity",
+                "id": "item with spaces"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"describe\",\"roles\":{\"subject\":{\"id\":\"item_with_spaces\",\"type\":\"entity\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "921f7a9509b0403b72493bdd602e4a0a38101c212d56b803bc9e7706433a54f8",
+      "fingerprint": "lfp:0.1:sha256:921f7a9509b0403b72493bdd602e4a0a"
+    },
+    {
+      "id": "array-term",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "collection",
+        "clauses": [
+          {
+            "predicate": "list",
+            "roles": {
+              "items": [
+                {
+                  "type": "item",
+                  "id": "a"
+                },
+                {
+                  "type": "item",
+                  "id": "b"
+                },
+                {
+                  "type": "item",
+                  "id": "c"
+                }
+              ]
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"list\",\"roles\":{\"items\":[{\"id\":\"a\",\"type\":\"item\"},{\"id\":\"b\",\"type\":\"item\"},{\"id\":\"c\",\"type\":\"item\"}]}}],\"kind\":\"collection\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "fef6bc3228160108688503eb3b3908ba1fe1b22a42aa7fe5c7cfb8479c70e24c",
+      "fingerprint": "lfp:0.1:sha256:fef6bc3228160108688503eb3b3908ba"
+    },
+    {
+      "id": "extra-term-fields",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "entity",
+                "id": "thing",
+                "customProp": "custom_value",
+                "count": 7
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"describe\",\"roles\":{\"subject\":{\"count\":7,\"customProp\":\"custom_value\",\"id\":\"thing\",\"type\":\"entity\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "98a0373df84d9471a56a81a48ead21ed9cc94b3ca9fd74adc7bd95687d466f35",
+      "fingerprint": "lfp:0.1:sha256:98a0373df84d9471a56a81a48ead21ed"
+    },
+    {
+      "id": "pred-buy-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "buy",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"buy\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "4ae512221909cd2674042329be70a978556ca9397c0ed0867676c28fc9db5bf0",
+      "fingerprint": "lfp:0.1:sha256:4ae512221909cd2674042329be70a978"
+    },
+    {
+      "id": "pred-buy-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "buy",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_buy"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"buy\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_buy\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "e2cba59a3e00c52563cd8f8d0b8114ec58b6f3a7cf68eee6a08bfb7d67c8c8b1",
+      "fingerprint": "lfp:0.1:sha256:e2cba59a3e00c52563cd8f8d0b8114ec"
+    },
+    {
+      "id": "pred-sell-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "sell",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"sell\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "319ffe9f52c85e79f48feef8b47b14ac1f697f574edbf5077dda145af42f52af",
+      "fingerprint": "lfp:0.1:sha256:319ffe9f52c85e79f48feef8b47b14ac"
+    },
+    {
+      "id": "pred-sell-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "sell",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_sell"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"sell\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_sell\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "59d458c8d2c2342e69c4b5516568235cb9260965416a863d48e9a9858cecbaf4",
+      "fingerprint": "lfp:0.1:sha256:59d458c8d2c2342e69c4b5516568235c"
+    },
+    {
+      "id": "pred-give-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "give",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"give\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "8cc2bbb356aeba8b1e61c150e168de530ad69953a061ffb212bee9e2dafe76ee",
+      "fingerprint": "lfp:0.1:sha256:8cc2bbb356aeba8b1e61c150e168de53"
+    },
+    {
+      "id": "pred-give-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "give",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_give"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"give\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_give\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "cd7fa73a304c05a4509a6961592d28c2b90d23b9a2927fecc52e869429098f80",
+      "fingerprint": "lfp:0.1:sha256:cd7fa73a304c05a4509a6961592d28c2"
+    },
+    {
+      "id": "pred-take-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "take",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"take\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "66787e90d50f734bbe3e48b65bcd9bd5d6736d285de447cae38993e125168d1c",
+      "fingerprint": "lfp:0.1:sha256:66787e90d50f734bbe3e48b65bcd9bd5"
+    },
+    {
+      "id": "pred-take-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "take",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_take"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"take\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_take\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "fa7ad9ae08a0d670c2f2000ac6b81b4686bde19314b512b5264858e39f774959",
+      "fingerprint": "lfp:0.1:sha256:fa7ad9ae08a0d670c2f2000ac6b81b46"
+    },
+    {
+      "id": "pred-send-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "send",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"send\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "90b41fa4c4aadcc627be3c944d7a9509fe5472684b5d1d70e7fd139aec607f10",
+      "fingerprint": "lfp:0.1:sha256:90b41fa4c4aadcc627be3c944d7a9509"
+    },
+    {
+      "id": "pred-send-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "send",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_send"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"send\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_send\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "f7a2ec5ea82a49e56e7aeae341df2acd2ff9e30c663b5396adf2d3ef0ea9b34d",
+      "fingerprint": "lfp:0.1:sha256:f7a2ec5ea82a49e56e7aeae341df2acd"
+    },
+    {
+      "id": "pred-receive-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "receive",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"receive\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "2eacc1710ed14ddc4bd437bcfe9779dae0af2b1e508f18d740b29ff87d6d7116",
+      "fingerprint": "lfp:0.1:sha256:2eacc1710ed14ddc4bd437bcfe9779da"
+    },
+    {
+      "id": "pred-receive-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "receive",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_receive"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"receive\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_receive\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "2d6ab5b2ef984eccc1b0726da74f0f1cff3a1d782563a02501eb1a8b34061bc4",
+      "fingerprint": "lfp:0.1:sha256:2d6ab5b2ef984eccc1b0726da74f0f1c"
+    },
+    {
+      "id": "pred-create-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "create",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"create\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "287f082140b6d3456ed0efd222039f29936b1b67c9d81e3c8d2d2159cd10824f",
+      "fingerprint": "lfp:0.1:sha256:287f082140b6d3456ed0efd222039f29"
+    },
+    {
+      "id": "pred-create-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "create",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_create"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"create\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_create\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "16dd42061e751a7b35f15e85af3599222d13eb260766bd77d863e51ad5ac5b67",
+      "fingerprint": "lfp:0.1:sha256:16dd42061e751a7b35f15e85af359922"
+    },
+    {
+      "id": "pred-delete-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "delete",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"delete\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "1a944bb8f5ec4e70b6d35a6bb3424c458006fa51fa73d4f534d8cf4c3888a9fc",
+      "fingerprint": "lfp:0.1:sha256:1a944bb8f5ec4e70b6d35a6bb3424c45"
+    },
+    {
+      "id": "pred-delete-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "delete",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_delete"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"delete\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_delete\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "0e6ab0e6b896e296888cb338ed40948f5c3ff28091f8c9daccfc3c15c1af67b1",
+      "fingerprint": "lfp:0.1:sha256:0e6ab0e6b896e296888cb338ed40948f"
+    },
+    {
+      "id": "pred-move-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "move",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"move\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "406d564ac45e72099e88e098e9b911c7ac71e05184f3959201fe932bb2fc410b",
+      "fingerprint": "lfp:0.1:sha256:406d564ac45e72099e88e098e9b911c7"
+    },
+    {
+      "id": "pred-move-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "move",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_move"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"move\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_move\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "4031d235a4337adf6599cf39332a1ee0084ac64acd06c02710a98819ec9ebb0b",
+      "fingerprint": "lfp:0.1:sha256:4031d235a4337adf6599cf39332a1ee0"
+    },
+    {
+      "id": "pred-copy-1role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "copy",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"copy\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "37af7068abe5577576533992532cc8dd7cb51ae2e4809ef2f5742ef655937a31",
+      "fingerprint": "lfp:0.1:sha256:37af7068abe5577576533992532cc8dd"
+    },
+    {
+      "id": "pred-copy-2role",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "action",
+        "clauses": [
+          {
+            "predicate": "copy",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "user"
+              },
+              "patient": {
+                "type": "object",
+                "id": "item_copy"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"copy\",\"roles\":{\"agent\":{\"id\":\"user\",\"type\":\"actor\"},\"patient\":{\"id\":\"item_copy\",\"type\":\"object\"}}}],\"kind\":\"action\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "ba4fde6341900b295e897c2268b981d26fd11413b3d8824af8c58c0b936b9ebe",
+      "fingerprint": "lfp:0.1:sha256:ba4fde6341900b295e897c2268b981d2"
+    },
+    {
+      "id": "nested-cond-2",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "rule",
+        "clauses": [
+          {
+            "predicate": "trigger",
+            "roles": {
+              "agent": {
+                "type": "system",
+                "id": "monitor"
+              }
+            },
+            "negated": false,
+            "conditions": [
+              {
+                "predicate": "detect",
+                "roles": {
+                  "theme": {
+                    "type": "signal",
+                    "id": "anomaly"
+                  }
+                },
+                "negated": false,
+                "conditions": [
+                  {
+                    "predicate": "exceed",
+                    "roles": {
+                      "metric": {
+                        "type": "measure",
+                        "id": "cpu"
+                      },
+                      "limit": 95
+                    },
+                    "negated": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"conditions\":[{\"conditions\":[{\"negated\":false,\"predicate\":\"exceed\",\"roles\":{\"limit\":95,\"metric\":{\"id\":\"cpu\",\"type\":\"measure\"}}}],\"negated\":false,\"predicate\":\"detect\",\"roles\":{\"theme\":{\"id\":\"anomaly\",\"type\":\"signal\"}}}],\"negated\":false,\"predicate\":\"trigger\",\"roles\":{\"agent\":{\"id\":\"monitor\",\"type\":\"system\"}}}],\"kind\":\"rule\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "18afb3c7c43a951553a01b520e0b244c183cd0282c1a9186869798ffb3c7a7ad",
+      "fingerprint": "lfp:0.1:sha256:18afb3c7c43a951553a01b520e0b244c"
+    },
+    {
+      "id": "mixed-negation",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "compound",
+        "clauses": [
+          {
+            "predicate": "like",
+            "roles": {
+              "theme": {
+                "type": "concept",
+                "id": "coffee"
+              }
+            },
+            "negated": false
+          },
+          {
+            "predicate": "like",
+            "roles": {
+              "theme": {
+                "type": "concept",
+                "id": "tea"
+              }
+            },
+            "negated": true
+          },
+          {
+            "predicate": "prefer",
+            "roles": {
+              "theme": {
+                "type": "concept",
+                "id": "water"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"like\",\"roles\":{\"theme\":{\"id\":\"coffee\",\"type\":\"concept\"}}},{\"negated\":true,\"predicate\":\"like\",\"roles\":{\"theme\":{\"id\":\"tea\",\"type\":\"concept\"}}},{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"theme\":{\"id\":\"water\",\"type\":\"concept\"}}}],\"kind\":\"compound\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "b73c6e2171e0e7f790ae21327ff1480831678ff2928332bbd23937b3b485cbdc",
+      "fingerprint": "lfp:0.1:sha256:b73c6e2171e0e7f790ae21327ff14808"
+    },
+    {
+      "id": "surface-empty",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "",
+                "language": "und"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"und\",\"type\":\"literal\",\"value\":\"\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "46d5b90a585b92403a56bf26f7099125ea5375b2574acd78023e60485c4bdd03",
+      "fingerprint": "lfp:0.1:sha256:46d5b90a585b92403a56bf26f7099125",
+      "surfaceText": "",
+      "surfaceFingerprint": "lsf:0.1:sha256:e3b0c44298fc1c149afbf4c8"
+    },
+    {
+      "id": "surface-single-char",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "x",
+                "language": "und"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"und\",\"type\":\"literal\",\"value\":\"x\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "d37e421a401b5611681967a8887563b8d6350b201abd9785331426d63283abc9",
+      "fingerprint": "lfp:0.1:sha256:d37e421a401b5611681967a8887563b8",
+      "surfaceText": "x",
+      "surfaceFingerprint": "lsf:0.1:sha256:2d711642b726b04401627ca9"
+    },
+    {
+      "id": "surface-digits",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "12345",
+                "language": "und"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"und\",\"type\":\"literal\",\"value\":\"12345\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "b3b4fee8c2696285435137cd92c85ff3a2c915647445282b2d837f66c25e14cb",
+      "fingerprint": "lfp:0.1:sha256:b3b4fee8c2696285435137cd92c85ff3",
+      "surfaceText": "12345",
+      "surfaceFingerprint": "lsf:0.1:sha256:5994471abb01112afcc18159"
+    },
+    {
+      "id": "surface-punctuation",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "!@#$%^&*()",
+                "language": "und"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"und\",\"type\":\"literal\",\"value\":\"!@#$%^&*()\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "e2f8a2e8368b295b1fbb13b1f2ab77107a94e837274e8a8e495a059b709e39b2",
+      "fingerprint": "lfp:0.1:sha256:e2f8a2e8368b295b1fbb13b1f2ab7710",
+      "surfaceText": "!@#$%^&*()",
+      "surfaceFingerprint": "lsf:0.1:sha256:95ce789c5c9d184909727098"
+    },
+    {
+      "id": "surface-emoji",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "😀🎉🚀",
+                "language": "und"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"und\",\"type\":\"literal\",\"value\":\"😀🎉🚀\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "8480e55346e19502d82add61b4c7d43abe0e975dfc53956271b47b2a1a514d52",
+      "fingerprint": "lfp:0.1:sha256:8480e55346e19502d82add61b4c7d43a",
+      "surfaceText": "😀🎉🚀",
+      "surfaceFingerprint": "lsf:0.1:sha256:7cfabb1cd921d1d085a20a13"
+    },
+    {
+      "id": "surface-long",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "language": "und"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"und\",\"type\":\"literal\",\"value\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "b4c77768a409d4aad74beea3f03aa65572b6ddc76af374315ddcc82bfa3f600b",
+      "fingerprint": "lfp:0.1:sha256:b4c77768a409d4aad74beea3f03aa655",
+      "surfaceText": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "surfaceFingerprint": "lsf:0.1:sha256:41edece42d63e8d9bf515a9b"
+    },
+    {
+      "id": "surface-unicode-math",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "∑∫∂∇",
+                "language": "und"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"und\",\"type\":\"literal\",\"value\":\"∑∫∂∇\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "b049efba3d5340368be5915ad4b925e17d27115fc4f326ea59a940aa4f3bede6",
+      "fingerprint": "lfp:0.1:sha256:b049efba3d5340368be5915ad4b925e1",
+      "surfaceText": "∑∫∂∇",
+      "surfaceFingerprint": "lsf:0.1:sha256:29efeaa3346940aff075bc07"
+    },
+    {
+      "id": "surface-cjk-mix",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "say",
+            "roles": {
+              "content": {
+                "type": "literal",
+                "value": "Hello你好こんにちは",
+                "language": "und"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"say\",\"roles\":{\"content\":{\"language\":\"und\",\"type\":\"literal\",\"value\":\"Hello你好こんにちは\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "f48679a0502d429837dacb9575ffb843c4f5362a5a3c9eaeeaf757e1326d5032",
+      "fingerprint": "lfp:0.1:sha256:f48679a0502d429837dacb9575ffb843",
+      "surfaceText": "Hello你好こんにちは",
+      "surfaceFingerprint": "lsf:0.1:sha256:1785234fb672a9a73da0a54f"
+    },
+    {
+      "id": "term-ref",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "reference",
+        "clauses": [
+          {
+            "predicate": "cite",
+            "roles": {
+              "source": {
+                "type": "document",
+                "id": "paper-001",
+                "ref": "https://example.com/paper"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"cite\",\"roles\":{\"source\":{\"id\":\"paper-001\",\"ref\":\"https://example.com/paper\",\"type\":\"document\"}}}],\"kind\":\"reference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "c8cf2f4e314bd02193c97dc0f3b20b89d4992c50e15fe23dd1786551f0f3bc47",
+      "fingerprint": "lfp:0.1:sha256:c8cf2f4e314bd02193c97dc0f3b20b89"
+    },
+    {
+      "id": "multi-refs",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "citation",
+        "clauses": [
+          {
+            "predicate": "cite",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "author"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "references": [
+          {
+            "type": "source",
+            "id": "ref-a",
+            "ref": "urn:isbn:123"
+          },
+          {
+            "type": "source",
+            "id": "ref-b",
+            "ref": "urn:isbn:456"
+          },
+          {
+            "type": "source",
+            "id": "ref-c",
+            "ref": "urn:isbn:789"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"cite\",\"roles\":{\"agent\":{\"id\":\"author\",\"type\":\"actor\"}}}],\"kind\":\"citation\",\"references\":[{\"id\":\"ref-a\",\"ref\":\"urn:isbn:123\",\"type\":\"source\"},{\"id\":\"ref-b\",\"ref\":\"urn:isbn:456\",\"type\":\"source\"},{\"id\":\"ref-c\",\"ref\":\"urn:isbn:789\",\"type\":\"source\"}],\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "c0e8b048e79ab751d84c2e612c0baba7442c952e907ac0538f276bd1ac655650",
+      "fingerprint": "lfp:0.1:sha256:c0e8b048e79ab751d84c2e612c0baba7"
+    },
+    {
+      "id": "consequence-chain",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "causal",
+        "clauses": [
+          {
+            "predicate": "cause",
+            "roles": {
+              "agent": {
+                "type": "event",
+                "id": "rainfall"
+              }
+            },
+            "negated": false,
+            "consequences": [
+              {
+                "predicate": "flood",
+                "roles": {
+                  "location": {
+                    "type": "place",
+                    "id": "valley"
+                  }
+                },
+                "negated": false
+              },
+              {
+                "predicate": "evacuate",
+                "roles": {
+                  "patient": {
+                    "type": "group",
+                    "id": "residents"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"consequences\":[{\"negated\":false,\"predicate\":\"flood\",\"roles\":{\"location\":{\"id\":\"valley\",\"type\":\"place\"}}},{\"negated\":false,\"predicate\":\"evacuate\",\"roles\":{\"patient\":{\"id\":\"residents\",\"type\":\"group\"}}}],\"negated\":false,\"predicate\":\"cause\",\"roles\":{\"agent\":{\"id\":\"rainfall\",\"type\":\"event\"}}}],\"kind\":\"causal\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "577d79f6f2040c24ebc8171253e17deb537bf53747a4144b6e190b347c5479ea",
+      "fingerprint": "lfp:0.1:sha256:577d79f6f2040c24ebc8171253e17deb"
+    },
+    {
+      "id": "nfkc-ligature",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "entity",
+                "id": "ﬁnd"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"describe\",\"roles\":{\"subject\":{\"id\":\"find\",\"type\":\"entity\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "a2f2f6af8cb7c3452df4b7d230e951269d6ccb8970136b23fad884bcc5309469",
+      "fingerprint": "lfp:0.1:sha256:a2f2f6af8cb7c3452df4b7d230e95126"
+    },
+    {
+      "id": "num-zero",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "measurement",
+        "clauses": [
+          {
+            "predicate": "measure",
+            "roles": {
+              "result": 0
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"measure\",\"roles\":{\"result\":0}}],\"kind\":\"measurement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "e1255bd45384ec4e149e5d3029e003865b9ab365c1f2fa89f50661691f42d4fe",
+      "fingerprint": "lfp:0.1:sha256:e1255bd45384ec4e149e5d3029e00386"
+    },
+    {
+      "id": "num-negative",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "measurement",
+        "clauses": [
+          {
+            "predicate": "measure",
+            "roles": {
+              "result": -42
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"measure\",\"roles\":{\"result\":-42}}],\"kind\":\"measurement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "5eba6c5453b1fa13822b238813e724cd671985ad7c060321070149a215fcc1f1",
+      "fingerprint": "lfp:0.1:sha256:5eba6c5453b1fa13822b238813e724cd"
+    },
+    {
+      "id": "num-float-precision",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "measurement",
+        "clauses": [
+          {
+            "predicate": "measure",
+            "roles": {
+              "result": 0.30000000000000004
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"measure\",\"roles\":{\"result\":0.30000000000000004}}],\"kind\":\"measurement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "ca1d6cb45ec3b8759e62af834cd9a00a0a91c296fd94217dae7443cea5ee0151",
+      "fingerprint": "lfp:0.1:sha256:ca1d6cb45ec3b8759e62af834cd9a00a"
+    },
+    {
+      "id": "num-large",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "measurement",
+        "clauses": [
+          {
+            "predicate": "measure",
+            "roles": {
+              "result": 999999999999
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"measure\",\"roles\":{\"result\":999999999999}}],\"kind\":\"measurement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "6f58aec383d717a79e27e32f4d4b0d06153644db6ca2d99d3987e6ad1e1439e5",
+      "fingerprint": "lfp:0.1:sha256:6f58aec383d717a79e27e32f4d4b0d06"
+    },
+    {
+      "id": "bool-false-term",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "state",
+        "clauses": [
+          {
+            "predicate": "is",
+            "roles": {
+              "subject": {
+                "type": "flag",
+                "id": "enabled"
+              },
+              "value": false
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"is\",\"roles\":{\"subject\":{\"id\":\"enabled\",\"type\":\"flag\"},\"value\":false}}],\"kind\":\"state\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "defd23c6aedf7d9f7e1808022fb2c6d9eba40c2cadb7d962ece895ec2697b692",
+      "fingerprint": "lfp:0.1:sha256:defd23c6aedf7d9f7e1808022fb2c6d9"
+    },
+    {
+      "id": "nested-array-terms",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "collection",
+        "clauses": [
+          {
+            "predicate": "group",
+            "roles": {
+              "items": [
+                [
+                  {
+                    "type": "item",
+                    "id": "a1"
+                  },
+                  {
+                    "type": "item",
+                    "id": "a2"
+                  }
+                ],
+                [
+                  {
+                    "type": "item",
+                    "id": "b1"
+                  }
+                ]
+              ]
+            },
+            "negated": false
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"group\",\"roles\":{\"items\":[[{\"id\":\"a1\",\"type\":\"item\"},{\"id\":\"a2\",\"type\":\"item\"}],[{\"id\":\"b1\",\"type\":\"item\"}]]}}],\"kind\":\"collection\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "c26b97ecc531ef4fb525eac861b71bb61b8e6565813f4869a5336dad4badeee8",
+      "fingerprint": "lfp:0.1:sha256:c26b97ecc531ef4fb525eac861b71bb6"
+    },
+    {
+      "id": "empty-annotations",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "test",
+            "roles": {
+              "a": {
+                "type": "x",
+                "id": "y"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "annotations": {}
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"test\",\"roles\":{\"a\":{\"id\":\"y\",\"type\":\"x\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "917001f0702b2b7bb84c1e636d116b807ea58646b169d1a9722506fd8d8f50fb",
+      "fingerprint": "lfp:0.1:sha256:917001f0702b2b7bb84c1e636d116b80"
+    },
+    {
+      "id": "empty-provenance",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "statement",
+        "clauses": [
+          {
+            "predicate": "test",
+            "roles": {
+              "a": {
+                "type": "x",
+                "id": "y"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "provenance": {}
+      },
+      "canonicalBytes": "{\"clauses\":[{\"negated\":false,\"predicate\":\"test\",\"roles\":{\"a\":{\"id\":\"y\",\"type\":\"x\"}}}],\"kind\":\"statement\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "canonicalSha256": "917001f0702b2b7bb84c1e636d116b807ea58646b169d1a9722506fd8d8f50fb",
+      "fingerprint": "lfp:0.1:sha256:917001f0702b2b7bb84c1e636d116b80"
+    },
+    {
+      "id": "mod-must",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "modal",
+        "clauses": [
+          {
+            "predicate": "happen",
+            "roles": {
+              "event": {
+                "type": "event",
+                "id": "change"
+              }
+            },
+            "negated": false,
+            "modality": "must"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"modality\":\"must\",\"negated\":false,\"predicate\":\"happen\",\"roles\":{\"event\":{\"id\":\"change\",\"type\":\"event\"}}}],\"kind\":\"modal\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "7613efb96890fb241f74e85320da63a3eed206798ad59b8a45d268822d9336be",
+      "fingerprint": "lfp:0.1:sha256:7613efb96890fb241f74e85320da63a3"
+    },
+    {
+      "id": "mod-should",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "modal",
+        "clauses": [
+          {
+            "predicate": "happen",
+            "roles": {
+              "event": {
+                "type": "event",
+                "id": "change"
+              }
+            },
+            "negated": false,
+            "modality": "should"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"modality\":\"should\",\"negated\":false,\"predicate\":\"happen\",\"roles\":{\"event\":{\"id\":\"change\",\"type\":\"event\"}}}],\"kind\":\"modal\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "2fb7db5c968af89d632f1a80fdc7b17531857123c1ab83569d44b6c565771af4",
+      "fingerprint": "lfp:0.1:sha256:2fb7db5c968af89d632f1a80fdc7b175"
+    },
+    {
+      "id": "mod-might",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "modal",
+        "clauses": [
+          {
+            "predicate": "happen",
+            "roles": {
+              "event": {
+                "type": "event",
+                "id": "change"
+              }
+            },
+            "negated": false,
+            "modality": "might"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"modality\":\"might\",\"negated\":false,\"predicate\":\"happen\",\"roles\":{\"event\":{\"id\":\"change\",\"type\":\"event\"}}}],\"kind\":\"modal\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "221491b9079160be198f4b1892bedeaa4a57a9b2a036a88f4152fefd9740a28e",
+      "fingerprint": "lfp:0.1:sha256:221491b9079160be198f4b1892bedeaa"
+    },
+    {
+      "id": "mod-can",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "modal",
+        "clauses": [
+          {
+            "predicate": "happen",
+            "roles": {
+              "event": {
+                "type": "event",
+                "id": "change"
+              }
+            },
+            "negated": false,
+            "modality": "can"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"modality\":\"can\",\"negated\":false,\"predicate\":\"happen\",\"roles\":{\"event\":{\"id\":\"change\",\"type\":\"event\"}}}],\"kind\":\"modal\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "d77c20a00b8b9f88088e608966a65c753874e64a66114b5a3f7cc45e4576bea8",
+      "fingerprint": "lfp:0.1:sha256:d77c20a00b8b9f88088e608966a65c75"
+    },
+    {
+      "id": "mod-will",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "modal",
+        "clauses": [
+          {
+            "predicate": "happen",
+            "roles": {
+              "event": {
+                "type": "event",
+                "id": "change"
+              }
+            },
+            "negated": false,
+            "modality": "will"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"modality\":\"will\",\"negated\":false,\"predicate\":\"happen\",\"roles\":{\"event\":{\"id\":\"change\",\"type\":\"event\"}}}],\"kind\":\"modal\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "45eb194633d8c9ae3badb0705502c4972501bb90cca38f6b6ec054eb7f76222b",
+      "fingerprint": "lfp:0.1:sha256:45eb194633d8c9ae3badb0705502c497"
+    },
+    {
+      "id": "mod-would",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "hypothetical",
+        "kind": "modal",
+        "clauses": [
+          {
+            "predicate": "happen",
+            "roles": {
+              "event": {
+                "type": "event",
+                "id": "change"
+              }
+            },
+            "negated": false,
+            "modality": "would"
+          }
+        ]
+      },
+      "canonicalBytes": "{\"clauses\":[{\"modality\":\"would\",\"negated\":false,\"predicate\":\"happen\",\"roles\":{\"event\":{\"id\":\"change\",\"type\":\"event\"}}}],\"kind\":\"modal\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"hypothetical\"}",
+      "canonicalSha256": "37c18eb6ce434302252483c0ffd915e89d6f741feb2c3c277c0785c45e608af3",
+      "fingerprint": "lfp:0.1:sha256:37c18eb6ce434302252483c0ffd915e8"
+    }
+  ]
+}
