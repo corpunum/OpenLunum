@@ -1,0 +1,29 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "supergemma4-e4b-live",
+  "provider": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:8080/v1",
+  "model": "supergemma4-e4b",
+  "temperature": 0,
+  "seed": 42,
+  "maxTokens": 4096,
+  "noThink": true,
+  "timeoutMs": 300000,
+  "metadata": {
+    "purpose": "Model family eval R2.5: SuperGemma4 E4B (Gemma family), Q4_K_M quant, llama.cpp native router",
+    "family": "gemma",
+    "architecture": "gemma2",
+    "quantization": "Q4_K_M",
+    "modelPreset": {
+      "source": "/home/corpunum/models-preset.ini",
+      "section": "[supergemma4-e4b]",
+      "ggufPath": "/home/corpunum/models/supergemma4-e4b-Q4_K_M.gguf",
+      "gpuLayers": 999,
+      "ctxSize": 32768,
+      "flashAttn": "on",
+      "cacheTypeK": "q8_0",
+      "cacheTypeV": "q8_0",
+      "parallel": 1
+    }
+  }
+}
