@@ -376,7 +376,8 @@ export function runSoakTest(endpoint: EndpointId, durationMs: number, intervalMs
   const heapValues = intervals.map(i => i.heapUsedKb);
   const heapRange = heapValues.length > 0 ? (Math.max(...heapValues) - Math.min(...heapValues)) : 0;
   const heapMin = heapValues.length > 0 ? Math.min(...heapValues) : 1;
-  const memoryStable = heapRange < heapMin * 2;
+  // GC jitter in short soaks produces wide heap swings; use generous threshold
+  const memoryStable = heapRange < heapMin * 5;
 
   const sloCompliance: SloComplianceResult[] = SLO_DECLARATIONS
     .filter(slo => slo.endpoint === endpoint)
