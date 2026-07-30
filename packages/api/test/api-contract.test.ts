@@ -4,6 +4,7 @@ import {
   API_CONTRACT_VERSION,
   API_BASE_PATH,
   API_ENDPOINTS,
+  API_ROUTES,
   DEFAULT_RATE_LIMIT,
   STRICT_RATE_LIMIT,
   MAX_REQUEST_BYTES,
@@ -14,7 +15,9 @@ import {
   isWithinRateLimit,
   isWithinSizeLimit,
   getApiContractManifest,
+  validateApiRequest,
   type TenantContext,
+  type ApiRoute,
 } from '../src/api-contract.js';
 
 describe('API contract', () => {
@@ -144,5 +147,128 @@ describe('getApiContractManifest', () => {
     assert.strictEqual(manifest.version, API_CONTRACT_VERSION);
     assert.strictEqual(manifest.basePath, API_BASE_PATH);
     assert.ok(manifest.endpoints.length >= 6);
+  });
+});
+
+describe('versioned API routes (API_ROUTES)', () => {
+  it('contract version is 1.0.0', () => {
+    assert.strictEqual(API_CONTRACT_VERSION, '1.0.0');
+  });
+
+  it('API_ROUTES includes all required endpoints', () => {
+    const paths = API_ROUTES.map(r => r.path);
+    for (const expected of ['/health', '/routes', '/parse', '/realize', '/render', '/retrieve']) {
+      assert.ok(paths.includes(expected), `missing route: ${expected}`);
+    }
+  });
+
+  it('each route has valid versioned structure', () => {
+    for (const route of API_ROUTES) {
+      assert.ok(typeof route.method === 'string');
+      assert.ok(route.path.startsWith('/'));
+      assert.ok(/^\d+\.\d+\.\d+$/.test(route.version), `invalid version: ${route.version}`);
+      assert.ok(typeof route.requestSchema === 'object');
+      assert.ok(typeof route.responseSchema === 'object');
+      assert.ok(typeof route.requiresAuth === 'boolean');
+      assert.ok(route.rateLimit.windowMs > 0);
+      assert.ok(route.rateLimit.maxRequests > 0);
+      assert.ok(['global', 'per-tenant'].includes(route.rateLimit.scope));
+      assert.ok(route.timeoutMs > 0);
+    }
+  });
+
+  it('health and routes endpoints do not require auth', () => {
+    const health = API_ROUTES.find(r => r.path === '/health')!;
+    const routes = API_ROUTES.find(r => r.path === '/routes')!;
+    assert.strictEqual(health.requiresAuth, false);
+    assert.strictEqual(routes.requiresAuth, false);
+  });
+
+  it('mutation endpoints require auth', () => {
+    for (const path of ['/parse', '/realize', '/render', '/retrieve']) {
+      const route = API_ROUTES.find(r => r.path === path)!;
+      assert.strictEqual(route.requiresAuth, true, `${path} should require auth`);
+    }
+  });
+
+  it('retrieve endpoint has stricter rate limit than others', () => {
+    const retrieve = API_ROUTES.find(r => r.path === '/retrieve')!;
+    const parse = API_ROUTES.find(r => r.path === '/parse')!;
+    assert.ok(retrieve.rateLimit.maxRequests < parse.rateLimit.maxRequests);
+  });
+
+  it('all routes have version 1.0.0', () => {
+    for (const route of API_ROUTES) {
+      assert.strictEqual(route.version, '1.0.0');
+    }
+  });
+
+  it('routes with POST method have request schemas', () => {
+    for (const route of API_ROUTES.filter(r => r.method === 'POST')) {
+      assert.ok(Object.keys(route.requestSchema).length > 0, `POST ${route.path} should have requestSchema`);
+    }
+  });
+});
+
+describe('API request validation', () => {
+  function getTestRoute(): ApiRoute {
+    return {
+      method: 'POST',
+      path: '/parse',
+      version: '1.0.0',
+      requestSchema: {
+        type: 'object',
+        properties: {
+          text: { type: 'string' },
+          language: { type: 'string' }
+        },
+        required: ['text', 'language']
+      },
+      responseSchema: { type: 'object' },
+      requiresAuth: true,
+      rateLimit: DEFAULT_RATE_LIMIT,
+      maxRequestBytes: MAX_REQUEST_BYTES,
+      timeoutMs: DEFAULT_TIMEOUT_MS,
+    };
+  }
+
+  it('validates a valid request', () => {
+    const route = getTestRoute();
+    const result = validateApiRequest(route, { text: 'hello', language: 'en' });
+    assert.strictEqual(result.ok, true);
+    assert.strictEqual(result.errors.length, 0);
+  });
+
+  it('rejects a request with missing required field', () => {
+    const route = getTestRoute();
+    const result = validateApiRequest(route, { text: 'hello' });
+    assert.strictEqual(result.ok, false);
+    assert.ok(result.errors.some(e => e.includes('language')));
+  });
+
+  it('rejects a request with non-object body', () => {
+    const route = getTestRoute();
+    const result = validateApiRequest(route, 'not an object');
+    assert.strictEqual(result.ok, false);
+  });
+
+  it('accepts null/non-object body for routes with no required schema', () => {
+    const route = getTestRoute();
+    route.requestSchema = {};
+    const result = validateApiRequest(route, null);
+    assert.strictEqual(result.ok, true);
+  });
+
+  it('validates a route from API_ROUTES', () => {
+    const parseRoute = API_ROUTES.find(r => r.path === '/parse')!;
+    const result = validateApiRequest(parseRoute, { text: 'test', language: 'en' });
+    assert.strictEqual(result.ok, true);
+  });
+
+  it('rejects missing required field for real route', () => {
+    const parseRoute = API_ROUTES.find(r => r.path === '/parse')!;
+    const result = validateApiRequest(parseRoute, { text: 'test' });
+    assert.strictEqual(result.ok, false);
+    assert.ok(result.errors.some(e => e.includes('language')));
   });
 });

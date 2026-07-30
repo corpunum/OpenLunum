@@ -25,3 +25,34 @@ export type {
   ErrorResponse,
   RoutesResponse
 } from './types.js';
+
+// API contract and versioning
+export {
+  API_CONTRACT_VERSION,
+  API_BASE_PATH,
+  API_ROUTES,
+  API_ENDPOINTS,
+  DEFAULT_RATE_LIMIT,
+  STRICT_RATE_LIMIT,
+  MAX_REQUEST_BYTES,
+  DEFAULT_TIMEOUT_MS,
+  validateApiRequest,
+  validateTenantContext,
+  hasPermission,
+  isWithinRateLimit,
+  isWithinSizeLimit,
+  getApiContractManifest,
+  type ApiRoute,
+  type ApiAuthConfig,
+  type ApiRateLimit,
+  type TenantContext,
+  type TenantPermission,
+} from './api-contract.js';
+
+// Auth middleware
+export {
+  createAuthMiddleware,
+  createRateLimiter,
+  type AuthRequest,
+  type AuthResult,
+} from './auth-middleware.js';
