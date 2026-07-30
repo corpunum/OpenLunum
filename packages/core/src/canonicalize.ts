@@ -1,10 +1,36 @@
 import { SEM_SCHEMA } from './constants.js';
 import type { LunumClause, LunumSem, LunumTerm, LunumTermObject, ValidationResult } from './types.js';
 
+/**
+ * Canonicalization algorithm (lunum-canon/1.0)
+ *
+ * This module implements the frozen 1.0 canonicalization algorithm for Lunum-Sem.
+ * Canonicalization transforms semantic content into a deterministic form suitable for
+ * fingerprinting and storage. The algorithm is deterministic and reversible at the
+ * semantic level (identity is preserved even if formatting is normalized).
+ *
+ * Key invariants:
+ * - Same semantic content always produces the same canonical form
+ * - Different semantic content produces different canonical forms (with high probability)
+ * - Canonicalization is stable across language boundaries and Unicode normalization forms
+ * - Clause order is preserved (significant for multi-clause semantics)
+ */
+
+/**
+ * Normalize identifiers (predicates, role names, type discriminators, IDs, language tags).
+ * Identifiers undergo: NFKC Unicode normalization, trimming, lowercasing, space→underscore.
+ * Example: "Prefer Object" → "prefer_object"
+ */
 function normalizeIdentifier(value: unknown): string {
   return String(value ?? '').normalize('NFKC').trim().replace(/\s+/gu, '_').toLocaleLowerCase('und');
 }
 
+/**
+ * Normalize text values (in "value" fields and other text content).
+ * Text undergoes: NFKC Unicode normalization, trimming, multiple spaces→single space.
+ * Text is NOT lowercased or case-normalized, preserving semantic distinction.
+ * Example: "Hello  World" → "Hello World"
+ */
 function normalizeText(value: unknown): string {
   return String(value ?? '').normalize('NFKC').trim().replace(/\s+/gu, ' ');
 }
@@ -53,6 +79,11 @@ function canonicalClause(clause: LunumClause): LunumClause {
   return out;
 }
 
+/**
+ * Validate a Lunum-Sem object before canonicalization.
+ * This check ensures the object has the required structure and fields.
+ * Canonicalization will fail if validation returns false.
+ */
 export function validateSem(value: unknown): ValidationResult {
   const errors: string[] = [];
   if (!isObject(value)) return { ok: false, errors: ['sem must be an object'] };
@@ -68,6 +99,18 @@ export function validateSem(value: unknown): ValidationResult {
   return { ok: errors.length === 0, errors };
 }
 
+/**
+ * Canonicalize a Lunum-Sem object to a deterministic form.
+ *
+ * This is the main entry point for canonicalization. It:
+ * 1. Validates the input structure
+ * 2. Normalizes schema, world, kind, and clauses
+ * 3. Sorts and recursively canonicalizes nested structures
+ * 4. Omits empty optional fields
+ *
+ * The output is deterministic: identical inputs always produce identical outputs.
+ * Throw if validation fails.
+ */
 export function canonicalizeSem(value: unknown): LunumSem {
   const validation = validateSem(value);
   if (!validation.ok) throw new TypeError(`Invalid Lunum-Sem: ${validation.errors.join('; ')}`);
@@ -84,6 +127,21 @@ export function canonicalizeSem(value: unknown): LunumSem {
   return out;
 }
 
+/**
+ * Stable JSON stringification for deterministic hashing.
+ *
+ * This function produces a canonical JSON representation where:
+ * - Object keys are sorted lexicographically (enables deterministic ordering)
+ * - Arrays preserve their order (order is significant)
+ * - All values are recursively stringified in the same manner
+ *
+ * The output is suitable for cryptographic hashing (SHA-256) because
+ * identical input always produces identical output string, regardless
+ * of object key insertion order or whitespace variation.
+ *
+ * Example:
+ *   stableStringify({ b: 1, a: 2 }) === stableStringify({ a: 2, b: 1 })
+ */
 export function stableStringify(value: unknown): string {
   if (value === null || typeof value !== 'object') return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
