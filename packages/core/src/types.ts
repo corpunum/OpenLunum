@@ -104,3 +104,29 @@ export interface ContextMessage {
   lunumMeta?: Partial<EligibilityDecision>;
   lunum_meta?: Partial<EligibilityDecision>;
 }
+
+export interface FeatureBreakdown {
+  matched: string[];
+  missing: string[];
+  extra: string[];
+}
+
+export interface InvariantExplanation {
+  code: string;
+  path: string;
+  detail: string;
+  severity: 'hard' | 'soft';
+}
+
+export interface ComparisonExplanation {
+  features: FeatureBreakdown;
+  invariants: InvariantExplanation[];
+  scores: {
+    featureRecall: number;
+    featurePrecision: number;
+    featureRecallReason: string;
+    featurePrecisionReason: string;
+  };
+  reasoning: string[];
+  summary: string;
+}
