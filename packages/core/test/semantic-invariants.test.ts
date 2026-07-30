@@ -338,3 +338,295 @@ test('the full mutation-false-positive-v2 corpus scores below 0.80 (precision ho
   }
   assert.deepEqual(stillAboveThreshold, []);
 });
+
+// Additional tests for clause-path-aware role-identity invariant
+test('role-identity invariant: detects deep-nested role swap in condition-condition', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'delete',
+      roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'concept', id: 'files' } },
+      negated: false,
+      conditions: [{
+        predicate: 'confirmed',
+        roles: { agent: { type: 'actor', id: 'user' } },
+        negated: false,
+        conditions: [{
+          predicate: 'requested',
+          roles: { agent: { type: 'actor', id: 'service' } },
+          negated: false
+        }]
+      }]
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'delete',
+      roles: { agent: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'files' } },
+      negated: false,
+      conditions: [{
+        predicate: 'confirmed',
+        roles: { agent: { type: 'actor', id: 'system' } },
+        negated: false,
+        conditions: [{
+          predicate: 'requested',
+          roles: { agent: { type: 'actor', id: 'service' } },
+          negated: false
+        }]
+      }]
+    }]
+  } as unknown as LunumSem;
+  const firings = checkRoleIdentityInvariant(a, b);
+  assert.ok(firings.length > 0, 'should detect role swap in deeply nested conditions');
+  assert.ok(firings.every((firing) => firing.code === 'role-identity'));
+});
+
+test('role-identity invariant: detects role swap in consequence clause', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'approve',
+      roles: { agent: { type: 'actor', id: 'manager' } },
+      negated: false,
+      consequences: [{
+        predicate: 'grant',
+        roles: { agent: { type: 'actor', id: 'system' }, recipient: { type: 'actor', id: 'user' } },
+        negated: false
+      }]
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'approve',
+      roles: { agent: { type: 'actor', id: 'manager' } },
+      negated: false,
+      consequences: [{
+        predicate: 'grant',
+        roles: { agent: { type: 'actor', id: 'user' }, recipient: { type: 'actor', id: 'system' } },
+        negated: false
+      }]
+    }]
+  } as unknown as LunumSem;
+  const firings = checkRoleIdentityInvariant(a, b);
+  assert.ok(firings.length > 0, 'should detect role swap in consequence clauses');
+  assert.ok(firings.every((firing) => firing.code === 'role-identity'));
+});
+
+test('role-identity invariant: detects role swap across multiple nested paths', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'execute',
+      roles: { agent: { type: 'actor', id: 'admin' }, theme: { type: 'concept', id: 'command' } },
+      negated: false,
+      conditions: [{
+        predicate: 'authorized',
+        roles: { subject: { type: 'actor', id: 'user' } },
+        negated: false
+      }],
+      consequences: [{
+        predicate: 'log',
+        roles: { agent: { type: 'actor', id: 'system' }, event: { type: 'concept', id: 'action' } },
+        negated: false
+      }]
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'execute',
+      roles: { agent: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'command' } },
+      negated: false,
+      conditions: [{
+        predicate: 'authorized',
+        roles: { subject: { type: 'actor', id: 'admin' } },
+        negated: false
+      }],
+      consequences: [{
+        predicate: 'log',
+        roles: { agent: { type: 'actor', id: 'system' }, event: { type: 'concept', id: 'action' } },
+        negated: false
+      }]
+    }]
+  } as unknown as LunumSem;
+  const firings = checkRoleIdentityInvariant(a, b);
+  assert.ok(firings.length > 0, 'should detect role swap across multiple nested paths');
+});
+
+test('role-identity invariant: does NOT fire when roles are preserved in deep nesting', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'archive',
+      roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'concept', id: 'data' } },
+      negated: false,
+      conditions: [{
+        predicate: 'verified',
+        roles: { subject: { type: 'actor', id: 'user' } },
+        negated: false,
+        conditions: [{
+          predicate: 'confirmed',
+          roles: { agent: { type: 'actor', id: 'system' } },
+          negated: false
+        }]
+      }]
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'archive',
+      roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'concept', id: 'data' } },
+      negated: false,
+      conditions: [{
+        predicate: 'verified',
+        roles: { subject: { type: 'actor', id: 'user' } },
+        negated: false,
+        conditions: [{
+          predicate: 'confirmed',
+          roles: { agent: { type: 'actor', id: 'system' } },
+          negated: false
+        }]
+      }]
+    }]
+  } as unknown as LunumSem;
+  const firings = checkRoleIdentityInvariant(a, b);
+  assert.deepEqual(firings, [], 'should not fire when roles are preserved across all nesting levels');
+});
+
+test('role-identity invariant: handles multiple roles in same document with swap', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [
+      {
+        predicate: 'review',
+        roles: { agent: { type: 'actor', id: 'reviewer' }, theme: { type: 'concept', id: 'proposal' } },
+        negated: false
+      },
+      {
+        predicate: 'approve',
+        roles: { agent: { type: 'actor', id: 'approver' }, theme: { type: 'concept', id: 'proposal' } },
+        negated: false
+      }
+    ]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [
+      {
+        predicate: 'review',
+        roles: { agent: { type: 'actor', id: 'approver' }, theme: { type: 'concept', id: 'proposal' } },
+        negated: false
+      },
+      {
+        predicate: 'approve',
+        roles: { agent: { type: 'actor', id: 'reviewer' }, theme: { type: 'concept', id: 'proposal' } },
+        negated: false
+      }
+    ]
+  } as unknown as LunumSem;
+  const firings = checkRoleIdentityInvariant(a, b);
+  assert.ok(firings.length > 0, 'should detect role swap across multiple clauses');
+  assert.ok(firings.every((firing) => firing.code === 'role-identity'));
+});
+
+test('role-identity invariant: does NOT fire on independent single role changes', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'create',
+      roles: { agent: { type: 'actor', id: 'user_1' }, theme: { type: 'concept', id: 'document' } },
+      negated: false
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'create',
+      roles: { agent: { type: 'actor', id: 'user_2' }, theme: { type: 'concept', id: 'document' } },
+      negated: false
+    }]
+  } as unknown as LunumSem;
+  assert.deepEqual(checkRoleIdentityInvariant(a, b), [], 'should not fire for single isolated role changes');
+});
+
+test('role-identity invariant: detects swap between object fillers in different roles', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'notify',
+      roles: {
+        agent: { type: 'actor', id: 'system' },
+        recipient: { type: 'actor', id: 'admin' }
+      },
+      negated: false,
+      conditions: [{
+        predicate: 'triggered',
+        roles: { event: { type: 'concept', id: 'event_a' } },
+        negated: false
+      }]
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'notify',
+      roles: {
+        agent: { type: 'actor', id: 'admin' },
+        recipient: { type: 'actor', id: 'system' }
+      },
+      negated: false,
+      conditions: [{
+        predicate: 'triggered',
+        roles: { event: { type: 'concept', id: 'event_a' } },
+        negated: false
+      }]
+    }]
+  } as unknown as LunumSem;
+  const firings = checkRoleIdentityInvariant(a, b);
+  assert.ok(firings.length > 0, 'should detect role swap in the same clause between two roles');
+});
+
+test('role-identity invariant integration: hard-gates compareSem on deep-nested role swap', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'configure',
+      roles: { agent: { type: 'actor', id: 'admin' } },
+      negated: false,
+      conditions: [{
+        predicate: 'permission',
+        roles: { subject: { type: 'actor', id: 'user' } },
+        negated: false
+      }],
+      consequences: [{
+        predicate: 'apply',
+        roles: { agent: { type: 'actor', id: 'system' } },
+        negated: false
+      }]
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'configure',
+      roles: { agent: { type: 'actor', id: 'user' } },
+      negated: false,
+      conditions: [{
+        predicate: 'permission',
+        roles: { subject: { type: 'actor', id: 'admin' } },
+        negated: false
+      }],
+      consequences: [{
+        predicate: 'apply',
+        roles: { agent: { type: 'actor', id: 'system' } },
+        negated: false
+      }]
+    }]
+  } as unknown as LunumSem;
+  const comparison = compareSem(a, b);
+  assert.equal(comparison.hardMismatch, true, 'should report hard mismatch');
+  assert.ok(comparison.hardInvariants.some((inv) => inv.code === 'role-identity'), 'should include role-identity firing');
+});
