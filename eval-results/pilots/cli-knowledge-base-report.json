@@ -1,0 +1,147 @@
+{
+  "pilotName": "cli-knowledge-base",
+  "pilotVersion": "0.1.0",
+  "timestamp": "2026-07-30T10:30:04.706Z",
+  "scenarios": [
+    {
+      "name": "exact-fingerprint-retrieval",
+      "description": "Store a preference and retrieve by exact fingerprint match",
+      "passed": true,
+      "details": {
+        "stored": "lfp:0.1:sha256:82f125c50100dc9547f0c40112ab361b",
+        "retrieved": "lfp:0.1:sha256:82f125c50100dc9547f0c40112ab361b",
+        "score": 1
+      }
+    },
+    {
+      "name": "semantic-similarity-retrieval",
+      "description": "Query by partial semantic match — should rank Python preference highest",
+      "passed": true,
+      "details": {
+        "totalMatches": 3,
+        "topScore": 0.8,
+        "topTags": [
+          "programming"
+        ],
+        "scores": [
+          {
+            "score": 0.8,
+            "tags": [
+              "programming"
+            ]
+          },
+          {
+            "score": 0.6666666666666667,
+            "tags": [
+              "programming"
+            ]
+          },
+          {
+            "score": 0.4642857142857143,
+            "tags": [
+              "calendar"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "tag-retrieval",
+      "description": "Retrieve entries by tag — editor and calendar should be separate",
+      "passed": true,
+      "details": {
+        "editorCount": 2,
+        "calendarCount": 1
+      }
+    },
+    {
+      "name": "deduplication",
+      "description": "Detect duplicate entry via fingerprint before storing again",
+      "passed": true,
+      "details": {
+        "isDuplicate": true,
+        "storeSize": 1
+      }
+    },
+    {
+      "name": "validation-gate",
+      "description": "Valid sems pass validation, invalid sems are rejected",
+      "passed": true,
+      "details": {
+        "validOk": true,
+        "invalidOk": false,
+        "invalidErrors": [
+          "world is required",
+          "kind is required",
+          "clauses must be a non-empty array"
+        ]
+      }
+    },
+    {
+      "name": "roundtrip-stability",
+      "description": "Fingerprint is stable across multiple canonicalization passes",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:14bbf55ffbe0474e6e8874bdbabb1c56",
+        "fp2": "lfp:0.1:sha256:14bbf55ffbe0474e6e8874bdbabb1c56",
+        "fp3": "lfp:0.1:sha256:14bbf55ffbe0474e6e8874bdbabb1c56"
+      }
+    },
+    {
+      "name": "negation-distinguishes",
+      "description": "Positive and negated clauses produce different fingerprints",
+      "passed": true,
+      "details": {
+        "posFp": "lfp:0.1:sha256:9a06488243ee7a94bcbb903efb9ca749",
+        "negFp": "lfp:0.1:sha256:e875710a73f58301053d3dea8008cf11",
+        "storeSize": 2
+      }
+    },
+    {
+      "name": "modality-preservation",
+      "description": "Fact vs belief modality produces different fingerprints",
+      "passed": true,
+      "details": {
+        "factFp": "lfp:0.1:sha256:9fbcbdf674239f2f9ba626ade0fe1dc1",
+        "beliefFp": "lfp:0.1:sha256:365583c6facbc6314f9359ca74fd2949"
+      }
+    },
+    {
+      "name": "multi-clause-entry",
+      "description": "Multi-clause entries retain all clauses through the pipeline",
+      "passed": true,
+      "details": {
+        "clauseCount": 3,
+        "exactMatch": true,
+        "recall": 1
+      }
+    },
+    {
+      "name": "rendering-present",
+      "description": "Stored records include at least one non-empty rendering",
+      "passed": true,
+      "details": {
+        "renderingCount": 1,
+        "firstCode": "P prefers user linux"
+      }
+    }
+  ],
+  "summary": {
+    "totalScenarios": 10,
+    "passed": 10,
+    "failed": 0,
+    "successCriteria": [
+      "All 10 scenarios pass",
+      "Exact fingerprint retrieval works",
+      "Semantic similarity ranking is correct",
+      "Deduplication prevents double-storage",
+      "Negation and modality are distinguished"
+    ],
+    "rollbackCriteria": [
+      "Any scenario fails that involves data corruption",
+      "Fingerprint instability detected",
+      "Validation gate allows invalid sems"
+    ],
+    "verdict": "PASS"
+  }
+}
