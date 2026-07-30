@@ -1,0 +1,32 @@
+{
+  "id": "multilingual-expanded-v2",
+  "path": "datasets/dev/multilingual-expanded-v2.jsonl",
+  "sha256": "ab0cf7e8b83da9cf5919279143e63e14490a1d8f409aa09de32bd2b2c9e9de97",
+  "items": 96,
+  "languages": [
+    "en",
+    "el",
+    "es",
+    "id",
+    "ja",
+    "ko",
+    "zh",
+    "ar",
+    "pt",
+    "fr",
+    "de",
+    "ru"
+  ],
+  "categories": [
+    "preference",
+    "constraint",
+    "reminder",
+    "consent",
+    "belief",
+    "plan",
+    "schedule",
+    "knowledge"
+  ],
+  "status": "development",
+  "warning": "Expanded 12-language dataset for R2.3 language coverage (issue #382)."
+}
