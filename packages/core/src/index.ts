@@ -55,6 +55,7 @@ export * from './quality-gate-ci.js';
 export * from './prompt-injection.js';
 export * from './renderer-conformance.js';
 export * from './compatibility-matrix.js';
+export * from './support-contract.js';
 export {
   classifyContent,
   classifyByCategory,
