@@ -42,6 +42,7 @@ export type {
 export * from './token-optimization.js';
 export * from './token-optimization-compat.js';
 export * from './agent-state.js';
+export * from './agent-state-freeze.js';
 export * from './native-model.js';
 export * from './model-identity.js';
 export * from './model-renderer-profiles.js';
