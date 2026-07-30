@@ -1,0 +1,1043 @@
+{
+  "version": "0.1.0",
+  "timestamp": "2026-07-30T11:12:23.612Z",
+  "vectors": [
+    {
+      "id": "migration-simple-preference",
+      "description": "Simple preference survives forward and backward migration",
+      "category": "migration",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "agent": "user",
+              "theme": "dark_mode"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "migration-negated-obligation",
+      "description": "Negated obligation preserves negation and modality across migration",
+      "category": "migration",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "constraint",
+        "clauses": [
+          {
+            "predicate": "share",
+            "roles": {
+              "agent": "system",
+              "theme": "personal_data"
+            },
+            "negated": true,
+            "modality": "obligation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "migration-nested-conditions",
+      "description": "Nested conditions survive round-trip migration",
+      "category": "migration",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "policy",
+        "clauses": [
+          {
+            "predicate": "grant",
+            "roles": {
+              "agent": "system",
+              "theme": "access"
+            },
+            "conditions": [
+              {
+                "predicate": "authenticate",
+                "roles": {
+                  "agent": "user"
+                }
+              }
+            ],
+            "consequences": [
+              {
+                "predicate": "log",
+                "roles": {
+                  "agent": "system",
+                  "theme": "access_event"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "migration-multi-clause",
+      "description": "Multi-clause sem preserves clause order across migration",
+      "category": "migration",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "pipeline",
+        "clauses": [
+          {
+            "predicate": "fetch",
+            "roles": {
+              "agent": "system",
+              "source": "api"
+            }
+          },
+          {
+            "predicate": "transform",
+            "roles": {
+              "agent": "system",
+              "theme": "data"
+            }
+          },
+          {
+            "predicate": "store",
+            "roles": {
+              "agent": "system",
+              "destination": "database"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "migration-temporal",
+      "description": "Temporal clause with time field survives migration",
+      "category": "migration",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "schedule",
+        "clauses": [
+          {
+            "predicate": "remind",
+            "roles": {
+              "agent": "system",
+              "theme": "meeting"
+            },
+            "time": "2025-06-15T10:00:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "migration-provenance",
+      "description": "Sem with provenance metadata survives migration",
+      "category": "migration",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "knowledge",
+        "clauses": [
+          {
+            "predicate": "states",
+            "roles": {
+              "agent": "expert",
+              "theme": "water_boils_at_100c"
+            }
+          }
+        ],
+        "provenance": {
+          "source": "textbook",
+          "author": "physics_department"
+        }
+      }
+    },
+    {
+      "id": "ambiguity-null-vs-omitted-modality",
+      "description": "Explicit null modality and omitted modality must canonicalize identically",
+      "category": "ambiguity",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "agent": "user",
+              "theme": "json"
+            },
+            "modality": null
+          }
+        ]
+      },
+      "prohibitedBehavior": "Different fingerprints for null vs omitted modality"
+    },
+    {
+      "id": "ambiguity-false-negated-vs-omitted",
+      "description": "Explicit negated:false and omitted negated must canonicalize identically",
+      "category": "ambiguity",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "fact",
+        "clauses": [
+          {
+            "predicate": "is",
+            "roles": {
+              "theme": "sky",
+              "value": "blue"
+            },
+            "negated": false
+          }
+        ]
+      },
+      "prohibitedBehavior": "Different fingerprints for negated:false vs omitted negated"
+    },
+    {
+      "id": "ambiguity-empty-conditions-vs-omitted",
+      "description": "Empty conditions array and omitted conditions must canonicalize identically",
+      "category": "ambiguity",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "fact",
+        "clauses": [
+          {
+            "predicate": "exists",
+            "roles": {
+              "theme": "entity"
+            },
+            "conditions": []
+          }
+        ]
+      },
+      "prohibitedBehavior": "Different fingerprints for conditions:[] vs omitted conditions"
+    },
+    {
+      "id": "ambiguity-empty-annotations-vs-omitted",
+      "description": "Empty annotations and omitted annotations must canonicalize identically",
+      "category": "ambiguity",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "fact",
+        "clauses": [
+          {
+            "predicate": "exists",
+            "roles": {
+              "theme": "entity"
+            }
+          }
+        ],
+        "annotations": {}
+      },
+      "prohibitedBehavior": "Different fingerprints for annotations:{} vs omitted annotations"
+    },
+    {
+      "id": "ambiguity-role-key-casing",
+      "description": "Role keys with different casing must canonicalize to same form",
+      "category": "ambiguity",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "Agent": "user",
+              "Theme": "dark"
+            }
+          }
+        ]
+      },
+      "prohibitedBehavior": "Case-sensitive role keys producing different fingerprints"
+    },
+    {
+      "id": "ambiguity-whitespace-predicate",
+      "description": "Predicates with surrounding whitespace must canonicalize to trimmed form",
+      "category": "ambiguity",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "  prefer  ",
+            "roles": {
+              "agent": "user"
+            }
+          }
+        ]
+      },
+      "prohibitedBehavior": "Whitespace in predicates affecting fingerprint"
+    },
+    {
+      "id": "ambiguity-unicode-normalization",
+      "description": "Equivalent Unicode sequences must produce same canonical form",
+      "category": "ambiguity",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "agent": "user",
+              "theme": "café"
+            }
+          }
+        ]
+      },
+      "prohibitedBehavior": "NFC vs NFD producing different fingerprints"
+    },
+    {
+      "id": "canon-role-sort-order",
+      "description": "Role keys must be sorted lexicographically in canonical form",
+      "category": "canonicalization",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "fact",
+        "clauses": [
+          {
+            "predicate": "transfer",
+            "roles": {
+              "destination": "b",
+              "source": "a",
+              "agent": "user"
+            }
+          }
+        ]
+      },
+      "expectedCanonicalKeys": [
+        "agent",
+        "destination",
+        "source"
+      ]
+    },
+    {
+      "id": "canon-nested-sort",
+      "description": "Role sorting applies recursively in conditions and consequences",
+      "category": "canonicalization",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "policy",
+        "clauses": [
+          {
+            "predicate": "grant",
+            "roles": {
+              "agent": "system"
+            },
+            "conditions": [
+              {
+                "predicate": "verify",
+                "roles": {
+                  "target": "identity",
+                  "source": "provider"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "canon-nfkc-normalization",
+      "description": "Identifiers undergo NFKC normalization",
+      "category": "canonicalization",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "agent": "user",
+              "theme": "Ｔｅｓｔ"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "canon-case-folding",
+      "description": "Identifiers are lowercased during canonicalization",
+      "category": "canonicalization",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "PREFER",
+            "roles": {
+              "AGENT": "User",
+              "THEME": "Dark_Mode"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "fp-deterministic",
+      "description": "Same sem produces same fingerprint on repeated calls",
+      "category": "fingerprint",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "agent": "user",
+              "theme": "typescript"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "fp-negation-distinguishes",
+      "description": "Negated and non-negated clauses produce different fingerprints",
+      "category": "fingerprint",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "agent": "user",
+              "theme": "coffee"
+            },
+            "negated": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "fp-modality-distinguishes",
+      "description": "Different modalities produce different fingerprints",
+      "category": "fingerprint",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "constraint",
+        "clauses": [
+          {
+            "predicate": "access",
+            "roles": {
+              "agent": "user",
+              "theme": "admin_panel"
+            },
+            "modality": "permission"
+          }
+        ]
+      }
+    },
+    {
+      "id": "roundtrip-complex",
+      "description": "Complex sem with all field types survives create→canonicalize→fingerprint→compare",
+      "category": "roundtrip",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "policy",
+        "clauses": [
+          {
+            "predicate": "encrypt",
+            "roles": {
+              "agent": "system",
+              "theme": "data"
+            },
+            "modality": "obligation"
+          },
+          {
+            "predicate": "notify",
+            "roles": {
+              "agent": "system",
+              "theme": "user"
+            },
+            "conditions": [
+              {
+                "predicate": "detect",
+                "roles": {
+                  "agent": "system",
+                  "theme": "breach"
+                }
+              }
+            ],
+            "consequences": [
+              {
+                "predicate": "lock",
+                "roles": {
+                  "agent": "system",
+                  "theme": "account"
+                }
+              }
+            ]
+          }
+        ],
+        "provenance": {
+          "source": "security_policy",
+          "author": "ciso"
+        },
+        "annotations": {
+          "confidence": 0.95,
+          "tags": [
+            "security",
+            "mandatory"
+          ]
+        }
+      }
+    },
+    {
+      "id": "roundtrip-multilingual-roles",
+      "description": "Roles with multilingual content survive round-trip",
+      "category": "roundtrip",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "agent": "user",
+              "theme": {
+                "type": "concept",
+                "value": "dark mode",
+                "language": "en"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "boundary-single-clause",
+      "description": "Minimal valid sem with one clause",
+      "category": "boundary",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "fact",
+        "clauses": [
+          {
+            "predicate": "exists",
+            "roles": {
+              "theme": "something"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "boundary-many-clauses",
+      "description": "20-clause sem survives full pipeline",
+      "category": "boundary",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "pipeline",
+        "clauses": [
+          {
+            "predicate": "step_0",
+            "roles": {
+              "agent": "system",
+              "theme": "task_0"
+            }
+          },
+          {
+            "predicate": "step_1",
+            "roles": {
+              "agent": "system",
+              "theme": "task_1"
+            }
+          },
+          {
+            "predicate": "step_2",
+            "roles": {
+              "agent": "system",
+              "theme": "task_2"
+            }
+          },
+          {
+            "predicate": "step_3",
+            "roles": {
+              "agent": "system",
+              "theme": "task_3"
+            }
+          },
+          {
+            "predicate": "step_4",
+            "roles": {
+              "agent": "system",
+              "theme": "task_4"
+            }
+          },
+          {
+            "predicate": "step_5",
+            "roles": {
+              "agent": "system",
+              "theme": "task_5"
+            }
+          },
+          {
+            "predicate": "step_6",
+            "roles": {
+              "agent": "system",
+              "theme": "task_6"
+            }
+          },
+          {
+            "predicate": "step_7",
+            "roles": {
+              "agent": "system",
+              "theme": "task_7"
+            }
+          },
+          {
+            "predicate": "step_8",
+            "roles": {
+              "agent": "system",
+              "theme": "task_8"
+            }
+          },
+          {
+            "predicate": "step_9",
+            "roles": {
+              "agent": "system",
+              "theme": "task_9"
+            }
+          },
+          {
+            "predicate": "step_10",
+            "roles": {
+              "agent": "system",
+              "theme": "task_10"
+            }
+          },
+          {
+            "predicate": "step_11",
+            "roles": {
+              "agent": "system",
+              "theme": "task_11"
+            }
+          },
+          {
+            "predicate": "step_12",
+            "roles": {
+              "agent": "system",
+              "theme": "task_12"
+            }
+          },
+          {
+            "predicate": "step_13",
+            "roles": {
+              "agent": "system",
+              "theme": "task_13"
+            }
+          },
+          {
+            "predicate": "step_14",
+            "roles": {
+              "agent": "system",
+              "theme": "task_14"
+            }
+          },
+          {
+            "predicate": "step_15",
+            "roles": {
+              "agent": "system",
+              "theme": "task_15"
+            }
+          },
+          {
+            "predicate": "step_16",
+            "roles": {
+              "agent": "system",
+              "theme": "task_16"
+            }
+          },
+          {
+            "predicate": "step_17",
+            "roles": {
+              "agent": "system",
+              "theme": "task_17"
+            }
+          },
+          {
+            "predicate": "step_18",
+            "roles": {
+              "agent": "system",
+              "theme": "task_18"
+            }
+          },
+          {
+            "predicate": "step_19",
+            "roles": {
+              "agent": "system",
+              "theme": "task_19"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "boundary-deep-nesting",
+      "description": "3-level nested conditions survive canonicalization",
+      "category": "boundary",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "policy",
+        "clauses": [
+          {
+            "predicate": "execute",
+            "roles": {
+              "agent": "system"
+            },
+            "conditions": [
+              {
+                "predicate": "approve",
+                "roles": {
+                  "agent": "manager"
+                },
+                "conditions": [
+                  {
+                    "predicate": "review",
+                    "roles": {
+                      "agent": "auditor"
+                    },
+                    "conditions": [
+                      {
+                        "predicate": "submit",
+                        "roles": {
+                          "agent": "engineer"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "boundary-empty-string-world",
+      "description": "Empty world should fail validation",
+      "category": "boundary",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "",
+        "kind": "fact",
+        "clauses": [
+          {
+            "predicate": "exists",
+            "roles": {
+              "theme": "x"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "vectorId": "migration-simple-preference",
+      "passed": true,
+      "details": {
+        "fpBefore": "lfp:0.1:sha256:b99ae93d84c83f7a3c58383f34bccc84",
+        "fpAfter": "lfp:0.1:sha256:b99ae93d84c83f7a3c58383f34bccc84",
+        "forwardWarnings": 0,
+        "backwardWarnings": 0,
+        "clauseCountPreserved": true
+      }
+    },
+    {
+      "vectorId": "migration-negated-obligation",
+      "passed": true,
+      "details": {
+        "fpBefore": "lfp:0.1:sha256:ce7b1e3112366926c1785c8d72d987d5",
+        "fpAfter": "lfp:0.1:sha256:ce7b1e3112366926c1785c8d72d987d5",
+        "forwardWarnings": 0,
+        "backwardWarnings": 0,
+        "clauseCountPreserved": true
+      }
+    },
+    {
+      "vectorId": "migration-nested-conditions",
+      "passed": true,
+      "details": {
+        "fpBefore": "lfp:0.1:sha256:8997f78a2bdba7cfdf5dadd4acdc8f0f",
+        "fpAfter": "lfp:0.1:sha256:8997f78a2bdba7cfdf5dadd4acdc8f0f",
+        "forwardWarnings": 0,
+        "backwardWarnings": 0,
+        "clauseCountPreserved": true
+      }
+    },
+    {
+      "vectorId": "migration-multi-clause",
+      "passed": true,
+      "details": {
+        "fpBefore": "lfp:0.1:sha256:c7a8b30c0fd32c0f77470057bc40f932",
+        "fpAfter": "lfp:0.1:sha256:c7a8b30c0fd32c0f77470057bc40f932",
+        "forwardWarnings": 0,
+        "backwardWarnings": 0,
+        "clauseCountPreserved": true
+      }
+    },
+    {
+      "vectorId": "migration-temporal",
+      "passed": true,
+      "details": {
+        "fpBefore": "lfp:0.1:sha256:a13e1f3b2da06ffcec14dbfa862e0a3e",
+        "fpAfter": "lfp:0.1:sha256:a13e1f3b2da06ffcec14dbfa862e0a3e",
+        "forwardWarnings": 0,
+        "backwardWarnings": 0,
+        "clauseCountPreserved": true
+      }
+    },
+    {
+      "vectorId": "migration-provenance",
+      "passed": true,
+      "details": {
+        "fpBefore": "lfp:0.1:sha256:9d985e18da384489314f01a2d9ab183b",
+        "fpAfter": "lfp:0.1:sha256:9d985e18da384489314f01a2d9ab183b",
+        "forwardWarnings": 0,
+        "backwardWarnings": 1,
+        "clauseCountPreserved": true
+      }
+    },
+    {
+      "vectorId": "ambiguity-null-vs-omitted-modality",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:8a0e2ca72e326cd359488802e86b1a95",
+        "fp2": "lfp:0.1:sha256:8a0e2ca72e326cd359488802e86b1a95",
+        "prohibited": "Different fingerprints for null vs omitted modality",
+        "ambiguityResolved": true
+      }
+    },
+    {
+      "vectorId": "ambiguity-false-negated-vs-omitted",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:65be9ccb6314e98389489e5f192b35a8",
+        "fp2": "lfp:0.1:sha256:65be9ccb6314e98389489e5f192b35a8",
+        "prohibited": "Different fingerprints for negated:false vs omitted negated",
+        "ambiguityResolved": true
+      }
+    },
+    {
+      "vectorId": "ambiguity-empty-conditions-vs-omitted",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:20bc692a5c8f0d4437c580b79c4200dd",
+        "fp2": "lfp:0.1:sha256:20bc692a5c8f0d4437c580b79c4200dd",
+        "prohibited": "Different fingerprints for conditions:[] vs omitted conditions",
+        "ambiguityResolved": true
+      }
+    },
+    {
+      "vectorId": "ambiguity-empty-annotations-vs-omitted",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:20bc692a5c8f0d4437c580b79c4200dd",
+        "fp2": "lfp:0.1:sha256:20bc692a5c8f0d4437c580b79c4200dd",
+        "prohibited": "Different fingerprints for annotations:{} vs omitted annotations",
+        "ambiguityResolved": true
+      }
+    },
+    {
+      "vectorId": "ambiguity-role-key-casing",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:56900c73bca365dc4a8dbeae47141731",
+        "fp2": "lfp:0.1:sha256:56900c73bca365dc4a8dbeae47141731",
+        "prohibited": "Case-sensitive role keys producing different fingerprints",
+        "ambiguityResolved": true
+      }
+    },
+    {
+      "vectorId": "ambiguity-whitespace-predicate",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:7dac68f99fe121d39385ad6b2efb5837",
+        "fp2": "lfp:0.1:sha256:7dac68f99fe121d39385ad6b2efb5837",
+        "prohibited": "Whitespace in predicates affecting fingerprint",
+        "ambiguityResolved": true
+      }
+    },
+    {
+      "vectorId": "ambiguity-unicode-normalization",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:9c3c5e7b9534799dc7d0313a7c6db1f8",
+        "fp2": "lfp:0.1:sha256:9c3c5e7b9534799dc7d0313a7c6db1f8",
+        "prohibited": "NFC vs NFD producing different fingerprints",
+        "ambiguityResolved": true
+      }
+    },
+    {
+      "vectorId": "canon-role-sort-order",
+      "passed": true,
+      "details": {
+        "expectedKeys": [
+          "agent",
+          "destination",
+          "source"
+        ],
+        "actualKeys": [
+          "agent",
+          "destination",
+          "source"
+        ]
+      }
+    },
+    {
+      "vectorId": "canon-nested-sort",
+      "passed": true,
+      "details": {
+        "fp": "lfp:0.1:sha256:00cdf7de6898b74fe9d55abea536bd7d",
+        "canonLength": 244
+      }
+    },
+    {
+      "vectorId": "canon-nfkc-normalization",
+      "passed": true,
+      "details": {
+        "fp": "lfp:0.1:sha256:20cd73a87d6429d860b4297d947689e5",
+        "canonLength": 158
+      }
+    },
+    {
+      "vectorId": "canon-case-folding",
+      "passed": true,
+      "details": {
+        "fp": "lfp:0.1:sha256:397236a2f9c3b5036a4b7f4326945005",
+        "canonLength": 163
+      }
+    },
+    {
+      "vectorId": "fp-deterministic",
+      "passed": true,
+      "details": {
+        "fp1": "lfp:0.1:sha256:206143c45d8d108e035f0e6e94d6b58d",
+        "fp2": "lfp:0.1:sha256:206143c45d8d108e035f0e6e94d6b58d"
+      }
+    },
+    {
+      "vectorId": "fp-negation-distinguishes",
+      "passed": true,
+      "details": {
+        "negatedFp": "lfp:0.1:sha256:ba8a84ce2a6f5f19f6760c6612d91154",
+        "nonNegFp": "lfp:0.1:sha256:f5ff55afcba58029d0aefb81b44c36c8"
+      }
+    },
+    {
+      "vectorId": "fp-modality-distinguishes",
+      "passed": true,
+      "details": {
+        "withModalityFp": "lfp:0.1:sha256:ec27fc8552ced5f2506829de270860a4",
+        "noModalityFp": "lfp:0.1:sha256:c5e09dc36b3d800ce1d9514d99042ead"
+      }
+    },
+    {
+      "vectorId": "roundtrip-complex",
+      "passed": true,
+      "details": {
+        "fp": "lfp:0.1:sha256:b5945988aaf9a5b73a5b4896a47de085",
+        "recordFp": "lfp:0.1:sha256:b5945988aaf9a5b73a5b4896a47de085",
+        "clauseCount": 2
+      }
+    },
+    {
+      "vectorId": "roundtrip-multilingual-roles",
+      "passed": true,
+      "details": {
+        "fp": "lfp:0.1:sha256:fe7136ed7a1300e3e98fecac8afcd1d6",
+        "recordFp": "lfp:0.1:sha256:fe7136ed7a1300e3e98fecac8afcd1d6",
+        "clauseCount": 1
+      }
+    },
+    {
+      "vectorId": "boundary-single-clause",
+      "passed": true,
+      "details": {
+        "fp": "lfp:0.1:sha256:9e65a2fd41951b63ae54b00dc77009c3",
+        "clauseCount": 1
+      }
+    },
+    {
+      "vectorId": "boundary-many-clauses",
+      "passed": true,
+      "details": {
+        "fp": "lfp:0.1:sha256:801f973d3d9061d8628c13f88b211674",
+        "clauseCount": 20
+      }
+    },
+    {
+      "vectorId": "boundary-deep-nesting",
+      "passed": true,
+      "details": {
+        "fp": "lfp:0.1:sha256:f68a84005a5cfa5c9957d8ff251fa9aa",
+        "clauseCount": 1
+      }
+    },
+    {
+      "vectorId": "boundary-empty-string-world",
+      "passed": true,
+      "details": {
+        "valid": false,
+        "errors": [
+          "world is required"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total": 26,
+    "passed": 26,
+    "failed": 0,
+    "byCategory": {
+      "migration": {
+        "total": 6,
+        "passed": 6
+      },
+      "ambiguity": {
+        "total": 7,
+        "passed": 7
+      },
+      "canonicalization": {
+        "total": 4,
+        "passed": 4
+      },
+      "fingerprint": {
+        "total": 3,
+        "passed": 3
+      },
+      "roundtrip": {
+        "total": 2,
+        "passed": 2
+      },
+      "boundary": {
+        "total": 4,
+        "passed": 4
+      }
+    },
+    "verdict": "PASS"
+  }
+}
