@@ -1,0 +1,134 @@
+{
+  "pilotName": "agent-preference-memory",
+  "pilotVersion": "0.1.0",
+  "timestamp": "2026-07-30T10:30:04.696Z",
+  "scenarios": [
+    {
+      "name": "cross-language-fingerprint-identity",
+      "description": "Identical semantic structures from EN/EL source texts produce the same fingerprint",
+      "passed": true,
+      "details": {
+        "enFp": "lfp:0.1:sha256:790db69a79f0db70eaad0d30c4da5f3d",
+        "elFp": "lfp:0.1:sha256:790db69a79f0db70eaad0d30c4da5f3d"
+      }
+    },
+    {
+      "name": "cross-language-retrieval",
+      "description": "Store preference in English, retrieve with identical sem — should find exact match",
+      "passed": true,
+      "details": {
+        "matchCount": 1,
+        "exact": true
+      }
+    },
+    {
+      "name": "constraint-modality-separation",
+      "description": "Obligation vs permission constraints have distinct fingerprints and both store correctly",
+      "passed": true,
+      "details": {
+        "obligationFp": "lfp:0.1:sha256:13e56e565d4a05b520bbb0c23a5fcfcd",
+        "permissionFp": "lfp:0.1:sha256:684adc699f6a027e2cac7bf8db7a4f8b",
+        "entryCount": 2
+      }
+    },
+    {
+      "name": "preference-override-detection",
+      "description": "Old and new preference share structure but differ in content — detectable as override",
+      "passed": true,
+      "details": {
+        "recall": 0.8333333333333334,
+        "precision": 0.8333333333333334,
+        "exactFp": false,
+        "missing": [
+          "role:0:language:python"
+        ],
+        "extra": [
+          "role:0:language:rust"
+        ]
+      }
+    },
+    {
+      "name": "multilingual-canonical-equivalence",
+      "description": "Same sem from 4 languages (EN/EL/ES/JA) produces identical fingerprint",
+      "passed": true,
+      "details": {
+        "fingerprints": [
+          "lfp:0.1:sha256:152d90bf24ff253dbe1177293fbdda10",
+          "lfp:0.1:sha256:152d90bf24ff253dbe1177293fbdda10",
+          "lfp:0.1:sha256:152d90bf24ff253dbe1177293fbdda10",
+          "lfp:0.1:sha256:152d90bf24ff253dbe1177293fbdda10"
+        ],
+        "languages": [
+          "en",
+          "el",
+          "es",
+          "ja"
+        ]
+      }
+    },
+    {
+      "name": "preference-rendering",
+      "description": "Preference sems produce non-empty renderings",
+      "passed": true,
+      "details": {
+        "code": "A prefers user utc",
+        "profile": "generic-en-pivot/0.1"
+      }
+    },
+    {
+      "name": "conditional-preferences",
+      "description": "Conditional clauses survive the full create→canonicalize→compare cycle",
+      "passed": true,
+      "details": {
+        "conditionCount": 1,
+        "exactMatch": true
+      }
+    },
+    {
+      "name": "negated-constraints",
+      "description": "Negated obligation constraints preserve negation flag through the pipeline",
+      "passed": true,
+      "details": {
+        "negated": true,
+        "modality": "obligation"
+      }
+    },
+    {
+      "name": "multi-constraint-entry",
+      "description": "Multiple constraints in one entry all survive the pipeline",
+      "passed": true,
+      "details": {
+        "clauseCount": 3,
+        "valid": true
+      }
+    },
+    {
+      "name": "user-correction-flow",
+      "description": "After storing a correction, both old and new are retrievable — agent can detect the override",
+      "passed": true,
+      "details": {
+        "beforeCount": 1,
+        "afterCount": 2,
+        "afterExact": true
+      }
+    }
+  ],
+  "summary": {
+    "totalScenarios": 10,
+    "passed": 10,
+    "failed": 0,
+    "successCriteria": [
+      "All 10 scenarios pass",
+      "Cross-language fingerprint identity holds",
+      "Constraint modalities are preserved",
+      "User corrections are detectable",
+      "Multilingual source texts map to same canonical sem"
+    ],
+    "rollbackCriteria": [
+      "Cross-language fingerprint divergence",
+      "Modality or negation lost through pipeline",
+      "Validation rejects valid preference sems"
+    ],
+    "verdict": "PASS"
+  }
+}
