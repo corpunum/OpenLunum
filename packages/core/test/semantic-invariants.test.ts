@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { checkHardInvariants, checkRoleIdentityInvariant, checkNegationInvariant, checkConditionInvariant, checkProtectedLiteralInvariant } from '../src/semantic-invariants.js';
+import { checkHardInvariants, checkRoleIdentityInvariant, checkNegationInvariant, checkObligationPermissionInvariant, checkConditionInvariant, checkProtectedLiteralInvariant } from '../src/semantic-invariants.js';
 import { NearSemanticFingerprintGenerator } from '../src/near-semantic-fingerprints.js';
 import { compareSem } from '../src/compare.js';
 import type { LunumSem } from '../src/types.js';
@@ -128,6 +128,122 @@ test('negation-flip invariant: fires when a matched clause negates differently',
 
 test('negation-flip invariant: does not fire when negation is unchanged', () => {
   assert.deepEqual(checkNegationInvariant(baseSem(), baseSem()), []);
+});
+
+test('obligation-permission invariant: fires when a matched clause modality differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.modality = 'obligation';
+  b.clauses[0]!.modality = 'permission';
+  const firings = checkObligationPermissionInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.equal(firings[0]!.code, 'obligation-permission');
+  assert.match(firings[0]!.detail, /modality differs/u);
+});
+
+test('obligation-permission invariant: does not fire when modality is unchanged', () => {
+  assert.deepEqual(checkObligationPermissionInvariant(baseSem(), baseSem()), []);
+});
+
+test('obligation-permission invariant: does not fire when both are null modality', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.modality = null;
+  b.clauses[0]!.modality = null;
+  assert.deepEqual(checkObligationPermissionInvariant(a, b), []);
+});
+
+test('obligation-permission invariant: fires when modality changes from obligation to null', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.modality = 'obligation';
+  b.clauses[0]!.modality = null;
+  const firings = checkObligationPermissionInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.equal(firings[0]!.code, 'obligation-permission');
+});
+
+test('obligation-permission invariant: detects modality swap in nested condition', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.conditions![0]!.modality = 'necessity';
+  b.clauses[0]!.conditions![0]!.modality = 'possibility';
+  const firings = checkObligationPermissionInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.equal(firings[0]!.code, 'obligation-permission');
+});
+
+test('obligation-permission invariant: detects modality swap in consequence clause', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'approve',
+      roles: { agent: { type: 'actor', id: 'manager' } },
+      negated: false,
+      modality: 'obligation',
+      consequences: [{
+        predicate: 'grant',
+        roles: { agent: { type: 'actor', id: 'system' }, recipient: { type: 'actor', id: 'user' } },
+        negated: false,
+        modality: 'permission'
+      }]
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'approve',
+      roles: { agent: { type: 'actor', id: 'manager' } },
+      negated: false,
+      modality: 'obligation',
+      consequences: [{
+        predicate: 'grant',
+        roles: { agent: { type: 'actor', id: 'system' }, recipient: { type: 'actor', id: 'user' } },
+        negated: false,
+        modality: 'obligation'
+      }]
+    }]
+  } as unknown as LunumSem;
+  const firings = checkObligationPermissionInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.equal(firings[0]!.code, 'obligation-permission');
+  assert.match(firings[0]!.path, /grant/u);
+});
+
+test('obligation-permission invariant: detects multiple modality differences in deep nesting', () => {
+  const a = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'execute',
+      roles: { agent: { type: 'actor', id: 'admin' }, theme: { type: 'concept', id: 'command' } },
+      negated: false,
+      modality: 'obligation',
+      conditions: [{
+        predicate: 'authorized',
+        roles: { subject: { type: 'actor', id: 'user' } },
+        negated: false,
+        modality: 'necessity'
+      }]
+    }]
+  } as unknown as LunumSem;
+  const b = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement',
+    clauses: [{
+      predicate: 'execute',
+      roles: { agent: { type: 'actor', id: 'admin' }, theme: { type: 'concept', id: 'command' } },
+      negated: false,
+      modality: 'permission',
+      conditions: [{
+        predicate: 'authorized',
+        roles: { subject: { type: 'actor', id: 'user' } },
+        negated: false,
+        modality: 'possibility'
+      }]
+    }]
+  } as unknown as LunumSem;
+  const firings = checkObligationPermissionInvariant(a, b);
+  assert.equal(firings.length, 2);
+  assert.ok(firings.every((firing) => firing.code === 'obligation-permission'));
 });
 
 test('condition-change invariant: fires when a condition is added or removed', () => {
@@ -273,6 +389,16 @@ test('checkHardInvariants: identical sems fire nothing', () => {
   assert.deepEqual(result, { hardMismatch: false, invariants: [] });
 });
 
+test('checkHardInvariants: fires obligation-permission invariant on modality mismatch', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.modality = 'obligation';
+  b.clauses[0]!.modality = 'permission';
+  const result = checkHardInvariants(a, b);
+  assert.equal(result.hardMismatch, true);
+  assert.ok(result.invariants.some((inv) => inv.code === 'obligation-permission'));
+});
+
 test('compareSem (near-semantic) hard-fails a role swap regardless of its bag-of-features similarity', () => {
   const generator = new NearSemanticFingerprintGenerator(0.8);
   const a = baseSem();
@@ -294,6 +420,16 @@ test('compareSem (core, exact/feature-recall) reports the same hard invariant fi
   const comparison = compareSem(a, b);
   assert.equal(comparison.hardMismatch, true);
   assert.ok(comparison.hardInvariants.some((firing) => firing.code === 'negation-flip'));
+});
+
+test('compareSem (core) reports obligation-permission mismatch as hard invariant', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.modality = 'obligation';
+  b.clauses[0]!.modality = 'permission';
+  const comparison = compareSem(a, b);
+  assert.equal(comparison.hardMismatch, true);
+  assert.ok(comparison.hardInvariants.some((firing) => firing.code === 'obligation-permission'));
 });
 
 test('all 8 former false-positive role-swap pairs from the #365 sweep are now hard mismatches', () => {

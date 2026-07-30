@@ -1,16 +1,17 @@
 /**
- * Hard semantic invariants (#370, readiness R5.1 / R5.1a / R6.1).
+ * Hard semantic invariants (#370, #462, readiness R5.1 / R5.1a / R6.1).
  *
  * Invariants implemented:
  *  - role-identity (R5.1a): clause-path role-identity binding
  *  - negation-flip (R6.1): matched clause negation differs
  *  - condition-change (R6.1): condition presence/predicates differ
+ *  - obligation-permission (R6.1): matched clause modality differs (obligation/permission swap)
  *  - protected-literal (R6.1): quantity/date value differs in matched clause
  */
 
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 
-export type HardInvariantCode = 'role-identity' | 'negation-flip' | 'condition-change' | 'protected-literal';
+export type HardInvariantCode = 'role-identity' | 'negation-flip' | 'condition-change' | 'obligation-permission' | 'protected-literal';
 
 export interface InvariantFiring {
   code: HardInvariantCode;
@@ -161,6 +162,22 @@ export function checkNegationInvariant(a: LunumSem, b: LunumSem): InvariantFirin
   return firings;
 }
 
+export function checkObligationPermissionInvariant(a: LunumSem, b: LunumSem): InvariantFiring[] {
+  const firings: InvariantFiring[] = [];
+  walkClausePairs(a.clauses, b.clauses, '', (path, clauseA, clauseB) => {
+    const modalityA = clauseA.modality ?? null;
+    const modalityB = clauseB.modality ?? null;
+    if (modalityA !== modalityB) {
+      firings.push({
+        code: 'obligation-permission',
+        path,
+        detail: `predicate '${clauseA.predicate}' modality differs: '${modalityA}' vs '${modalityB}' (obligation/permission swap)`
+      });
+    }
+  });
+  return firings;
+}
+
 export function checkConditionInvariant(a: LunumSem, b: LunumSem): InvariantFiring[] {
   const firings: InvariantFiring[] = [];
   walkClausePairs(a.clauses, b.clauses, '', (path, clauseA, clauseB) => {
@@ -212,6 +229,7 @@ export function checkHardInvariants(a: LunumSem, b: LunumSem): HardInvariantResu
   const invariants = [
     ...checkRoleIdentityInvariant(a, b),
     ...checkNegationInvariant(a, b),
+    ...checkObligationPermissionInvariant(a, b),
     ...checkConditionInvariant(a, b),
     ...checkProtectedLiteralInvariant(a, b)
   ];
