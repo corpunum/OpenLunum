@@ -1,11 +1,15 @@
 /**
- * Tests for the production parse gates module (readiness R2.7, issue #375).
+ * Tests for the production parse gates module (readiness R2.7, issue #458).
  *
  * `checkParseGates` is a pure function over an already-aggregated
  * `ParseResults` summary, so it is tested directly against hand-built
  * fixtures: an all-pass baseline, one failure per individual gate, the
  * safety-invariant floor (which cannot be lowered even via explicit
  * override), and custom config overrides for the other gates.
+ *
+ * `ParseGateEvaluator` is also tested for multi-scope evaluation, including:
+ * all scopes passing, individual scope failures, per-gate aggregation across
+ * scopes, and custom gate config application.
  */
 
 import { test } from 'node:test';
@@ -14,6 +18,7 @@ import {
   DEFAULT_PARSE_GATES,
   SAFETY_INVARIANT_PASS_RATE_FLOOR,
   checkParseGates,
+  ParseGateEvaluator,
   type ParseGateConfig,
   type ParseResults
 } from '../src/parse-gates.js';
@@ -149,4 +154,192 @@ test('checkParseGates: boundary values (exactly at threshold) pass', () => {
   };
   const verdict = checkParseGates(results);
   assert.equal(verdict.passed, true);
+});
+
+// --- Tests for ParseGateEvaluator ---
+
+test('ParseGateEvaluator: default constructor uses DEFAULT_PARSE_GATES', () => {
+  const evaluator = new ParseGateEvaluator();
+  const config = evaluator.getConfig();
+  assert.deepEqual(config, DEFAULT_PARSE_GATES);
+});
+
+test('ParseGateEvaluator: custom config is applied and enforced', () => {
+  const customConfig: ParseGateConfig = { ...DEFAULT_PARSE_GATES, exactMatchRate: 0.99 };
+  const evaluator = new ParseGateEvaluator(customConfig);
+  const config = evaluator.getConfig();
+  assert.equal(config.exactMatchRate, 0.99);
+});
+
+test('ParseGateEvaluator: evaluate() with all-passing scopes returns allPassed = true', () => {
+  const evaluator = new ParseGateEvaluator();
+  const scopedResults = {
+    en: passingResults,
+    el: { ...passingResults, validParseRate: 0.96 }
+  };
+  const report = evaluator.evaluate(scopedResults);
+  assert.equal(report.allPassed, true);
+  assert.equal(report.scopeVerdicts.length, 2);
+  for (const verdict of report.scopeVerdicts) {
+    assert.equal(verdict.passed, true, `expected scope ${verdict.scope} to pass`);
+  }
+});
+
+test('ParseGateEvaluator: single failing scope causes allPassed = false', () => {
+  const evaluator = new ParseGateEvaluator();
+  const scopedResults = {
+    en: passingResults,
+    el: { ...passingResults, validParseRate: 0.5 }
+  };
+  const report = evaluator.evaluate(scopedResults);
+  assert.equal(report.allPassed, false);
+  const enVerdict = report.scopeVerdicts.find((v) => v.scope === 'en');
+  const elVerdict = report.scopeVerdicts.find((v) => v.scope === 'el');
+  assert.equal(enVerdict!.passed, true);
+  assert.equal(elVerdict!.passed, false);
+});
+
+test('ParseGateEvaluator: per-gate aggregation correctly identifies failing gates', () => {
+  const evaluator = new ParseGateEvaluator();
+  const scopedResults = {
+    en: { ...passingResults, validParseRate: 0.5 },
+    el: { ...passingResults, exactMatchRate: 0.5 }
+  };
+  const report = evaluator.evaluate(scopedResults);
+  assert.equal(report.allPassed, false);
+  // validParseRate fails in the 'en' scope.
+  assert.equal(report.gateAggregate.validParseRate, false);
+  // exactMatchRate fails in the 'el' scope.
+  assert.equal(report.gateAggregate.exactMatchRate, false);
+  // Other gates pass in all scopes.
+  assert.equal(report.gateAggregate.featureRecallMin, true);
+  assert.equal(report.gateAggregate.featurePrecisionMin, true);
+  assert.equal(report.gateAggregate.safetyInvariantPassRate, true);
+  assert.equal(report.gateAggregate.fallbackRate, true);
+});
+
+test('ParseGateEvaluator: evaluateScope() returns a single scope verdict', () => {
+  const evaluator = new ParseGateEvaluator();
+  const verdict = evaluator.evaluateScope('en', passingResults);
+  assert.equal(verdict.scope, 'en');
+  assert.equal(verdict.passed, true);
+  assert.equal(verdict.gates.length, 6);
+  for (const gate of verdict.gates) {
+    assert.equal(gate.passed, true);
+  }
+});
+
+test('ParseGateEvaluator: evaluateScope() with failing result returns passed = false', () => {
+  const evaluator = new ParseGateEvaluator();
+  const failingResults = { ...passingResults, validParseRate: 0.5 };
+  const verdict = evaluator.evaluateScope('en', failingResults);
+  assert.equal(verdict.scope, 'en');
+  assert.equal(verdict.passed, false);
+  const gate = verdict.gates.find((g) => g.gate === 'validParseRate');
+  assert.equal(gate!.passed, false);
+});
+
+test('ParseGateEvaluator: custom config affects multi-scope evaluation', () => {
+  const customConfig: ParseGateConfig = { ...DEFAULT_PARSE_GATES, exactMatchRate: 0.99 };
+  const evaluator = new ParseGateEvaluator(customConfig);
+  const scopedResults = {
+    en: passingResults,
+    el: { ...passingResults, exactMatchRate: 0.9 }
+  };
+  const report = evaluator.evaluate(scopedResults);
+  assert.equal(report.allPassed, false);
+  // The 'el' scope should fail because exactMatchRate (0.9) is below the custom threshold (0.99).
+  const elVerdict = report.scopeVerdicts.find((v) => v.scope === 'el');
+  assert.equal(elVerdict!.passed, false);
+  const gate = elVerdict!.gates.find((g) => g.gate === 'exactMatchRate');
+  assert.equal(gate!.passed, false);
+  assert.equal(gate!.threshold, 0.99);
+});
+
+test('ParseGateEvaluator: empty scope map results in allPassed = true', () => {
+  const evaluator = new ParseGateEvaluator();
+  const report = evaluator.evaluate({});
+  assert.equal(report.allPassed, true);
+  assert.equal(report.scopeVerdicts.length, 0);
+});
+
+test('ParseGateEvaluator: multiple failing scopes aggregate correctly', () => {
+  const evaluator = new ParseGateEvaluator();
+  const scopedResults = {
+    en: { ...passingResults, validParseRate: 0.5, featureRecall: 0.5 },
+    el: { ...passingResults, exactMatchRate: 0.5, featurePrecision: 0.5 },
+    id: { ...passingResults, fallbackRate: 0.9 }
+  };
+  const report = evaluator.evaluate(scopedResults);
+  assert.equal(report.allPassed, false);
+  assert.equal(report.scopeVerdicts.length, 3);
+  // Check gate aggregates.
+  assert.equal(report.gateAggregate.validParseRate, false);
+  assert.equal(report.gateAggregate.featureRecallMin, false);
+  assert.equal(report.gateAggregate.exactMatchRate, false);
+  assert.equal(report.gateAggregate.featurePrecisionMin, false);
+  assert.equal(report.gateAggregate.fallbackRate, false);
+  assert.equal(report.gateAggregate.safetyInvariantPassRate, true);
+});
+
+test('ParseGateEvaluator: safety invariant floor is enforced across scopes', () => {
+  const laxConfig: ParseGateConfig = { ...DEFAULT_PARSE_GATES, safetyInvariantPassRate: 0.5 };
+  const evaluator = new ParseGateEvaluator(laxConfig);
+  const scopedResults = {
+    en: { ...passingResults, safetyInvariantPassRate: 0.99 },
+    el: passingResults
+  };
+  const report = evaluator.evaluate(scopedResults);
+  // The 'en' scope should fail because safetyInvariantPassRate (0.99) is below the floor (1.0).
+  assert.equal(report.allPassed, false);
+  const enVerdict = report.scopeVerdicts.find((v) => v.scope === 'en');
+  assert.equal(enVerdict!.passed, false);
+  const gate = enVerdict!.gates.find((g) => g.gate === 'safetyInvariantPassRate');
+  assert.equal(gate!.passed, false);
+  assert.equal(gate!.threshold, SAFETY_INVARIANT_PASS_RATE_FLOOR);
+});
+
+test('ParseGateEvaluator: large-scale multi-scope evaluation', () => {
+  const evaluator = new ParseGateEvaluator();
+  const scopedResults: Record<string, ParseResults> = {};
+  const languages = ['en', 'el', 'id', 'es', 'fr', 'de'];
+
+  // Create results for each language, with one failing.
+  for (const lang of languages) {
+    if (lang === 'id') {
+      scopedResults[lang] = { ...passingResults, exactMatchRate: 0.5 };
+    } else {
+      scopedResults[lang] = passingResults;
+    }
+  }
+
+  const report = evaluator.evaluate(scopedResults);
+  assert.equal(report.allPassed, false);
+  assert.equal(report.scopeVerdicts.length, 6);
+
+  // Check that only 'id' fails.
+  for (const verdict of report.scopeVerdicts) {
+    if (verdict.scope === 'id') {
+      assert.equal(verdict.passed, false);
+    } else {
+      assert.equal(verdict.passed, true);
+    }
+  }
+
+  // Only exactMatchRate should fail globally.
+  assert.equal(report.gateAggregate.exactMatchRate, false);
+  for (const [gate, passed] of Object.entries(report.gateAggregate)) {
+    if (gate !== 'exactMatchRate') {
+      assert.equal(passed, true, `expected gate ${gate} to pass globally`);
+    }
+  }
+});
+
+test('ParseGateEvaluator: config is included in report', () => {
+  const customConfig: ParseGateConfig = { ...DEFAULT_PARSE_GATES, validParseRate: 0.9 };
+  const evaluator = new ParseGateEvaluator(customConfig);
+  const report = evaluator.evaluate({ en: passingResults });
+  assert.equal(report.config.validParseRate, 0.9);
+  // Safety invariant floor should still be enforced.
+  assert.equal(report.config.safetyInvariantPassRate, SAFETY_INVARIANT_PASS_RATE_FLOOR);
 });
