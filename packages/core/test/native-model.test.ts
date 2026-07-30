@@ -5,11 +5,11 @@ import {
   buildParseInstruction,
   buildRealizeInstruction,
   buildModelFamilyProfile,
-  type ModelRendererProfile
+  type LunumNativeProfile
 } from '../src/index.js';
 
 describe('native-model', () => {
-  function buildProfile(overrides: Partial<ModelRendererProfile> = {}): ModelRendererProfile {
+  function buildProfile(overrides: Partial<LunumNativeProfile> = {}): LunumNativeProfile {
     return {
       family: 'native',
       version: '1.0.0',
