@@ -1,6 +1,7 @@
 import { ProfileGenerator, type ProfileResult, type ProfileType } from './profiles.js';
 import type { MeasurementResult } from './tokenizer-measurement.js';
 import type { LunumRecord } from './types.js';
+import { getProfileForModel, listSupportedFamilies, type ModelRendererProfile, type ProfileSelectionRejection } from './model-renderer-profiles.js';
 
 export interface ProfileSelectionResult {
   modelId: string;
@@ -24,10 +25,23 @@ export interface ModelProfileRecommendation {
   notes: string;
 }
 
+/**
+ * Fallback policy for handling missing or unsupported renderer profiles.
+ */
+export enum ProfileFallbackPolicy {
+  /** Reject with error if profile not found */
+  STRICT = 'strict',
+  /** Fall back to default profile (safe) */
+  DEFAULT = 'default',
+  /** Fall back to most compatible profile */
+  COMPATIBLE = 'compatible',
+}
+
 export class ProfileSelector {
   private readonly profileGenerator = new ProfileGenerator();
   private readonly measurements = new Map<string, MeasurementResult[]>();
   private readonly recommendations = new Map<string, ProfileSelectionResult>();
+  private fallbackPolicy: ProfileFallbackPolicy = ProfileFallbackPolicy.DEFAULT;
 
   selectProfile(record: LunumRecord, modelId?: string): ProfileSelectionResult {
     const safeResult = this.profileGenerator.profileSafe(record);
@@ -120,6 +134,91 @@ export class ProfileSelector {
     };
   }
 
+  /**
+   * Set the fallback policy for handling missing or unsupported profiles.
+   */
+  setFallbackPolicy(policy: ProfileFallbackPolicy): void {
+    this.fallbackPolicy = policy;
+  }
+
+  /**
+   * Get the current fallback policy.
+   */
+  getFallbackPolicy(): ProfileFallbackPolicy {
+    return this.fallbackPolicy;
+  }
+
+  /**
+   * Validate that a model environment is supported.
+   * Throws ProfileSelectionRejection if invalid.
+   */
+  validateEnvironment(modelId: string | undefined, requestedProfile?: ProfileType): void {
+    if (!modelId) {
+      return; // Generic models are always allowed
+    }
+
+    const profile = getProfileForModel(modelId);
+    if (!profile) {
+      throw {
+        kind: 'rejection',
+        reason: `Unknown model: ${modelId}. Supported families: ${listSupportedFamilies().join(', ')}`,
+        modelId,
+      } as ProfileSelectionRejection;
+    }
+
+    if (requestedProfile && !profile.acceptedProfiles.includes(requestedProfile)) {
+      throw {
+        kind: 'rejection',
+        reason: `Profile '${requestedProfile}' not supported for model ${modelId}. Accepted: ${profile.acceptedProfiles.join(', ')}`,
+        modelId,
+        environment: `profile:${requestedProfile}`,
+      } as ProfileSelectionRejection;
+    }
+  }
+
+  /**
+   * Select profile with strict validation that rejects unknown environments.
+   * Throws ProfileSelectionRejection in STRICT mode, otherwise applies fallback policy.
+   */
+  selectProfileWithValidation(
+    record: LunumRecord,
+    modelId: string | undefined,
+    requestedProfile?: ProfileType,
+  ): ProfileSelectionResult | ProfileSelectionRejection {
+    try {
+      this.validateEnvironment(modelId, requestedProfile);
+    } catch (error) {
+      const rejection = error as ProfileSelectionRejection;
+      if (this.fallbackPolicy === ProfileFallbackPolicy.STRICT) {
+        throw rejection;
+      }
+
+      // Apply fallback policy
+      if (this.fallbackPolicy === ProfileFallbackPolicy.DEFAULT) {
+        return this.selectProfile(record, modelId);
+      }
+
+      if (this.fallbackPolicy === ProfileFallbackPolicy.COMPATIBLE) {
+        if (modelId) {
+          const profile = getProfileForModel(modelId);
+          if (profile) {
+            return this.selectProfile(record, modelId);
+          }
+        }
+        return this.selectProfile(record);
+      }
+    }
+
+    return this.selectProfile(record, modelId);
+  }
+
+  /**
+   * Get model profile details if available.
+   */
+  getModelProfile(modelId: string): ModelRendererProfile | undefined {
+    return getProfileForModel(modelId);
+  }
+
   private determineBestProfile(
     safe: ProfileResult,
     short: ProfileResult,
@@ -193,4 +292,4 @@ export class ProfileSelector {
   }
 }
 
-export const profileSelectorExports = [ProfileSelector] as const;
+export const profileSelectorExports = [ProfileSelector, ProfileFallbackPolicy] as const;
