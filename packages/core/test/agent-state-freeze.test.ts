@@ -338,8 +338,8 @@ describe('agent-state-freeze', () => {
       const migrated = migrateAgentState01to10(state);
       assert.strictEqual(migrated.stateVersion, 'agent-state/1.0');
       assert.strictEqual(migrated.steps.length, 2);
-      assert.strictEqual(migrated.steps[0].status, 'completed');
-      assert.strictEqual(migrated.steps[1].status, 'running');
+      assert.strictEqual(migrated.steps[0]!.status, 'completed');
+      assert.strictEqual(migrated.steps[1]!.status, 'running');
     });
   });
 
@@ -361,9 +361,9 @@ describe('agent-state-freeze', () => {
 
       const results = replaySteps(state);
       assert.strictEqual(results.length, 1);
-      assert.strictEqual(results[0].stepId, 'step-1');
-      assert.strictEqual(results[0].status, 'replayed');
-      assert.strictEqual(results[0].originalStatus, 'completed');
+      assert.strictEqual(results[0]!.stepId, 'step-1');
+      assert.strictEqual(results[0]!.status, 'replayed');
+      assert.strictEqual(results[0]!.originalStatus, 'completed');
     });
 
     it('skips failed steps', () => {
@@ -383,8 +383,8 @@ describe('agent-state-freeze', () => {
 
       const results = replaySteps(state);
       assert.strictEqual(results.length, 1);
-      assert.strictEqual(results[0].status, 'skipped');
-      assert.strictEqual(results[0].originalStatus, 'failed');
+      assert.strictEqual(results[0]!.status, 'skipped');
+      assert.strictEqual(results[0]!.originalStatus, 'failed');
     });
 
     it('skips abandoned steps', () => {
@@ -404,8 +404,8 @@ describe('agent-state-freeze', () => {
 
       const results = replaySteps(state);
       assert.strictEqual(results.length, 1);
-      assert.strictEqual(results[0].status, 'skipped');
-      assert.strictEqual(results[0].originalStatus, 'abandoned');
+      assert.strictEqual(results[0]!.status, 'skipped');
+      assert.strictEqual(results[0]!.originalStatus, 'abandoned');
     });
 
     it('skips running steps', () => {
@@ -425,8 +425,8 @@ describe('agent-state-freeze', () => {
 
       const results = replaySteps(state);
       assert.strictEqual(results.length, 1);
-      assert.strictEqual(results[0].status, 'skipped');
-      assert.strictEqual(results[0].originalStatus, 'running');
+      assert.strictEqual(results[0]!.status, 'skipped');
+      assert.strictEqual(results[0]!.originalStatus, 'running');
     });
 
     it('skips pending steps', () => {
@@ -446,8 +446,8 @@ describe('agent-state-freeze', () => {
 
       const results = replaySteps(state);
       assert.strictEqual(results.length, 1);
-      assert.strictEqual(results[0].status, 'skipped');
-      assert.strictEqual(results[0].originalStatus, 'pending');
+      assert.strictEqual(results[0]!.status, 'skipped');
+      assert.strictEqual(results[0]!.originalStatus, 'pending');
     });
 
     it('handles mixed step statuses', () => {
@@ -485,9 +485,9 @@ describe('agent-state-freeze', () => {
 
       const results = replaySteps(state);
       assert.strictEqual(results.length, 3);
-      assert.strictEqual(results[0].status, 'replayed');
-      assert.strictEqual(results[1].status, 'skipped');
-      assert.strictEqual(results[2].status, 'skipped');
+      assert.strictEqual(results[0]!.status, 'replayed');
+      assert.strictEqual(results[1]!.status, 'skipped');
+      assert.strictEqual(results[2]!.status, 'skipped');
     });
   });
 
@@ -610,7 +610,7 @@ describe('agent-state-freeze', () => {
       });
 
       const { recoveredState } = recoverFromInterruption(state);
-      assert.strictEqual(recoveredState.steps[0].status, 'pending');
+      assert.strictEqual(recoveredState.steps[0]!.status, 'pending');
     });
 
     it('abandons abandoned steps by changing status to abandoned', () => {
@@ -629,7 +629,7 @@ describe('agent-state-freeze', () => {
       });
 
       const { recoveredState } = recoverFromInterruption(state);
-      assert.strictEqual(recoveredState.steps[0].status, 'abandoned');
+      assert.strictEqual(recoveredState.steps[0]!.status, 'abandoned');
     });
 
     it('preserves non-running steps', () => {
@@ -657,8 +657,8 @@ describe('agent-state-freeze', () => {
       });
 
       const { recoveredState } = recoverFromInterruption(state);
-      assert.strictEqual(recoveredState.steps[0].status, 'completed');
-      assert.strictEqual(recoveredState.steps[1].status, 'abandoned');
+      assert.strictEqual(recoveredState.steps[0]!.status, 'completed');
+      assert.strictEqual(recoveredState.steps[1]!.status, 'abandoned');
     });
 
     it('returns false for recovered when no running steps', () => {
