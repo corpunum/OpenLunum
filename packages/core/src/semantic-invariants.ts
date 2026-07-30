@@ -1,15 +1,16 @@
 /**
- * Hard semantic invariants (#370, #462, readiness R5.1 / R5.1a / R6.1).
+ * Hard semantic invariants (#370, #462, readiness R5.1 / R5.1a / R6.1 / R6.2).
  *
  * Invariants implemented:
  *  - role-identity (R5.1a): clause-path role-identity binding
  *  - negation-flip (R6.1): matched clause negation differs
  *  - condition-change (R6.1): condition presence/predicates differ
  *  - obligation-permission (R6.1): matched clause modality differs (obligation/permission swap)
- *  - protected-literal (R6.1): quantity/date value differs in matched clause
+ *  - protected-literal (R6.1 / R6.2): quantity/date/identifier/range/url/path/structured-ref value differs in matched clause
  */
 
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
+import { defaultRegistry } from './protected-literal-registry.js';
 
 export type HardInvariantCode = 'role-identity' | 'negation-flip' | 'condition-change' | 'obligation-permission' | 'protected-literal';
 
@@ -33,28 +34,10 @@ function extractFillerId(term: LunumTerm | undefined): string | undefined {
   return typeof term.id === 'string' ? term.id : undefined;
 }
 
-const PROTECTED_LITERAL_TYPES = new Set(['quantity', 'date', 'identifier', 'range', 'url', 'path']);
-
 function extractProtectedLiteral(term: LunumTerm | undefined): { type: string; token: string } | undefined {
-  if (!isTermObject(term)) return undefined;
-  const obj = term as Record<string, unknown>;
-  const type = obj.type;
-  if (typeof type !== 'string' || !PROTECTED_LITERAL_TYPES.has(type)) return undefined;
-  switch (type) {
-    case 'quantity':
-      return { type, token: JSON.stringify({ value: obj.value, unit: obj.unit ?? null }) };
-    case 'date':
-      return { type, token: JSON.stringify({ value: obj.value }) };
-    case 'identifier':
-      return { type, token: JSON.stringify({ id: obj.id ?? null, value: obj.value ?? null }) };
-    case 'range':
-      return { type, token: JSON.stringify({ min: obj.min ?? obj.value, max: obj.max ?? null, unit: obj.unit ?? null }) };
-    case 'url':
-    case 'path':
-      return { type, token: JSON.stringify({ value: obj.value ?? obj.ref ?? null }) };
-    default:
-      return undefined;
-  }
+  if (term === undefined) return undefined;
+  const detected = defaultRegistry.detect(term);
+  return detected ? { type: detected.type, token: detected.token } : undefined;
 }
 
 function walkClauses(clauses: LunumClause[] | undefined, pathPrefix: string, visit: (path: string, clause: LunumClause) => void): void {
