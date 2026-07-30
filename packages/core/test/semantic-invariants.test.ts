@@ -766,3 +766,77 @@ test('role-identity invariant integration: hard-gates compareSem on deep-nested 
   assert.equal(comparison.hardMismatch, true, 'should report hard mismatch');
   assert.ok(comparison.hardInvariants.some((inv) => inv.code === 'role-identity'), 'should include role-identity firing');
 });
+
+// ============================================
+// STRUCTURED-REF TESTS (R6.2 readiness)
+// ============================================
+
+test('protected-literal invariant: fires when structured-ref section reference differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.reference = { type: 'structured-ref', value: '§3.2' } as never;
+  b.clauses[0]!.roles.reference = { type: 'structured-ref', value: '§3.3' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.equal(firings[0]!.code, 'protected-literal');
+  assert.match(firings[0]!.detail, /structured-ref/u);
+});
+
+test('protected-literal invariant: fires when version reference differs', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.version = { type: 'structured-ref', value: 'v2.1.0' } as never;
+  b.clauses[0]!.roles.version = { type: 'structured-ref', value: 'v2.2.0' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+  assert.equal(firings[0]!.code, 'protected-literal');
+});
+
+test('protected-literal invariant: does not fire when structured-ref matches', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.reference = { type: 'structured-ref', value: '§4.5.6' } as never;
+  b.clauses[0]!.roles.reference = { type: 'structured-ref', value: '§4.5.6' } as never;
+  assert.deepEqual(checkProtectedLiteralInvariant(a, b), []);
+});
+
+test('protected-literal invariant: detects version pre-release alteration', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.release = { type: 'structured-ref', value: 'v1.0.0-rc.1' } as never;
+  b.clauses[0]!.roles.release = { type: 'structured-ref', value: 'v1.0.0-rc.2' } as never;
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1);
+});
+
+// ============================================
+// COMBINED LITERAL TYPE TESTS (R6.2)
+// ============================================
+
+test('protected-literal invariant: handles all expanded categories in single sem', () => {
+  const a = baseSem();
+  const b = baseSem();
+
+  // Add multiple protected literal types to same clause
+  a.clauses[0]!.roles.cost = { type: 'quantity', value: 500, unit: 'usd' } as never;
+  a.clauses[0]!.roles.deadline = { type: 'date', value: '2026-08-15' } as never;
+  a.clauses[0]!.roles.reference = { type: 'structured-ref', value: '§2.1' } as never;
+
+  b.clauses[0]!.roles.cost = { type: 'quantity', value: 500, unit: 'usd' } as never;
+  b.clauses[0]!.roles.deadline = { type: 'date', value: '2026-08-15' } as never;
+  b.clauses[0]!.roles.reference = { type: 'structured-ref', value: '§2.2' } as never;
+
+  const firings = checkProtectedLiteralInvariant(a, b);
+  assert.equal(firings.length, 1, 'only the altered reference should fire');
+  assert.match(firings[0]!.detail, /structured-ref/u);
+});
+
+test('checkHardInvariants: structured-ref mismatch is caught', () => {
+  const a = baseSem();
+  const b = baseSem();
+  a.clauses[0]!.roles.ref = { type: 'structured-ref', value: 'v1.0.0' } as never;
+  b.clauses[0]!.roles.ref = { type: 'structured-ref', value: 'v2.0.0' } as never;
+  const result = checkHardInvariants(a, b);
+  assert.equal(result.hardMismatch, true);
+  assert.ok(result.invariants.some((inv) => inv.code === 'protected-literal'));
+});
