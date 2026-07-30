@@ -1,0 +1,16 @@
+{
+  "id": "cross-language-retrieval-v1",
+  "path": "datasets/dev/cross-language-retrieval-v1.jsonl",
+  "sha256": "349f7bd45c49d0fb6dad6fed2bbd450fdd997b81485d3b29dce3ca84ba9144a4",
+  "items": 66,
+  "languages": [
+    "EN",
+    "EL",
+    "ES",
+    "JA",
+    "ZH",
+    "FR"
+  ],
+  "status": "development",
+  "warning": "Cross-language retrieval benchmark v1 for R9.1 and R9.2 evaluation."
+}
