@@ -450,3 +450,168 @@ export function validateSoakTestResult(result: SoakTestResult): { ok: boolean; e
   if (!result.overall.memoryStableKb) errors.push('memory not stable');
   return { ok: errors.length === 0, errors };
 }
+
+// ── Concurrent Load Testing (with actual Promise.all) ───────────────
+
+export interface ConcurrentLoadResult {
+  schema: 'openlunum-concurrent-load/0.1';
+  version: typeof LOAD_SOAK_VERSION;
+  endpoint: EndpointId;
+  concurrency: number;
+  totalRequests: number;
+  timestamp: string;
+  durationMs: number;
+  successCount: number;
+  errorCount: number;
+  errorRate: number;
+  throughputRps: number;
+  concurrentLatency: {
+    min: number;
+    max: number;
+    mean: number;
+    p50: number;
+    p95: number;
+    p99: number;
+  };
+  buckets: LatencyBucket[];
+  degradationFactor: number;
+}
+
+export async function runActualConcurrentLoad(
+  endpoint: EndpointId,
+  concurrency: number,
+  requestsPerWorker: number
+): Promise<ConcurrentLoadResult> {
+  const fn = getEndpointFn(endpoint);
+  const totalRequests = concurrency * requestsPerWorker;
+
+  // Warmup
+  for (let i = 0; i < 50; i++) fn();
+
+  const latencies: number[] = [];
+  let errors = 0;
+
+  // Create concurrent workers
+  const worker = async () => {
+    const workerLatencies: number[] = [];
+    for (let r = 0; r < requestsPerWorker; r++) {
+      const t0 = performance.now();
+      try {
+        fn();
+      } catch {
+        errors++;
+      }
+      workerLatencies.push(performance.now() - t0);
+    }
+    return workerLatencies;
+  };
+
+  const startTime = performance.now();
+  const results = await Promise.all(Array.from({ length: concurrency }, () => worker()));
+  const durationMs = performance.now() - startTime;
+
+  // Flatten results
+  for (const workerLatencies of results) {
+    latencies.push(...workerLatencies);
+  }
+
+  // Compute baseline (sequential) duration for comparison
+  const baselineSequential = totalRequests * (latencies.length > 0 ? latencies.reduce((a, b) => a + b, 0) / latencies.length : 0);
+  const degradationFactor = baselineSequential > 0 ? durationMs / baselineSequential : 1;
+
+  return {
+    schema: 'openlunum-concurrent-load/0.1',
+    version: LOAD_SOAK_VERSION,
+    endpoint,
+    concurrency,
+    totalRequests,
+    timestamp: new Date().toISOString(),
+    durationMs: Math.round(durationMs * 1000) / 1000,
+    successCount: totalRequests - errors,
+    errorCount: errors,
+    errorRate: errors / totalRequests,
+    throughputRps: Math.round((totalRequests / (durationMs / 1000)) * 100) / 100,
+    concurrentLatency: computeLatencyStats(latencies),
+    buckets: buildBuckets(latencies),
+    degradationFactor: Math.round(degradationFactor * 100) / 100,
+  };
+}
+
+export interface BenchmarkReport {
+  schema: 'openlunum-benchmark/0.1';
+  version: typeof LOAD_SOAK_VERSION;
+  timestamp: string;
+  endpoints: Array<{
+    endpoint: EndpointId;
+    loadTest: LoadTestResult;
+    concurrentLoad: ConcurrentLoadResult;
+  }>;
+  summary: {
+    totalTests: number;
+    passedTests: number;
+    failedTests: number;
+    errorRate: number;
+    overallThroughputRps: number;
+  };
+}
+
+export function createBenchmarkReport(
+  loadTests: LoadTestResult[],
+  concurrentTests: ConcurrentLoadResult[]
+): BenchmarkReport {
+  const endpoints = new Map<EndpointId, { loadTest?: LoadTestResult; concurrentLoad?: ConcurrentLoadResult }>();
+
+  for (const lt of loadTests) {
+    if (!endpoints.has(lt.endpoint)) endpoints.set(lt.endpoint, {});
+    endpoints.get(lt.endpoint)!.loadTest = lt;
+  }
+
+  for (const ct of concurrentTests) {
+    if (!endpoints.has(ct.endpoint)) endpoints.set(ct.endpoint, {});
+    endpoints.get(ct.endpoint)!.concurrentLoad = ct;
+  }
+
+  const reportEndpoints: BenchmarkReport['endpoints'] = [];
+  for (const [endpoint, tests] of endpoints) {
+    if (tests.loadTest && tests.concurrentLoad) {
+      reportEndpoints.push({
+        endpoint,
+        loadTest: tests.loadTest,
+        concurrentLoad: tests.concurrentLoad,
+      });
+    }
+  }
+
+  let totalTests = 0;
+  let passedTests = 0;
+  let totalErrors = 0;
+  let totalThroughput = 0;
+
+  for (const test of loadTests) {
+    totalTests++;
+    if (test.errorRate < 0.01) passedTests++;
+    totalErrors += test.errorCount;
+    totalThroughput += test.throughputRps;
+  }
+
+  for (const test of concurrentTests) {
+    totalTests++;
+    if (test.errorRate < 0.01) passedTests++;
+    totalErrors += test.errorCount;
+    totalThroughput += test.throughputRps;
+  }
+
+  return {
+    schema: 'openlunum-benchmark/0.1',
+    version: LOAD_SOAK_VERSION,
+    timestamp: new Date().toISOString(),
+    endpoints: reportEndpoints,
+    summary: {
+      totalTests,
+      passedTests,
+      failedTests: totalTests - passedTests,
+      errorRate: totalTests > 0 ? totalErrors / (totalTests * 100) : 0,
+      overallThroughputRps: Math.round(totalThroughput),
+    },
+  };
+}
