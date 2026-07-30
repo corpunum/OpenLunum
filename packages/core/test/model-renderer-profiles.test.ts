@@ -1,105 +1,139 @@
-import test from 'node:test';
+import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  getAcceptedRendererProfile,
-  listAcceptedRendererProfiles,
-  resolveProfileForModel,
-  isProfileAccepted,
-  ACCEPTED_PROFILES_REGISTRY_SIZE,
-  type AcceptedRendererProfile,
+  RENDERER_PROFILES_VERSION,
+  MODEL_RENDERER_PROFILES,
+  getProfileForModel,
+  listSupportedFamilies,
+  getProfilesByFamily,
+  type ModelRendererProfile,
 } from '../src/model-renderer-profiles.js';
-import type { ModelIdentity } from '../src/model-identity.js';
 
 const REQUIRED_FAMILIES = ['qwen', 'llama', 'gemma'];
+const VALID_RENDERER_PROFILES = ['safe', 'short', 'tight'] as const;
 
-test('registry has profiles for Qwen, Llama, Gemma', () => {
-  assert.ok(ACCEPTED_PROFILES_REGISTRY_SIZE >= 3);
-  for (const family of REQUIRED_FAMILIES) {
-    const profile = getAcceptedRendererProfile(family);
-    assert.ok(profile, `missing profile for ${family}`);
-    assert.equal(profile.family, family);
-  }
-});
+describe('ModelRendererProfile', () => {
+  it('RENDERER_PROFILES_VERSION is set to 1.0.0', () => {
+    assert.equal(RENDERER_PROFILES_VERSION, '1.0.0');
+  });
 
-test('listAcceptedRendererProfiles returns all registered profiles', () => {
-  const profiles = listAcceptedRendererProfiles();
-  assert.equal(profiles.length, ACCEPTED_PROFILES_REGISTRY_SIZE);
-  const families = new Set(profiles.map(p => p.family));
-  for (const family of REQUIRED_FAMILIES) {
-    assert.ok(families.has(family), `missing ${family} in list`);
-  }
-});
+  it('MODEL_RENDERER_PROFILES has at least 8 profiles', () => {
+    assert.ok(MODEL_RENDERER_PROFILES.length >= 8);
+  });
 
-test('each profile has tokenizer identity', () => {
-  const profiles = listAcceptedRendererProfiles();
-  for (const profile of profiles) {
-    assert.ok(profile.tokenizer, `${profile.family} missing tokenizer`);
-    assert.ok(profile.tokenizer.model, `${profile.family} missing tokenizer.model`);
-    assert.ok(profile.tokenizer.vocabSize > 0, `${profile.family} vocabSize must be positive`);
-  }
-});
+  it('all three families (qwen, llama, gemma) are covered', () => {
+    const families = listSupportedFamilies();
+    for (const family of REQUIRED_FAMILIES) {
+      assert.ok(families.includes(family), `missing family: ${family}`);
+    }
+    assert.equal(families.length, REQUIRED_FAMILIES.length);
+  });
 
-test('each profile has retention baseline', () => {
-  const profiles = listAcceptedRendererProfiles();
-  for (const profile of profiles) {
-    assert.ok(profile.retentionBaseline, `${profile.family} missing retentionBaseline`);
-    assert.ok(profile.retentionBaseline.safePreservation >= 0.9);
-    assert.ok(profile.retentionBaseline.shortPreservation >= 0.8);
-    assert.ok(profile.retentionBaseline.tightPreservation >= 0.7);
-  }
-});
+  it('getProfileForModel returns correct profile for known models', () => {
+    const qwenProfile = getProfileForModel('Qwen3-Coder-30B-A3B');
+    assert.ok(qwenProfile);
+    assert.equal(qwenProfile.modelFamily, 'qwen');
+    assert.equal(qwenProfile.modelId, 'Qwen3-Coder-30B-A3B');
+    assert.equal(qwenProfile.quantization, 'Q4_K_M');
+    assert.equal(qwenProfile.rendererProfile, 'short');
 
-test('each profile has at least one accepted profile type', () => {
-  const profiles = listAcceptedRendererProfiles();
-  for (const profile of profiles) {
-    assert.ok(profile.acceptedProfiles.length > 0, `${profile.family} has no accepted profiles`);
-    assert.ok(profile.acceptedProfiles.includes(profile.defaultProfile),
-      `${profile.family} default profile not in accepted list`);
-  }
-});
+    const llamaProfile = getProfileForModel('Llama-3.1-8B');
+    assert.ok(llamaProfile);
+    assert.equal(llamaProfile.modelFamily, 'llama');
+    assert.equal(llamaProfile.modelId, 'Llama-3.1-8B');
 
-test('resolveProfileForModel returns profile for known family', () => {
-  const identity: ModelIdentity = { family: 'qwen', name: 'Qwen3-30B-A3B' };
-  const result = resolveProfileForModel(identity);
-  assert.ok(result);
-  assert.equal(result.profile.family, 'qwen');
-  assert.equal(result.recommendedType, 'short');
-});
+    const gemmaProfile = getProfileForModel('Gemma-2-27B');
+    assert.ok(gemmaProfile);
+    assert.equal(gemmaProfile.modelFamily, 'gemma');
+  });
 
-test('resolveProfileForModel returns undefined for unknown family', () => {
-  const identity: ModelIdentity = { family: 'unknown', name: 'SomeModel' };
-  const result = resolveProfileForModel(identity);
-  assert.equal(result, undefined);
-});
+  it('getProfileForModel returns undefined for unknown models', () => {
+    const unknown = getProfileForModel('UnknownModel-999B');
+    assert.equal(unknown, undefined);
+  });
 
-test('isProfileAccepted checks profile type against family', () => {
-  assert.equal(isProfileAccepted('qwen', 'tight'), true);
-  assert.equal(isProfileAccepted('llama', 'tight'), false);
-  assert.equal(isProfileAccepted('llama', 'safe'), true);
-  assert.equal(isProfileAccepted('unknown', 'safe'), false);
-});
+  it('listSupportedFamilies includes all three families', () => {
+    const families = listSupportedFamilies();
+    for (const family of REQUIRED_FAMILIES) {
+      assert.ok(families.includes(family));
+    }
+  });
 
-test('getAcceptedRendererProfile is case-insensitive', () => {
-  assert.ok(getAcceptedRendererProfile('Qwen'));
-  assert.ok(getAcceptedRendererProfile('LLAMA'));
-  assert.ok(getAcceptedRendererProfile('Gemma'));
-});
+  it('each profile references a valid renderer profile name', () => {
+    for (const profile of MODEL_RENDERER_PROFILES) {
+      assert.ok(
+        VALID_RENDERER_PROFILES.includes(profile.rendererProfile),
+        `invalid renderer profile: ${profile.rendererProfile}`
+      );
+    }
+  });
 
-test('Qwen profile uses chatml template and qwen2 tokenizer', () => {
-  const profile = getAcceptedRendererProfile('qwen')!;
-  assert.equal(profile.tokenizer.model, 'qwen2');
-  assert.equal(profile.tokenizer.chatTemplate, 'chatml');
-  assert.equal(profile.tokenizer.vocabSize, 151936);
-});
+  it('Qwen profiles use chatml template', () => {
+    const qwenProfiles = getProfilesByFamily('qwen');
+    assert.ok(qwenProfiles.length > 0);
+    for (const profile of qwenProfiles) {
+      assert.equal(profile.chatTemplate, 'chatml', `${profile.modelId} should use chatml`);
+    }
+  });
 
-test('Llama profile uses gpt2 tokenizer', () => {
-  const profile = getAcceptedRendererProfile('llama')!;
-  assert.equal(profile.tokenizer.model, 'gpt2');
-  assert.equal(profile.tokenizer.vocabSize, 128256);
-});
+  it('Llama profiles use llama3 template', () => {
+    const llamaProfiles = getProfilesByFamily('llama');
+    assert.ok(llamaProfiles.length > 0);
+    for (const profile of llamaProfiles) {
+      assert.equal(profile.chatTemplate, 'llama3', `${profile.modelId} should use llama3`);
+    }
+  });
 
-test('Gemma profile uses llama-bpe tokenizer with large vocab', () => {
-  const profile = getAcceptedRendererProfile('gemma')!;
-  assert.equal(profile.tokenizer.model, 'llama-bpe');
-  assert.equal(profile.tokenizer.vocabSize, 256000);
+  it('Gemma profiles use gemma template', () => {
+    const gemmaProfiles = getProfilesByFamily('gemma');
+    assert.ok(gemmaProfiles.length > 0);
+    for (const profile of gemmaProfiles) {
+      assert.equal(profile.chatTemplate, 'gemma', `${profile.modelId} should use gemma`);
+    }
+  });
+
+  it('all profiles have tokenEfficiency between 0 and 1', () => {
+    for (const profile of MODEL_RENDERER_PROFILES) {
+      assert.ok(profile.tokenEfficiency >= 0 && profile.tokenEfficiency <= 1,
+        `${profile.modelId} tokenEfficiency must be 0-1, got ${profile.tokenEfficiency}`);
+    }
+  });
+
+  it('all profiles have ISO 8601 verifiedAt timestamp', () => {
+    const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+    for (const profile of MODEL_RENDERER_PROFILES) {
+      assert.ok(iso8601Regex.test(profile.verifiedAt),
+        `${profile.modelId} verifiedAt must be ISO 8601, got ${profile.verifiedAt}`);
+    }
+  });
+
+  it('Qwen family has expected models', () => {
+    const qwenProfiles = getProfilesByFamily('qwen');
+    const modelIds = qwenProfiles.map(p => p.modelId);
+    assert.ok(modelIds.includes('Qwen3-Coder-30B-A3B'));
+    assert.ok(modelIds.includes('Qwen3.6-35B-A3B'));
+    assert.ok(modelIds.includes('Qwen3.5-4B-MTP'));
+  });
+
+  it('Llama family has expected models', () => {
+    const llamaProfiles = getProfilesByFamily('llama');
+    const modelIds = llamaProfiles.map(p => p.modelId);
+    assert.ok(modelIds.includes('Llama-3.3-70B'));
+    assert.ok(modelIds.includes('Llama-3.1-8B'));
+  });
+
+  it('Gemma family has expected models', () => {
+    const gemmaProfiles = getProfilesByFamily('gemma');
+    const modelIds = gemmaProfiles.map(p => p.modelId);
+    assert.ok(modelIds.includes('Gemma-2-27B'));
+    assert.ok(modelIds.includes('Gemma-2-9B'));
+    assert.ok(modelIds.includes('SuperGemma4-E4B'));
+  });
+
+  it('all profiles use Q4_K_M quantization', () => {
+    for (const profile of MODEL_RENDERER_PROFILES) {
+      assert.equal(profile.quantization, 'Q4_K_M',
+        `${profile.modelId} should use Q4_K_M quantization`);
+    }
+  });
 });

@@ -27,8 +27,8 @@ export interface InstructionTemplate {
   constraints: string[];
 }
 
-/** A renderer profile optimized for a specific model family. */
-export interface ModelRendererProfile {
+/** A Lunum-native renderer profile optimized for a specific model family. */
+export interface LunumNativeProfile {
   family: ModelFamily;
   version: string;
   tokenizerId: string;
@@ -47,7 +47,7 @@ export interface FallbackProfile {
 }
 
 /** Validate a model renderer profile. */
-export function validateModelProfile(profile: ModelRendererProfile): { ok: boolean; errors: string[] } {
+export function validateModelProfile(profile: LunumNativeProfile): { ok: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!profile.family) errors.push('missing family');
@@ -110,7 +110,7 @@ export function buildModelFamilyProfile(
   version: string,
   tokenizerId: string,
   maxContextTokens: number
-): ModelRendererProfile {
+): LunumNativeProfile {
   const isNative = family === 'native';
 
   const mappings: LunumTokenMapping[] = isNative
