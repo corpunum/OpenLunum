@@ -349,3 +349,145 @@ test('clause types preserve predicate and roles structure', () => {
   assert.equal(typeof v01.roles, 'object');
   assert.equal(typeof v02.roles, 'object');
 });
+
+// ── Scorer explanation tests (#446) ─────────────────────────────────
+
+test('explanation: perfect match includes all matched features', () => {
+  const expected: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } } }]
+  };
+  const actual = expected;
+  const comparison = compareSem(expected, actual, { explain: true });
+  assert.ok(comparison.explanation);
+  // world, kind, predicate, negated, role = 5 features
+  assert.equal(comparison.explanation!.features.matched.length, 5);
+  assert.equal(comparison.explanation!.features.missing.length, 0);
+  assert.equal(comparison.explanation!.features.extra.length, 0);
+  assert.equal(comparison.explanation!.invariants.length, 0);
+  assert.match(comparison.explanation!.summary, /Perfect match/);
+});
+
+test('explanation: partial match with missing features', () => {
+  const expected: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [
+      { predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } } }
+    ]
+  };
+  const actual: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } } }]
+  };
+  const comparison = compareSem(expected, actual, { explain: true });
+  assert.ok(comparison.explanation);
+  assert.ok(comparison.explanation!.features.missing.length > 0);
+  assert.equal(comparison.explanation!.features.extra.length, 0);
+  assert.match(comparison.explanation!.summary, /missing some expected features/);
+});
+
+test('explanation: extra features detected', () => {
+  const expected: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'instruction',
+    clauses: [{ predicate: 'enable', roles: { theme: { type: 'feature', id: 'dark_mode' } } }]
+  };
+  const actual: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'instruction',
+    clauses: [
+      { predicate: 'enable', roles: { theme: { type: 'feature', id: 'dark_mode' } } },
+      { predicate: 'disable', roles: { theme: { type: 'feature', id: 'notifications' } } }
+    ]
+  };
+  const comparison = compareSem(expected, actual, { explain: true });
+  assert.ok(comparison.explanation);
+  assert.equal(comparison.explanation!.features.extra.length, 3); // extra features from extra clause: predicate, negated, role
+  assert.match(comparison.explanation!.summary, /extra features/);
+});
+
+test('explanation: complete mismatch', () => {
+  const expected: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } } }]
+  };
+  const actual: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'tool',
+    kind: 'instruction',
+    clauses: [{ predicate: 'enable', roles: { theme: { type: 'feature', id: 'logging' } } }]
+  };
+  const comparison = compareSem(expected, actual, { explain: true });
+  assert.ok(comparison.explanation);
+  assert.ok(comparison.explanation!.features.missing.length > 0);
+  assert.ok(comparison.explanation!.features.extra.length > 0);
+  assert.match(comparison.explanation!.summary, /Partial match/);
+});
+
+test('explanation: invariant violations included', () => {
+  const expected: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'conditional_instruction',
+    clauses: [{ predicate: 'enable', roles: { theme: { type: 'feature', id: 'power_saving' } } }]
+  };
+  const actual: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'conditional_instruction',
+    clauses: [{ ...expected.clauses[0]!, negated: true }]
+  };
+  const comparison = compareSem(expected, actual, { explain: true });
+  assert.ok(comparison.explanation);
+  assert.ok(comparison.explanation!.invariants.length > 0);
+  assert.match(comparison.explanation!.summary, /invariants are violated/);
+});
+
+test('explanation: score contributions explained', () => {
+  const expected: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [
+      { predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'detail' } } }
+    ]
+  };
+  const actual: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } } }]
+  };
+  const comparison = compareSem(expected, actual, { explain: true });
+  assert.ok(comparison.explanation);
+  assert.ok(comparison.explanation!.scores.featureRecallReason);
+  assert.ok(comparison.explanation!.scores.featurePrecisionReason);
+  assert.match(comparison.explanation!.scores.featureRecallReason, /expected/);
+  assert.match(comparison.explanation!.scores.featurePrecisionReason, /actual/);
+});
+
+test('explanation: only produced when requested (no overhead on normal path)', () => {
+  const expected: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } } }]
+  };
+  const actual = expected;
+  const comparisonWithout = compareSem(expected, actual);
+  const comparisonWith = compareSem(expected, actual, { explain: true });
+  assert.strictEqual(comparisonWithout.explanation, undefined);
+  assert.ok(comparisonWith.explanation);
+  assert.equal(comparisonWithout.featureRecall, comparisonWith.featureRecall);
+  assert.equal(comparisonWithout.featurePrecision, comparisonWith.featurePrecision);
+});
