@@ -1,5 +1,38 @@
-export const CLI_CONTRACT_VERSION = '0.1.0' as const;
+/**
+ * OpenLunum CLI Contract (R11.1, R11.2, R11.3)
+ *
+ * This module exports stable, versioned types for CLI commands, exit codes,
+ * and structured error/success output. All types are frozen and semver-stable.
+ */
 
+export const CLI_CONTRACT_VERSION = '1.0.0' as const;
+
+/**
+ * CliCommand: Union of all supported CLI commands
+ */
+export type CliCommand = 'inspect' | 'encode' | 'compile' | 'migrate' | 'pipeline' | 'quality-gate' | 'process-jsonl' | 'contract';
+
+/**
+ * CliExitCode: Enumerated exit codes with stable numeric values
+ * - SUCCESS: 0 (successful execution)
+ * - VALIDATION_ERROR: 1 (input or record validation failed)
+ * - IO_ERROR: 2 (file system or I/O error)
+ * - INTERNAL_ERROR: 3 (internal/runtime error)
+ * - USAGE_ERROR: 4 (invalid CLI usage)
+ */
+export const CliExitCode = {
+  SUCCESS: 0,
+  VALIDATION_ERROR: 1,
+  IO_ERROR: 2,
+  INTERNAL_ERROR: 3,
+  USAGE_ERROR: 4,
+} as const;
+
+export type CliExitCodeValue = typeof CliExitCode[keyof typeof CliExitCode];
+
+/**
+ * Legacy alias for backwards compatibility
+ */
 export const EXIT_CODES = {
   SUCCESS: 0,
   RUNTIME_ERROR: 1,
@@ -9,6 +42,55 @@ export const EXIT_CODES = {
 } as const;
 
 export type ExitCode = typeof EXIT_CODES[keyof typeof EXIT_CODES];
+
+/**
+ * CliErrorOutput: Structured error output with optional details
+ */
+export interface CliErrorOutput {
+  readonly code: CliExitCodeValue;
+  readonly command: string;
+  readonly message: string;
+  readonly details?: readonly string[];
+}
+
+/**
+ * CliSuccessOutput: Structured success output with command and data payload
+ */
+export interface CliSuccessOutput {
+  readonly code: 0;
+  readonly command: string;
+  readonly data: unknown;
+}
+
+/**
+ * formatCliError: Formats a CliErrorOutput into human-readable text
+ */
+export function formatCliError(error: CliErrorOutput): string {
+  const lines: string[] = [];
+  lines.push(`Error [${error.code}]: ${error.message}`);
+  if (error.command) {
+    lines.push(`Command: ${error.command}`);
+  }
+  if (error.details && error.details.length > 0) {
+    lines.push('Details:');
+    for (const detail of error.details) {
+      lines.push(`  - ${detail}`);
+    }
+  }
+  return lines.join('\n');
+}
+
+/**
+ * formatCliSuccess: Formats a CliSuccessOutput into human-readable text
+ */
+export function formatCliSuccess(output: CliSuccessOutput): string {
+  const lines: string[] = [];
+  lines.push(`Success: ${output.command}`);
+  if (output.data !== null && output.data !== undefined) {
+    lines.push(JSON.stringify(output.data, null, 2));
+  }
+  return lines.join('\n');
+}
 
 export interface CLICommandSpec {
   name: string;
