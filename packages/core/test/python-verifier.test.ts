@@ -1,15 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { resolve } from 'node:path';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const repoRoot = resolve(__dirname, '..', '..', '..', '..');
 
 test('python independent verifier validates canonical bytes and fingerprints', async () => {
-  const verifierPath = resolve(process.cwd(), '..', '..', 'scripts', 'independent-verifier.py');
+  const verifierPath = resolve(repoRoot, 'scripts', 'independent-verifier.py');
 
   // Run the Python verifier as subprocess
   const result = await new Promise<{ code: number; stdout: string; stderr: string }>((resolve_promise) => {
     const proc = spawn('python3', [verifierPath], {
-      cwd: resolve(process.cwd(), '..', '..'),
+      cwd: repoRoot,
       stdio: ['ignore', 'pipe', 'pipe']
     });
 
