@@ -1,0 +1,227 @@
+{
+  "schemaVersion": "canonical-golden-vectors/1.0",
+  "description": "Golden vectors for testing canonical byte and fingerprint computation",
+  "vectors": [
+    {
+      "description": "simple clause",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "concise_answers"
+              }
+            }
+          }
+        ]
+      },
+      "canonicalJson": "{\"clauses\":[{\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"},\"theme\":{\"id\":\"concise_answers\",\"type\":\"concept\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "digest": "0af498974b6b50f488eea6784add3e6f08b61f39aacd6a9c259292101cc5471c",
+      "fingerprint": "lfp:0.1:sha256:0af498974b6b50f488eea6784add3e6f"
+    },
+    {
+      "description": "negated clause",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "enable",
+            "roles": {
+              "theme": {
+                "type": "feature",
+                "id": "power_saving"
+              }
+            },
+            "negated": true
+          }
+        ]
+      },
+      "canonicalJson": "{\"clauses\":[{\"negated\":true,\"predicate\":\"enable\",\"roles\":{\"theme\":{\"id\":\"power_saving\",\"type\":\"feature\"}}}],\"kind\":\"instruction\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "digest": "c55770bf4f1077e4f80b88bcebf99c41e4e94e5140a0b85c27621d1cb45b198c",
+      "fingerprint": "lfp:0.1:sha256:c55770bf4f1077e4f80b88bcebf99c41"
+    },
+    {
+      "description": "conditional clause",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "conditional_instruction",
+        "clauses": [
+          {
+            "predicate": "enable",
+            "roles": {
+              "theme": {
+                "type": "feature",
+                "id": "power_saving"
+              }
+            },
+            "conditions": [
+              {
+                "predicate": "below",
+                "roles": {
+                  "subject": {
+                    "type": "metric",
+                    "id": "battery"
+                  },
+                  "value": {
+                    "type": "quantity",
+                    "value": 20
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "canonicalJson": "{\"clauses\":[{\"conditions\":[{\"negated\":false,\"predicate\":\"below\",\"roles\":{\"subject\":{\"id\":\"battery\",\"type\":\"metric\"},\"value\":{\"type\":\"quantity\",\"value\":20}}}],\"negated\":false,\"predicate\":\"enable\",\"roles\":{\"theme\":{\"id\":\"power_saving\",\"type\":\"feature\"}}}],\"kind\":\"conditional_instruction\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "digest": "e302b06056837518aab7018b239eb83332f5939d2084aef390c496820bb16962",
+      "fingerprint": "lfp:0.1:sha256:e302b06056837518aab7018b239eb833"
+    },
+    {
+      "description": "multi-clause",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "enable",
+            "roles": {
+              "theme": {
+                "type": "feature",
+                "id": "dark_mode"
+              }
+            }
+          },
+          {
+            "predicate": "disable",
+            "roles": {
+              "theme": {
+                "type": "feature",
+                "id": "notifications"
+              }
+            }
+          }
+        ]
+      },
+      "canonicalJson": "{\"clauses\":[{\"negated\":false,\"predicate\":\"enable\",\"roles\":{\"theme\":{\"id\":\"dark_mode\",\"type\":\"feature\"}}},{\"negated\":false,\"predicate\":\"disable\",\"roles\":{\"theme\":{\"id\":\"notifications\",\"type\":\"feature\"}}}],\"kind\":\"instruction\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "digest": "4a85248ca65f05ded5880ecb5c7881e4e13c3dcf5f34cf2c0a525f2736f7ab03",
+      "fingerprint": "lfp:0.1:sha256:4a85248ca65f05ded5880ecb5c7881e4"
+    },
+    {
+      "description": "with annotations",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "user"
+              }
+            },
+            "annotations": {
+              "confidence": 0.95,
+              "source": "user_profile"
+            }
+          }
+        ],
+        "annotations": {
+          "version": 2,
+          "timestamp": "2026-01-01T00:00:00Z"
+        }
+      },
+      "canonicalJson": "{\"annotations\":{\"timestamp\":\"2026-01-01T00:00:00Z\",\"version\":2},\"clauses\":[{\"annotations\":{\"confidence\":0.95,\"source\":\"user_profile\"},\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"id\":\"user\",\"type\":\"actor\"}}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "digest": "23fd495e6fbeb0f92ea97d6b0bbe5a57c6aee86974614179e6094aab8aadb7b3",
+      "fingerprint": "lfp:0.1:sha256:23fd495e6fbeb0f92ea97d6b0bbe5a57"
+    },
+    {
+      "description": "with modality",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "enable",
+            "roles": {
+              "theme": {
+                "type": "feature",
+                "id": "auto_save"
+              }
+            },
+            "modality": "obligation"
+          }
+        ]
+      },
+      "canonicalJson": "{\"clauses\":[{\"modality\":\"obligation\",\"negated\":false,\"predicate\":\"enable\",\"roles\":{\"theme\":{\"id\":\"auto_save\",\"type\":\"feature\"}}}],\"kind\":\"instruction\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "digest": "ca6f374066e1d90dec14d72fa6d610a536cd6cc22f7a01d8e1cb642b519fd642",
+      "fingerprint": "lfp:0.1:sha256:ca6f374066e1d90dec14d72fa6d610a5"
+    },
+    {
+      "description": "role-tagged",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "transfer",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "system"
+              },
+              "object": {
+                "type": "entity",
+                "id": "file"
+              },
+              "source": {
+                "type": "location",
+                "id": "disk_a"
+              },
+              "destination": {
+                "type": "location",
+                "id": "disk_b"
+              }
+            }
+          }
+        ]
+      },
+      "canonicalJson": "{\"clauses\":[{\"negated\":false,\"predicate\":\"transfer\",\"roles\":{\"agent\":{\"id\":\"system\",\"type\":\"actor\"},\"destination\":{\"id\":\"disk_b\",\"type\":\"location\"},\"object\":{\"id\":\"file\",\"type\":\"entity\"},\"source\":{\"id\":\"disk_a\",\"type\":\"location\"}}}],\"kind\":\"instruction\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "digest": "2c7d78e562e66e1086ec169b0c43aca3284561c8e4e2c6ec438f3783b796fa56",
+      "fingerprint": "lfp:0.1:sha256:2c7d78e562e66e1086ec169b0c43aca3"
+    },
+    {
+      "description": "minimal",
+      "sem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "basic",
+        "clauses": [
+          {
+            "predicate": "exist",
+            "roles": {}
+          }
+        ]
+      },
+      "canonicalJson": "{\"clauses\":[{\"negated\":false,\"predicate\":\"exist\",\"roles\":{}}],\"kind\":\"basic\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "digest": "5315675b9c8804d218657ad0ad1550416a4f0810fc1bb4a1379466bb9c11f253",
+      "fingerprint": "lfp:0.1:sha256:5315675b9c8804d218657ad0ad155041"
+    }
+  ]
+}
