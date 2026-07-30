@@ -1,0 +1,642 @@
+{
+  "vectors": [
+    {
+      "id": "v001-simple-obligation",
+      "description": "Simple obligation clause: user MUST pay invoice",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "commercial",
+        "kind": "obligation",
+        "clauses": [
+          {
+            "predicate": "pay",
+            "roles": {
+              "agent": { "type": "role", "id": "user" },
+              "object": { "type": "thing", "id": "invoice" }
+            },
+            "modality": "must"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v002-simple-prohibition",
+      "description": "Simple prohibition clause: system SHALL NOT access user data",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "security",
+        "kind": "prohibition",
+        "clauses": [
+          {
+            "predicate": "access",
+            "roles": {
+              "agent": { "type": "role", "id": "system" },
+              "object": { "type": "thing", "id": "user_data" }
+            },
+            "modality": "shall",
+            "negated": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "v003-simple-permission",
+      "description": "Simple permission clause: user MAY view document",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "access",
+        "kind": "permission",
+        "clauses": [
+          {
+            "predicate": "view",
+            "roles": {
+              "agent": { "type": "role", "id": "user" },
+              "object": { "type": "document", "id": "doc123" }
+            },
+            "modality": "may"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v004-negated-clause",
+      "description": "Negated clause: service MUST NOT collect data",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "privacy",
+        "kind": "prohibition",
+        "clauses": [
+          {
+            "predicate": "collect",
+            "roles": {
+              "agent": { "type": "service", "id": "analytics" },
+              "object": { "type": "data", "id": "personal_info" }
+            },
+            "modality": "must",
+            "negated": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "v005-conditional-simple",
+      "description": "Conditional clause: IF user accepts THEN system can track",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "consent",
+        "kind": "conditional",
+        "clauses": [
+          {
+            "predicate": "track",
+            "roles": {
+              "agent": { "type": "service", "id": "analytics" },
+              "object": { "type": "event", "id": "session" }
+            },
+            "modality": "may",
+            "conditions": [
+              {
+                "predicate": "accept",
+                "roles": {
+                  "agent": { "type": "role", "id": "user" },
+                  "object": { "type": "terms", "id": "tracking_policy" }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "v006-conditional-complex",
+      "description": "Complex conditional with consequences: IF payment fails THEN retry THEN notify",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "commerce",
+        "kind": "procedure",
+        "clauses": [
+          {
+            "predicate": "retry",
+            "roles": {
+              "agent": { "type": "service", "id": "payment_processor" }
+            },
+            "modality": "should",
+            "conditions": [
+              {
+                "predicate": "fail",
+                "roles": {
+                  "object": { "type": "transaction", "id": "payment_001" }
+                },
+                "negated": false
+              }
+            ],
+            "consequences": [
+              {
+                "predicate": "notify",
+                "roles": {
+                  "agent": { "type": "service", "id": "notification" },
+                  "recipient": { "type": "role", "id": "user" }
+                },
+                "modality": "should"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "v007-multi-clause",
+      "description": "Multi-clause document: user pays AND receives confirmation AND data expires",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "transaction",
+        "kind": "agreement",
+        "clauses": [
+          {
+            "predicate": "pay",
+            "roles": {
+              "agent": { "type": "role", "id": "buyer" },
+              "object": { "type": "currency", "value": "100", "currency": "USD" }
+            },
+            "modality": "must"
+          },
+          {
+            "predicate": "receive",
+            "roles": {
+              "agent": { "type": "role", "id": "buyer" },
+              "object": { "type": "message", "id": "confirmation" }
+            },
+            "modality": "should"
+          },
+          {
+            "predicate": "expire",
+            "roles": {
+              "object": { "type": "data", "id": "personal_data" }
+            },
+            "time": { "type": "duration", "value": "P30D" },
+            "modality": "must"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v008-modality-variants",
+      "description": "Various modality markers across clauses",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "obligations",
+        "kind": "requirements",
+        "clauses": [
+          {
+            "predicate": "authenticate",
+            "roles": {
+              "agent": { "type": "service", "id": "api" }
+            },
+            "modality": "must"
+          },
+          {
+            "predicate": "validate",
+            "roles": {
+              "agent": { "type": "service", "id": "api" }
+            },
+            "modality": "should"
+          },
+          {
+            "predicate": "log",
+            "roles": {
+              "agent": { "type": "service", "id": "api" }
+            },
+            "modality": "may"
+          },
+          {
+            "predicate": "encrypt",
+            "roles": {
+              "agent": { "type": "service", "id": "api" }
+            },
+            "modality": "shall"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v009-role-tagged",
+      "description": "Clauses with various role tags: user, system, third-party",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "ecosystem",
+        "kind": "roles",
+        "clauses": [
+          {
+            "predicate": "request",
+            "roles": {
+              "agent": { "type": "role", "id": "user" },
+              "recipient": { "type": "role", "id": "system" }
+            },
+            "modality": "may"
+          },
+          {
+            "predicate": "respond",
+            "roles": {
+              "agent": { "type": "role", "id": "system" },
+              "recipient": { "type": "role", "id": "user" }
+            },
+            "modality": "should"
+          },
+          {
+            "predicate": "intermediary_access",
+            "roles": {
+              "agent": { "type": "role", "id": "third_party" },
+              "object": { "type": "data", "id": "api_response" }
+            },
+            "modality": "must",
+            "negated": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "v010-with-annotations",
+      "description": "Clause with annotations: confidence, tags, notes",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "quality",
+        "kind": "clause_with_metadata",
+        "clauses": [
+          {
+            "predicate": "deliver",
+            "roles": {
+              "agent": { "type": "service", "id": "delivery" },
+              "object": { "type": "package", "id": "pkg_001" }
+            },
+            "modality": "should",
+            "annotations": {
+              "confidence": 0.95,
+              "tags": ["sla", "priority"],
+              "notes": "Must deliver within 24 hours"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "v011-temporal-condition",
+      "description": "Clause with temporal constraints",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "schedule",
+        "kind": "time_bound",
+        "clauses": [
+          {
+            "predicate": "execute",
+            "roles": {
+              "agent": { "type": "service", "id": "scheduler" }
+            },
+            "modality": "must",
+            "time": {
+              "type": "datetime",
+              "value": "2024-12-31T23:59:59Z"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "v012-scope-boundaries",
+      "description": "Multiple clauses with scope boundaries",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "scope",
+        "kind": "scoped_obligations",
+        "clauses": [
+          {
+            "predicate": "internal_access",
+            "roles": {
+              "agent": { "type": "system", "id": "service_a" },
+              "object": { "type": "data", "id": "internal_db" }
+            },
+            "modality": "must"
+          },
+          {
+            "predicate": "external_access",
+            "roles": {
+              "agent": { "type": "system", "id": "service_a" },
+              "object": { "type": "data", "id": "external_api" }
+            },
+            "modality": "must",
+            "negated": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "v013-empty-roles",
+      "description": "Minimal clause with empty roles object",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "minimal",
+        "kind": "basic",
+        "clauses": [
+          {
+            "predicate": "exists",
+            "roles": {}
+          }
+        ]
+      }
+    },
+    {
+      "id": "v014-complex-nesting",
+      "description": "Deeply nested conditions and consequences",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "complex",
+        "kind": "nested_logic",
+        "clauses": [
+          {
+            "predicate": "level1",
+            "roles": {
+              "agent": { "type": "service", "id": "orchestrator" }
+            },
+            "modality": "should",
+            "conditions": [
+              {
+                "predicate": "level2_cond",
+                "roles": {
+                  "object": { "type": "state", "id": "ready" }
+                },
+                "conditions": [
+                  {
+                    "predicate": "level3_cond",
+                    "roles": {
+                      "object": { "type": "resource", "id": "available" }
+                    }
+                  }
+                ]
+              }
+            ],
+            "consequences": [
+              {
+                "predicate": "level2_cons",
+                "roles": {
+                  "agent": { "type": "service", "id": "worker" }
+                },
+                "consequences": [
+                  {
+                    "predicate": "level3_cons",
+                    "roles": {
+                      "object": { "type": "event", "id": "completed" }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "v015-with-references",
+      "description": "Document with external references",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "referenced",
+        "kind": "with_refs",
+        "clauses": [
+          {
+            "predicate": "comply",
+            "roles": {
+              "agent": { "type": "organization", "id": "vendor" },
+              "object": { "type": "standard", "id": "iso27001" }
+            },
+            "modality": "must"
+          }
+        ],
+        "references": [
+          {
+            "type": "standard",
+            "id": "iso27001",
+            "value": "ISO/IEC 27001:2022"
+          },
+          {
+            "type": "regulation",
+            "id": "gdpr",
+            "value": "General Data Protection Regulation"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v016-with-provenance",
+      "description": "Document with provenance metadata",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "authored",
+        "kind": "with_provenance",
+        "clauses": [
+          {
+            "predicate": "approve",
+            "roles": {
+              "agent": { "type": "person", "id": "approver_001" },
+              "object": { "type": "document", "id": "contract_001" }
+            },
+            "modality": "must"
+          }
+        ],
+        "provenance": {
+          "source": "legal_dept",
+          "author": "john_doe",
+          "timestamp": "2024-01-15T10:30:00Z",
+          "version": 2
+        }
+      }
+    },
+    {
+      "id": "v017-with-doc-annotations",
+      "description": "Document with document-level annotations",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "annotated",
+        "kind": "with_annotations",
+        "clauses": [
+          {
+            "predicate": "execute",
+            "roles": {
+              "agent": { "type": "service", "id": "executor" }
+            },
+            "modality": "must"
+          }
+        ],
+        "annotations": {
+          "document_confidence": 0.98,
+          "legal_review": "approved",
+          "review_date": "2024-01-15"
+        }
+      }
+    },
+    {
+      "id": "v018-negated-negated",
+      "description": "Double negation: NOT (NOT allow)",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "logic",
+        "kind": "double_negation",
+        "clauses": [
+          {
+            "predicate": "deny",
+            "roles": {
+              "agent": { "type": "system", "id": "access_control" },
+              "object": { "type": "permission", "id": "read" }
+            },
+            "modality": "must",
+            "negated": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "v019-term-variety",
+      "description": "Various term types: strings, objects, arrays, primitives",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "types",
+        "kind": "term_variety",
+        "clauses": [
+          {
+            "predicate": "process",
+            "roles": {
+              "agent": { "type": "system" },
+              "string_value": "simple text",
+              "number_value": 42,
+              "boolean_value": true,
+              "array_value": [1, 2, 3],
+              "object_value": {
+                "type": "complex",
+                "nested": {
+                  "deep": "value"
+                }
+              }
+            },
+            "modality": "should"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v020-unicode-normalization",
+      "description": "Unicode text requiring NFKC normalization",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "multilingual",
+        "kind": "unicode_test",
+        "clauses": [
+          {
+            "predicate": "communicate",
+            "roles": {
+              "agent": { "type": "user", "id": "user_001" },
+              "object": { "type": "message", "value": "Café naïve Ⅲ" }
+            },
+            "modality": "may"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v021-whitespace-normalization",
+      "description": "Whitespace normalization: multiple spaces, tabs, newlines",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "formatting",
+        "kind": "whitespace_test",
+        "clauses": [
+          {
+            "predicate": "document",
+            "roles": {
+              "agent": { "type": "author" },
+              "object": { "type": "text", "value": "This   has   multiple     spaces\nand\nnewlines\t\tand\ttabs" }
+            },
+            "modality": "must"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v022-identifier-normalization",
+      "description": "Identifiers normalized to lowercase with underscores",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "NormalizationTest",
+        "kind": "IDENTIFIER_NORMALIZATION",
+        "clauses": [
+          {
+            "predicate": "MyPredicate",
+            "roles": {
+              "MyRole": { "type": "MyType", "id": "MyID" }
+            },
+            "modality": "MUST"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v023-null-modality",
+      "description": "Clause with null modality",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "modality_tests",
+        "kind": "null_modality",
+        "clauses": [
+          {
+            "predicate": "exist",
+            "roles": {
+              "object": { "type": "entity", "id": "thing" }
+            },
+            "modality": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "v024-complex-time",
+      "description": "Complex time objects with multiple properties",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "temporal",
+        "kind": "complex_time",
+        "clauses": [
+          {
+            "predicate": "schedule",
+            "roles": {
+              "agent": { "type": "service" }
+            },
+            "modality": "should",
+            "time": {
+              "type": "interval",
+              "start": "2024-01-01T00:00:00Z",
+              "end": "2024-12-31T23:59:59Z",
+              "recurrence": "RRULE:FREQ=DAILY"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "v025-sorted-roles",
+      "description": "Roles should be sorted alphabetically in canonical form",
+      "input": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "sorting",
+        "kind": "role_sort",
+        "clauses": [
+          {
+            "predicate": "transfer",
+            "roles": {
+              "zebra": { "type": "animal" },
+              "apple": { "type": "fruit" },
+              "middle": { "type": "value" },
+              "banana": { "type": "fruit" }
+            },
+            "modality": "should"
+          }
+        ]
+      }
+    }
+  ]
+}
