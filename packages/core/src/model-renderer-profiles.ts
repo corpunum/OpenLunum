@@ -1,160 +1,162 @@
 import type { ProfileType } from './profiles.js';
 
-/**
- * Renderer profiles version.
- */
 export const RENDERER_PROFILES_VERSION = '1.0.0';
 
-/**
- * Model-specific renderer profile with quantization details.
- */
 export interface ModelRendererProfile {
-  /** Model family (qwen, llama, gemma) */
   modelFamily: string;
-  /** Model ID (e.g., "Qwen3-Coder-30B-A3B") */
   modelId: string;
-  /** Quantization format (e.g., "Q4_K_M") */
+  displayName: string;
+  identity: string;
   quantization: string;
-  /** Chat template format (e.g., "chatml", "llama3", "gemma") */
   chatTemplate: string;
-  /** Recommended renderer profile type (safe, short, tight) */
   rendererProfile: ProfileType;
-  /** Token efficiency metric (0-1, higher is better) */
+  acceptedProfiles: ProfileType[];
+  defaultProfile: ProfileType;
+  tokenizer: string;
   tokenEfficiency: number;
-  /** ISO 8601 timestamp of verification */
   verifiedAt: string;
 }
 
-/**
- * Qwen model profiles
- */
 const QWEN_PROFILES: ModelRendererProfile[] = [
   {
     modelFamily: 'qwen',
     modelId: 'Qwen3-Coder-30B-A3B',
+    displayName: 'Qwen3 Coder 30B A3B',
+    identity: 'qwen3-coder-30b-a3b',
     quantization: 'Q4_K_M',
     chatTemplate: 'chatml',
     rendererProfile: 'short',
+    acceptedProfiles: ['safe', 'short'],
+    defaultProfile: 'short',
+    tokenizer: 'qwen',
     tokenEfficiency: 0.92,
     verifiedAt: '2026-07-30T00:00:00Z',
   },
   {
     modelFamily: 'qwen',
     modelId: 'Qwen3.6-35B-A3B',
+    displayName: 'Qwen3.6 35B A3B',
+    identity: 'qwen36-35b-a3b',
     quantization: 'Q4_K_M',
     chatTemplate: 'chatml',
     rendererProfile: 'short',
+    acceptedProfiles: ['safe', 'short'],
+    defaultProfile: 'short',
+    tokenizer: 'qwen',
     tokenEfficiency: 0.91,
     verifiedAt: '2026-07-30T00:00:00Z',
   },
   {
     modelFamily: 'qwen',
     modelId: 'Qwen3.5-4B-MTP',
+    displayName: 'Qwen3.5 4B MTP',
+    identity: 'qwen35-4b-mtp',
     quantization: 'Q4_K_M',
     chatTemplate: 'chatml',
     rendererProfile: 'safe',
+    acceptedProfiles: ['safe'],
+    defaultProfile: 'safe',
+    tokenizer: 'qwen',
     tokenEfficiency: 0.88,
     verifiedAt: '2026-07-30T00:00:00Z',
   },
 ];
 
-/**
- * Llama model profiles
- */
 const LLAMA_PROFILES: ModelRendererProfile[] = [
   {
     modelFamily: 'llama',
     modelId: 'Llama-3.3-70B',
+    displayName: 'Llama 3.3 70B',
+    identity: 'llama-33-70b',
     quantization: 'Q4_K_M',
     chatTemplate: 'llama3',
     rendererProfile: 'safe',
+    acceptedProfiles: ['safe'],
+    defaultProfile: 'safe',
+    tokenizer: 'llama',
     tokenEfficiency: 0.89,
     verifiedAt: '2026-07-30T00:00:00Z',
   },
   {
     modelFamily: 'llama',
     modelId: 'Llama-3.1-8B',
+    displayName: 'Llama 3.1 8B',
+    identity: 'llama-31-8b',
     quantization: 'Q4_K_M',
     chatTemplate: 'llama3',
     rendererProfile: 'short',
+    acceptedProfiles: ['safe', 'short'],
+    defaultProfile: 'short',
+    tokenizer: 'llama',
     tokenEfficiency: 0.87,
     verifiedAt: '2026-07-30T00:00:00Z',
   },
 ];
 
-/**
- * Gemma model profiles
- */
 const GEMMA_PROFILES: ModelRendererProfile[] = [
   {
     modelFamily: 'gemma',
     modelId: 'Gemma-2-27B',
+    displayName: 'Gemma 2 27B',
+    identity: 'gemma-2-27b',
     quantization: 'Q4_K_M',
     chatTemplate: 'gemma',
     rendererProfile: 'short',
+    acceptedProfiles: ['safe', 'short'],
+    defaultProfile: 'short',
+    tokenizer: 'gemma',
     tokenEfficiency: 0.90,
     verifiedAt: '2026-07-30T00:00:00Z',
   },
   {
     modelFamily: 'gemma',
     modelId: 'Gemma-2-9B',
+    displayName: 'Gemma 2 9B',
+    identity: 'gemma-2-9b',
     quantization: 'Q4_K_M',
     chatTemplate: 'gemma',
     rendererProfile: 'short',
+    acceptedProfiles: ['safe', 'short'],
+    defaultProfile: 'short',
+    tokenizer: 'gemma',
     tokenEfficiency: 0.85,
     verifiedAt: '2026-07-30T00:00:00Z',
   },
   {
     modelFamily: 'gemma',
     modelId: 'SuperGemma4-E4B',
+    displayName: 'SuperGemma4 E4B',
+    identity: 'supergemma4-e4b',
     quantization: 'Q4_K_M',
     chatTemplate: 'gemma',
     rendererProfile: 'tight',
+    acceptedProfiles: ['safe', 'short', 'tight'],
+    defaultProfile: 'tight',
+    tokenizer: 'gemma',
     tokenEfficiency: 0.93,
     verifiedAt: '2026-07-30T00:00:00Z',
   },
 ];
 
-/**
- * Complete registry of model renderer profiles
- */
 export const MODEL_RENDERER_PROFILES: ModelRendererProfile[] = [
   ...QWEN_PROFILES,
   ...LLAMA_PROFILES,
   ...GEMMA_PROFILES,
 ];
 
-/**
- * Get renderer profile for a specific model ID.
- * @param modelId - The model ID to look up
- * @returns The renderer profile or undefined if not found
- */
 export function getProfileForModel(modelId: string): ModelRendererProfile | undefined {
   return MODEL_RENDERER_PROFILES.find(p => p.modelId === modelId);
 }
 
-/**
- * List all supported model families.
- * @returns Array of unique family names
- */
 export function listSupportedFamilies(): string[] {
   const families = new Set(MODEL_RENDERER_PROFILES.map(p => p.modelFamily));
   return Array.from(families).sort();
 }
 
-/**
- * Get all profiles for a specific model family.
- * @param family - The model family name
- * @returns Array of profiles for that family
- */
 export function getProfilesByFamily(family: string): ModelRendererProfile[] {
   return MODEL_RENDERER_PROFILES.filter(p => p.modelFamily === family);
 }
 
-/**
- * List all renderer profiles for a given model ID.
- * @returns Array of all profiles in the registry
- */
 export function listAllProfiles(): ModelRendererProfile[] {
   return [...MODEL_RENDERER_PROFILES];
 }
