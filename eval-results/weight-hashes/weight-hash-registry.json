@@ -1,0 +1,50 @@
+{
+  "version": "0.1.0",
+  "entries": [
+    {
+      "modelId": "Qwen3-Coder-30B-A3B",
+      "quantization": "GGUF Q4_K_M",
+      "fileHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "fileSize": 0,
+      "source": "huggingface://path/to/Qwen3-Coder-30B-A3B.Q4_K_M.gguf",
+      "verifiedAt": "2026-07-30T00:00:00Z",
+      "_comment": "PLACEHOLDER: Replace with real hash from: sha256sum Qwen3-Coder-30B-A3B.Q4_K_M.gguf"
+    },
+    {
+      "modelId": "SuperQwen-AgentWorld-35B",
+      "quantization": "GGUF default",
+      "fileHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "fileSize": 0,
+      "source": "huggingface://path/to/SuperQwen-AgentWorld-35B.gguf",
+      "verifiedAt": "2026-07-30T00:00:00Z",
+      "_comment": "PLACEHOLDER: Replace with real hash from: sha256sum SuperQwen-AgentWorld-35B.gguf"
+    },
+    {
+      "modelId": "Qwen3.6-35B-A3B",
+      "quantization": "GGUF default",
+      "fileHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "fileSize": 0,
+      "source": "huggingface://path/to/Qwen3.6-35B-A3B.gguf",
+      "verifiedAt": "2026-07-30T00:00:00Z",
+      "_comment": "PLACEHOLDER: Replace with real hash from: sha256sum Qwen3.6-35B-A3B.gguf"
+    },
+    {
+      "modelId": "SuperGemma4-E4B",
+      "quantization": "GGUF default",
+      "fileHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "fileSize": 0,
+      "source": "huggingface://path/to/SuperGemma4-E4B.gguf",
+      "verifiedAt": "2026-07-30T00:00:00Z",
+      "_comment": "PLACEHOLDER: Replace with real hash from: sha256sum SuperGemma4-E4B.gguf"
+    },
+    {
+      "modelId": "Qwen3.5-4B-MTP",
+      "quantization": "GGUF default",
+      "fileHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "fileSize": 0,
+      "source": "huggingface://path/to/Qwen3.5-4B-MTP.gguf",
+      "verifiedAt": "2026-07-30T00:00:00Z",
+      "_comment": "PLACEHOLDER: Replace with real hash from: sha256sum Qwen3.5-4B-MTP.gguf"
+    }
+  ]
+}
