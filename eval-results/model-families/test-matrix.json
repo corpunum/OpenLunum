@@ -1,0 +1,67 @@
+{
+  "version": "0.1.0",
+  "families": [
+    {
+      "family": "qwen",
+      "modelId": "Qwen3-Coder-30B-A3B-Q4_K_M",
+      "quantization": "Q4_K_M",
+      "chatTemplate": "qwen",
+      "contextLength": 32768,
+      "frozen": true,
+      "profileHash": "abb2977da12d39e244eb19eefe8947418e0bc6bfd4c11e5e0ab2be7e9ebd4586"
+    },
+    {
+      "family": "qwen",
+      "modelId": "Qwen3.6-35B-A3B-Q4_K_M",
+      "quantization": "Q4_K_M",
+      "chatTemplate": "qwen",
+      "contextLength": 32768,
+      "frozen": true,
+      "profileHash": "4c96e5b61edea78c38f2201abf9909074432d3b6f9f5a585b1d5762fe98591d3"
+    },
+    {
+      "family": "gemma",
+      "modelId": "SuperGemma4-E4B-Q5_K_M",
+      "quantization": "Q5_K_M",
+      "chatTemplate": "gemma",
+      "contextLength": 8192,
+      "frozen": true,
+      "profileHash": "d4fd11680ff1a862d5696c60ce33a3c44b7b6ba785840efb0dd4e795edec95d0"
+    },
+    {
+      "family": "gemma",
+      "modelId": "Gemma-2-27B-Q4_K_M",
+      "quantization": "Q4_K_M",
+      "chatTemplate": "gemma",
+      "contextLength": 8192,
+      "frozen": true,
+      "profileHash": "edaacfd548db96eeba88a61ed836602e36e80bcbc8715832188d2b06b923789b"
+    },
+    {
+      "family": "llama",
+      "modelId": "Llama-3.3-70B-Q4_K_M",
+      "quantization": "Q4_K_M",
+      "chatTemplate": "llama",
+      "contextLength": 8192,
+      "frozen": true,
+      "profileHash": "678b10aab7fdf5c77715c2f7575b2c67d3c62b15784ed374b13c21fc2a5e5d9a"
+    },
+    {
+      "family": "llama",
+      "modelId": "Llama-3.1-8B-Q4_K_M",
+      "quantization": "Q4_K_M",
+      "chatTemplate": "llama",
+      "contextLength": 8192,
+      "frozen": true,
+      "profileHash": "d90e79c8b945dd44599de817330aa9cfe697474e49cbf17f8acb3821260d8132"
+    }
+  ],
+  "testCategories": [
+    "parse",
+    "retention",
+    "latency",
+    "schema-validation"
+  ],
+  "expectedMinParse": 0.85,
+  "expectedMinRetention": 0.8
+}
