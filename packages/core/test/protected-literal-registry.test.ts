@@ -409,7 +409,7 @@ test('registry: detected literal maintains type after round-trip', () => {
   const detected = defaultRegistry.detect(term);
   assert.ok(detected);
   assert.equal(detected!.type, 'identifier');
-  assert.equal(detected!.raw, undefined);
+  assert.equal((detected!.raw as Record<string, unknown>).id, 'ACCT-12345');
 });
 
 test('registry: handles mixed literal and non-literal roles', () => {

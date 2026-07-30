@@ -76,7 +76,7 @@ function detectIdentifier(term: LunumTerm): DetectedLiteral | undefined {
 
   const id = obj.id;
   const value = obj.value;
-  if (id === null && id === undefined && value === null && value === undefined) return undefined;
+  if ((id === null || id === undefined) && (value === null || value === undefined)) return undefined;
   if (typeof id !== 'string' && typeof id !== 'undefined' && id !== null) return undefined;
   if (typeof value !== 'string' && typeof value !== 'undefined' && value !== null) return undefined;
 
