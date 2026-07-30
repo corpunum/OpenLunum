@@ -10,9 +10,10 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ProfileSelector } from '../src/profile-selector.js';
+import { ProfileSelector, ProfileFallbackPolicy } from '../src/profile-selector.js';
 import type { ProfileType } from '../src/profiles.js';
 import type { ProfileSelectionResult, ModelProfileRecommendation } from '../src/profile-selector.js';
+import type { ProfileSelectionRejection } from '../src/model-renderer-profiles.js';
 
 function buildRecord(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
@@ -289,4 +290,175 @@ test('profile selector: handles record without annotations', () => {
 
   assert.ok(result.recommendedProfile === 'safe' || result.recommendedProfile === 'short');
   assert.ok(result.rationale.includes('Profile'));
+});
+
+// ── R8.4: Profile Selection Validation Tests ──────────────────────────
+
+test('profile selector: validateEnvironment accepts valid models', () => {
+  const selector = new ProfileSelector();
+  assert.doesNotThrow(() => {
+    selector.validateEnvironment('Qwen3-Coder-30B-A3B', 'short');
+  });
+});
+
+test('profile selector: validateEnvironment accepts generic models without validation', () => {
+  const selector = new ProfileSelector();
+  assert.doesNotThrow(() => {
+    selector.validateEnvironment(undefined);
+  });
+});
+
+test('profile selector: validateEnvironment rejects unknown models in STRICT mode', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.STRICT);
+  assert.throws(
+    () => selector.validateEnvironment('UnknownModel-999B'),
+    (error: unknown) => {
+      const rejection = error as ProfileSelectionRejection;
+      return rejection.kind === 'rejection' && rejection.reason.includes('Unknown model');
+    }
+  );
+});
+
+test('profile selector: validateEnvironment rejects unsupported profiles', () => {
+  const selector = new ProfileSelector();
+  assert.throws(
+    () => selector.validateEnvironment('Qwen3.5-4B-MTP', 'short'),
+    (error: unknown) => {
+      const rejection = error as ProfileSelectionRejection;
+      return rejection.kind === 'rejection' && rejection.reason.includes('not supported');
+    }
+  );
+});
+
+test('profile selector: selectProfileWithValidation in STRICT mode throws on unknown model', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.STRICT);
+  const record = buildRecord();
+
+  assert.throws(
+    () => selector.selectProfileWithValidation(record as any, 'UnknownModel-999B'),
+    (error: unknown) => {
+      const rejection = error as ProfileSelectionRejection;
+      return rejection.kind === 'rejection';
+    }
+  );
+});
+
+test('profile selector: selectProfileWithValidation in DEFAULT mode falls back on unknown model', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.DEFAULT);
+  const record = buildRecord();
+
+  const result = selector.selectProfileWithValidation(record as any, 'UnknownModel-999B');
+  // Should return a ProfileSelectionResult (fallback), not a rejection
+  assert.ok('recommendedProfile' in result && !('kind' in result));
+  assert.ok(['safe', 'short', 'tight'].includes((result as ProfileSelectionResult).recommendedProfile));
+});
+
+test('profile selector: selectProfileWithValidation in COMPATIBLE mode falls back on unknown model', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.COMPATIBLE);
+  const record = buildRecord();
+
+  const result = selector.selectProfileWithValidation(record as any, 'UnknownModel-999B');
+  // Should return a ProfileSelectionResult (fallback), not a rejection
+  assert.ok('recommendedProfile' in result && !('kind' in result));
+});
+
+test('profile selector: getModelProfile returns model metadata', () => {
+  const selector = new ProfileSelector();
+  const profile = selector.getModelProfile('Qwen3-Coder-30B-A3B');
+
+  assert.ok(profile);
+  assert.equal(profile!.modelId, 'Qwen3-Coder-30B-A3B');
+  assert.ok(profile!.tokenizerIdentity);
+  assert.ok(profile!.templateIdentity);
+});
+
+test('profile selector: getModelProfile returns undefined for unknown model', () => {
+  const selector = new ProfileSelector();
+  const profile = selector.getModelProfile('UnknownModel-999B');
+
+  assert.equal(profile, undefined);
+});
+
+// ── R8.6: Fallback Behavior Tests ──────────────────────────────────────
+
+test('profile selector: fallback policy defaults to DEFAULT', () => {
+  const selector = new ProfileSelector();
+  assert.equal(selector.getFallbackPolicy(), ProfileFallbackPolicy.DEFAULT);
+});
+
+test('profile selector: setFallbackPolicy changes the policy', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.STRICT);
+  assert.equal(selector.getFallbackPolicy(), ProfileFallbackPolicy.STRICT);
+
+  selector.setFallbackPolicy(ProfileFallbackPolicy.COMPATIBLE);
+  assert.equal(selector.getFallbackPolicy(), ProfileFallbackPolicy.COMPATIBLE);
+});
+
+test('profile selector: STRICT fallback policy enforces validation', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.STRICT);
+  const record = buildRecord();
+
+  assert.throws(
+    () => selector.selectProfileWithValidation(record as any, 'UnknownModel-999B'),
+    (error: unknown) => {
+      const rejection = error as ProfileSelectionRejection;
+      return rejection.kind === 'rejection';
+    }
+  );
+});
+
+test('profile selector: DEFAULT fallback policy returns result for unknown model', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.DEFAULT);
+  const record = buildRecord();
+
+  const result = selector.selectProfileWithValidation(record as any, 'UnknownModel-999B');
+  assert.ok('recommendedProfile' in result);
+  assert.ok(!('kind' in result));
+});
+
+test('profile selector: COMPATIBLE fallback policy returns result for unknown model', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.COMPATIBLE);
+  const record = buildRecord();
+
+  const result = selector.selectProfileWithValidation(record as any, 'UnknownModel-999B');
+  assert.ok('recommendedProfile' in result);
+  assert.ok(!('kind' in result));
+});
+
+test('profile selector: supported model selection works across all fallback policies', () => {
+  const selector = new ProfileSelector();
+  const record = buildRecord();
+  const modelId = 'Qwen3-Coder-30B-A3B';
+
+  for (const policy of [ProfileFallbackPolicy.STRICT, ProfileFallbackPolicy.DEFAULT, ProfileFallbackPolicy.COMPATIBLE]) {
+    selector.setFallbackPolicy(policy);
+    const result = selector.selectProfileWithValidation(record as any, modelId);
+
+    // All policies should return successful result for known model
+    assert.ok('recommendedProfile' in result, `${policy} policy should return result for known model`);
+    assert.ok(!('kind' in result), `${policy} policy should not return rejection for known model`);
+  }
+});
+
+test('profile selector: rejection includes environment context for fallback decisions', () => {
+  const selector = new ProfileSelector();
+  selector.setFallbackPolicy(ProfileFallbackPolicy.STRICT);
+
+  try {
+    selector.validateEnvironment('Qwen3.5-4B-MTP', 'short');
+    assert.fail('should have thrown');
+  } catch (error) {
+    const rejection = error as ProfileSelectionRejection;
+    assert.equal(rejection.kind, 'rejection');
+    assert.ok(rejection.environment);
+    assert.equal(rejection.environment, 'profile:short');
+  }
 });
