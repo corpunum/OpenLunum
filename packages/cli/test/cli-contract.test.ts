@@ -1,9 +1,18 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import type {
+  CliCommand,
+  CliExitCodeValue,
+  CliErrorOutput,
+  CliSuccessOutput,
+} from '../src/cli-contract.js';
 import {
   CLI_CONTRACT_VERSION,
+  CliExitCode,
   COMMANDS,
   EXIT_CODES,
+  formatCliError,
+  formatCliSuccess,
   formatStructuredError,
   getContractManifest,
 } from '../src/cli-contract.js';
@@ -11,6 +20,10 @@ import {
 describe('CLI contract', () => {
   it('contract version is a semver string', () => {
     assert.match(CLI_CONTRACT_VERSION, /^\d+\.\d+\.\d+$/u);
+  });
+
+  it('contract version is 1.0.0', () => {
+    assert.strictEqual(CLI_CONTRACT_VERSION, '1.0.0');
   });
 
   it('exit codes are unique integers', () => {
@@ -23,6 +36,20 @@ describe('CLI contract', () => {
     assert.strictEqual(EXIT_CODES.SUCCESS, 0);
     assert.strictEqual(EXIT_CODES.RUNTIME_ERROR, 1);
     assert.strictEqual(EXIT_CODES.USAGE_ERROR, 2);
+  });
+
+  it('CliExitCode has distinct values', () => {
+    const codes = Object.values(CliExitCode);
+    assert.strictEqual(new Set(codes).size, codes.length);
+    for (const code of codes) assert.strictEqual(typeof code, 'number');
+  });
+
+  it('CliExitCode has expected numeric values', () => {
+    assert.strictEqual(CliExitCode.SUCCESS, 0);
+    assert.strictEqual(CliExitCode.VALIDATION_ERROR, 1);
+    assert.strictEqual(CliExitCode.IO_ERROR, 2);
+    assert.strictEqual(CliExitCode.INTERNAL_ERROR, 3);
+    assert.strictEqual(CliExitCode.USAGE_ERROR, 4);
   });
 
   it('COMMANDS includes all expected subcommands', () => {
@@ -62,6 +89,120 @@ describe('CLI contract', () => {
         assert.ok(f.description.length > 0);
       }
     }
+  });
+});
+
+describe('CliCommand type', () => {
+  it('covers all supported commands', () => {
+    const expectedCommands: CliCommand[] = [
+      'inspect',
+      'encode',
+      'compile',
+      'migrate',
+      'pipeline',
+      'quality-gate',
+      'process-jsonl',
+      'contract',
+    ];
+
+    for (const cmd of expectedCommands) {
+      const _: CliCommand = cmd;
+    }
+
+    assert.ok(true);
+  });
+});
+
+describe('formatCliError', () => {
+  it('formats error with code and message', () => {
+    const error: CliErrorOutput = {
+      code: CliExitCode.VALIDATION_ERROR,
+      command: 'migrate',
+      message: 'Input record invalid',
+    };
+
+    const formatted = formatCliError(error);
+    assert.ok(formatted.includes('Error [1]'));
+    assert.ok(formatted.includes('Input record invalid'));
+    assert.ok(formatted.includes('migrate'));
+  });
+
+  it('formats error with details array', () => {
+    const error: CliErrorOutput = {
+      code: CliExitCode.IO_ERROR,
+      command: 'pipeline',
+      message: 'File not found',
+      details: ['File /path/to/file does not exist', 'Check the path and retry'],
+    };
+
+    const formatted = formatCliError(error);
+    assert.ok(formatted.includes('Error [2]'));
+    assert.ok(formatted.includes('File /path/to/file does not exist'));
+    assert.ok(formatted.includes('Check the path and retry'));
+    assert.ok(formatted.includes('Details:'));
+  });
+
+  it('handles error without details', () => {
+    const error: CliErrorOutput = {
+      code: CliExitCode.USAGE_ERROR,
+      command: 'encode',
+      message: 'Missing required flag --sem',
+    };
+
+    const formatted = formatCliError(error);
+    assert.ok(formatted.includes('Error [4]'));
+    assert.ok(!formatted.includes('Details:'));
+  });
+});
+
+describe('formatCliSuccess', () => {
+  it('formats success output with data', () => {
+    const output: CliSuccessOutput = {
+      code: 0,
+      command: 'inspect',
+      data: { fingerprint: 'lfp:sha256:abc123' },
+    };
+
+    const formatted = formatCliSuccess(output);
+    assert.ok(formatted.includes('Success: inspect'));
+    assert.ok(formatted.includes('lfp:sha256:abc123'));
+  });
+
+  it('handles null data', () => {
+    const output: CliSuccessOutput = {
+      code: 0,
+      command: 'validate',
+      data: null,
+    };
+
+    const formatted = formatCliSuccess(output);
+    assert.ok(formatted.includes('Success: validate'));
+  });
+
+  it('handles undefined data', () => {
+    const output: CliSuccessOutput = {
+      code: 0,
+      command: 'process',
+      data: undefined,
+    };
+
+    const formatted = formatCliSuccess(output);
+    assert.ok(formatted.includes('Success: process'));
+  });
+
+  it('formats complex data structures', () => {
+    const output: CliSuccessOutput = {
+      code: 0,
+      command: 'quality-gate',
+      data: {
+        passed: 5,
+        failed: 2,
+      },
+    };
+
+    const formatted = formatCliSuccess(output);
+    assert.ok(formatted.includes('Success: quality-gate'));
+    assert.ok(formatted.includes('passed'));
   });
 });
 
