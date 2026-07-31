@@ -91,3 +91,4 @@ export type {
 export * from './rollback-process.js';
 export * from './retention-fallback-rollback.js';
 export * from './prohibited-domains.js';
+export * from './observability.js';
