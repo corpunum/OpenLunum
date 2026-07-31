@@ -12,6 +12,7 @@ function makeResult(mode: 'natural' | 'lunum' | 'mixed', overrides: Partial<Benc
     taskId: 'test-1',
     mode,
     tokenCount: mode === 'natural' ? 100 : 70,
+    tokenCountMethod: 'calibrated',
     preservedLiterals: true,
     preservedRoles: true,
     preservedNegation: true,
