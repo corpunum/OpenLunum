@@ -156,10 +156,14 @@ export interface DomainClassificationResult {
   primaryDomain: ProhibitedDomainId | null;
 }
 
-function computeMatchConfidence(matchedKeywords: number, matchedPatterns: number): number {
+function computeMatchConfidence(matchedKeywords: number, matchedPatterns: number, categoryBonus: boolean): number {
   if (matchedKeywords === 0 && matchedPatterns === 0) return 0;
   // Patterns are higher precision than keywords; weight accordingly.
-  const raw = 0.35 + matchedKeywords * 0.12 + matchedPatterns * 0.25;
+  let raw = 0.35 + matchedKeywords * 0.12 + matchedPatterns * 0.25;
+  // When the input category explicitly names this domain, give a small boost
+  // so that an explicitly categorized signal is not overridden by a weaker
+  // heuristic match on an unrelated domain.
+  if (categoryBonus) raw += 0.05;
   return Math.min(1, raw);
 }
 
@@ -174,6 +178,7 @@ function computeMatchConfidence(matchedKeywords: number, matchedPatterns: number
 export function classifyDomain(input: DomainClassificationInput): DomainClassificationResult {
   const text = (input.sourceText ?? '').toLowerCase();
   const tags = (input.tags ?? []).map((t) => t.toLowerCase());
+  const category = (input.category ?? '').toLowerCase();
   const matches: DomainMatch[] = [];
 
   for (const domainId of PROHIBITED_DOMAIN_IDS) {
@@ -192,11 +197,20 @@ export function classifyDomain(input: DomainClassificationInput): DomainClassifi
 
     // Tags provide a weaker, direct signal (e.g. tag === 'legal_advice').
     const tagHit = tags.includes(domainId) || tags.includes(domainId.replace(/_/gu, '-'));
+    // The category field provides a direct, explicit signal (e.g. category === 'legal_advice').
+    const categoryHit = category === domainId || category === domainId.replace(/_/gu, '-');
 
-    if (matchedKeywords.length === 0 && matchedPatterns.length === 0 && !tagHit) continue;
+    if (matchedKeywords.length === 0 && matchedPatterns.length === 0 && !tagHit && !categoryHit) continue;
 
-    let confidence = computeMatchConfidence(matchedKeywords.length, matchedPatterns.length);
-    if (tagHit) confidence = Math.max(confidence, 0.95);
+    let confidence: number;
+    // When both text matches and category tag agree, confidence is near-certain.
+    if (categoryHit && (matchedKeywords.length > 0 || matchedPatterns.length > 0)) {
+      confidence = 1;
+    } else {
+      confidence = computeMatchConfidence(matchedKeywords.length, matchedPatterns.length, categoryHit);
+      if (tagHit) confidence = Math.max(confidence, 0.95);
+      if (categoryHit) confidence = Math.max(confidence, 0.95);
+    }
 
     matches.push({
       domain: domainId,
@@ -389,13 +403,31 @@ export function evaluateDomainGate(
     };
   }
 
-  const primary = classification.domains[0]!;
-  if (primary.confidence < DOMAIN_BLOCK_CONFIDENCE_THRESHOLD) {
-    reasons.push(`below_block_threshold:${primary.confidence.toFixed(2)}`);
+  // Evaluate ALL domains above threshold, not just the primary.
+  // If any matched prohibited domain above threshold lacks an opt-in, block.
+  const unoptedInDomains: DomainMatch[] = [];
+  for (const match of classification.domains) {
+    if (match.confidence < DOMAIN_BLOCK_CONFIDENCE_THRESHOLD) {
+      reasons.push(`below_block_threshold:${match.domain}:${match.confidence.toFixed(2)}`);
+      continue;
+    }
+    if (!registry.isOptedIn(match.domain)) {
+      unoptedInDomains.push(match);
+    }
+  }
+
+  // If all above-threshold domains are opted-in, allow.
+  if (unoptedInDomains.length === 0) {
+    const optedInDomains = classification.domains
+      .filter((m) => m.confidence >= DOMAIN_BLOCK_CONFIDENCE_THRESHOLD)
+      .map((m) => m.domain);
+    reasons.push(
+      ...optedInDomains.map((d) => `opt_in_present:${d}`)
+    );
     return {
       allowed: true,
       blocked: false,
-      domain: primary.domain,
+      domain: classification.primaryDomain,
       classification,
       requiresOptIn: false,
       missingEvidenceTypes: [],
@@ -403,21 +435,16 @@ export function evaluateDomainGate(
     };
   }
 
-  const domain = primary.domain;
-  if (registry.isOptedIn(domain)) {
-    return {
-      allowed: true,
-      blocked: false,
-      domain,
-      classification,
-      requiresOptIn: false,
-      missingEvidenceTypes: [],
-      reasons: [`opt_in_present:${domain}`]
-    };
-  }
-
+  // Block on the first unopted-in domain above threshold.
+  const blocked = unoptedInDomains[0]!;
+  const domain = blocked.domain;
   const spec = PROHIBITED_DOMAIN_SPECS[domain];
   reasons.push(`prohibited_domain:${domain}`);
+  if (unoptedInDomains.length > 1) {
+    reasons.push(
+      `additional_unopted_in:${unoptedInDomains.slice(1).map((m) => m.domain).join(',')}`
+    );
+  }
   return {
     allowed: false,
     blocked: true,
