@@ -207,6 +207,21 @@ export type {
   ProductFlowSummary,
 } from './redteam-product-flows.js';
 
+// Backup, restore and rollback (R14.8)
+export {
+  createBackup,
+  verifyBackup,
+  restoreBackup,
+  rollbackToBackup,
+} from './backup-restore.js';
+export type {
+  BackupManifest,
+  BackupFileEntry,
+  BackupVerification,
+  RestoreResult,
+  RollbackResult,
+} from './backup-restore.js';
+
 // Security contracts (R15.3)
 export {
   auditForSecrets,
