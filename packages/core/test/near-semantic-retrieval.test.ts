@@ -208,3 +208,64 @@ test('compareRecords and threshold mutation preserve the same semantics', () => 
   assert.throws(() => generator.setThreshold(-0.01), RangeError);
   assert.throws(() => generator.setThreshold(1.01), RangeError);
 });
+
+test('adversarial retrieval attacks are rejected by hard constraints', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.7);
+  
+  // Create a query that should match a document about Paris
+  const query = makeSem({ subjectId: 'paris', literal: 'France' });
+  
+  // Create a corpus with a legitimate document
+  const legitimateDoc = { 
+    id: 'legitimate', 
+    sem: makeSem({ subjectId: 'paris', literal: 'France' }) 
+  };
+  
+  // Create an adversarial document that tries to bypass hard constraints
+  // by changing the literal but keeping other fields the same (should still be rejected)
+  const adversarialDoc = { 
+    id: 'adversarial', 
+    sem: makeSem({ subjectId: 'paris', literal: 'Germany' }) 
+  };
+  
+  const corpus = [legitimateDoc, adversarialDoc];
+  
+  const matches = new Set(retrieve(generator, query, corpus));
+  
+  // Only the legitimate document should match
+  assert.ok(matches.has('legitimate'));
+  assert.equal(matches.size, 1);
+  
+  // The adversarial document should not match because of hard constraint on literal
+  assert.equal(matches.has('adversarial'), false);
+});
+
+test('retrieval is robust against adversarial modifications that attempt to evade filtering', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.7);
+  
+  // Query for Paris-related information
+  const query = makeSem({ subjectId: 'paris', kind: 'fact' });
+  
+  // Legitimate document with matching hard fields
+  const legitimateDoc = { id: 'paris-location', sem: makeSem({ subjectId: 'paris', kind: 'fact' }) };
+
+  // Adversarial documents that try to evade by changing hard-constraint fields
+  const adversarialDocs = [
+    { id: 'schema-adversarial', sem: makeSem({ subjectId: 'paris', schema: 'lunum-sem/0.1', kind: 'fact' }) },
+    { id: 'world-adversarial', sem: makeSem({ subjectId: 'paris', world: 'fiction', kind: 'fact' }) },
+    { id: 'kind-adversarial', sem: makeSem({ subjectId: 'paris', kind: 'preference' }) },
+  ];
+
+  const corpus = [legitimateDoc, ...adversarialDocs];
+
+  const matches = new Set(retrieve(generator, query, corpus));
+
+  // Only the legitimate document should match
+  assert.ok(matches.has('paris-location'));
+  assert.equal(matches.size, 1);
+
+  // Adversarial documents should not match due to hard constraints
+  assert.equal(matches.has('schema-adversarial'), false);
+  assert.equal(matches.has('world-adversarial'), false);
+  assert.equal(matches.has('kind-adversarial'), false);
+});
