@@ -241,3 +241,22 @@ export type {
   IsolationViolation,
   IsolationVerification,
 } from './security-contracts.js';
+
+// Supply-chain audit (R15.4)
+export {
+  verifyLockfileIntegrity,
+  auditDependencyProvenance,
+  checkForKnownVulnerabilities,
+  verifyArtifactIntegrity,
+  KNOWN_VULNERABILITIES,
+} from './supply-chain-audit.js';
+export type {
+  LockfileVerification,
+  PackageDep,
+  ProvenanceReport,
+  KnownVulnerability,
+  VulnerablePackage,
+  VulnerabilityReport,
+  ArtifactVerification,
+  SupplyChainReport,
+} from './supply-chain-audit.js';
