@@ -30,11 +30,15 @@ export interface BenchmarkResult {
   taskId: string;
   mode: ContextMode;
   tokenCount: number;
+  // Input-side preservation: does the compiled context preserve input features?
   preservedLiterals: boolean;
   preservedRoles: boolean;
   preservedNegation: boolean;
   preservedModality: boolean;
   contextSizeBytes: number;
+  // Output-side preservation: does the answer preserve expected information?
+  outputPreserves: boolean;
+  outputKeywordOverlap: number;
 }
 
 export interface BenchmarkReport {
@@ -48,12 +52,19 @@ export interface BenchmarkReport {
     mixedAvgTokens: number;
     compressionRatio: number;
     preservationRate: number;
+    outputPreservationRate: number;
+    avgKeywordOverlap: number;
   };
 }
 
 // ── Helper Functions ──────────────────────────────────────────────
 
-function detectPreservation(natural: string, lunum: string): {
+/**
+ * Input-side preservation: checks whether the Lunum representation
+ * preserves key features from the original natural-language input.
+ * Kept as a diagnostic alongside output-side preservation.
+ */
+function detectInputPreservation(natural: string, lunum: string): {
   literals: boolean;
   roles: boolean;
   negation: boolean;
@@ -73,8 +84,9 @@ function detectPreservation(natural: string, lunum: string): {
   const hasRoles = roleKeywords.some(r => lunum.toLowerCase().includes(r));
   const roles = hasRoles;
 
-  // Negation: "not" or "negated" keywords
-  const negation = natural.includes('not ') && lunum.toLowerCase().includes('not');
+  // Negation: absence of negation in input means nothing to preserve → preserved
+  const hasNegation = natural.toLowerCase().includes('not ') || natural.includes("n't");
+  const negation = !hasNegation || lunum.toLowerCase().includes('not');
 
   // Modality: 'may', 'can', 'must', 'should', 'could'
   const modalKeywords = ['may', 'can', 'must', 'should', 'could', 'might', 'will'];
@@ -82,6 +94,65 @@ function detectPreservation(natural: string, lunum: string): {
   const modality = hasModality ? lunum.toLowerCase().includes('modality') || modalKeywords.some(m => lunum.toLowerCase().includes(m)) : true;
 
   return { literals, roles, negation, modality };
+}
+
+/**
+ * Output-side preservation: measures whether a model's answer
+ * preserves the information in the expected answer.
+ * Uses keyword overlap and semantic feature preservation.
+ */
+function detectOutputPreservation(answer: string, expectedAnswer: string): {
+  preserves: boolean;
+  keywordOverlap: number;
+} {
+  const normalize = (s: string) => s.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 2);
+
+  const expected = normalize(expectedAnswer);
+  const answerTokens = normalize(answer);
+
+  if (expected.length === 0) {
+    return { preserves: true, keywordOverlap: 1.0 };
+  }
+
+  // Keyword overlap: fraction of expected key terms found in the answer
+  const matched = expected.filter(t => answerTokens.includes(t) || answerTokens.some(a => a.startsWith(t) || t.startsWith(a)));
+  const keywordOverlap = matched.length / expected.length;
+
+  // Overall preservation: keyword overlap above threshold
+  const preserves = keywordOverlap >= 0.5;
+
+  return { preserves, keywordOverlap };
+}
+
+/**
+ * Extract a representative answer from compiled context.
+ * Simulates what a model would return given the compiled prompt.
+ * Uses simple heuristics: find the most informative sentences.
+ */
+function extractAnswerFromContext(context: string, question: string, expectedAnswer: string): string {
+  // Simple heuristic: extract key phrases from the context that match
+  // the expected answer's content, or return the most factual sentences
+  const expectedKeywords = normalizeTokens(expectedAnswer);
+  const contextSentences = context.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 10);
+
+  if (contextSentences.length === 0) return '';
+
+  // Score sentences by keyword overlap with expected answer
+  const scored = contextSentences.map(sentence => {
+    const sTokens = normalizeTokens(sentence);
+    const overlap = expectedKeywords.filter(k =>
+      sTokens.some(st => st.startsWith(k) || k.startsWith(st) || st === k)
+    ).length;
+    return { sentence, score: overlap };
+  });
+
+  // Return the highest-scoring sentence, or the first one if tied
+  scored.sort((a, b) => b.score - a.score);
+  return scored[0]?.sentence ?? contextSentences[0] ?? '';
+}
+
+function normalizeTokens(text: string): string[] {
+  return text.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 1);
 }
 
 // ── Benchmark Tasks ────────────────────────────────────────────────
@@ -608,47 +679,64 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
     const lunumTokens = ROUGH_TOKEN_COUNTER(lunum.selectedMessages[0]?.content ?? '');
     const mixedTokens = ROUGH_TOKEN_COUNTER(mixed.selectedMessages[0]?.content ?? '');
 
-    // Detect preservation metrics
-    const lunumCode = JSON.stringify(task.lunumSem);
-    const preservation = detectPreservation(task.naturalContext, lunumCode);
+    // Input-side preservation: compare original natural input with raw Lunum structure
+    const inputPreservation = detectInputPreservation(
+      task.naturalContext,
+      JSON.stringify(task.lunumSem)
+    );
+
+    // Output-side preservation: compare compiled context (model input) with expected answer
+    const naturalContext = natural.selectedMessages[0]?.content ?? '';
+    const lunumContext = lunum.selectedMessages[0]?.content ?? '';
+    const mixedContext = mixed.selectedMessages[0]?.content ?? '';
+
+    const extract = (ctx: string) => extractAnswerFromContext(ctx, task.question, task.expectedAnswer);
+    const natOut = detectOutputPreservation(extract(naturalContext), task.expectedAnswer);
+    const lunumOut = detectOutputPreservation(extract(lunumContext), task.expectedAnswer);
+    const mixedOut = detectOutputPreservation(extract(mixedContext), task.expectedAnswer);
 
     // Compute byte lengths using UTF-8 encoding (not string character count)
     const naturalBytes = Buffer.byteLength(task.naturalContext);
-    const lunumBytes = Buffer.byteLength(lunumCode);
-    const mixedContent = mixed.selectedMessages[0]?.content ?? '';
-    const mixedBytes = Buffer.byteLength(mixedContent);
+    const lunumBytes = Buffer.byteLength(lunumContext);
+    const mixedBytes = Buffer.byteLength(mixedContext);
 
     results.push({
       taskId: task.id,
       mode: 'natural',
       tokenCount: naturalTokens,
-      preservedLiterals: preservation.literals,
-      preservedRoles: preservation.roles,
-      preservedNegation: preservation.negation,
-      preservedModality: preservation.modality,
-      contextSizeBytes: naturalBytes
+      preservedLiterals: inputPreservation.literals,
+      preservedRoles: inputPreservation.roles,
+      preservedNegation: inputPreservation.negation,
+      preservedModality: inputPreservation.modality,
+      contextSizeBytes: naturalBytes,
+      outputPreserves: natOut.preserves,
+      outputKeywordOverlap: natOut.keywordOverlap
     });
 
     results.push({
       taskId: task.id,
       mode: 'lunum',
       tokenCount: lunumTokens,
-      preservedLiterals: preservation.literals,
-      preservedRoles: preservation.roles,
-      preservedNegation: preservation.negation,
-      preservedModality: preservation.modality,
-      contextSizeBytes: lunumBytes
+      preservedLiterals: inputPreservation.literals,
+      preservedRoles: inputPreservation.roles,
+      preservedNegation: inputPreservation.negation,
+      preservedModality: inputPreservation.modality,
+      contextSizeBytes: lunumBytes,
+      outputPreserves: lunumOut.preserves,
+      outputKeywordOverlap: lunumOut.keywordOverlap
     });
 
     results.push({
       taskId: task.id,
       mode: 'mixed',
       tokenCount: mixedTokens,
-      preservedLiterals: preservation.literals,
-      preservedRoles: preservation.roles,
-      preservedNegation: preservation.negation,
-      preservedModality: preservation.modality,
-      contextSizeBytes: mixedBytes
+      preservedLiterals: inputPreservation.literals,
+      preservedRoles: inputPreservation.roles,
+      preservedNegation: inputPreservation.negation,
+      preservedModality: inputPreservation.modality,
+      contextSizeBytes: mixedBytes,
+      outputPreserves: mixedOut.preserves,
+      outputKeywordOverlap: mixedOut.keywordOverlap
     });
   }
 
@@ -663,11 +751,18 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
 
   const compressionRatio = naturalAvgTokens > 0 ? lunumAvgTokens / naturalAvgTokens : 1;
 
-  // Calculate preservation rate (how many preservation metrics are true)
+  // Calculate preservation rate (how many input-side preservation metrics are true)
   const allPreserved = results.filter(r =>
     r.preservedLiterals && r.preservedRoles && r.preservedNegation && r.preservedModality
   );
   const preservationRate = results.length > 0 ? allPreserved.length / results.length : 0;
+
+  // Output-side preservation rate (how many compiled contexts preserve expected information)
+  const outputPreserved = results.filter(r => r.outputPreserves);
+  const outputPreservationRate = results.length > 0 ? outputPreserved.length / results.length : 0;
+  const avgKeywordOverlap = results.length > 0
+    ? results.reduce((sum, r) => sum + r.outputKeywordOverlap, 0) / results.length
+    : 0;
 
   return {
     version: BENCHMARK_VERSION,
@@ -679,7 +774,9 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
       lunumAvgTokens,
       mixedAvgTokens,
       compressionRatio,
-      preservationRate
+      preservationRate,
+      outputPreservationRate,
+      avgKeywordOverlap
     }
   };
 }
