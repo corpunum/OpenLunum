@@ -278,3 +278,20 @@ export type {
   AuditEntry,
   AuditTrail,
 } from './data-lifecycle.js';
+
+// Incident response (R15.6)
+export {
+  detectEvidenceTampering,
+  quarantineEvidence,
+  simulateIncident,
+  INCIDENT_RUNBOOKS,
+} from './incident-response.js';
+export type {
+  IncidentType,
+  TamperDetectionResult,
+  QuarantineEntry,
+  QuarantineResult,
+  RunbookStep,
+  IncidentRunbook,
+  SimulationResult,
+} from './incident-response.js';
