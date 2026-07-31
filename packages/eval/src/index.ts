@@ -193,3 +193,12 @@ export { RoundTripChecker } from './roundtrip-consistency.js';
 
 // False positive review
 export { runFalsePositiveReviewCliEntrypoint } from './false-positive-review-cli.js';
+
+// Red-team product flows (R15.5)
+export { runProductFlowRedTeam, PRODUCT_FLOW_TEST_CASES } from './redteam-product-flows.js';
+export type {
+  ProductFlowTestCase,
+  ProductFlowTestResult,
+  ProductFlowCategorySummary,
+  ProductFlowSummary,
+} from './redteam-product-flows.js';
