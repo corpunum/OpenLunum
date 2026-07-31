@@ -327,3 +327,95 @@ test('enforceDomainGate: returns decision when not blocked', () => {
   const decision = enforceDomainGate({ sourceText: 'The sky is blue.' }, registry);
   assert.equal(decision.allowed, true);
 });
+
+// ============================================
+// Secondary domain gating fix (#497)
+// ============================================
+
+test('gate: primary opted-in but secondary prohibited — still blocked (#497)', () => {
+  const registry = new DomainOptInRegistry();
+  registry.register({
+    domain: 'legal_advice',
+    evidence: completeLegalEvidence(),
+    approvedBy: 'reviewer@example.com',
+    approvedAt: '2026-07-31T00:00:00Z',
+    justification: 'justified'
+  });
+  // Content triggers legal_advice (primary, opted-in) AND destructive_action_authorization (secondary, NOT opted-in)
+  const decision = evaluateDomainGate(
+    { sourceText: 'Should I sue them and also delete all production records?' },
+    registry
+  );
+  assert.equal(decision.allowed, false, 'should be blocked when secondary domain lacks opt-in');
+  assert.equal(decision.blocked, true);
+  // The blocked domain is the secondary (destructive) because legal_advice is opted-in
+  assert.equal(decision.domain, 'destructive_action_authorization');
+  assert.equal(decision.requiresOptIn, true);
+  // classification should still show both domains
+  assert.ok(
+    decision.classification.domains.some((d) => d.domain === 'legal_advice'),
+    'legal_advice should appear in classification'
+  );
+  assert.ok(
+    decision.classification.domains.some((d) => d.domain === 'destructive_action_authorization'),
+    'destructive_action_authorization should appear in classification'
+  );
+});
+
+test('gate: both primary and secondary opted-in — allowed', () => {
+  const registry = new DomainOptInRegistry();
+  registry.register({
+    domain: 'legal_advice',
+    evidence: completeLegalEvidence(),
+    approvedBy: 'reviewer@example.com',
+    approvedAt: '2026-07-31T00:00:00Z',
+    justification: 'justified'
+  });
+  registry.register({
+    domain: 'destructive_action_authorization',
+    evidence: [
+      { type: 'human_confirmation', description: 'Requires explicit human confirmation step' },
+      { type: 'reversibility_assessment', description: 'Action is reversible via backup' },
+      { type: 'blast_radius_review', description: 'Limited to staging environment' }
+    ],
+    approvedBy: 'reviewer@example.com',
+    approvedAt: '2026-07-31T00:00:00Z',
+    justification: 'justified'
+  });
+  const decision = evaluateDomainGate(
+    { sourceText: 'Should I sue them and also delete all production records?' },
+    registry
+  );
+  assert.equal(decision.allowed, true);
+  assert.equal(decision.blocked, false);
+});
+
+test('gate: primary below threshold, secondary above threshold without opt-in — blocked', () => {
+  const registry = new DomainOptInRegistry();
+  // Content with a weak legal signal (below threshold) but a strong destructive signal
+  const decision = evaluateDomainGate(
+    { sourceText: 'delete all files now' },
+    registry
+  );
+  assert.equal(decision.allowed, false);
+  assert.equal(decision.blocked, true);
+  assert.equal(decision.domain, 'destructive_action_authorization');
+});
+
+test('classifier: category field influences domain confidence', () => {
+  const resultWithCategory = classifyDomain({
+    sourceText: 'unrelated text',
+    category: 'legal_advice'
+  });
+  const resultWithoutCategory = classifyDomain({
+    sourceText: 'unrelated text'
+  });
+  // With category tag, legal_advice should appear and be boosted
+  assert.ok(
+    resultWithCategory.domains.some((d) => d.domain === 'legal_advice'),
+    'category should produce a legal_advice match'
+  );
+  // The confidence with category should be higher
+  const catMatch = resultWithCategory.domains.find((d) => d.domain === 'legal_advice');
+  assert.ok(catMatch && catMatch.confidence >= 0.95, 'category should boost confidence');
+});
