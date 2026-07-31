@@ -612,8 +612,11 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
     const lunumCode = JSON.stringify(task.lunumSem);
     const preservation = detectPreservation(task.naturalContext, lunumCode);
 
-    // Create results for each mode
-    const contextBytes = task.naturalContext.length;
+    // Compute byte lengths using UTF-8 encoding (not string character count)
+    const naturalBytes = Buffer.byteLength(task.naturalContext);
+    const lunumBytes = Buffer.byteLength(lunumCode);
+    const mixedContent = mixed.selectedMessages[0]?.content ?? '';
+    const mixedBytes = Buffer.byteLength(mixedContent);
 
     results.push({
       taskId: task.id,
@@ -623,7 +626,7 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
       preservedRoles: preservation.roles,
       preservedNegation: preservation.negation,
       preservedModality: preservation.modality,
-      contextSizeBytes: contextBytes
+      contextSizeBytes: naturalBytes
     });
 
     results.push({
@@ -634,7 +637,7 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
       preservedRoles: preservation.roles,
       preservedNegation: preservation.negation,
       preservedModality: preservation.modality,
-      contextSizeBytes: lunumCode.length
+      contextSizeBytes: lunumBytes
     });
 
     results.push({
@@ -645,7 +648,7 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
       preservedRoles: preservation.roles,
       preservedNegation: preservation.negation,
       preservedModality: preservation.modality,
-      contextSizeBytes: Math.min(contextBytes, lunumCode.length)
+      contextSizeBytes: mixedBytes
     });
   }
 

@@ -471,4 +471,79 @@ describe('Context Compaction Benchmark', () => {
       'Without eligible=true, mixed mode should fall back to natural'
     );
   });
+
+  // ── Multi-Byte Character Tests ─────────────────────────────────
+
+  it('should calculate contextSizeBytes using UTF-8 byte length for multi-byte characters', () => {
+    const multiByteTask: BenchmarkTask = {
+      id: 'task-multibyte-001',
+      name: 'Multi-Byte Character Context',
+      category: 'qa',
+      naturalContext: '東京は日本の首都です。人口は約1,400万人です。🌏',
+      lunumSem: {
+        schema: 'lunum/1.0',
+        world: 'entity',
+        kind: 'fact',
+        clauses: [
+          {
+            predicate: 'is_capital',
+            roles: { country: 'Japan', city: 'Tokyo' }
+          }
+        ]
+      },
+      question: 'Where is Tokyo?',
+      expectedAnswer: 'Tokyo is the capital of Japan. 🌏'
+    };
+
+    const report = runBenchmark([multiByteTask]);
+    const naturalResult = report.results.find(r => r.taskId === multiByteTask.id && r.mode === 'natural')!;
+
+    const strLength = multiByteTask.naturalContext.length;
+    const byteLength = Buffer.byteLength(multiByteTask.naturalContext);
+
+    assert.ok(
+      byteLength > strLength,
+      `Expected byte length (${byteLength}) to exceed string length (${strLength}) for multi-byte context`
+    );
+    assert.strictEqual(
+      naturalResult.contextSizeBytes,
+      byteLength,
+      `contextSizeBytes should use Buffer.byteLength() (${byteLength}), not string.length (${strLength})`
+    );
+  });
+
+  it('should calculate mixed mode contextSizeBytes using UTF-8 byte length for multi-byte characters', () => {
+    const multiByteTask: BenchmarkTask = {
+      id: 'task-multibyte-mixed-001',
+      name: 'Multi-Byte Mixed Mode',
+      category: 'qa',
+      naturalContext: '北京是中国的首都。🏛️',
+      lunumSem: {
+        schema: 'lunum/1.0',
+        world: 'entity',
+        kind: 'fact',
+        clauses: [
+          {
+            predicate: 'is_capital',
+            roles: { country: 'China', city: 'Beijing' }
+          }
+        ]
+      },
+      question: 'What is Beijing?',
+      expectedAnswer: 'Beijing is the capital of China.'
+    };
+
+    const report = runBenchmark([multiByteTask]);
+    const mixedResult = report.results.find(r => r.taskId === multiByteTask.id && r.mode === 'mixed')!;
+
+    assert.strictEqual(
+      typeof mixedResult.contextSizeBytes,
+      'number',
+      'Mixed mode contextSizeBytes should be a number'
+    );
+    assert.ok(
+      mixedResult.contextSizeBytes > 0,
+      'Mixed mode contextSizeBytes should be positive for multi-byte content'
+    );
+  });
 });
