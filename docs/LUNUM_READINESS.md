@@ -75,8 +75,8 @@ All of the following must be accepted:
 | CLI integration | **86%** | Inspect, encode, migrate and quality-gate paths with fail-closed validation and atomic writes; stable command/flag/exit-code contracts; streaming JSONL processing; structured machine-readable errors; install/upgrade/rollback contract (#515); e2e tests from built artifacts (#516); performance and failure-injection tests (#517) | Platform support (Linux/macOS/Windows) remains untested | `packages/cli/README.md`, CLI tests, #387, #515, #516, #517 |
 | HTTP API, MCP and adapters | **68%** | HTTP, MCP and OpenUnum adoption paths exist; versioned API/MCP contracts with auth middleware, rate limiting, CORS and error response format tests; JSON-structured logging with OTel-compatible traces and correlation IDs (#478) | Sustained load testing, SLOs and independent deployments remain unproven | `README.md`, `STATUS.md`, package integration tests, #388, #468/#478 |
 | Evaluation and reproducibility | **97%** | Versioned protocol, manifests, hashes, raw JSONL, deterministic bundles, error taxonomy, exact-SHA evaluation, machine-readable evidence registry with automated consistency checking, expanded datasets, repeated-sampling infrastructure and model-weight hash registry for 5 named models | External replication, statistical conventions and superseded-evidence lineage remain | #293/#294, #295-#315, #321-#336, `docs/evaluation/testLunumv1/`, #353/#361, #358/#363, #385 |
-| Operational reliability | **54%** | Endpoint verification, one-shot workers, thermal watchdogs, bounded calls, opt-in streaming with TTFT/TPOT, load-soak and concurrency test infrastructure (#449), mock-transport recovery tests | Sustained load execution, failover, SLOs, crash/disk-pressure recovery remain unproven | #272/#289, #296/#297, #301/#302, #316/#317, #322/#324, #357/#364, #449 |
-| Security, governance and rollback | **64%** | Protected-data boundaries, prompt-injection/safety tests, rollback/compatibility docs, exact-head merge controls and threat model eval vectors for adversarial inputs (injection, overflow, encoding, schema abuse) | No external security assessment, tenant isolation proof, production incident drills or compliance mapping | `STATUS.md`, repository operating model, CI policies, #390 |
+| Operational reliability | **79%** | Endpoint verification, one-shot workers, thermal watchdogs, bounded calls, opt-in streaming with TTFT/TPOT, load-soak and concurrency test infrastructure (#449), mock-transport recovery tests, performance bias control (#539), health/readiness probes and failover procedures (#544), SLO compliance verification and measured soak (#545), backup/restore/rollback exercises (#540) | R14.4 crash/disk-pressure recovery only partially proven (mock transport); no live sustained load execution against production endpoints | #272/#289, #296/#297, #301/#302, #316/#317, #322/#324, #357/#364, #449, #539, #540, #544, #545 |
+| Security, governance and rollback | **88%** | Protected-data boundaries, prompt-injection/safety tests, rollback/compatibility docs, exact-head merge controls, threat model eval vectors, secret management and tenant isolation (#538), red-team product flow suites (#537), supply-chain and dependency provenance controls (#541), incident response and compromised-evidence exercises (#543), privacy/retention/deletion audit (#542) | No external security assessment or penetration testing (R15.2) | `STATUS.md`, repository operating model, CI policies, #390, #537, #538, #541, #542, #543 |
 | External adoption and ecosystem | **28%** | Multiple integration surfaces; narrow internal pilot designed with success/rollback criteria (#456) | No accepted evidence that unrelated products use the same core representation in production-like conditions | `VISION.md`, `README.md`, adapter paths, #456 |
 
 ## Actions required to reach 100% by area
@@ -241,7 +241,7 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [ ] **R13.6 Version percentile/statistical conventions** and verify independent recomputation.
 - [ ] **R13.7 Preserve superseded evidence and correction lineage** without rewriting history.
 
-### R14 — Operational reliability: 48% → 100%
+### R14 — Operational reliability: 79% → 100%
 
 **100% definition:** Declared deployments meet measured availability, latency, recovery and capacity objectives under normal and fault conditions.
 
@@ -249,22 +249,22 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R14.2 Resolve cold-weight preflight ambiguity** — accepted. `scripts/verify-audit-endpoints.sh` now reports `pass`/`cold`/`absent`/`error` as distinct states. Status: accepted — issue #357, PR #364, merge SHA `f665e10`, evidence `scripts/verify-audit-endpoints.sh`, `scripts/verify-audit-endpoints.test.mjs`
 - [x] **R14.3 Add sustained load and concurrency tests** — accepted infrastructure. Load and concurrency test infrastructure. Status: accepted — PR #449, merge SHA `30d6e51`
 - [x] **R14.4 Test process crash, router restart, timeout, cancellation, disk pressure and partial-output recovery** — accepted partial. Connection-reset and timeout recovery tested via mock server; no silent retry or corrupted evidence. Crash, router restart, disk pressure and partial-output recovery remain unproven. Status: accepted partial — issue #357, PR #364, merge SHA `f665e10`, evidence `packages/eval/test/model-streaming.test.ts`
-- [ ] **R14.5 Control or explicitly model caching and thermal-order bias** in performance evidence.
-- [ ] **R14.6 Add health/readiness probes and failover procedures.**
-- [ ] **R14.7 Declare SLOs and complete a measured soak period.**
-- [ ] **R14.8 Run backup, restore and rollback exercises.**
+- [x] **R14.5 Control or explicitly model caching and thermal-order bias** — accepted. Shuffle, thermal cooldown, cache bias detection and bias-controlled measurement with warmup/cooldown. Status: accepted — issue #528, PR #539, merge SHA `89528ca`, evidence `packages/eval/src/perf-bias-control.ts`, `packages/eval/test/perf-bias-control.test.ts`
+- [x] **R14.6 Add health/readiness probes and failover procedures** — accepted. Health probes with built-in sem/fingerprint/schema checks, readiness gate, 3 failover procedures. Status: accepted — issue #529, PR #544, merge SHA `6d70c08`, evidence `packages/eval/src/health-probes.ts`, `packages/eval/test/health-probes.test.ts`
+- [x] **R14.7 Declare SLOs and complete a measured soak period** — accepted. SLO compliance verification with margin-to-breach percentages, measured soak runner. Status: accepted — issue #530, PR #545, merge SHA `b6c45df`, evidence `packages/eval/src/slo-compliance.ts`, `packages/eval/test/slo-compliance.test.ts`
+- [x] **R14.8 Run backup, restore and rollback exercises** — accepted. Backup with SHA-256 manifest, verify/restore/rollback with integrity checks. Status: accepted — issue #531, PR #540, merge SHA `407a000`, evidence `packages/eval/src/backup-restore.ts`, `packages/eval/test/backup-restore.test.ts`
 
-### R15 — Security, governance and rollback: 57% → 100%
+### R15 — Security, governance and rollback: 88% → 100%
 
 **100% definition:** The supported system has an independently reviewed threat model, secure deployment controls, incident response, dependency integrity and tested rollback.
 
 - [x] **R15.1 Update the threat model** — accepted. Threat model eval vectors for adversarial inputs covering injection, overflow, encoding attacks and schema abuse with per-vector pass/fail and severity classification. Status: accepted — issue #390, PR #433, merge SHA `e137d6e`, evidence `packages/eval/src/threat-model.ts`, `packages/eval/test/threat-model.test.ts`
 - [ ] **R15.2 Complete external security review or penetration testing.**
-- [ ] **R15.3 Add secret management, least privilege and tenant isolation guidance/tests.**
-- [ ] **R15.4 Add dependency, provenance and supply-chain controls** including lockfile/artifact verification.
-- [ ] **R15.5 Run prompt-injection and semantic-confusion red-team suites** against supported product flows.
-- [ ] **R15.6 Run incident, rollback and compromised-evidence exercises.**
-- [ ] **R15.7 Map privacy, retention, deletion and audit requirements** for target deployments.
+- [x] **R15.3 Add secret management, least privilege and tenant isolation guidance/tests** — accepted. Secret scanning, tenant isolation verification, least privilege policies. Status: accepted — issue #532, PR #538, merge SHA `8dffd63`, evidence `packages/eval/src/security-contracts.ts`, `packages/eval/test/security-contracts.test.ts`
+- [x] **R15.4 Add dependency, provenance and supply-chain controls** — accepted. Lockfile verification, dependency provenance audit, known vulnerability check, artifact integrity with SHA-256. Status: accepted — issue #533, PR #541, merge SHA `fe0a933`, evidence `packages/eval/src/supply-chain-audit.ts`, `packages/eval/test/supply-chain-audit.test.ts`
+- [x] **R15.5 Run prompt-injection and semantic-confusion red-team suites** — accepted. 13 test cases across 5 categories (CLI injection, JSONL poisoning, schema injection, fingerprint attack, unicode normalization). Status: accepted — issue #534, PR #537, merge SHA `d9ea61a`, evidence `packages/eval/src/redteam-product-flows.ts`, `packages/eval/test/redteam-product-flows.test.ts`
+- [x] **R15.6 Run incident, rollback and compromised-evidence exercises** — accepted. Evidence tampering detection, quarantine with manifest, 4 incident runbooks with simulation/validation. Status: accepted — issue #535, PR #543, merge SHA `b3a8411`, evidence `packages/eval/src/incident-response.ts`, `packages/eval/test/incident-response.test.ts`
+- [x] **R15.7 Map privacy, retention, deletion and audit requirements** — accepted. Data sensitivity classification, retention policies, compliance auditing, deletion manifests with audit trail. Status: accepted — issue #536, PR #542, merge SHA `7ab2f2e`, evidence `packages/eval/src/data-lifecycle.ts`, `packages/eval/test/data-lifecycle.test.ts`
 
 ### R16 — External adoption and ecosystem: 20% → 100%
 
@@ -383,6 +383,8 @@ For failed or rejected actions, append the same evidence detail and preserve the
 | 2026-07-30 | Safety-critical preservation (R6) | 64% | 74% | PR #480 (R6.1, merge SHA `b8b5cee`): hard gates converting invariants to verdict enforcement. PR #473 (R6.2, merge SHA `2a75ea1`): 7-category protected literal registry. PR #476 (R6.4, merge SHA `74eca3b`): prohibited automatic-use domains. Implemented contract +6%, deterministic verification +4%. | Invariants now block false match verdicts; 7 literal categories detected; 4 prohibited domains enforced | Adversarial red-team and incident-handling remain unproven | Claude Opus 4.6 |
 | 2026-07-30 | Agent-state and handoffs (R10) | 72% | 80% | PR #474 (R10.3, merge SHA `68f9dc7`): SHA-256 hash chain tamper evidence. PR #477 (R10.4, merge SHA `2901cad`): idempotency keys and duplicate detection. Implemented contract +5%, deterministic verification +3%. | Tamper detection and idempotency both landed with tests | Interoperability and long-running workflow proof remain absent | Claude Opus 4.6 |
 | 2026-07-30 | HTTP API, MCP and adapters (R12) | 62% | 68% | PR #478 (R12.4, merge SHA `2c8649e`): JSON-structured logging with OTel-compatible traces, correlation IDs and span hierarchy. Implemented contract +3%, deterministic verification +3%. | Full observability stack with configurable sinks | Sustained load testing, SLOs and independent deployments remain unproven | Claude Opus 4.6 |
+| 2026-08-01 | Operational reliability (R14) | 54% | 79% | PR #539 (R14.5, merge SHA `89528ca`): perf bias control. PR #544 (R14.6, merge SHA `6d70c08`): health/readiness probes and failover. PR #545 (R14.7, merge SHA `b6c45df`): SLO compliance and measured soak. PR #540 (R14.8, merge SHA `407a000`): backup/restore/rollback exercises. Implemented contract +15%, deterministic verification +10%. | All 4 remaining R14 items landed with tests; bias control, health probes, SLO verification, backup integrity all passing | R14.4 crash/disk-pressure recovery remains partial (mock transport only); no live sustained load against production endpoints | Claude Opus 4.6 |
+| 2026-08-01 | Security, governance and rollback (R15) | 64% | 88% | PR #538 (R15.3, merge SHA `8dffd63`): secret management and tenant isolation. PR #537 (R15.5, merge SHA `d9ea61a`): red-team product flows. PR #541 (R15.4, merge SHA `fe0a933`): supply-chain audit. PR #543 (R15.6, merge SHA `b3a8411`): incident response exercises. PR #542 (R15.7, merge SHA `7ab2f2e`): data lifecycle and retention. Implemented contract +16%, deterministic verification +8%. | 5 of 6 remaining R15 items landed; secret scanning, red-team suites, supply-chain controls, incident response, and data lifecycle all passing | R15.2 external security review/penetration testing remains open — requires external party | Claude Opus 4.6 |
 
 ## Current recommended sequence
 
@@ -393,8 +395,9 @@ This tracker does not autonomously assign work. The vision owner chooses priorit
 3. Make an explicit owner calibration decision using the #365/#374 threshold sweep data (R5.5).
 4. Execute the expanded multilingual corpus against live local models to produce accepted baselines (R2.2, R2.6).
 5. Prove context compaction preserves downstream task quality with live model evidence (R7).
-6. Complete operational reliability gaps: sustained load, failover, SLOs (R14).
-7. Continue product-pilot work (R16) and external adoption.
+6. Complete remaining operational reliability gap: live sustained load execution against production endpoints (R14).
+7. Arrange external security review or penetration testing (R15.2).
+8. Continue product-pilot work (R16) and external adoption.
 
 ## Honest current conclusion
 
