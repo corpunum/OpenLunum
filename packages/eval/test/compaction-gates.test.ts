@@ -20,6 +20,7 @@ function makeResult(mode: 'natural' | 'lunum' | 'mixed', overrides: Partial<Benc
     contextSizeBytes: mode === 'natural' ? 400 : 280,
     outputPreserves: true,
     outputKeywordOverlap: 0.8,
+    taskSuccess: true,
     ...overrides,
   };
 }
@@ -43,6 +44,9 @@ function makeReport(overrides: Partial<BenchmarkReport['summary']> = {}, results
       preservationRate: 1.0,
       outputPreservationRate: 1.0,
       avgKeywordOverlap: 0.8,
+      naturalTokensPerSuccess: 100,
+      lunumTokensPerSuccess: 70,
+      mixedTokensPerSuccess: 85,
       ...overrides,
     },
   };

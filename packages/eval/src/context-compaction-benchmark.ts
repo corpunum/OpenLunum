@@ -46,6 +46,7 @@ export interface BenchmarkResult {
   contextSizeBytes: number;
   outputPreserves: boolean;
   outputKeywordOverlap: number;
+  taskSuccess: boolean;
 }
 
 export interface BenchmarkReport {
@@ -61,6 +62,9 @@ export interface BenchmarkReport {
     preservationRate: number;
     outputPreservationRate: number;
     avgKeywordOverlap: number;
+    naturalTokensPerSuccess: number;
+    lunumTokensPerSuccess: number;
+    mixedTokensPerSuccess: number;
   };
 }
 
@@ -719,7 +723,8 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
       preservedModality: inputPreservation.modality,
       contextSizeBytes: naturalBytes,
       outputPreserves: natOut.preserves,
-      outputKeywordOverlap: natOut.keywordOverlap
+      outputKeywordOverlap: natOut.keywordOverlap,
+      taskSuccess: natOut.preserves,
     });
 
     results.push({
@@ -733,7 +738,8 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
       preservedModality: inputPreservation.modality,
       contextSizeBytes: lunumBytes,
       outputPreserves: lunumOut.preserves,
-      outputKeywordOverlap: lunumOut.keywordOverlap
+      outputKeywordOverlap: lunumOut.keywordOverlap,
+      taskSuccess: lunumOut.preserves,
     });
 
     results.push({
@@ -747,7 +753,8 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
       preservedModality: inputPreservation.modality,
       contextSizeBytes: mixedBytes,
       outputPreserves: mixedOut.preserves,
-      outputKeywordOverlap: mixedOut.keywordOverlap
+      outputKeywordOverlap: mixedOut.keywordOverlap,
+      taskSuccess: mixedOut.preserves,
     });
   }
 
@@ -775,6 +782,13 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
     ? results.reduce((sum, r) => sum + r.outputKeywordOverlap, 0) / results.length
     : 0;
 
+  function tokensPerSuccess(modeResults: BenchmarkResult[]): number {
+    const successes = modeResults.filter(r => r.taskSuccess).length;
+    const totalTokens = modeResults.reduce((sum, r) => sum + r.tokenCount, 0);
+    if (successes === 0) return totalTokens > 0 ? totalTokens * modeResults.length : 0;
+    return totalTokens / successes;
+  }
+
   return {
     version: BENCHMARK_VERSION,
     timestamp: new Date().toISOString(),
@@ -787,7 +801,10 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
       compressionRatio,
       preservationRate,
       outputPreservationRate,
-      avgKeywordOverlap
+      avgKeywordOverlap,
+      naturalTokensPerSuccess: tokensPerSuccess(naturalResults),
+      lunumTokensPerSuccess: tokensPerSuccess(lunumResults),
+      mixedTokensPerSuccess: tokensPerSuccess(mixedResults),
     }
   };
 }
