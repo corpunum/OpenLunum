@@ -100,6 +100,10 @@ export type {
 export { computeFreshnessDecay, computeRankedScore, rankResults, DEFAULT_RANKING_WEIGHTS } from './retrieval-ranking.js';
 export type { RankingSignal, RankingWeights, RankedResult } from './retrieval-ranking.js';
 
+// Retrieval strategy comparison
+export { compareStrategies, DEFAULT_HYBRID_WEIGHTS } from './retrieval-strategy-comparison.js';
+export type { StrategyName, RetrievalDocument, StrategyMetrics, StrategyComparisonReport, RetrievalQuery, HybridWeights } from './retrieval-strategy-comparison.js';
+
 // Context compaction
 export { runBenchmark } from './context-compaction-benchmark.js';
 export type {
