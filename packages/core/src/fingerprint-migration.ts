@@ -294,9 +294,13 @@ export function migrateForward01to02(
         }
       }
 
-      // Normalize time to ISO 8601 string
-      if (upgraded.time !== undefined && typeof upgraded.time !== 'string') {
-        upgraded.time = typeof upgraded.time === 'object' && upgraded.time !== null
+      // Normalize time to ISO 8601 string.
+      // `time: null` and an omitted `time` field are both "no time" (see
+      // canonicalizeSem's `clause.time != null` check) and MUST canonicalize
+      // identically across migration too — identity is preserved for both.
+      // Only a present, non-null, non-string time value is lossily stringified.
+      if (upgraded.time != null && typeof upgraded.time !== 'string') {
+        upgraded.time = typeof upgraded.time === 'object'
           ? JSON.stringify(upgraded.time)
           : String(upgraded.time);
         warnings.push({
