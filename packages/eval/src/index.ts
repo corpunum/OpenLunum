@@ -96,6 +96,10 @@ export type {
   RetrievalItemResult,
 } from './retrieval-runner.js';
 
+// Retrieval ranking
+export { computeFreshnessDecay, computeRankedScore, rankResults, DEFAULT_RANKING_WEIGHTS } from './retrieval-ranking.js';
+export type { RankingSignal, RankingWeights, RankedResult } from './retrieval-ranking.js';
+
 // Context compaction
 export { runBenchmark } from './context-compaction-benchmark.js';
 export type {
