@@ -238,6 +238,10 @@ export type {
   FailoverProcedure,
 } from './health-probes.js';
 
+// SLO compliance (R14.7)
+export { verifySloCompliance, runMeasuredSoak } from './slo-compliance.js';
+export type { MarginReport, SloComplianceEntry, SloComplianceReport } from './slo-compliance.js';
+
 // Security contracts (R15.3)
 export {
   auditForSecrets,
