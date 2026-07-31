@@ -96,3 +96,4 @@ export * from './prohibited-domains.js';
 export * from './observability.js';
 export * from './hard-gates.js';
 export * from './human-review-policy.js';
+export * from './context-mode-selector.js';
