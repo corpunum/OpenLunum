@@ -7,8 +7,16 @@
  */
 
 import { compileContext, type ContextMessage, type ContextMode } from '@corpunum/lunum';
-import { ROUGH_TOKEN_COUNTER } from '@corpunum/lunum';
+import { type TokenCounter } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
+
+export type TokenCountMethod = 'exact' | 'calibrated';
+
+const BYTES_PER_TOKEN_EN = 3.5;
+
+export function calibratedTokenCount(text: string): number {
+  return Math.max(1, Math.ceil(Buffer.byteLength(text, 'utf8') / BYTES_PER_TOKEN_EN));
+}
 
 export const BENCHMARK_VERSION = '0.1.0';
 
@@ -30,13 +38,12 @@ export interface BenchmarkResult {
   taskId: string;
   mode: ContextMode;
   tokenCount: number;
-  // Input-side preservation: does the compiled context preserve input features?
+  tokenCountMethod: TokenCountMethod;
   preservedLiterals: boolean;
   preservedRoles: boolean;
   preservedNegation: boolean;
   preservedModality: boolean;
   contextSizeBytes: number;
-  // Output-side preservation: does the answer preserve expected information?
   outputPreserves: boolean;
   outputKeywordOverlap: number;
 }
@@ -655,7 +662,7 @@ export const BENCHMARK_TASKS: BenchmarkTask[] = [
 
 // ── Benchmark Execution ────────────────────────────────────────────
 
-export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
+export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter): BenchmarkReport {
   const results: BenchmarkResult[] = [];
 
   for (const task of tasks) {
@@ -674,10 +681,11 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
     const lunum = compileContext(messages, { mode: 'lunum' });
     const mixed = compileContext(messages, { mode: 'mixed' });
 
-    // Calculate token counts
-    const naturalTokens = ROUGH_TOKEN_COUNTER(natural.selectedMessages[0]?.content ?? '');
-    const lunumTokens = ROUGH_TOKEN_COUNTER(lunum.selectedMessages[0]?.content ?? '');
-    const mixedTokens = ROUGH_TOKEN_COUNTER(mixed.selectedMessages[0]?.content ?? '');
+    const countTokens = tokenCounter ?? calibratedTokenCount;
+    const method: TokenCountMethod = tokenCounter ? 'exact' : 'calibrated';
+    const naturalTokens = countTokens(natural.selectedMessages[0]?.content ?? '');
+    const lunumTokens = countTokens(lunum.selectedMessages[0]?.content ?? '');
+    const mixedTokens = countTokens(mixed.selectedMessages[0]?.content ?? '');
 
     // Input-side preservation: compare original natural input with raw Lunum structure
     const inputPreservation = detectInputPreservation(
@@ -704,6 +712,7 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
       taskId: task.id,
       mode: 'natural',
       tokenCount: naturalTokens,
+      tokenCountMethod: method,
       preservedLiterals: inputPreservation.literals,
       preservedRoles: inputPreservation.roles,
       preservedNegation: inputPreservation.negation,
@@ -717,6 +726,7 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
       taskId: task.id,
       mode: 'lunum',
       tokenCount: lunumTokens,
+      tokenCountMethod: method,
       preservedLiterals: inputPreservation.literals,
       preservedRoles: inputPreservation.roles,
       preservedNegation: inputPreservation.negation,
@@ -730,6 +740,7 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
       taskId: task.id,
       mode: 'mixed',
       tokenCount: mixedTokens,
+      tokenCountMethod: method,
       preservedLiterals: inputPreservation.literals,
       preservedRoles: inputPreservation.roles,
       preservedNegation: inputPreservation.negation,
