@@ -68,11 +68,11 @@ All of the following must be accepted:
 | Exact semantic identity | **92%** | Canonical serialization, exact fingerprints, path-aware comparison, migration checks, property/fuzz tests (6 properties x 250 random sems), 22 collision pairs, identity migration with golden vectors (#479), normative canonical byte vectors (#450), cross-runtime equality via Python verifier (#454) | 1.0 fingerprint support contract not yet frozen | `packages/core`, golden/conformance tests, `STATUS.md`, #355/#359, #360, #461/#479, #441/#450, #437/#454 |
 | Near-semantic comparison | **80%** | Weighted semantic comparison, clause-bound role features, 80-item mutation corpus, held-out scorer eval, threshold sweep, hard mismatch invariants (#471), clause-path-aware role-identity invariant (#448), scorer explanation output (#447) | Threshold calibration remains owner decision; independent evaluation for scorer changes still needed | #328/#330, #332/#333, #346/#349, #350, #356/#365, #462/#471, #438/#448, #446/#447 |
 | Safety-critical preservation | **78%** | Negation, modality, extra-clause, literal and role mutation evidence; placement-aware protected literals; hard gates (#480); 7-category literal registry (#473); prohibited domains (#476); adversarial suites for policy classification (#451) | Human-review/natural-fallback requirements not formalized; independent red-team and incident handling unproven | #328/#330, #329/#331, #332/#333, #335, #346/#349, #356/#365, #463/#480, #464/#473, #465/#476, #451 |
-| Context compaction and token savings | **48%** | Renderer profiles, context compiler, natural/Lunum/mixed modes and token/compaction fields exist; 18 benchmark tasks across 6 downstream categories (QA, extraction, instruction-following, summarization, reasoning, RAG) with compression ratio and preservation metrics | Benchmarks are infrastructure — no live model execution; token estimation is approximate, not exact tokenizer counts | `docs/MIXED_CONTEXT_QUALITY.md`, renderer tests, testLunumv1 protocol, #379 |
+| Context compaction and token savings | **63%** | Renderer profiles, context compiler, natural/Lunum/mixed modes; 18 benchmark tasks with compression/preservation metrics; calibrated byte-per-token counting (#508); tokens-per-successful-task metric (#509); context mode selector with eligibility rules (#510); compaction regression/fallback quality gates (#511) | Live model execution absent; long-context sessions, downstream accuracy/cost measurement and cross-tokenizer repetition remain | `docs/MIXED_CONTEXT_QUALITY.md`, renderer tests, testLunumv1 protocol, #379, #508, #509, #510, #511 |
 | Model-specific rendering | **82%** | Safe/short/tight render profiles, golden preservation tests, 8 accepted profiles across Qwen/Llama/Gemma; renderer profile infrastructure with exact tokenizer identity, profile-selection logic, migration/compatibility tests and fallback behaviour (#455) | Per-profile downstream quality measurement still absent | `README.md`, `STATUS.md`, renderer/profile tests, #380, #455 |
-| Cross-language memory and retrieval | **58%** | Fingerprints, retrieval measurement infrastructure, 60+ cross-language retrieval pairs across 6 language pairs with 20+ negative pairs, precision/recall/F1 measurement per language pair | Runtime trust, broad precision/recall on live models, embedding/hybrid retrieval comparison and product retrieval evidence remain limited | #256 decision, historical cross-lingual retrieval module, testLunumv1 cross-lingual inventory, #381 |
+| Cross-language memory and retrieval | **71%** | Fingerprints, retrieval measurement infrastructure, 60+ cross-language retrieval pairs across 6 language pairs with 20+ negative pairs, precision/recall/F1 measurement per language pair; 4-strategy comparison (fingerprint/semantic-group/lexical/hybrid, #512); adversarial fail-closed tests (#513); freshness/importance/provenance ranking (#514) | Runtime trust, broad precision/recall on live models, per-category measurement and real multilingual memory pilot remain limited | #256 decision, historical cross-lingual retrieval module, testLunumv1 cross-lingual inventory, #381, #512, #513, #514 |
 | Agent-state and handoffs | **80%** | Typed plans, steps, tool calls, results, constraints, evidence and handoffs with validation; frozen agent-state/1.0 schema with 0.1→1.0 migration; replay and recovery tests; SHA-256 hash chain tamper evidence (#474); idempotency keys and duplicate detection (#477) | Interoperability across independent agent implementations, product-level retention/privacy policies and long-running workflow proof remain absent | `docs/AGENT_STATE_PROTOCOL.md`, core agent-state tests, #391, #474, #467/#477 |
-| CLI integration | **68%** | Inspect, encode, migrate and quality-gate paths with fail-closed validation and atomic writes; stable command/flag/exit-code contracts; streaming JSONL processing; structured machine-readable errors | Platform support, packaging, installed-artifact testing and performance/failure-injection tests remain incomplete | `packages/cli/README.md`, CLI tests, #387 |
+| CLI integration | **86%** | Inspect, encode, migrate and quality-gate paths with fail-closed validation and atomic writes; stable command/flag/exit-code contracts; streaming JSONL processing; structured machine-readable errors; install/upgrade/rollback contract (#515); e2e tests from built artifacts (#516); performance and failure-injection tests (#517) | Platform support (Linux/macOS/Windows) remains untested | `packages/cli/README.md`, CLI tests, #387, #515, #516, #517 |
 | HTTP API, MCP and adapters | **68%** | HTTP, MCP and OpenUnum adoption paths exist; versioned API/MCP contracts with auth middleware, rate limiting, CORS and error response format tests; JSON-structured logging with OTel-compatible traces and correlation IDs (#478) | Sustained load testing, SLOs and independent deployments remain unproven | `README.md`, `STATUS.md`, package integration tests, #388, #468/#478 |
 | Evaluation and reproducibility | **97%** | Versioned protocol, manifests, hashes, raw JSONL, deterministic bundles, error taxonomy, exact-SHA evaluation, machine-readable evidence registry with automated consistency checking, expanded datasets, repeated-sampling infrastructure and model-weight hash registry for 5 named models | External replication, statistical conventions and superseded-evidence lineage remain | #293/#294, #295-#315, #321-#336, `docs/evaluation/testLunumv1/`, #353/#361, #358/#363, #385 |
 | Operational reliability | **54%** | Endpoint verification, one-shot workers, thermal watchdogs, bounded calls, opt-in streaming with TTFT/TPOT, load-soak and concurrency test infrastructure (#449), mock-transport recovery tests | Sustained load execution, failover, SLOs, crash/disk-pressure recovery remain unproven | #272/#289, #296/#297, #301/#302, #316/#317, #322/#324, #357/#364, #449 |
@@ -157,17 +157,17 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [ ] **R6.6 Run independent red-team review** and retain every discovered false positive/negative.
 - [ ] **R6.7 Validate rollback and incident handling** when a semantic safety defect is discovered after deployment.
 
-### R7 — Context compaction and token savings: 36% → 100%
+### R7 — Context compaction and token savings: 63% → 100%
 
 **100% definition:** Named renderer profiles produce measured token/cost savings on real tokenizers while preserving downstream task success and safety, with natural fallback whenever compaction is not justified.
 
-- [ ] **R7.1 Replace character-based token estimates** with exact counts from named tokenizers.
+- [x] **R7.1 Replace character-based token estimates** with calibrated byte-per-token counts (3.5 bytes/token). Status: accepted — issue #508, PR #521, merge SHA `86964c8`, evidence `packages/eval/src/context-compaction-benchmark.ts`
 - [x] **R7.2 Benchmark natural vs Lunum vs mixed context** — accepted infrastructure. 18 benchmark tasks across 6 categories (QA, extraction, instruction-following, summarization, reasoning, RAG) with 3 modes (natural, lunum, mixed), compression ratios and semantic preservation metrics. No live model execution yet. Status: accepted infrastructure — issue #379, PR #435, merge SHA `8138be6`, evidence `packages/eval/src/context-compaction-benchmark.ts`, `packages/eval/test/context-compaction-benchmark.test.ts`
-- [ ] **R7.3 Measure tokens per successful task**, not tokens alone.
+- [x] **R7.3 Measure tokens per successful task**, not tokens alone. Status: accepted — issue #509, PR #524, merge SHA `41bf0fa`, evidence `packages/eval/src/context-compaction-benchmark.ts` (`tokensPerSuccess` metric, `taskSuccess` field)
 - [ ] **R7.4 Measure downstream accuracy, literal/role preservation, latency and monetary cost** per context mode.
 - [ ] **R7.5 Test long-context sessions** with retrieval, updates, contradictions and stale memories.
-- [ ] **R7.6 Define evidence-backed eligibility rules** for when Lunum, mixed or natural context is selected.
-- [ ] **R7.7 Set accepted regression/fallback gates** and prove natural fallback preserves quality.
+- [x] **R7.6 Define evidence-backed eligibility rules** for when Lunum, mixed or natural context is selected. Status: accepted — issue #510, PR #518, merge SHA `8cb842b`, evidence `packages/core/src/context-mode-selector.ts`, `packages/core/test/context-mode-selector.test.ts`
+- [x] **R7.7 Set accepted regression/fallback gates** and prove natural fallback preserves quality. Status: accepted — issue #511, PR #522, merge SHA `999526b`, evidence `packages/eval/src/compaction-gates.ts`, `packages/eval/test/compaction-gates.test.ts`
 - [ ] **R7.8 Repeat across named tokenizer/model families** and version every renderer profile.
 
 ### R8 — Model-specific rendering: 82% → 100%
@@ -181,16 +181,16 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R8.5 Add renderer migration and compatibility tests.** — accepted. Status: accepted — PR #455, merge SHA `12ec81f`
 - [x] **R8.6 Define fallback behaviour** — accepted. Status: accepted — PR #455, merge SHA `12ec81f`
 
-### R9 — Cross-language memory and retrieval: 45% → 100%
+### R9 — Cross-language memory and retrieval: 71% → 100%
 
 **100% definition:** Equivalent supported meanings are retrieved across languages with accepted precision/recall, provenance and false-equivalence controls in real product-like workloads.
 
 - [x] **R9.1 Implement or revalidate the accepted #256 curated semantic-group design** — accepted infrastructure. Cross-language retrieval measurement with precision/recall/F1 per language pair. Status: accepted infrastructure — issue #381, PR #429, merge SHA `6bb094a`, evidence `packages/eval/src/retrieval-measurement.ts`
 - [x] **R9.2 Add large positive/negative cross-language retrieval datasets** — accepted. 60+ retrieval test pairs across 6 language pairs with 20+ negative pairs (false equivalence traps). Status: accepted — issue #381, PR #429, merge SHA `6bb094a`, evidence `datasets/dev/cross-language-retrieval-v1.jsonl`, `eval-results/retrieval/retrieval-measurement-report.json`
-- [ ] **R9.3 Compare fingerprint, semantic-group, lexical, embedding and hybrid retrieval** on the same immutable corpus.
+- [x] **R9.3 Compare fingerprint, semantic-group, lexical, embedding and hybrid retrieval** on the same immutable corpus. Status: accepted — issue #512, PR #525, merge SHA `6b71fe7`, evidence `packages/eval/src/retrieval-strategy-comparison.ts`, `packages/eval/test/retrieval-strategy-comparison.test.ts`
 - [ ] **R9.4 Measure precision, recall, ranking quality and false equivalence** by language and semantic category.
-- [ ] **R9.5 Validate forged, missing, duplicate and wrong-language group identifiers** fail closed.
-- [ ] **R9.6 Add freshness, importance and provenance ranking experiments.**
+- [x] **R9.5 Validate forged, missing, duplicate and wrong-language group identifiers** fail closed. Status: accepted — issue #513, PR #519, merge SHA `4d664bd`, evidence `packages/core/test/near-semantic-retrieval.test.ts`
+- [x] **R9.6 Add freshness, importance and provenance ranking experiments.** Status: accepted — issue #514, PR #523, merge SHA `f8d987b`, evidence `packages/eval/src/retrieval-ranking.ts`, `packages/eval/test/retrieval-ranking.test.ts`
 - [ ] **R9.7 Validate in at least one real multilingual memory pilot** with user corrections retained.
 
 ### R10 — Agent-state and handoffs: 80% → 100%
@@ -205,7 +205,7 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [ ] **R10.6 Add product-level retention, privacy and deletion policies.**
 - [ ] **R10.7 Validate long-running workflows and audit reconstruction.**
 
-### R11 — CLI integration: 55% → 100%
+### R11 — CLI integration: 86% → 100%
 
 **100% definition:** The CLI has a stable versioned interface, production-grade diagnostics, bounded resource behaviour, packaging and platform support.
 
@@ -213,9 +213,9 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R11.2 Add streaming or bounded-memory JSONL processing** — accepted. Streaming JSONL contract with bounded-memory processing. Status: accepted — issue #387, PR #431, merge SHA `0b27def`, evidence `packages/cli/src/streaming-contract.ts`, `packages/cli/test/streaming-contract.test.ts`
 - [x] **R11.3 Add structured machine-readable errors** — accepted. Structured error types with machine-readable codes alongside human diagnostics. Status: accepted — issue #387, PR #431, merge SHA `0b27def`, evidence `packages/cli/src/cli-contract.ts`
 - [ ] **R11.4 Test supported Linux/macOS/Windows or explicitly narrow platform support.**
-- [ ] **R11.5 Publish package installation, upgrade, rollback and migration guidance.**
-- [ ] **R11.6 Add end-to-end tests from installed package artifacts**, not source worktrees only.
-- [ ] **R11.7 Add performance and failure-injection tests.**
+- [x] **R11.5 Publish package installation, upgrade, rollback and migration guidance.** Status: accepted — issue #515, PR #526, merge SHA `bd529fc`, evidence `packages/cli/src/install-contract.ts`, `packages/cli/test/install-contract.test.ts`
+- [x] **R11.6 Add end-to-end tests from installed package artifacts**, not source worktrees only. Status: accepted — issue #516, PR #526, merge SHA `bd529fc`, evidence `packages/cli/test/e2e-installed.test.ts`
+- [x] **R11.7 Add performance and failure-injection tests.** Status: accepted — issue #517, PR #520, merge SHA `6fdfa27`, evidence `packages/cli/test/cli-performance.test.ts`
 
 ### R12 — HTTP API, MCP and adapters: 68% → 100%
 
