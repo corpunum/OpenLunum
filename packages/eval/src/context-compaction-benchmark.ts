@@ -593,7 +593,8 @@ export function runBenchmark(tasks: BenchmarkTask[]): BenchmarkReport {
       {
         role: 'system',
         content: task.naturalContext,
-        lunumCode: JSON.stringify(task.lunumSem)
+        lunumCode: JSON.stringify(task.lunumSem),
+        lunumMeta: { eligible: true }
       }
     ];
 
