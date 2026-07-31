@@ -202,3 +202,23 @@ export type {
   ProductFlowCategorySummary,
   ProductFlowSummary,
 } from './redteam-product-flows.js';
+
+// Security contracts (R15.3)
+export {
+  auditForSecrets,
+  verifyTenantIsolation,
+  DEFAULT_SECRET_POLICY,
+  LEAST_PRIVILEGE_POLICIES,
+} from './security-contracts.js';
+export type {
+  SecretKind,
+  SecretPolicy,
+  SecretFinding,
+  ComponentRole,
+  PermissionSet,
+  LeastPrivilegePolicy,
+  EvalRunManifest,
+  TenantIsolationContract,
+  IsolationViolation,
+  IsolationVerification,
+} from './security-contracts.js';
