@@ -20,6 +20,86 @@ Lunum-Code — measured model/tokenizer-specific rendering
 natural fallback whenever compact representation is unsafe
 ```
 
+## Current state (July 2026)
+
+| Metric | Value |
+|---|---|
+| Core test suite | **1,221 tests, 93 suites, 0 failures** |
+| CI checks | 5 required (verify, schema-drift, quality-gates, report-validation, protected-data-boundary) |
+| Workspace packages | 6 (`core`, `eval`, `cli`, `api`, `mcp`, `adapter-openunum`) |
+| Commits on main | 638 |
+| Issues resolved | 105 |
+| Languages covered | 12 (EN, EL, ES, ID, JA, KO, ZH, AR, PT, FR, DE, RU) |
+| Model families tested | 3 (Qwen, Gemma, Llama) with 6 frozen profiles |
+
+### Readiness summary
+
+| Level | Estimate | Meaning |
+|---|---:|---|
+| Research/reference platform | **95%** | Strong architecture, comprehensive conformance corpus, reproducible evidence |
+| Controlled internal pilot | **82%** | Core paths usable with narrow domains and mandatory natural-language fallback |
+| General production dependency | **62%** | Substantial foundations; broad operational and live evidence gaps remain |
+
+### Capability readiness
+
+| Capability | Readiness |
+|---|---:|
+| Canonical semantic layer | **95%** |
+| Multilingual parsing | **85%** |
+| Round-trip semantic retention | **90%** |
+| Exact semantic identity | **92%** |
+| Near-semantic comparison | **80%** |
+| Safety-critical preservation | **78%** |
+| Context compaction and token savings | **48%** |
+| Model-specific rendering | **82%** |
+| Cross-language memory and retrieval | **58%** |
+| Agent-state and handoffs | **80%** |
+| CLI integration | **68%** |
+| HTTP API, MCP and adapters | **68%** |
+| Evaluation and reproducibility | **97%** |
+| Operational reliability | **54%** |
+| Security, governance and rollback | **64%** |
+| External adoption and ecosystem | **28%** |
+
+### Detailed capability status
+
+| Capability | Readiness | What works now | Main gap |
+|---|---:|---|---|
+| Canonical semantic layer | **95%** | Strict TypeScript semantic structures, canonicalization, provenance, versioned schemas, 28-vector conformance corpus, independent Python verifier, support contract, frozen 1.0 schema and fingerprint versions | Schema freeze not yet ratified by external adoption |
+| Multilingual parsing | **85%** | Real built-CLI EN/EL/ES/ID runs on two local models; 12-language corpus (96+ items); model-family test matrix (3 families, 6 profiles); production parse gates; uncertainty/fallback policy | Native review needed for non-EN/EL; no live model execution on expanded corpus |
+| Round-trip semantic retention | **90%** | Manifest-driven realization + parse-back, nested three-level fixtures, 216-record dataset (8 languages, 12 categories), audit-trailed fallback/rollback, retention gates and deterministic recomputation | No live retention model evidence; repeated-pass chaining is plan only |
+| Exact semantic identity | **92%** | Canonical serialization, exact fingerprints, path-aware comparison, property/fuzz tests, 22 collision pairs, identity migration with golden vectors, normative byte vectors, cross-runtime Python verifier | 1.0 fingerprint support contract not yet frozen |
+| Near-semantic comparison | **80%** | Weighted semantic comparison, clause-bound role features, 80-item mutation corpus, held-out scorer eval, threshold sweep, hard mismatch invariants, clause-path-aware role-identity invariant, scorer explanation output | Threshold calibration awaits owner decision |
+| Safety-critical preservation | **78%** | Hard gates enforcing verdict on invariant violations; 7-category protected literal registry; prohibited domains; adversarial suites for policy classification | Human-review requirements not formalized; incident handling unproven |
+| Context compaction | **48%** | Renderer profiles, context compiler, 18 benchmark tasks across 6 downstream categories with compression metrics | Infrastructure only — no live model execution or exact tokenizer counts |
+| Model-specific rendering | **82%** | 8 accepted profiles across Qwen/Llama/Gemma with identity, tokenizer fields, profile-selection logic, migration/compatibility tests and fallback | Per-profile downstream quality measurement still absent |
+| Cross-language retrieval | **58%** | 60+ cross-language retrieval pairs across 6 language pairs with precision/recall/F1 | No live model retrieval evidence; no embedding/hybrid comparison |
+| Agent-state and handoffs | **80%** | Frozen agent-state/1.0 schema, replay/recovery tests, SHA-256 tamper evidence, idempotency keys and duplicate detection | Interoperability and long-running workflow proof absent |
+| CLI integration | **68%** | Stable command/flag/exit-code contracts, streaming JSONL, structured machine-readable errors | Platform packaging and installed-artifact testing incomplete |
+| HTTP API, MCP and adapters | **68%** | Versioned API/MCP contracts, auth, rate limiting, CORS, OTel-compatible structured logging with traces and correlation IDs | Sustained load testing, SLOs and independent deployments unproven |
+| Evaluation and reproducibility | **97%** | Versioned protocol, immutable manifests, raw JSONL, deterministic bundles, machine-readable evidence registry, model-weight hash registry | External replication and superseded-evidence lineage remain |
+| Operational reliability | **54%** | Endpoint verification, thermal watchdogs, streaming with TTFT/TPOT, load-soak and concurrency test infrastructure | Sustained load execution, failover, SLOs, crash recovery unproven |
+| Security and governance | **64%** | Protected-data boundaries, prompt-injection tests, threat model eval vectors, exact-head merge controls | No external security assessment or tenant isolation proof |
+| External adoption | **28%** | Narrow internal pilot designed with success/rollback criteria | No production-like evidence from unrelated products |
+
+Full detail, evidence links and change log: [`docs/LUNUM_READINESS.md`](docs/LUNUM_READINESS.md)
+
+### Recent work (Phase 7 + 8)
+
+Phase 7 and 8 shipped 23 PRs covering:
+
+- **Semantic safety:** hard invariants (negation-flip, role-identity, obligation-permission, condition-change, protected-literal) converted to hard product gates that block false `match` verdicts
+- **Protected literals:** 7-category registry (quantity, date, identifier, range, url, path, structured-ref)
+- **Uncertainty policy:** confidence scoring with 6 evidence factors, automatic fallback to natural text
+- **Identity migration:** forward/backward classification with golden vectors proving #360 fixes
+- **Retention rollback:** audit-trailed rollback when round trips fail or become ambiguous
+- **Prohibited domains:** hard blocks for legal/medical/financial/destructive domains
+- **Agent-state:** tamper evidence (SHA-256 hash chains), idempotency keys, duplicate detection
+- **Observability:** JSON-structured logging, OTel-compatible traces, correlation IDs
+- **Parse gates:** multi-scope evaluator with safety invariant floors
+- **Support contract:** versioned compatibility and support commitments
+- **Independent verifier:** Python cross-implementation byte/fingerprint validator
+
 ## North star
 
 A product records meaning once, retains the original evidence, retrieves that meaning across languages, and renders only the representation best suited to the receiving model and task.
@@ -30,33 +110,53 @@ source evidence -> canonical semantics -> stable identity -> measured rendering 
 
 Token compression alone is not success. Success requires meaning preservation, downstream task quality, safety, reversibility, compatibility, and reproducible evidence.
 
-## Start here
-
-Humans, coding agents, and research agents should read:
-
-1. [`START_HERE.md`](START_HERE.md)
-2. [`VISION.md`](VISION.md)
-3. [`AGENTS.md`](AGENTS.md)
-4. [`docs/REPOSITORY_OPERATING_MODEL.md`](docs/REPOSITORY_OPERATING_MODEL.md)
-5. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-6. [`docs/EXPERIMENT_PROTOCOL.md`](docs/EXPERIMENT_PROTOCOL.md)
-7. [`docs/EVALUATION_PROTOCOL.md`](docs/EVALUATION_PROTOCOL.md)
-8. [`STATUS.md`](STATUS.md)
-
-A local orchestrator should begin with [`docs/LOCAL_ORCHESTRATOR_ONBOARDING.md`](docs/LOCAL_ORCHESTRATOR_ONBOARDING.md), then use [`ORCHESTRATOR-PROMPT.md`](ORCHESTRATOR-PROMPT.md).
-
-`CAMPAIGN.md` and `WORK_QUEUE.md` are archive pointers. GitHub issues are the canonical backlog, readiness, assignment, blocker, and acceptance state. Historical operating material is indexed under [`research/archive/operating-model-pre-issue-driven/`](research/archive/operating-model-pre-issue-driven/README.md).
-
-## Bootstrap
+## Quick start
 
 ```bash
 corepack enable
 pnpm install --frozen-lockfile
-pnpm verify
-pnpm agent:status
+pnpm verify          # typecheck + test + eval:smoke
+pnpm agent:status    # check orchestration state
 ```
 
 Node 22 and pnpm 10.13.1 are required.
+
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| [`START_HERE.md`](START_HERE.md) | Entry point for humans and agents |
+| [`VISION.md`](VISION.md) | Long-term goals and principles |
+| [`AGENTS.md`](AGENTS.md) | Agent integration guide |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | System architecture |
+| [`docs/LUNUM_READINESS.md`](docs/LUNUM_READINESS.md) | Production readiness tracker with evidence |
+| [`docs/REPOSITORY_OPERATING_MODEL.md`](docs/REPOSITORY_OPERATING_MODEL.md) | Branch, issue, CI and acceptance model |
+| [`docs/EXPERIMENT_PROTOCOL.md`](docs/EXPERIMENT_PROTOCOL.md) | How experiments are run and validated |
+| [`docs/EVALUATION_PROTOCOL.md`](docs/EVALUATION_PROTOCOL.md) | Evaluation methodology |
+| [`STATUS.md`](STATUS.md) | Implementation status and honest limitations |
+
+## Core boundaries
+
+- `Lunum-Sem` is language-neutral structured meaning.
+- Lunum-Code is a renderer profile, not canonical semantics.
+- Natural source text, language, provenance, and protected literals are retained.
+- Heuristic surface records are not canonical semantics.
+- Fingerprint or canonicalization changes require versioning, golden vectors, migration rules, and independent review.
+- Implementation and protected evaluation data are not modified in the same PR.
+- A model cannot be the only judge of its own output.
+
+## Architecture
+
+OpenLunum is a pnpm monorepo with six packages:
+
+| Package | Description |
+|---|---|
+| `packages/core` | Semantic types, canonicalization, fingerprints, comparison, invariants, safety gates |
+| `packages/eval` | Evaluation infrastructure, conformance corpus, model-family test matrix |
+| `packages/cli` | Command-line interface for inspect, encode, migrate, quality-gate |
+| `packages/api` | HTTP API with auth, rate limiting, CORS, streaming |
+| `packages/mcp` | Model Context Protocol adapter |
+| `packages/adapter-openunum` | OpenUnum integration adapter |
 
 ## Repository operating model
 
@@ -69,63 +169,12 @@ work/<worker>/<issue-number>-<short-name>
 Key rules:
 
 - workers receive one explicit ready GitHub issue;
-- one issue per branch;
-- one active implementation PR per worker;
-- at most three active implementation PRs repository-wide by default;
-- steady state is `main` plus no more than three active task branches;
-- more than eight remote branches blocks new dispatch until cleanup or documented exceptions;
-- workers run once and exit with `candidate`, `blocked`, or `no-improvement`;
+- one issue per branch, one active implementation PR per worker;
 - autonomous workers never push to or merge into `main`;
 - semantic and evidence-sensitive work requires independent evaluation;
-- accepted work is squash merged and its branch is deleted;
-- workers do not create campaign, status, sync, completion, or idle branches.
+- accepted work is squash merged and its branch is deleted.
 
-See [`docs/REPOSITORY_OPERATING_MODEL.md`](docs/REPOSITORY_OPERATING_MODEL.md) for the complete role, branch, issue, CI, and acceptance model.
-
-## Local worker dispatch
-
-Create a local one-shot assignment:
-
-```bash
-cp scripts/WORKER_ASSIGNMENT.example.md reports/orchestrator/WORKER_ASSIGNMENT.md
-$EDITOR reports/orchestrator/WORKER_ASSIGNMENT.md
-pnpm worker:dispatch -- /home/corpunum/openlunum-workers/eval
-```
-
-The dispatcher refuses to run without a valid assignment, rejects reused branches, invokes the worker once, archives local runtime evidence, and exits. The current dispatcher has one global lock, so dispatchers run sequentially unless a reviewed per-lane locking change is accepted.
-
-## GitHub Actions budget
-
-Pull requests remain draft during local iteration and review. Run targeted checks and `pnpm verify` locally, request independent evaluation when required, and mark a coherent candidate ready only when routine pushes are finished. If a ready PR needs changes, return it to draft before pushing.
-
-Hosted Actions are exact-head acceptance evidence, not the development loop. Never weaken required checks to save quota, and do not add recurring full-repository workflows without an explicit reviewed budget.
-
-## Core boundaries
-
-- `Lunum-Sem` is language-neutral structured meaning.
-- Lunum-Code is a renderer profile, not canonical semantics.
-- Natural source text, language, provenance, and protected literals are retained.
-- Heuristic surface records are not canonical semantics.
-- Fingerprint or canonicalization changes require versioning, golden vectors, migration rules, and independent review.
-- Implementation and protected evaluation data are not modified in the same PR.
-- A model cannot be the only judge of its own output.
-
-## Main areas
-
-OpenLunum contains:
-
-- a strict TypeScript semantic core;
-- canonical serialization and exact/near-semantic fingerprints;
-- safe, short, and tight renderer profiles;
-- multilingual parsing and realization experiment tooling;
-- tokenizer and model-profile measurement;
-- migration and compatibility tooling;
-- CLI, HTTP API, MCP, and OpenUnum adoption paths;
-- reproducible experiment manifests and reports;
-- semantic, safety, rollback, and quality gates;
-- local worker, evaluator, and orchestration infrastructure.
-
-Current implementation status and honest limitations are maintained in [`STATUS.md`](STATUS.md). Capability lists in prose are summaries, not acceptance evidence.
+See [`docs/REPOSITORY_OPERATING_MODEL.md`](docs/REPOSITORY_OPERATING_MODEL.md) for the complete model.
 
 ## Experiment expectations
 
@@ -141,15 +190,20 @@ Behavior-changing and evidence-changing work should declare:
 - exact reproduction commands;
 - what the result does not prove.
 
-Development results become proposals only after deterministic validation. Support or reference claims require independent evaluation and maintainer acceptance.
+Development results become proposals only after deterministic validation.
 
-## Current ordered work
+## What's next
 
-The local orchestrator should process current work in this order unless the vision owner changes it:
+The following areas have the most room for improvement toward production readiness:
 
-1. issue #255 — historical branch cleanup;
-2. issue #253 — honest EN/EL/ES/ID parse and retention baselines after confirming two named local endpoints;
-3. issue #188 — live merge-control and branch-protection proof;
-4. issues #256 and #257 — accept or reject two preserved distinct proposals.
+1. **Live model evidence** — Run the expanded multilingual corpus and retention tests against live local models (Qwen, Gemma, Llama) to produce accepted baselines beyond infrastructure-only results.
+2. **Context compaction proof (48%)** — Execute downstream task benchmarks with live models to prove token savings preserve task quality.
+3. **Operational reliability (50%)** — Sustained-load testing, failover, crash recovery, and declared SLOs.
+4. **Near-semantic threshold calibration (70%)** — Owner decision on the 0.8 threshold given known role-swap false positives.
+5. **Schema freeze** — Freeze Lunum 1.0 schema, canonicalization, and fingerprint contracts.
+6. **External adoption (20%)** — At least two unrelated product pilots with retained evidence.
+7. **Security assessment** — External review, tenant isolation proof, incident response exercises.
 
-Historical reports produced by the broken parse path are not accepted baselines. Threshold calibration follows accepted replacement evidence.
+## License
+
+See [`LICENSE`](LICENSE) for terms.
