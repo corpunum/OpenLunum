@@ -222,6 +222,22 @@ export type {
   RollbackResult,
 } from './backup-restore.js';
 
+// Health/readiness probes and failover (R14.6)
+export {
+  checkHealth,
+  semValidationProbe,
+  fingerprintProbe,
+  schemaRegistryProbe,
+  ReadinessGate,
+  FAILOVER_PROCEDURES,
+} from './health-probes.js';
+export type {
+  HealthProbe,
+  ProbeResult,
+  HealthReport,
+  FailoverProcedure,
+} from './health-probes.js';
+
 // Security contracts (R15.3)
 export {
   auditForSecrets,
