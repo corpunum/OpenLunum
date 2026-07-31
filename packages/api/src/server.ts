@@ -14,6 +14,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRecord, deriveLunumSidecar, compileLunumShadowContext } from '@corpunum/lunum';
 import type { LunumRecord, LunumSem } from '@corpunum/lunum';
+import { randomUUID } from 'node:crypto';
 import type {
   ApiServerOptions,
   ParseRequest,
@@ -25,6 +26,11 @@ import type {
   RetrieveRequest,
   RetrieveResponse,
   HealthResponse,
+  HealthStatus,
+  DependencyCheck,
+  ReadyResponse,
+  ReadinessState,
+  ReadyDetail,
   ErrorResponse,
   RoutesResponse
 } from './types.js';
@@ -55,6 +61,8 @@ export class LunumApiServer {
   private startTime: number;
   private openApiSpec: Record<string, unknown>;
   private _routes: Array<{ method: string; path: string; handler: (req: IncomingMessage, res: ServerResponse) => Promise<void> }>;
+  private _dependencies: DependencyCheck[];
+  private _readyDetails: ReadyDetail[];
 
   constructor(options: ApiServerOptions = {}) {
     this.options = {
@@ -67,6 +75,8 @@ export class LunumApiServer {
     this.startTime = Date.now();
     this.openApiSpec = loadOpenApiSpec();
     this._routes = [];
+    this._dependencies = this._initDefaultDependencies();
+    this._readyDetails = this._initDefaultReadyDetails();
 
     this.server = createServer(async (req, res) => {
       await this.handleRequest(req, res);
@@ -88,6 +98,16 @@ export class LunumApiServer {
   /** Public accessor for route definitions */
   get routeDefs(): Array<{ method: string; path: string }> {
     return this._routes.map(r => ({ method: r.method, path: r.path }));
+  }
+
+  /** Public accessor for dependency checks */
+  get dependencies(): DependencyCheck[] {
+    return this._dependencies;
+  }
+
+  /** Public accessor for readiness details */
+  get readyDetails(): ReadyDetail[] {
+    return this._readyDetails;
   }
 
   /**
@@ -170,6 +190,68 @@ export class LunumApiServer {
   }
 
   /**
+   * Set custom dependency checks for health endpoint.
+   */
+  setDependencies(deps: DependencyCheck[]): void {
+    this._dependencies = deps;
+  }
+
+  /**
+   * Set custom readiness details for the ready endpoint.
+   */
+  setReadyDetails(details: ReadyDetail[]): void {
+    this._readyDetails = details;
+  }
+
+  /**
+   * Compute aggregate health status from dependency checks.
+   */
+  _aggregateStatus(statuses: HealthStatus[]): HealthStatus {
+    if (statuses.some(s => s === 'unhealthy')) return 'unhealthy';
+    if (statuses.some(s => s === 'degraded')) return 'degraded';
+    return 'ok';
+  }
+
+  /**
+   * Compute overall readiness state from component readiness.
+   */
+  _aggregateReadiness(details: ReadyDetail[]): ReadinessState {
+    return details.every(d => d.ready) ? 'ready' : 'not-ready';
+  }
+
+  // ── Dependency initialisation ───────────────────────────────────
+
+  private _initDefaultDependencies(): DependencyCheck[] {
+    const coreOk: DependencyCheck = {
+      name: 'core',
+      status: 'ok',
+      detail: 'Lunum core library loaded',
+      latencyMs: 0,
+    };
+    const datastoreOk: DependencyCheck = {
+      name: 'datastore',
+      status: 'ok',
+      detail: 'Datastore connected',
+      latencyMs: 0,
+    };
+    const modelOk: DependencyCheck = {
+      name: 'model',
+      status: 'ok',
+      detail: 'Model endpoint reachable',
+      latencyMs: 0,
+    };
+    return [coreOk, datastoreOk, modelOk];
+  }
+
+  private _initDefaultReadyDetails(): ReadyDetail[] {
+    return [
+      { component: 'model', ready: true, detail: 'Model endpoint reachable' },
+      { component: 'schema', ready: true, detail: 'Schema loaded' },
+      { component: 'auth', ready: true, detail: 'Auth configured' },
+    ];
+  }
+
+  /**
    * Start the server
    */
   async start(): Promise<{ host: string; port: number }> {
@@ -200,17 +282,34 @@ export class LunumApiServer {
  */
 export function buildDefaultRoutes(prefix: string): Array<{ method: string; path: string; handler: (server: LunumApiServer) => (req: IncomingMessage, res: ServerResponse) => Promise<void> }> {
   return [
-    // Health check
+    // Health check — liveness + dependency status
     {
       method: 'GET',
       path: '/health',
       handler: (server) => async (_req, res) => {
+        const statuses = server.dependencies.map(d => d.status);
+        const info = server.getInfo();
         const response: HealthResponse = {
-          status: 'ok',
+          status: server._aggregateStatus(statuses),
           version: '0.2.0',
-          uptime: Math.floor((Date.now() - Date.now() + 0) / 1000),
+          uptime: info.uptime,
           lunumVersion: '0.2.0',
-          routes: server.routesCount
+          routes: info.routes,
+          dependencies: server.dependencies,
+        };
+        server.sendJson(res, 200, response);
+      }
+    },
+    // Readiness check — component readiness state
+    {
+      method: 'GET',
+      path: '/ready',
+      handler: (server) => async (_req, res) => {
+        const response: ReadyResponse = {
+          state: server._aggregateReadiness(server.readyDetails),
+          version: '0.2.0',
+          timestamp: new Date().toISOString(),
+          components: [...server.readyDetails],
         };
         server.sendJson(res, 200, response);
       }

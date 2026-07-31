@@ -110,17 +110,57 @@ export interface RetrieveResponse {
   };
 }
 
+export type HealthStatus = 'ok' | 'degraded' | 'unhealthy';
+
+/** Result of a single dependency health check. */
+export interface DependencyCheck {
+  /** Dependency identifier (e.g. 'core', 'datastore', 'model') */
+  name: string;
+  /** Dependency status */
+  status: HealthStatus;
+  /** Human-readable detail */
+  detail: string;
+  /** Latency in milliseconds, if measured */
+  latencyMs?: number;
+}
+
 export interface HealthResponse {
-  /** Server status */
-  status: 'ok';
+  /** Aggregate health status */
+  status: HealthStatus;
   /** Server version */
   version: string;
-  /** Uptime in seconds */
+  /** Uptime in seconds since server start */
   uptime: number;
   /** Lunum core version */
   lunumVersion: string;
   /** Registered routes count */
   routes: number;
+  /** Individual dependency checks */
+  dependencies: DependencyCheck[];
+}
+
+/** Overall readiness state. */
+export type ReadinessState = 'ready' | 'not-ready';
+
+/** Per-component readiness information. */
+export interface ReadyDetail {
+  /** Component name (e.g. 'model', 'schema', 'auth') */
+  component: string;
+  /** Whether this component is ready */
+  ready: boolean;
+  /** Human-readable detail about the component state */
+  detail: string;
+}
+
+export interface ReadyResponse {
+  /** Overall readiness state */
+  state: ReadinessState;
+  /** Server version */
+  version: string;
+  /** Timestamp of this check */
+  timestamp: string;
+  /** Individual component readiness */
+  components: ReadyDetail[];
 }
 
 export interface ErrorResponse {
@@ -128,6 +168,8 @@ export interface ErrorResponse {
   code: string;
   /** Human-readable error message */
   message: string;
+  /** Unique request identifier for tracing */
+  requestId: string;
   /** Optional details */
   details?: Record<string, unknown>;
 }

@@ -22,6 +22,11 @@ export type {
   RetrieveRequest,
   RetrieveResponse,
   HealthResponse,
+  HealthStatus,
+  DependencyCheck,
+  ReadyResponse,
+  ReadinessState,
+  ReadyDetail,
   ErrorResponse,
   RoutesResponse
 } from './types.js';

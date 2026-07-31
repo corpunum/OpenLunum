@@ -77,10 +77,11 @@ test('api server: registers custom routes', () => {
 
 test('api server: buildDefaultRoutes creates standard endpoints', () => {
   const routes = buildDefaultRoutes('/api/v1');
-  assert.ok(routes.length >= 7, 'should have at least 7 default routes');
+  assert.ok(routes.length >= 8, 'should have at least 8 default routes');
 
   const paths = routes.map(r => r.path);
   assert.ok(paths.includes('/health'), 'should have /health');
+  assert.ok(paths.includes('/ready'), 'should have /ready');
   assert.ok(paths.includes('/parse'), 'should have /parse');
   assert.ok(paths.includes('/realize'), 'should have /realize');
   assert.ok(paths.includes('/render'), 'should have /render');
@@ -91,7 +92,7 @@ test('api server: buildDefaultRoutes creates standard endpoints', () => {
 
 // ── Test: Health endpoint ──────────────────────────────────────────
 
-test('api server: /health returns OK status', async () => {
+test('api server: /health returns OK status with default dependencies', async () => {
   const server = new LunumApiServer();
   const routes = buildDefaultRoutes('/api/v1');
 
@@ -112,6 +113,125 @@ test('api server: /health returns OK status', async () => {
   const parsed = JSON.parse(captured.body);
   assert.strictEqual(parsed.status, 'ok');
   assert.strictEqual(parsed.version, '0.2.0');
+  assert.strictEqual(parsed.lunumVersion, '0.2.0');
+  assert.strictEqual(typeof parsed.uptime, 'number');
+  assert.strictEqual(parsed.routes >= 8, true);
+  assert.ok(Array.isArray(parsed.dependencies), 'should have dependencies array');
+  assert.ok(parsed.dependencies.length >= 3, 'should have at least 3 dependencies');
+});
+
+test('api server: /health reports degraded status when dependency is degraded', async () => {
+  const server = new LunumApiServer();
+  server.setDependencies([
+    { name: 'core', status: 'ok', detail: 'OK', latencyMs: 1 },
+    { name: 'datastore', status: 'degraded', detail: 'Slow response', latencyMs: 500 },
+    { name: 'model', status: 'ok', detail: 'OK', latencyMs: 10 },
+  ]);
+  const routes = buildDefaultRoutes('/api/v1');
+
+  for (const route of routes) {
+    server.addRoute(route.method, route.path, route.handler(server));
+  }
+
+  const req = createMockRequest('GET', '/health');
+  let captured = { status: 0, body: '' };
+  const res = Object.assign({
+    setHeader: () => {},
+    writeHead: (status: number) => { captured.status = status; return res as ServerResponse; },
+    end: (chunk?: string) => { captured.body = chunk ?? ''; return res as ServerResponse; }
+  }) as unknown as ServerResponse;
+
+  await server['handleRequest'](req, res);
+  assert.strictEqual(captured.status, 200);
+  const parsed = JSON.parse(captured.body);
+  assert.strictEqual(parsed.status, 'degraded');
+});
+
+test('api server: /health reports unhealthy status when dependency is unhealthy', async () => {
+  const server = new LunumApiServer();
+  server.setDependencies([
+    { name: 'core', status: 'ok', detail: 'OK', latencyMs: 1 },
+    { name: 'datastore', status: 'unhealthy', detail: 'Connection refused', latencyMs: 0 },
+    { name: 'model', status: 'ok', detail: 'OK', latencyMs: 10 },
+  ]);
+  const routes = buildDefaultRoutes('/api/v1');
+
+  for (const route of routes) {
+    server.addRoute(route.method, route.path, route.handler(server));
+  }
+
+  const req = createMockRequest('GET', '/health');
+  let captured = { status: 0, body: '' };
+  const res = Object.assign({
+    setHeader: () => {},
+    writeHead: (status: number) => { captured.status = status; return res as ServerResponse; },
+    end: (chunk?: string) => { captured.body = chunk ?? ''; return res as ServerResponse; }
+  }) as unknown as ServerResponse;
+
+  await server['handleRequest'](req, res);
+  assert.strictEqual(captured.status, 200);
+  const parsed = JSON.parse(captured.body);
+  assert.strictEqual(parsed.status, 'unhealthy');
+});
+
+// ── Test: Ready endpoint ───────────────────────────────────────────
+
+test('api server: /ready returns ready state with default components', async () => {
+  const server = new LunumApiServer();
+  const routes = buildDefaultRoutes('/api/v1');
+
+  for (const route of routes) {
+    server.addRoute(route.method, route.path, route.handler(server));
+  }
+
+  const req = createMockRequest('GET', '/ready');
+  let captured = { status: 0, body: '' };
+  const res = Object.assign({
+    setHeader: () => {},
+    writeHead: (status: number) => { captured.status = status; return res as ServerResponse; },
+    end: (chunk?: string) => { captured.body = chunk ?? ''; return res as ServerResponse; }
+  }) as unknown as ServerResponse;
+
+  await server['handleRequest'](req, res);
+  assert.strictEqual(captured.status, 200);
+  const parsed = JSON.parse(captured.body);
+  assert.strictEqual(parsed.state, 'ready');
+  assert.strictEqual(parsed.version, '0.2.0');
+  assert.ok(typeof parsed.timestamp === 'string', 'timestamp should be an ISO string');
+  assert.ok(Array.isArray(parsed.components), 'should have components array');
+  assert.ok(parsed.components.length >= 3, 'should have at least 3 components');
+  for (const comp of parsed.components) {
+    assert.ok(typeof comp.component === 'string', 'component should have string name');
+    assert.strictEqual(typeof comp.ready, 'boolean', 'component should have boolean ready');
+    assert.ok(typeof comp.detail === 'string', 'component should have string detail');
+  }
+});
+
+test('api server: /ready reports not-ready when a component is not ready', async () => {
+  const server = new LunumApiServer();
+  server.setReadyDetails([
+    { component: 'model', ready: true, detail: 'Model endpoint reachable' },
+    { component: 'schema', ready: true, detail: 'Schema loaded' },
+    { component: 'auth', ready: false, detail: 'Auth middleware not configured' },
+  ]);
+  const routes = buildDefaultRoutes('/api/v1');
+
+  for (const route of routes) {
+    server.addRoute(route.method, route.path, route.handler(server));
+  }
+
+  const req = createMockRequest('GET', '/ready');
+  let captured = { status: 0, body: '' };
+  const res = Object.assign({
+    setHeader: () => {},
+    writeHead: (status: number) => { captured.status = status; return res as ServerResponse; },
+    end: (chunk?: string) => { captured.body = chunk ?? ''; return res as ServerResponse; }
+  }) as unknown as ServerResponse;
+
+  await server['handleRequest'](req, res);
+  assert.strictEqual(captured.status, 200);
+  const parsed = JSON.parse(captured.body);
+  assert.strictEqual(parsed.state, 'not-ready');
 });
 
 // ── Test: Parse endpoint ───────────────────────────────────────────

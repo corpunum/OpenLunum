@@ -67,16 +67,58 @@ export const API_ROUTES: readonly ApiRoute[] = [
     method: 'GET',
     path: '/health',
     version: '1.0.0',
-    description: 'Health check endpoint returning server status and version',
+    description: 'Health check endpoint returning server status, uptime, and dependency checks',
     requestSchema: {},
     responseSchema: {
       type: 'object',
       properties: {
-        status: { type: 'string' },
+        status: { type: 'string', enum: ['ok', 'degraded', 'unhealthy'] },
         version: { type: 'string' },
         uptime: { type: 'number' },
         lunumVersion: { type: 'string' },
-        routes: { type: 'number' }
+        routes: { type: 'number' },
+        dependencies: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              name: { type: 'string' },
+              status: { type: 'string', enum: ['ok', 'degraded', 'unhealthy'] },
+              detail: { type: 'string' },
+              latencyMs: { type: 'number' }
+            }
+          }
+        }
+      }
+    },
+    requiresAuth: false,
+    rateLimit: DEFAULT_RATE_LIMIT,
+    maxRequestBytes: 0,
+    timeoutMs: 5_000,
+  },
+  {
+    method: 'GET',
+    path: '/ready',
+    version: '1.0.0',
+    description: 'Readiness check endpoint returning component readiness state',
+    requestSchema: {},
+    responseSchema: {
+      type: 'object',
+      properties: {
+        state: { type: 'string', enum: ['ready', 'not-ready'] },
+        version: { type: 'string' },
+        timestamp: { type: 'string' },
+        components: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              component: { type: 'string' },
+              ready: { type: 'boolean' },
+              detail: { type: 'string' }
+            }
+          }
+        }
       }
     },
     requiresAuth: false,
@@ -261,8 +303,18 @@ export const API_ENDPOINTS: readonly ApiEndpointSpec[] = [
   {
     method: 'GET',
     path: '/health',
-    description: 'Health check endpoint returning server status and version',
+    description: 'Health check endpoint returning server status, uptime, and dependency checks',
     responseSchema: 'HealthResponse',
+    requiresAuth: false,
+    rateLimit: DEFAULT_RATE_LIMIT,
+    maxRequestBytes: 0,
+    timeoutMs: 5_000,
+  },
+  {
+    method: 'GET',
+    path: '/ready',
+    description: 'Readiness check endpoint returning component readiness state',
+    responseSchema: 'ReadyResponse',
     requiresAuth: false,
     rateLimit: DEFAULT_RATE_LIMIT,
     maxRequestBytes: 0,
