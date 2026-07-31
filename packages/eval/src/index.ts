@@ -260,3 +260,21 @@ export type {
   ArtifactVerification,
   SupplyChainReport,
 } from './supply-chain-audit.js';
+
+// Data lifecycle (R15.7)
+export {
+  classifyDataSensitivity,
+  auditRetentionCompliance,
+  generateDeletionManifest,
+  DEFAULT_RETENTION_POLICIES,
+} from './data-lifecycle.js';
+export type {
+  DataSensitivity,
+  RetentionPolicy,
+  ExpiredFile,
+  RetentionComplianceResult,
+  DeletionEntry,
+  DeletionManifest,
+  AuditEntry,
+  AuditTrail,
+} from './data-lifecycle.js';
