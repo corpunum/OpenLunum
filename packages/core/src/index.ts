@@ -86,3 +86,5 @@ export type {
   RiskLevel,
   CategoryMetadata,
 } from './policy-classifier.js';
+export * from './rollback-process.js';
+export * from './retention-fallback-rollback.js';
