@@ -89,3 +89,4 @@ export type {
 } from './policy-classifier.js';
 export * from './rollback-process.js';
 export * from './retention-fallback-rollback.js';
+export * from './prohibited-domains.js';
