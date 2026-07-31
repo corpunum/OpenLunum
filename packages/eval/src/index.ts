@@ -194,6 +194,10 @@ export { RoundTripChecker } from './roundtrip-consistency.js';
 // False positive review
 export { runFalsePositiveReviewCliEntrypoint } from './false-positive-review-cli.js';
 
+// Performance bias control (R14.5)
+export { shuffleTestOrder, thermalCooldown, detectCacheBias, runWithBiasControl, DEFAULT_BIAS_CONFIG } from './perf-bias-control.js';
+export type { BiasReport, BiasControlConfig, BiasControlledResult } from './perf-bias-control.js';
+
 // Red-team product flows (R15.5)
 export { runProductFlowRedTeam, PRODUCT_FLOW_TEST_CASES } from './redteam-product-flows.js';
 export type {
