@@ -105,6 +105,10 @@ export type {
   BenchmarkReport,
 } from './context-compaction-benchmark.js';
 
+// Compaction gates
+export { evaluateCompactionGates, DEFAULT_COMPACTION_GATES } from './compaction-gates.js';
+export type { CompactionGateConfig, GateVerdict, GateResult } from './compaction-gates.js';
+
 // Threshold sweep
 export { runThresholdSweep } from './threshold-sweep.js';
 export type {
