@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, writeFile } from 'node:fs/promises';
 
+import { compileContext } from '@corpunum/lunum';
 import {
   BENCHMARK_VERSION,
   BENCHMARK_TASKS,
@@ -375,5 +376,99 @@ describe('Context Compaction Benchmark', () => {
       assert.ok(!isNaN(value), `Summary.${key} should not be NaN`);
       assert.ok(isFinite(value), `Summary.${key} should be finite`);
     }
+  });
+
+  // ── Mixed Mode Distinctness Tests ──────────────────────────────
+
+  it('mixed mode output should differ from natural mode for eligible tasks', () => {
+    for (const task of BENCHMARK_TASKS) {
+      const messages = [
+        {
+          role: 'system' as const,
+          content: task.naturalContext,
+          lunumCode: JSON.stringify(task.lunumSem),
+          lunumMeta: { eligible: true }
+        }
+      ];
+
+      const naturalResult = compileContext(messages, { mode: 'natural' });
+      const mixedResult = compileContext(messages, { mode: 'mixed' });
+
+      const naturalContent = naturalResult.selectedMessages[0]?.content ?? '';
+      const mixedContent = mixedResult.selectedMessages[0]?.content ?? '';
+
+      assert.notStrictEqual(
+        naturalContent,
+        mixedContent,
+        `Task ${task.id}: mixed mode content should differ from natural mode when eligible=true`
+      );
+    }
+  });
+
+  it('runBenchmark should report different token counts for mixed vs natural', () => {
+    const report = runBenchmark(BENCHMARK_TASKS);
+
+    // At least some tasks should show different mixed vs natural token counts
+    let differingCount = 0;
+    for (const task of BENCHMARK_TASKS) {
+      const naturalResult = report.results.find(
+        r => r.taskId === task.id && r.mode === 'natural'
+      );
+      const mixedResult = report.results.find(
+        r => r.taskId === task.id && r.mode === 'mixed'
+      );
+
+      if (
+        naturalResult &&
+        mixedResult &&
+        naturalResult.tokenCount !== mixedResult.tokenCount
+      ) {
+        differingCount++;
+      }
+    }
+
+    assert.ok(
+      differingCount > 0,
+      `Expected at least some tasks to have different token counts between natural and mixed modes, got ${differingCount} out of ${BENCHMARK_TASKS.length}`
+    );
+  });
+
+  it('compileContext without eligible=true falls back to natural for mixed mode', () => {
+    const task = BENCHMARK_TASKS[0]!;
+    const messagesWithMeta = [
+      {
+        role: 'system' as const,
+        content: task.naturalContext,
+        lunumCode: JSON.stringify(task.lunumSem),
+        lunumMeta: { eligible: true }
+      }
+    ];
+    const messagesWithoutMeta = [
+      {
+        role: 'system' as const,
+        content: task.naturalContext,
+        lunumCode: JSON.stringify(task.lunumSem)
+      }
+    ];
+
+    const withMeta = compileContext(messagesWithMeta, { mode: 'mixed' });
+    const withoutMeta = compileContext(messagesWithoutMeta, { mode: 'mixed' });
+
+    const withContent = withMeta.selectedMessages[0]?.content ?? '';
+    const withoutContent = withoutMeta.selectedMessages[0]?.content ?? '';
+
+    // With eligible=true, mixed should use lunumCode (different from natural)
+    assert.notStrictEqual(
+      withContent,
+      task.naturalContext,
+      'With eligible=true, mixed mode should use lunumCode'
+    );
+
+    // Without eligible, mixed should fall back to natural (same as natural mode)
+    assert.strictEqual(
+      withoutContent,
+      task.naturalContext,
+      'Without eligible=true, mixed mode should fall back to natural'
+    );
   });
 });
