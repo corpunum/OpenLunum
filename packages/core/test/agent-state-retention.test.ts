@@ -23,6 +23,11 @@ import {
   type RetentionMetadata,
   type RetentionPolicy,
   type AgentState,
+  DEFAULT_AGENT_RETENTION_POLICIES,
+  classifyAgentPrivacy,
+  processDeletionRequest,
+  auditAgentRetention,
+  type AgentDataCategory,
 } from '../src/index.js';
 
 // ---------------------------------------------------------------------------
@@ -471,6 +476,86 @@ describe('agent-state-retention', () => {
       assert.strictEqual(m.recordHandle, 'test-handle');
       assert.strictEqual(m.planId, 'plan-1');
       assert.strictEqual(m.agentId, 'agent-1');
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // R10.6 — Product-level retention, privacy and deletion policies
+  // -------------------------------------------------------------------------
+
+  describe('DEFAULT_AGENT_RETENTION_POLICIES', () => {
+    it('has 6 entries', () => {
+      assert.strictEqual(DEFAULT_AGENT_RETENTION_POLICIES.length, 6);
+    });
+
+    it('covers all agent data categories', () => {
+      const categories: AgentDataCategory[] = [
+        'plan', 'step-result', 'tool-call', 'evidence', 'handoff', 'constraint',
+      ];
+      const covered = DEFAULT_AGENT_RETENTION_POLICIES.map(p => p.category);
+      for (const cat of categories) {
+        assert.ok(covered.includes(cat), `Missing policy for category: ${cat}`);
+      }
+    });
+  });
+
+  describe('classifyAgentPrivacy', () => {
+    it('detects email as PII', () => {
+      const result = classifyAgentPrivacy('tool-call', 'Contact user@example.com for details');
+      assert.strictEqual(result.containsPII, true);
+      assert.strictEqual(result.category, 'tool-call');
+      assert.strictEqual(result.dataSubjectRights, true);
+    });
+
+    it('returns no PII for clean content', () => {
+      const result = classifyAgentPrivacy('plan', 'Execute step 1 of the deployment plan');
+      assert.strictEqual(result.containsPII, false);
+      assert.strictEqual(result.containsSensitive, false);
+      assert.strictEqual(result.dataSubjectRights, false);
+      assert.strictEqual(result.crossBorderRestrictions, false);
+    });
+  });
+
+  describe('processDeletionRequest', () => {
+    it('uses correct method from policy', () => {
+      const req = processDeletionRequest('tool-call', 'GDPR request');
+      assert.strictEqual(req.method, 'anonymize');
+      assert.strictEqual(req.category, 'tool-call');
+      assert.strictEqual(req.reason, 'GDPR request');
+      assert.strictEqual(req.completedAt, null);
+      assert.ok(req.id);
+      assert.ok(req.requestedAt);
+
+      const req2 = processDeletionRequest('step-result', 'cleanup');
+      assert.strictEqual(req2.method, 'hard-delete');
+
+      const req3 = processDeletionRequest('plan', 'archive');
+      assert.strictEqual(req3.method, 'soft-delete');
+    });
+  });
+
+  describe('auditAgentRetention', () => {
+    it('flags expired data', () => {
+      const result = auditAgentRetention([
+        { category: 'tool-call', ageDays: 60 },   // exceeds 30-day limit
+        { category: 'plan', ageDays: 400 },        // exceeds 365-day limit
+      ]);
+      assert.strictEqual(result.violations.length, 2);
+      assert.strictEqual(result.compliant, 0);
+      assert.strictEqual(result.policiesChecked, 2);
+      assert.ok(result.violations.every(v => v.severity === 'error'));
+    });
+
+    it('passes for fresh data', () => {
+      const result = auditAgentRetention([
+        { category: 'plan', ageDays: 10 },
+        { category: 'evidence', ageDays: 100 },
+        { category: 'constraint', ageDays: 1 },
+      ]);
+      assert.strictEqual(result.violations.length, 0);
+      assert.strictEqual(result.compliant, 3);
+      assert.strictEqual(result.policiesChecked, 3);
+      assert.ok(result.timestamp);
     });
   });
 
