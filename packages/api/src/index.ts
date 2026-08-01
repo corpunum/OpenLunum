@@ -61,3 +61,19 @@ export {
   type AuthRequest,
   type AuthResult,
 } from './auth-middleware.js';
+
+// API load, concurrency, and failure-injection testing
+export {
+  API_ENDPOINTS_LOAD,
+  DEFAULT_API_LOAD_CONFIG,
+  FAILURE_SCENARIOS,
+  simulateApiLoad,
+  simulateFailureInjection,
+  testConcurrencyLevels,
+  type ApiEndpoint,
+  type ApiLoadConfig,
+  type ApiLoadResult,
+  type FailureScenario,
+  type FailureInjectionResult,
+  type ConcurrencyTestResult,
+} from './api-load-testing.js';
