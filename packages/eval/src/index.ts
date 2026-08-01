@@ -350,3 +350,20 @@ export type {
   StaleReport,
   ScenarioResult,
 } from './long-context-sessions.js';
+
+// Retrieval category metrics (R9.4)
+export {
+  computeCategoryMetrics,
+  computeLanguageMetrics,
+  computeRankingQuality,
+  generateRetrievalCategoryReport,
+} from './retrieval-category-metrics.js';
+export type {
+  LanguagePair,
+  SemanticCategory,
+  CategoryMetrics,
+  LanguageMetrics,
+  RetrievalJudgment,
+  RankingQualityMetrics,
+  RetrievalCategoryReport,
+} from './retrieval-category-metrics.js';
