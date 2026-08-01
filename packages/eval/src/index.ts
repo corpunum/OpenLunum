@@ -398,3 +398,21 @@ export type {
   RankingQualityMetrics,
   RetrievalCategoryReport,
 } from './retrieval-category-metrics.js';
+
+// Safety incident handling (R6.7)
+export {
+  createRollbackPlan,
+  validateRollbackPlan,
+  simulateSafetyIncident,
+  SAFETY_DEFECT_SCENARIOS,
+} from './safety-incident-handling.js';
+export type {
+  SafetyDefectType,
+  SafetyDefect,
+  RollbackStep,
+  RollbackPlan,
+  PlanValidation,
+  IncidentPhaseName,
+  IncidentPhase,
+  IncidentTimeline,
+} from './safety-incident-handling.js';
