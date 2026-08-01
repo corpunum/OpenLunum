@@ -91,3 +91,22 @@ export {
   type FailureInjectionResult,
   type ConcurrencyTestResult,
 } from './api-load-testing.js';
+
+// Downstream integration contracts (R12.7)
+export {
+  DOWNSTREAM_INTEGRATIONS,
+  validateIntegrationContract,
+  testIntegration,
+  runIntegrationSuite,
+} from './downstream-integrations.js';
+export type {
+  IntegrationId,
+  IntegrationStatus,
+  IntegrationContract,
+  ApiSurfaceUsage,
+  DataFlow,
+  ErrorStrategy,
+  ErrorHandlingContract,
+  IntegrationTestResult,
+  IntegrationReport,
+} from './downstream-integrations.js';
