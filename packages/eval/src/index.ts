@@ -332,3 +332,21 @@ export type {
   ModeQualityConfig,
   ModeComparisonReport,
 } from './context-mode-quality.js';
+
+// Long-context sessions (R7.5)
+export {
+  buildSessionTimeline,
+  detectStaleRetrievals,
+  runSessionScenario,
+  SESSION_TEST_SCENARIOS,
+  SessionMemory,
+} from './long-context-sessions.js';
+export type {
+  SessionEvent,
+  MemoryEntry,
+  MemoryConflict,
+  RetrievalAttempt,
+  SessionTimeline,
+  StaleReport,
+  ScenarioResult,
+} from './long-context-sessions.js';
