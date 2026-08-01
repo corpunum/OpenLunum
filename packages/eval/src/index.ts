@@ -472,3 +472,24 @@ export type {
   ChangeReviewProtocol,
   ChangeReviewResult,
 } from './independent-eval.js';
+
+// External/separate-environment replication (R13.4)
+export {
+  REPLICATION_PACKAGES,
+  validateReplicationPackage,
+  checkEnvironmentCompatibility,
+  compareResults,
+  simulateReplication,
+  runReplicationSuite,
+} from './external-replication.js';
+export type {
+  ReplicationTarget,
+  ReplicationStatus,
+  ReplicationPackage,
+  ReplicationExpectation,
+  EnvironmentRequirement,
+  ReplicationAttempt,
+  EnvironmentDescriptor,
+  ReplicationMeasurement,
+  ReplicationReport,
+} from './external-replication.js';
