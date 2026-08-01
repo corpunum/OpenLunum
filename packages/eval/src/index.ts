@@ -433,3 +433,23 @@ export type {
   ProfileQualityReport,
   CrossProfileComparison,
 } from './profile-quality-measurement.js';
+
+// Statistical conventions (R13.6)
+export {
+  CONVENTIONS_VERSION,
+  DEFAULT_CONVENTIONS,
+  computePercentile,
+  computeMean,
+  computeStdDev,
+  computeMedian as computeConventionMedian,
+  computeIQR,
+  computeDescriptiveStats,
+  verifyRecomputation,
+} from './statistical-conventions.js';
+export type {
+  PercentileMethod,
+  AggregationMethod,
+  ConfidenceMethod,
+  StatisticalConventions,
+  DescriptiveStats,
+} from './statistical-conventions.js';
