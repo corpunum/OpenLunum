@@ -649,3 +649,179 @@ export function buildRetentionMetadata(
     ...overrides,
   };
 }
+
+// ---------------------------------------------------------------------------
+// R10.6 — Product-level retention, privacy and deletion policies
+// ---------------------------------------------------------------------------
+
+/**
+ * Categories of data produced by agents during plan execution.
+ */
+export type AgentDataCategory =
+  | 'plan'
+  | 'step-result'
+  | 'tool-call'
+  | 'evidence'
+  | 'handoff'
+  | 'constraint';
+
+/**
+ * Retention policy for a specific agent data category.
+ */
+export interface AgentRetentionPolicy {
+  category: AgentDataCategory;
+  retentionDays: number;
+  personalDataPresent: boolean;
+  deletionMethod: 'soft-delete' | 'hard-delete' | 'anonymize';
+  auditRequired: boolean;
+}
+
+/**
+ * Default retention policies for all agent data categories.
+ */
+export const DEFAULT_AGENT_RETENTION_POLICIES: readonly AgentRetentionPolicy[] = [
+  { category: 'plan',        retentionDays: 365,  personalDataPresent: false, deletionMethod: 'soft-delete', auditRequired: true  },
+  { category: 'step-result', retentionDays: 90,   personalDataPresent: false, deletionMethod: 'hard-delete', auditRequired: true  },
+  { category: 'tool-call',   retentionDays: 30,   personalDataPresent: true,  deletionMethod: 'anonymize',   auditRequired: true  },
+  { category: 'evidence',    retentionDays: 3650, personalDataPresent: false, deletionMethod: 'soft-delete', auditRequired: true  },
+  { category: 'handoff',     retentionDays: 180,  personalDataPresent: true,  deletionMethod: 'anonymize',   auditRequired: true  },
+  { category: 'constraint',  retentionDays: 365,  personalDataPresent: false, deletionMethod: 'soft-delete', auditRequired: false },
+] as const;
+
+/**
+ * Privacy classification result for a piece of agent data.
+ */
+export interface PrivacyClassification {
+  category: AgentDataCategory;
+  containsPII: boolean;
+  containsSensitive: boolean;
+  dataSubjectRights: boolean;
+  crossBorderRestrictions: boolean;
+}
+
+/**
+ * Scan content for PII indicators and return a privacy classification.
+ *
+ * Checks for email patterns, phone patterns, and honorific-prefixed names.
+ */
+export function classifyAgentPrivacy(
+  category: AgentDataCategory,
+  content: string,
+): PrivacyClassification {
+  const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+  const phonePattern = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/;
+  const namePattern = /\b(?:Mr|Ms|Mrs|Dr|Prof)\b\.?\s+[A-Z][a-z]+/;
+
+  const containsPII =
+    emailPattern.test(content) ||
+    phonePattern.test(content) ||
+    namePattern.test(content);
+
+  return {
+    category,
+    containsPII,
+    containsSensitive: containsPII,
+    dataSubjectRights: containsPII,
+    crossBorderRestrictions: containsPII,
+  };
+}
+
+/**
+ * A request to delete agent data for a specific category.
+ */
+export interface DeletionRequest {
+  id: string;
+  category: AgentDataCategory;
+  reason: string;
+  requestedAt: string;
+  completedAt: string | null;
+  method: 'soft-delete' | 'hard-delete' | 'anonymize';
+}
+
+let deletionRequestCounter = 0;
+
+/**
+ * Create a deletion request using the matching retention policy's method.
+ */
+export function processDeletionRequest(
+  category: AgentDataCategory,
+  reason: string,
+): DeletionRequest {
+  const policy = DEFAULT_AGENT_RETENTION_POLICIES.find(p => p.category === category);
+  if (!policy) {
+    throw new Error(`No retention policy found for category: ${category}`);
+  }
+
+  deletionRequestCounter++;
+  return {
+    id: `del-${deletionRequestCounter}-${Date.now()}`,
+    category,
+    reason,
+    requestedAt: new Date().toISOString(),
+    completedAt: null,
+    method: policy.deletionMethod,
+  };
+}
+
+/**
+ * A single retention violation found during an audit.
+ */
+export interface RetentionViolation {
+  category: AgentDataCategory;
+  issue: string;
+  severity: 'warning' | 'error';
+}
+
+/**
+ * Result of auditing agent data retention compliance.
+ */
+export interface AgentRetentionAudit {
+  timestamp: string;
+  policiesChecked: number;
+  compliant: number;
+  violations: RetentionViolation[];
+}
+
+/**
+ * Audit agent data ages against retention policies.
+ *
+ * Each item in `dataAges` is checked against the matching policy's
+ * `retentionDays`. Items exceeding their retention period are flagged
+ * as violations.
+ */
+export function auditAgentRetention(
+  dataAges: Array<{ category: AgentDataCategory; ageDays: number }>,
+  policies: AgentRetentionPolicy[] = [...DEFAULT_AGENT_RETENTION_POLICIES],
+): AgentRetentionAudit {
+  const violations: RetentionViolation[] = [];
+  let compliant = 0;
+
+  for (const item of dataAges) {
+    const policy = policies.find(p => p.category === item.category);
+    if (!policy) {
+      violations.push({
+        category: item.category,
+        issue: `No retention policy found for category "${item.category}"`,
+        severity: 'error',
+      });
+      continue;
+    }
+
+    if (item.ageDays > policy.retentionDays) {
+      violations.push({
+        category: item.category,
+        issue: `Data age (${item.ageDays} days) exceeds retention limit (${policy.retentionDays} days)`,
+        severity: 'error',
+      });
+    } else {
+      compliant++;
+    }
+  }
+
+  return {
+    timestamp: new Date().toISOString(),
+    policiesChecked: dataAges.length,
+    compliant,
+    violations,
+  };
+}
