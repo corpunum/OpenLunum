@@ -510,3 +510,21 @@ export type {
   RedTeamReviewSession,
   RedTeamReviewReport,
 } from './redteam-independent-review.js';
+
+// Security self-assessment framework (R15.2)
+export {
+  SECURITY_CONTROLS,
+  assessControl,
+  assessDomain,
+  generateAssessmentReport,
+  runSampleAssessment,
+} from './security-self-assessment.js';
+export type {
+  SecurityDomain,
+  MaturityLevel,
+  EvidenceKind,
+  SecurityControl,
+  ControlAssessment,
+  DomainAssessment,
+  SecuritySelfAssessmentReport,
+} from './security-self-assessment.js';
