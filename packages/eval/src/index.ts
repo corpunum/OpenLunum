@@ -47,6 +47,22 @@ export type {
   LineageQueryResult,
 } from './evidence-lineage.js';
 
+// Evidence supersession (R13.7)
+export {
+  createSupersession,
+  createCorrection,
+  buildSupersessionChain,
+  validateNoHistoryRewriting,
+  snapshotEvidence,
+} from './evidence-supersession.js';
+export type {
+  SupersessionRecord,
+  CorrectionEntry,
+  SupersessionRegistry,
+  HistoryValidation,
+  EvidenceSnapshot,
+} from './evidence-supersession.js';
+
 // Runner
 export { runExperiment } from './runner.js';
 
