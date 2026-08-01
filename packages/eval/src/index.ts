@@ -315,3 +315,20 @@ export type {
   IncidentRunbook,
   SimulationResult,
 } from './incident-response.js';
+
+// Context mode quality (R7.4)
+export {
+  measureAccuracy,
+  measureLiteralPreservation,
+  measureRolePreservation,
+  estimateTokenCost,
+  compareContextModes,
+  DEFAULT_QUALITY_TOLERANCES,
+} from './context-mode-quality.js';
+export type {
+  ContextMode as EvalContextMode,
+  QualityDimension,
+  ModeQualityMeasurement,
+  ModeQualityConfig,
+  ModeComparisonReport,
+} from './context-mode-quality.js';
