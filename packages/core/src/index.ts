@@ -103,3 +103,4 @@ export * from './threshold-calibration.js';
 export * from './release-governance.js';
 export * from './agent-interop.js';
 export * from './multilingual-memory-pilot.js';
+export * from './correction-telemetry.js';
