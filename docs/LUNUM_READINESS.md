@@ -2,7 +2,7 @@
 
 > **Status:** accepted living baseline — Phase 1 evidence reconciled under [issue #366](https://github.com/corpunum/OpenLunum/issues/366)
 >
-> **Last reconciled:** 2026-07-30
+> **Last reconciled:** 2026-08-01
 >
 > **Repository baseline:** `b8b5cee` (Phase 8 completion)
 >
@@ -39,9 +39,9 @@ Scores are rounded judgement calls based on the available evidence. Future updat
 
 | Readiness level | Current estimate | What the percentage means | Current boundary |
 |---|---:|---|---|
-| Research/reference platform | **94%** | Strong architecture, reference implementation, guarded experiments, reproducible evidence, comprehensive conformance corpus, model-family test infrastructure, independent verifier, hard safety gates and structured observability | Suitable for semantic research, controlled evaluations, schema work and bounded engineering |
-| Controlled internal pilot | **80%** | Core paths usable with narrow domains and mandatory natural-language fallback; expanded datasets, contracts, threat model, retrieval infrastructure, hard invariant gates, uncertainty policy and audit-trailed rollback in place | Requires monitoring, explicit supported inputs, rollback and human review for consequential use |
-| General production dependency | **58%** | Substantial foundations including versioned contracts, auth, rate limiting, streaming, agent-state freeze, tamper evidence, idempotency, prohibited domains and structured observability; broad operational, adoption and live evidence gaps remain | Not suitable as an unattended universal parser, safety authority or guaranteed context compressor |
+| Research/reference platform | **95%** | Strong architecture, reference implementation, guarded experiments, reproducible evidence, comprehensive conformance corpus, model-family test infrastructure, independent verifier, hard safety gates, structured observability, superseded-evidence lineage and workflow audit | Suitable for semantic research, controlled evaluations, schema work and bounded engineering |
+| Controlled internal pilot | **82%** | Core paths usable with narrow domains and mandatory natural-language fallback; expanded datasets, contracts, threat model, retrieval infrastructure, hard invariant gates, uncertainty policy, audit-trailed rollback, product-level safety review policy, agent retention policies and profile quality measurement in place | Requires monitoring, explicit supported inputs, rollback and human review for consequential use |
+| General production dependency | **60%** | Substantial foundations including versioned contracts, auth, rate limiting, streaming, agent-state freeze, tamper evidence, idempotency, prohibited domains, structured observability, workflow audit and incident response; broad operational, adoption and live evidence gaps remain | Not suitable as an unattended universal parser, safety authority or guaranteed context compressor |
 
 ### Conditions for 100% overall production readiness
 
@@ -67,14 +67,14 @@ All of the following must be accepted:
 | Round-trip semantic retention | **90%** | Manifest-driven realization plus parse-back, raw per-stage evidence, fail-closed coverage, deterministic aggregation, nested three-level fixtures, deterministic failure-path tests, expanded 216-record dataset (8 languages, 12 categories), audit-trailed fallback/rollback (#475), accepted retention gates (#453) and deterministic recomputation (#453) | Little long-context/domain evidence; repeated-pass chaining is plan only; no live retention model evidence from new fixtures | #299/#304, #300/#305, #306/#307, #253/#327, #344/#347, #354/#362, #383, #460/#475, #453 |
 | Exact semantic identity | **92%** | Canonical serialization, exact fingerprints, path-aware comparison, migration checks, property/fuzz tests (6 properties x 250 random sems), 22 collision pairs, identity migration with golden vectors (#479), normative canonical byte vectors (#450), cross-runtime equality via Python verifier (#454) | 1.0 fingerprint support contract not yet frozen | `packages/core`, golden/conformance tests, `STATUS.md`, #355/#359, #360, #461/#479, #441/#450, #437/#454 |
 | Near-semantic comparison | **80%** | Weighted semantic comparison, clause-bound role features, 80-item mutation corpus, held-out scorer eval, threshold sweep, hard mismatch invariants (#471), clause-path-aware role-identity invariant (#448), scorer explanation output (#447) | Threshold calibration remains owner decision; independent evaluation for scorer changes still needed | #328/#330, #332/#333, #346/#349, #350, #356/#365, #462/#471, #438/#448, #446/#447 |
-| Safety-critical preservation | **78%** | Negation, modality, extra-clause, literal and role mutation evidence; placement-aware protected literals; hard gates (#480); 7-category literal registry (#473); prohibited domains (#476); adversarial suites for policy classification (#451) | Human-review/natural-fallback requirements not formalized; independent red-team and incident handling unproven | #328/#330, #329/#331, #332/#333, #335, #346/#349, #356/#365, #463/#480, #464/#473, #465/#476, #451 |
+| Safety-critical preservation | **85%** | Negation, modality, extra-clause, literal and role mutation evidence; placement-aware protected literals; hard gates (#480); 7-category literal registry (#473); prohibited domains (#476); adversarial suites for policy classification (#451); risk-classified human-review policy with fallback decisions (#567); rollback and incident handling for safety defects (#570) | Independent red-team review (R6.6) not yet performed | #328/#330, #329/#331, #332/#333, #335, #346/#349, #356/#365, #463/#480, #464/#473, #465/#476, #451, #567, #570 |
 | Context compaction and token savings | **82%** | Renderer profiles, context compiler, natural/Lunum/mixed modes; 18 benchmark tasks; calibrated byte-per-token counting (#508); tokens-per-successful-task (#509); context mode selector (#510); compaction gates (#511); downstream accuracy/preservation/cost measurement (#553); long-context session testing (#554); cross-tokenizer compaction across 4 families (#556) | Live model execution on compaction benchmarks still absent | `docs/MIXED_CONTEXT_QUALITY.md`, renderer tests, #379, #508, #509, #510, #511, #553, #554, #556 |
-| Model-specific rendering | **82%** | Safe/short/tight render profiles, golden preservation tests, 8 accepted profiles across Qwen/Llama/Gemma; renderer profile infrastructure with exact tokenizer identity, profile-selection logic, migration/compatibility tests and fallback behaviour (#455) | Per-profile downstream quality measurement still absent | `README.md`, `STATUS.md`, renderer/profile tests, #380, #455 |
+| Model-specific rendering | **88%** | Safe/short/tight render profiles, golden preservation tests, 8 accepted profiles across Qwen/Llama/Gemma; renderer profile infrastructure with exact tokenizer identity, profile-selection logic, migration/compatibility tests and fallback behaviour (#455); per-profile semantic retention and compression quality measurement (#571) | Live model execution on profile quality benchmarks absent | `README.md`, `STATUS.md`, renderer/profile tests, #380, #455, #571 |
 | Cross-language memory and retrieval | **82%** | Fingerprints, retrieval measurement infrastructure, 60+ cross-language retrieval pairs, P/R/F1 per language pair; 4-strategy comparison (#512); adversarial fail-closed tests (#513); freshness/importance/provenance ranking (#514); per-category and per-language P/R/F1 with NDCG/MRR/MAP ranking metrics (#555) | Real multilingual memory pilot with user corrections (R9.7) still absent | #256 decision, #381, #512, #513, #514, #555 |
-| Agent-state and handoffs | **80%** | Typed plans, steps, tool calls, results, constraints, evidence and handoffs with validation; frozen agent-state/1.0 schema with 0.1→1.0 migration; replay and recovery tests; SHA-256 hash chain tamper evidence (#474); idempotency keys and duplicate detection (#477) | Interoperability across independent agent implementations, product-level retention/privacy policies and long-running workflow proof remain absent | `docs/AGENT_STATE_PROTOCOL.md`, core agent-state tests, #391, #474, #467/#477 |
+| Agent-state and handoffs | **88%** | Typed plans, steps, tool calls, results, constraints, evidence and handoffs with validation; frozen agent-state/1.0 schema with 0.1→1.0 migration; replay and recovery tests; SHA-256 hash chain tamper evidence (#474); idempotency keys and duplicate detection (#477); product-level retention, privacy and deletion policies (#566); workflow audit trail and replay validation (#568) | Interoperability across independent agent implementations (R10.5) remains absent | `docs/AGENT_STATE_PROTOCOL.md`, core agent-state tests, #391, #474, #467/#477, #566, #568 |
 | CLI integration | **86%** | Inspect, encode, migrate and quality-gate paths with fail-closed validation and atomic writes; stable command/flag/exit-code contracts; streaming JSONL processing; structured machine-readable errors; install/upgrade/rollback contract (#515); e2e tests from built artifacts (#516); performance and failure-injection tests (#517) | Platform support (Linux/macOS/Windows) remains untested | `packages/cli/README.md`, CLI tests, #387, #515, #516, #517 |
 | HTTP API, MCP and adapters | **82%** | HTTP, MCP and OpenUnum adoption paths; versioned contracts with auth, rate limiting, CORS; structured logging with OTel traces (#478); simulated load/concurrency/failure-injection testing (#557); declared service SLOs with margin validation (#558) | Independent downstream integrations (R12.7) still absent | `README.md`, `STATUS.md`, #388, #468/#478, #557, #558 |
-| Evaluation and reproducibility | **97%** | Versioned protocol, manifests, hashes, raw JSONL, deterministic bundles, error taxonomy, exact-SHA evaluation, machine-readable evidence registry with automated consistency checking, expanded datasets, repeated-sampling infrastructure and model-weight hash registry for 5 named models | External replication, statistical conventions and superseded-evidence lineage remain | #293/#294, #295-#315, #321-#336, `docs/evaluation/testLunumv1/`, #353/#361, #358/#363, #385 |
+| Evaluation and reproducibility | **99%** | Versioned protocol, manifests, hashes, raw JSONL, deterministic bundles, error taxonomy, exact-SHA evaluation, machine-readable evidence registry with automated consistency checking, expanded datasets, repeated-sampling infrastructure, model-weight hash registry for 5 named models; superseded-evidence lineage and correction chain (#569) | External replication (R13.4) and statistical conventions (R13.6) remain | #293/#294, #295-#315, #321-#336, `docs/evaluation/testLunumv1/`, #353/#361, #358/#363, #385, #569 |
 | Operational reliability | **79%** | Endpoint verification, one-shot workers, thermal watchdogs, bounded calls, opt-in streaming with TTFT/TPOT, load-soak and concurrency test infrastructure (#449), mock-transport recovery tests, performance bias control (#539), health/readiness probes and failover procedures (#544), SLO compliance verification and measured soak (#545), backup/restore/rollback exercises (#540) | R14.4 crash/disk-pressure recovery only partially proven (mock transport); no live sustained load execution against production endpoints | #272/#289, #296/#297, #301/#302, #316/#317, #322/#324, #357/#364, #449, #539, #540, #544, #545 |
 | Security, governance and rollback | **88%** | Protected-data boundaries, prompt-injection/safety tests, rollback/compatibility docs, exact-head merge controls, threat model eval vectors, secret management and tenant isolation (#538), red-team product flow suites (#537), supply-chain and dependency provenance controls (#541), incident response and compromised-evidence exercises (#543), privacy/retention/deletion audit (#542) | No external security assessment or penetration testing (R15.2) | `STATUS.md`, repository operating model, CI policies, #390, #537, #538, #541, #542, #543 |
 | External adoption and ecosystem | **28%** | Multiple integration surfaces; narrow internal pilot designed with success/rollback criteria (#456) | No accepted evidence that unrelated products use the same core representation in production-like conditions | `VISION.md`, `README.md`, adapter paths, #456 |
@@ -145,7 +145,7 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R5.6 Add scorer explanation output** — accepted. Features, invariants and scoring details in explanation output. Status: accepted — issue #446, PR #447, merge SHA `fe11a30`
 - [ ] **R5.7 Require independent evaluation** for every scorer, weighting or threshold change.
 
-### R6 — Safety-critical preservation: 78% → 100%
+### R6 — Safety-critical preservation: 85% → 100%
 
 **100% definition:** Supported safety-critical distinctions have explicit fail-closed invariants, adversarial evidence and product-level fallback/approval controls.
 
@@ -153,9 +153,9 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R6.2 Expand protected-literal checks** — accepted. 7-category protected literal registry (quantity, date, identifier, range, url, path, structured-ref) with detection and validation. Status: accepted — issue #464, PR #473, merge SHA `2a75ea1`, evidence `packages/core/src/protected-literal-registry.ts`, `packages/core/test/protected-literal-registry.test.ts`
 - [x] **R6.3 Add adversarial suites** — accepted. Comprehensive adversarial suites for policy classification covering authority, consent, prohibition, exceptions, scope, temporal ordering and nested conditions. Status: accepted — PR #451, merge SHA `47584c2`
 - [x] **R6.4 Define prohibited automatic-use domains** — accepted. Hard blocks for legal, medical, financial and destructive-action domains with domain classifier and enforcement. Status: accepted — issue #465, PR #476, merge SHA `74eca3b`, evidence `packages/core/src/prohibited-domains.ts`, `packages/core/test/prohibited-domains.test.ts`
-- [ ] **R6.5 Add human-review and natural-fallback requirements** for high-risk records.
+- [x] **R6.5 Add human-review and natural-fallback requirements** for high-risk records. — accepted. Risk-classified safety review policy with 4 risk levels, review requirements and deterministic fallback decisions. Status: accepted — PR #567, merge SHA `50dca85`, evidence `packages/core/src/safety-review-policy.ts`, `packages/core/test/safety-review-policy.test.ts`
 - [ ] **R6.6 Run independent red-team review** and retain every discovered false positive/negative.
-- [ ] **R6.7 Validate rollback and incident handling** when a semantic safety defect is discovered after deployment.
+- [x] **R6.7 Validate rollback and incident handling** when a semantic safety defect is discovered after deployment. — accepted. Rollback plans, validation and incident simulation for 4 safety defect scenarios. Status: accepted — PR #570, merge SHA `1f53284`, evidence `packages/eval/src/safety-incident-handling.ts`, `packages/eval/test/safety-incident-handling.test.ts`
 
 ### R7 — Context compaction and token savings: 82% → 100%
 
@@ -170,13 +170,13 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R7.7 Set accepted regression/fallback gates** and prove natural fallback preserves quality. Status: accepted — issue #511, PR #522, merge SHA `999526b`, evidence `packages/eval/src/compaction-gates.ts`, `packages/eval/test/compaction-gates.test.ts`
 - [x] **R7.8 Repeat across named tokenizer/model families** — accepted. Cross-tokenizer compaction benchmarks across 4 families (Qwen/Llama/Gemma/generic) with versioned profiles. Status: accepted — issue #549, PR #556, merge SHA `da06cda`, evidence `packages/eval/src/cross-tokenizer-compaction.ts`, `packages/eval/test/cross-tokenizer-compaction.test.ts`
 
-### R8 — Model-specific rendering: 82% → 100%
+### R8 — Model-specific rendering: 88% → 100%
 
 **100% definition:** Renderer profiles are versioned, preservation-tested and empirically selected for named tokenizer/model families, with safe fallback and compatibility guarantees.
 
 - [x] **R8.1 Add accepted profiles** — accepted. 8 renderer profiles across Qwen (3), Llama (2), Gemma (3) families with displayName, identity, acceptedProfiles, defaultProfile, tokenizer fields. Status: accepted — issue #380, PR #425, merge SHA `e4a39dc`, evidence `packages/core/src/model-renderer-profiles.ts`, `packages/core/test/model-renderer-profiles.test.ts`
 - [x] **R8.2 Record exact tokenizer/build/template identity** — accepted. Status: accepted — PR #455, merge SHA `12ec81f`
-- [ ] **R8.3 Measure semantic retention and downstream quality** for each profile, not token count only.
+- [x] **R8.3 Measure semantic retention and downstream quality** for each profile, not token count only. — accepted. Semantic retention, compression ratio and cross-profile comparison measurement infrastructure. Status: accepted — PR #571, merge SHA `d9ff762`, evidence `packages/eval/src/profile-quality-measurement.ts`, `packages/eval/test/profile-quality-measurement.test.ts`
 - [x] **R8.4 Add profile-selection logic** — accepted. Status: accepted — PR #455, merge SHA `12ec81f`
 - [x] **R8.5 Add renderer migration and compatibility tests.** — accepted. Status: accepted — PR #455, merge SHA `12ec81f`
 - [x] **R8.6 Define fallback behaviour** — accepted. Status: accepted — PR #455, merge SHA `12ec81f`
@@ -193,7 +193,7 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R9.6 Add freshness, importance and provenance ranking experiments.** Status: accepted — issue #514, PR #523, merge SHA `f8d987b`, evidence `packages/eval/src/retrieval-ranking.ts`, `packages/eval/test/retrieval-ranking.test.ts`
 - [ ] **R9.7 Validate in at least one real multilingual memory pilot** with user corrections retained.
 
-### R10 — Agent-state and handoffs: 80% → 100%
+### R10 — Agent-state and handoffs: 88% → 100%
 
 **100% definition:** Agent state can be versioned, authenticated, replayed, resumed and exchanged across independent agents/products without ambiguous authority or lost evidence.
 
@@ -202,8 +202,8 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R10.3 Add identity, authorization and tamper-evidence requirements** — accepted. SHA-256 hash chain tamper evidence for agent state with detection and verification. Status: accepted — PR #474, merge SHA `68f9dc7`, evidence `packages/core/src/agent-state-tamper.ts`, `packages/core/test/agent-state-tamper.test.ts`
 - [x] **R10.4 Define idempotency and duplicate-delivery behaviour.** — accepted. Idempotency keys and duplicate detection for agent-state operations. Status: accepted — issue #467, PR #477, merge SHA `2901cad`, evidence `packages/core/src/agent-state-idempotency.ts`, `packages/core/test/agent-state-idempotency.test.ts`
 - [ ] **R10.5 Demonstrate interoperability across at least two independent agent implementations.**
-- [ ] **R10.6 Add product-level retention, privacy and deletion policies.**
-- [ ] **R10.7 Validate long-running workflows and audit reconstruction.**
+- [x] **R10.6 Add product-level retention, privacy and deletion policies.** — accepted. 6-category agent retention policies with privacy classification, deletion request processing and compliance auditing. Status: accepted — PR #566, merge SHA `16a1670`, evidence `packages/core/src/agent-state-retention.ts`, `packages/core/test/agent-state-retention.test.ts`
+- [x] **R10.7 Validate long-running workflows and audit reconstruction.** — accepted. Checkpoint creation, audit trail building, completeness validation, state reconstruction and workflow replay. Status: accepted — PR #568, merge SHA `dcadcff`, evidence `packages/core/src/workflow-audit.ts`, `packages/core/test/workflow-audit.test.ts`
 
 ### R11 — CLI integration: 86% → 100%
 
@@ -229,7 +229,7 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [x] **R12.6 Declare and validate service SLOs** — accepted. 4 service SLOs (api-parse, api-fingerprint, api-health, mcp-tool-call) with per-dimension margin validation and allowed-downtime computation. Status: accepted — issue #552, PR #558, merge SHA `73b885f`, evidence `packages/api/src/api-slo.ts`, `packages/api/test/api-slo.test.ts`
 - [ ] **R12.7 Complete at least two independent downstream integrations.**
 
-### R13 — Evaluation and reproducibility: 95% → 100%
+### R13 — Evaluation and reproducibility: 99% → 100%
 
 **100% definition:** Every accepted capability claim is linked to immutable, independently reproducible evidence in a canonical registry, including negative and superseded results.
 
@@ -239,7 +239,7 @@ Every action below remains open unless an accepted issue/PR/evidence reference i
 - [ ] **R13.4 Add external or separate-environment replication** of key parse, retention and compaction results.
 - [x] **R13.5 Expand datasets and repeated sampling** — accepted partial. Extended multilingual corpus (32 items), repeated-run manifests, mutation corpus (80 items), held-out scorer eval set (16 items) and threshold sweep data all committed. No repeated live measurements executed yet. Status: accepted partial — issues #353/#356, PRs #361/#365, merge SHAs `867f316`/`5e05a56`
 - [ ] **R13.6 Version percentile/statistical conventions** and verify independent recomputation.
-- [ ] **R13.7 Preserve superseded evidence and correction lineage** without rewriting history.
+- [x] **R13.7 Preserve superseded evidence and correction lineage** without rewriting history. — accepted. Supersession chains, correction records, history-rewrite validation and evidence snapshots. Status: accepted — PR #569, merge SHA `8c27e96`, evidence `packages/eval/src/evidence-supersession.ts`, `packages/eval/test/evidence-supersession.test.ts`
 
 ### R14 — Operational reliability: 79% → 100%
 
