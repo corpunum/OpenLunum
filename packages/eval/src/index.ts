@@ -493,3 +493,20 @@ export type {
   ReplicationMeasurement,
   ReplicationReport,
 } from './external-replication.js';
+
+// Independent red-team review framework (R6.6)
+export {
+  ALL_ATTACK_CATEGORIES,
+  validateFinding,
+  validateSession,
+  generateReport,
+  SAMPLE_REVIEW_SESSION,
+} from './redteam-independent-review.js';
+export type {
+  FindingSeverity,
+  FindingStatus,
+  AttackCategory,
+  RedTeamFinding,
+  RedTeamReviewSession,
+  RedTeamReviewReport,
+} from './redteam-independent-review.js';
