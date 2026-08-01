@@ -546,3 +546,20 @@ export type {
   DiskPressureSimulation,
   CrashRecoveryReport,
 } from './crash-recovery-simulation.js';
+
+// Compaction execution runner (R7)
+export {
+  DEFAULT_RUN_CONFIG,
+  COMPACTION_TASKS,
+  simulateCompactionMeasurement,
+  runCompactionBenchmark,
+} from './compaction-execution-runner.js';
+export type {
+  ExecutionMode,
+  ContextMode as CompactionContextMode,
+  CompactionTask,
+  CompactionMeasurement,
+  CompactionRunConfig,
+  CompactionExecutionReport,
+  CompactionModeSummary,
+} from './compaction-execution-runner.js';
