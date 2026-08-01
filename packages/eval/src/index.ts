@@ -416,3 +416,20 @@ export type {
   IncidentPhase,
   IncidentTimeline,
 } from './safety-incident-handling.js';
+
+// Profile quality measurement (R8.3)
+export {
+  measureSemanticRetention,
+  measureLiteralPreservation as measureProfileLiteralPreservation,
+  measureCompressionRatio,
+  evaluateProfile,
+  compareProfiles,
+  QUALITY_THRESHOLDS,
+} from './profile-quality-measurement.js';
+export type {
+  ProfileId,
+  QualityMetric as ProfileQualityMetric,
+  ProfileMeasurement,
+  ProfileQualityReport,
+  CrossProfileComparison,
+} from './profile-quality-measurement.js';
