@@ -299,6 +299,21 @@ export type {
   AuditTrail,
 } from './data-lifecycle.js';
 
+// Cross-tokenizer compaction (R7.8)
+export {
+  estimateTokenCount,
+  compareCrossTokenizer,
+  TOKENIZER_PROFILES,
+  PROFILE_VERSIONS,
+} from './cross-tokenizer-compaction.js';
+export type {
+  TokenizerFamily,
+  TokenizerProfile,
+  CrossTokenizerResult,
+  CrossTokenizerReport,
+  ProfileVersionEntry,
+} from './cross-tokenizer-compaction.js';
+
 // Incident response (R15.6)
 export {
   detectEvidenceTampering,
