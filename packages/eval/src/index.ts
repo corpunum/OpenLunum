@@ -453,3 +453,22 @@ export type {
   StatisticalConventions,
   DescriptiveStats,
 } from './statistical-conventions.js';
+
+// Independent evaluation infrastructure (R5.7)
+export {
+  DEFAULT_REVIEW_PROTOCOL,
+  validateScorerChange,
+  validateReview,
+  detectRegressions,
+  evaluateChangeReview,
+} from './independent-eval.js';
+export type {
+  ChangeType,
+  ReviewStatus,
+  ScorerChange,
+  EvalBenchmark,
+  BenchmarkMetric,
+  IndependentReview,
+  ChangeReviewProtocol,
+  ChangeReviewResult,
+} from './independent-eval.js';
