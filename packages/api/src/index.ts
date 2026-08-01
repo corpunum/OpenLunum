@@ -54,6 +54,20 @@ export {
   type TenantPermission,
 } from './api-contract.js';
 
+// Service SLO declarations and validation
+export {
+  API_SERVICE_SLOS,
+  validateServiceSlo,
+  validateAllSlos,
+  computeAllowedDowntime,
+  type ServiceSlo,
+  type SloMeasurement,
+  type SloMargins,
+  type SloValidationResult,
+  type SloComplianceReport,
+  type SloTarget,
+} from './api-slo.js';
+
 // Auth middleware
 export {
   createAuthMiddleware,
