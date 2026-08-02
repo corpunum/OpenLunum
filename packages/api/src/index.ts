@@ -110,3 +110,20 @@ export type {
   IntegrationTestResult,
   IntegrationReport,
 } from './downstream-integrations.js';
+
+// API contract validation (R12.8)
+export {
+  API_ENDPOINT_CONTRACTS,
+  validateEndpoint,
+  checkCompatibility as checkApiCompatibility,
+  runContractValidation,
+} from './api-contract-validation.js';
+export type {
+  HttpMethod,
+  ContractStatus,
+  EndpointContract,
+  ContractViolation,
+  EndpointValidation,
+  CompatibilityCheck as ApiCompatibilityCheck,
+  ContractValidationReport,
+} from './api-contract-validation.js';
