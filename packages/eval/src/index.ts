@@ -713,3 +713,22 @@ export type {
   ThresholdLevelSummary,
   ThresholdCalibrationReport,
 } from './threshold-calibration-runner.js';
+
+// Safety gate runner (R6.8)
+export {
+  SAFETY_GATE_TYPES,
+  RISK_LEVELS as SAFETY_GATE_RISK_LEVELS,
+  GATE_SCENARIOS,
+  simulateGateExecution,
+  runSafetyGateSuite,
+} from './safety-gate-runner.js';
+export type {
+  SafetyGateType,
+  SafetyGateRiskLevel,
+  SafetyGateScenario,
+  SafetyGateProfile,
+  SafetyGateExecutionResult,
+  SafetyGateSummary,
+  SafetyRiskSummary,
+  SafetyGateReport,
+} from './safety-gate-runner.js';
