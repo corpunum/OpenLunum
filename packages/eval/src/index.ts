@@ -563,3 +563,18 @@ export type {
   CompactionExecutionReport,
   CompactionModeSummary,
 } from './compaction-execution-runner.js';
+
+// Retention pass runner (R3.3)
+export {
+  DEFAULT_PASS_CONFIG,
+  RETENTION_TEST_ITEMS,
+  simulatePass,
+  runRetentionPasses,
+  runMultiItemRetention,
+} from './retention-pass-runner.js';
+export type {
+  RetentionPassConfig,
+  PassResult,
+  RetentionDriftReport,
+  MultiItemRetentionReport,
+} from './retention-pass-runner.js';
