@@ -578,3 +578,21 @@ export type {
   RetentionDriftReport,
   MultiItemRetentionReport,
 } from './retention-pass-runner.js';
+
+// Parse threshold validation (R2)
+export {
+  GATE_KEYS,
+  SAMPLE_SCOPED_RESULTS,
+  validateScope,
+  detectRegressions as detectParseRegressions,
+  runValidation,
+  runSampleValidation,
+} from './parse-threshold-validation.js';
+export type {
+  ValidationScope,
+  ScopedParseResults,
+  GateViolation,
+  ScopeValidation,
+  RegressionEntry,
+  ValidationReport,
+} from './parse-threshold-validation.js';
