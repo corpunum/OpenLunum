@@ -104,3 +104,15 @@ export * from './release-governance.js';
 export * from './agent-interop.js';
 export * from './multilingual-memory-pilot.js';
 export * from './correction-telemetry.js';
+export {
+  CONFORMANCE_VECTORS,
+  runConformanceCheck,
+  runConformanceSuite as runSchemaConformanceSuite,
+} from './schema-conformance-runner.js';
+export type {
+  ConformanceCategory,
+  ConformanceVector,
+  ConformanceResult,
+  CategorySummary,
+  ConformanceReport,
+} from './schema-conformance-runner.js';
