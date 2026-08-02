@@ -675,3 +675,22 @@ export type {
   CompactionReadinessVerdict,
   CompactionGateValidationReport,
 } from './compaction-gate-validation.js';
+
+// Operational load execution simulation runner (R14.9)
+export {
+  LOAD_LEVELS as OPERATIONAL_LOAD_LEVELS,
+  OPERATION_TYPES as OPERATIONAL_OPERATION_TYPES,
+  simulateLoadTest,
+  runOperationalLoadSuite,
+} from './operational-load-runner.js';
+export type {
+  OperationalLoadLevelName,
+  OperationalOperationName,
+  OperationalLoadLevel,
+  OperationalOperationProfile,
+  OperationalLatencyMetrics,
+  OperationalLoadMeasurement,
+  OperationalOperationSummary,
+  OperationalLevelSummary,
+  OperationalLoadReport,
+} from './operational-load-runner.js';
