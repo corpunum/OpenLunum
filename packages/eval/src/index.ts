@@ -528,3 +528,21 @@ export type {
   DomainAssessment,
   SecuritySelfAssessmentReport,
 } from './security-self-assessment.js';
+
+// Crash and disk-pressure recovery simulation (R14.4)
+export {
+  FAILURE_INJECTIONS,
+  simulateDiskPressure,
+  simulateCrashRecovery,
+  validateRecoveryResult,
+  generateRecoveryReport,
+  runCrashRecoverySimulation,
+} from './crash-recovery-simulation.js';
+export type {
+  FailureScenario as CrashFailureScenario,
+  RecoveryOutcome,
+  FailureInjection,
+  RecoveryResult,
+  DiskPressureSimulation,
+  CrashRecoveryReport,
+} from './crash-recovery-simulation.js';
