@@ -656,3 +656,22 @@ export type {
   RetentionExecutionComplexitySummary,
   RetentionExecutionReport,
 } from './retention-execution-runner.js';
+
+// Compaction gate validation (R7.10)
+export {
+  COMPACTION_QUALITY_GATES,
+  CONTEXT_MODES,
+  evaluateGate,
+  runCompactionGateValidation,
+} from './compaction-gate-validation.js';
+export type {
+  CompactionGateId,
+  GateThresholdDirection,
+  CompactionQualityGate,
+  GateContextMode,
+  ContextModeDescriptor,
+  GateEvaluationResult,
+  ModeGateSummary,
+  CompactionReadinessVerdict,
+  CompactionGateValidationReport,
+} from './compaction-gate-validation.js';
