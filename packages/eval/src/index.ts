@@ -636,3 +636,23 @@ export type {
   ParseLanguageSummary,
   ModelFamilyParseSuiteReport,
 } from './parse-model-family-runner.js';
+
+// Retention execution validation (R3.8)
+export {
+  COMPLEXITY_LEVELS,
+  SEMANTIC_CATEGORIES,
+  RETENTION_LANGUAGES,
+  FEATURE_PRESERVATION_THRESHOLD,
+  simulateRetentionRun,
+  runRetentionExecutionSuite,
+} from './retention-execution-runner.js';
+export type {
+  ExecutionComplexityLevel,
+  RetentionExecutionCategory,
+  RetentionExecutionLanguage,
+  RetentionExecutionMetrics,
+  RetentionExecutionCategorySummary,
+  RetentionExecutionLanguageSummary,
+  RetentionExecutionComplexitySummary,
+  RetentionExecutionReport,
+} from './retention-execution-runner.js';
