@@ -596,3 +596,18 @@ export type {
   RegressionEntry,
   ValidationReport,
 } from './parse-threshold-validation.js';
+
+// Profile execution validation (R8.7)
+export {
+  PROFILE_CONFIGS,
+  simulateExecution,
+  checkCompatibility,
+  runProfileValidation,
+} from './profile-execution-validation.js';
+export type {
+  ModelFamily,
+  ProfileConfig,
+  ExecutionResult,
+  CompatibilityCheck,
+  ProfileValidationReport,
+} from './profile-execution-validation.js';
