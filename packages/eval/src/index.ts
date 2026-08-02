@@ -694,3 +694,22 @@ export type {
   OperationalLevelSummary,
   OperationalLoadReport,
 } from './operational-load-runner.js';
+
+// Threshold calibration execution runner (R5.8)
+export {
+  SEMANTIC_CHANGE_TYPES,
+  THRESHOLD_LEVELS,
+  simulateCalibrationRun,
+  runThresholdCalibrationSuite,
+} from './threshold-calibration-runner.js';
+export type {
+  CalibrationChangeType,
+  CalibrationChangeProfile,
+  CalibrationThresholdName,
+  CalibrationThresholdLevel,
+  CalibrationRunMetrics,
+  CalibrationRunResult,
+  ChangeTypeSummary,
+  ThresholdLevelSummary,
+  ThresholdCalibrationReport,
+} from './threshold-calibration-runner.js';
