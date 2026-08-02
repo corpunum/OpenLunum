@@ -611,3 +611,28 @@ export type {
   CompatibilityCheck,
   ProfileValidationReport,
 } from './profile-execution-validation.js';
+
+// Multilingual parse model-family simulation runner (R2.10)
+export {
+  PARSE_MODEL_FAMILY_RUNNER_VERSION,
+  MODEL_FAMILIES,
+  TEST_LANGUAGES,
+  DEFAULT_PARSE_FAMILY_GATES,
+  simulateParseRun,
+  checkParseFamilyGates,
+  runModelFamilyParseSuite,
+} from './parse-model-family-runner.js';
+export type {
+  ParseModelFamilyId,
+  TestLanguageCode,
+  ParseDifficulty,
+  ModelFamilyProfile as ParseModelFamilyProfile,
+  TestLanguageProfile,
+  ParseRunMetrics,
+  ParseRunResult,
+  ParseFamilyGateConfig,
+  ParseFamilyGateCheck,
+  ParseFamilySummary,
+  ParseLanguageSummary,
+  ModelFamilyParseSuiteReport,
+} from './parse-model-family-runner.js';
