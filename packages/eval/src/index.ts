@@ -850,6 +850,23 @@ export type {
   RetrievalPerformanceReport,
 } from './retrieval-performance-bounds.js';
 
+// Scorer sensitivity analysis (R5.8)
+export {
+  SENSITIVITY_DIMENSIONS,
+  SCORER_COMPONENTS,
+  simulateSensitivityTest,
+  runScorerSensitivitySuite,
+} from './scorer-sensitivity-analysis.js';
+export type {
+  SensitivityDimension,
+  ScorerComponent,
+  SensitivityDimensionProfile,
+  ScorerComponentProfile,
+  SensitivityResult,
+  ComponentSensitivitySummary,
+  ScorerSensitivityReport,
+} from './scorer-sensitivity-analysis.js';
+
 // Compaction boundary stress (R7.12)
 export {
   BOUNDARY_CATEGORIES,
