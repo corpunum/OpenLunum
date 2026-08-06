@@ -786,3 +786,21 @@ export type {
   ProfileRegressionSummary,
   RegressionReport,
 } from './profile-regression-runner.js';
+
+// Parse coverage validation (R2.11)
+export {
+  LANGUAGE_GROUPS,
+  PARSE_INPUT_TYPES,
+  simulateParseCoverage,
+  runParseCoverageValidation,
+} from './parse-coverage-validation.js';
+export type {
+  ParseLanguageGroup,
+  ParseInputType,
+  LanguageGroupProfile,
+  ParseInputProfile,
+  ParseCoverageResult,
+  LanguageGroupSummary,
+  InputTypeSummary,
+  ParseCoverageReport,
+} from './parse-coverage-validation.js';
