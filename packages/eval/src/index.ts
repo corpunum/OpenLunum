@@ -850,6 +850,23 @@ export type {
   RetrievalPerformanceReport,
 } from './retrieval-performance-bounds.js';
 
+// Compaction boundary stress (R7.12)
+export {
+  BOUNDARY_CATEGORIES,
+  STRESS_DIMENSIONS,
+  simulateBoundaryStress,
+  runCompactionBoundaryStressSuite,
+} from './compaction-boundary-stress.js';
+export type {
+  BoundaryCategory,
+  StressDimension,
+  BoundaryCategoryProfile,
+  StressDimensionProfile,
+  BoundaryStressResult,
+  BoundaryCategorySummary,
+  CompactionBoundaryStressReport,
+} from './compaction-boundary-stress.js';
+
 // Compaction regression runner (R7.11)
 export {
   COMPACTION_STRATEGIES,
