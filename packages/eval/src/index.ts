@@ -901,6 +901,23 @@ export type {
   ParseAmbiguityResolutionReport,
 } from './parse-ambiguity-resolution.js';
 
+// Profile compatibility migration (R8.9)
+export {
+  MIGRATION_PATHS,
+  COMPATIBILITY_DIMENSIONS,
+  simulateMigrationTest,
+  runProfileCompatibilityMigrationSuite,
+} from './profile-compatibility-migration.js';
+export type {
+  MigrationPathId,
+  CompatibilityDimension,
+  MigrationPathProfile,
+  CompatibilityDimensionProfile,
+  MigrationTestResult,
+  MigrationPathSummary,
+  ProfileCompatibilityMigrationReport,
+} from './profile-compatibility-migration.js';
+
 // Compaction regression runner (R7.11)
 export {
   COMPACTION_STRATEGIES,
