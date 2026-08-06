@@ -819,3 +819,18 @@ export type {
   FailoverScenarioSummary,
   OperationalFailoverReport,
 } from './operational-failover-runner.js';
+
+// Parse error recovery (R2.12)
+export {
+  PARSE_ERROR_PROFILES,
+  simulateParseErrorRecovery,
+  runParseErrorRecoverySuite,
+} from './parse-error-recovery.js';
+export type {
+  ParseErrorCategory,
+  RecoveryAction,
+  ParseErrorProfile,
+  ParseErrorRecoveryResult,
+  ParseErrorCategorySummary,
+  ParseErrorRecoveryReport,
+} from './parse-error-recovery.js';
