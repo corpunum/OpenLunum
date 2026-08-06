@@ -901,6 +901,23 @@ export type {
   RetrievalConsistencyReport,
 } from './retrieval-consistency-validation.js';
 
+// CLI integration stress (R11.10)
+export {
+  STRESS_SCENARIOS,
+  STABILITY_METRICS,
+  simulateStressTest,
+  runCliIntegrationStressSuite,
+} from './cli-integration-stress.js';
+export type {
+  StressScenario,
+  StabilityMetric,
+  StressScenarioProfile,
+  StabilityMetricProfile,
+  StressTestResult,
+  ScenarioSummary,
+  CliIntegrationStressReport,
+} from './cli-integration-stress.js';
+
 // Compaction boundary stress (R7.12)
 export {
   BOUNDARY_CATEGORIES,
