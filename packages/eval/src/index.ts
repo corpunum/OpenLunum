@@ -1019,3 +1019,20 @@ export type {
   RetentionStrategySummary,
   RetentionRegressionReport,
 } from './retention-regression-runner.js';
+
+// Agent-state execution stress (R10.8)
+export {
+  AGENT_STRESS_SCENARIOS,
+  RESILIENCE_METRICS,
+  simulateAgentStressTest,
+  runAgentStateExecutionStressSuite,
+} from './agent-state-execution-stress.js';
+export type {
+  AgentStressScenario,
+  ResilienceMetric,
+  AgentStressScenarioProfile,
+  ResilienceMetricProfile,
+  AgentStressResult,
+  AgentScenarioSummary,
+  AgentStateExecutionStressReport,
+} from './agent-state-execution-stress.js';
