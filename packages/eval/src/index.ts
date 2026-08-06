@@ -804,3 +804,18 @@ export type {
   InputTypeSummary,
   ParseCoverageReport,
 } from './parse-coverage-validation.js';
+
+// Operational failover runner (R14.10)
+export {
+  FAILOVER_SCENARIOS,
+  simulateFailoverTest,
+  runOperationalFailoverSuite,
+} from './operational-failover-runner.js';
+export type {
+  FailoverScenarioName,
+  FailoverOutcome,
+  FailoverScenarioProfile,
+  FailoverTestResult,
+  FailoverScenarioSummary,
+  OperationalFailoverReport,
+} from './operational-failover-runner.js';
