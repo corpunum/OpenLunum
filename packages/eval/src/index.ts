@@ -884,6 +884,23 @@ export type {
   AdversarialBypassReport,
 } from './adversarial-bypass-resistance.js';
 
+// Retrieval consistency validation (R9.10)
+export {
+  QUERY_REFORMULATIONS,
+  CONSISTENCY_METRICS,
+  simulateConsistencyTest,
+  runRetrievalConsistencySuite,
+} from './retrieval-consistency-validation.js';
+export type {
+  QueryReformulation,
+  ConsistencyMetric,
+  ReformulationProfile,
+  ConsistencyMetricProfile,
+  ConsistencyResult,
+  ReformulationSummary,
+  RetrievalConsistencyReport,
+} from './retrieval-consistency-validation.js';
+
 // Compaction boundary stress (R7.12)
 export {
   BOUNDARY_CATEGORIES,
