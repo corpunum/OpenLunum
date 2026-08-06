@@ -769,3 +769,20 @@ export type {
   EdgeCategorySummary,
   CanonicalizationEdgeCaseReport,
 } from './canonicalization-edge-cases.js';
+
+// Profile regression runner (R8.8)
+export {
+  REGRESSION_PROFILES,
+  REGRESSION_METRICS,
+  simulateRegressionTest,
+  runProfileRegressionSuite,
+} from './profile-regression-runner.js';
+export type {
+  RegressionProfileId,
+  RegressionMetricName,
+  RegressionProfile,
+  RegressionMetric,
+  RegressionTestResult,
+  ProfileRegressionSummary,
+  RegressionReport,
+} from './profile-regression-runner.js';
