@@ -732,3 +732,24 @@ export type {
   SafetyRiskSummary,
   SafetyGateReport,
 } from './safety-gate-runner.js';
+
+// Retrieval execution validation (R9.8)
+export {
+  RETRIEVAL_STRATEGIES,
+  CORPUS_SIZES,
+  QUERY_COMPLEXITIES,
+  simulateRetrievalExecution,
+  runRetrievalExecutionSuite,
+} from './retrieval-execution-validation.js';
+export type {
+  RetrievalStrategyName as RetrievalExecStrategyName,
+  RetrievalCorpusSize,
+  RetrievalQueryComplexity,
+  RetrievalStrategyProfile,
+  RetrievalCorpusProfile,
+  RetrievalQueryProfile,
+  RetrievalExecutionMetrics,
+  RetrievalStrategySummary,
+  RetrievalCorpusSummary,
+  RetrievalExecutionReport,
+} from './retrieval-execution-validation.js';
