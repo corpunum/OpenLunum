@@ -753,3 +753,19 @@ export type {
   RetrievalCorpusSummary,
   RetrievalExecutionReport,
 } from './retrieval-execution-validation.js';
+
+// Canonicalization edge cases (R4.7)
+export {
+  EDGE_CASE_CATEGORIES,
+  simulateEdgeCaseValidation,
+  runCanonicalizationEdgeCaseSuite,
+} from './canonicalization-edge-cases.js';
+export type {
+  EdgeCaseCategory,
+  CanonicalizationOutcome,
+  EdgeCaseProfile,
+  EdgeCaseScenario,
+  EdgeCaseResult,
+  EdgeCategorySummary,
+  CanonicalizationEdgeCaseReport,
+} from './canonicalization-edge-cases.js';
