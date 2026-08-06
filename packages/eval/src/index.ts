@@ -1036,3 +1036,20 @@ export type {
   AgentScenarioSummary,
   AgentStateExecutionStressReport,
 } from './agent-state-execution-stress.js';
+
+// Operational recovery orchestration (R14.12)
+export {
+  RECOVERY_SCENARIOS,
+  COORDINATION_METRICS,
+  simulateRecoveryOrchestration,
+  runOperationalRecoveryOrchestrationSuite,
+} from './operational-recovery-orchestration.js';
+export type {
+  RecoveryScenario,
+  CoordinationMetric,
+  RecoveryScenarioProfile,
+  CoordinationMetricProfile,
+  RecoveryOrchestrationResult,
+  RecoveryScenarioSummary,
+  OperationalRecoveryOrchestrationReport,
+} from './operational-recovery-orchestration.js';
