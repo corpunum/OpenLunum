@@ -849,3 +849,20 @@ export type {
   WorkloadPerformanceSummary,
   RetrievalPerformanceReport,
 } from './retrieval-performance-bounds.js';
+
+// Compaction regression runner (R7.11)
+export {
+  COMPACTION_STRATEGIES,
+  COMPACTION_REGRESSION_METRICS,
+  simulateCompactionRegression,
+  runCompactionRegressionSuite,
+} from './compaction-regression-runner.js';
+export type {
+  CompactionStrategyName,
+  CompactionRegressionMetric,
+  CompactionStrategyProfile,
+  CompactionRegressionMetricProfile,
+  CompactionRegressionResult,
+  CompactionStrategySummary,
+  CompactionRegressionReport,
+} from './compaction-regression-runner.js';
