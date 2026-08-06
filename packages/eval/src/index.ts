@@ -884,6 +884,23 @@ export type {
   DegradationCascadeReport,
 } from './degradation-cascade-simulation.js';
 
+// Parse ambiguity resolution (R2.13)
+export {
+  AMBIGUITY_PROFILES,
+  RESOLUTION_STRATEGIES,
+  simulateAmbiguityResolution,
+  runParseAmbiguityResolutionSuite,
+} from './parse-ambiguity-resolution.js';
+export type {
+  AmbiguityType,
+  ResolutionStrategy,
+  AmbiguityProfile,
+  ResolutionStrategyProfile,
+  AmbiguityResolutionResult,
+  AmbiguityTypeSummary,
+  ParseAmbiguityResolutionReport,
+} from './parse-ambiguity-resolution.js';
+
 // Compaction regression runner (R7.11)
 export {
   COMPACTION_STRATEGIES,
