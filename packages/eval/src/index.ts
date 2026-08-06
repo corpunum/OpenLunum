@@ -867,6 +867,23 @@ export type {
   ScorerSensitivityReport,
 } from './scorer-sensitivity-analysis.js';
 
+// Adversarial bypass resistance (R6.9)
+export {
+  ATTACK_VECTORS,
+  SAFETY_GATES,
+  simulateBypassTest,
+  runAdversarialBypassSuite,
+} from './adversarial-bypass-resistance.js';
+export type {
+  AttackVector,
+  SafetyGateTarget,
+  AttackVectorProfile,
+  BypassSafetyGateProfile,
+  BypassResistanceResult,
+  GateResistanceSummary,
+  AdversarialBypassReport,
+} from './adversarial-bypass-resistance.js';
+
 // Compaction boundary stress (R7.12)
 export {
   BOUNDARY_CATEGORIES,
