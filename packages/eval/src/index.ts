@@ -867,6 +867,23 @@ export type {
   CompactionBoundaryStressReport,
 } from './compaction-boundary-stress.js';
 
+// Degradation cascade simulation (R14.11)
+export {
+  CASCADE_SCENARIOS,
+  ISOLATION_CHECKS,
+  simulateCascadeStep,
+  runDegradationCascadeSuite,
+} from './degradation-cascade-simulation.js';
+export type {
+  CascadeScenarioName,
+  IsolationCheckName,
+  CascadeScenarioProfile,
+  IsolationCheckProfile,
+  CascadeStepResult,
+  CascadeScenarioSummary,
+  DegradationCascadeReport,
+} from './degradation-cascade-simulation.js';
+
 // Compaction regression runner (R7.11)
 export {
   COMPACTION_STRATEGIES,
