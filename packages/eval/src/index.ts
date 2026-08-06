@@ -834,3 +834,18 @@ export type {
   ParseErrorCategorySummary,
   ParseErrorRecoveryReport,
 } from './parse-error-recovery.js';
+
+// Retrieval performance bounds (R9.9)
+export {
+  RETRIEVAL_WORKLOADS,
+  simulateRetrievalPerformance,
+  runRetrievalPerformanceSuite,
+} from './retrieval-performance-bounds.js';
+export type {
+  RetrievalWorkloadName,
+  LatencyTier,
+  RetrievalWorkloadProfile,
+  RetrievalPerformanceResult,
+  WorkloadPerformanceSummary,
+  RetrievalPerformanceReport,
+} from './retrieval-performance-bounds.js';
