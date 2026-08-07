@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# OpenLunum Primary Worker (retired persistent campaign loop).
-# Governed by Issue #271: legacy campaign loop is RETIRED.
-# All worker execution is routed through the one-shot assignment dispatcher scripts/pi-dispatch-once.sh.
 
 WORKDIR="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
 ASSIGNMENT_FILE="${OPENLUNUM_ASSIGNMENT_FILE:-$WORKDIR/reports/orchestrator/WORKER_ASSIGNMENT.md}"
+PAUSED_FLAG="$WORKDIR/reports/orchestrator/PAUSED"
+POLL_INTERVAL="${POLL_INTERVAL:-60}"
 
-if [[ ! -f "$ASSIGNMENT_FILE" ]]; then
-  echo "IDLE: no explicit worker assignment"
-  exit 0
-fi
+while true; do
+  if [[ -f "$PAUSED_FLAG" ]]; then
+    sleep "$POLL_INTERVAL"
+    continue
+  fi
 
-exec "$(dirname "$0")/pi-dispatch-once.sh" "$WORKDIR"
+  if [[ -f "$ASSIGNMENT_FILE" ]]; then
+    "$(dirname "$0")/pi-dispatch-once.sh" "$WORKDIR" || true
+  fi
+
+  sleep "$POLL_INTERVAL"
+done
