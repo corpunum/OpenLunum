@@ -127,3 +127,41 @@ export type {
   CompatibilityCheck as ApiCompatibilityCheck,
   ContractValidationReport,
 } from './api-contract-validation.js';
+
+// API versioning validation (R12.9)
+export {
+  API_VERSIONS,
+  VERSION_ENDPOINTS,
+  VERSION_TRANSITIONS,
+  simulateEndpointValidation,
+  simulateTransition,
+  runApiVersioningValidation,
+} from './api-versioning-validation.js';
+export type {
+  ApiVersionName,
+  VersionTransitionType,
+  VersionEndpointCategory,
+  ApiVersionProfile,
+  VersionTransition,
+  VersionEndpointResult,
+  VersionSummary,
+  TransitionSummary,
+  ApiVersioningReport,
+} from './api-versioning-validation.js';
+
+// API error recovery simulation (R12.10)
+export {
+  API_ERROR_CATEGORIES,
+  RECOVERY_METRICS,
+  simulateApiErrorRecovery,
+  runApiErrorRecoverySuite,
+} from './api-error-recovery.js';
+export type {
+  ApiErrorCategory,
+  RecoveryMetric,
+  ApiErrorCategoryProfile,
+  RecoveryMetricProfile,
+  ApiErrorRecoveryResult,
+  ApiErrorCategorySummary,
+  ApiErrorRecoveryReport,
+} from './api-error-recovery.js';
