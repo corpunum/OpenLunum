@@ -1002,3 +1002,20 @@ export type {
   CompactionStrategySummary,
   CompactionRegressionReport,
 } from './compaction-regression-runner.js';
+
+// Retention regression runner (R3.9)
+export {
+  RETENTION_STRATEGIES,
+  RETENTION_QUALITY_METRICS,
+  simulateRetentionRegression,
+  runRetentionRegressionSuite,
+} from './retention-regression-runner.js';
+export type {
+  RetentionStrategy,
+  RetentionQualityMetric,
+  RetentionStrategyProfile,
+  RetentionQualityMetricProfile,
+  RetentionRegressionResult,
+  RetentionStrategySummary,
+  RetentionRegressionReport,
+} from './retention-regression-runner.js';
