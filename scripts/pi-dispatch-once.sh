@@ -11,6 +11,12 @@ if ! flock -n 9; then
   exit 2
 fi
 
+PAUSED_FLAG="$WORKDIR/reports/orchestrator/PAUSED"
+if [[ -f "$PAUSED_FLAG" ]]; then
+  echo "PAUSED: thermal or manual pause active — skipping dispatch" >&2
+  exit 0
+fi
+
 if [[ ! -f "$ASSIGNMENT_FILE" ]]; then
   echo "IDLE: no explicit worker assignment"
   exit 0
