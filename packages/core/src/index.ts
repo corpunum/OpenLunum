@@ -76,6 +76,7 @@ export * from './renderer-conformance.js';
 export * from './compatibility-matrix.js';
 export * from './support-contract.js';
 export * from './fingerprint-contract.js';
+export * from './fingerprint-support-contract.js';
 export {
   classifyContent,
   classifyByCategory,
