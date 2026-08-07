@@ -3,6 +3,7 @@ name: quality-gate
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
     paths:
       - 'packages/cli/src/**'
       - 'packages/cli/test/**'
