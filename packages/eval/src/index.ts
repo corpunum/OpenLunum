@@ -1121,3 +1121,37 @@ export type {
   DomainComplianceSummary,
   ComplianceAuditValidationReport,
 } from './compliance-audit-validation.js';
+
+// Integration readiness validation (R16.8)
+export {
+  INTEGRATION_PREREQUISITES,
+  ADOPTION_SCENARIOS as INTEGRATION_ADOPTION_SCENARIOS,
+  simulateIntegrationReadiness,
+  runIntegrationReadinessValidationSuite,
+} from './integration-readiness-validation.js';
+export type {
+  IntegrationPrerequisite,
+  AdoptionScenario as IntegrationAdoptionScenario,
+  PrerequisiteProfile,
+  AdoptionScenarioProfile as IntegrationAdoptionScenarioProfile,
+  IntegrationReadinessResult,
+  PrerequisiteSummary,
+  IntegrationReadinessReport,
+} from './integration-readiness-validation.js';
+
+// Adoption compatibility testing (R16.9)
+export {
+  ADOPTION_STAGES,
+  COMPATIBILITY_DIMENSIONS as ADOPTION_COMPATIBILITY_DIMENSIONS,
+  simulateAdoptionCompatibility,
+  runAdoptionCompatibilityTestingSuite,
+} from './adoption-compatibility-testing.js';
+export type {
+  AdoptionStage,
+  CompatibilityDimension as AdoptionCompatibilityDimension,
+  AdoptionStageProfile,
+  CompatibilityDimensionProfile as AdoptionCompatibilityDimensionProfile,
+  AdoptionCompatibilityResult,
+  AdoptionStageSummary,
+  AdoptionCompatibilityReport,
+} from './adoption-compatibility-testing.js';
