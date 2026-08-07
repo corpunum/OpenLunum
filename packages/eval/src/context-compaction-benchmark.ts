@@ -18,6 +18,15 @@ export function calibratedTokenCount(text: string): number {
   return Math.max(1, Math.ceil(Buffer.byteLength(text, 'utf8') / BYTES_PER_TOKEN_EN));
 }
 
+/**
+ * Compute context size in bytes using UTF-8 encoding
+ * This provides a more accurate measure of actual memory footprint
+ * and network transmission size
+ */
+export function computeContextSizeBytes(context: string): number {
+  return Buffer.byteLength(context, 'utf8');
+}
+
 export const BENCHMARK_VERSION = '0.1.0';
 
 // ── Types ──────────────────────────────────────────────────────────
@@ -708,9 +717,9 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
     const mixedOut = detectOutputPreservation(extract(mixedContext), task.expectedAnswer);
 
     // Compute byte lengths using UTF-8 encoding (not string character count)
-    const naturalBytes = Buffer.byteLength(task.naturalContext);
-    const lunumBytes = Buffer.byteLength(lunumContext);
-    const mixedBytes = Buffer.byteLength(mixedContext);
+    const naturalBytes = computeContextSizeBytes(naturalContext);
+    const lunumBytes = computeContextSizeBytes(lunumContext);
+    const mixedBytes = computeContextSizeBytes(mixedContext);
 
     results.push({
       taskId: task.id,
