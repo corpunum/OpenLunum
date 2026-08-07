@@ -1053,3 +1053,71 @@ export type {
   RecoveryScenarioSummary,
   OperationalRecoveryOrchestrationReport,
 } from './operational-recovery-orchestration.js';
+
+// Compaction cross-mode consistency (R7.13)
+export {
+  COMPACTION_MODES,
+  CONSISTENCY_DIMENSIONS as CROSS_MODE_CONSISTENCY_DIMENSIONS,
+  simulateCrossModeConsistency,
+  runCompactionCrossModeConsistencySuite,
+} from './compaction-cross-mode-consistency.js';
+export type {
+  CompactionMode,
+  ConsistencyDimension as CrossModeConsistencyDimension,
+  CompactionModeProfile,
+  ConsistencyDimensionProfile as CrossModeConsistencyDimensionProfile,
+  CrossModeConsistencyResult,
+  ModePairSummary,
+  CompactionCrossModeConsistencyReport,
+} from './compaction-cross-mode-consistency.js';
+
+// Compaction token efficiency (R7.14)
+export {
+  TOKENIZER_TARGETS,
+  EFFICIENCY_METRICS,
+  simulateTokenEfficiency,
+  runCompactionTokenEfficiencySuite,
+} from './compaction-token-efficiency.js';
+export type {
+  TokenizerTarget,
+  EfficiencyMetric,
+  TokenizerTargetProfile,
+  EfficiencyMetricProfile,
+  TokenEfficiencyResult,
+  TokenizerEfficiencySummary,
+  CompactionTokenEfficiencyReport,
+} from './compaction-token-efficiency.js';
+
+// Security regression testing (R15.8)
+export {
+  SECURITY_CONTROL_AREAS,
+  REGRESSION_CHECK_TYPES,
+  simulateSecurityRegressionTest,
+  runSecurityRegressionSuite,
+} from './security-regression-testing.js';
+export type {
+  SecurityControlArea,
+  RegressionCheckType,
+  SecurityControlProfile,
+  RegressionCheckProfile,
+  SecurityRegressionResult,
+  ControlRegressionSummary,
+  SecurityRegressionReport,
+} from './security-regression-testing.js';
+
+// Compliance audit validation (R15.9)
+export {
+  COMPLIANCE_DOMAINS,
+  AUDIT_CHECK_TYPES,
+  simulateComplianceAudit,
+  runComplianceAuditValidationSuite,
+} from './compliance-audit-validation.js';
+export type {
+  ComplianceDomain,
+  AuditCheckType,
+  ComplianceDomainProfile,
+  AuditCheckProfile,
+  ComplianceAuditResult,
+  DomainComplianceSummary,
+  ComplianceAuditValidationReport,
+} from './compliance-audit-validation.js';
