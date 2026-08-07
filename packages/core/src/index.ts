@@ -119,3 +119,4 @@ export type {
   CategorySummary,
   ConformanceReport,
 } from './schema-conformance-runner.js';
+export * from './tenant-isolation.js';
