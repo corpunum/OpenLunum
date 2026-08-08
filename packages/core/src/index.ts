@@ -120,3 +120,4 @@ export type {
   ConformanceReport,
 } from './schema-conformance-runner.js';
 export * from './tenant-isolation.js';
+export * from './backup-restore.js';
