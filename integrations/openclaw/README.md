@@ -1,15 +1,63 @@
-# OpenClaw adoption profile
+# OpenClaw integration — Lunum MCP server
 
-**Status:** Design.
+**Status:** Working — native MCP via `openclaw mcp add`.
 
-Preferred split:
+OpenClaw has built-in MCP support. The Lunum MCP server connects directly over stdio and exposes all 7 tools to all OpenClaw agents (main, coder, tester, frontend).
 
-- A `SKILL.md` can teach an OpenClaw agent how to inspect or invoke Lunum tools.
-- A native extension, service, or product-level memory adapter is required for real persistence/context integration.
-- A text skill alone must not be described as full Lunum adoption.
+## Setup
 
-Because OpenClaw is persistent, tool-capable, and highly privileged, treat imported skills, source memories, and any Lunum sidecar service as untrusted boundaries. Use strict allowlists and retain original evidence.
+```bash
+openclaw mcp add lunum \
+  --command node \
+  --arg /home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js \
+  --env LUNUM_COMPACTION=auto \
+  --env LUNUM_MULTILINGUAL=off \
+  --env LUNUM_CONTEXT_MODE=mixed
+```
 
-Official references:
-- https://github.com/openclaw/openclaw
-- https://docs.openclaw.ai/tools/skills
+Verify:
+
+```bash
+openclaw mcp list    # should show lunum
+openclaw mcp probe   # should list all 7 tools
+```
+
+Reload after config changes:
+
+```bash
+openclaw mcp reload
+```
+
+## Remove
+
+```bash
+openclaw mcp remove lunum
+```
+
+## Tools
+
+All 7 Lunum tools become available in OpenClaw sessions:
+
+| Tool | Description |
+|---|---|
+| `lunum_derive` | Text → sidecar (code + sem + fingerprint + meta) |
+| `lunum_compile_context` | Compile messages into compacted context with token counts |
+| `lunum_fingerprint` | Deterministic `lfp:VERSION:sha256:DIGEST` identity |
+| `lunum_validate` | Validate Sem against frozen schema |
+| `lunum_render` | Render Sem to compact code string |
+| `lunum_compare` | Feature recall/precision between two Sems |
+| `lunum_classify` | Eligibility decision for compact representation |
+
+## Testing
+
+Via Telegram or any connected channel:
+
+```
+Use lunum_derive to compact: The quick brown fox jumps over the lazy dog
+```
+
+Or via CLI:
+
+```bash
+openclaw chat "Use lunum_derive on 'Hello world'"
+```
