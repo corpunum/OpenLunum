@@ -5,10 +5,13 @@
   "type": "module",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
+  "bin": {
+    "lunum-mcp": "./dist/bin/lunum-mcp.js"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/src/server.js",
-    "dev": "tsx src/server.ts",
+    "start": "node dist/bin/lunum-mcp.js",
+    "dev": "tsx bin/lunum-mcp.ts",
     "test:unit": "node --test dist/test/*.test.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
@@ -20,6 +23,7 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "@corpunum/lunum": "workspace:*"
+    "@corpunum/lunum": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.12.0"
   }
 }
