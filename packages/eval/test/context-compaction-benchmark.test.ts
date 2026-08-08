@@ -138,14 +138,13 @@ describe('Context Compaction Benchmark', () => {
     }
   });
 
-  it('should have valid preservation metrics (booleans)', () => {
+  it('should have valid preservation metrics (boolean preservation + numeric keywordOverlap)', () => {
     const report = runBenchmark(BENCHMARK_TASKS);
 
     for (const result of report.results) {
-      assert.strictEqual(typeof result.preservedLiterals, 'boolean', `preservedLiterals should be boolean for ${result.taskId}`);
-      assert.strictEqual(typeof result.preservedRoles, 'boolean', `preservedRoles should be boolean for ${result.taskId}`);
-      assert.strictEqual(typeof result.preservedNegation, 'boolean', `preservedNegation should be boolean for ${result.taskId}`);
-      assert.strictEqual(typeof result.preservedModality, 'boolean', `preservedModality should be boolean for ${result.taskId}`);
+      assert.strictEqual(typeof result.preservation, 'boolean', `preservation should be boolean for ${result.taskId}`);
+      assert.strictEqual(typeof result.keywordOverlap, 'number', `keywordOverlap should be number for ${result.taskId}`);
+      assert.ok(result.keywordOverlap >= 0 && result.keywordOverlap <= 1, `keywordOverlap ${result.keywordOverlap} out of range for ${result.taskId}`);
     }
   });
 
