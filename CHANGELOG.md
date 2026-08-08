@@ -1,5 +1,94 @@
 # OpenLunum Changelog
 
+## Since 0.2.2 (Readiness Sprint)
+
+### Added — Readiness Phases 20–27 (PRs #611–#661)
+
+All 16 readiness areas received validation runners, stress testing, and simulation infrastructure. 14 of 16 capabilities now at 97%+.
+
+#### Canonical semantic layer (R1)
+- **Canonicalization edge case validation** across 8 categories (unicode normalization, whitespace, casing, diacritics, numerals, punctuation, zero-width chars, RTL markers) with preservation and round-trip stability metrics (PR #611)
+
+#### Multilingual parsing (R2)
+- **Parse coverage validation** across 6 language groups × 5 input types with per-group feature extraction and schema conformance metrics (PR #616)
+- **Parse error recovery simulation** across 7 error categories with recovery actions, field preservation and zero-corruption invariant (PR #620)
+- **Parse ambiguity resolution simulation** across 7 ambiguity types × 4 resolution strategies with safety-relevant classification and meaning-preservation invariants (PR #629)
+
+#### Round-trip retention (R3)
+- **Retention regression runner** across 5 strategies × 6 quality metrics with preservation bounding and stability scoring (PR #641)
+
+#### Near-semantic comparison (R5)
+- **Scorer sensitivity analysis** across 5 dimensions × 6 components with stability thresholds and calibration confidence (PR #636)
+
+#### Safety-critical preservation (R6)
+- **Adversarial bypass resistance simulation** across 6 attack vectors × 5 safety gates with detection/prevention rates and false negative tracking (PR #637)
+
+#### Context compaction (R7)
+- **Compaction regression runner** across 5 strategies × 6 quality metrics with delta consistency and stability scoring (PR #618)
+- **Compaction boundary stress simulation** across 6 boundary categories × 4 stress dimensions with no-corruption and graceful-handling invariants (PR #627)
+- **Compaction cross-mode consistency validation** across 5 modes × 6 dimensions with semantic-equivalence and no-information-loss invariants (PR #646)
+- **Compaction token-efficiency profiling** across 5 tokenizer families × 5 efficiency metrics with savings-positive and overhead-bounded invariants (PR #646)
+- **Compaction regression/fallback gates** for R7.7 (PR #651)
+- **Context eligibility rules module** for R7.6 (PR #659)
+- **Preservation metrics fix** — compare model output not input representations (PR #660)
+- **Tokenizer counting infrastructure** with calibrated chars-per-token ratios per model family for R7.1 (PR #661)
+
+#### Model-specific rendering (R8)
+- **Profile regression runner** across 8 profiles × 5 quality metrics with configurable tolerances and worst-delta tracking (PR #613)
+- **Profile compatibility migration simulation** across 6 migration paths × 5 compatibility dimensions with semantics-preserved and rollback-safe invariants (PR #630)
+
+#### Cross-language retrieval (R9)
+- **Retrieval performance bounds** across 5 workloads with p50/p95/p99 latency profiling and SLO bound checking (PR #621)
+- **Retrieval consistency validation** across 5 query reformulations × 4 consistency metrics with rank preservation tracking (PR #638)
+
+#### Agent-state and handoffs (R10)
+- **Agent-state execution stress testing** across 5 scenarios × 4 resilience metrics with no-corruption and ordering invariants (PR #642)
+
+#### CLI integration (R11)
+- **CLI error recovery validation** across 8 error categories with structured error guarantees and no-state-corruption invariant (PR #614)
+- **CLI integration stress testing** across 5 stress scenarios × 4 stability metrics with no-state-corruption and all-errors-contained invariants (PR #639)
+- **Package lifecycle module** with install/upgrade/rollback guidance for R11.5 (PR #652)
+
+#### HTTP API, MCP and adapters (R12)
+- **API versioning validation** across 5 versions × 6 endpoints with version transition testing and migration verification (PR #615)
+- **API error recovery simulation** across 6 error categories × 4 recovery metrics with no-leak and client-notification invariants (PR #643)
+- **Health/readiness probe tests** and failover procedures for R14.6 (PR #658)
+
+#### Evaluation and reproducibility (R13) — now 100%
+- **Evidence lineage edges** and integration tests for R13.7 (PR #655)
+
+#### Operational reliability (R14)
+- **Operational load simulation** across 5 load levels × 4 operations with degradation detection and SLO validation (PR #606)
+- **Operational failover runner** across 6 scenarios with zero-data-loss and all-alerts-fired invariants (PR #619)
+- **Degradation cascade simulation** across 5 cascade scenarios × 4 isolation checks with zero-data-loss and recovery-ordering invariants (PR #628)
+- **Operational recovery orchestration** across 5 scenarios × 4 coordination metrics with data-loss and service-ordering invariants (PR #644)
+- **Backup, restore and rollback exercises** with SHA-256 manifest for R14.8 (PR #657)
+
+#### Security, governance and rollback (R15)
+- **Security regression testing** across 6 control areas × 5 check types with no-bypass and audit-complete invariants (PR #646)
+- **Compliance audit validation** across 6 domains × 4 check types with evidence-chain-intact and no-audit-gaps invariants (PR #646)
+- **Privacy audit map** for R15.7 (PR #654)
+- **Tenant isolation, secret detection, and least-privilege roles** for R15.3 (PR #656)
+
+#### External adoption (R16)
+- **Integration readiness validation** across 6 prerequisites × 5 adoption scenarios (PR #647)
+- **Adoption compatibility testing** across 5 stages × 5 dimensions (PR #647)
+- **Fingerprint 1.0 support contract** for R4.6 (PR #653)
+
+### Added — Ops (PRs #648–#650)
+- **Thermal PAUSED flag enforcement** before worker dispatch (PR #648)
+- **Worker loops converted to polling daemons** with PAUSED support (PR #649)
+- **Untracked reports/pi-loop files** (already gitignored) (PR #650)
+
+### Changed — Readiness
+- **Readiness tracker** updated through Phase 27 with all change-log rows, evidence references and score adjustments
+- **Overall production readiness** raised from 62% to 90%
+- **14 of 16 capabilities** now at 97% or higher
+- **Evaluation and reproducibility** at 100% — all defined action items complete
+- **Zero open issues** on the board
+
+---
+
 ## Since 0.2.1 (Documentation Sync)
 
 ### Added — Ops (commits 2691dc6, 6bb0bf6)
