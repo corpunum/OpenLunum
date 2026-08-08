@@ -5,13 +5,13 @@
   "positivePairs": 44,
   "negativePairs": 22,
   "truePositives": 44,
-  "trueNegatives": 14,
-  "falsePositives": 8,
+  "trueNegatives": 16,
+  "falsePositives": 6,
   "falseNegatives": 0,
-  "precision": 0.8461538461538461,
+  "precision": 0.88,
   "recall": 1,
-  "f1": 0.9166666666666666,
-  "falsePositiveRate": 0.36363636363636365,
+  "f1": 0.9361702127659575,
+  "falsePositiveRate": 0.2727272727272727,
   "byLanguagePair": {
     "EN-EL": {
       "pair": "EN-EL",
@@ -33,13 +33,13 @@
       "positivePairs": 8,
       "negativePairs": 4,
       "truePositives": 8,
-      "trueNegatives": 2,
-      "falsePositives": 2,
+      "trueNegatives": 3,
+      "falsePositives": 1,
       "falseNegatives": 0,
-      "precision": 0.8,
+      "precision": 0.8888888888888888,
       "recall": 1,
-      "f1": 0.888888888888889,
-      "falsePositiveRate": 0.5
+      "f1": 0.9411764705882353,
+      "falsePositiveRate": 0.25
     },
     "EN-JA": {
       "pair": "EN-JA",
@@ -89,14 +89,14 @@
       "positivePairs": 7,
       "negativePairs": 4,
       "truePositives": 7,
-      "trueNegatives": 2,
-      "falsePositives": 2,
+      "trueNegatives": 3,
+      "falsePositives": 1,
       "falseNegatives": 0,
-      "precision": 0.7777777777777778,
+      "precision": 0.875,
       "recall": 1,
-      "f1": 0.8750000000000001,
-      "falsePositiveRate": 0.5
+      "f1": 0.9333333333333333,
+      "falsePositiveRate": 0.25
     }
   },
-  "generatedAt": "2026-07-30T11:09:30.744Z"
+  "generatedAt": "2026-08-08T07:14:03.108Z"
 }

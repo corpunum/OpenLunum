@@ -19,6 +19,19 @@ export type {
   ExperimentItem,
 } from './types.js';
 
+// Tokenizer counting
+export {
+  countTokensCharBased,
+  countTokensExact,
+  getTokenizerFamily,
+  compareTokenCounts,
+  countChars,
+} from './tokenizer-counter.js';
+export type {
+  TokenCountResult,
+  TokenCountComparison,
+} from './tokenizer-counter.js';
+
 // I/O utilities
 export {
   findWorkspaceRoot,
