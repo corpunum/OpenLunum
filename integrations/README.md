@@ -11,7 +11,7 @@ Status labels:
 | Product | Preferred path | Status | Notes |
 |---|---|---|---|
 | OpenUnum | package dependency + product adapter | Verified-current-state / Reference plan | Detailed gap analysis against current private repo |
-| Claude Code | project plugin/hooks + optional MCP | Design | Turn/session/tool hooks can call Lunum; MCP exposes explicit operations |
+| Claude Code | MCP server over stdio via `.mcp.json` | **Working** | 7 real tools wired to core functions; auto-discovered by Claude Code |
 | Codex CLI | `AGENTS.md` + MCP + repo dependency | Design | Best for repository adoption and explicit Lunum tools |
 | Gemini CLI / transition path | extension/hooks/MCP | Design | Product surface is evolving; pin tested versions |
 | OpenCode | plugin + MCP | Design | Use plugin lifecycle where context control is available |

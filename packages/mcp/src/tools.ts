@@ -1,318 +1,226 @@
-/**
- * MCP tool definitions for Lunum integration
- * 
- * Provides standardized tools for semantic parsing, realization, fingerprinting,
- * and context management through the Model Context Protocol.
- */
-
 import type { LunumToolDefinition, McpToolResponse } from './types.js';
-import { InputValidator, createMcpError, mcpErrorToResponse, McpErrorCode } from './errors.js';
+import {
+  deriveLunumSidecar,
+  deriveSurfaceSidecar,
+  compileContext,
+  fingerprintSem,
+  validateSem,
+  renderSem,
+  compareSem,
+  classifyByCategory,
+} from '@corpunum/lunum';
+import type { ContextMode, LunumSem } from '@corpunum/lunum';
+import { resolveConfig } from './config.js';
 
-// ── Parse Tool ──────────────────────────────────────────────────────
+function ok(data: unknown): McpToolResponse {
+  return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
+}
 
-export const parseTool: LunumToolDefinition = {
-  name: 'lunum_parse',
-  description: 'Parse natural language text into Lunum-Semantic representation',
+function err(message: string): McpToolResponse {
+  return { content: [{ type: 'text', text: JSON.stringify({ success: false, error: message }) }], isError: true };
+}
+
+export const deriveTool: LunumToolDefinition = {
+  name: 'lunum_derive',
+  description: 'Derive a Lunum sidecar (semantic representation + fingerprint + compact code) from input text. If no pre-parsed Sem is provided, uses surface telegraph (heuristic, no LLM needed, ~22% char savings).',
   inputSchema: {
     type: 'object',
     properties: {
-      text: {
-        type: 'string',
-        description: 'The natural language text to parse'
-      },
-      language: {
-        type: 'string',
-        description: 'Language code (e.g., en, el, es, id)',
-        default: 'en'
-      },
-      world: {
-        type: 'string',
-        description: 'World marker (real, fiction, tool, dream, belief, metaphor)',
-        default: 'real'
-      }
+      text: { type: 'string', description: 'Source text to derive from' },
+      role: { type: 'string', description: 'Message role (user, assistant, system)', default: 'user' },
+      category: { type: 'string', description: 'Content category for policy classification' },
+      sem: { type: 'object', description: 'Pre-parsed Lunum-Sem (if available); omit for surface telegraph path' },
     },
-    required: ['text']
+    required: ['text'],
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
-      const validation = InputValidator.validate(input, {
-        text: { required: true, type: 'string', minLength: 1, maxLength: 10000 },
-        language: { type: 'string', enum: ['en', 'el', 'es', 'id', 'zh', 'ar', 'fr', 'de', 'ja', 'ko'] },
-        world: { type: 'string', enum: ['real', 'fiction', 'tool', 'dream', 'belief', 'metaphor'] }
-      });
-      if (!validation.ok) {
-        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Parse tool input validation failed', { validationErrors: validation.errors });
-        return mcpErrorToResponse(error);
-      }
-
       const text = input.text as string;
-      const language = (input.language as string) ?? 'en';
-      const world = (input.world as string) ?? 'real';
-
-      // Placeholder: In real implementation, would use Lunum parser
-      const result = {
-        success: true,
-        data: {
-          world,
-          kind: 'parsed_text',
-          clauses: [
-            {
-              predicate: 'statement',
-              roles: {
-                subject: text.substring(0, 50) + (text.length > 50 ? '...' : '')
-              }
-            }
-          ]
-        }
-      };
-
-      return {
-        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
-      };
+      if (!text?.trim()) return err('text is required and must be non-empty');
+      const sidecar = deriveLunumSidecar({
+        content: text,
+        role: (input.role as string) ?? 'user',
+        category: (input.category as string) ?? undefined,
+        sem: (input.sem as LunumSem) ?? undefined,
+      });
+      return ok({ success: true, sidecar });
     } catch (error) {
-      return {
-        content: [{ type: 'text', text: `Error: ${(error as Error).message}` }],
-        isError: true
-      };
+      return err((error as Error).message);
     }
-  }
+  },
 };
 
-// ── Realize Tool ────────────────────────────────────────────────────
-
-export const realizeTool: LunumToolDefinition = {
-  name: 'lunum_realize',
-  description: 'Realize Lunum-Semantic representation to natural language',
+export const compileContextTool: LunumToolDefinition = {
+  name: 'lunum_compile_context',
+  description: 'Compile an array of messages into compacted context with token counts and savings estimate. Supports natural, lunum, mixed, and shadow_mixed modes.',
   inputSchema: {
     type: 'object',
     properties: {
-      sem: {
-        type: 'object',
-        description: 'Lunum-Semantic representation'
+      messages: {
+        type: 'array',
+        description: 'Array of message objects with role, content, and optional lunum_code/lunum_meta fields',
       },
-      targetLanguage: {
+      mode: {
         type: 'string',
-        description: 'Target language code (e.g., en, el, es, id)',
-        default: 'en'
-      }
+        description: 'Context compilation mode',
+        enum: ['natural', 'lunum', 'mixed', 'shadow_mixed'],
+      },
     },
-    required: ['sem']
+    required: ['messages'],
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
-      const validation = InputValidator.validate(input, {
-        sem: { required: true, type: 'object' },
-        targetLanguage: { type: 'string', enum: ['en', 'el', 'es', 'id', 'zh', 'ar', 'fr', 'de', 'ja', 'ko'] }
-      });
-      if (!validation.ok) {
-        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Realize tool input validation failed', { validationErrors: validation.errors });
-        return mcpErrorToResponse(error);
-      }
-
-      const sem = input.sem as object;
-      const targetLanguage = (input.targetLanguage as string) ?? 'en';
-
-      // Placeholder: In real implementation, would use Lunum realizer
-      const result = {
+      const messages = input.messages as Array<Record<string, unknown>>;
+      if (!Array.isArray(messages)) return err('messages must be an array');
+      const config = resolveConfig();
+      const mode = (input.mode as ContextMode) ?? config.contextMode;
+      const result = compileContext(messages as never[], { mode });
+      return ok({
         success: true,
-        text: `Realized ${targetLanguage} text from semantic representation`,
-        sem: sem
-      };
-
-      return {
-        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
-      };
+        mode: result.mode,
+        tokenCounter: result.tokenCounter,
+        naturalTokens: result.naturalTokens,
+        lunumTokens: result.lunumTokens,
+        mixedTokens: result.mixedTokens,
+        selectedTokens: result.mode === 'lunum' ? result.lunumTokens : result.mode === 'natural' ? result.naturalTokens : result.mixedTokens,
+        ratio: result.ratio,
+        estimatedSavings: `${(result.estimatedSavings * 100).toFixed(1)}%`,
+        messageCount: result.selectedMessages.length,
+      });
     } catch (error) {
-      return {
-        content: [{ type: 'text', text: `Error: ${(error as Error).message}` }],
-        isError: true
-      };
+      return err((error as Error).message);
     }
-  }
+  },
 };
-
-// ── Fingerprint Tool ────────────────────────────────────────────────
 
 export const fingerprintTool: LunumToolDefinition = {
   name: 'lunum_fingerprint',
-  description: 'Generate or verify fingerprint for Lunum-Semantic content',
+  description: 'Generate a deterministic semantic fingerprint (lfp:VERSION:sha256:DIGEST) for a Lunum-Sem object. Identical meaning always produces the same fingerprint.',
   inputSchema: {
     type: 'object',
     properties: {
-      sem: {
-        type: 'object',
-        description: 'Lunum-Semantic representation'
-      },
-      fingerprint: {
-        type: 'string',
-        description: 'Existing fingerprint to verify'
-      },
-      length: {
-        type: 'number',
-        description: 'Fingerprint length in characters',
-        default: 32
-      }
+      sem: { type: 'object', description: 'Lunum-Sem object to fingerprint' },
+      length: { type: 'number', description: 'Digest length in hex chars (16-64, default 32)', default: 32 },
     },
-    required: []
+    required: ['sem'],
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
-      const validation = InputValidator.validate(input, {
-        sem: { type: 'object' },
-        fingerprint: { type: 'string' },
-        length: { type: 'number', min: 16, max: 64 }
-      });
-      if (!validation.ok) {
-        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Fingerprint tool input validation failed', { validationErrors: validation.errors });
-        return mcpErrorToResponse(error);
-      }
-
-      const sem = input.sem as object | undefined;
-      const fingerprint = input.fingerprint as string | undefined;
-      const length = typeof input.length === 'number' ? input.length : 32;
-
-      // Placeholder: In real implementation, would use Lunum fingerprint function
-      const result = {
-        success: true,
-        fingerprint: fingerprint || `lfp:0.1:sha256:${'0'.repeat(length)}`
-      };
-
-      return {
-        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
-      };
+      const sem = input.sem;
+      if (!sem || typeof sem !== 'object') return err('sem is required and must be an object');
+      const length = typeof input.length === 'number' ? input.length : undefined;
+      const fp = fingerprintSem(sem, length !== undefined ? { length } : {});
+      return ok({ success: true, fingerprint: fp });
     } catch (error) {
-      return {
-        content: [{ type: 'text', text: `Error: ${(error as Error).message}` }],
-        isError: true
-      };
+      return err((error as Error).message);
     }
-  }
-};
-
-// ── Retrieve Tool ───────────────────────────────────────────────────
-
-export const retrieveTool: LunumToolDefinition = {
-  name: 'lunum_retrieve',
-  description: 'Retrieve Lunum records by fingerprint or query',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      fingerprint: {
-        type: 'string',
-        description: 'Fingerprint to retrieve'
-      },
-      query: {
-        type: 'string',
-        description: 'Search query'
-      },
-      maxResults: {
-        type: 'number',
-        description: 'Maximum results to return',
-        default: 10
-      }
-    },
-    required: []
   },
-  handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
-    try {
-      const validation = InputValidator.validate(input, {
-        fingerprint: { type: 'string' },
-        query: { type: 'string', maxLength: 1000 },
-        maxResults: { type: 'number', min: 1, max: 100 }
-      });
-      if (!validation.ok) {
-        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Retrieve tool input validation failed', { validationErrors: validation.errors });
-        return mcpErrorToResponse(error);
-      }
-
-      const fingerprint = input.fingerprint as string | undefined;
-      const query = input.query as string | undefined;
-      const maxResults = typeof input.maxResults === 'number' ? input.maxResults : 10;
-
-      const result = {
-        success: true,
-        count: 0,
-        items: [] as Array<Record<string, unknown>>
-      };
-
-      // Placeholder: In real implementation, would query storage
-      if (fingerprint) {
-        result.items.push({ fingerprint, query });
-        result.count = 1;
-      }
-
-      return {
-        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
-      };
-    } catch (error) {
-      return {
-        content: [{ type: 'text', text: `Error: ${(error as Error).message}` }],
-        isError: true
-      };
-    }
-  }
 };
-
-// ── Validate Tool ───────────────────────────────────────────────────
 
 export const validateTool: LunumToolDefinition = {
   name: 'lunum_validate',
-  description: 'Validate Lunum-Semantic content against schema',
+  description: 'Validate a Lunum-Sem object against the frozen schema. Returns ok/errors.',
   inputSchema: {
     type: 'object',
     properties: {
-      sem: {
-        type: 'object',
-        description: 'Lunum-Semantic representation to validate'
-      },
-      schema: {
-        type: 'string',
-        description: 'Schema version to validate against',
-        default: 'lunum-sem/0.1-draft'
-      }
+      sem: { type: 'object', description: 'Lunum-Sem object to validate' },
     },
-    required: ['sem']
+    required: ['sem'],
   },
   handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
     try {
-      const validation = InputValidator.validate(input, {
-        sem: { required: true, type: 'object' },
-        schema: { type: 'string', enum: ['lunum-sem/0.1-draft', 'lunum-sem/0.2'] }
-      });
-      if (!validation.ok) {
-        const error = createMcpError(McpErrorCode.INVALID_INPUT, 'Validate tool input validation failed', { validationErrors: validation.errors });
-        return mcpErrorToResponse(error);
-      }
-
-      const sem = input.sem as object;
-      const schema = (input.schema as string) ?? 'lunum-sem/0.1-draft';
-
-      // Placeholder: In real implementation, would validate against schema
-      const result = {
-        success: true,
-        valid: true,
-        schema,
-        errors: [] as string[]
-      };
-
-      return {
-        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
-      };
+      const sem = input.sem;
+      if (!sem || typeof sem !== 'object') return err('sem is required and must be an object');
+      const result = validateSem(sem);
+      return ok({ success: true, valid: result.ok, errors: result.errors });
     } catch (error) {
-      return {
-        content: [{ type: 'text', text: `Error: ${(error as Error).message}` }],
-        isError: true
-      };
+      return err((error as Error).message);
     }
-  }
+  },
 };
 
-// ── Export all tools ────────────────────────────────────────────────
+export const renderTool: LunumToolDefinition = {
+  name: 'lunum_render',
+  description: 'Render a Lunum-Sem to a compact code string using the default renderer profile.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      sem: { type: 'object', description: 'Lunum-Sem object to render' },
+    },
+    required: ['sem'],
+  },
+  handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
+    try {
+      const sem = input.sem;
+      if (!sem || typeof sem !== 'object') return err('sem is required and must be an object');
+      const result = renderSem(sem as LunumSem);
+      return ok({ success: true, profile: result.profile, code: result.code, semantic: result.semantic });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
+
+export const compareTool: LunumToolDefinition = {
+  name: 'lunum_compare',
+  description: 'Compare two Lunum-Sem objects and return feature recall, precision, missing/extra features, and hard-mismatch detection.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      expected: { type: 'object', description: 'Expected (reference) Lunum-Sem' },
+      actual: { type: 'object', description: 'Actual Lunum-Sem to compare against expected' },
+      explain: { type: 'boolean', description: 'Include detailed explanation', default: false },
+    },
+    required: ['expected', 'actual'],
+  },
+  handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
+    try {
+      const expected = input.expected;
+      const actual = input.actual;
+      if (!expected || typeof expected !== 'object') return err('expected is required and must be an object');
+      if (!actual || typeof actual !== 'object') return err('actual is required and must be an object');
+      const result = compareSem(expected as LunumSem, actual as LunumSem, { explain: input.explain === true });
+      return ok({ success: true, comparison: result });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
+
+export const classifyTool: LunumToolDefinition = {
+  name: 'lunum_classify',
+  description: 'Classify content by category and return an eligibility decision (whether Lunum compact representation is safe to use for this content).',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      category: { type: 'string', description: 'Content category (e.g., factual_claim, instruction, opinion)' },
+      confidence: { type: 'number', description: 'Parse confidence (0-1)', default: 0.5 },
+      sourceText: { type: 'string', description: 'Original source text' },
+      semantic: { type: 'boolean', description: 'Whether the input was semantically parsed (vs surface heuristic)', default: false },
+    },
+    required: ['category'],
+  },
+  handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
+    try {
+      const category = input.category as string;
+      if (!category?.trim()) return err('category is required');
+      const confidence = typeof input.confidence === 'number' ? input.confidence : 0.5;
+      const sourceText = (input.sourceText as string) ?? '';
+      const semantic = input.semantic === true;
+      const result = classifyByCategory(category, confidence, sourceText, semantic);
+      return ok({ success: true, decision: result });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
 
 export const lunumTools: LunumToolDefinition[] = [
-  parseTool,
-  realizeTool,
+  deriveTool,
+  compileContextTool,
   fingerprintTool,
-  retrieveTool,
-  validateTool
+  validateTool,
+  renderTool,
+  compareTool,
+  classifyTool,
 ];
