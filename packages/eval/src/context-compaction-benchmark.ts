@@ -39,13 +39,18 @@ export interface BenchmarkResult {
   mode: ContextMode;
   tokenCount: number;
   tokenCountMethod: TokenCountMethod;
-  preservedLiterals: boolean;
-  preservedRoles: boolean;
-  preservedNegation: boolean;
-  preservedModality: boolean;
+  /** Preservation of key information as measured by whether the compiled context supports the expected answer */
+  preservation: boolean;
+  /** Keyword overlap between extracted answer and expected answer (0-1) */
+  keywordOverlap: number;
   contextSizeBytes: number;
-  outputPreserves: boolean;
-  outputKeywordOverlap: number;
+  /** Input-side diagnostic: Lunum structure vs. original natural text (separate from output preservation) */
+  inputPreservation?: {
+    literals: boolean;
+    roles: boolean;
+    negation: boolean;
+    modality: boolean;
+  };
   taskSuccess: boolean;
 }
 
@@ -60,7 +65,6 @@ export interface BenchmarkReport {
     mixedAvgTokens: number;
     compressionRatio: number;
     preservationRate: number;
-    outputPreservationRate: number;
     avgKeywordOverlap: number;
     naturalTokensPerSuccess: number;
     lunumTokensPerSuccess: number;
@@ -71,9 +75,44 @@ export interface BenchmarkReport {
 // ── Helper Functions ──────────────────────────────────────────────
 
 /**
+ * Output-side preservation: measures whether a compiled context
+ * (simulated model input) preserves the key information from the
+ * expected answer. Uses keyword overlap to determine if the context
+ * supports producing the expected answer.
+ *
+ * This is the primary preservation metric — it evaluates whether the
+ * model's *output* can preserve the expected answer, not whether the
+ * Lunum representation preserves the input.
+ */
+function detectOutputPreservation(answer: string, expectedAnswer: string): {
+  preserves: boolean;
+  keywordOverlap: number;
+} {
+  const normalize = (s: string) => s.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 2);
+
+  const expected = normalize(expectedAnswer);
+  const answerTokens = normalize(answer);
+
+  if (expected.length === 0) {
+    return { preserves: true, keywordOverlap: 1.0 };
+  }
+
+  // Keyword overlap: fraction of expected key terms found in the answer
+  const matched = expected.filter(t => answerTokens.includes(t) || answerTokens.some(a => a.startsWith(t) || t.startsWith(a)));
+  const keywordOverlap = matched.length / expected.length;
+
+  // Overall preservation: keyword overlap above threshold
+  const preserves = keywordOverlap >= 0.5;
+
+  return { preserves, keywordOverlap };
+}
+
+/**
  * Input-side preservation: checks whether the Lunum representation
  * preserves key features from the original natural-language input.
- * Kept as a diagnostic alongside output-side preservation.
+ * This is a separate diagnostic — not used as the primary preservation
+ * metric. Output-side preservation (model output vs. expected answer)
+ * is the primary metric.
  */
 function detectInputPreservation(natural: string, lunum: string): {
   literals: boolean;
@@ -105,34 +144,6 @@ function detectInputPreservation(natural: string, lunum: string): {
   const modality = hasModality ? lunum.toLowerCase().includes('modality') || modalKeywords.some(m => lunum.toLowerCase().includes(m)) : true;
 
   return { literals, roles, negation, modality };
-}
-
-/**
- * Output-side preservation: measures whether a model's answer
- * preserves the information in the expected answer.
- * Uses keyword overlap and semantic feature preservation.
- */
-function detectOutputPreservation(answer: string, expectedAnswer: string): {
-  preserves: boolean;
-  keywordOverlap: number;
-} {
-  const normalize = (s: string) => s.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 2);
-
-  const expected = normalize(expectedAnswer);
-  const answerTokens = normalize(answer);
-
-  if (expected.length === 0) {
-    return { preserves: true, keywordOverlap: 1.0 };
-  }
-
-  // Keyword overlap: fraction of expected key terms found in the answer
-  const matched = expected.filter(t => answerTokens.includes(t) || answerTokens.some(a => a.startsWith(t) || t.startsWith(a)));
-  const keywordOverlap = matched.length / expected.length;
-
-  // Overall preservation: keyword overlap above threshold
-  const preserves = keywordOverlap >= 0.5;
-
-  return { preserves, keywordOverlap };
 }
 
 /**
@@ -691,69 +702,62 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
     const lunumTokens = countTokens(lunum.selectedMessages[0]?.content ?? '');
     const mixedTokens = countTokens(mixed.selectedMessages[0]?.content ?? '');
 
-    // Input-side preservation: compare original natural input with raw Lunum structure
-    const inputPreservation = detectInputPreservation(
-      task.naturalContext,
-      JSON.stringify(task.lunumSem)
-    );
-
-    // Output-side preservation: compare compiled context (model input) with expected answer
+    // Compiled context per mode for output-side preservation
     const naturalContext = natural.selectedMessages[0]?.content ?? '';
     const lunumContext = lunum.selectedMessages[0]?.content ?? '';
     const mixedContext = mixed.selectedMessages[0]?.content ?? '';
-
-    const extract = (ctx: string) => extractAnswerFromContext(ctx, task.question, task.expectedAnswer);
-    const natOut = detectOutputPreservation(extract(naturalContext), task.expectedAnswer);
-    const lunumOut = detectOutputPreservation(extract(lunumContext), task.expectedAnswer);
-    const mixedOut = detectOutputPreservation(extract(mixedContext), task.expectedAnswer);
 
     // Compute byte lengths using UTF-8 encoding (not string character count)
     const naturalBytes = Buffer.byteLength(task.naturalContext);
     const lunumBytes = Buffer.byteLength(lunumContext);
     const mixedBytes = Buffer.byteLength(mixedContext);
 
+    // Input-side preservation: diagnostic only, computed once per task
+    const inputPreservation = detectInputPreservation(
+      task.naturalContext,
+      JSON.stringify(task.lunumSem)
+    );
+
+    // Output-side preservation: per-mode, comparing compiled context to expected answer
+    const extract = (ctx: string) => extractAnswerFromContext(ctx, task.question, task.expectedAnswer);
+
+    // Natural mode result
+    const natOut = detectOutputPreservation(extract(naturalContext), task.expectedAnswer);
     results.push({
       taskId: task.id,
       mode: 'natural',
       tokenCount: naturalTokens,
       tokenCountMethod: method,
-      preservedLiterals: inputPreservation.literals,
-      preservedRoles: inputPreservation.roles,
-      preservedNegation: inputPreservation.negation,
-      preservedModality: inputPreservation.modality,
+      preservation: natOut.preserves,
+      keywordOverlap: natOut.keywordOverlap,
       contextSizeBytes: naturalBytes,
-      outputPreserves: natOut.preserves,
-      outputKeywordOverlap: natOut.keywordOverlap,
+      inputPreservation,
       taskSuccess: natOut.preserves,
     });
 
+    // Lunum mode result
+    const lunumOut = detectOutputPreservation(extract(lunumContext), task.expectedAnswer);
     results.push({
       taskId: task.id,
       mode: 'lunum',
       tokenCount: lunumTokens,
       tokenCountMethod: method,
-      preservedLiterals: inputPreservation.literals,
-      preservedRoles: inputPreservation.roles,
-      preservedNegation: inputPreservation.negation,
-      preservedModality: inputPreservation.modality,
+      preservation: lunumOut.preserves,
+      keywordOverlap: lunumOut.keywordOverlap,
       contextSizeBytes: lunumBytes,
-      outputPreserves: lunumOut.preserves,
-      outputKeywordOverlap: lunumOut.keywordOverlap,
       taskSuccess: lunumOut.preserves,
     });
 
+    // Mixed mode result
+    const mixedOut = detectOutputPreservation(extract(mixedContext), task.expectedAnswer);
     results.push({
       taskId: task.id,
       mode: 'mixed',
       tokenCount: mixedTokens,
       tokenCountMethod: method,
-      preservedLiterals: inputPreservation.literals,
-      preservedRoles: inputPreservation.roles,
-      preservedNegation: inputPreservation.negation,
-      preservedModality: inputPreservation.modality,
+      preservation: mixedOut.preserves,
+      keywordOverlap: mixedOut.keywordOverlap,
       contextSizeBytes: mixedBytes,
-      outputPreserves: mixedOut.preserves,
-      outputKeywordOverlap: mixedOut.keywordOverlap,
       taskSuccess: mixedOut.preserves,
     });
   }
@@ -769,17 +773,14 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
 
   const compressionRatio = naturalAvgTokens > 0 ? lunumAvgTokens / naturalAvgTokens : 1;
 
-  // Calculate preservation rate (how many input-side preservation metrics are true)
-  const allPreserved = results.filter(r =>
-    r.preservedLiterals && r.preservedRoles && r.preservedNegation && r.preservedModality
-  );
-  const preservationRate = results.length > 0 ? allPreserved.length / results.length : 0;
+  // Preservation rate: how many compiled contexts preserve the expected answer
+  const preservationRate = results.length > 0
+    ? results.filter(r => r.preservation).length / results.length
+    : 0;
 
-  // Output-side preservation rate (how many compiled contexts preserve expected information)
-  const outputPreserved = results.filter(r => r.outputPreserves);
-  const outputPreservationRate = results.length > 0 ? outputPreserved.length / results.length : 0;
+  // Average keyword overlap (0-1, higher is better)
   const avgKeywordOverlap = results.length > 0
-    ? results.reduce((sum, r) => sum + r.outputKeywordOverlap, 0) / results.length
+    ? results.reduce((sum, r) => sum + r.keywordOverlap, 0) / results.length
     : 0;
 
   function tokensPerSuccess(modeResults: BenchmarkResult[]): number {
@@ -800,7 +801,6 @@ export function runBenchmark(tasks: BenchmarkTask[], tokenCounter?: TokenCounter
       mixedAvgTokens,
       compressionRatio,
       preservationRate,
-      outputPreservationRate,
       avgKeywordOverlap,
       naturalTokensPerSuccess: tokensPerSuccess(naturalResults),
       lunumTokensPerSuccess: tokensPerSuccess(lunumResults),
