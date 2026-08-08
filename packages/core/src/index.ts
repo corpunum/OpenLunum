@@ -99,6 +99,7 @@ export * from './hard-gates.js';
 export * from './compaction-gates.js';
 export * from './human-review-policy.js';
 export * from './context-mode-selector.js';
+export * from './context-eligibility.js';
 export * from './safety-review-policy.js';
 export * from './workflow-audit.js';
 export * from './threshold-calibration.js';
