@@ -54,6 +54,7 @@ export interface LanguageMetrics {
 export interface FeatureMetric {
   expected: number;
   matched: number;
+  observed: number;
   recall: number;
   precision: number;
 }
@@ -148,11 +149,18 @@ function semanticFeatureSets(sem: LunumSem): Record<string, Set<string>> {
 function featureMetrics(gold: LunumSem, actual: LunumSem): Record<string, FeatureMetric> {
   const expected = semanticFeatureSets(gold);
   const observed = semanticFeatureSets(actual);
-  return Object.fromEntries(Object.keys(expected).map((name) => {
+  const names = new Set([...Object.keys(expected), ...Object.keys(observed)]);
+  return Object.fromEntries([...names].map((name) => {
     const left = expected[name]!;
     const right = observed[name]!;
     const matched = [...left].filter((feature) => right.has(feature)).length;
-    return [name, { expected: left.size, matched, recall: left.size > 0 ? matched / left.size : 1, precision: right.size > 0 ? matched / right.size : 1 }];
+    return [name, {
+      expected: left.size,
+      matched,
+      observed: right.size,
+      recall: left.size > 0 ? matched / left.size : 1,
+      precision: right.size > 0 ? matched / right.size : 1
+    }];
   }));
 }
 
@@ -531,18 +539,19 @@ export async function runParseExperiment(
         const aggregate = aggregateFeatures[name] ?? { expected: 0, matched: 0, observed: 0 };
         aggregate.expected += values.expected;
         aggregate.matched += values.matched;
-        aggregate.observed += values.expected * values.precision;
+        aggregate.observed += values.observed;
         aggregateFeatures[name] = aggregate;
         const local = languageFeatures[name] ?? { expected: 0, matched: 0, observed: 0 };
         local.expected += values.expected;
         local.matched += values.matched;
-        local.observed += values.expected * values.precision;
+        local.observed += values.observed;
         languageFeatures[name] = local;
       }
     }
     const breakdown = Object.fromEntries(Object.entries(languageFeatures).map(([name, values]) => [name, {
       expected: values.expected,
       matched: values.matched,
+      observed: values.observed,
       recall: values.expected > 0 ? values.matched / values.expected : 1,
       precision: values.observed > 0 ? values.matched / values.observed : 1,
     }]));
@@ -636,6 +645,7 @@ export async function runParseExperiment(
   const featureBreakdown = Object.fromEntries(Object.entries(aggregateFeatures).map(([name, values]) => [name, {
     expected: values.expected,
     matched: values.matched,
+    observed: values.observed,
     recall: values.expected > 0 ? values.matched / values.expected : 1,
     precision: values.observed > 0 ? values.matched / values.observed : 1,
   }]));

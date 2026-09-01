@@ -165,7 +165,7 @@ export interface ItemResult {
   featureRecall?: number;
   featurePrecision?: number;
   /** Per-feature extraction diagnostics; never substitutes for exact match. */
-  featureMetrics?: Record<string, { expected: number; matched: number; recall: number; precision: number }>;
+  featureMetrics?: Record<string, { expected: number; matched: number; observed: number; recall: number; precision: number }>;
   protectedLiteralCoverage?: number;
   /** Placement-aware protected literal checks (see protected-literal-placement.ts). Diagnostic only, not a gate input. */
   protectedLiteralPlacement?: Array<{
