@@ -1,7 +1,7 @@
 {
   "schema": "openlunum-evidence-validity/0.1",
-  "generatedAt": "2026-09-01T04:48:56.027Z",
-  "repositoryCommit": "cc23121942b7ec19bbcb636c195c22db988cac51",
+  "generatedAt": "2026-09-01T04:52:07.319Z",
+  "repositoryCommit": "d6b55028af58748632d02e79232f031fbfe3ff10",
   "criteria": {
     "liveModelRequires": [
       "hash-verified dataset(s)",
