@@ -1,0 +1,57 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "modelProfile": {
+    "schema": "openlunum-model-profile/0.1",
+    "id": "qwen3-coder-30b-heldout-smoke",
+    "provider": "openai-compatible",
+    "baseUrl": "http://127.0.0.1:8080/v1",
+    "model": "openai/qwen3-coder-30b-a3b",
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 384,
+    "noThink": true,
+    "timeoutMs": 300000,
+    "metadata": {
+      "purpose": "Bounded live smoke slice of the held-out raw-text extraction evaluation.",
+      "parentProfile": "profiles/models/qwen3-coder-30b-heldout.json",
+      "outputBudgetRationale": "A smoke run is bounded to 384 output tokens; its results cannot substitute for the full 40-item evaluation."
+    }
+  },
+  "provenance": {
+    "startedAt": "2026-09-01T04:43:51.944Z",
+    "completedAt": "2026-09-01T04:45:10.391Z",
+    "codeCommit": "ddc5ad86513277adbd486748a16d01289205db52",
+    "baselineCommit": "f4b7e90",
+    "baselineCommitResolvable": true,
+    "datasetPath": "datasets/dev/multilingual-extended-v1.jsonl",
+    "datasetSha256": "bfe2edada088738f0f0a1ad191dfe3940a30c58471cec64afac5f74371b32b31",
+    "modelProfileSha256": "80396ee78e3351f5fe28a8239d32e44b17cbef15a4f253d1abf289e950cd76ec",
+    "modelProfileId": "qwen3-coder-30b-heldout-smoke",
+    "modelIdentity": {
+      "requestedModel": "openai/qwen3-coder-30b-a3b",
+      "advertisedModelIds": [
+        "openai/qwen3-coder-30b-a3b",
+        "openai/qwen3.5-122b-a10b",
+        "openai/qwen3.6-35b-a3b",
+        "openai/qwen3.6-40b-code",
+        "openai/qwen3.8-27b",
+        "openai/qwythos-9b-claude-mythos",
+        "openai/superqwen-agentworld-35b-a3b",
+        "openai/superqwen3.8-27b-abliterated",
+        "openunum-brain-1.5b-Q4_K_M",
+        "openunum-brain-1.7b-Q4_K_M",
+        "openunum-brain-1.7b-skills-Q4_K_M",
+        "openunum-brain-4b-contract3-Q4_1",
+        "orpheus-3b-tts",
+        "supergemma4-e4b"
+      ],
+      "verified": true
+    },
+    "effectiveSystemPromptSha256": "ce8a05b79cef2cf38dabb96e6fdeabb2890eddcf5a64781154d330d19d5611d1",
+    "schemaVersion": "lunum-sem/0.1-draft",
+    "evidenceValid": true,
+    "invalidReasons": []
+  }
+}
