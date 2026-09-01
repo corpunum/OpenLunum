@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { appendFile, mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { NearSemanticFingerprintGenerator, stableStringify, validateSem } from '@corpunum/lunum';
+import { stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, readJson, sha256File, writeJson, validateProfile } from './io.js';
 import { effectiveSystemPrompt, OpenAICompatibleModel } from './model.js';
@@ -88,7 +88,7 @@ export async function runStage2LiveRetrieval(): Promise<string> {
       evidence.rawResponse = completion.rawResponse;
       const parsed = extractStructuredJson(completion.content) as Record<string, unknown>;
       if (parsed.status === 'abstain') { evidence.abstained = true; evidence.valid = true; cache.set(cacheKey, null); extractionEvidence.push(evidence); return null; }
-      const validation = validateSem(parsed);
+      const validation = validateSemanticCandidate(parsed);
       if (!validation.ok) throw new Error(validation.errors.join('; '));
       evidence.valid = true;
       const sem = parsed as unknown as LunumSem;

@@ -1,6 +1,6 @@
 /** End-to-end retrieval boundary: raw text enters on both sides; Sem is never supplied by the dataset. */
 
-import { fingerprintSem, NearSemanticFingerprintGenerator, validateSem } from '@corpunum/lunum';
+import { fingerprintSem, NearSemanticFingerprintGenerator, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 
 export const RAW_TEXT_RETRIEVAL_VERSION = '0.1.0';
@@ -80,7 +80,7 @@ async function extract(input: RawTextExtractionInput, extractor: RawTextExtracto
   try {
     const value = await extractor(input);
     if (value === null) return { sem: null, error: 'extractor abstained' };
-    const validation = validateSem(value);
+    const validation = validateSemanticCandidate(value);
     if (!validation.ok) return { sem: null, error: `invalid extracted Sem: ${validation.errors.join('; ')}` };
     return { sem: value };
   } catch (error) { return { sem: null, error: error instanceof Error ? error.message : String(error) }; }

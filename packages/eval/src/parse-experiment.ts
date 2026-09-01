@@ -6,7 +6,7 @@ import { appendFile, mkdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, stableStringify, validateSem } from '@corpunum/lunum';
+import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
 import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
@@ -366,7 +366,7 @@ export async function runParseExperiment(
             break;
           }
 
-          const validation = validateSem(parsed);
+          const validation = validateSemanticCandidate(parsed);
           if (!validation.ok) throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
           if (expectedOutcome === 'abstain' || item.goldSem === null) {
             finalResult = {

@@ -95,6 +95,7 @@ function validateClauseTree(clauses: unknown, path: string, errors: string[]): v
       for (const [role, term] of Object.entries(rawClause.roles)) {
         if (role.trim().length === 0) errors.push(`${clausePath}.roles has an empty role name`);
         if (!isFiniteJsonValue(term, new Set())) errors.push(`${clausePath}.roles.${role} is not a finite JSON value`);
+        validateTypedTerm(term, `${clausePath}.roles.${role}`, errors);
       }
     }
     if (rawClause.negated !== undefined && typeof rawClause.negated !== 'boolean') {
@@ -105,6 +106,23 @@ function validateClauseTree(clauses: unknown, path: string, errors: string[]): v
     }
     if (rawClause.conditions !== undefined) validateClauseTree(rawClause.conditions, `${clausePath}.conditions`, errors);
     if (rawClause.consequences !== undefined) validateClauseTree(rawClause.consequences, `${clausePath}.consequences`, errors);
+  }
+}
+
+function validateTypedTerm(term: unknown, path: string, errors: string[]): void {
+  if (Array.isArray(term)) {
+    term.forEach((item, index) => validateTypedTerm(item, `${path}[${index}]`, errors));
+    return;
+  }
+  if (!isRecord(term)) return;
+  if (term.type === 'quantity' && (typeof term.value !== 'number' || !Number.isFinite(term.value))) {
+    errors.push(`${path} quantity requires a finite numeric value`);
+  }
+  if (term.type === 'date' && typeof term.value !== 'string' && typeof term.value !== 'number') {
+    errors.push(`${path} date requires a string or numeric value`);
+  }
+  for (const [key, value] of Object.entries(term)) {
+    if (key !== 'value') validateTypedTerm(value, `${path}.${key}`, errors);
   }
 }
 
