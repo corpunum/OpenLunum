@@ -64,6 +64,23 @@ export interface EligibilityDecision {
   reasons: string[];
 }
 
+/**
+ * The trust state of a semantic parse. A candidate is structurally valid but
+ * must not be treated as a durable or automatically served semantic memory.
+ */
+export type SemanticTrustStatus = 'candidate' | 'promoted' | 'abstained';
+
+export interface SemanticTrustDecision {
+  status: SemanticTrustStatus;
+  /** Confidence recomputed from evidence, never accepted from a caller score. */
+  confidence: number;
+  /** True only when the candidate has passed every automatic-promotion gate. */
+  promoted: boolean;
+  /** Candidate must remain natural-only until a reviewer resolves these reasons. */
+  requiresHumanReview: boolean;
+  reasons: string[];
+}
+
 export interface LunumRendering {
   code: string;
   profile: string;
@@ -80,6 +97,7 @@ export interface LunumRecord {
     ref: string | null;
   };
   sem: LunumSem;
+  /** Exact semantic fingerprint (lfp:*). Surface and near-semantic fingerprints are separate concepts. */
   fingerprint: string;
   nearSemanticFingerprint?: string;
   renderings: Record<string, LunumRendering>;
@@ -90,6 +108,7 @@ export interface LunumRecord {
 export interface LunumSidecar {
   lunumCode: string | null;
   lunumSem: LunumSem | null;
+  /** Compatibility slot; lunumMeta.fingerprintKind disambiguates surface vs exact semantic. */
   lunumFp: string | null;
   lunumMeta: Record<string, unknown> & { eligible: boolean };
 }

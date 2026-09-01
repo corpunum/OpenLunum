@@ -1,0 +1,16 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "multilingual-parse-heldout-v1",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "hypothesis": "A grammar-taught parser generalizes beyond the four core scenarios to paraphrases, additional predicates, negation, modality, references, dates, and ten languages without receiving the expected Sem.",
+  "baselineCommit": "7a40c3f80f017c21d69ba606fe7c11f267257958",
+  "dataset": {
+    "path": "datasets/dev/multilingual-extended-v1.jsonl",
+    "sha256": "bfe2edada088738f0f0a1ad191dfe3940a30c58471cec64afac5f74371b32b31"
+  },
+  "modelProfile": "profiles/models/qwen3-coder-30b-live.json",
+  "limits": { "maxItems": 40, "maxAttemptsPerItem": 1, "maxModelCalls": 40 },
+  "gates": { "minimumFeatureRecall": 0.95, "minimumExactRate": 0.75, "requireProtectedLiteralCoverage": true },
+  "outputDirectory": "reports/experiments/multilingual-parse-heldout-v1"
+}

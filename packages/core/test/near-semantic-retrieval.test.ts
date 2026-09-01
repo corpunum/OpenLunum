@@ -108,16 +108,15 @@ test('schema, world, kind, structure, negation, modality, and typed literals are
   }
 });
 
-test('predicate identifiers are weighted soft features but unrelated values miss the operational threshold', () => {
+test('predicate identifiers are hard semantic identity', () => {
   const generator = new NearSemanticFingerprintGenerator(0.7);
   const result = generator.compareSem(
     makeSem({ predicate: 'location' }),
     makeSem({ predicate: 'price' }),
   );
 
-  assert.equal(result.hardCompatible, true);
-  assert.ok(result.similarity > 0);
-  assert.ok(result.similarity < 0.7);
+  assert.equal(result.hardCompatible, false);
+  assert.equal(result.similarity, 0);
   assert.equal(result.similar, false);
 });
 
@@ -125,7 +124,7 @@ test('fingerprints use the versioned checksum and opaque feature-sketch format',
   const fingerprint = new NearSemanticFingerprintGenerator().generate(makeSem());
   assert.match(
     fingerprint,
-    /^nfp:2:sha256:[a-f0-9]{64}:[a-f0-9]{64}:(?:-|(?:[a-f0-9]{16}\.)*[a-f0-9]{16})$/u,
+    /^nfp:3:sha256:[a-f0-9]{64}:[a-f0-9]{64}:(?:-|(?:[a-f0-9]{16}\.)*[a-f0-9]{16})$/u,
   );
   assert.equal(fingerprint.includes('paris'), false);
   assert.equal(fingerprint.includes('france'), false);
@@ -136,7 +135,7 @@ test('malformed, legacy, and checksum-mismatched fingerprints fail closed', () =
   const valid = generator.generate(makeSem());
   const malformed: NearSemanticFingerprint[] = [
     'nfp:12345678',
-    'nfp:2:sha256:not-a-checksum',
+    'nfp:3:sha256:not-a-checksum',
     `${valid.slice(0, -1)}${valid.endsWith('a') ? 'b' : 'a'}`,
   ];
 
@@ -156,7 +155,7 @@ test('near-semantic retrieval improves recall only for compatible identifier var
     { id: 'near-id', sem: makeSem({ subjectId: 'city-paris' }) },
     { id: 'other-id', sem: makeSem({ subjectId: 'london' }) },
     { id: 'hard-literal-change', sem: makeSem({ subjectId: 'paris', literal: 'different' }) },
-    { id: 'soft-predicate-change', sem: makeSem({ subjectId: 'paris', predicate: 'price' }) },
+    { id: 'hard-predicate-change', sem: makeSem({ subjectId: 'paris', predicate: 'price' }) },
   ];
 
   const queryFingerprint = generator.generate(query);
@@ -170,7 +169,7 @@ test('near-semantic retrieval improves recall only for compatible identifier var
   assert.ok(nearMatches.includes('exact'));
   assert.ok(nearMatches.includes('near-id'));
   assert.equal(nearMatches.includes('hard-literal-change'), false);
-  assert.equal(nearMatches.includes('soft-predicate-change'), false);
+  assert.equal(nearMatches.includes('hard-predicate-change'), false);
   assert.ok(nearRecall > exactRecall);
 });
 

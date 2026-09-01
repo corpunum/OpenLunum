@@ -108,6 +108,7 @@ export * from './agent-interop.js';
 export * from './multilingual-memory-pilot.js';
 export * from './correction-telemetry.js';
 export * from './privacy-audit-map.js';
+export * from './privacy-derived-lifecycle.js';
 export {
   CONFORMANCE_VECTORS,
   runConformanceCheck,

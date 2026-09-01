@@ -59,5 +59,8 @@ export function validateProfile(value: ModelProfile): void {
   if (value.schema !== 'openlunum-model-profile/0.1') throw new Error('Unsupported model profile schema');
   if (value.provider !== 'openai-compatible') throw new Error('Only openai-compatible profiles are currently supported');
   if (!value.baseUrl || !value.model) throw new Error('baseUrl and model are required');
+  if (/(?:replace-with|placeholder|example-model)/iu.test(value.model)) {
+    throw new Error('model must name a concrete endpoint model; placeholder model IDs cannot produce evidence');
+  }
   resolveMaxTokens(value.maxTokens);
 }

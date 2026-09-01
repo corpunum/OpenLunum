@@ -14,7 +14,7 @@ function createSem(): LunumSem {
     clauses: [{
       predicate: 'prefer',
       roles: {
-        experiencer: { type: 'actor', id: 'user' },
+        experiencer: { type: 'concept', id: 'user' },
         theme: { type: 'concept', id: 'concise_answers' }
       },
       negated: false
@@ -32,7 +32,7 @@ test('near-semantic fingerprints are deterministic, opaque, and order independen
   };
 
   const fingerprint = generator.generate(first);
-  assert.match(fingerprint, /^nfp:2:sha256:[a-f0-9]{64}:[a-f0-9]{64}:(?:-|(?:[a-f0-9]{16}\.)*[a-f0-9]{16})$/u);
+  assert.match(fingerprint, /^nfp:3:sha256:[a-f0-9]{64}:[a-f0-9]{64}:(?:-|(?:[a-f0-9]{16}\.)*[a-f0-9]{16})$/u);
   assert.equal(generator.generate(second), fingerprint);
   assert.equal(generator.compare(fingerprint, fingerprint).similarity, 1);
   assert.equal(fingerprint.includes('user'), false);
@@ -172,6 +172,16 @@ test('legacy, malformed, identical malformed, and checksum-mismatched fingerprin
   assert.match(tamperedResult.hardMismatchReasons?.join('\n') ?? '', /Invalid or checksum-mismatched/u);
 });
 
+test('nfp:2 fingerprints fail closed and must be regenerated before comparison', () => {
+  const generator = new NearSemanticFingerprintGenerator();
+  const current = generator.generate(createSem());
+  const legacy = current.replace(/^nfp:3:/u, 'nfp:2:') as NearSemanticFingerprint;
+  const result = generator.compare(current, legacy);
+  assert.equal(result.similar, false);
+  assert.equal(result.hardCompatible, false);
+  assert.match(result.hardMismatchReasons?.join('\n') ?? '', /Invalid or checksum-mismatched/u);
+});
+
 test('empty semantic feature sketches remain valid and comparable', () => {
   const generator = new NearSemanticFingerprintGenerator();
   const empty: LunumSem = {
@@ -257,6 +267,38 @@ test('near-semantic score is bound to clause context and detects agent-role swap
     nearResult.similarity >= 0.8,
     `expected unrelated near-match to remain high, got ${nearResult.similarity}`
   );
+});
+
+test('stored nfp comparison hard-rejects an actor authority swap without original Sem', () => {
+  const generator = new NearSemanticFingerprintGenerator(0);
+  const result = generator.compare(
+    generator.generate(createRoleSwapSem(true)),
+    generator.generate(createRoleSwapSem(false))
+  );
+  assert.equal(result.similarity, 0);
+  assert.equal(result.similar, false);
+  assert.equal(result.hardCompatible, false);
+});
+
+test('full clause paths keep repeated predicates from collapsing into one role-feature bag', () => {
+  const generator = new NearSemanticFingerprintGenerator(1);
+  const base: LunumSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'statement', clauses: [{
+      predicate: 'permit', roles: { subject: { type: 'concept', id: 'request' } }, negated: false,
+      conditions: [
+        { predicate: 'confirmed', roles: { agent: { type: 'concept', id: 'alice' } }, negated: false },
+        { predicate: 'confirmed', roles: { agent: { type: 'concept', id: 'bob' } }, negated: false }
+      ]
+    }]
+  };
+  const swapped = structuredClone(base);
+  const conditions = swapped.clauses[0]!.conditions!;
+  conditions[0]!.roles.agent = { type: 'concept', id: 'bob' };
+  conditions[1]!.roles.agent = { type: 'concept', id: 'alice' };
+
+  const storedResult = generator.compare(generator.generate(base), generator.generate(swapped));
+  assert.ok(storedResult.similarity < 1, `expected repeated-predicate swap to alter stored features, got ${storedResult.similarity}`);
+  assert.equal(storedResult.similar, false);
 });
 
 test('threshold must remain in the inclusive zero-to-one range', () => {

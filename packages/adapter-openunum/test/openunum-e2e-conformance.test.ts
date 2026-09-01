@@ -292,7 +292,7 @@ test('e2e conformance: compileLunumShadowContext returns natural and mixed separ
 
 // ── Test group: Shadow vs Direct delta measurement ─────────────────
 
-test('e2e conformance: shadow and direct produce different fingerprints for same semantics', () => {
+test('e2e conformance: shadow and direct use the same canonical fingerprint', () => {
   const sem = buildLunumSem();
   const record = buildRecord(sem);
   const adapter = new ShadowModeAdapter({ enabled: true, compareWithProduction: true });
@@ -302,9 +302,9 @@ test('e2e conformance: shadow and direct produce different fingerprints for same
   // Direct API produces a fingerprint via deriveLunumSidecar
   const directSidecar = deriveLunumSidecar({ content: 'Test', sem, role: 'user' });
 
-  // Shadow fingerprint uses a different calculation method
-  assert.ok(shadowResult.shadow!.fingerprint !== directSidecar.lunumFp, 'fingerprints should differ by method');
-  assert.ok(shadowResult.shadow!.fingerprint.startsWith('lfp:shadow:'), 'shadow fingerprint should have lfp:shadow: prefix');
+  // Shadow mode must be comparable with the direct API.
+  assert.strictEqual(shadowResult.shadow!.fingerprint, directSidecar.lunumFp);
+  assert.match(shadowResult.shadow!.fingerprint, /^lfp:0\.1:sha256:[a-f0-9]+$/, 'shadow fingerprint should use canonical semantic format');
 });
 
 test('e2e conformance: shadow mode preserves semantic identity through comparison', () => {
@@ -344,7 +344,7 @@ test('e2e conformance: generates valid conformance report', () => {
   addResult(report, 'default config disabled', 'configuration', true);
   addResult(report, 'config can be set', 'configuration', true);
   addResult(report, 'processes simple record', 'shadow processing', true);
-  addResult(report, 'shadow produces different fingerprint', 'delta measurement', true);
+  addResult(report, 'shadow uses canonical fingerprint', 'delta measurement', true);
   addResult(report, 'shadow preserves semantics', 'delta measurement', true);
   addResult(report, 'direct API produces correct sidecar', 'direct API', true);
   addResult(report, 'shadow context preserves natural', 'direct API', true);
@@ -417,8 +417,8 @@ test('e2e conformance: full lifecycle with report', () => {
   const shadowResult = adapter.process(buildRecord(sem), sem);
   const directSidecar = deriveLunumSidecar({ content: 'Test', sem, role: 'user' });
 
-  addResult(report, 'shadow fingerprint differs from direct', 'delta measurement',
-    shadowResult.shadow!.fingerprint !== directSidecar.lunumFp);
+  addResult(report, 'shadow fingerprint equals direct', 'delta measurement',
+    shadowResult.shadow!.fingerprint === directSidecar.lunumFp);
   addResult(report, 'direct sidecar has all keys', 'direct API',
     Object.keys(directSidecar).length === 4);
 

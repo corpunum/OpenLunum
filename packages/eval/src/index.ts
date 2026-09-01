@@ -169,6 +169,18 @@ export type {
   CrossLingualIndex,
 } from './cross-lingual-retrieval.js';
 
+// Raw-text retrieval: the extraction and retrieval stages are both exercised.
+export { runRawTextRetrievalEvaluation } from './raw-text-retrieval.js';
+export type {
+  RawTextMemory,
+  RawTextQuery,
+  RawTextExtractionInput,
+  RawTextExtractor,
+  RawTextRetrievalQueryResult,
+  RawTextRetrievalMetrics,
+  RawTextRetrievalReport,
+} from './raw-text-retrieval.js';
+
 // Model family eval
 export {
   validateModelFamilyResult,

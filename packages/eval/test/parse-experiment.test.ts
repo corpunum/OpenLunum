@@ -9,22 +9,120 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
-import { sha256File } from '../src/io.js';
+import { sha256File, validateProfile } from '../src/io.js';
 import { parsePrompt } from '../src/prompts.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
-test('parse experiment defines four languages', () => {
-  assert.deepStrictEqual(PARSE_LANGUAGES, ['en', 'el', 'es', 'id']);
+test('parse experiment defines the supported multilingual evaluation languages', () => {
+  assert.deepStrictEqual(PARSE_LANGUAGES, ['en', 'el', 'es', 'id', 'fr', 'de', 'ja', 'zh', 'pt', 'ar']);
   assert.strictEqual(PARSE_LANGUAGE_LABELS.en, 'English');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.el, 'Greek');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.es, 'Spanish');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.id, 'Indonesian');
 });
 
-test('parse experiment runner records passing results for all four languages', async () => {
+test('parse evidence rejects placeholder model IDs before a request is made', () => {
+  assert.throws(() => validateProfile({
+    schema: 'openlunum-model-profile/0.1',
+    id: 'example',
+    provider: 'openai-compatible',
+    baseUrl: 'http://127.0.0.1:8080/v1',
+    model: 'replace-with-server-model-id',
+    temperature: 0,
+    timeoutMs: 1000
+  }), /placeholder model IDs/u);
+});
+
+test('parse experiment enforces maxModelCalls globally and records verified provenance', async () => {
+  let completions = 0;
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } }, negated: false }]
+  };
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    if (request.url === '/v1/chat/completions') {
+      completions += 1;
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(sem) } }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-parse-budget-'));
+  try {
+    const items = ['en', 'el', 'es', 'id'].map((sourceLanguage) => ({ id: `budget-${sourceLanguage}`, sourceLanguage, sourceText: 'test', goldSem: sem }));
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, `${items.map((item) => JSON.stringify(item)).join('\n')}\n`, 'utf8');
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(profilePath, JSON.stringify({ schema: 'openlunum-model-profile/0.1', id: 'mock', provider: 'openai-compatible', baseUrl: `http://127.0.0.1:${address.port}/v1`, model: 'mock-local', temperature: 0, timeoutMs: 5000 }), 'utf8');
+    const manifestPath = path.join(temp, 'experiment.json');
+    await writeFile(manifestPath, JSON.stringify({ schema: 'openlunum-experiment/0.1', id: 'parse-budget', area: 'multilingual-parse', task: 'parse', hypothesis: 'global budget', baselineCommit: 'HEAD', dataset: { path: datasetPath, sha256: await sha256File(datasetPath) }, modelProfile: profilePath, limits: { maxItems: 4, maxAttemptsPerItem: 1, maxModelCalls: 2 }, gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false }, outputDirectory: path.join(temp, 'reports') }), 'utf8');
+    const { report } = await runParseExperiment(manifestPath);
+    assert.strictEqual(completions, 2);
+    assert.strictEqual(report.totalItems, 2);
+    assert.strictEqual(report.provenance.modelIdentity.verified, true);
+    assert.match(report.provenance.effectiveSystemPromptSha256 ?? '', /^[a-f0-9]{64}$/u);
+    assert.ok(report.provenance.codeCommit);
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parse experiment retains a malformed retry before a succeeding attempt', async () => {
+  let calls = 0;
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } }, negated: false }] };
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    if (request.url === '/v1/chat/completions') {
+      calls += 1;
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: calls === 1 ? 'not json' : JSON.stringify(sem) } }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-parse-attempts-'));
+  try {
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, `${JSON.stringify({ id: 'retry-en', sourceLanguage: 'en', sourceText: 'test', goldSem: sem })}\n`, 'utf8');
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(profilePath, JSON.stringify({ schema: 'openlunum-model-profile/0.1', id: 'mock', provider: 'openai-compatible', baseUrl: `http://127.0.0.1:${address.port}/v1`, model: 'mock-local', temperature: 0, timeoutMs: 5000 }), 'utf8');
+    const manifestPath = path.join(temp, 'experiment.json');
+    await writeFile(manifestPath, JSON.stringify({ schema: 'openlunum-experiment/0.1', id: 'parse-attempts', area: 'multilingual-parse', task: 'parse', hypothesis: 'attempt retention', baselineCommit: 'HEAD', dataset: { path: datasetPath, sha256: await sha256File(datasetPath) }, modelProfile: profilePath, limits: { maxItems: 1, maxAttemptsPerItem: 2, maxModelCalls: 2 }, gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false }, outputDirectory: path.join(temp, 'reports') }), 'utf8');
+    const { outputDirectory } = await runParseExperiment(manifestPath);
+    const [result] = (await readFile(path.join(outputDirectory, 'parse-results-en.jsonl'), 'utf8')).trim().split('\n').map((line) => JSON.parse(line));
+    assert.strictEqual(result.status, 'passed');
+    assert.deepStrictEqual(result.attempts.map((entry: { status: string }) => entry.status), ['error', 'passed']);
+    assert.strictEqual(result.attempts[0].rawOutput, 'not json');
+    assert.match(result.attempts[0].systemPromptSha256, /^[a-f0-9]{64}$/u);
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parse experiment runner records passing results for every language present in the dataset', async () => {
   const sem = {
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
@@ -119,8 +217,8 @@ test('parse experiment runner records passing results for all four languages', a
     assert.strictEqual(report.totalErrors, 0);
 
     // Verify per-language metrics
-    assert.strictEqual(report.languageMetrics.length, 4);
-    for (const langMetrics of report.languageMetrics) {
+    assert.strictEqual(report.languageMetrics.length, 10);
+    for (const langMetrics of report.languageMetrics.filter((metrics) => metrics.totalItems > 0)) {
       assert.ok(langMetrics.totalItems > 0);
       assert.strictEqual(langMetrics.passedItems, langMetrics.totalItems);
       assert.strictEqual(langMetrics.exactRate, 1);

@@ -32,6 +32,32 @@ export interface ModelCompletion {
   usage: CompletionUsage | null;
 }
 
+/** Minimal, non-secret identity evidence obtained from GET /models before a run. */
+export interface ModelIdentityEvidence {
+  requestedModel: string;
+  advertisedModelIds: string[];
+  verified: boolean;
+  verificationError?: string;
+}
+
+/** Inputs required to decide whether a parse run can be treated as live evidence. */
+export interface ParseRunProvenance {
+  startedAt: string;
+  completedAt: string;
+  codeCommit: string | null;
+  baselineCommit: string;
+  baselineCommitResolvable: boolean;
+  datasetPath: string;
+  datasetSha256: string;
+  modelProfileSha256: string;
+  modelProfileId: string;
+  modelIdentity: ModelIdentityEvidence;
+  effectiveSystemPromptSha256: string | null;
+  schemaVersion: string;
+  evidenceValid: boolean;
+  invalidReasons: string[];
+}
+
 /**
  * Result of an opt-in streaming completion (see OpenAICompatibleModel.completeStreaming).
  * Extends ModelCompletion with timing instrumentation only obtainable by observing
@@ -80,6 +106,12 @@ export interface ItemResult {
   id: string;
   status: 'passed' | 'failed' | 'error';
   rawOutput: string;
+  /** SHA-256 of the exact system message sent for this item. */
+  systemPromptSha256?: string;
+  /** SHA-256 of the user message sent for this item. Raw output is retained separately. */
+  userPromptSha256?: string;
+  /** Every request attempt, including attempts superseded by a later retry. */
+  attempts?: ParseAttemptEvidence[];
   completion?: ModelCompletion;
   parsedSem?: LunumSem;
   realizedText?: string;
@@ -88,6 +120,8 @@ export interface ItemResult {
   nearSemanticScore?: number;
   featureRecall?: number;
   featurePrecision?: number;
+  /** Per-feature extraction diagnostics; never substitutes for exact match. */
+  featureMetrics?: Record<string, { expected: number; matched: number; recall: number; precision: number }>;
   protectedLiteralCoverage?: number;
   /** Placement-aware protected literal checks (see protected-literal-placement.ts). Diagnostic only, not a gate input. */
   protectedLiteralPlacement?: Array<{
@@ -122,6 +156,17 @@ export interface ItemResult {
   falseNegatives?: string[];
   hasFalseEquivalence?: boolean;
   isNearSemantic?: boolean;
+}
+
+/** Retained request-level evidence for parse retries. */
+export interface ParseAttemptEvidence {
+  attempt: number;
+  status: 'passed' | 'failed' | 'error';
+  rawOutput: string;
+  systemPromptSha256: string | null;
+  userPromptSha256: string | null;
+  error?: string;
+  latencyMs: number;
 }
 
 export interface ExperimentItem {

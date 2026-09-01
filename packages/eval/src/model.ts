@@ -2,6 +2,15 @@ import type { CompletionUsage, ModelCompletion, ModelProfile, StreamingModelComp
 
 export const DEFAULT_MAX_TOKENS = 4096;
 
+/**
+ * Return the exact system message sent to the endpoint.  Evidence writers must
+ * hash this value, rather than the pre-transport prompt, because `noThink`
+ * changes the message the model actually receives.
+ */
+export function effectiveSystemPrompt(profile: ModelProfile, system: string): string {
+  return profile.noThink ? `/no_think\n${system}` : system;
+}
+
 function readNumber(value: unknown): number | undefined {
   return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
 }
@@ -63,7 +72,7 @@ export class OpenAICompatibleModel {
   }
 
   async complete(system: string, user: string): Promise<ModelCompletion> {
-    const effectiveSystem = this.profile.noThink ? `/no_think\n${system}` : system;
+    const effectiveSystem = effectiveSystemPrompt(this.profile, system);
     const body: Record<string, unknown> = {
       model: this.profile.model,
       temperature: this.profile.temperature,
@@ -106,7 +115,7 @@ export class OpenAICompatibleModel {
    * behavior or request shape changes unless it explicitly switches to this method.
    */
   async completeStreaming(system: string, user: string): Promise<StreamingModelCompletion> {
-    const effectiveSystem = this.profile.noThink ? `/no_think\n${system}` : system;
+    const effectiveSystem = effectiveSystemPrompt(this.profile, system);
     const body: Record<string, unknown> = {
       model: this.profile.model,
       temperature: this.profile.temperature,

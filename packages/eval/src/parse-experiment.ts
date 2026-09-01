@@ -3,22 +3,30 @@
  */
 
 import { appendFile, mkdir, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { compareSem, NearSemanticFingerprintGenerator, validateSem } from '@corpunum/lunum';
+import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, stableStringify, validateSem } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
-import { OpenAICompatibleModel } from './model.js';
+import { effectiveSystemPrompt, OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
 import { checkProtectedLiteralPlacement, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
-import type { DatasetItem, ExperimentManifest, ItemResult, ModelProfile } from './types.js';
+import type { DatasetItem, ExperimentManifest, ItemResult, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
 
-export type ParseLanguage = 'en' | 'el' | 'es' | 'id';
-export const PARSE_LANGUAGES: ParseLanguage[] = ['en', 'el', 'es', 'id'];
+export type ParseLanguage = 'en' | 'el' | 'es' | 'id' | 'fr' | 'de' | 'ja' | 'zh' | 'pt' | 'ar';
+export const PARSE_LANGUAGES: ParseLanguage[] = ['en', 'el', 'es', 'id', 'fr', 'de', 'ja', 'zh', 'pt', 'ar'];
 export const PARSE_LANGUAGE_LABELS: Record<ParseLanguage, string> = {
   en: 'English',
   el: 'Greek',
   es: 'Spanish',
-  id: 'Indonesian'
+  id: 'Indonesian',
+  fr: 'French',
+  de: 'German',
+  ja: 'Japanese',
+  zh: 'Chinese',
+  pt: 'Portuguese',
+  ar: 'Arabic'
 };
 
 export interface LanguageMetrics {
@@ -36,6 +44,17 @@ export interface LanguageMetrics {
   fingerprintMatches: number;
   exactFingerprintCount: number;
   nearSemanticFingerprintCount: number;
+  schemaValidityRate: number;
+  canonicalExactRate: number;
+  featureBreakdown: Record<string, FeatureMetric>;
+  abstentionAccuracy: number | null;
+}
+
+export interface FeatureMetric {
+  expected: number;
+  matched: number;
+  recall: number;
+  precision: number;
 }
 
 export interface ParseExperimentReport {
@@ -55,6 +74,9 @@ export interface ParseExperimentReport {
   crossLanguageComparison: CrossLanguageComparison;
   languageBreakdown: Record<ParseLanguage, number[]>;
   failureModes: Record<string, number>;
+  featureBreakdown: Record<string, FeatureMetric>;
+  abstentionAccuracy: number | null;
+  provenance: ParseRunProvenance;
 }
 
 export interface CrossLanguageComparison {
@@ -79,6 +101,89 @@ function computeVariance(values: number[]): number {
   if (values.length <= 1) return 0;
   const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
   return values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length;
+}
+
+function sha256Text(value: string): string {
+  return createHash('sha256').update(value).digest('hex');
+}
+
+function semanticFeatureSets(sem: LunumSem): Record<string, Set<string>> {
+  const canonical = canonicalizeSem(sem);
+  const sets: Record<string, Set<string>> = {
+    predicate: new Set(), role: new Set(), literal: new Set(), negation: new Set(), modality: new Set(),
+    condition: new Set(), consequence: new Set(), reference: new Set()
+  };
+  const walk = (clauses: typeof canonical.clauses, prefix: string): void => {
+    clauses.forEach((clause, index) => {
+      const path = `${prefix}${index}`;
+      sets.predicate!.add(`${path}:${clause.predicate}`);
+      sets.negation!.add(`${path}:${clause.negated === true}`);
+      if (clause.modality !== undefined) sets.modality!.add(`${path}:${String(clause.modality)}`);
+      for (const [role, value] of Object.entries(clause.roles ?? {})) {
+        const encoded = stableStringify(value);
+        sets.role!.add(`${path}:${role}`);
+        sets.literal!.add(`${path}:${role}:${encoded}`);
+      }
+      if (clause.conditions?.length) sets.condition!.add(`${path}:${clause.conditions.length}`);
+      if (clause.consequences?.length) sets.consequence!.add(`${path}:${clause.consequences.length}`);
+      walk(clause.conditions ?? [], `${path}.condition.`);
+      walk(clause.consequences ?? [], `${path}.consequence.`);
+    });
+  };
+  walk(canonical.clauses, '');
+  for (const [index, reference] of (canonical.references ?? []).entries()) sets.reference!.add(`${index}:${stableStringify(reference)}`);
+  return sets;
+}
+
+function featureMetrics(gold: LunumSem, actual: LunumSem): Record<string, FeatureMetric> {
+  const expected = semanticFeatureSets(gold);
+  const observed = semanticFeatureSets(actual);
+  return Object.fromEntries(Object.keys(expected).map((name) => {
+    const left = expected[name]!;
+    const right = observed[name]!;
+    const matched = [...left].filter((feature) => right.has(feature)).length;
+    return [name, { expected: left.size, matched, recall: left.size > 0 ? matched / left.size : 1, precision: right.size > 0 ? matched / right.size : 1 }];
+  }));
+}
+
+function gitCommit(root: string): string | null {
+  try {
+    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+function gitCommitResolvable(root: string, revision: string): boolean {
+  try {
+    execFileSync('git', ['cat-file', '-e', `${revision}^{commit}`], { cwd: root, stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function advertisedModelIds(payload: unknown): string[] {
+  if (!payload || typeof payload !== 'object') return [];
+  const entries = (payload as { data?: unknown }).data;
+  if (!Array.isArray(entries)) return [];
+  return entries.flatMap((entry) => entry && typeof entry === 'object' && typeof (entry as { id?: unknown }).id === 'string'
+    ? [(entry as { id: string }).id]
+    : []);
+}
+
+async function verifyModelIdentity(model: OpenAICompatibleModel, profile: ModelProfile): Promise<ModelIdentityEvidence> {
+  try {
+    const ids = advertisedModelIds(await model.doctor());
+    return { requestedModel: profile.model, advertisedModelIds: ids, verified: ids.includes(profile.model) };
+  } catch (error) {
+    return {
+      requestedModel: profile.model,
+      advertisedModelIds: [],
+      verified: false,
+      verificationError: error instanceof Error ? error.message : String(error)
+    };
+  }
 }
 
 export async function runParseExperiment(
@@ -106,6 +211,13 @@ export async function runParseExperiment(
   const profile = await readJson<ModelProfile>(modelProfilePath);
   validateProfile(profile);
 
+  const startedAt = new Date().toISOString();
+  const modelIdentity = await verifyModelIdentity(new OpenAICompatibleModel(profile), profile);
+  const codeCommit = gitCommit(root);
+  const baselineCommitResolvable = gitCommitResolvable(root, manifest.baselineCommit);
+  const promptProbe = items[0] ? parsePrompt(items[0]) : null;
+  const effectiveSystemPromptSha256 = promptProbe ? sha256Text(effectiveSystemPrompt(profile, promptProbe.system)) : null;
+
   const runId = new Date().toISOString().replace(/[:.]/gu, '-');
   const outputRoot = path.isAbsolute(manifest.outputDirectory)
     ? manifest.outputDirectory
@@ -121,22 +233,27 @@ export async function runParseExperiment(
 
   const languageResults = new Map<ParseLanguage, ItemResult[]>();
   const nearSemantic = new NearSemanticFingerprintGenerator(0.8);
+  let calls = 0;
 
   for (const [language, languageItems] of byLanguage) {
     if (languageItems.length === 0) continue;
     const model = new OpenAICompatibleModel(profile);
     const results: ItemResult[] = [];
-    let calls = 0;
-
     for (const item of languageItems) {
       if (calls >= manifest.limits.maxModelCalls) break;
       let finalResult: ItemResult | null = null;
+      const attempts: ParseAttemptEvidence[] = [];
 
       for (let attempt = 1; attempt <= manifest.limits.maxAttemptsPerItem && calls < manifest.limits.maxModelCalls; attempt += 1) {
         const started = performance.now();
         let rawOutput = '';
+        let systemPromptSha256: string | null = null;
+        let userPromptSha256: string | null = null;
         try {
           const prompt = parsePrompt(item);
+          const effectiveSystem = effectiveSystemPrompt(profile, prompt.system);
+          systemPromptSha256 = sha256Text(effectiveSystem);
+          userPromptSha256 = sha256Text(prompt.user);
           calls += 1;
           const completion = await model.complete(prompt.system, prompt.user);
           rawOutput = completion.content;
@@ -147,6 +264,7 @@ export async function runParseExperiment(
           const goldSem = item.goldSem as LunumSem;
           const parsedSem = parsed as LunumSem;
           const comparison = compareSem(goldSem, parsedSem);
+          const perFeature = featureMetrics(goldSem, parsedSem);
           const nearResult = nearSemantic.compareSem(goldSem, parsedSem, {
             protectedLiterals: item.protectedLiterals ?? []
           });
@@ -162,31 +280,55 @@ export async function runParseExperiment(
             id: item.id,
             status: comparison.exactFingerprint ? 'passed' : 'failed',
             rawOutput,
+            systemPromptSha256,
+            userPromptSha256,
             parsedSem,
             exact: comparison.exactFingerprint,
             nearSemantic: nearOnly,
             nearSemanticScore: nearResult.similarity,
             featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision,
+            featureMetrics: perFeature,
             missingFeatures: comparison.missingFeatures,
             protectedLiteralPlacement: literalPlacement,
             protectedLiteralPlacementCoverage: protectedLiteralPlacementCoverage(literalPlacement),
             completion,
             latencyMs: performance.now() - started
           };
+          attempts.push({
+            attempt,
+            status: finalResult.status,
+            rawOutput,
+            systemPromptSha256,
+            userPromptSha256,
+            latencyMs: finalResult.latencyMs
+          });
           if (finalResult.status === 'passed') break;
         } catch (error) {
+          const message = `attempt ${attempt}: ${error instanceof Error ? error.message : String(error)}`;
+          const latencyMs = performance.now() - started;
           finalResult = {
             id: item.id,
             status: 'error',
             rawOutput,
-            error: `attempt ${attempt}: ${error instanceof Error ? error.message : String(error)}`,
-            latencyMs: performance.now() - started
+            ...(systemPromptSha256 ? { systemPromptSha256 } : {}),
+            ...(userPromptSha256 ? { userPromptSha256 } : {}),
+            error: message,
+            latencyMs
           };
+          attempts.push({
+            attempt,
+            status: 'error',
+            rawOutput,
+            systemPromptSha256,
+            userPromptSha256,
+            error: message,
+            latencyMs
+          });
         }
       }
 
-      if (finalResult) results.push(finalResult);
+      if (finalResult) results.push({ ...finalResult, attempts });
     }
 
     languageResults.set(language, results);
@@ -194,12 +336,12 @@ export async function runParseExperiment(
 
   const languageMetrics: LanguageMetrics[] = [];
   const languageBreakdown: Record<ParseLanguage, number[]> = {
-    en: [0, 0, 0, 0],
-    el: [0, 0, 0, 0],
-    es: [0, 0, 0, 0],
-    id: [0, 0, 0, 0]
+    en: [0, 0, 0, 0], el: [0, 0, 0, 0], es: [0, 0, 0, 0], id: [0, 0, 0, 0],
+    fr: [0, 0, 0, 0], de: [0, 0, 0, 0], ja: [0, 0, 0, 0], zh: [0, 0, 0, 0],
+    pt: [0, 0, 0, 0], ar: [0, 0, 0, 0]
   };
   const failureModes: Record<string, number> = {};
+  const aggregateFeatures: Record<string, { expected: number; matched: number; observed: number }> = {};
   let totalItems = 0;
   let totalPassed = 0;
   let totalFailed = 0;
@@ -223,6 +365,27 @@ export async function runParseExperiment(
     const featureRecall = total > 0 ? results.reduce((sum, result) => sum + (result.featureRecall ?? 0), 0) / total : 0;
     const featurePrecision = total > 0 ? results.reduce((sum, result) => sum + (result.featurePrecision ?? 0), 0) / total : 0;
     const meanLatencyMs = total > 0 ? results.reduce((sum, result) => sum + result.latencyMs, 0) / total : 0;
+    const languageFeatures: Record<string, { expected: number; matched: number; observed: number }> = {};
+    for (const result of results) {
+      for (const [name, values] of Object.entries(result.featureMetrics ?? {})) {
+        const aggregate = aggregateFeatures[name] ?? { expected: 0, matched: 0, observed: 0 };
+        aggregate.expected += values.expected;
+        aggregate.matched += values.matched;
+        aggregate.observed += values.expected * values.precision;
+        aggregateFeatures[name] = aggregate;
+        const local = languageFeatures[name] ?? { expected: 0, matched: 0, observed: 0 };
+        local.expected += values.expected;
+        local.matched += values.matched;
+        local.observed += values.expected * values.precision;
+        languageFeatures[name] = local;
+      }
+    }
+    const breakdown = Object.fromEntries(Object.entries(languageFeatures).map(([name, values]) => [name, {
+      expected: values.expected,
+      matched: values.matched,
+      recall: values.expected > 0 ? values.matched / values.expected : 1,
+      precision: values.observed > 0 ? values.matched / values.observed : 1,
+    }]));
 
     languageMetrics.push({
       language,
@@ -239,6 +402,10 @@ export async function runParseExperiment(
       fingerprintMatches: exactCount,
       exactFingerprintCount: exactCount,
       nearSemanticFingerprintCount: nearCount
+      ,schemaValidityRate: total > 0 ? results.filter((result) => result.status !== 'error').length / total : 0
+      ,canonicalExactRate: exactRate
+      ,featureBreakdown: breakdown
+      ,abstentionAccuracy: null
     });
 
     languageBreakdown[language] = [passed, failed, errors, total];
@@ -306,7 +473,34 @@ export async function runParseExperiment(
     consistencyScore,
     variance
   };
+  const featureBreakdown = Object.fromEntries(Object.entries(aggregateFeatures).map(([name, values]) => [name, {
+    expected: values.expected,
+    matched: values.matched,
+    recall: values.expected > 0 ? values.matched / values.expected : 1,
+    precision: values.observed > 0 ? values.matched / values.observed : 1,
+  }]));
   const languageCount = languagesIncluded.length;
+  const invalidReasons: string[] = [];
+  if (!codeCommit) invalidReasons.push('current git commit could not be resolved');
+  if (!baselineCommitResolvable) invalidReasons.push(`baselineCommit is not a resolvable commit: ${manifest.baselineCommit}`);
+  if (!modelIdentity.verified) invalidReasons.push('endpoint did not verify the requested model through GET /models');
+  if (!effectiveSystemPromptSha256) invalidReasons.push('no effective system prompt was captured');
+  const provenance: ParseRunProvenance = {
+    startedAt,
+    completedAt: new Date().toISOString(),
+    codeCommit,
+    baselineCommit: manifest.baselineCommit,
+    baselineCommitResolvable,
+    datasetPath: manifest.dataset.path,
+    datasetSha256: actualHash,
+    modelProfileSha256: await sha256File(modelProfilePath),
+    modelProfileId: profile.id,
+    modelIdentity,
+    effectiveSystemPromptSha256,
+    schemaVersion: 'lunum-sem/0.1-draft',
+    evidenceValid: invalidReasons.length === 0,
+    invalidReasons
+  };
   const report: ParseExperimentReport = {
     experimentId: manifest.id,
     runId,
@@ -323,7 +517,10 @@ export async function runParseExperiment(
     languageMetrics,
     crossLanguageComparison,
     languageBreakdown,
-    failureModes
+    failureModes,
+    featureBreakdown,
+    abstentionAccuracy: null,
+    provenance
   };
 
   for (const [language, results] of languageResults) {
@@ -388,7 +585,7 @@ ${Object.entries(failureModes).map(([mode, count]) => `- ${mode}: ${count}`).joi
     platform: process.platform,
     arch: process.arch,
     modelProfile: profile,
-    startedAt: new Date().toISOString()
+    provenance
   });
 
   return { report, outputDirectory: output };
