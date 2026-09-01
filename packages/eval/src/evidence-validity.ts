@@ -144,7 +144,15 @@ function sha256Like(value: unknown): boolean {
 }
 
 async function resultFiles(directory: string): Promise<string[]> {
-  const entries = await readdir(directory, { withFileTypes: true });
+  let entries;
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch {
+    // A historical manifest may point at an output directory that was never
+    // materialized or has since been pruned. That is invalid evidence, not an
+    // evaluator crash.
+    return [];
+  }
   const direct = entries
     .filter((entry) => entry.isFile() && (entry.name === 'item-results.jsonl' || entry.name === 'items.jsonl' || /^parse-results-[a-z]+\.jsonl$/u.test(entry.name)))
     .map((entry) => path.join(directory, entry.name));
