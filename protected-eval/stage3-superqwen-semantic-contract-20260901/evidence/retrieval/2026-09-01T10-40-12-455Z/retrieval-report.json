@@ -1,0 +1,463 @@
+{
+  "version": "0.1.0",
+  "threshold": 0.8,
+  "topK": 3,
+  "inputMode": "raw-text-only",
+  "metrics": {
+    "queries": 16,
+    "memoryCount": 16,
+    "queryExtractionFailures": 10,
+    "memoryExtractionFailures": 10,
+    "semanticMatchingFailures": 16,
+    "rankingFailures": 0,
+    "truePositives": 0,
+    "falsePositives": 0,
+    "falseNegatives": 16,
+    "trueNegatives": 42,
+    "precision": 1,
+    "recall": 0,
+    "f1": 0,
+    "falsePositiveRate": 0,
+    "top1Accuracy": 0,
+    "positiveTop1Accuracy": 0,
+    "negativeRejectionAccuracy": 0,
+    "topKRecall": 0,
+    "byLanguagePair": {
+      "en-el": {
+        "queries": 8,
+        "precision": 1,
+        "recall": 0,
+        "f1": 0,
+        "falsePositiveRate": 0,
+        "topKRecall": 0
+      },
+      "el-en": {
+        "queries": 8,
+        "precision": 1,
+        "recall": 0,
+        "f1": 0,
+        "falsePositiveRate": 0,
+        "topKRecall": 0
+      }
+    }
+  },
+  "queryResults": [
+    {
+      "queryId": "query-pref-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "pref-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "pref-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [
+        "pref-el"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-pref-el",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "pref-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "pref-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "noncanonical extracted Sem: predicate 'for' is not registered and remains unresolved",
+      "semanticMatchingFailures": [
+        "pref-en"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-neg-delete-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "neg-delete-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "neg-delete-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [
+        "neg-delete-el"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-neg-delete-el",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "neg-delete-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "neg-delete-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [
+        "neg-delete-en"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-mod-approve-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "mod-approve-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "mod-approve-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [
+        "mod-approve-el"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-mod-approve-el",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "mod-approve-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "mod-approve-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [
+        "mod-approve-en"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-cond-power-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "cond-power-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "cond-power-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "cond-power-el"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-cond-power-el",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "cond-power-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "cond-power-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "cond-power-en"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-ref-contract-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "ref-contract-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "ref-contract-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [
+        "ref-contract-el"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-ref-contract-el",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "ref-contract-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "ref-contract-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "ref-contract-en"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-list-review-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "list-review-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "list-review-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "list-review-el"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-list-review-el",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "list-review-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "list-review-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "list-review-en"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-transfer-ab-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "transfer-ab-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "transfer-ab-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "transfer-ab-el"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-transfer-ab-el",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "transfer-ab-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "transfer-ab-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "transfer-ab-en"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-transfer-ba-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "transfer-ba-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "transfer-ba-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "transfer-ba-el"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "query-transfer-ba-el",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "transfer-ba-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "transfer-ba-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "transfer-ba-en"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    }
+  ],
+  "baselines": {
+    "lexical": {
+      "precision": 0.4,
+      "recall": 0.5,
+      "f1": 0.4444444444444445,
+      "falsePositiveRate": 0.10714285714285714,
+      "top1Accuracy": 0.375,
+      "positiveTop1Accuracy": 0.375,
+      "negativeRejectionAccuracy": 0,
+      "topKRecall": 0.5,
+      "truePositives": 8,
+      "falsePositives": 12,
+      "falseNegatives": 8,
+      "trueNegatives": 100,
+      "failures": 0
+    }
+  }
+}

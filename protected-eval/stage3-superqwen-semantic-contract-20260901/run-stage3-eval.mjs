@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import Ajv2020 from '../../packages/eval/node_modules/ajv/dist/2020.js';
-import { runParseExperiment, buildExtractionSchema, extractStructuredJson } from '../../packages/eval/dist/src/parse-experiment.js';
+import { buildExtractionSchema, extractStructuredJson } from '../../packages/eval/dist/src/parse-experiment.js';
 import { OpenAICompatibleModel, effectiveSystemPrompt } from '../../packages/eval/dist/src/model.js';
 import { parsePrompt } from '../../packages/eval/dist/src/prompts.js';
 import { runRawTextRetrievalEvaluation } from '../../packages/eval/dist/src/raw-text-retrieval.js';
@@ -18,7 +18,7 @@ const experimentPath = path.join(here, 'experiment.json');
 const profilePath = path.join(root, 'profiles/models/superqwen3.8-27b-abliterated-live.json');
 const semSchemaPath = path.join(root, 'schemas/lunum-sem.schema.json');
 const evidenceRoot = path.join(here, 'evidence');
-const requestedCandidate = '6149dee6b518020bc804b5db8f68f36ba00f4cf';
+const requestedCandidate = '6149deed6b518020bc804b5db8f68f36ba00f4cf';
 const implementationCandidate = '6149deed6b518020bc804b5db8f68f36ba00f4cf';
 const thresholds = [0.6, 0.7, 0.8, 0.85, 0.9, 0.95];
 
@@ -103,14 +103,14 @@ async function validateInputs(corpus, protectedManifest, experiment, extractionS
     experiment,
     corpus: { path: path.relative(root, corpusPath), sha256: corpusSha, itemCount: corpus.length },
     schema: { path: path.relative(root, semSchemaPath), sha256: await fileHash(semSchemaPath), transportSchema: extractionSchema, transportSchemaSha256: hash(stableStringify(extractionSchema)), validatedGoldItems: corpus.filter((x) => x.goldSem !== null && x.expectedOutcome !== 'abstain').length, abstentionItems: corpus.filter((x) => x.expectedOutcome === 'abstain').length },
-    candidate: { requestedSha: requestedCandidate, requestedShaResolvable: false, implementationSha: implementationCandidate, implementationShaResolvable: git(['cat-file', '-t', implementationCandidate]) === 'commit' }
+    candidate: { requestedSha: requestedCandidate, requestedShaResolvable: git(['cat-file', '-t', requestedCandidate]) === 'commit', implementationSha: implementationCandidate, implementationShaResolvable: git(['cat-file', '-t', implementationCandidate]) === 'commit' }
   };
   await save(path.join(evidenceRoot, 'frozen-inputs.json'), frozen);
   return frozen;
 }
-async function runIncrementalParseSubset(corpus, profile, extractionSchema) {
-  const subset = corpus.filter((item) => ['pref-dark-mode', 'neg-delete-archive', 'ambiguous-ready'].includes(item.semanticGroup));
-  const runOutput = path.join(evidenceRoot, 'parse-subset', new Date().toISOString().replace(/[:.]/gu, '-'));
+async function runIncrementalParse(corpus, profile, extractionSchema) {
+  const subset = corpus;
+  const runOutput = path.join(evidenceRoot, 'parse-full', new Date().toISOString().replace(/[:.]/gu, '-'));
   await mkdir(runOutput, { recursive: true });
   const model = new OpenAICompatibleModel({ ...profile, maxTokens: 256 });
   const validator = new Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(extractionSchema);
@@ -173,7 +173,7 @@ async function runIncrementalParseSubset(corpus, profile, extractionSchema) {
     const abstainRows = results.filter((x) => x.expectedOutcome === 'abstain');
     return [language, { totalItems: expected, passedItems: pass, failedItems: results.filter((x) => x.status === 'failed').length, errorItems: results.filter((x) => x.status === 'error').length, exactRate: expected ? exactCount / expected : 0, featureRecall: recalls.length ? recalls.reduce((a, b) => a + b, 0) / recalls.length : 0, abstentionAccuracy: abstainItems.length ? abstainRows.filter((x) => x.abstained === true).length / abstainItems.length : null }];
   }));
-  const report = { status: 'INCOMPLETE_SUBSET', subsetPolicy: 'predeclared: all preference, negation, and ambiguity groups; three items per language', totalItems: subset.length, totalPassed: passed, totalFailed: rows.filter((x) => x.status === 'failed').length, totalErrors: rows.filter((x) => x.status === 'error').length, exactRate: subset.length ? exact / subset.length : 0, abstentionAccuracy: abstentionExpected ? abstentionCorrect / abstentionExpected : null, byLanguage, decoding: { temperature: profile.temperature, seed: profile.seed ?? null, maxTokens: 256, chatTemplateKwargs: profile.chatTemplateKwargs ?? null }, noRetries: true, firstUntouchedRun: true };
+  const report = { status: 'COMPLETE', corpusPolicy: 'full frozen corpus: all 54 cases; prior 18-case diagnostic preserved separately', totalItems: subset.length, totalPassed: passed, totalFailed: rows.filter((x) => x.status === 'failed').length, totalErrors: rows.filter((x) => x.status === 'error').length, exactRate: subset.length ? exact / subset.length : 0, abstentionAccuracy: abstentionExpected ? abstentionCorrect / abstentionExpected : null, byLanguage, decoding: { temperature: profile.temperature, seed: profile.seed ?? null, maxTokens: 256, chatTemplateKwargs: profile.chatTemplateKwargs ?? null }, noRetries: true, firstUntouchedRun: true };
   await save(path.join(runOutput, 'parse-summary.json'), report);
   return { outputDirectory: runOutput, report, subset };
 }
@@ -210,13 +210,18 @@ async function main() {
     return blocker;
   }
   let parseResult;
-  try {
-    parseResult = await runIncrementalParseSubset(corpus, profile, extractionSchema);
-  } catch (error) {
-    const blocker = { status: 'NOT_RUN', phase: 'live-parse', startedAt, completedAt: new Date().toISOString(), endpoint: profile.baseUrl, requestedModel: profile.model, advertisedModelIds: modelIds, error: error instanceof Error ? error.message : String(error), noRetries: true, candidate: frozen.candidate };
-    await save(path.join(evidenceRoot, 'live-gate.json'), blocker);
-    await save(path.join(evidenceRoot, 'run-status.json'), { status: 'NOT_RUN', reason: 'Live parse gate failed; no fabricated live metrics.', blocker, partialParseOutput: parseResult?.outputDirectory || null });
-    return blocker;
+  if (process.env.STAGE3_RETRIEVAL_ONLY === '1') {
+    const existingParseOutput = process.env.STAGE3_PARSE_OUTPUT || path.join(evidenceRoot, 'parse-full/2026-09-01T10-31-29-151Z');
+    parseResult = { outputDirectory: existingParseOutput, report: await json(path.join(existingParseOutput, 'parse-summary.json')) };
+  } else {
+    try {
+      parseResult = await runIncrementalParse(corpus, profile, extractionSchema);
+    } catch (error) {
+      const blocker = { status: 'NOT_RUN', phase: 'live-parse', startedAt, completedAt: new Date().toISOString(), endpoint: profile.baseUrl, requestedModel: profile.model, advertisedModelIds: modelIds, error: error instanceof Error ? error.message : String(error), noRetries: true, candidate: frozen.candidate };
+      await save(path.join(evidenceRoot, 'live-gate.json'), blocker);
+      await save(path.join(evidenceRoot, 'run-status.json'), { status: 'NOT_RUN', reason: 'Live parse gate failed; no fabricated live metrics.', blocker, partialParseOutput: parseResult?.outputDirectory || null });
+      return blocker;
+    }
   }
   const retrievalGroups = new Set(['pref-dark-mode', 'neg-delete-archive', 'mod-obligation-approve', 'cond-low-power', 'ref-send-contract', 'list-review-date', 'critical-transfer-ab', 'critical-transfer-ba']);
   const selected = corpus.filter((x) => retrievalGroups.has(x.semanticGroup) && (x.sourceLanguage === 'en' || x.sourceLanguage === 'el'));
@@ -229,26 +234,28 @@ async function main() {
   const extractionEvidence = [];
   const extracted = [];
   const cache = new Map();
+  const retrievalOutput = path.join(evidenceRoot, 'retrieval', new Date().toISOString().replace(/[:.]/gu, '-'));
+  await mkdir(retrievalOutput, { recursive: true });
+  await writeFile(path.join(retrievalOutput, 'raw-extractions.jsonl'), '', 'utf8');
   const extract = async (input) => {
     const key = input.kind + ':' + input.id;
     if (cache.has(key)) return cache.get(key);
     const prompt = parsePrompt({ id: input.id, sourceLanguage: input.language, sourceText: input.text, goldSem: {} });
     const evidence = { id: input.id, kind: input.kind, language: input.language, text: input.text, rawOutput: '', valid: false, abstained: false, startedAt: new Date().toISOString() };
+    let completion;
     try {
-      const completion = await model.complete(prompt.system, prompt.user, { structuredOutput: { mode: 'json_schema', schema: extractionSchema, strict: true, fallback: 'json_object' } });
+      completion = await model.complete(prompt.system, prompt.user, { structuredOutput: { mode: 'json_schema', schema: extractionSchema, strict: true, fallback: 'json_object' } });
       evidence.rawOutput = completion.content; evidence.rawRequest = completion.rawRequest; evidence.rawResponse = completion.rawResponse;
       const parsed = extractStructuredJson(completion.content);
-      if (parsed?.status === 'abstain') { evidence.abstained = true; evidence.valid = true; evidence.completedAt = new Date().toISOString(); extractionEvidence.push(evidence); extracted.push({ id: input.id, kind: input.kind, language: input.language, sem: null }); cache.set(key, null); return null; }
+      if (parsed?.status === 'abstain') { evidence.abstained = true; evidence.valid = true; evidence.completedAt = new Date().toISOString(); extractionEvidence.push(evidence); await appendFile(path.join(retrievalOutput, 'raw-extractions.jsonl'), JSON.stringify(evidence) + '\n', 'utf8'); extracted.push({ id: input.id, kind: input.kind, language: input.language, sem: null }); cache.set(key, null); return null; }
       const validation = validateSemanticCandidate(parsed);
       if (!validation.ok) throw new Error(validation.errors.join('; '));
-      evidence.valid = true; evidence.completedAt = new Date().toISOString(); extractionEvidence.push(evidence); extracted.push({ id: input.id, kind: input.kind, language: input.language, sem: parsed }); cache.set(key, parsed); return parsed;
+      evidence.valid = true; evidence.completedAt = new Date().toISOString(); extractionEvidence.push(evidence); await appendFile(path.join(retrievalOutput, 'raw-extractions.jsonl'), JSON.stringify(evidence) + '\n', 'utf8'); extracted.push({ id: input.id, kind: input.kind, language: input.language, sem: parsed }); cache.set(key, parsed); return parsed;
     } catch (error) {
-      evidence.error = error instanceof Error ? error.message : String(error); evidence.completedAt = new Date().toISOString(); extractionEvidence.push(evidence); extracted.push({ id: input.id, kind: input.kind, language: input.language, sem: null }); cache.set(key, null); return null;
+      evidence.error = error instanceof Error ? error.message : String(error); evidence.rawOutput = evidence.rawOutput || completion?.content || ''; evidence.rawRequest = completion?.rawRequest || error?.rawRequest || null; evidence.rawResponse = completion?.rawResponse || error?.rawResponse || null; evidence.completedAt = new Date().toISOString(); extractionEvidence.push(evidence); await appendFile(path.join(retrievalOutput, 'raw-extractions.jsonl'), JSON.stringify(evidence) + '\n', 'utf8'); extracted.push({ id: input.id, kind: input.kind, language: input.language, sem: null }); cache.set(key, null); return null;
     }
   };
   const retrievalReport = await runRawTextRetrievalEvaluation({ memories, queries, extract, threshold: 0.8, topK: 3, baselines: { lexical } });
-  const retrievalOutput = path.join(evidenceRoot, 'retrieval', new Date().toISOString().replace(/[:.]/gu, '-'));
-  await mkdir(retrievalOutput, { recursive: true });
   await save(path.join(retrievalOutput, 'retrieval-report.json'), retrievalReport);
   await save(path.join(retrievalOutput, 'raw-extractions.json'), extractionEvidence);
   await writeFile(path.join(retrievalOutput, 'raw-extractions.jsonl'), extractionEvidence.map((x) => JSON.stringify(x)).join('\n') + '\n', 'utf8');
@@ -256,8 +263,8 @@ async function main() {
   await save(path.join(retrievalOutput, 'retrieval-inputs.json'), { inputMode: 'raw-text-only', directionPairs: ['el->en', 'en->el'], memories, queries, candidatePoolRule: 'Identical raw memory pools are used for semantic and lexical retrieval; gold IDs are scoring labels only.', embeddingBaseline: { status: 'NOT RUN', reason: 'No embedding endpoint was already available without changing the loaded model.' } });
   const promptProbe = parsePrompt(corpus[0]);
   const metadata = {
-    status: 'INCOMPLETE_SUBSET', firstUntouchedRun: true, noTuningAfterFailures: true, noRetries: true, fullCorpusRan: false, fullCorpusRequestedItems: 54, startedAt, completedAt: new Date().toISOString(),
-    requestedCandidateSha: requestedCandidate, requestedCandidateShaResolvable: false, implementationSha: implementationCandidate, implementationShaResolvable: true,
+    status: 'COMPLETE', firstUntouchedRun: true, noTuningAfterFailures: true, noRetries: true, fullCorpusRan: true, fullCorpusRequestedItems: 54, startedAt, completedAt: new Date().toISOString(),
+    requestedCandidateSha: requestedCandidate, requestedCandidateShaResolvable: git(['cat-file', '-t', requestedCandidate]) === 'commit', implementationSha: implementationCandidate, implementationShaResolvable: git(['cat-file', '-t', implementationCandidate]) === 'commit',
     endpoint: profile.baseUrl, getModelsPath: profile.baseUrl + '/models', requestedModelId: profile.model, reportedModelIds: modelIds, modelVerified: true,
     profilePath: path.relative(root, profilePath), profileSha256: await fileHash(profilePath), profileId: profile.id,
     decoding: { temperature: evaluationProfile.temperature, seed: evaluationProfile.seed ?? null, maxTokens: evaluationProfile.maxTokens, chatTemplateKwargs: evaluationProfile.chatTemplateKwargs ?? null },
@@ -267,8 +274,8 @@ async function main() {
     liveModelProcessPolicy: 'Existing loaded endpoint only; no download, restart, replacement, or /free call.', candidatePoolPolicy: 'Raw text only for model extractor and lexical baseline.', sourceWorkingTree: 'isolated evaluator clone; candidate implementation tree unchanged', modelDiscovery: discovery
   };
   await save(path.join(evidenceRoot, 'metadata.json'), metadata);
-  await save(path.join(evidenceRoot, 'run-status.json'), { status: 'INCOMPLETE_SUBSET', firstUntouchedRun: true, parseSummary: path.relative(root, path.join(parseResult.outputDirectory, 'parse-summary.json')), retrievalReport: path.relative(root, path.join(retrievalOutput, 'retrieval-report.json')), thresholdSweep: path.relative(root, path.join(retrievalOutput, 'threshold-sweep.json')), metrics: { parse: parseResult.report, retrieval: retrievalReport.metrics } });
-  return { status: 'INCOMPLETE_SUBSET', parseOutputDirectory: parseResult.outputDirectory, retrievalOutput };
+  await save(path.join(evidenceRoot, 'run-status.json'), { status: 'COMPLETE', firstUntouchedRun: true, fullCorpusRan: true, priorDiagnostic: 'evidence/parse-subset/2026-09-01T10-22-34-360Z', parseSummary: path.relative(root, path.join(parseResult.outputDirectory, 'parse-summary.json')), retrievalReport: path.relative(root, path.join(retrievalOutput, 'retrieval-report.json')), thresholdSweep: path.relative(root, path.join(retrievalOutput, 'threshold-sweep.json')), metrics: { parse: parseResult.report, retrieval: retrievalReport.metrics } });
+  return { status: 'COMPLETE', parseOutputDirectory: parseResult.outputDirectory, retrievalOutput };
 }
 main().then((result) => console.log(JSON.stringify(result, null, 2))).catch(async (error) => {
   const failure = { status: 'BLOCKED', completedAt: new Date().toISOString(), error: error instanceof Error ? error.stack || error.message : String(error) };

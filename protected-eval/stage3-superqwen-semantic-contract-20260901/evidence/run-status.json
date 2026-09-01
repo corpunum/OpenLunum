@@ -1,0 +1,141 @@
+{
+  "status": "COMPLETE_WITH_EVIDENCE_LIMITATION",
+  "firstUntouchedRun": true,
+  "fullCorpusRan": true,
+  "parseAttempts": {
+    "items": 54,
+    "oneAttemptEach": true,
+    "rawRequestResponseComplete": true
+  },
+  "retrievalAttempts": {
+    "items": 32,
+    "oneAttemptEach": true,
+    "rawOutputComplete": true,
+    "rawRequestResponseComplete": false,
+    "recordsMissingRawRequestResponse": 18
+  },
+  "priorDiagnostic": "evidence/parse-subset/2026-09-01T10-22-34-360Z",
+  "parseSummary": "protected-eval/stage3-superqwen-semantic-contract-20260901/evidence/parse-full/2026-09-01T10-31-29-151Z/parse-summary.json",
+  "retrievalReport": "protected-eval/stage3-superqwen-semantic-contract-20260901/evidence/retrieval/2026-09-01T10-40-12-455Z/retrieval-report.json",
+  "thresholdSweep": "protected-eval/stage3-superqwen-semantic-contract-20260901/evidence/retrieval/2026-09-01T10-40-12-455Z/threshold-sweep.json",
+  "notRunBlockers": [
+    "Embedding baseline NOT RUN: no already-available embedding endpoint without changing the loaded model.",
+    "Retrieval transport provenance incomplete for 18 invalid records due evaluator-side field overwrite; no retry permitted."
+  ],
+  "metrics": {
+    "parse": {
+      "status": "COMPLETE",
+      "corpusPolicy": "full frozen corpus: all 54 cases; prior 18-case diagnostic preserved separately",
+      "totalItems": 54,
+      "totalPassed": 1,
+      "totalFailed": 23,
+      "totalErrors": 30,
+      "exactRate": 0,
+      "abstentionAccuracy": 0.16666666666666666,
+      "byLanguage": {
+        "en": {
+          "totalItems": 9,
+          "passedItems": 1,
+          "failedItems": 4,
+          "errorItems": 4,
+          "exactRate": 0,
+          "featureRecall": 0.45833333333333337,
+          "abstentionAccuracy": 1
+        },
+        "el": {
+          "totalItems": 9,
+          "passedItems": 0,
+          "failedItems": 4,
+          "errorItems": 5,
+          "exactRate": 0,
+          "featureRecall": 0.2222222222222222,
+          "abstentionAccuracy": 0
+        },
+        "es": {
+          "totalItems": 9,
+          "passedItems": 0,
+          "failedItems": 3,
+          "errorItems": 6,
+          "exactRate": 0,
+          "featureRecall": 0.3333333333333333,
+          "abstentionAccuracy": 0
+        },
+        "id": {
+          "totalItems": 9,
+          "passedItems": 0,
+          "failedItems": 4,
+          "errorItems": 5,
+          "exactRate": 0,
+          "featureRecall": 0.5555555555555556,
+          "abstentionAccuracy": 0
+        },
+        "fr": {
+          "totalItems": 9,
+          "passedItems": 0,
+          "failedItems": 4,
+          "errorItems": 5,
+          "exactRate": 0,
+          "featureRecall": 0.2777777777777778,
+          "abstentionAccuracy": 0
+        },
+        "de": {
+          "totalItems": 9,
+          "passedItems": 0,
+          "failedItems": 4,
+          "errorItems": 5,
+          "exactRate": 0,
+          "featureRecall": 0.5,
+          "abstentionAccuracy": 0
+        }
+      },
+      "decoding": {
+        "temperature": 0,
+        "seed": 42,
+        "maxTokens": 256,
+        "chatTemplateKwargs": {
+          "enable_thinking": false
+        }
+      },
+      "noRetries": true,
+      "firstUntouchedRun": true
+    },
+    "retrieval": {
+      "queries": 16,
+      "memoryCount": 16,
+      "queryExtractionFailures": 10,
+      "memoryExtractionFailures": 10,
+      "semanticMatchingFailures": 16,
+      "rankingFailures": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 16,
+      "trueNegatives": 42,
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Accuracy": 0,
+      "positiveTop1Accuracy": 0,
+      "negativeRejectionAccuracy": 0,
+      "topKRecall": 0,
+      "byLanguagePair": {
+        "en-el": {
+          "queries": 8,
+          "precision": 1,
+          "recall": 0,
+          "f1": 0,
+          "falsePositiveRate": 0,
+          "topKRecall": 0
+        },
+        "el-en": {
+          "queries": 8,
+          "precision": 1,
+          "recall": 0,
+          "f1": 0,
+          "falsePositiveRate": 0,
+          "topKRecall": 0
+        }
+      }
+    }
+  }
+}

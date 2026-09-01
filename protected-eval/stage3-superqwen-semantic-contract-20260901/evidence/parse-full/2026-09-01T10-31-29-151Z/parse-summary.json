@@ -1,0 +1,76 @@
+{
+  "status": "COMPLETE",
+  "corpusPolicy": "full frozen corpus: all 54 cases; prior 18-case diagnostic preserved separately",
+  "totalItems": 54,
+  "totalPassed": 1,
+  "totalFailed": 23,
+  "totalErrors": 30,
+  "exactRate": 0,
+  "abstentionAccuracy": 0.16666666666666666,
+  "byLanguage": {
+    "en": {
+      "totalItems": 9,
+      "passedItems": 1,
+      "failedItems": 4,
+      "errorItems": 4,
+      "exactRate": 0,
+      "featureRecall": 0.45833333333333337,
+      "abstentionAccuracy": 1
+    },
+    "el": {
+      "totalItems": 9,
+      "passedItems": 0,
+      "failedItems": 4,
+      "errorItems": 5,
+      "exactRate": 0,
+      "featureRecall": 0.2222222222222222,
+      "abstentionAccuracy": 0
+    },
+    "es": {
+      "totalItems": 9,
+      "passedItems": 0,
+      "failedItems": 3,
+      "errorItems": 6,
+      "exactRate": 0,
+      "featureRecall": 0.3333333333333333,
+      "abstentionAccuracy": 0
+    },
+    "id": {
+      "totalItems": 9,
+      "passedItems": 0,
+      "failedItems": 4,
+      "errorItems": 5,
+      "exactRate": 0,
+      "featureRecall": 0.5555555555555556,
+      "abstentionAccuracy": 0
+    },
+    "fr": {
+      "totalItems": 9,
+      "passedItems": 0,
+      "failedItems": 4,
+      "errorItems": 5,
+      "exactRate": 0,
+      "featureRecall": 0.2777777777777778,
+      "abstentionAccuracy": 0
+    },
+    "de": {
+      "totalItems": 9,
+      "passedItems": 0,
+      "failedItems": 4,
+      "errorItems": 5,
+      "exactRate": 0,
+      "featureRecall": 0.5,
+      "abstentionAccuracy": 0
+    }
+  },
+  "decoding": {
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 256,
+    "chatTemplateKwargs": {
+      "enable_thinking": false
+    }
+  },
+  "noRetries": true,
+  "firstUntouchedRun": true
+}

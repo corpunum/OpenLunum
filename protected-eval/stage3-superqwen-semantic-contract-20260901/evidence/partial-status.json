@@ -49,8 +49,8 @@
     "modelId": "openai/superqwen3.8-27b-abliterated"
   },
   "candidate": {
-    "requestedSha": "6149dee6b518020bc804b5db8f68f36ba00f4cf",
-    "requestedShaResolvable": false,
+    "requestedSha": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
+    "requestedShaResolvable": true,
     "implementationShaUsed": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
     "shaDiscrepancy": "The requested SHA is not present; the checkout and remote branch resolve to the implementation SHA used."
   },

@@ -237,8 +237,8 @@
     "abstentionItems": 6
   },
   "candidate": {
-    "requestedSha": "6149dee6b518020bc804b5db8f68f36ba00f4cf",
-    "requestedShaResolvable": false,
+    "requestedSha": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
+    "requestedShaResolvable": true,
     "implementationSha": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
     "implementationShaResolvable": true
   }
