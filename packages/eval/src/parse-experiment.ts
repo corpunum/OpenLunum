@@ -257,11 +257,12 @@ export async function runParseExperiment(
   validateProfile(profile);
   const schemaPath = path.join(root, 'schemas/lunum-sem.schema.json');
   const semSchema = await readJson<Record<string, unknown>>(schemaPath);
+  const { $defs: semDefs, $schema: _semSchema, $id: _semId, title: _semTitle, ...semBranch } = semSchema;
   const extractionSchema = {
     $schema: 'https://json-schema.org/draft/2020-12/schema',
     $id: 'https://openlunum.org/schemas/semantic-extraction-result/0.1',
     title: 'OpenLunum semantic extraction result',
-    oneOf: [semSchema, {
+    oneOf: [semBranch, {
       type: 'object',
       additionalProperties: false,
       required: ['status', 'reason'],
@@ -269,7 +270,8 @@ export async function runParseExperiment(
         status: { const: 'abstain' },
         reason: { type: 'string', minLength: 1 }
       }
-    }]
+    }],
+    $defs: semDefs
   } as Record<string, unknown>;
   const schemaVersion = 'semantic-extraction-result/0.1';
   const schemaSha256 = sha256Text(stableStringify(extractionSchema));

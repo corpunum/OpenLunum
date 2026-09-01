@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { appendFile, mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { NearSemanticFingerprintGenerator, validateSem } from '@corpunum/lunum';
+import { NearSemanticFingerprintGenerator, stableStringify, validateSem } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, readJson, sha256File, writeJson, validateProfile } from './io.js';
 import { effectiveSystemPrompt, OpenAICompatibleModel } from './model.js';
@@ -62,12 +62,14 @@ export async function runStage2LiveRetrieval(): Promise<string> {
   const profile = await readJson<ModelProfile>(path.join(root, profilePath));
   validateProfile(profile);
   const semSchema = await readJson<Record<string, unknown>>(path.join(root, 'schemas/lunum-sem.schema.json'));
+  const { $defs: semDefs, $schema: _semSchema, $id: _semId, title: _semTitle, ...semBranch } = semSchema;
   const extractionSchema = {
     $schema: 'https://json-schema.org/draft/2020-12/schema',
     $id: 'https://openlunum.org/schemas/semantic-extraction-result/0.1',
-    oneOf: [semSchema, { type: 'object', additionalProperties: false, required: ['status', 'reason'], properties: { status: { const: 'abstain' }, reason: { type: 'string', minLength: 1 } } }]
+    oneOf: [semBranch, { type: 'object', additionalProperties: false, required: ['status', 'reason'], properties: { status: { const: 'abstain' }, reason: { type: 'string', minLength: 1 } } }],
+    $defs: semDefs
   };
-  const schemaSha256 = sha256Text(JSON.stringify(extractionSchema));
+  const schemaSha256 = sha256Text(stableStringify(extractionSchema));
   const model = new OpenAICompatibleModel(profile);
   const advertised = await model.doctor() as { data?: Array<{ id?: string }> };
   const advertisedModelIds = (advertised.data ?? []).flatMap((entry) => typeof entry.id === 'string' ? [entry.id] : []);
