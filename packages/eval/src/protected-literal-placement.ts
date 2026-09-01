@@ -104,7 +104,7 @@ export function collectLiteralPlacements(sem: LunumSem | null | undefined): Lite
   const out: LiteralPlacement[] = [];
   if (!sem) return out;
   for (const clause of sem.clauses ?? []) walkClause(clause, 'root', out);
-  for (const reference of sem.references ?? []) walkTerm(reference, 'references', out);
+  for (const reference of sem.references ?? []) walkTerm(reference as unknown as LunumTerm, 'references', out);
   return out.map((placement) => ({ path: normalizePath(placement.path), value: placement.value }));
 }
 

@@ -10,7 +10,13 @@ import type { LunumClause, LunumSem } from './types.js';
  * This version makes the semantic/metadata boundary explicit instead of
  * silently changing the meaning of `lfp:0.1`.
  */
-export const SEMANTIC_IDENTITY_FINGERPRINT_VERSION = '2.0' as const;
+/**
+ * Version 2.1 makes the reference identity/evidence boundary explicit.  The
+ * 2.0 projection accidentally hashed provider/source-language fields such as
+ * a pronoun token.  Keep 2.0 readable for migration, but never silently
+ * change its durable meaning.
+ */
+export const SEMANTIC_IDENTITY_FINGERPRINT_VERSION = '2.1' as const;
 
 function identityClause(clause: LunumClause): LunumClause {
   const { annotations: _annotations, conditions, consequences, ...rest } = clause;
@@ -23,13 +29,23 @@ function identityClause(clause: LunumClause): LunumClause {
 
 /** Return only proposition-bearing Sem fields; provenance and annotations are metadata. */
 export function semanticIdentityProjection(sem: LunumSem): Record<string, unknown> {
+  const semanticReferences = (sem.references ?? []).flatMap((reference) => {
+    // `ref` is the grounded, language-neutral referent. `token`, `surface`,
+    // `language`, and reference type describe source evidence and must not
+    // alter proposition identity. An ungrounded reference remains preserved
+    // in the Sem, but cannot assert exact identity.
+    const ref = typeof reference.ref === 'string' ? reference.ref.trim() : '';
+    const id = typeof reference.id === 'string' ? reference.id.trim() : '';
+    const grounded = ref || id;
+    return grounded ? [{ ref: grounded.normalize('NFKC').replace(/\s+/gu, '_').toLocaleLowerCase('und') }] : [];
+  });
   return {
     protocol: 'lunum-protocol/0.1',
     schema: sem.schema,
     world: sem.world,
     kind: sem.kind,
     clauses: sem.clauses.map(identityClause),
-    ...(sem.references?.length ? { references: sem.references } : {})
+    ...(semanticReferences.length ? { references: semanticReferences } : {})
   };
 }
 

@@ -1,4 +1,4 @@
-import type { LunumClause, LunumSem, LunumTerm } from './types.js';
+import type { LunumClause, LunumReference, LunumSem, LunumTerm } from './types.js';
 import { canonicalizeSem, validateSem } from './canonicalize.js';
 
 /**
@@ -193,6 +193,34 @@ function normalizeClause(clause: LunumClause, path: string, issues: SemanticNorm
   };
 }
 
+function normalizeReferences(references: LunumReference[] | undefined, issues: SemanticNormalizationIssue[], strict: boolean): LunumReference[] | undefined {
+  if (!references?.length) return references;
+  return references.map((reference, index) => {
+    const path = `references[${index}]`;
+    const out: LunumReference = { ...reference };
+    if (out.referenceKind !== undefined && out.referenceKind !== 'semantic' && out.referenceKind !== 'surface-evidence') {
+      issues.push({ path: `${path}.referenceKind`, field: 'instance_identifier', code: 'unknown_protocol_symbol', severity: 'error', message: 'referenceKind must be semantic or surface-evidence' });
+    }
+    if (out.referenceKind === 'surface-evidence') {
+      if (typeof out.sourceRef !== 'string' || !out.sourceRef.trim()) issues.push({ path: `${path}.sourceRef`, field: 'instance_identifier', code: 'unknown_protocol_symbol', severity: 'error', message: 'surface-evidence requires sourceRef' });
+      if (typeof out.surface !== 'string') issues.push({ path: `${path}.surface`, field: 'instance_identifier', code: 'unknown_protocol_symbol', severity: 'error', message: 'surface-evidence requires surface text' });
+      const span = out.span;
+      if (!span || !Number.isSafeInteger(span.start) || !Number.isSafeInteger(span.end) || span.start < 0 || span.end <= span.start) {
+        issues.push({ path: `${path}.span`, field: 'instance_identifier', code: 'unknown_protocol_symbol', severity: 'error', message: 'surface-evidence requires a valid half-open span' });
+      }
+      return out;
+    }
+    const grounded = typeof out.ref === 'string' ? out.ref : typeof out.id === 'string' ? out.id : '';
+    if (!grounded.trim()) {
+      issues.push({ path, field: 'instance_identifier', code: 'unknown_protocol_symbol', severity: strict ? 'error' : 'warning', message: 'reference has no grounded ref or id and cannot establish exact identity' });
+    } else {
+      if (typeof out.ref === 'string') out.ref = basicIdentifier(out.ref);
+      if (typeof out.id === 'string') out.id = basicIdentifier(out.id);
+    }
+    return out;
+  });
+}
+
 /** Normalize a structurally valid candidate into versioned protocol symbols. */
 export function normalizeSemanticCandidate(value: unknown, options: NormalizeSemanticOptions = {}): SemanticNormalizationResult {
   const validation = validateSem(value);
@@ -207,11 +235,13 @@ export function normalizeSemanticCandidate(value: unknown, options: NormalizeSem
   const input = value as LunumSem;
   const issues: SemanticNormalizationIssue[] = [];
   const basic = canonicalizeSem(input);
+  const references = normalizeReferences(input.references, issues, strict);
   const normalized: LunumSem = {
     ...basic,
     world: mapSymbol(input.world, 'world', 'world', issues, strict),
     kind: mapSymbol(input.kind, 'kind', 'kind', issues, strict),
-    clauses: input.clauses.map((clause, index) => normalizeClause(clause, `clauses[${index}]`, issues, strict))
+    clauses: input.clauses.map((clause, index) => normalizeClause(clause, `clauses[${index}]`, issues, strict)),
+    ...(references ? { references } : {})
   };
   const errors = issues.filter((issue) => issue.severity === 'error');
   const unknown = issues.some((issue) => issue.code === 'unknown_protocol_symbol' || issue.code === 'extension_symbol');

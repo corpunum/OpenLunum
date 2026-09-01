@@ -10,6 +10,25 @@ export interface LunumTermObject {
   [key: string]: unknown;
 }
 
+/**
+ * A top-level reference may carry both a grounded semantic referent (`ref` or
+ * `id`) and source evidence (`token`, `surface`, `language`, etc.). The latter
+ * is recoverable evidence, not identity. Explicit surface-evidence references
+ * are never used to assert semantic identity.
+ */
+export interface LunumReference {
+  type?: string;
+  id?: string;
+  value?: unknown;
+  language?: string;
+  ref?: string;
+  referenceKind?: 'semantic' | 'surface-evidence';
+  sourceRef?: string;
+  surface?: string;
+  span?: { start: number; end: number };
+  [key: string]: unknown;
+}
+
 export type LunumTerm = Primitive | LunumTermObject | LunumTerm[];
 
 export interface LunumClause {
@@ -46,7 +65,7 @@ export interface LunumSem {
   world: string;
   kind: string;
   clauses: LunumClause[];
-  references?: LunumTermObject[];
+  references?: LunumReference[];
   provenance?: Record<string, unknown>;
   annotations?: Record<string, unknown>;
 }
@@ -99,7 +118,7 @@ export interface LunumRecord {
   sem: LunumSem;
   /** Exact semantic fingerprint (lfp:*). Surface and near-semantic fingerprints are separate concepts. */
   fingerprint: string;
-  /** Protocol-canonical identity fingerprint (lfp:2.0); absent for unresolved candidates. */
+  /** Protocol-canonical identity fingerprint (lfp:2.1); absent for unresolved candidates. */
   semanticFingerprint?: string;
   /** Source-text identity fingerprint (lsf:*), for deduplication only. */
   surfaceFingerprint?: string;

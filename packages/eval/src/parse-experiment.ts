@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import Ajv2020Module from 'ajv/dist/2020.js';
-import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
+import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, semanticFingerprint, stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
 import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
@@ -80,6 +80,7 @@ export interface ParseExperimentReport {
   failureModes: Record<string, number>;
   featureBreakdown: Record<string, FeatureMetric>;
   abstentionAccuracy: number | null;
+  goldValidation: GoldValidationReport;
   provenance: ParseRunProvenance;
 }
 
@@ -120,6 +121,75 @@ export function buildExtractionSchema(semSchema: Record<string, unknown>): Recor
     }],
     $defs: semDefs
   };
+}
+
+export interface GoldValidationReport {
+  total: number;
+  transportValid: number;
+  structuralValid: number;
+  protocolCanonical: number;
+  identityValid: number;
+  abstentionCases: number;
+  invalid: Array<{ id: string; stages: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; identityError?: string }>;
+}
+
+/**
+ * Validate evaluation gold before constructing a provider or making a model
+ * call. Gold is an assertion about the protocol, not merely an example that
+ * happens to fit the wire schema. Aliases and unresolved symbols are rejected
+ * here rather than silently normalized into a flattering score.
+ */
+export function validateEvaluationGold(items: readonly DatasetItem[], extractionSchema: Record<string, unknown>): GoldValidationReport {
+  const transportValidator = new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(extractionSchema);
+  const report: GoldValidationReport = {
+    total: items.length,
+    transportValid: 0,
+    structuralValid: 0,
+    protocolCanonical: 0,
+    identityValid: 0,
+    abstentionCases: 0,
+    invalid: []
+  };
+  for (const item of items) {
+    if (item.goldSem === null || item.expectedOutcome === 'abstain') {
+      report.abstentionCases += 1;
+      continue;
+    }
+    const stages: string[] = [];
+    const transportValid = Boolean(transportValidator(item.goldSem));
+    if (transportValid) report.transportValid += 1; else stages.push('transport-schema');
+    const structural = validateSemanticCandidate(item.goldSem);
+    if (structural.ok) report.structuralValid += 1; else stages.push('semantic-structure');
+    const normalization = structural.ok ? normalizeSemanticCandidate(item.goldSem, { strict: true }) : null;
+    // Gold must already be canonical. A candidate alias can be normalized at
+    // runtime, but gold aliases would make the protected target depend on an
+    // implementation-side rewrite.
+    if (normalization?.canonical && normalization.status === 'canonical') report.protocolCanonical += 1;
+    else if (normalization) stages.push('protocol-canonicality');
+    let identityError: string | undefined;
+    if (normalization?.canonical && normalization.status === 'canonical' && normalization.sem) {
+      try {
+        semanticFingerprint(normalization.sem);
+        report.identityValid += 1;
+      } catch (error) {
+        identityError = error instanceof Error ? error.message : String(error);
+        stages.push('semantic-identity');
+      }
+    } else {
+      stages.push('semantic-identity');
+    }
+    if (stages.length > 0) {
+      report.invalid.push({
+        id: item.id,
+        stages,
+        ...(transportValid ? {} : { transportErrors: transportValidator.errors ?? [] }),
+        ...(structural.ok ? {} : { structuralErrors: structural.errors }),
+        ...(normalization ? { normalizationIssues: normalization.issues } : {}),
+        ...(identityError ? { identityError } : {})
+      });
+    }
+  }
+  return report;
 }
 
 function computeVariance(values: number[]): number {
@@ -297,13 +367,10 @@ export async function runParseExperiment(
     fallback: 'json_object' as const
   };
   const transportValidator = new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(extractionSchema);
-  const invalidGold = items.flatMap((item) => {
-    if (item.goldSem === null || item.expectedOutcome === 'abstain') return [];
-    return transportValidator(item.goldSem)
-      ? []
-      : [`${item.id}: ${(transportValidator.errors ?? []).map((error) => error.message ?? 'invalid').join('; ')}`];
-  });
-  if (invalidGold.length > 0) throw new Error(`Evaluation gold Sem failed the exact transport schema: ${invalidGold.join(' | ')}`);
+  const goldValidation = validateEvaluationGold(items, extractionSchema);
+  if (goldValidation.invalid.length > 0) {
+    throw new Error(`Evaluation gold failed the complete preflight gate: ${JSON.stringify(goldValidation)}`);
+  }
 
   const startedAt = new Date().toISOString();
   const modelIdentity = await verifyModelIdentity(new OpenAICompatibleModel(profile), profile);
@@ -739,6 +806,7 @@ export async function runParseExperiment(
     failureModes,
     featureBreakdown,
     abstentionAccuracy: abstentionExpected > 0 ? abstentionCorrect / abstentionExpected : null,
+    goldValidation,
     provenance
   };
 

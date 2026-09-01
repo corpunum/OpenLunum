@@ -91,6 +91,12 @@ export function validateSem(value: unknown): ValidationResult {
   if (!String(value.world ?? '').trim()) errors.push('world is required');
   if (!String(value.kind ?? '').trim()) errors.push('kind is required');
   if (!Array.isArray(value.clauses) || value.clauses.length === 0) errors.push('clauses must be a non-empty array');
+  if (value.references !== undefined) {
+    if (!Array.isArray(value.references)) errors.push('references must be an array');
+    else value.references.forEach((reference, index) => {
+      if (!isObject(reference)) errors.push(`references[${index}] must be an object`);
+    });
+  }
   for (const [index, rawClause] of (Array.isArray(value.clauses) ? value.clauses : []).entries()) {
     if (!isObject(rawClause)) { errors.push(`clauses[${index}] must be an object`); continue; }
     if (!String(rawClause.predicate ?? '').trim()) errors.push(`clauses[${index}].predicate is required`);
@@ -121,7 +127,7 @@ export function canonicalizeSem(value: unknown): LunumSem {
     kind: normalizeIdentifier(sem.kind),
     clauses: sem.clauses.map(canonicalClause)
   };
-  if (sem.references?.length) out.references = sem.references.map((item) => canonicalTerm(item) as LunumTermObject);
+  if (sem.references?.length) out.references = sem.references.map((item) => canonicalTerm(item as unknown as LunumTerm) as LunumTermObject);
   if (sem.provenance && Object.keys(sem.provenance).length) out.provenance = canonicalUnknown(sem.provenance) as Record<string, unknown>;
   if (sem.annotations && Object.keys(sem.annotations).length) out.annotations = canonicalUnknown(sem.annotations) as Record<string, unknown>;
   return out;

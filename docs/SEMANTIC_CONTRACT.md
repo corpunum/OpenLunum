@@ -44,7 +44,7 @@ rejects collisions and does not alias role swaps (`subject`/`agent`,
 
 ## Identity fields
 
-The `lfp:2.0` semantic identity projection includes protocol version, schema,
+The `lfp:2.1` semantic identity projection includes protocol version, schema,
 world, kind, clauses, nested control flow, references, predicates, roles, term
 types, identifiers, values, negation, modality, and time. It excludes Sem
 provenance and annotations because those describe evidence and policy rather
@@ -55,7 +55,7 @@ OpenLunum keeps three distinct representations:
 
 - `surfaceFingerprint` (`lsf:*`) for normalized source-text identity;
 - legacy `fingerprint` (`lfp:0.1`) for compatibility and migration;
-- `semanticFingerprint` (`lfp:2.0`) for validated protocol-canonical identity.
+- `semanticFingerprint` (`lfp:2.1`) for validated protocol-canonical identity.
 
 Near-semantic fingerprints are similarity features, not semantic identity.
 They apply hard gates to schema/world/kind, control flow, critical literals,
@@ -64,7 +64,12 @@ actor authority, and critical role/term shapes before scoring softer features.
 ## Compatibility and migration
 
 Existing `lfp:0.1` output is not reinterpreted. New identity output is
-versioned as `lfp:2.0`; migration code can compare or backfill it explicitly.
+versioned as `lfp:2.1`; migration code can compare or backfill it explicitly.
+
+Reference identity is grounded through `references[].ref` (or `id`) only.
+Surface evidence such as a pronoun token, source language, or provider-added
+reference type remains in the Sem/source artifact but is excluded from exact
+semantic identity. An ungrounded reference cannot establish exact identity.
 The active transport schema remains `lunum-sem/0.1-draft`. Frozen historical
 schemas are not silently rewritten. Evaluation startup validates every gold
 Sem against the exact transport schema sent to the model.

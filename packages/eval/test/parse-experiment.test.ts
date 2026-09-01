@@ -4,7 +4,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { execFile } from 'node:child_process';
 import { runParseExperiment } from '../src/parse-experiment.js';
-import { extractStructuredJson, PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES } from '../src/parse-experiment.js';
+import { buildExtractionSchema, extractStructuredJson, PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES, validateEvaluationGold } from '../src/parse-experiment.js';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import { createServer } from 'node:http';
@@ -22,6 +22,27 @@ test('parse experiment defines the supported multilingual evaluation languages',
   assert.strictEqual(PARSE_LANGUAGE_LABELS.el, 'Greek');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.es, 'Spanish');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.id, 'Indonesian');
+});
+
+test('gold preflight rejects transport-valid but noncanonical protocol symbols', async () => {
+  const semSchema = JSON.parse(await readFile(path.join(WORKSPACE_ROOT, 'schemas/lunum-sem.schema.json'), 'utf8'));
+  const item = {
+    id: 'noncanonical-kind',
+    sourceLanguage: 'en',
+    sourceText: 'A request.',
+    goldSem: {
+      schema: 'lunum-sem/0.1-draft',
+      world: 'real',
+      kind: 'obligation',
+      clauses: [{ predicate: 'request', roles: {}, negated: false }]
+    }
+  } as any;
+  const report = validateEvaluationGold([item], buildExtractionSchema(semSchema));
+  assert.equal(report.transportValid, 1);
+  assert.equal(report.structuralValid, 1);
+  assert.equal(report.protocolCanonical, 0);
+  assert.equal(report.identityValid, 0);
+  assert.deepEqual(report.invalid[0]?.stages, ['protocol-canonicality', 'semantic-identity']);
 });
 
 test('parse evidence rejects placeholder model IDs before a request is made', () => {
