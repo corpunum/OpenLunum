@@ -1,0 +1,4618 @@
+{
+  "schema": "openlunum-evidence-validity/0.1",
+  "generatedAt": "2026-09-01T08:38:53.512Z",
+  "repositoryCommit": "27fb3d68e955d1f7bbf291a37a977367a8858b01",
+  "criteria": {
+    "liveModelRequires": [
+      "hash-verified dataset(s)",
+      "execution code commit present in repository",
+      "prompt version and system-prompt SHA-256",
+      "runtime-attested model ID",
+      "verified endpoint model identity plus weight hash or model-file metadata identity",
+      "started/completed timestamps",
+      "semantic schema version and SHA-256",
+      "effective decoding parameters and structured-output mode",
+      "non-empty per-item raw outputs plus raw request/response exchange"
+    ],
+    "deterministicInterpretation": "Useful for regression only; not evidence of model-mediated or end-to-end behavior."
+  },
+  "globalFindings": [
+    {
+      "code": "heldout_dataset_is_repo_visible",
+      "message": "datasets/dev/scorer-eval-heldout-v1.jsonl is plaintext and visible to development agents; it cannot support a protected-set generalization claim."
+    },
+    {
+      "code": "heldout_dataset_is_repo_visible",
+      "message": "datasets/dev/stage2-heldout-v1.jsonl is plaintext and visible to development agents; it cannot support a protected-set generalization claim."
+    },
+    {
+      "code": "heldout_dataset_is_repo_visible",
+      "message": "datasets/dev/stage2-heldout-v2.jsonl is plaintext and visible to development agents; it cannot support a protected-set generalization claim."
+    }
+  ],
+  "totals": {
+    "VALID_EMPIRICAL": 4,
+    "DETERMINISTIC_ONLY": 8,
+    "INVALID_EMPIRICAL": 71
+  },
+  "runs": [
+    {
+      "reportDirectory": "reports/conformance-gates/2026-07-19T00-11-58-678Z",
+      "manifestPath": "reports/conformance-gates/2026-07-19T00-11-58-678Z/manifest.snapshot.json",
+      "manifestId": "conformance-gates",
+      "task": "conformance",
+      "modelDriven": false,
+      "validity": "DETERMINISTIC_ONLY",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        }
+      ],
+      "checkedDatasets": [],
+      "rawOutputFiles": [
+        "reports/conformance-gates/2026-07-19T00-11-58-678Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/abstention-clarification/2026-07-18T00-07-33-680Z",
+      "manifestPath": "reports/experiments/abstention-clarification/2026-07-18T00-07-33-680Z/manifest.snapshot.json",
+      "manifestId": "abstention-clarification",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/abstention-clarification/2026-07-18T00-07-33-680Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/abstention-clarification/2026-07-19T00-11-58-588Z",
+      "manifestPath": "reports/experiments/abstention-clarification/2026-07-19T00-11-58-588Z/manifest.snapshot.json",
+      "manifestId": "abstention-clarification",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/abstention-clarification/2026-07-19T00-11-58-588Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-321/parse/qwen3-coder-30b/2026-07-25T06-20-16-827Z",
+      "manifestPath": "reports/experiments/audit-321/parse/qwen3-coder-30b/2026-07-25T06-20-16-827Z/manifest.snapshot.json",
+      "manifestId": "audit-321-parse-qwen3-coder-30b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/audit-321/parse/qwen3-coder-30b/2026-07-25T06-20-16-827Z/parse-results-el.jsonl",
+        "reports/experiments/audit-321/parse/qwen3-coder-30b/2026-07-25T06-20-16-827Z/parse-results-en.jsonl",
+        "reports/experiments/audit-321/parse/qwen3-coder-30b/2026-07-25T06-20-16-827Z/parse-results-es.jsonl",
+        "reports/experiments/audit-321/parse/qwen3-coder-30b/2026-07-25T06-20-16-827Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z",
+      "manifestPath": "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/manifest.snapshot.json",
+      "manifestId": "audit-321-parse-qwen36-35b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/parse-results-el.jsonl",
+        "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/parse-results-en.jsonl",
+        "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/parse-results-es.jsonl",
+        "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-321/retention/qwen3-coder-30b/2026-07-25T07-30-24-165Z",
+      "manifestPath": "reports/experiments/audit-321/retention/qwen3-coder-30b/2026-07-25T07-30-24-165Z/manifest.snapshot.json",
+      "manifestId": "audit-321-retention-qwen3-coder-30b",
+      "task": null,
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_outputs",
+          "message": "No per-item raw-output JSONL is present."
+        },
+        {
+          "code": "missing_runtime_model_id",
+          "message": "environment.json does not attest the runtime model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_decoding_provenance",
+          "message": "Effective decoding parameters are not recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": []
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-321/retention/qwen36-35b/2026-07-25T07-20-44-436Z",
+      "manifestPath": "reports/experiments/audit-321/retention/qwen36-35b/2026-07-25T07-20-44-436Z/manifest.snapshot.json",
+      "manifestId": "audit-321-retention-qwen36-35b",
+      "task": null,
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_outputs",
+          "message": "No per-item raw-output JSONL is present."
+        },
+        {
+          "code": "missing_runtime_model_id",
+          "message": "environment.json does not attest the runtime model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_decoding_provenance",
+          "message": "Effective decoding parameters are not recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": []
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-339-remeasure/parse/qwen3-coder-30b",
+      "manifestPath": "reports/experiments/audit-339-remeasure/parse/qwen3-coder-30b/manifest.snapshot.json",
+      "manifestId": "audit-321-parse-qwen3-coder-30b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/audit-339-remeasure/parse/qwen3-coder-30b/parse-results-el.jsonl",
+        "reports/experiments/audit-339-remeasure/parse/qwen3-coder-30b/parse-results-en.jsonl",
+        "reports/experiments/audit-339-remeasure/parse/qwen3-coder-30b/parse-results-es.jsonl",
+        "reports/experiments/audit-339-remeasure/parse/qwen3-coder-30b/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-339-remeasure/parse/qwen36-35b",
+      "manifestPath": "reports/experiments/audit-339-remeasure/parse/qwen36-35b/manifest.snapshot.json",
+      "manifestId": "audit-321-parse-qwen36-35b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/audit-339-remeasure/parse/qwen36-35b/parse-results-el.jsonl",
+        "reports/experiments/audit-339-remeasure/parse/qwen36-35b/parse-results-en.jsonl",
+        "reports/experiments/audit-339-remeasure/parse/qwen36-35b/parse-results-es.jsonl",
+        "reports/experiments/audit-339-remeasure/parse/qwen36-35b/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-344-remeasure/false-positive/qwen3-coder-30b/2026-07-25T18-34-13-106Z",
+      "manifestPath": "reports/experiments/audit-344-remeasure/false-positive/qwen3-coder-30b/2026-07-25T18-34-13-106Z/manifest.snapshot.json",
+      "manifestId": "false-positive-review-332-qwen3-coder-30b",
+      "task": null,
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "missing_runtime_model_id",
+          "message": "environment.json does not attest the runtime model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_decoding_provenance",
+          "message": "Effective decoding parameters are not recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+          "declaredSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "actualSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "valid": true
+        },
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/audit-344-remeasure/false-positive/qwen3-coder-30b/2026-07-25T18-34-13-106Z/raw/items.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-344-remeasure/false-positive/qwen36-35b/2026-07-25T18-16-09-570Z",
+      "manifestPath": "reports/experiments/audit-344-remeasure/false-positive/qwen36-35b/2026-07-25T18-16-09-570Z/manifest.snapshot.json",
+      "manifestId": "false-positive-review-332-qwen36-35b",
+      "task": null,
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "missing_runtime_model_id",
+          "message": "environment.json does not attest the runtime model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_decoding_provenance",
+          "message": "Effective decoding parameters are not recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+          "declaredSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "actualSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "valid": true
+        },
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/audit-344-remeasure/false-positive/qwen36-35b/2026-07-25T18-16-09-570Z/raw/items.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-344-remeasure/parse/qwen3-coder-30b",
+      "manifestPath": "reports/experiments/audit-344-remeasure/parse/qwen3-coder-30b/manifest.snapshot.json",
+      "manifestId": "audit-321-parse-qwen3-coder-30b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/audit-344-remeasure/parse/qwen3-coder-30b/parse-results-el.jsonl",
+        "reports/experiments/audit-344-remeasure/parse/qwen3-coder-30b/parse-results-en.jsonl",
+        "reports/experiments/audit-344-remeasure/parse/qwen3-coder-30b/parse-results-es.jsonl",
+        "reports/experiments/audit-344-remeasure/parse/qwen3-coder-30b/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-344-remeasure/parse/qwen36-35b",
+      "manifestPath": "reports/experiments/audit-344-remeasure/parse/qwen36-35b/manifest.snapshot.json",
+      "manifestId": "audit-321-parse-qwen36-35b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/audit-344-remeasure/parse/qwen36-35b/parse-results-el.jsonl",
+        "reports/experiments/audit-344-remeasure/parse/qwen36-35b/parse-results-en.jsonl",
+        "reports/experiments/audit-344-remeasure/parse/qwen36-35b/parse-results-es.jsonl",
+        "reports/experiments/audit-344-remeasure/parse/qwen36-35b/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-344-remeasure/retention/qwen3-coder-30b/2026-07-25T18-33-50-764Z",
+      "manifestPath": "reports/experiments/audit-344-remeasure/retention/qwen3-coder-30b/2026-07-25T18-33-50-764Z/manifest.snapshot.json",
+      "manifestId": "audit-321-retention-qwen3-coder-30b",
+      "task": null,
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_outputs",
+          "message": "No per-item raw-output JSONL is present."
+        },
+        {
+          "code": "missing_runtime_model_id",
+          "message": "environment.json does not attest the runtime model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_decoding_provenance",
+          "message": "Effective decoding parameters are not recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": []
+    },
+    {
+      "reportDirectory": "reports/experiments/audit-344-remeasure/retention/qwen36-35b/2026-07-25T18-06-11-795Z",
+      "manifestPath": "reports/experiments/audit-344-remeasure/retention/qwen36-35b/2026-07-25T18-06-11-795Z/manifest.snapshot.json",
+      "manifestId": "audit-321-retention-qwen36-35b",
+      "task": null,
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_outputs",
+          "message": "No per-item raw-output JSONL is present."
+        },
+        {
+          "code": "missing_runtime_model_id",
+          "message": "environment.json does not attest the runtime model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_decoding_provenance",
+          "message": "Effective decoding parameters are not recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": []
+    },
+    {
+      "reportDirectory": "reports/experiments/conformance-reports/2026-07-18T00-07-33-797Z",
+      "manifestPath": "reports/experiments/conformance-reports/2026-07-18T00-07-33-797Z/manifest.snapshot.json",
+      "manifestId": "conformance-reports",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/conformance-reports/2026-07-18T00-07-33-797Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/conformance-reports/2026-07-19T00-11-58-712Z",
+      "manifestPath": "reports/experiments/conformance-reports/2026-07-19T00-11-58-712Z/manifest.snapshot.json",
+      "manifestId": "conformance-reports",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/conformance-reports/2026-07-19T00-11-58-712Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/conformance-vectors/2026-07-18T00-07-33-883Z",
+      "manifestPath": "reports/experiments/conformance-vectors/2026-07-18T00-07-33-883Z/manifest.snapshot.json",
+      "manifestId": "conformance-vectors",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/conformance-vectors/2026-07-18T00-07-33-883Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/conformance-vectors/2026-07-19T00-11-58-799Z",
+      "manifestPath": "reports/experiments/conformance-vectors/2026-07-19T00-11-58-799Z/manifest.snapshot.json",
+      "manifestId": "conformance-vectors",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/conformance-vectors/2026-07-19T00-11-58-799Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/context-quality-measurement/2026-07-18T00-07-33-963Z",
+      "manifestPath": "reports/experiments/context-quality-measurement/2026-07-18T00-07-33-963Z/manifest.snapshot.json",
+      "manifestId": "context-quality-measurement",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/context-quality-measurement/2026-07-18T00-07-33-963Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/context-quality-measurement/2026-07-19T00-11-58-954Z",
+      "manifestPath": "reports/experiments/context-quality-measurement/2026-07-19T00-11-58-954Z/manifest.snapshot.json",
+      "manifestId": "context-quality-measurement",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/context-quality-measurement/2026-07-19T00-11-58-954Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/english-greek-baselines/2026-07-18T00-07-34-047Z",
+      "manifestPath": "reports/experiments/english-greek-baselines/2026-07-18T00-07-34-047Z/manifest.snapshot.json",
+      "manifestId": "english-greek-baselines",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/english-greek-baselines/2026-07-18T00-07-34-047Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/english-greek-baselines/2026-07-19T00-11-59-042Z",
+      "manifestPath": "reports/experiments/english-greek-baselines/2026-07-19T00-11-59-042Z/manifest.snapshot.json",
+      "manifestId": "english-greek-baselines",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/english-greek-baselines/2026-07-19T00-11-59-042Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/false-positive-review-332/qwen3-coder-30b/2026-07-25T10-57-20-709Z",
+      "manifestPath": "reports/experiments/false-positive-review-332/qwen3-coder-30b/2026-07-25T10-57-20-709Z/manifest.snapshot.json",
+      "manifestId": "false-positive-review-332-qwen3-coder-30b",
+      "task": null,
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "missing_runtime_model_id",
+          "message": "environment.json does not attest the runtime model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_decoding_provenance",
+          "message": "Effective decoding parameters are not recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+          "declaredSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "actualSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "valid": true
+        },
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/false-positive-review-332/qwen3-coder-30b/2026-07-25T10-57-20-709Z/raw/items.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/false-positive-review-332/qwen36-35b/2026-07-25T10-41-05-173Z",
+      "manifestPath": "reports/experiments/false-positive-review-332/qwen36-35b/2026-07-25T10-41-05-173Z/manifest.snapshot.json",
+      "manifestId": "false-positive-review-332-qwen36-35b",
+      "task": null,
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "missing_runtime_model_id",
+          "message": "environment.json does not attest the runtime model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_decoding_provenance",
+          "message": "Effective decoding parameters are not recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/adversarial/mutation-false-positive-v1.jsonl",
+          "declaredSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "actualSha256": "62295f30f64acfebc3f9a4e9dae7be3e8c2526aa48a70be20152d5b6bafecc16",
+          "valid": true
+        },
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/false-positive-review-332/qwen36-35b/2026-07-25T10-41-05-173Z/raw/items.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/fingerprint-migration/2026-07-18T00-07-34-129Z",
+      "manifestPath": "reports/experiments/fingerprint-migration/2026-07-18T00-07-34-129Z/manifest.snapshot.json",
+      "manifestId": "fingerprint-migration",
+      "task": "conformance",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/fingerprint-migration/2026-07-18T00-07-34-129Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/fingerprint-migration/2026-07-19T00-11-59-125Z",
+      "manifestPath": "reports/experiments/fingerprint-migration/2026-07-19T00-11-59-125Z/manifest.snapshot.json",
+      "manifestId": "fingerprint-migration",
+      "task": "conformance",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/fingerprint-migration/2026-07-19T00-11-59-125Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/full-prompt-gates/2026-07-18T00-07-34-212Z",
+      "manifestPath": "reports/experiments/full-prompt-gates/2026-07-18T00-07-34-212Z/manifest.snapshot.json",
+      "manifestId": "full-prompt-gates",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/full-prompt-gates/2026-07-18T00-07-34-212Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/full-prompt-gates/2026-07-19T00-11-59-210Z",
+      "manifestPath": "reports/experiments/full-prompt-gates/2026-07-19T00-11-59-210Z/manifest.snapshot.json",
+      "manifestId": "full-prompt-gates",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/full-prompt-gates/2026-07-19T00-11-59-210Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/live-evidence-20260720-parse/2026-07-19T21-17-19-565Z",
+      "manifestPath": "reports/experiments/live-evidence-20260720-parse/2026-07-19T21-17-19-565Z/manifest.snapshot.json",
+      "manifestId": "live-evidence-20260720-parse",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/live-evidence-20260720-parse/2026-07-19T21-17-19-565Z/parse-results-el.jsonl",
+        "reports/experiments/live-evidence-20260720-parse/2026-07-19T21-17-19-565Z/parse-results-en.jsonl",
+        "reports/experiments/live-evidence-20260720-parse/2026-07-19T21-17-19-565Z/parse-results-es.jsonl",
+        "reports/experiments/live-evidence-20260720-parse/2026-07-19T21-17-19-565Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/live-evidence-20260720/2026-07-19T21-06-34-809Z",
+      "manifestPath": "reports/experiments/live-evidence-20260720/2026-07-19T21-06-34-809Z/manifest.snapshot.json",
+      "manifestId": "live-evidence-20260720",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/live-evidence-20260720/2026-07-19T21-06-34-809Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/live-parse-2026-08-08/qwen3-coder-30b/2026-08-08T08-54-39-933Z",
+      "manifestPath": "reports/experiments/live-parse-2026-08-08/qwen3-coder-30b/2026-08-08T08-54-39-933Z/manifest.snapshot.json",
+      "manifestId": "live-parse-2026-08-08-qwen3-coder-30b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/live-parse-2026-08-08/qwen3-coder-30b/2026-08-08T08-54-39-933Z/parse-results-el.jsonl",
+        "reports/experiments/live-parse-2026-08-08/qwen3-coder-30b/2026-08-08T08-54-39-933Z/parse-results-en.jsonl",
+        "reports/experiments/live-parse-2026-08-08/qwen3-coder-30b/2026-08-08T08-54-39-933Z/parse-results-es.jsonl",
+        "reports/experiments/live-parse-2026-08-08/qwen3-coder-30b/2026-08-08T08-54-39-933Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/live-parse-2026-08-08/qwen36-35b/2026-08-08T08-47-00-975Z",
+      "manifestPath": "reports/experiments/live-parse-2026-08-08/qwen36-35b/2026-08-08T08-47-00-975Z/manifest.snapshot.json",
+      "manifestId": "live-parse-2026-08-08-qwen36-35b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/live-parse-2026-08-08/qwen36-35b/2026-08-08T08-47-00-975Z/parse-results-el.jsonl",
+        "reports/experiments/live-parse-2026-08-08/qwen36-35b/2026-08-08T08-47-00-975Z/parse-results-en.jsonl",
+        "reports/experiments/live-parse-2026-08-08/qwen36-35b/2026-08-08T08-47-00-975Z/parse-results-es.jsonl",
+        "reports/experiments/live-parse-2026-08-08/qwen36-35b/2026-08-08T08-47-00-975Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/llama-tokenizer-counting/2026-07-18T00-07-34-289Z",
+      "manifestPath": "reports/experiments/llama-tokenizer-counting/2026-07-18T00-07-34-289Z/manifest.snapshot.json",
+      "manifestId": "llama-tokenizer-counting",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/llama-tokenizer-counting/2026-07-18T00-07-34-289Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/llama-tokenizer-counting/2026-07-19T00-11-59-298Z",
+      "manifestPath": "reports/experiments/llama-tokenizer-counting/2026-07-19T00-11-59-298Z/manifest.snapshot.json",
+      "manifestId": "llama-tokenizer-counting",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/llama-tokenizer-counting/2026-07-19T00-11-59-298Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/mcp-reference-impl/2026-07-18T00-07-34-369Z",
+      "manifestPath": "reports/experiments/mcp-reference-impl/2026-07-18T00-07-34-369Z/manifest.snapshot.json",
+      "manifestId": "mcp-reference-impl",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/mcp-reference-impl/2026-07-18T00-07-34-369Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/mcp-reference-impl/2026-07-19T00-11-59-381Z",
+      "manifestPath": "reports/experiments/mcp-reference-impl/2026-07-19T00-11-59-381Z/manifest.snapshot.json",
+      "manifestId": "mcp-reference-impl",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/mcp-reference-impl/2026-07-19T00-11-59-381Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-error-taxonomy/2026-07-18T00-07-34-474Z",
+      "manifestPath": "reports/experiments/multilingual-error-taxonomy/2026-07-18T00-07-34-474Z/manifest.snapshot.json",
+      "manifestId": "multilingual-error-taxonomy",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-error-taxonomy/2026-07-18T00-07-34-474Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-error-taxonomy/2026-07-19T00-11-59-494Z",
+      "manifestPath": "reports/experiments/multilingual-error-taxonomy/2026-07-19T00-11-59-494Z/manifest.snapshot.json",
+      "manifestId": "multilingual-error-taxonomy",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-error-taxonomy/2026-07-19T00-11-59-494Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-parse-baselines/2026-07-18T00-07-34-557Z",
+      "manifestPath": "reports/experiments/multilingual-parse-baselines/2026-07-18T00-07-34-557Z/manifest.snapshot.json",
+      "manifestId": "multilingual-parse-baselines",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-parse-baselines/2026-07-18T00-07-34-557Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-parse-baselines/2026-07-19T00-11-59-578Z",
+      "manifestPath": "reports/experiments/multilingual-parse-baselines/2026-07-19T00-11-59-578Z/manifest.snapshot.json",
+      "manifestId": "multilingual-parse-baselines",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-parse-baselines/2026-07-19T00-11-59-578Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-parse-heldout-v1-live-smoke/2026-09-01T04-43-51-969Z",
+      "manifestPath": "reports/experiments/multilingual-parse-heldout-v1-live-smoke/2026-09-01T04-43-51-969Z/manifest.snapshot.json",
+      "manifestId": "multilingual-parse-heldout-v1-live-smoke",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-extended-v1.jsonl",
+          "declaredSha256": "bfe2edada088738f0f0a1ad191dfe3940a30c58471cec64afac5f74371b32b31",
+          "actualSha256": "bfe2edada088738f0f0a1ad191dfe3940a30c58471cec64afac5f74371b32b31",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-parse-heldout-v1-live-smoke/2026-09-01T04-43-51-969Z/parse-results-el.jsonl",
+        "reports/experiments/multilingual-parse-heldout-v1-live-smoke/2026-09-01T04-43-51-969Z/parse-results-en.jsonl",
+        "reports/experiments/multilingual-parse-heldout-v1-live-smoke/2026-09-01T04-43-51-969Z/parse-results-es.jsonl",
+        "reports/experiments/multilingual-parse-heldout-v1-live-smoke/2026-09-01T04-43-51-969Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-parse-qwen3-coder-30b/2026-07-21T07-40-09-522Z",
+      "manifestPath": "reports/experiments/multilingual-parse-qwen3-coder-30b/2026-07-21T07-40-09-522Z/manifest.snapshot.json",
+      "manifestId": "multilingual-parse-qwen3-coder-30b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-parse-qwen3-coder-30b/2026-07-21T07-40-09-522Z/parse-results-el.jsonl",
+        "reports/experiments/multilingual-parse-qwen3-coder-30b/2026-07-21T07-40-09-522Z/parse-results-en.jsonl",
+        "reports/experiments/multilingual-parse-qwen3-coder-30b/2026-07-21T07-40-09-522Z/parse-results-es.jsonl",
+        "reports/experiments/multilingual-parse-qwen3-coder-30b/2026-07-21T07-40-09-522Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-parse-qwen36-35b/2026-07-21T09-02-50-023Z",
+      "manifestPath": "reports/experiments/multilingual-parse-qwen36-35b/2026-07-21T09-02-50-023Z/manifest.snapshot.json",
+      "manifestId": "multilingual-parse-qwen36-35b",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-parse-qwen36-35b/2026-07-21T09-02-50-023Z/parse-results-el.jsonl",
+        "reports/experiments/multilingual-parse-qwen36-35b/2026-07-21T09-02-50-023Z/parse-results-en.jsonl",
+        "reports/experiments/multilingual-parse-qwen36-35b/2026-07-21T09-02-50-023Z/parse-results-es.jsonl",
+        "reports/experiments/multilingual-parse-qwen36-35b/2026-07-21T09-02-50-023Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-retrieval/2026-07-18T00-07-34-636Z",
+      "manifestPath": "reports/experiments/multilingual-retrieval/2026-07-18T00-07-34-636Z/manifest.snapshot.json",
+      "manifestId": "multilingual-retrieval",
+      "task": "retrieval",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-retrieval/2026-07-18T00-07-34-636Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/multilingual-retrieval/2026-07-19T00-11-59-661Z",
+      "manifestPath": "reports/experiments/multilingual-retrieval/2026-07-19T00-11-59-661Z/manifest.snapshot.json",
+      "manifestId": "multilingual-retrieval",
+      "task": "retrieval",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/multilingual-retrieval/2026-07-19T00-11-59-661Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/near-semantic-fingerprints/2026-07-18T00-07-34-717Z",
+      "manifestPath": "reports/experiments/near-semantic-fingerprints/2026-07-18T00-07-34-717Z/manifest.snapshot.json",
+      "manifestId": "near-semantic-fingerprints",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/near-semantic-fingerprints/2026-07-18T00-07-34-717Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/near-semantic-fingerprints/2026-07-19T00-11-59-742Z",
+      "manifestPath": "reports/experiments/near-semantic-fingerprints/2026-07-19T00-11-59-742Z/manifest.snapshot.json",
+      "manifestId": "near-semantic-fingerprints",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/near-semantic-fingerprints/2026-07-19T00-11-59-742Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/openunum-shadow-adapter/2026-07-18T00-07-34-797Z",
+      "manifestPath": "reports/experiments/openunum-shadow-adapter/2026-07-18T00-07-34-797Z/manifest.snapshot.json",
+      "manifestId": "openunum-shadow-adapter",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/openunum-shadow-adapter/2026-07-18T00-07-34-797Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/openunum-shadow-adapter/2026-07-19T00-11-59-829Z",
+      "manifestPath": "reports/experiments/openunum-shadow-adapter/2026-07-19T00-11-59-829Z/manifest.snapshot.json",
+      "manifestId": "openunum-shadow-adapter",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/openunum-shadow-adapter/2026-07-19T00-11-59-829Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z",
+      "manifestPath": "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/manifest.snapshot.json",
+      "manifestId": "parse-stage2-superqwen-diagnostic",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/stage2-heldout-v1.jsonl",
+          "declaredSha256": "b244325d2b40288354bb91f8fe7714a1bdb0c259a4d4a249f0bf106f89b99b54",
+          "actualSha256": "b244325d2b40288354bb91f8fe7714a1bdb0c259a4d4a249f0bf106f89b99b54",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-ar.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-de.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-el.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-en.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-es.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-fr.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-id.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-ja.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-pt.jsonl",
+        "reports/experiments/parse-stage2-superqwen-diagnostic/2026-09-01T07-57-33-676Z/parse-results-zh.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-18-065Z",
+      "manifestPath": "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-18-065Z/manifest.snapshot.json",
+      "manifestId": "parse-stage2-superqwen-frozen",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/stage2-heldout-v2.jsonl",
+          "declaredSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+          "actualSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-18-065Z/parse-results-de.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-18-065Z/parse-results-el.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-18-065Z/parse-results-en.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-18-065Z/parse-results-es.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-18-065Z/parse-results-fr.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-18-065Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-47-899Z",
+      "manifestPath": "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-47-899Z/manifest.snapshot.json",
+      "manifestId": "parse-stage2-superqwen-frozen",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "VALID_EMPIRICAL",
+      "issues": [],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/stage2-heldout-v2.jsonl",
+          "declaredSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+          "actualSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-47-899Z/parse-results-de.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-47-899Z/parse-results-el.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-47-899Z/parse-results-en.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-47-899Z/parse-results-es.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-47-899Z/parse-results-fr.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-12-47-899Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z",
+      "manifestPath": "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/manifest.snapshot.json",
+      "manifestId": "parse-stage2-superqwen-frozen",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "VALID_EMPIRICAL",
+      "issues": [],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/stage2-heldout-v2.jsonl",
+          "declaredSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+          "actualSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-de.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-el.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-en.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-es.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-fr.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/protected-literal-scoring/2026-07-18T00-07-34-989Z",
+      "manifestPath": "reports/experiments/protected-literal-scoring/2026-07-18T00-07-34-989Z/manifest.snapshot.json",
+      "manifestId": "protected-literal-scoring",
+      "task": "realize",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/protected-literal-scoring/2026-07-18T00-07-34-989Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/protected-literal-scoring/2026-07-19T00-12-00-060Z",
+      "manifestPath": "reports/experiments/protected-literal-scoring/2026-07-19T00-12-00-060Z/manifest.snapshot.json",
+      "manifestId": "protected-literal-scoring",
+      "task": "realize",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/protected-literal-scoring/2026-07-19T00-12-00-060Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/realization-en-el/2026-07-18T00-07-35-072Z",
+      "manifestPath": "reports/experiments/realization-en-el/2026-07-18T00-07-35-072Z/manifest.snapshot.json",
+      "manifestId": "realization-en-el",
+      "task": "realize",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/realization-en-el/2026-07-18T00-07-35-072Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/realization-en-el/2026-07-19T00-12-00-144Z",
+      "manifestPath": "reports/experiments/realization-en-el/2026-07-19T00-12-00-144Z/manifest.snapshot.json",
+      "manifestId": "realization-en-el",
+      "task": "realize",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/realization-en-el/2026-07-19T00-12-00-144Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/release-provenance/2026-07-16T22-20-17-029Z",
+      "manifestPath": "reports/experiments/release-provenance/2026-07-16T22-20-17-029Z/manifest.snapshot.json",
+      "manifestId": "release-provenance",
+      "task": "infrastructure",
+      "modelDriven": false,
+      "validity": "DETERMINISTIC_ONLY",
+      "issues": [
+        {
+          "code": "dataset_not_found",
+          "message": "datasets/dev/empty.jsonl is not available for hash verification."
+        },
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/empty.jsonl",
+          "declaredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actualSha256": null,
+          "valid": false
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/release-provenance/2026-07-16T22-20-17-029Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/release-provenance/2026-07-18T00-07-35-151Z",
+      "manifestPath": "reports/experiments/release-provenance/2026-07-18T00-07-35-151Z/manifest.snapshot.json",
+      "manifestId": "release-provenance",
+      "task": "infrastructure",
+      "modelDriven": false,
+      "validity": "DETERMINISTIC_ONLY",
+      "issues": [
+        {
+          "code": "dataset_not_found",
+          "message": "datasets/dev/empty.jsonl is not available for hash verification."
+        },
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/empty.jsonl",
+          "declaredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actualSha256": null,
+          "valid": false
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/release-provenance/2026-07-18T00-07-35-151Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/release-provenance/2026-07-19T00-12-00-227Z",
+      "manifestPath": "reports/experiments/release-provenance/2026-07-19T00-12-00-227Z/manifest.snapshot.json",
+      "manifestId": "release-provenance",
+      "task": "infrastructure",
+      "modelDriven": false,
+      "validity": "DETERMINISTIC_ONLY",
+      "issues": [
+        {
+          "code": "dataset_not_found",
+          "message": "datasets/dev/empty.jsonl is not available for hash verification."
+        },
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/empty.jsonl",
+          "declaredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actualSha256": null,
+          "valid": false
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/release-provenance/2026-07-19T00-12-00-227Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/replace-id/2026-07-18T00-07-35-501Z",
+      "manifestPath": "reports/experiments/replace-id/2026-07-18T00-07-35-501Z/manifest.snapshot.json",
+      "manifestId": "replace-id",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/replace-id/2026-07-18T00-07-35-501Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/replace-id/2026-07-19T00-12-00-595Z",
+      "manifestPath": "reports/experiments/replace-id/2026-07-19T00-12-00-595Z/manifest.snapshot.json",
+      "manifestId": "replace-id",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/replace-id/2026-07-19T00-12-00-595Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/retrieval-stage2-superqwen/2026-09-01T08-28-12-495Z",
+      "manifestPath": "reports/experiments/retrieval-stage2-superqwen/2026-09-01T08-28-12-495Z/manifest.snapshot.json",
+      "manifestId": "retrieval-stage2-superqwen",
+      "task": "retrieval",
+      "modelDriven": true,
+      "validity": "VALID_EMPIRICAL",
+      "issues": [],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/stage2-retrieval-v1.jsonl",
+          "declaredSha256": "1235f3b750e0fbee35d7fe86dd3aaa7381235ded8ca230b9adf22294096b800a",
+          "actualSha256": "1235f3b750e0fbee35d7fe86dd3aaa7381235ded8ca230b9adf22294096b800a",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/retrieval-stage2-superqwen/2026-09-01T08-28-12-495Z/raw/items.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/retrieval-stage2-superqwen/2026-09-01T08-31-36-113Z",
+      "manifestPath": "reports/experiments/retrieval-stage2-superqwen/2026-09-01T08-31-36-113Z/manifest.snapshot.json",
+      "manifestId": "retrieval-stage2-superqwen",
+      "task": "retrieval",
+      "modelDriven": true,
+      "validity": "VALID_EMPIRICAL",
+      "issues": [],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/stage2-retrieval-v1.jsonl",
+          "declaredSha256": "1235f3b750e0fbee35d7fe86dd3aaa7381235ded8ca230b9adf22294096b800a",
+          "actualSha256": "1235f3b750e0fbee35d7fe86dd3aaa7381235ded8ca230b9adf22294096b800a",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/retrieval-stage2-superqwen/2026-09-01T08-31-36-113Z/raw/items.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/roundtrip-consistency/2026-07-18T00-07-35-183Z",
+      "manifestPath": "reports/experiments/roundtrip-consistency/2026-07-18T00-07-35-183Z/manifest.snapshot.json",
+      "manifestId": "roundtrip-consistency",
+      "task": "realize",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/roundtrip-consistency/2026-07-18T00-07-35-183Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/roundtrip-consistency/2026-07-19T00-12-00-261Z",
+      "manifestPath": "reports/experiments/roundtrip-consistency/2026-07-19T00-12-00-261Z/manifest.snapshot.json",
+      "manifestId": "roundtrip-consistency",
+      "task": "realize",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/roundtrip-consistency/2026-07-19T00-12-00-261Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/safe-short-tight-profiles/2026-07-18T00-07-35-261Z",
+      "manifestPath": "reports/experiments/safe-short-tight-profiles/2026-07-18T00-07-35-261Z/manifest.snapshot.json",
+      "manifestId": "safe-short-tight-profiles",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/safe-short-tight-profiles/2026-07-18T00-07-35-261Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/safe-short-tight-profiles/2026-07-19T00-12-00-345Z",
+      "manifestPath": "reports/experiments/safe-short-tight-profiles/2026-07-19T00-12-00-345Z/manifest.snapshot.json",
+      "manifestId": "safe-short-tight-profiles",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/safe-short-tight-profiles/2026-07-19T00-12-00-345Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/smoke-test",
+      "manifestPath": "reports/experiments/smoke-test/manifest.snapshot.json",
+      "manifestId": "smoke-test",
+      "task": "infrastructure",
+      "modelDriven": false,
+      "validity": "DETERMINISTIC_ONLY",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        }
+      ],
+      "checkedDatasets": [],
+      "rawOutputFiles": [
+        "reports/experiments/smoke-test/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/spanish-indonesian-baselines/2026-07-18T00-07-35-341Z",
+      "manifestPath": "reports/experiments/spanish-indonesian-baselines/2026-07-18T00-07-35-341Z/manifest.snapshot.json",
+      "manifestId": "spanish-indonesian-baselines",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/spanish-indonesian-baselines/2026-07-18T00-07-35-341Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/spanish-indonesian-baselines/2026-07-19T00-12-00-431Z",
+      "manifestPath": "reports/experiments/spanish-indonesian-baselines/2026-07-19T00-12-00-431Z/manifest.snapshot.json",
+      "manifestId": "spanish-indonesian-baselines",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/spanish-indonesian-baselines/2026-07-19T00-12-00-431Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/spanish-indonesian-realization/2026-07-18T00-07-35-424Z",
+      "manifestPath": "reports/experiments/spanish-indonesian-realization/2026-07-18T00-07-35-424Z/manifest.snapshot.json",
+      "manifestId": "spanish-indonesian-realization",
+      "task": "realize",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/spanish-indonesian-realization/2026-07-18T00-07-35-424Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/spanish-indonesian-realization/2026-07-19T00-12-00-515Z",
+      "manifestPath": "reports/experiments/spanish-indonesian-realization/2026-07-19T00-12-00-515Z/manifest.snapshot.json",
+      "manifestId": "spanish-indonesian-realization",
+      "task": "realize",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/spanish-indonesian-realization/2026-07-19T00-12-00-515Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/tokenizer-measurement/2026-07-18T00-07-35-579Z",
+      "manifestPath": "reports/experiments/tokenizer-measurement/2026-07-18T00-07-35-579Z/manifest.snapshot.json",
+      "manifestId": "tokenizer-measurement",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/tokenizer-measurement/2026-07-18T00-07-35-579Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/tokenizer-measurement/2026-07-19T00-12-00-679Z",
+      "manifestPath": "reports/experiments/tokenizer-measurement/2026-07-19T00-12-00-679Z/manifest.snapshot.json",
+      "manifestId": "tokenizer-measurement",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/tokenizer-measurement/2026-07-19T00-12-00-679Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/typed-structures-expand/2026-07-18T00-07-35-657Z",
+      "manifestPath": "reports/experiments/typed-structures-expand/2026-07-18T00-07-35-657Z/manifest.snapshot.json",
+      "manifestId": "typed-structures-expand",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/typed-structures-expand/2026-07-18T00-07-35-657Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/typed-structures-expand/2026-07-19T00-12-00-761Z",
+      "manifestPath": "reports/experiments/typed-structures-expand/2026-07-19T00-12-00-761Z/manifest.snapshot.json",
+      "manifestId": "typed-structures-expand",
+      "task": "integration",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/typed-structures-expand/2026-07-19T00-12-00-761Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/mcp-server-hardening/2026-07-19T00-11-59-461Z",
+      "manifestPath": "reports/mcp-server-hardening/2026-07-19T00-11-59-461Z/manifest.snapshot.json",
+      "manifestId": "mcp-server-hardening",
+      "task": "conformance",
+      "modelDriven": false,
+      "validity": "DETERMINISTIC_ONLY",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        }
+      ],
+      "checkedDatasets": [],
+      "rawOutputFiles": [
+        "reports/mcp-server-hardening/2026-07-19T00-11-59-461Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/openunum-shadow-live-test/2026-07-19T00-11-59-912Z",
+      "manifestPath": "reports/openunum-shadow-live-test/2026-07-19T00-11-59-912Z/manifest.snapshot.json",
+      "manifestId": "openunum-shadow-live-test",
+      "task": "integration",
+      "modelDriven": false,
+      "validity": "DETERMINISTIC_ONLY",
+      "issues": [
+        {
+          "code": "missing_summary",
+          "message": "No summary.json or parse-summary.json is present."
+        },
+        {
+          "code": "missing_raw_outputs",
+          "message": "No per-item raw-output JSONL is present."
+        }
+      ],
+      "checkedDatasets": [],
+      "rawOutputFiles": []
+    },
+    {
+      "reportDirectory": "reports/parse-experiment-multilingual/2026-07-18T00-07-34-909Z",
+      "manifestPath": "reports/parse-experiment-multilingual/2026-07-18T00-07-34-909Z/manifest.snapshot.json",
+      "manifestId": "parse-experiment-multilingual",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/parse-experiment-multilingual/2026-07-18T00-07-34-909Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/parse-experiment-multilingual/2026-07-19T00-11-59-944Z",
+      "manifestPath": "reports/parse-experiment-multilingual/2026-07-19T00-11-59-944Z/manifest.snapshot.json",
+      "manifestId": "parse-experiment-multilingual",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "INVALID_EMPIRICAL",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        },
+        {
+          "code": "placeholder_model_id",
+          "message": "The run names a placeholder rather than a real model ID."
+        },
+        {
+          "code": "unverified_model_identity",
+          "message": "No verified endpoint-reported model identity and model-file identity are recorded."
+        },
+        {
+          "code": "missing_prompt_provenance",
+          "message": "Prompt version and system-prompt SHA-256 are not both recorded."
+        },
+        {
+          "code": "missing_run_timestamps",
+          "message": "Started and completed timestamps are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_schema_provenance",
+          "message": "Semantic schema version and SHA-256 are not recorded in environment provenance."
+        },
+        {
+          "code": "missing_structured_output_mode",
+          "message": "Structured-output mode is not recorded (including explicit prompt-only/none)."
+        },
+        {
+          "code": "dirty_execution_tree",
+          "message": "The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source."
+        },
+        {
+          "code": "missing_execution_commit",
+          "message": "baselineCommit is not execution provenance; environment.json lacks codeCommit."
+        },
+        {
+          "code": "reported_baseline_predates_prompt_fix",
+          "message": "The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran."
+        }
+      ],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/multilingual-core-v1.jsonl",
+          "declaredSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "actualSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/parse-experiment-multilingual/2026-07-19T00-11-59-944Z/item-results.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/profile-selection/2026-07-19T00-12-00-024Z",
+      "manifestPath": "reports/profile-selection/2026-07-19T00-12-00-024Z/manifest.snapshot.json",
+      "manifestId": "profile-selection",
+      "task": "render",
+      "modelDriven": false,
+      "validity": "DETERMINISTIC_ONLY",
+      "issues": [
+        {
+          "code": "empty_raw_output",
+          "message": "Raw per-item output is absent, empty, or malformed."
+        },
+        {
+          "code": "missing_raw_exchange",
+          "message": "Per-item evidence does not retain both the raw request and raw provider response."
+        }
+      ],
+      "checkedDatasets": [],
+      "rawOutputFiles": [
+        "reports/profile-selection/2026-07-19T00-12-00-024Z/item-results.jsonl"
+      ]
+    }
+  ]
+}

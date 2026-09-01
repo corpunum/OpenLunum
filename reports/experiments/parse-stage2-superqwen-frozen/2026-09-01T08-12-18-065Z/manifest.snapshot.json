@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "parse-stage2-superqwen-frozen",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "hypothesis": "The provider contract and explicit abstention result can produce auditable candidate Sem or fail closed on genuinely underspecified multilingual text.",
+  "baselineCommit": "204dab3f5169c8ebd08e4dc76c56b9ffa635a103",
+  "dataset": {
+    "path": "datasets/dev/stage2-heldout-v2.jsonl",
+    "sha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261"
+  },
+  "modelProfile": "profiles/models/superqwen3.8-27b-abliterated-live.json",
+  "limits": {
+    "maxItems": 24,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 24
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": true
+  },
+  "outputDirectory": "reports/experiments/parse-stage2-superqwen-frozen"
+}

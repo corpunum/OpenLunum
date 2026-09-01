@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "retrieval-stage2-superqwen",
+  "area": "retrieval",
+  "task": "retrieval",
+  "hypothesis": "Raw multilingual semantic retrieval is useful only if extraction errors are visible and critical negatives fail closed.",
+  "baselineCommit": "27fb3d68e955d1f7bbf291a37a977367a8858b01",
+  "dataset": {
+    "path": "datasets/dev/stage2-retrieval-v1.jsonl",
+    "sha256": "1235f3b750e0fbee35d7fe86dd3aaa7381235ded8ca230b9adf22294096b800a"
+  },
+  "modelProfile": "profiles/models/superqwen3.8-27b-abliterated-live.json",
+  "limits": {
+    "maxItems": 22,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 22
+  },
+  "gates": {
+    "minimumFeatureRecall": 0,
+    "minimumExactRate": 0,
+    "requireProtectedLiteralCoverage": false
+  },
+  "outputDirectory": "reports/experiments/retrieval-stage2-superqwen"
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "parse-stage2-superqwen-diagnostic",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "hypothesis": "The discovered SuperQwen llama.cpp instance can emit valid Sem when chat-template thinking is disabled and JSON Schema is requested.",
+  "baselineCommit": "204dab3f5169c8ebd08e4dc76c56b9ffa635a103",
+  "dataset": {
+    "path": "datasets/dev/stage2-heldout-v1.jsonl",
+    "sha256": "b244325d2b40288354bb91f8fe7714a1bdb0c259a4d4a249f0bf106f89b99b54"
+  },
+  "modelProfile": "profiles/models/superqwen3.8-27b-abliterated-live.json",
+  "limits": {
+    "maxItems": 26,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 26
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": true
+  },
+  "outputDirectory": "reports/experiments/parse-stage2-superqwen-diagnostic"
+}

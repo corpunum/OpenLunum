@@ -1,0 +1,293 @@
+{
+  "version": "stage2-threshold-calibration/0.1",
+  "sourceRun": "reports/experiments/retrieval-stage2-superqwen/2026-09-01T08-31-36-113Z",
+  "extractionFailures": 4,
+  "pairCounts": {
+    "total": 80,
+    "positive": 8,
+    "negative": 72
+  },
+  "sweep": [
+    {
+      "threshold": 0.5,
+      "truePositive": 2,
+      "falsePositive": 5,
+      "falseNegative": 6,
+      "trueNegative": 67,
+      "precision": 0.2857142857142857,
+      "recall": 0.25,
+      "f1": 0.26666666666666666,
+      "accuracy": 0.8625
+    },
+    {
+      "threshold": 0.55,
+      "truePositive": 2,
+      "falsePositive": 5,
+      "falseNegative": 6,
+      "trueNegative": 67,
+      "precision": 0.2857142857142857,
+      "recall": 0.25,
+      "f1": 0.26666666666666666,
+      "accuracy": 0.8625
+    },
+    {
+      "threshold": 0.6,
+      "truePositive": 2,
+      "falsePositive": 5,
+      "falseNegative": 6,
+      "trueNegative": 67,
+      "precision": 0.2857142857142857,
+      "recall": 0.25,
+      "f1": 0.26666666666666666,
+      "accuracy": 0.8625
+    },
+    {
+      "threshold": 0.65,
+      "truePositive": 2,
+      "falsePositive": 5,
+      "falseNegative": 6,
+      "trueNegative": 67,
+      "precision": 0.2857142857142857,
+      "recall": 0.25,
+      "f1": 0.26666666666666666,
+      "accuracy": 0.8625
+    },
+    {
+      "threshold": 0.7,
+      "truePositive": 2,
+      "falsePositive": 5,
+      "falseNegative": 6,
+      "trueNegative": 67,
+      "precision": 0.2857142857142857,
+      "recall": 0.25,
+      "f1": 0.26666666666666666,
+      "accuracy": 0.8625
+    },
+    {
+      "threshold": 0.75,
+      "truePositive": 1,
+      "falsePositive": 5,
+      "falseNegative": 7,
+      "trueNegative": 67,
+      "precision": 0.16666666666666666,
+      "recall": 0.125,
+      "f1": 0.14285714285714288,
+      "accuracy": 0.85
+    },
+    {
+      "threshold": 0.8,
+      "truePositive": 1,
+      "falsePositive": 5,
+      "falseNegative": 7,
+      "trueNegative": 67,
+      "precision": 0.16666666666666666,
+      "recall": 0.125,
+      "f1": 0.14285714285714288,
+      "accuracy": 0.85
+    },
+    {
+      "threshold": 0.85,
+      "truePositive": 0,
+      "falsePositive": 4,
+      "falseNegative": 8,
+      "trueNegative": 68,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "accuracy": 0.85
+    },
+    {
+      "threshold": 0.9,
+      "truePositive": 0,
+      "falsePositive": 3,
+      "falseNegative": 8,
+      "trueNegative": 69,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "accuracy": 0.8625
+    },
+    {
+      "threshold": 0.95,
+      "truePositive": 0,
+      "falsePositive": 3,
+      "falseNegative": 8,
+      "trueNegative": 69,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "accuracy": 0.8625
+    }
+  ],
+  "falsePositivesAt08": [
+    {
+      "id": "q-en-preference-to-el:m-en-preference",
+      "similarity": 0.8095238095238095,
+      "hardCompatible": true
+    },
+    {
+      "id": "q-en-production-to-el:m-en-production",
+      "similarity": 1,
+      "hardCompatible": true
+    },
+    {
+      "id": "q-es-retry-to-en:m-es-retry",
+      "similarity": 1,
+      "hardCompatible": true
+    },
+    {
+      "id": "q-en-private-to-el:m-en-private",
+      "similarity": 1,
+      "hardCompatible": true
+    },
+    {
+      "id": "q-en-staging-negative:m-en-production",
+      "similarity": 0.8571428571428571,
+      "hardCompatible": true
+    }
+  ],
+  "critical": [
+    {
+      "id": "delete-all-vs-old",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "allow-vs-prohibit",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "enable-vs-disable",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "before-vs-after",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "quantity-5-vs-50",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "date-monday-vs-friday",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "alice-vs-bob",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "source-vs-destination",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "subject-vs-object",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "confirmed-vs-unconfirmed",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "production-vs-staging",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "public-vs-private",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "must-vs-may",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "is-vs-is-not",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    },
+    {
+      "id": "conditional-before-vs-after",
+      "similarity": 0,
+      "hardCompatible": false,
+      "similarAt08": false
+    }
+  ],
+  "sourceMetrics": {
+    "queries": 12,
+    "memoryCount": 10,
+    "queryExtractionFailures": 2,
+    "memoryExtractionFailures": 2,
+    "semanticMatchingFailures": 9,
+    "rankingFailures": 0,
+    "truePositives": 1,
+    "falsePositives": 0,
+    "falseNegatives": 9,
+    "trueNegatives": 109,
+    "precision": 1,
+    "recall": 0.1,
+    "f1": 0.18181818181818182,
+    "falsePositiveRate": 0,
+    "top1Accuracy": 0.25,
+    "topKRecall": 0.1,
+    "byLanguagePair": {
+      "el-en": {
+        "queries": 4,
+        "precision": 1,
+        "recall": 0,
+        "f1": 0,
+        "falsePositiveRate": 0,
+        "topKRecall": 0
+      },
+      "en-el": {
+        "queries": 5,
+        "precision": 1,
+        "recall": 0.25,
+        "f1": 0.4,
+        "falsePositiveRate": 0,
+        "topKRecall": 0.25
+      },
+      "es-en": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 0,
+        "f1": 0,
+        "falsePositiveRate": 0,
+        "topKRecall": 0
+      },
+      "en-es": {
+        "queries": 2,
+        "precision": 1,
+        "recall": 0,
+        "f1": 0,
+        "falsePositiveRate": 0,
+        "topKRecall": 0
+      }
+    }
+  }
+}
