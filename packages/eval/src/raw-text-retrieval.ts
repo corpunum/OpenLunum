@@ -68,10 +68,10 @@ function retrievalMetrics(
   return {
     ...aggregate,
     top1Accuracy: results.length > 0 ? top1 / results.length : 0,
-    topKRecall: results.length > 0 ? results.reduce((sum, result) => {
+    topKRecall: results.filter((result) => result.expectedMemoryIds.length > 0).length > 0 ? results.reduce((sum, result) => {
       const expected = new Set(result.expectedMemoryIds);
-      return sum + (expected.size === 0 ? 1 : result.retrievedMemoryIds.filter(id => expected.has(id)).length / expected.size);
-    }, 0) / results.length : 0,
+      return sum + (expected.size === 0 ? 0 : result.retrievedMemoryIds.filter(id => expected.has(id)).length / expected.size);
+    }, 0) / results.filter((result) => result.expectedMemoryIds.length > 0).length : 0,
     truePositives: tp, falsePositives: fp, falseNegatives: fn, trueNegatives: tn,
     failures: results.filter(result => result.failed).length,
   };
@@ -141,7 +141,8 @@ export async function runRawTextRetrievalEvaluation(input: {
     const pairFp = results.reduce((sum, result) => sum + result.retrievedMemoryIds.filter((id) => !result.expectedMemoryIds.includes(id)).length, 0);
     const pairFn = results.reduce((sum, result) => sum + result.expectedMemoryIds.filter((id) => !result.retrievedMemoryIds.includes(id)).length, 0);
     const pairTn = results.reduce((sum, result) => sum + Math.max(0, extractedMemories.length - result.retrievedMemoryIds.length - result.expectedMemoryIds.length), 0);
-    byLanguagePair[pair] = { queries: results.length, ...metrics(pairTp, pairFp, pairFn, pairTn), topKRecall: results.length > 0 ? results.reduce((sum, result) => sum + result.recall, 0) / results.length : 0 };
+    const positiveResults = results.filter((result) => result.expectedMemoryIds.length > 0);
+    byLanguagePair[pair] = { queries: results.length, ...metrics(pairTp, pairFp, pairFn, pairTn), topKRecall: positiveResults.length > 0 ? positiveResults.reduce((sum, result) => sum + result.recall, 0) / positiveResults.length : 0 };
   }
   const baselines: Record<string, RawTextBaselineMetrics> = {};
   for (const [name, baseline] of Object.entries(input.baselines ?? {})) {
@@ -157,5 +158,6 @@ export async function runRawTextRetrievalEvaluation(input: {
     }
     baselines[name] = retrievalMetrics(baselineResults, input.memories.length);
   }
-  return { version: RAW_TEXT_RETRIEVAL_VERSION, threshold, topK, inputMode: 'raw-text-only', metrics: { queries: queryResults.length, memoryCount: input.memories.length, queryExtractionFailures: queryResults.filter((result) => !result.extracted).length, memoryExtractionFailures: extractedMemories.filter((entry) => !entry.sem).length, semanticMatchingFailures: queryResults.reduce((sum, result) => sum + result.semanticMatchingFailures.length, 0), rankingFailures: queryResults.reduce((sum, result) => sum + result.rankingFailures.length, 0), truePositives: tp, falsePositives: fp, falseNegatives: fn, trueNegatives: tn, ...metrics(tp, fp, fn, tn), top1Accuracy: queryResults.length > 0 ? queryResults.filter((result) => result.top1Correct).length / queryResults.length : 0, topKRecall: queryResults.length > 0 ? queryResults.reduce((sum, result) => sum + result.recall, 0) / queryResults.length : 0, byLanguagePair }, queryResults, baselines };
+  const positiveQueryResults = queryResults.filter((result) => result.expectedMemoryIds.length > 0);
+  return { version: RAW_TEXT_RETRIEVAL_VERSION, threshold, topK, inputMode: 'raw-text-only', metrics: { queries: queryResults.length, memoryCount: input.memories.length, queryExtractionFailures: queryResults.filter((result) => !result.extracted).length, memoryExtractionFailures: extractedMemories.filter((entry) => !entry.sem).length, semanticMatchingFailures: queryResults.reduce((sum, result) => sum + result.semanticMatchingFailures.length, 0), rankingFailures: queryResults.reduce((sum, result) => sum + result.rankingFailures.length, 0), truePositives: tp, falsePositives: fp, falseNegatives: fn, trueNegatives: tn, ...metrics(tp, fp, fn, tn), top1Accuracy: queryResults.length > 0 ? queryResults.filter((result) => result.top1Correct).length / queryResults.length : 0, topKRecall: positiveQueryResults.length > 0 ? positiveQueryResults.reduce((sum, result) => sum + result.recall, 0) / positiveQueryResults.length : 0, byLanguagePair }, queryResults, baselines };
 }
