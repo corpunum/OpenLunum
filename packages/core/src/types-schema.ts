@@ -78,6 +78,7 @@ export interface ModelProfileSchema01 {
   seed?: number;
   maxTokens?: number;
   noThink?: boolean;
+  chatTemplateKwargs?: Record<string, unknown>;
   timeoutMs: number;
   metadata?: Record<string, unknown>;
 }
