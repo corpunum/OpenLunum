@@ -1,0 +1,16 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "qwen3-coder-30b-heldout",
+  "provider": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:8080/v1",
+  "model": "openai/qwen3-coder-30b-a3b",
+  "temperature": 0,
+  "seed": 42,
+  "maxTokens": 768,
+  "timeoutMs": 300000,
+  "metadata": {
+    "purpose": "Held-out raw-text extraction evaluation; same endpoint model as qwen3-coder-30b-live with bounded JSON output budget.",
+    "parentProfile": "profiles/models/qwen3-coder-30b-live.json",
+    "outputBudgetRationale": "The extraction contract requires one JSON object, so 768 output tokens bounds malformed runaway generations while remaining above the expected schema size."
+  }
+}
