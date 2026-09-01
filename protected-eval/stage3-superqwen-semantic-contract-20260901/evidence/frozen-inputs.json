@@ -1,0 +1,245 @@
+{
+  "protectedManifest": {
+    "schema": "openlunum-protected-eval/0.1",
+    "id": "stage3-superqwen-semantic-contract-20260901",
+    "datasetId": "openlunum-stage3-protected-semantic-contract-luna-20260901",
+    "version": "v1.0.0",
+    "dataset": {
+      "path": "protected-eval/stage3-superqwen-semantic-contract-20260901/corpus.jsonl",
+      "sha256": "bc392d724815419ed79b9db50103c7c62ebdc03c1b839fb5c9d672322dcaf3b8",
+      "license": "Evaluator-authored protected text; no external corpus or development/heldout expected outputs used."
+    },
+    "instructions": "Run once against the already-loaded named Luna model. Do not tune, retry, replace the model, or use existing development or heldout expected outputs. Preserve raw requests, responses, provenance, and first-run metrics.",
+    "coverage": {
+      "tasks": [
+        "parse",
+        "retrieval"
+      ],
+      "languages": [
+        "en",
+        "el",
+        "es",
+        "id",
+        "fr",
+        "de"
+      ],
+      "categories": [
+        "equivalent-cross-language-pairs",
+        "negation",
+        "modality",
+        "conditions",
+        "references",
+        "roles",
+        "numbers",
+        "dates",
+        "lists",
+        "ambiguity",
+        "abstention",
+        "critical-negatives"
+      ]
+    }
+  },
+  "experiment": {
+    "schema": "openlunum-experiment/0.1",
+    "id": "stage3-superqwen-semantic-contract-20260901",
+    "area": "semantic-contract",
+    "task": "parse",
+    "deterministic": true,
+    "hypothesis": "A named Luna model should preserve protected semantic roles and critical distinctions across independently authored multilingual raw text while abstaining on underspecified input.",
+    "baselineCommit": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
+    "dataset": {
+      "path": "protected-eval/stage3-superqwen-semantic-contract-20260901/corpus.jsonl",
+      "sha256": "bc392d724815419ed79b9db50103c7c62ebdc03c1b839fb5c9d672322dcaf3b8"
+    },
+    "modelProfile": "profiles/models/superqwen3.8-27b-abliterated-live.json",
+    "limits": {
+      "maxItems": 54,
+      "maxAttemptsPerItem": 1,
+      "maxModelCalls": 54
+    },
+    "gates": {
+      "minimumFeatureRecall": 0,
+      "minimumExactRate": 0,
+      "requireProtectedLiteralCoverage": false
+    },
+    "outputDirectory": "protected-eval/stage3-superqwen-semantic-contract-20260901/evidence/parse",
+    "evidenceClass": "protected",
+    "implementationCommit": "6149deed6b518020bc804b5db8f68f36ba00f4cf"
+  },
+  "corpus": {
+    "path": "protected-eval/stage3-superqwen-semantic-contract-20260901/corpus.jsonl",
+    "sha256": "bc392d724815419ed79b9db50103c7c62ebdc03c1b839fb5c9d672322dcaf3b8",
+    "itemCount": 54
+  },
+  "schema": {
+    "path": "schemas/lunum-sem.schema.json",
+    "sha256": "930c6adc7c1c48d83e732c3c4e30de91d105ef20f6c1d9bbd9adf329b8ef5a83",
+    "transportSchema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://openlunum.org/schemas/semantic-extraction-result/0.1",
+      "title": "OpenLunum semantic extraction result",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema",
+            "world",
+            "kind",
+            "clauses"
+          ],
+          "properties": {
+            "schema": {
+              "const": "lunum-sem/0.1-draft"
+            },
+            "world": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kind": {
+              "type": "string",
+              "minLength": 1
+            },
+            "clauses": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/clause"
+              }
+            },
+            "references": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "provenance": {
+              "type": "object"
+            },
+            "annotations": {
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "const": "abstain"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ],
+      "$defs": {
+        "term": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "value": {},
+                "language": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                }
+              }
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/term"
+              }
+            }
+          ]
+        },
+        "clause": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "predicate",
+            "roles"
+          ],
+          "properties": {
+            "predicate": {
+              "type": "string",
+              "minLength": 1
+            },
+            "roles": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/term"
+              }
+            },
+            "negated": {
+              "type": "boolean",
+              "default": false
+            },
+            "modality": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "time": {},
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/clause"
+              }
+            },
+            "consequences": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/clause"
+              }
+            },
+            "annotations": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "transportSchemaSha256": "c0a9ab5f283c7bb0ea10f1638986ea92b56f8de2ba4d669c0111763411ac84aa",
+    "validatedGoldItems": 48,
+    "abstentionItems": 6
+  },
+  "candidate": {
+    "requestedSha": "6149dee6b518020bc804b5db8f68f36ba00f4cf",
+    "requestedShaResolvable": false,
+    "implementationSha": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
+    "implementationShaResolvable": true
+  }
+}

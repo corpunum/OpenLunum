@@ -1,0 +1,66 @@
+{
+  "status": "INCOMPLETE_SUBSET",
+  "protectedGate": "NOT_RUN",
+  "firstUntouchedRun": true,
+  "fullCorpusRan": false,
+  "fullCorpusRequestedItems": 54,
+  "fullCorpusCompletedItems": 0,
+  "boundedParseSubset": {
+    "status": "COMPLETE",
+    "itemsRun": 18,
+    "itemsAvailable": 54,
+    "evidenceDirectory": "evidence/parse-subset/2026-09-01T10-22-34-360Z",
+    "policy": "Predeclared all preference, negation, and ambiguity groups; three cases per language.",
+    "attemptsPerItem": 1,
+    "maxTokens": 256
+  },
+  "parseSubsetMetrics": {
+    "passed": 1,
+    "failed": 17,
+    "errors": 0,
+    "exactRate": 0,
+    "abstentionAccuracy": 0.16666666666666666,
+    "byLanguage": {
+      "en": {"items": 3, "passed": 1, "exactRate": 0, "abstentionAccuracy": 1},
+      "el": {"items": 3, "passed": 0, "exactRate": 0, "abstentionAccuracy": 0},
+      "es": {"items": 3, "passed": 0, "exactRate": 0, "abstentionAccuracy": 0},
+      "id": {"items": 3, "passed": 0, "exactRate": 0, "abstentionAccuracy": 0},
+      "fr": {"items": 3, "passed": 0, "exactRate": 0, "abstentionAccuracy": 0},
+      "de": {"items": 3, "passed": 0, "exactRate": 0, "abstentionAccuracy": 0}
+    }
+  },
+  "retrieval": {
+    "status": "NOT_RUN",
+    "directions": ["el->en", "en->el"],
+    "semanticMetrics": null,
+    "lexicalBaselineMetrics": null,
+    "thresholdSweep": null,
+    "criticalFalsePositives": null,
+    "reason": "The evaluator client was stopped after the fixed retrieval stage remained active without flushing its buffered raw-extraction artifact. No retrieval metric is claimed."
+  },
+  "embeddingBaseline": {
+    "status": "NOT_RUN",
+    "reason": "No embedding endpoint was already available without changing the loaded model."
+  },
+  "liveAccess": {
+    "status": "VERIFIED_FOR_SUBSET",
+    "endpoint": "http://127.0.0.1:54523/v1",
+    "getModels": "evidence/model-discovery.json",
+    "modelId": "openai/superqwen3.8-27b-abliterated"
+  },
+  "candidate": {
+    "requestedSha": "6149dee6b518020bc804b5db8f68f36ba00f4cf",
+    "requestedShaResolvable": false,
+    "implementationShaUsed": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
+    "shaDiscrepancy": "The requested SHA is not present; the checkout and remote branch resolve to the implementation SHA used."
+  },
+  "controls": {
+    "noRetries": true,
+    "noTuningAfterFirstOutput": true,
+    "modelDownloadedRestartedOrReplaced": false,
+    "productionCodeModified": false,
+    "parseRawEvidencePreserved": true,
+    "retrievalRawEvidencePreserved": false
+  },
+  "recordedAt": "2026-09-01T13:28:27+03:00"
+}

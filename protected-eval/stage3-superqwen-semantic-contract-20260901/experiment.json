@@ -1,0 +1,27 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "stage3-superqwen-semantic-contract-20260901",
+  "area": "semantic-contract",
+  "task": "parse",
+  "deterministic": true,
+  "hypothesis": "A named Luna model should preserve protected semantic roles and critical distinctions across independently authored multilingual raw text while abstaining on underspecified input.",
+  "baselineCommit": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
+  "dataset": {
+    "path": "protected-eval/stage3-superqwen-semantic-contract-20260901/corpus.jsonl",
+    "sha256": "bc392d724815419ed79b9db50103c7c62ebdc03c1b839fb5c9d672322dcaf3b8"
+  },
+  "modelProfile": "profiles/models/superqwen3.8-27b-abliterated-live.json",
+  "limits": {
+    "maxItems": 54,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 54
+  },
+  "gates": {
+    "minimumFeatureRecall": 0,
+    "minimumExactRate": 0,
+    "requireProtectedLiteralCoverage": false
+  },
+  "outputDirectory": "protected-eval/stage3-superqwen-semantic-contract-20260901/evidence/parse",
+  "evidenceClass": "protected",
+  "implementationCommit": "6149deed6b518020bc804b5db8f68f36ba00f4cf"
+}
