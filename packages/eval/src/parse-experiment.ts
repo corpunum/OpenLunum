@@ -170,7 +170,7 @@ function gitWorkingTreeClean(root: string): boolean {
     // checkout.  Attest the evaluated source/data scope, not an unrelated
     // report or integration edit elsewhere in the repository.
     const scoped = [
-      'packages/core', 'packages/eval', 'schemas/model-profile.schema.json',
+      'packages/core/src', 'packages/core/test', 'packages/eval/src', 'packages/eval/test', 'packages/eval/package.json', 'schemas/model-profile.schema.json',
       'profiles/models/superqwen3.8-27b-abliterated-live.json',
       'datasets/dev/stage2-heldout-v1.jsonl', 'datasets/dev/stage2-heldout-v2.jsonl',
       'datasets/dev/stage2-retrieval-v1.jsonl', 'datasets/adversarial/critical-semantic-differences-v1.jsonl',

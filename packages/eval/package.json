@@ -19,6 +19,7 @@
     "report:generate": "pnpm build && node dist/src/cli.js report",
     "test:unit": "node --test dist/test/*.test.js",
     "eval:retention": "pnpm build && node dist/src/cli.js retention",
+    "eval:stage2-retrieval": "pnpm build && node dist/src/stage2-live-retrieval.js",
     "verify:strict": "pnpm build && node --test dist/test/*.test.js && pnpm eval:smoke && pnpm typecheck"
   },
   "devDependencies": {
