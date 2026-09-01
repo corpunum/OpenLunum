@@ -33,6 +33,12 @@ export type EvidenceIssueCode =
   | 'placeholder_model_id'
   | 'missing_runtime_model_id'
   | 'unverified_model_identity'
+  | 'missing_run_timestamps'
+  | 'missing_schema_provenance'
+  | 'missing_decoding_provenance'
+  | 'missing_structured_output_mode'
+  | 'dirty_execution_tree'
+  | 'missing_raw_exchange'
   | 'reported_baseline_predates_prompt_fix'
   | 'heldout_dataset_is_repo_visible';
 
@@ -186,6 +192,40 @@ async function rawOutputComplete(files: string[]): Promise<boolean> {
   return sawModelResult;
 }
 
+/**
+ * Raw output alone is insufficient for replay/audit: it cannot establish what
+ * request reached the provider or what response envelope was returned.  The
+ * runner may retain these as JSON values or serialized JSON strings, either on
+ * the item or on each retained attempt.
+ */
+async function rawExchangeComplete(files: string[]): Promise<boolean> {
+  let sawModelResult = false;
+  for (const file of files) {
+    const lines = (await readFile(file, 'utf8')).split(/\r?\n/u).filter((line) => line.trim());
+    for (const line of lines) {
+      let item: unknown;
+      try { item = JSON.parse(line); } catch { return false; }
+      if (!isRecord(item)) continue;
+      const status = stringAt(item, 'status');
+      if (status === 'error' || status === 'aborted') continue;
+      sawModelResult = true;
+      const hasRawExchangeValue = (value: unknown): boolean => {
+        if (typeof value === 'string') return value.trim().length > 0;
+        if (Array.isArray(value)) return value.length > 0;
+        return isRecord(value) && Object.keys(value).length > 0;
+      };
+      const hasExchange = (value: JsonRecord): boolean =>
+        hasRawExchangeValue(value.rawRequest) && hasRawExchangeValue(value.rawResponse);
+      const attempts = item.attempts;
+      const attemptExchange = Array.isArray(attempts)
+        && attempts.length > 0
+        && attempts.every((attempt) => isRecord(attempt) && hasExchange(attempt));
+      if (!hasExchange(item) && !attemptExchange) return false;
+    }
+  }
+  return sawModelResult;
+}
+
 function runtimeModelId(environment: JsonRecord | null, manifest: JsonRecord): string | null {
   const profile = environment?.modelProfile;
   if (isRecord(profile)) return stringAt(profile, 'model');
@@ -197,9 +237,33 @@ function runtimeModelId(environment: JsonRecord | null, manifest: JsonRecord): s
 function hasVerifiedModelIdentity(environment: JsonRecord | null, actualModelId: string | null): boolean {
   const identity = environment?.modelIdentity;
   if (!isRecord(identity) || identity.verified !== true) return false;
-  return stringAt(identity, 'reportedModelId') === actualModelId
-    && stringAt(identity, 'endpoint') !== null
-    && sha256Like(identity.weightsSha256);
+  const advertised = identity.advertisedModelIds;
+  if (stringAt(identity, 'requestedModel') !== actualModelId
+    || stringAt(identity, 'reportedModelId') !== actualModelId
+    || !Array.isArray(advertised)
+    || !advertised.includes(actualModelId)) return false;
+  const endpoint = stringAt(identity, 'endpoint') ?? (isRecord(environment?.modelProfile) ? stringAt(environment?.modelProfile, 'baseUrl') : null);
+  if (endpoint === null) return false;
+  try {
+    const parsed = new URL(endpoint);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+  } catch {
+    return false;
+  }
+
+  // A weights hash is ideal, but evidence must not require inventing one or
+  // hashing a very large local file merely to make a report appear valid.
+  if (sha256Like(identity.weightsSha256)) return true;
+  const file = identity.modelFileIdentity ?? (isRecord(environment?.modelProfile) && isRecord(environment.modelProfile.metadata)
+    ? environment.modelProfile.metadata.modelFile : undefined);
+  return isRecord(file)
+    && stringAt(file, 'source') !== null
+    && stringAt(file, 'fileName') !== null
+    && typeof file.fileSizeBytes === 'number'
+    && Number.isSafeInteger(file.fileSizeBytes)
+    && file.fileSizeBytes > 0
+    && typeof file.modifiedAt === 'string'
+    && !Number.isNaN(Date.parse(file.modifiedAt));
 }
 
 function hasPromptProvenance(summary: JsonRecord | null, environment: JsonRecord | null): boolean {
@@ -210,6 +274,41 @@ function hasPromptProvenance(summary: JsonRecord | null, environment: JsonRecord
 
 function executionCommit(environment: JsonRecord | null): string | null {
   return stringAt(environment, 'codeCommit');
+}
+
+function hasRunTimestamps(environment: JsonRecord | null): boolean {
+  const provenance = environment?.provenance;
+  if (!isRecord(provenance)) return false;
+  const started = stringAt(provenance, 'startedAt');
+  const completed = stringAt(provenance, 'completedAt');
+  return started !== null && completed !== null
+    && !Number.isNaN(Date.parse(started))
+    && !Number.isNaN(Date.parse(completed));
+}
+
+function hasSchemaProvenance(environment: JsonRecord | null): boolean {
+  const provenance = environment?.provenance;
+  if (!isRecord(provenance)) return false;
+  return stringAt(provenance, 'schemaVersion') !== null && sha256Like(provenance.schemaSha256);
+}
+
+function hasDecodingProvenance(environment: JsonRecord | null): boolean {
+  const profile = environment?.modelProfile;
+  if (!isRecord(profile)) return false;
+  return typeof profile.temperature === 'number'
+    && Number.isFinite(profile.temperature)
+    && (profile.maxTokens === undefined || (typeof profile.maxTokens === 'number' && Number.isSafeInteger(profile.maxTokens) && profile.maxTokens > 0));
+}
+
+function hasStructuredOutputMode(environment: JsonRecord | null): boolean {
+  const decoding = environment?.decoding;
+  if (!isRecord(decoding)) return false;
+  return ['json-schema', 'grammar', 'json', 'prompt-only', 'none'].includes(stringAt(decoding, 'structuredOutputMode') ?? '');
+}
+
+function hasCleanExecutionTree(environment: JsonRecord | null): boolean {
+  const provenance = environment?.provenance;
+  return isRecord(provenance) && provenance.workingTreeClean === true;
 }
 
 export async function auditEvidenceRun(repoRoot: string, manifestPath: string): Promise<EvidenceRunValidity> {
@@ -241,6 +340,9 @@ export async function auditEvidenceRun(repoRoot: string, manifestPath: string): 
   if (!environment) issues.push({ code: 'missing_environment', message: 'No environment.json is present.' });
   if (rawOutputFiles.length === 0) issues.push({ code: 'missing_raw_outputs', message: 'No per-item raw-output JSONL is present.' });
   else if (!await rawOutputComplete(rawOutputFiles)) issues.push({ code: 'empty_raw_output', message: 'Raw per-item output is absent, empty, or malformed.' });
+  if (rawOutputFiles.length > 0 && !await rawExchangeComplete(rawOutputFiles)) {
+    issues.push({ code: 'missing_raw_exchange', message: 'Per-item evidence does not retain both the raw request and raw provider response.' });
+  }
 
   const modelDriven = manifest?.deterministic !== true;
   if (modelDriven) {
@@ -250,10 +352,25 @@ export async function auditEvidenceRun(repoRoot: string, manifestPath: string): 
     const actualModelId = runtimeModelId(environment, manifest ?? {});
     if (!actualModelId) issues.push({ code: 'missing_runtime_model_id', message: 'environment.json does not attest the runtime model ID.' });
     if (!hasVerifiedModelIdentity(environment, actualModelId)) {
-      issues.push({ code: 'unverified_model_identity', message: 'No verified endpoint-reported model identity and weights hash are recorded.' });
+      issues.push({ code: 'unverified_model_identity', message: 'No verified endpoint-reported model identity and model-file identity are recorded.' });
     }
     if (!hasPromptProvenance(summary, environment)) {
       issues.push({ code: 'missing_prompt_provenance', message: 'Prompt version and system-prompt SHA-256 are not both recorded.' });
+    }
+    if (!hasRunTimestamps(environment)) {
+      issues.push({ code: 'missing_run_timestamps', message: 'Started and completed timestamps are not recorded in environment provenance.' });
+    }
+    if (!hasSchemaProvenance(environment)) {
+      issues.push({ code: 'missing_schema_provenance', message: 'Semantic schema version and SHA-256 are not recorded in environment provenance.' });
+    }
+    if (!hasDecodingProvenance(environment)) {
+      issues.push({ code: 'missing_decoding_provenance', message: 'Effective decoding parameters are not recorded.' });
+    }
+    if (!hasStructuredOutputMode(environment)) {
+      issues.push({ code: 'missing_structured_output_mode', message: 'Structured-output mode is not recorded (including explicit prompt-only/none).' });
+    }
+    if (!hasCleanExecutionTree(environment)) {
+      issues.push({ code: 'dirty_execution_tree', message: 'The run does not attest a clean working tree; its recorded commit cannot uniquely identify the executed source.' });
     }
     const commit = executionCommit(environment);
     if (!commit) issues.push({ code: 'missing_execution_commit', message: 'baselineCommit is not execution provenance; environment.json lacks codeCommit.' });
@@ -322,8 +439,11 @@ export async function buildEvidenceValidityManifest(repoRoot: string, reportsDir
         'execution code commit present in repository',
         'prompt version and system-prompt SHA-256',
         'runtime-attested model ID',
-        'verified endpoint model identity with weights SHA-256',
-        'non-empty per-item raw outputs'
+        'verified endpoint model identity plus weight hash or model-file metadata identity',
+        'started/completed timestamps',
+        'semantic schema version and SHA-256',
+        'effective decoding parameters and structured-output mode',
+        'non-empty per-item raw outputs plus raw request/response exchange'
       ],
       deterministicInterpretation: 'Useful for regression only; not evidence of model-mediated or end-to-end behavior.'
     },

@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "superqwen3.8-27b-abliterated-live",
+  "provider": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:54523/v1",
+  "model": "openai/superqwen3.8-27b-abliterated",
+  "temperature": 0,
+  "seed": 42,
+  "maxTokens": 768,
+  "chatTemplateKwargs": {
+    "enable_thinking": false
+  },
+  "timeoutMs": 300000,
+  "metadata": {
+    "purpose": "Stage 2 diagnostic and frozen extraction evaluation against the already-loaded SuperQwen3.8 27B Abliterated llama.cpp instance.",
+    "endpointDiscovery": "Observed from ss/ps and GET /v1/models on 2026-09-01; do not treat this local port as portable deployment configuration.",
+    "modelFile": {
+      "fileName": "SuperQwen3.8-27b-abliterated-Q4_K_M.gguf",
+      "source": "local llama.cpp process command line",
+      "fileSizeBytes": 16547400704,
+      "modifiedAt": "2026-08-29T12:36:51.534Z"
+    }
+  }
+}

@@ -14,8 +14,27 @@ export interface ModelProfile {
   seed?: number;
   maxTokens?: number;
   noThink?: boolean;
+  /** Provider-neutral chat-template parameters; adapters may ignore unsupported keys. */
+  chatTemplateKwargs?: Record<string, unknown>;
   timeoutMs: number;
   metadata?: Record<string, unknown>;
+}
+
+/** Provider-neutral request for constrained structured output.
+ *
+ * The semantic evaluator may request one of these capabilities, but the
+ * semantic core never knows how an individual provider transports it.
+ */
+export interface StructuredOutputCapability {
+  mode: 'json_schema' | 'json_object' | 'grammar' | 'prompt';
+  schema?: Record<string, unknown>;
+  grammar?: string;
+  strict?: boolean;
+  fallback?: 'json_object' | 'prompt';
+}
+
+export interface ModelCompletionOptions {
+  structuredOutput?: StructuredOutputCapability;
 }
 
 export interface CompletionUsage {
@@ -30,13 +49,27 @@ export interface ModelCompletion {
   content: string;
   finishReason: string | null;
   usage: CompletionUsage | null;
+  /** Final answer channel only; reasoning/thinking is never included here. */
+  /** Provider response envelope retained for evidence, with private reasoning fields redacted. */
+  rawResponse?: unknown;
+  /** Exact non-secret request body sent to the provider. */
+  rawRequest?: unknown;
 }
 
 /** Minimal, non-secret identity evidence obtained from GET /models before a run. */
 export interface ModelIdentityEvidence {
   requestedModel: string;
+  /** Exact model id returned by the provider's model discovery response. */
+  reportedModelId?: string;
   advertisedModelIds: string[];
   verified: boolean;
+  endpoint?: string;
+  modelFileIdentity?: {
+    source: string;
+    fileName: string;
+    fileSizeBytes: number;
+    modifiedAt: string;
+  };
   verificationError?: string;
 }
 
@@ -53,8 +86,12 @@ export interface ParseRunProvenance {
   modelProfileId: string;
   modelIdentity: ModelIdentityEvidence;
   effectiveSystemPromptSha256: string | null;
+  workingTreeClean?: boolean;
   promptVersion: string;
   schemaVersion: string;
+  schemaSha256?: string;
+  structuredOutputMode?: string;
+  decoding?: Record<string, unknown>;
   evidenceValid: boolean;
   invalidReasons: string[];
 }
@@ -98,7 +135,9 @@ export interface DatasetItem {
   sourceLanguage: string;
   sourceText: string;
   targetLanguage?: string;
+  /** Abstention fixtures encode no gold Sem at runtime and set expectedOutcome=abstain. */
   goldSem: LunumSem;
+  expectedOutcome?: 'parse' | 'abstain';
   protectedLiterals?: string[];
   tags?: string[];
 }
@@ -107,6 +146,9 @@ export interface ItemResult {
   id: string;
   status: 'passed' | 'failed' | 'error';
   rawOutput: string;
+  /** Decoded provider envelope when a response was received but normalization failed. */
+  rawResponse?: unknown;
+  rawRequest?: unknown;
   /** SHA-256 of the exact system message sent for this item. */
   systemPromptSha256?: string;
   /** SHA-256 of the user message sent for this item. Raw output is retained separately. */
@@ -115,6 +157,7 @@ export interface ItemResult {
   attempts?: ParseAttemptEvidence[];
   completion?: ModelCompletion;
   parsedSem?: LunumSem;
+  abstained?: boolean;
   realizedText?: string;
   exact?: boolean;
   nearSemantic?: boolean;
@@ -164,6 +207,8 @@ export interface ParseAttemptEvidence {
   attempt: number;
   status: 'passed' | 'failed' | 'error';
   rawOutput: string;
+  rawResponse?: unknown;
+  rawRequest?: unknown;
   systemPromptSha256: string | null;
   userPromptSha256: string | null;
   error?: string;

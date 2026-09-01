@@ -57,3 +57,44 @@ test('raw-text retrieval attributes extractor abstention and rejects wrong-but-v
   assert.ok(report.metrics.semanticMatchingFailures >= 1);
   assert.equal(report.queryResults.find((result) => result.queryId === 'wrong-role')?.retrievedMemoryIds.length, 0);
 });
+
+test('baseline hooks receive raw text only and are reported beside semantic retrieval', async () => {
+  const memory = sem('translate', 'guide', { recipient: { type: 'actor', id: 'team' } });
+  const seen: string[] = [];
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [{ id: 'guide-en', text: 'Translate the guide for the team.', language: 'en' }],
+    queries: [{ id: 'q-el', text: 'Μετέφρασε τον οδηγό για την ομάδα.', language: 'el', targetLanguage: 'en', expectedMemoryIds: ['guide-en'] }],
+    extract: ({ text, kind }) => {
+      seen.push(`${kind}:${text}`);
+      return memory;
+    },
+    topK: 1,
+    baselines: {
+      lexical: ({ query, memories, topK }) => {
+        assert.equal(topK, 1);
+        assert.equal(query.text, 'Μετέφρασε τον οδηγό για την ομάδα.');
+        assert.equal('expectedMemoryIds' in query, false);
+        assert.equal(memories[0]?.text, 'Translate the guide for the team.');
+        return [];
+      },
+    },
+  });
+  assert.deepEqual(seen, [
+    'memory:Translate the guide for the team.',
+    'query:Μετέφρασε τον οδηγό για την ομάδα.',
+  ]);
+  assert.equal(report.baselines.lexical?.top1Accuracy, 0);
+  assert.equal(report.baselines.lexical?.falsePositiveRate, 0);
+  assert.equal(report.baselines.lexical?.falseNegatives, 1);
+});
+
+test('baseline failures remain visible instead of disappearing from denominators', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [{ id: 'm', text: 'A fact.', language: 'en' }],
+    queries: [{ id: 'q', text: 'A fact?', language: 'en', expectedMemoryIds: ['m'] }],
+    extract: () => sem('state', 'fact'),
+    baselines: { broken: () => { throw new Error('baseline unavailable'); } },
+  });
+  assert.equal(report.baselines.broken?.failures, 1);
+  assert.equal(report.baselines.broken?.falseNegatives, 1);
+});

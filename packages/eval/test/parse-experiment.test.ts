@@ -4,7 +4,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { execFile } from 'node:child_process';
 import { runParseExperiment } from '../src/parse-experiment.js';
-import { PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES } from '../src/parse-experiment.js';
+import { extractStructuredJson, PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES } from '../src/parse-experiment.js';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import { createServer } from 'node:http';
@@ -34,6 +34,13 @@ test('parse evidence rejects placeholder model IDs before a request is made', ()
     temperature: 0,
     timeoutMs: 1000
   }), /placeholder model IDs/u);
+});
+
+test('structured parse extraction fails closed on prose wrappers and accepts one JSON fence', () => {
+  assert.deepStrictEqual(extractStructuredJson('```json\n{"ok":true}\n```'), { ok: true });
+  assert.throws(() => extractStructuredJson('Here is the JSON: {"ok":true}'), /exactly one JSON object/u);
+  assert.throws(() => extractStructuredJson('{"ok":true}\nThat is all.'), /exactly one JSON object/u);
+  assert.throws(() => extractStructuredJson('```json\n{"ok":true}\n```\nextra'), /exactly one JSON object/u);
 });
 
 test('parse experiment enforces maxModelCalls globally and records verified provenance', async () => {

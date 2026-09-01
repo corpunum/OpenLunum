@@ -624,6 +624,7 @@ export async function runFalsePositiveReviewCli(
         if (!validation.ok) throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
         const parsedSem = parsed as LunumSem;
 
+        if (!sourceItem.goldSem || !item.goldSem) throw new Error('false-positive review requires gold Sem for both source and target');
         const sourceMatch = scoreAgainst(generator, sourceItem.goldSem, parsedSem, sourceItem.protectedLiterals ?? []);
         const ownMatch = scoreAgainst(generator, item.goldSem, parsedSem, item.protectedLiterals ?? []);
         const falsePositive = sourceMatch.exact || sourceMatch.nearSemanticOnly;

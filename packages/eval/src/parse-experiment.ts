@@ -9,13 +9,13 @@ import path from 'node:path';
 import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, stableStringify, validateSem } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
-import { effectiveSystemPrompt, OpenAICompatibleModel } from './model.js';
+import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
 import { checkProtectedLiteralPlacement, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
-import type { DatasetItem, ExperimentManifest, ItemResult, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
+import type { DatasetItem, ExperimentManifest, ItemResult, ModelCompletion, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
 
 export type ParseLanguage = 'en' | 'el' | 'es' | 'id' | 'fr' | 'de' | 'ja' | 'zh' | 'pt' | 'ar';
-export const PARSE_PROMPT_VERSION = 'parse-prompt/2';
+export const PARSE_PROMPT_VERSION = 'parse-prompt/3';
 export const PARSE_LANGUAGES: ParseLanguage[] = ['en', 'el', 'es', 'id', 'fr', 'de', 'ja', 'zh', 'pt', 'ar'];
 export const PARSE_LANGUAGE_LABELS: Record<ParseLanguage, string> = {
   en: 'English',
@@ -89,13 +89,14 @@ export interface CrossLanguageComparison {
   variance: Record<string, number>;
 }
 
-function extractJson(text: string): unknown {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/iu)?.[1];
-  const candidate = fenced ?? text;
-  const start = candidate.indexOf('{');
-  const end = candidate.lastIndexOf('}');
-  if (start < 0 || end < start) throw new Error('No JSON object found in model output');
-  return JSON.parse(candidate.slice(start, end + 1));
+export function extractStructuredJson(text: string): unknown {
+  const trimmed = text.trim();
+  const fencedMatch = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/iu);
+  const candidate = fencedMatch?.[1]?.trim() ?? trimmed;
+  if (!candidate.startsWith('{') || !candidate.endsWith('}')) {
+    throw new Error('Model output must be exactly one JSON object (optionally in one JSON code fence)');
+  }
+  return JSON.parse(candidate);
 }
 
 function computeVariance(values: number[]): number {
@@ -106,6 +107,14 @@ function computeVariance(values: number[]): number {
 
 function sha256Text(value: string): string {
   return createHash('sha256').update(value).digest('hex');
+}
+
+function isAbstention(value: unknown): value is { status: 'abstain'; reason: string } {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const candidate = value as Record<string, unknown>;
+  return candidate.status === 'abstain'
+    && typeof candidate.reason === 'string'
+    && candidate.reason.trim().length > 0;
 }
 
 function semanticFeatureSets(sem: LunumSem): Record<string, Set<string>> {
@@ -155,6 +164,28 @@ function gitCommit(root: string): string | null {
   }
 }
 
+function gitWorkingTreeClean(root: string): boolean {
+  try {
+    // The operator may have unrelated, intentionally preserved work in the
+    // checkout.  Attest the evaluated source/data scope, not an unrelated
+    // report or integration edit elsewhere in the repository.
+    const scoped = [
+      'packages/core', 'packages/eval', 'schemas/model-profile.schema.json',
+      'profiles/models/superqwen3.8-27b-abliterated-live.json',
+      'datasets/dev/stage2-heldout-v1.jsonl', 'datasets/dev/stage2-heldout-v2.jsonl',
+      'datasets/dev/stage2-retrieval-v1.jsonl', 'datasets/adversarial/critical-semantic-differences-v1.jsonl',
+      'datasets/manifests/stage2-heldout-v1.json', 'datasets/manifests/stage2-heldout-v2.json',
+      'datasets/manifests/stage2-retrieval-v1.json', 'datasets/manifests/critical-semantic-differences-v1.json',
+      'experiments/parse-stage2-superqwen-diagnostic/experiment.json',
+      'experiments/parse-stage2-superqwen-frozen/experiment.json'
+    ];
+    const status = execFileSync('git', ['status', '--porcelain', '--untracked-files=all', '--', ...scoped], { cwd: root, encoding: 'utf8' });
+    return status.trim().length === 0;
+  } catch {
+    return false;
+  }
+}
+
 function gitCommitResolvable(root: string, revision: string): boolean {
   try {
     execFileSync('git', ['cat-file', '-e', `${revision}^{commit}`], { cwd: root, stdio: 'ignore' });
@@ -176,12 +207,25 @@ function advertisedModelIds(payload: unknown): string[] {
 async function verifyModelIdentity(model: OpenAICompatibleModel, profile: ModelProfile): Promise<ModelIdentityEvidence> {
   try {
     const ids = advertisedModelIds(await model.doctor());
-    return { requestedModel: profile.model, advertisedModelIds: ids, verified: ids.includes(profile.model) };
+    const metadata = profile.metadata?.modelFile;
+    const modelFileIdentity = metadata && typeof metadata === 'object' && !Array.isArray(metadata)
+      ? metadata as ModelIdentityEvidence['modelFileIdentity']
+      : undefined;
+    const identity: ModelIdentityEvidence = {
+      requestedModel: profile.model,
+      advertisedModelIds: ids,
+      verified: ids.includes(profile.model),
+      endpoint: profile.baseUrl,
+      ...(modelFileIdentity ? { modelFileIdentity } : {})
+    };
+    if (ids.includes(profile.model)) identity.reportedModelId = profile.model;
+    return identity;
   } catch (error) {
     return {
       requestedModel: profile.model,
       advertisedModelIds: [],
       verified: false,
+      endpoint: profile.baseUrl,
       verificationError: error instanceof Error ? error.message : String(error)
     };
   }
@@ -211,6 +255,30 @@ export async function runParseExperiment(
   const items = ((await loadDataset(datasetPath)) as DatasetItem[]).slice(0, manifest.limits.maxItems);
   const profile = await readJson<ModelProfile>(modelProfilePath);
   validateProfile(profile);
+  const schemaPath = path.join(root, 'schemas/lunum-sem.schema.json');
+  const semSchema = await readJson<Record<string, unknown>>(schemaPath);
+  const extractionSchema = {
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    $id: 'https://openlunum.org/schemas/semantic-extraction-result/0.1',
+    title: 'OpenLunum semantic extraction result',
+    oneOf: [semSchema, {
+      type: 'object',
+      additionalProperties: false,
+      required: ['status', 'reason'],
+      properties: {
+        status: { const: 'abstain' },
+        reason: { type: 'string', minLength: 1 }
+      }
+    }]
+  } as Record<string, unknown>;
+  const schemaVersion = 'semantic-extraction-result/0.1';
+  const schemaSha256 = sha256Text(stableStringify(extractionSchema));
+  const structuredOutput = {
+    mode: 'json_schema' as const,
+    schema: extractionSchema,
+    strict: true,
+    fallback: 'json_object' as const
+  };
 
   const startedAt = new Date().toISOString();
   const modelIdentity = await verifyModelIdentity(new OpenAICompatibleModel(profile), profile);
@@ -248,6 +316,9 @@ export async function runParseExperiment(
       for (let attempt = 1; attempt <= manifest.limits.maxAttemptsPerItem && calls < manifest.limits.maxModelCalls; attempt += 1) {
         const started = performance.now();
         let rawOutput = '';
+        let rawRequest: unknown;
+        let rawResponse: unknown;
+        let completion: ModelCompletion | undefined;
         let systemPromptSha256: string | null = null;
         let userPromptSha256: string | null = null;
         try {
@@ -256,13 +327,76 @@ export async function runParseExperiment(
           systemPromptSha256 = sha256Text(effectiveSystem);
           userPromptSha256 = sha256Text(prompt.user);
           calls += 1;
-          const completion = await model.complete(prompt.system, prompt.user);
+          completion = await model.complete(prompt.system, prompt.user, { structuredOutput });
           rawOutput = completion.content;
-          const parsed = extractJson(rawOutput);
+          rawRequest = completion.rawRequest;
+          rawResponse = completion.rawResponse;
+          const parsed = extractStructuredJson(rawOutput);
+          const expectedOutcome = item.expectedOutcome ?? 'parse';
+          if (isAbstention(parsed)) {
+            finalResult = {
+              id: item.id,
+              status: expectedOutcome === 'abstain' || item.goldSem === null ? 'passed' : 'failed',
+              rawOutput,
+              rawRequest,
+              rawResponse,
+              systemPromptSha256,
+              userPromptSha256,
+              abstained: true,
+              ...(expectedOutcome === 'abstain' || item.goldSem === null ? {} : {
+                featureRecall: 0,
+                featurePrecision: 0,
+                missingFeatures: ['model abstained for a representable item']
+              }),
+              completion,
+              latencyMs: performance.now() - started
+            };
+            attempts.push({
+              attempt,
+              status: finalResult.status,
+              rawOutput,
+              rawRequest,
+              rawResponse,
+              systemPromptSha256,
+              userPromptSha256,
+              latencyMs: finalResult.latencyMs
+            });
+            break;
+          }
+
           const validation = validateSem(parsed);
           if (!validation.ok) throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
+          if (expectedOutcome === 'abstain' || item.goldSem === null) {
+            finalResult = {
+              id: item.id,
+              status: 'failed',
+              rawOutput,
+              rawRequest,
+              rawResponse,
+              systemPromptSha256,
+              userPromptSha256,
+              parsedSem: parsed as LunumSem,
+              abstained: false,
+              featureRecall: 0,
+              featurePrecision: 0,
+              missingFeatures: ['expected abstention but model returned a semantic candidate'],
+              completion,
+              latencyMs: performance.now() - started
+            };
+            attempts.push({
+              attempt,
+              status: finalResult.status,
+              rawOutput,
+              rawRequest,
+              rawResponse,
+              systemPromptSha256,
+              userPromptSha256,
+              latencyMs: finalResult.latencyMs
+            });
+            break;
+          }
 
-          const goldSem = item.goldSem as LunumSem;
+          const goldSem = item.goldSem;
           const parsedSem = parsed as LunumSem;
           const comparison = compareSem(goldSem, parsedSem);
           const perFeature = featureMetrics(goldSem, parsedSem);
@@ -281,6 +415,8 @@ export async function runParseExperiment(
             id: item.id,
             status: comparison.exactFingerprint ? 'passed' : 'failed',
             rawOutput,
+            rawRequest,
+            rawResponse,
             systemPromptSha256,
             userPromptSha256,
             parsedSem,
@@ -300,6 +436,8 @@ export async function runParseExperiment(
             attempt,
             status: finalResult.status,
             rawOutput,
+            rawRequest,
+            rawResponse,
             systemPromptSha256,
             userPromptSha256,
             latencyMs: finalResult.latencyMs
@@ -308,10 +446,17 @@ export async function runParseExperiment(
         } catch (error) {
           const message = `attempt ${attempt}: ${error instanceof Error ? error.message : String(error)}`;
           const latencyMs = performance.now() - started;
+          if (error instanceof ModelResponseError) {
+            rawResponse = error.rawResponse;
+            rawRequest = error.rawRequest;
+          }
           finalResult = {
             id: item.id,
             status: 'error',
             rawOutput,
+            ...(rawRequest !== undefined ? { rawRequest } : {}),
+            ...(rawResponse !== undefined ? { rawResponse } : {}),
+            ...(completion ? { completion } : {}),
             ...(systemPromptSha256 ? { systemPromptSha256 } : {}),
             ...(userPromptSha256 ? { userPromptSha256 } : {}),
             error: message,
@@ -321,6 +466,8 @@ export async function runParseExperiment(
             attempt,
             status: 'error',
             rawOutput,
+            ...(rawRequest !== undefined ? { rawRequest } : {}),
+            ...(rawResponse !== undefined ? { rawResponse } : {}),
             systemPromptSha256,
             userPromptSha256,
             error: message,
@@ -352,6 +499,8 @@ export async function runParseExperiment(
   let totalFeatureRecall = 0;
   let totalFeaturePrecision = 0;
   let totalLatencyMs = 0;
+  let abstentionExpected = 0;
+  let abstentionCorrect = 0;
 
   for (const language of PARSE_LANGUAGES) {
     const results = languageResults.get(language) ?? [];
@@ -367,6 +516,14 @@ export async function runParseExperiment(
     const featurePrecision = total > 0 ? results.reduce((sum, result) => sum + (result.featurePrecision ?? 0), 0) / total : 0;
     const meanLatencyMs = total > 0 ? results.reduce((sum, result) => sum + result.latencyMs, 0) / total : 0;
     const languageFeatures: Record<string, { expected: number; matched: number; observed: number }> = {};
+    const languageItems = byLanguage.get(language) ?? [];
+    const expectedAbstentions = languageItems.filter((item) => item.expectedOutcome === 'abstain' || item.goldSem === null).length;
+    const correctAbstentions = results.filter((result, index) => {
+      const item = languageItems[index];
+      return (item?.expectedOutcome === 'abstain' || item?.goldSem === null) && result.abstained === true;
+    }).length;
+    abstentionExpected += expectedAbstentions;
+    abstentionCorrect += correctAbstentions;
     for (const result of results) {
       for (const [name, values] of Object.entries(result.featureMetrics ?? {})) {
         const aggregate = aggregateFeatures[name] ?? { expected: 0, matched: 0, observed: 0 };
@@ -406,7 +563,7 @@ export async function runParseExperiment(
       ,schemaValidityRate: total > 0 ? results.filter((result) => result.status !== 'error').length / total : 0
       ,canonicalExactRate: exactRate
       ,featureBreakdown: breakdown
-      ,abstentionAccuracy: null
+      ,abstentionAccuracy: expectedAbstentions > 0 ? correctAbstentions / expectedAbstentions : null
     });
 
     languageBreakdown[language] = [passed, failed, errors, total];
@@ -482,7 +639,9 @@ export async function runParseExperiment(
   }]));
   const languageCount = languagesIncluded.length;
   const invalidReasons: string[] = [];
+  const workingTreeClean = gitWorkingTreeClean(root);
   if (!codeCommit) invalidReasons.push('current git commit could not be resolved');
+  if (!workingTreeClean) invalidReasons.push('working tree was dirty during the run; commit does not identify executed source');
   if (!baselineCommitResolvable) invalidReasons.push(`baselineCommit is not a resolvable commit: ${manifest.baselineCommit}`);
   if (!modelIdentity.verified) invalidReasons.push('endpoint did not verify the requested model through GET /models');
   if (!effectiveSystemPromptSha256) invalidReasons.push('no effective system prompt was captured');
@@ -498,8 +657,17 @@ export async function runParseExperiment(
     modelProfileId: profile.id,
     modelIdentity,
     effectiveSystemPromptSha256,
+    workingTreeClean,
     promptVersion: PARSE_PROMPT_VERSION,
-    schemaVersion: 'lunum-sem/0.1-draft',
+    schemaVersion,
+    schemaSha256,
+    structuredOutputMode: 'json-schema',
+    decoding: {
+      temperature: profile.temperature,
+      ...(profile.seed !== undefined ? { seed: profile.seed } : {}),
+      maxTokens: profile.maxTokens,
+      chatTemplateKwargs: profile.chatTemplateKwargs ?? null
+    },
     evidenceValid: invalidReasons.length === 0,
     invalidReasons
   };
@@ -521,7 +689,7 @@ export async function runParseExperiment(
     languageBreakdown,
     failureModes,
     featureBreakdown,
-    abstentionAccuracy: null,
+    abstentionAccuracy: abstentionExpected > 0 ? abstentionCorrect / abstentionExpected : null,
     provenance
   };
 
@@ -592,6 +760,10 @@ ${Object.entries(failureModes).map(([mode, count]) => `- ${mode}: ${count}`).joi
     prompt: {
       version: PARSE_PROMPT_VERSION,
       systemSha256: effectiveSystemPromptSha256,
+    },
+    decoding: {
+      ...provenance.decoding,
+      structuredOutputMode: provenance.structuredOutputMode
     },
     provenance
   });

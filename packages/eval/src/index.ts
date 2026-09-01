@@ -12,6 +12,8 @@ export type {
   ModelProfile,
   CompletionUsage,
   ModelCompletion,
+  ModelCompletionOptions,
+  StructuredOutputCapability,
   StreamingModelCompletion,
   ExperimentManifest,
   DatasetItem,
@@ -80,7 +82,8 @@ export type {
 export { runExperiment } from './runner.js';
 
 // Model
-export { OpenAICompatibleModel } from './model.js';
+export { ModelResponseError, OpenAICompatibleModel, normalizeModelResponse, openAICompatibleStructuredOutputAdapter } from './model.js';
+export type { StructuredOutputAdapter } from './model.js';
 
 // Smoke testing
 export { runSmoke } from './smoke.js';
@@ -176,10 +179,13 @@ export type {
   RawTextQuery,
   RawTextExtractionInput,
   RawTextExtractor,
+  RawTextBaseline,
   RawTextRetrievalQueryResult,
   RawTextRetrievalMetrics,
+  RawTextBaselineMetrics,
   RawTextRetrievalReport,
 } from './raw-text-retrieval.js';
+export { runStage2LiveRetrieval } from './stage2-live-retrieval.js';
 
 // Model family eval
 export {

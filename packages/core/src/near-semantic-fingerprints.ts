@@ -166,6 +166,14 @@ function collectHardTermLiterals(term: LunumTerm, output: string[]): void {
     return;
   }
   if (term !== null && typeof term === 'object') {
+    // Keep ordinary concept/resource ids soft so harmless extraction naming
+    // variance (e.g. `informe` vs `report`) can remain near-semantic.  IDs
+    // that change authority, environment, visibility, or destructive scope
+    // are hard invariants because a confident near-match would be unsafe.
+    const hardIdentityTypes = new Set(['actor', 'access', 'collection', 'environment']);
+    if (typeof term.type === 'string' && typeof term.id === 'string' && hardIdentityTypes.has(term.type)) {
+      output.push(`typed-id:${JSON.stringify(term.type)}:${JSON.stringify(term.id)}`);
+    }
     if (typeof term.ref === 'string') output.push(`ref:${JSON.stringify(term.ref)}`);
     if ('value' in term) collectPrimitiveValues(term.value, output);
     return;
@@ -256,7 +264,7 @@ function hardMismatchReasons(first: HardSignature, second: HardSignature): strin
     reasons.push('clause structure, negation, or modality differs');
   }
   if (stableValue(first.literals) !== stableValue(second.literals)) {
-    reasons.push('typed literal, reference value, or literal multiplicity differs');
+    reasons.push('protected-literal or typed literal, reference value, or literal multiplicity differs');
   }
   if (stableValue(first.actorBindings) !== stableValue(second.actorBindings)) {
     reasons.push('actor identity or authority binding differs');

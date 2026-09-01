@@ -130,10 +130,11 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     system: [
       'Convert the input into Lunum-Sem JSON.',
       'Return one JSON object only; no markdown.',
-      'Use schema lunum-sem/0.1-draft.',
+      'For a representable statement, return a Lunum-Sem object using schema lunum-sem/0.1-draft.',
+      'If the source is too ambiguous, underspecified, or unsupported to represent without inventing facts, fail closed with exactly {"status":"abstain","reason":"brief explanation"}.',
       'Preserve entities, roles, negation, conditions, quantities, dates, time, modality, and uncertainty.',
       'Use language-neutral controlled identifiers in lower_snake_case.',
-      'Do not invent facts. If ambiguous, record an annotation warning rather than choosing silently.',
+      'Do not invent facts. Record an annotation warning for a representable uncertainty; use the abstain result when a safe semantic candidate cannot be formed.',
       '',
       'Expected JSON structure:',
       '{',
