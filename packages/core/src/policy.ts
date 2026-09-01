@@ -1,4 +1,7 @@
+import { createHash } from 'node:crypto';
 import { validateSem } from './canonicalize.js';
+import { fingerprintSem } from './fingerprint.js';
+import type { SemanticNormalizationIssue } from './semantic-registry.js';
 import {
   computeParseConfidence,
   hasMinimumEvidence,
@@ -41,6 +44,9 @@ export interface SemanticVerification {
   verifierId: string;
   verifiedAt: string;
   result: 'match';
+  /** Bind the verification to the exact source and candidate it checked. */
+  sourceTextSha256?: string;
+  candidateFingerprint?: string;
 }
 
 export interface SemanticTrustInput {
@@ -56,9 +62,16 @@ export interface SemanticTrustInput {
   knownPredicates?: ReadonlySet<string> | undefined;
   /** Legacy caller confidence is retained only to make its non-authority visible. */
   callerConfidence?: number | undefined;
+  /** Result of the protocol normalizer; absent means the caller bypassed it. */
+  canonicalProtocol?: boolean | undefined;
+  normalizationIssues?: SemanticNormalizationIssue[] | undefined;
 }
 
 export const MIN_PROMOTION_CONFIDENCE = 0.90;
+
+function sha256Text(value: string): string {
+  return createHash('sha256').update(value).digest('hex');
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -186,6 +199,10 @@ export function evaluateSemanticTrust(input: SemanticTrustInput): SemanticTrustD
   const reasons: string[] = [];
   if (input.callerConfidence !== undefined) reasons.push('caller_confidence_ignored');
   if (!(input.sourceText ?? '').trim()) reasons.push('missing_source_text');
+  if (input.canonicalProtocol !== true) reasons.push('semantic_not_protocol_canonical');
+  for (const issue of input.normalizationIssues ?? []) {
+    if (issue.severity === 'warning' && issue.code === 'unknown_protocol_symbol') reasons.push(`unresolved_protocol_symbol:${issue.path}`);
+  }
   if (parseConfidence.score < MIN_PROMOTION_CONFIDENCE) {
     reasons.push(`evidence_confidence_below_${MIN_PROMOTION_CONFIDENCE.toFixed(2)}`);
   }
@@ -232,6 +249,11 @@ export function evaluateSemanticTrust(input: SemanticTrustInput): SemanticTrustD
     !validEvidenceTimestamp(verification.verifiedAt)
   ) {
     reasons.push('invalid_independent_verification');
+  } else if (
+    verification.sourceTextSha256 !== sha256Text(input.sourceText ?? '') ||
+    verification.candidateFingerprint !== fingerprintForTrust(input.sem)
+  ) {
+    reasons.push('invalid_verification_binding');
   }
 
   const uniqueReasons = [...new Set(reasons)];
@@ -242,6 +264,10 @@ export function evaluateSemanticTrust(input: SemanticTrustInput): SemanticTrustD
     requiresHumanReview: uniqueReasons.length > 0,
     reasons: uniqueReasons,
   };
+}
+
+function fingerprintForTrust(sem: unknown): string {
+  return fingerprintSem(sem);
 }
 
 export function classifyEligibility(input: EligibilityInput = {}): EligibilityDecision {

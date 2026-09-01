@@ -1,6 +1,51 @@
 import crypto from 'node:crypto';
 import { FP_VERSION } from './constants.js';
 import { canonicalizeSem, stableStringify } from './canonicalize.js';
+import { normalizeSemanticCandidate } from './semantic-registry.js';
+import type { LunumClause, LunumSem } from './types.js';
+
+/**
+ * New identity projection. The legacy `fingerprintSem` output is preserved
+ * because it is already stored in records and referenced by migration docs.
+ * This version makes the semantic/metadata boundary explicit instead of
+ * silently changing the meaning of `lfp:0.1`.
+ */
+export const SEMANTIC_IDENTITY_FINGERPRINT_VERSION = '2.0' as const;
+
+function identityClause(clause: LunumClause): LunumClause {
+  const { annotations: _annotations, conditions, consequences, ...rest } = clause;
+  return {
+    ...rest,
+    ...(conditions?.length ? { conditions: conditions.map(identityClause) } : {}),
+    ...(consequences?.length ? { consequences: consequences.map(identityClause) } : {})
+  };
+}
+
+/** Return only proposition-bearing Sem fields; provenance and annotations are metadata. */
+export function semanticIdentityProjection(sem: LunumSem): Record<string, unknown> {
+  return {
+    protocol: 'lunum-protocol/0.1',
+    schema: sem.schema,
+    world: sem.world,
+    kind: sem.kind,
+    clauses: sem.clauses.map(identityClause),
+    ...(sem.references?.length ? { references: sem.references } : {})
+  };
+}
+
+/**
+ * Fingerprint a protocol-canonical Sem with metadata excluded. Unknown
+ * controlled symbols are rejected rather than becoming durable identity.
+ */
+export function semanticFingerprint(sem: unknown, options: { length?: number } = {}): string {
+  const normalization = normalizeSemanticCandidate(sem);
+  if (!normalization.sem || !normalization.canonical) {
+    throw new TypeError('Cannot compute semantic identity for a non-canonical protocol candidate');
+  }
+  const projection = semanticIdentityProjection(canonicalizeSem(normalization.sem));
+  const digest = crypto.createHash('sha256').update(stableStringify(projection)).digest('hex');
+  return `lfp:${SEMANTIC_IDENTITY_FINGERPRINT_VERSION}:sha256:${digest.slice(0, boundedLength(options.length ?? 32))}`;
+}
 
 /**
  * Fingerprint version and format specification (lunum-fp/1.0)

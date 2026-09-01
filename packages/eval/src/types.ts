@@ -1,4 +1,5 @@
 import type { LunumSem } from '@corpunum/lunum';
+import type { SemanticNormalizationResult } from '@corpunum/lunum';
 
 export type WorkArea = 'semantic-contract' | 'multilingual-parse' | 'realization' | 'rendering' | 'context' | 'retrieval' | 'integration' | 'infrastructure';
 export type ExperimentTask = 'parse' | 'realize' | 'render' | 'context' | 'retrieval' | 'integration' | 'conformance' | 'infrastructure';
@@ -127,6 +128,10 @@ export interface ExperimentManifest {
   limits: { maxItems: number; maxAttemptsPerItem: number; maxModelCalls: number };
   gates: { minimumFeatureRecall: number; minimumExactRate: number; requireProtectedLiteralCoverage: boolean };
   outputDirectory: string;
+  /** Evidence tier; protected claims require an independent evaluator receipt. */
+  evidenceClass?: 'development' | 'regression' | 'protected';
+  /** Candidate implementation commit used by a protected evaluator. */
+  implementationCommit?: string;
 }
 
 export interface DatasetItem {
@@ -157,6 +162,13 @@ export interface ItemResult {
   attempts?: ParseAttemptEvidence[];
   completion?: ModelCompletion;
   parsedSem?: LunumSem;
+  /** Protocol normalization outcome; structural validity alone is not canonical identity. */
+  candidateNormalization?: Pick<SemanticNormalizationResult, 'status' | 'canonical' | 'issues' | 'protocolVersion'>;
+  canonicalExact?: boolean;
+  /** Validated against the exact JSON Schema sent to the provider. */
+  transportSchemaValid?: boolean;
+  /** Legacy formatting-only fingerprint comparison, retained for migration diagnostics. */
+  legacyExact?: boolean;
   abstained?: boolean;
   realizedText?: string;
   exact?: boolean;

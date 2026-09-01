@@ -6,11 +6,13 @@ import { appendFile, mkdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
+import Ajv2020Module from 'ajv/dist/2020.js';
+import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
 import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
+import { parseStrictJsonObject } from './strict-json.js';
 import { checkProtectedLiteralPlacement, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
 import type { DatasetItem, ExperimentManifest, ItemResult, ModelCompletion, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
 
@@ -97,7 +99,27 @@ export function extractStructuredJson(text: string): unknown {
   if (!candidate.startsWith('{') || !candidate.endsWith('}')) {
     throw new Error('Model output must be exactly one JSON object (optionally in one JSON code fence)');
   }
-  return JSON.parse(candidate);
+  return parseStrictJsonObject(candidate);
+}
+
+/** Build the exact schema sent to a provider for parse tasks. */
+export function buildExtractionSchema(semSchema: Record<string, unknown>): Record<string, unknown> {
+  const { $defs: semDefs, $schema: _semSchema, $id: _semId, title: _semTitle, ...semBranch } = semSchema;
+  return {
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    $id: 'https://openlunum.org/schemas/semantic-extraction-result/0.1',
+    title: 'OpenLunum semantic extraction result',
+    oneOf: [semBranch, {
+      type: 'object',
+      additionalProperties: false,
+      required: ['status', 'reason'],
+      properties: {
+        status: { const: 'abstain' },
+        reason: { type: 'string', minLength: 1 }
+      }
+    }],
+    $defs: semDefs
+  };
 }
 
 function computeVariance(values: number[]): number {
@@ -265,22 +287,7 @@ export async function runParseExperiment(
   validateProfile(profile);
   const schemaPath = path.join(root, 'schemas/lunum-sem.schema.json');
   const semSchema = await readJson<Record<string, unknown>>(schemaPath);
-  const { $defs: semDefs, $schema: _semSchema, $id: _semId, title: _semTitle, ...semBranch } = semSchema;
-  const extractionSchema = {
-    $schema: 'https://json-schema.org/draft/2020-12/schema',
-    $id: 'https://openlunum.org/schemas/semantic-extraction-result/0.1',
-    title: 'OpenLunum semantic extraction result',
-    oneOf: [semBranch, {
-      type: 'object',
-      additionalProperties: false,
-      required: ['status', 'reason'],
-      properties: {
-        status: { const: 'abstain' },
-        reason: { type: 'string', minLength: 1 }
-      }
-    }],
-    $defs: semDefs
-  } as Record<string, unknown>;
+  const extractionSchema = buildExtractionSchema(semSchema);
   const schemaVersion = 'semantic-extraction-result/0.1';
   const schemaSha256 = sha256Text(stableStringify(extractionSchema));
   const structuredOutput = {
@@ -289,6 +296,14 @@ export async function runParseExperiment(
     strict: true,
     fallback: 'json_object' as const
   };
+  const transportValidator = new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(extractionSchema);
+  const invalidGold = items.flatMap((item) => {
+    if (item.goldSem === null || item.expectedOutcome === 'abstain') return [];
+    return transportValidator(item.goldSem)
+      ? []
+      : [`${item.id}: ${(transportValidator.errors ?? []).map((error) => error.message ?? 'invalid').join('; ')}`];
+  });
+  if (invalidGold.length > 0) throw new Error(`Evaluation gold Sem failed the exact transport schema: ${invalidGold.join(' | ')}`);
 
   const startedAt = new Date().toISOString();
   const modelIdentity = await verifyModelIdentity(new OpenAICompatibleModel(profile), profile);
@@ -342,6 +357,9 @@ export async function runParseExperiment(
           rawRequest = completion.rawRequest;
           rawResponse = completion.rawResponse;
           const parsed = extractStructuredJson(rawOutput);
+          if (!transportValidator(parsed)) {
+            throw new Error(`Transport schema validation failed: ${(transportValidator.errors ?? []).map((error) => error.message ?? 'invalid').join('; ')}`);
+          }
           const expectedOutcome = item.expectedOutcome ?? 'parse';
           if (isAbstention(parsed)) {
             finalResult = {
@@ -353,6 +371,7 @@ export async function runParseExperiment(
               systemPromptSha256,
               userPromptSha256,
               abstained: true,
+              transportSchemaValid: true,
               ...(expectedOutcome === 'abstain' || item.goldSem === null ? {} : {
                 featureRecall: 0,
                 featurePrecision: 0,
@@ -387,6 +406,7 @@ export async function runParseExperiment(
               userPromptSha256,
               parsedSem: parsed as LunumSem,
               abstained: false,
+              transportSchemaValid: true,
               featureRecall: 0,
               featurePrecision: 0,
               missingFeatures: ['expected abstention but model returned a semantic candidate'],
@@ -407,13 +427,21 @@ export async function runParseExperiment(
           }
 
           const goldSem = item.goldSem;
-          const parsedSem = parsed as LunumSem;
+          const candidateNormalization = normalizeSemanticCandidate(parsed);
+          const parsedSem = (candidateNormalization.sem ?? parsed) as LunumSem;
+          const goldNormalization = normalizeSemanticCandidate(goldSem);
+          // The legacy comparison remains diagnostic. Canonical exactness is
+          // only asserted when both sides are protocol-canonical.
           const comparison = compareSem(goldSem, parsedSem);
+          const canonicalComparison = goldNormalization.canonical && candidateNormalization.canonical && goldNormalization.sem && candidateNormalization.sem
+            ? compareSem(goldNormalization.sem, candidateNormalization.sem)
+            : null;
           const perFeature = featureMetrics(goldSem, parsedSem);
           const nearResult = nearSemantic.compareSem(goldSem, parsedSem, {
             protectedLiterals: item.protectedLiterals ?? []
           });
-          const nearOnly = !comparison.exactFingerprint && nearResult.similar;
+          const canonicalExact = canonicalComparison?.exactFingerprint === true;
+          const nearOnly = !canonicalExact && nearResult.similar;
 
           // Placement-aware protected literal check (issue #329): verifies each
           // declared protectedLiteral lands in the same structural role it
@@ -423,14 +451,17 @@ export async function runParseExperiment(
 
           finalResult = {
             id: item.id,
-            status: comparison.exactFingerprint ? 'passed' : 'failed',
+            status: canonicalExact ? 'passed' : 'failed',
             rawOutput,
             rawRequest,
             rawResponse,
             systemPromptSha256,
             userPromptSha256,
             parsedSem,
-            exact: comparison.exactFingerprint,
+            exact: canonicalExact,
+            legacyExact: comparison.exactFingerprint,
+            canonicalExact,
+            transportSchemaValid: true,
             nearSemantic: nearOnly,
             nearSemanticScore: nearResult.similarity,
             featureRecall: comparison.featureRecall,
@@ -439,6 +470,12 @@ export async function runParseExperiment(
             missingFeatures: comparison.missingFeatures,
             protectedLiteralPlacement: literalPlacement,
             protectedLiteralPlacementCoverage: protectedLiteralPlacementCoverage(literalPlacement),
+            candidateNormalization: {
+              status: candidateNormalization.status,
+              canonical: candidateNormalization.canonical,
+              issues: candidateNormalization.issues,
+              protocolVersion: candidateNormalization.protocolVersion
+            },
             completion,
             latencyMs: performance.now() - started
           };
@@ -571,7 +608,7 @@ export async function runParseExperiment(
       fingerprintMatches: exactCount,
       exactFingerprintCount: exactCount,
       nearSemanticFingerprintCount: nearCount
-      ,schemaValidityRate: total > 0 ? results.filter((result) => result.status !== 'error').length / total : 0
+      ,schemaValidityRate: total > 0 ? results.filter((result) => result.transportSchemaValid === true).length / total : 0
       ,canonicalExactRate: exactRate
       ,featureBreakdown: breakdown
       ,abstentionAccuracy: expectedAbstentions > 0 ? correctAbstentions / expectedAbstentions : null

@@ -52,6 +52,7 @@ import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
+import { parseStrictJsonObject } from './strict-json.js';
 import {
   planFalsePositiveReviewExecution,
   validateFalsePositiveReviewManifest,
@@ -225,19 +226,20 @@ function classifyTransportError(error: unknown): string {
 function classifyModelFailure(error: unknown): string {
   const message = error instanceof Error ? error.message : String(error);
   const lower = message.toLowerCase();
-  if (lower.includes('no json object found')) return 'no_json_in_output';
+  if (lower.includes('no json object found') || lower.includes('must be exactly one json object')) return 'no_json_in_output';
   if (lower.includes('unexpected token') || lower.includes('json.parse')) return 'malformed_json';
   if (lower.includes('validation failed')) return 'schema_validation_failed';
   return 'unexpected_model_failure';
 }
 
 function extractJson(text: string): unknown {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/iu)?.[1];
-  const candidate = fenced ?? text;
-  const start = candidate.indexOf('{');
-  const end = candidate.lastIndexOf('}');
-  if (start < 0 || end < start) throw new Error('No JSON object found in model output');
-  return JSON.parse(candidate.slice(start, end + 1));
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/iu);
+  const candidate = fenced?.[1]?.trim() ?? trimmed;
+  if (!candidate.startsWith('{') || !candidate.endsWith('}')) {
+    throw new Error('Model output must be exactly one JSON object (optionally in one JSON code fence)');
+  }
+  return parseStrictJsonObject(candidate);
 }
 
 function percentile(sortedValues: number[], fraction: number): number {

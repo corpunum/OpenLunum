@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { createRecord, deriveLunumSidecar } from '../src/derive.js';
 import { evaluateSemanticTrust, validateSemanticCandidate } from '../src/policy.js';
+import { fingerprintSem } from '../src/fingerprint.js';
 import type { ConfidenceEvidenceFactors } from '../src/fallback-policy.js';
 import type { LunumSem } from '../src/types.js';
 
@@ -44,6 +46,8 @@ const verifiedInputs = {
     verifierId: 'verifier-model@sha256:1234',
     verifiedAt: '2026-09-01T00:00:01.000Z',
     result: 'match' as const,
+    sourceTextSha256: createHash('sha256').update('The user prefers dark mode.').digest('hex'),
+    candidateFingerprint: fingerprintSem(sem),
   },
   knownPredicates: new Set(['prefer']),
 };
@@ -96,6 +100,17 @@ test('only corroborated, low-risk, vocabulary-checked Sem is promoted', () => {
   assert.equal((record.meta.semanticTrust as { promoted: boolean }).promoted, true);
   assert.equal(record.policy.eligible, true);
   assert.equal(record.policy.confidence >= 0.9, true);
+});
+
+test('verification bound to a different source or candidate cannot promote a wrong-but-valid Sem', () => {
+  const decision = evaluateSemanticTrust({
+    sem,
+    ...verifiedInputs,
+    sourceText: 'Never delete production data without approval.',
+  });
+
+  assert.equal(decision.promoted, false);
+  assert.ok(decision.reasons.includes('invalid_verification_binding'));
 });
 
 test('a category/risk assertion that disagrees with its evidence cannot be promoted', () => {

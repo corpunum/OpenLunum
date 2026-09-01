@@ -1,5 +1,5 @@
 import type { DatasetItem } from './types.js';
-import { vocabularyBlock } from './predicate-vocabulary.js';
+import { protocolVocabularyBlock } from '@corpunum/lunum';
 
 export function renderPrompt(item: DatasetItem): { system: string; user: string } {
   return {
@@ -157,7 +157,7 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       `Project State: ${exampleProjectState}`,
       `Permission: ${examplePermission}`,
       '',
-      vocabularyBlock()
+      protocolVocabularyBlock()
     ].join('\n'),
     user: JSON.stringify({ sourceLanguage: item.sourceLanguage, sourceText: item.sourceText })
   };

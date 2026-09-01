@@ -38,6 +38,7 @@ interface HardSignature {
   clauseShapes: string[];
   literals: string[];
   actorBindings: string[];
+  roleShapes: string[];
 }
 
 interface ParsedFingerprint {
@@ -83,6 +84,9 @@ function clauseShape(clause: LunumClause): string {
     predicate: clause.predicate,
     negated: clause.negated === true,
     modality: clause.modality ?? null,
+    // Sibling ordering is a soft near-match dimension; canonical exact
+    // identity still preserves array order. Presence, direction, predicate,
+    // negation, and modality remain hard through this shape.
     conditions: (clause.conditions ?? []).map(clauseShape).sort(),
     consequences: (clause.consequences ?? []).map(clauseShape).sort()
   });
@@ -188,6 +192,35 @@ function collectHardClauseLiterals(clause: LunumClause, output: string[]): void 
   for (const consequence of clause.consequences ?? []) collectHardClauseLiterals(consequence, output);
 }
 
+function hardTermShape(term: LunumTerm): string {
+  if (Array.isArray(term)) return `[${term.map(hardTermShape).join(',')}]`;
+  if (term !== null && typeof term === 'object') {
+    const type = typeof term.type === 'string' ? term.type : '-';
+    const identityTypes = new Set(['actor', 'access', 'collection', 'environment', 'date', 'quantity', 'time', 'url', 'path', 'range']);
+    const id = identityTypes.has(type) && typeof term.id === 'string' ? `:${JSON.stringify(term.id)}` : '';
+    const value = 'value' in term ? `:${stableValue(term.value)}` : '';
+    const ref = typeof term.ref === 'string' ? `:ref=${JSON.stringify(term.ref)}` : '';
+    return `typed:${type}${id}${value}${ref}`;
+  }
+  return primitiveToken(term);
+}
+
+function collectRoleShapes(clauses: LunumClause[] | undefined, relation: string, prefix: string, output: string[]): void {
+  const hardRoles = new Set(['agent', 'experiencer', 'subject', 'actor', 'recipient', 'object', 'theme', 'patient', 'target', 'source', 'destination', 'condition', 'consequence']);
+  const occurrences = new Map<string, number>();
+  for (const clause of clauses ?? []) {
+    const occurrence = occurrences.get(clause.predicate) ?? 0;
+    occurrences.set(clause.predicate, occurrence + 1);
+    const context = `${prefix}${relation}.${clause.predicate}#${occurrence}`;
+    for (const role of Object.keys(clause.roles ?? {}).filter((name) => hardRoles.has(name)).sort()) {
+      output.push(`${context}:${role}:${hardTermShape(clause.roles[role]!)}`);
+    }
+    if (clause.time !== undefined) output.push(`${context}:time:${hardTermShape(clause.time)}`);
+    collectRoleShapes(clause.conditions, 'condition', `${context}.`, output);
+    collectRoleShapes(clause.consequences, 'consequence', `${context}.`, output);
+  }
+}
+
 function collectActorBindings(
   clauses: LunumClause[] | undefined,
   relation: string,
@@ -214,8 +247,10 @@ function collectActorBindings(
 function hardSignature(sem: LunumSem): HardSignature {
   const literals: string[] = [];
   const actorBindings: string[] = [];
+  const roleShapes: string[] = [];
   for (const clause of sem.clauses) collectHardClauseLiterals(clause, literals);
   collectActorBindings(sem.clauses, 'root', '', actorBindings);
+  collectRoleShapes(sem.clauses, 'root', '', roleShapes);
   for (const reference of sem.references ?? []) {
     if (typeof reference.ref === 'string') literals.push(`ref:${JSON.stringify(reference.ref)}`);
     if ('value' in reference) collectPrimitiveValues(reference.value, literals);
@@ -226,7 +261,8 @@ function hardSignature(sem: LunumSem): HardSignature {
     kind: sem.kind,
     clauseShapes: sem.clauses.map(clauseShape).sort(),
     literals: literals.sort(),
-    actorBindings: actorBindings.sort()
+    actorBindings: actorBindings.sort(),
+    roleShapes: roleShapes.sort()
   };
 }
 
@@ -268,6 +304,9 @@ function hardMismatchReasons(first: HardSignature, second: HardSignature): strin
   }
   if (stableValue(first.actorBindings) !== stableValue(second.actorBindings)) {
     reasons.push('actor identity or authority binding differs');
+  }
+  if (stableValue(first.roleShapes) !== stableValue(second.roleShapes)) {
+    reasons.push('role binding or typed-term shape differs');
   }
   return reasons;
 }

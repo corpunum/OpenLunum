@@ -52,5 +52,5 @@ test('raw-text critical mutations do not retrieve their unmutated memory', async
   assert.equal(report.metrics.queryExtractionFailures, 0);
   assert.equal(report.metrics.memoryExtractionFailures, 0);
   assert.equal(report.metrics.falsePositives, 0, `critical mutation false positives: ${report.queryResults.filter((result) => result.retrievedMemoryIds.length > 0).map((result) => result.queryId).join(', ')}`);
-  assert.equal(report.metrics.top1Accuracy, 1);
+  assert.equal(report.metrics.negativeRejectionAccuracy, 1);
 });

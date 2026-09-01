@@ -50,9 +50,9 @@ export interface LunumSemSchema02 {
   annotations?: {     confidence?: Confidence,     tags?: string[],     notes?: string };
 }
 
-export type v02Term = Record<string, unknown>;
+export type v02Term = string | number | boolean | {     type: string,     id?: string,     value?: unknown,     language?: string,     ref?: string };
 export type v02Reference = {     id: string,     url: string,     title?: string,     type?: string };
-export type v02Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: "fact" | "opinion" | "belief" | "possibility" | "necessity" | "obligation" | "permission" | "ability" | "intention" | "certainty" | null,     time?: unknown,     conditions?: v02Clause[],     consequences?: v02Clause[],     annotations?: {     confidence?: Confidence,     evidence?: string } };
+export type v02Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: "fact" | "opinion" | "belief" | "possibility" | "necessity" | "obligation" | "permission" | "ability" | "intention" | "certainty" | null,     time?: string | Record<string, unknown>,     conditions?: v02Clause[],     consequences?: v02Clause[],     annotations?: {     confidence?: Confidence,     evidence?: string } };
 
 export interface LunumSemSchema01 {
   schema: "lunum-sem/0.1-draft";
@@ -64,7 +64,7 @@ export interface LunumSemSchema01 {
   annotations?: Record<string, unknown>;
 }
 
-export type v01Term = Record<string, unknown>;
+export type v01Term = string | number | boolean | null | {     type: string,     id?: string,     value?: unknown,     language?: string,     ref?: string } | v01Term[];
 export type v01Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: string | null,     time?: unknown,     conditions?: v01Clause[],     consequences?: v01Clause[],     annotations?: Record<string, unknown> };
 
 export interface ModelProfileSchema01 {
@@ -122,7 +122,7 @@ export interface SharedSchema1 {
 
 }
 
-export type Term = Record<string, unknown>;
+export type Term = string | number | boolean | {     type: string,     id?: string,     value?: unknown,     language?: string,     ref?: string };
 export type Reference = {     id: string,     url: string,     label?: string };
 export type Iso8601 = string;
 export type Confidence = number;

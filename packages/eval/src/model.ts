@@ -84,14 +84,23 @@ function finalContent(value: unknown): string | undefined {
   if (!Array.isArray(value)) return undefined;
   const parts = value.flatMap((part) => {
     if (!part || typeof part !== 'object') return [];
-    const text = (part as { text?: unknown }).text;
+    const typedPart = part as { type?: unknown; text?: unknown };
+    // Providers may expose reasoning as typed content parts. Only final text
+    // channels are eligible for Sem parsing; never concatenate private
+    // reasoning/thinking into the answer channel.
+    if (typeof typedPart.type === 'string' && /^(?:reasoning|thinking|thought)$/iu.test(typedPart.type)) return [];
+    if (typeof typedPart.type === 'string' && !/^(?:text|output_text)$/iu.test(typedPart.type)) return [];
+    const text = typedPart.text;
     return typeof text === 'string' ? [text] : [];
   });
   return parts.length > 0 ? parts.join('') : undefined;
 }
 
 function redactPrivateReasoning(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(redactPrivateReasoning);
+  if (Array.isArray(value)) return value
+    .filter((entry) => !(entry && typeof entry === 'object' && typeof (entry as { type?: unknown }).type === 'string'
+      && /^(?:reasoning|thinking|thought)$/iu.test((entry as { type: string }).type)))
+    .map(redactPrivateReasoning);
   if (!value || typeof value !== 'object') return value;
   return Object.fromEntries(Object.entries(value)
     .filter(([key]) => !/^(?:reasoning_content|reasoning|thinking|thought)$/iu.test(key))
@@ -173,7 +182,17 @@ export class OpenAICompatibleModel {
         body: responseText
       }, body);
     }
-    const payload = await response.json();
+    const responseText = await response.text();
+    let payload: unknown;
+    try {
+      payload = JSON.parse(responseText);
+    } catch {
+      throw new ModelResponseError('Model response was not valid JSON', {
+        status: response.status,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: responseText
+      }, body);
+    }
     try {
       const completion = normalizeModelResponse(payload);
       return { ...completion, rawRequest: body };

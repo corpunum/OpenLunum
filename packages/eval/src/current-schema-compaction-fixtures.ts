@@ -26,7 +26,7 @@ export const CURRENT_SCHEMA_COMPACTION_FIXTURES: readonly CurrentSchemaCompactio
     sem: {
       schema: 'lunum-sem/0.1-draft',
       world: 'real',
-      kind: 'system_fact',
+      kind: 'simple_fact',
       clauses: [{
         predicate: 'limit',
         roles: {
@@ -69,7 +69,6 @@ export const CURRENT_SCHEMA_COMPACTION_FIXTURES: readonly CurrentSchemaCompactio
         predicate: 'disclose',
         roles: { agent: 'operator', theme: 'customer email addresses' },
         negated: true,
-        modality: 'must_not',
         conditions: [{ predicate: 'consent', roles: { form: 'written' }, negated: true }],
       }],
     },
@@ -83,7 +82,7 @@ export const CURRENT_SCHEMA_COMPACTION_FIXTURES: readonly CurrentSchemaCompactio
     sem: {
       schema: 'lunum-sem/0.1-draft',
       world: 'tool',
-      kind: 'system_fact',
+      kind: 'simple_fact',
       clauses: [{
         predicate: 'run',
         roles: { agent: 'operator', theme: 'git checkout -- config.yaml' },

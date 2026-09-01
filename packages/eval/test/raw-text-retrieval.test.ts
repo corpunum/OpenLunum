@@ -98,3 +98,34 @@ test('baseline failures remain visible instead of disappearing from denominators
   assert.equal(report.baselines.broken?.failures, 1);
   assert.equal(report.baselines.broken?.falseNegatives, 1);
 });
+
+test('routing is separate from semantic equivalence and baselines use the routed pool', async () => {
+  const equivalent = sem('translate', 'guide', { recipient: { type: 'actor', id: 'team' } });
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'guide-en', text: 'Translate the guide for the team.', language: 'en' },
+      { id: 'guide-el', text: 'Μετέφρασε τον οδηγό για την ομάδα.', language: 'el' },
+      { id: 'other-el', text: 'Delete the guide.', language: 'el' }
+    ],
+    queries: [{ id: 'q-en-to-el', text: 'Translate the guide for the team.', language: 'en', targetLanguage: 'el', expectedMemoryIds: ['guide-el'], semanticEquivalentMemoryIds: ['guide-en', 'guide-el'] }],
+    extract: () => equivalent,
+    topK: 1,
+    baselines: { lexical: ({ memories }) => memories.map((memory) => memory.id) }
+  });
+  const result = report.queryResults[0]!;
+  assert.deepEqual(result.routedOutEquivalentMemoryIds, ['guide-en']);
+  assert.equal(report.baselines.lexical?.falsePositives, 0);
+  assert.equal(result.candidateCount, 2);
+});
+
+test('noncanonical schema-valid extraction is contained and does not enter semantic retrieval', async () => {
+  const unknown = sem('unregistered_operation', 'guide');
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [{ id: 'm', text: 'An operation.', language: 'en' }],
+    queries: [{ id: 'q', text: 'An operation?', language: 'en', expectedMemoryIds: ['m'] }],
+    extract: () => unknown
+  });
+  assert.equal(report.metrics.memoryExtractionFailures, 1);
+  assert.equal(report.metrics.queryExtractionFailures, 1);
+  assert.equal(report.metrics.falsePositives, 0);
+});

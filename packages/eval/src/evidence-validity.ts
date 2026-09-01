@@ -40,7 +40,11 @@ export type EvidenceIssueCode =
   | 'dirty_execution_tree'
   | 'missing_raw_exchange'
   | 'reported_baseline_predates_prompt_fix'
-  | 'heldout_dataset_is_repo_visible';
+  | 'heldout_dataset_is_repo_visible'
+  | 'missing_dataset_declaration'
+  | 'multiple_dataset_declarations'
+  | 'protected_dataset_is_repo_visible'
+  | 'execution_commit_mismatch';
 
 export interface EvidenceIssue {
   code: EvidenceIssueCode;
@@ -346,6 +350,17 @@ export async function auditEvidenceRun(repoRoot: string, manifestPath: string): 
 
   const modelDriven = manifest?.deterministic !== true;
   if (modelDriven) {
+    if (declaredDatasets.length === 0) {
+      issues.push({ code: 'missing_dataset_declaration', message: 'A model-driven run must declare a hash-verified dataset.' });
+    } else if (declaredDatasets.length !== 1) {
+      issues.push({ code: 'multiple_dataset_declarations', message: `A model-driven run must declare exactly one dataset; found ${declaredDatasets.length}.` });
+    }
+    if (manifest?.evidenceClass === 'protected' && declaredDatasets.some((dataset) => {
+      const normalized = dataset.path.replaceAll('\\', '/');
+      return normalized.startsWith('datasets/dev/') || normalized.includes('/datasets/dev/');
+    })) {
+      issues.push({ code: 'protected_dataset_is_repo_visible', message: 'A protected evidence run cannot use a repository-visible datasets/dev path.' });
+    }
     if (hasPlaceholderModel(environment) || hasPlaceholderModel(manifest)) {
       issues.push({ code: 'placeholder_model_id', message: 'The run names a placeholder rather than a real model ID.' });
     }
@@ -375,6 +390,10 @@ export async function auditEvidenceRun(repoRoot: string, manifestPath: string): 
     const commit = executionCommit(environment);
     if (!commit) issues.push({ code: 'missing_execution_commit', message: 'baselineCommit is not execution provenance; environment.json lacks codeCommit.' });
     else if (!gitCommitExists(repoRoot, commit)) issues.push({ code: 'unknown_execution_commit', message: `Recorded execution commit ${commit} is not present in this repository.` });
+    const manifestExecutionCommit = stringAt(manifest, 'implementationCommit');
+    if (manifestExecutionCommit && commit && manifestExecutionCommit !== commit) {
+      issues.push({ code: 'execution_commit_mismatch', message: 'The manifest implementationCommit does not match the executed codeCommit.' });
+    }
 
     const baseline = stringAt(manifest, 'baselineCommit');
     if (manifest?.task === 'parse' && baseline && gitCommitExists(repoRoot, baseline)

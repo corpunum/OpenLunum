@@ -15,7 +15,7 @@
     "annotations":{"type":"object"}
   },
   "$defs":{
-    "term":{"oneOf":[{"type":"string"},{"type":"number"},{"type":"boolean"},{"type":"object","additionalProperties":true,"required":["type"],"properties":{"type":{"type":"string"},"id":{"type":"string"},"value":{},"language":{"type":"string"},"ref":{"type":"string"}}}]},
+    "term":{"oneOf":[{"type":"string"},{"type":"number"},{"type":"boolean"},{"type":"null"},{"type":"object","additionalProperties":true,"required":["type"],"properties":{"type":{"type":"string"},"id":{"type":"string"},"value":{},"language":{"type":"string"},"ref":{"type":"string"}}},{"type":"array","items":{"$ref":"#/$defs/term"}}]},
     "clause":{"type":"object","additionalProperties":false,"required":["predicate","roles"],"properties":{"predicate":{"type":"string","minLength":1},"roles":{"type":"object","additionalProperties":{"$ref":"#/$defs/term"}},"negated":{"type":"boolean","default":false},"modality":{"type":["string","null"]},"time":{},"conditions":{"type":"array","items":{"$ref":"#/$defs/clause"}},"consequences":{"type":"array","items":{"$ref":"#/$defs/clause"}},"annotations":{"type":"object"}}}
   }
 }

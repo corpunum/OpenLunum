@@ -43,6 +43,48 @@ test('structured parse extraction fails closed on prose wrappers and accepts one
   assert.throws(() => extractStructuredJson('```json\n{"ok":true}\n```\nextra'), /exactly one JSON object/u);
 });
 
+test('parse experiment rejects schema-invalid model candidates instead of counting exact matches', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } }, negated: false }],
+    extra: 'not allowed'
+  };
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-invalid' }] }));
+      return;
+    }
+    if (request.url === '/v1/chat/completions') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(sem) } }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-transport-schema-'));
+  try {
+    const dataset = { id: 'invalid-candidate', sourceLanguage: 'en', sourceText: 'test', goldSem: { ...sem, extra: undefined } };
+    delete (dataset.goldSem as any).extra;
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, `${JSON.stringify(dataset)}\n`, 'utf8');
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(profilePath, JSON.stringify({ schema: 'openlunum-model-profile/0.1', id: 'mock', provider: 'openai-compatible', baseUrl: `http://127.0.0.1:${address.port}/v1`, model: 'mock-invalid', temperature: 0, timeoutMs: 5000 }), 'utf8');
+    const manifestPath = path.join(temp, 'experiment.json');
+    await writeFile(manifestPath, JSON.stringify({ schema: 'openlunum-experiment/0.1', id: 'transport-schema-test', area: 'multilingual-parse', task: 'parse', hypothesis: 'schema invalid candidates fail closed', baselineCommit: 'test', dataset: { path: datasetPath, sha256: await sha256File(datasetPath) }, modelProfile: profilePath, limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 }, gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false }, outputDirectory: path.join(temp, 'reports') }), 'utf8');
+    const { report } = await runParseExperiment(manifestPath);
+    assert.equal(report.totalErrors, 1);
+    assert.equal(report.overallExactRate, 0);
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
 test('parse experiment enforces maxModelCalls globally and records verified provenance', async () => {
   let completions = 0;
   const sem = {
@@ -302,7 +344,7 @@ test('parse experiment handles mixed pass/fail correctly', async () => {
   const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-parse-mixed-'));
   try {
     const items = [
-      { id: 'test-en-1', sourceLanguage: 'en', sourceText: 'Test 1.', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [] } }
+      { id: 'test-en-1', sourceLanguage: 'en', sourceText: 'Test 1.', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: {}, negated: false }] } }
     ];
 
     const datasetPath = path.join(temp, 'dataset.jsonl');
@@ -359,7 +401,7 @@ test('parse experiment skips languages with no items', async () => {
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
     kind: 'preference',
-    clauses: []
+    clauses: [{ predicate: 'prefer', roles: {}, negated: false }]
   };
 
   const server = createServer((request, response) => {
@@ -448,7 +490,7 @@ test('parse-experiment CLI arg: argv[3] is the manifest, not argv[2]', async () 
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
     kind: 'preference',
-    clauses: []
+    clauses: [{ predicate: 'prefer', roles: {}, negated: false }]
   };
 
   let serverPort = 0;

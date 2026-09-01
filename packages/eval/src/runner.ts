@@ -1,22 +1,26 @@
 import { appendFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { compareSem, validateSem, renderSem, canonicalizeSem, fingerprintSem } from '@corpunum/lunum';
+import Ajv2020Module from 'ajv/dist/2020.js';
+import { compareSem, validateSem, renderSem, canonicalizeSem, fingerprintSem, normalizeSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem, LunumRendering } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt, realizePrompt } from './prompts.js';
+import { parseStrictJsonObject } from './strict-json.js';
 import { runRenderExperiment, writeRenderReport } from './render-runner.js';
 import { runContextExperiment, writeContextReport } from './context-runner.js';
+import { buildExtractionSchema, extractStructuredJson } from './parse-experiment.js';
 import type { ExperimentManifest, ItemResult, ModelProfile, ExperimentItem } from './types.js';
 export type { ExperimentItem };
 
-function extractJson(text: string): unknown {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/iu)?.[1];
-  const candidate = fenced ?? text;
-  const start = candidate.indexOf('{');
-  const end = candidate.lastIndexOf('}');
-  if (start < 0 || end < start) throw new Error('No JSON object found in model output');
-  return JSON.parse(candidate.slice(start, end + 1));
+export function extractJson(text: string): unknown {
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/iu);
+  const candidate = fenced?.[1]?.trim() ?? trimmed;
+  if (!candidate.startsWith('{') || !candidate.endsWith('}')) {
+    throw new Error('Model output must be exactly one JSON object (optionally in one JSON code fence)');
+  }
+  return parseStrictJsonObject(candidate);
 }
 
 function literalCoverage(text: string, literals: string[]): number {
@@ -27,6 +31,11 @@ function literalCoverage(text: string, literals: string[]): number {
 
 async function runModelTask(manifest: ExperimentManifest, root: string, output: string, dataset: ExperimentItem[], profile: ModelProfile): Promise<ItemResult[]> {
   const model = new OpenAICompatibleModel(profile);
+  const parseValidator = manifest.task === 'parse'
+    ? new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(
+      buildExtractionSchema(await readJson<Record<string, unknown>>(path.join(root, 'schemas/lunum-sem.schema.json')))
+    )
+    : null;
   const results: ItemResult[] = [];
   let calls = 0;
 
@@ -38,12 +47,19 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
       const started = performance.now();
       let rawOutput = '';
       try {
+        const parsePromptValue = manifest.task === 'parse' ? parsePrompt(item as any) : null;
         const promptText = manifest.task === 'realize'
           ? realizePrompt(item as any, manifest.targetLanguage ?? (item as any).targetLanguage ?? 'English').user
-          : parsePrompt(item as any).user;
+          : parsePromptValue?.user ?? parsePrompt(item as any).user;
 
         calls += 1;
-        const completion = await model.complete('You are a precise Lunum experiment runner. Reply only with valid JSON.', promptText);
+        const completion = await model.complete(
+          parsePromptValue?.system ?? 'You are a precise Lunum experiment runner. Reply only with valid JSON.',
+          promptText,
+          parseValidator ? {
+            structuredOutput: { mode: 'json_schema', schema: buildExtractionSchema(await readJson<Record<string, unknown>>(path.join(root, 'schemas/lunum-sem.schema.json'))), strict: true, fallback: 'json_object' }
+          } : undefined
+        );
         rawOutput = completion.content;
 
         if (manifest.task === 'parse') {
@@ -51,15 +67,21 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
           if (!item.goldSem) {
             throw new Error('goldSem is required for parse but missing');
           }
-          const parsed = extractJson(rawOutput);
+          const parsed = extractStructuredJson(rawOutput);
+          if (!parseValidator?.(parsed)) throw new Error(`Transport schema validation failed: ${(parseValidator?.errors ?? []).map((error) => error.message ?? 'invalid').join('; ')}`);
           const validation = validateSem(parsed);
           if (!validation.ok) throw new Error(validation.errors.join('; '));
           const parsedSem = parsed as LunumSem;
-          // Use actual goldSem as reference, not the parsed result
+          const candidate = normalizeSemanticCandidate(parsed);
+          const gold = normalizeSemanticCandidate((item as any).goldSem);
           const comparison = compareSem((item as any).goldSem as any, parsedSem);
+          const canonicalExact = candidate.canonical && gold.canonical && candidate.sem && gold.sem
+            ? compareSem(gold.sem, candidate.sem).exactFingerprint
+            : false;
           finalResult = {
-            id: item.id, status: comparison.exactFingerprint ? 'passed' : 'failed', rawOutput, completion, parsedSem,
-            exact: comparison.exactFingerprint, featureRecall: comparison.featureRecall,
+            id: item.id, status: canonicalExact ? 'passed' : 'failed', rawOutput, rawRequest: completion.rawRequest, rawResponse: completion.rawResponse, completion, parsedSem,
+            exact: canonicalExact, legacyExact: comparison.exactFingerprint, canonicalExact, transportSchemaValid: true,
+            candidateNormalization: { status: candidate.status, canonical: candidate.canonical, issues: candidate.issues, protocolVersion: candidate.protocolVersion }, featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision, missingFeatures: comparison.missingFeatures,
             latencyMs: performance.now() - started
           };

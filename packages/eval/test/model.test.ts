@@ -248,6 +248,17 @@ test('normalizeModelResponse accepts text content parts but rejects arbitrary wr
   );
 });
 
+test('typed reasoning content parts never enter the final answer or retained envelope', () => {
+  const completion = normalizeModelResponse({
+    choices: [{ message: { content: [
+      { type: 'reasoning', text: 'private chain of thought' },
+      { type: 'text', text: '{"ok":true}' }
+    ] } }]
+  });
+  assert.equal(completion.content, '{"ok":true}');
+  assert.deepStrictEqual(completion.rawResponse, { choices: [{ message: { content: [{ type: 'text', text: '{"ok":true}' }] } }] });
+});
+
 test('normalization errors retain the provider envelope for forensic evidence', () => {
   const payload = { choices: [{ message: { reasoning_content: 'thinking only' } }] };
   assert.throws(

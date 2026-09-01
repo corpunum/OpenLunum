@@ -1,6 +1,6 @@
 import { DEFAULT_RENDERER, RECORD_SCHEMA, SEM_SCHEMA } from './constants.js';
 import { canonicalizeSem } from './canonicalize.js';
-import { fingerprintSem, surfaceFingerprint } from './fingerprint.js';
+import { fingerprintSem, semanticFingerprint, surfaceFingerprint } from './fingerprint.js';
 import { renderSem } from './render.js';
 import {
   classifyEligibility,
@@ -9,6 +9,7 @@ import {
   type SemanticClassificationEvidence,
   type SemanticVerification,
 } from './policy.js';
+import { normalizeSemanticCandidate } from './semantic-registry.js';
 import type { ConfidenceEvidenceFactors } from './fallback-policy.js';
 import type { LunumRecord, LunumSem, LunumSidecar, Risk } from './types.js';
 
@@ -65,7 +66,9 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
   if (!candidateValidation.ok) {
     throw new TypeError(`Invalid Lunum-Sem candidate: ${candidateValidation.errors.join('; ')}`);
   }
-  const canonical = canonicalizeSem(input.sem);
+  const normalization = normalizeSemanticCandidate(input.sem);
+  if (!normalization.sem) throw new TypeError('Invalid Lunum-Sem protocol candidate: normalization rejected the input');
+  const canonical = canonicalizeSem(normalization.sem);
   const renderer = input.renderer ?? DEFAULT_RENDERER;
   const rendering = renderSem(canonical, { profile: renderer });
   const trust = evaluateSemanticTrust({
@@ -78,6 +81,8 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
     verification: input.verification,
     knownPredicates: input.knownPredicates,
     callerConfidence: input.confidence,
+    canonicalProtocol: normalization.canonical,
+    normalizationIssues: normalization.issues,
   });
   const basePolicy = classifyEligibility({
     category: input.category ?? canonical.kind,
@@ -91,11 +96,14 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
     eligible: basePolicy.eligible && trust.promoted,
     reasons: [...new Set([...basePolicy.reasons, ...trust.reasons])],
   };
+  const semanticIdentity = normalization.canonical ? semanticFingerprint(canonical) : undefined;
   return {
     recordVersion: RECORD_SCHEMA,
     source: { text: input.sourceText ?? '', language: input.sourceLanguage ?? null, role: input.role ?? null, ref: input.sourceRef ?? null },
     sem: canonical,
     fingerprint: fingerprintSem(canonical),
+    ...(semanticIdentity ? { semanticFingerprint: semanticIdentity } : {}),
+    surfaceFingerprint: surfaceFingerprint(input.sourceText ?? ''),
     renderings: { [renderer]: { code: rendering.code, profile: renderer, tokens: null } },
     policy,
     meta: {
@@ -104,6 +112,7 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
       semanticTrustStatus: trust.status,
       semanticPromoted: trust.promoted,
       semanticTrust: trust,
+      semanticNormalization: normalization,
     }
   };
 }
