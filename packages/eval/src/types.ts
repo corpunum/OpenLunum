@@ -53,6 +53,7 @@ export interface ParseRunProvenance {
   modelProfileId: string;
   modelIdentity: ModelIdentityEvidence;
   effectiveSystemPromptSha256: string | null;
+  promptVersion: string;
   schemaVersion: string;
   evidenceValid: boolean;
   invalidReasons: string[];

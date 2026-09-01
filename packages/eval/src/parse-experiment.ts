@@ -15,6 +15,7 @@ import { checkProtectedLiteralPlacement, protectedLiteralPlacementCoverage } fro
 import type { DatasetItem, ExperimentManifest, ItemResult, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
 
 export type ParseLanguage = 'en' | 'el' | 'es' | 'id' | 'fr' | 'de' | 'ja' | 'zh' | 'pt' | 'ar';
+export const PARSE_PROMPT_VERSION = 'parse-prompt/2';
 export const PARSE_LANGUAGES: ParseLanguage[] = ['en', 'el', 'es', 'id', 'fr', 'de', 'ja', 'zh', 'pt', 'ar'];
 export const PARSE_LANGUAGE_LABELS: Record<ParseLanguage, string> = {
   en: 'English',
@@ -497,6 +498,7 @@ export async function runParseExperiment(
     modelProfileId: profile.id,
     modelIdentity,
     effectiveSystemPromptSha256,
+    promptVersion: PARSE_PROMPT_VERSION,
     schemaVersion: 'lunum-sem/0.1-draft',
     evidenceValid: invalidReasons.length === 0,
     invalidReasons
@@ -585,6 +587,12 @@ ${Object.entries(failureModes).map(([mode, count]) => `- ${mode}: ${count}`).joi
     platform: process.platform,
     arch: process.arch,
     modelProfile: profile,
+    codeCommit,
+    modelIdentity,
+    prompt: {
+      version: PARSE_PROMPT_VERSION,
+      systemSha256: effectiveSystemPromptSha256,
+    },
     provenance
   });
 
