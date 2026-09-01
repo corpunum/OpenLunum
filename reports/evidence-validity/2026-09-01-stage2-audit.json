@@ -1,7 +1,7 @@
 {
   "schema": "openlunum-evidence-validity/0.1",
-  "generatedAt": "2026-09-01T08:45:21.437Z",
-  "repositoryCommit": "a99153c46e60ca26be4778e067da5d6b469608bc",
+  "generatedAt": "2026-09-01T08:51:57.036Z",
+  "repositoryCommit": "3fe7aed6deb3db122602bbfbc3affa042780f203",
   "criteria": {
     "liveModelRequires": [
       "hash-verified dataset(s)",
@@ -31,7 +31,7 @@
     }
   ],
   "totals": {
-    "VALID_EMPIRICAL": 4,
+    "VALID_EMPIRICAL": 5,
     "DETERMINISTIC_ONLY": 8,
     "INVALID_EMPIRICAL": 71
   },
@@ -3151,6 +3151,31 @@
         "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-es.jsonl",
         "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-fr.jsonl",
         "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-34-11-292Z/parse-results-id.jsonl"
+      ]
+    },
+    {
+      "reportDirectory": "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-46-44-901Z",
+      "manifestPath": "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-46-44-901Z/manifest.snapshot.json",
+      "manifestId": "parse-stage2-superqwen-frozen",
+      "task": "parse",
+      "modelDriven": true,
+      "validity": "VALID_EMPIRICAL",
+      "issues": [],
+      "checkedDatasets": [
+        {
+          "path": "datasets/dev/stage2-heldout-v2.jsonl",
+          "declaredSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+          "actualSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+          "valid": true
+        }
+      ],
+      "rawOutputFiles": [
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-46-44-901Z/parse-results-de.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-46-44-901Z/parse-results-el.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-46-44-901Z/parse-results-en.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-46-44-901Z/parse-results-es.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-46-44-901Z/parse-results-fr.jsonl",
+        "reports/experiments/parse-stage2-superqwen-frozen/2026-09-01T08-46-44-901Z/parse-results-id.jsonl"
       ]
     },
     {
