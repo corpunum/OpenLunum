@@ -1,11 +1,11 @@
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { appendFile, mkdir, readFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, readJson, sha256File, writeJson, validateProfile } from './io.js';
-import { effectiveSystemPrompt, OpenAICompatibleModel } from './model.js';
+import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
 import { extractStructuredJson } from './parse-experiment.js';
 import { parsePrompt } from './prompts.js';
 import { runRawTextRetrievalEvaluation, type RawTextMemory, type RawTextQuery } from './raw-text-retrieval.js';
@@ -69,6 +69,7 @@ export async function runStage2LiveRetrieval(): Promise<string> {
   const extractionSchema = {
     $schema: 'https://json-schema.org/draft/2020-12/schema',
     $id: 'https://openlunum.org/schemas/semantic-extraction-result/0.1',
+    title: 'OpenLunum semantic extraction result',
     oneOf: [semBranch, { type: 'object', additionalProperties: false, required: ['status', 'reason'], properties: { status: { const: 'abstain' }, reason: { type: 'string', minLength: 1 } } }],
     $defs: semDefs
   };
@@ -99,6 +100,10 @@ export async function runStage2LiveRetrieval(): Promise<string> {
       extractionEvidence.push(evidence);
       return sem;
     } catch (error) {
+      if (error instanceof ModelResponseError) {
+        evidence.rawRequest = error.rawRequest;
+        evidence.rawResponse = error.rawResponse;
+      }
       evidence.error = error instanceof Error ? error.message : String(error);
       extractionEvidence.push(evidence);
       cache.set(cacheKey, null);
@@ -112,13 +117,22 @@ export async function runStage2LiveRetrieval(): Promise<string> {
   const datasetSha256 = await sha256File(path.join(root, datasetPath));
   const promptProbe = parsePrompt({ id: 'probe', sourceLanguage: 'en', sourceText: 'probe', goldSem: {} as LunumSem });
   await writeJson(path.join(output, 'retrieval-report.json'), report);
+  await writeJson(path.join(output, 'summary.json'), report);
+  const codeCommit = git(root, ['rev-parse', 'HEAD']);
+  const provenance = { startedAt, completedAt: new Date().toISOString(), codeCommit, workingTreeClean: cleanTree(root), datasetPath, datasetSha256, promptVersion: 'parse-prompt/3', effectiveSystemPromptSha256: sha256Text(effectiveSystemPrompt(profile, promptProbe.system)), schemaVersion: 'semantic-extraction-result/0.1', schemaSha256, structuredOutputMode: 'json-schema', decoding: { temperature: profile.temperature, seed: profile.seed ?? null, maxTokens: profile.maxTokens, chatTemplateKwargs: profile.chatTemplateKwargs ?? null }, modelId: profile.model };
   await writeJson(path.join(output, 'environment.json'), {
     inputMode: 'raw-text-only',
+    codeCommit,
     modelProfile: profile,
     modelIdentity: { requestedModel: profile.model, reportedModelId: advertisedModelIds.includes(profile.model) ? profile.model : null, advertisedModelIds, verified: advertisedModelIds.includes(profile.model), endpoint: profile.baseUrl, modelFileIdentity: profile.metadata?.modelFile ?? null },
-    provenance: { startedAt, completedAt: new Date().toISOString(), codeCommit: git(root, ['rev-parse', 'HEAD']), workingTreeClean: cleanTree(root), datasetPath, datasetSha256, promptVersion: 'parse-prompt/3', effectiveSystemPromptSha256: sha256Text(effectiveSystemPrompt(profile, promptProbe.system)), schemaVersion: 'semantic-extraction-result/0.1', schemaSha256, structuredOutputMode: 'json-schema', decoding: { temperature: profile.temperature, seed: profile.seed ?? null, maxTokens: profile.maxTokens, chatTemplateKwargs: profile.chatTemplateKwargs ?? null }, modelId: profile.model }
+    prompt: { version: 'parse-prompt/3', systemSha256: provenance.effectiveSystemPromptSha256 },
+    decoding: { ...provenance.decoding, structuredOutputMode: provenance.structuredOutputMode },
+    provenance
   });
   await writeJson(path.join(output, 'raw-extractions.json'), extractionEvidence);
+  await mkdir(path.join(output, 'raw'), { recursive: true });
+  await writeFile(path.join(output, 'raw', 'items.jsonl'), extractionEvidence.map((item) => JSON.stringify({ id: item.id, status: item.valid ? 'passed' : 'failed', rawOutput: item.rawOutput, rawRequest: item.rawRequest, rawResponse: item.rawResponse, error: item.error })).join('\n') + '\n', 'utf8');
+  await writeJson(path.join(output, 'manifest.snapshot.json'), { schema: 'openlunum-experiment/0.1', id: 'retrieval-stage2-superqwen', area: 'retrieval', task: 'retrieval', hypothesis: 'Raw multilingual semantic retrieval is useful only if extraction errors are visible and critical negatives fail closed.', baselineCommit: codeCommit, dataset: { path: datasetPath, sha256: datasetSha256 }, modelProfile: profilePath, limits: { maxItems: items.length, maxAttemptsPerItem: 1, maxModelCalls: items.length }, gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false }, outputDirectory: 'reports/experiments/retrieval-stage2-superqwen' });
   await appendFile(path.join(output, 'README.md'), `# Stage 2 raw-text retrieval\n\nRaw memories and raw queries only; no gold Sem is sent to the extractor. The evaluator uses gold IDs only for scoring.\n\nEmbedding baseline: NOT RUN (no embedding endpoint was available without changing the loaded model).\n`);
   return output;
 }

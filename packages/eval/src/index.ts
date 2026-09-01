@@ -186,6 +186,7 @@ export type {
   RawTextRetrievalReport,
 } from './raw-text-retrieval.js';
 export { runStage2LiveRetrieval } from './stage2-live-retrieval.js';
+export { runStage2ThresholdCalibration } from './stage2-threshold-calibration.js';
 
 // Model family eval
 export {
