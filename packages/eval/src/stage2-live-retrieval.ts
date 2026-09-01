@@ -31,7 +31,10 @@ interface ExtractionEvidence {
 function sha256Text(value: string): string { return createHash('sha256').update(value).digest('hex'); }
 function git(root: string, args: string[]): string { return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim(); }
 function cleanTree(root: string): boolean {
-  try { execFileSync('git', ['diff', '--quiet'], { cwd: root, stdio: 'ignore' }); execFileSync('git', ['diff', '--cached', '--quiet'], { cwd: root, stdio: 'ignore' }); return true; }
+  try {
+    const status = execFileSync('git', ['status', '--porcelain', '--untracked-files=all', '--', 'packages/core/src', 'packages/core/test', 'packages/eval/src', 'packages/eval/test', 'packages/eval/package.json', 'schemas/model-profile.schema.json', 'profiles/models/superqwen3.8-27b-abliterated-live.json', 'datasets/dev/stage2-heldout-v1.jsonl', 'datasets/dev/stage2-heldout-v2.jsonl', 'datasets/dev/stage2-retrieval-v1.jsonl', 'datasets/adversarial/critical-semantic-differences-v1.jsonl', 'datasets/manifests/stage2-heldout-v1.json', 'datasets/manifests/stage2-heldout-v2.json', 'datasets/manifests/stage2-retrieval-v1.json', 'datasets/manifests/critical-semantic-differences-v1.json', 'experiments/parse-stage2-superqwen-diagnostic/experiment.json', 'experiments/parse-stage2-superqwen-frozen/experiment.json'], { cwd: root, encoding: 'utf8' });
+    return status.trim().length === 0;
+  }
   catch { return false; }
 }
 function tokens(text: string): string[] { return text.normalize('NFKC').toLocaleLowerCase('und').match(/[\p{L}\p{N}]+/gu) ?? []; }
