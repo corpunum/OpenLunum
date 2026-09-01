@@ -9,7 +9,7 @@
     "path": "datasets/dev/multilingual-extended-v1.jsonl",
     "sha256": "bfe2edada088738f0f0a1ad191dfe3940a30c58471cec64afac5f74371b32b31"
   },
-  "modelProfile": "profiles/models/qwen3-coder-30b-heldout.json",
+  "modelProfile": "profiles/models/qwen3-coder-30b-heldout-smoke.json",
   "limits": { "maxItems": 10, "maxAttemptsPerItem": 1, "maxModelCalls": 10 },
   "gates": { "minimumFeatureRecall": 0.95, "minimumExactRate": 0.75, "requireProtectedLiteralCoverage": true },
   "outputDirectory": "reports/experiments/multilingual-parse-heldout-v1-live-smoke"
