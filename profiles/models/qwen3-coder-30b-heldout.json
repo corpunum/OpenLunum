@@ -7,10 +7,12 @@
   "temperature": 0,
   "seed": 42,
   "maxTokens": 768,
+  "noThink": true,
   "timeoutMs": 300000,
   "metadata": {
     "purpose": "Held-out raw-text extraction evaluation; same endpoint model as qwen3-coder-30b-live with bounded JSON output budget.",
     "parentProfile": "profiles/models/qwen3-coder-30b-live.json",
-    "outputBudgetRationale": "The extraction contract requires one JSON object, so 768 output tokens bounds malformed runaway generations while remaining above the expected schema size."
+    "outputBudgetRationale": "The extraction contract requires one JSON object, so 768 output tokens bounds malformed runaway generations while remaining above the expected schema size.",
+    "noThinkRationale": "This held-out extraction run measures structured output, not hidden reasoning traces; the directive prevents the endpoint from consuming the bounded output budget with analysis."
   }
 }
