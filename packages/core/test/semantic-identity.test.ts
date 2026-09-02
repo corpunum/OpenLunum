@@ -68,3 +68,16 @@ test('explicit surface evidence is recoverable but excluded from exact identity'
   assert.equal(semanticFingerprint(english), semanticFingerprint(greek));
   assert.equal(semanticIdentityProjection(english).references, undefined);
 });
+
+test('surface-evidence references never become identity-bearing even when they carry a hint', () => {
+  const withoutEvidence = { ...sem };
+  const withEvidence = {
+    ...sem,
+    references: [{
+      referenceKind: 'surface-evidence' as const, sourceRef: 'source-1', surface: 'she',
+      span: { start: 0, end: 3 }, ref: 'maria'
+    }]
+  };
+  assert.deepEqual(semanticIdentityProjection(withEvidence), semanticIdentityProjection(withoutEvidence));
+  assert.equal(semanticFingerprint(withEvidence), semanticFingerprint(withoutEvidence));
+});

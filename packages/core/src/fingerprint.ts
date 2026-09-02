@@ -30,6 +30,7 @@ function identityClause(clause: LunumClause): LunumClause {
 /** Return only proposition-bearing Sem fields; provenance and annotations are metadata. */
 export function semanticIdentityProjection(sem: LunumSem): Record<string, unknown> {
   const semanticReferences = (sem.references ?? []).flatMap((reference) => {
+    if (reference.referenceKind === 'surface-evidence') return [];
     // `ref` is the grounded, language-neutral referent. `token`, `surface`,
     // `language`, and reference type describe source evidence and must not
     // alter proposition identity. An ungrounded reference remains preserved
