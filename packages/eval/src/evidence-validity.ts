@@ -101,7 +101,16 @@ async function readJson(file: string): Promise<JsonRecord | null> {
 
 async function walk(root: string, filename: string): Promise<string[]> {
   const found: string[] = [];
-  const entries = await readdir(root, { withFileTypes: true });
+  let entries;
+  try {
+    entries = await readdir(root, { withFileTypes: true });
+  } catch (error) {
+    // Evidence audits may run alongside short-lived test or evaluator
+    // worktrees. A subtree disappearing between discovery and inspection is
+    // not evidence corruption; it simply cannot contain a file we can audit.
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') return found;
+    throw error;
+  }
   for (const entry of entries) {
     const candidate = path.join(root, entry.name);
     if (entry.isDirectory()) found.push(...await walk(candidate, filename));
