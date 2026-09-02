@@ -1,0 +1,21 @@
+{
+  "schema": "openlunum-stage3-gold-preflight/0.1",
+  "status": "PASS",
+  "validator": "packages/eval/src/parse-experiment.ts#validateEvaluationGold",
+  "transportSchema": "https://openlunum.org/schemas/semantic-extraction-result/0.1",
+  "transportSchemaSha256": "80300f14f4bc2895be12532dc9533a6027f47b42ce213223b3c060b0a8cf37fc",
+  "corpusPath": "experiments/protected-eval/stage3-superqwen-semantic-contract-v2-20260902/corpus.jsonl",
+  "corpusSha256": "46e1fed448fadeed19672c484fb5fef1fc358a554a2f40f0cac0480a99238c47",
+  "counts": {
+    "total": 66,
+    "transportValid": 54,
+    "structuralValid": 54,
+    "protocolCanonical": 54,
+    "identityValid": 54,
+    "abstentionCases": 12,
+    "invalid": 0
+  },
+  "invalid": [],
+  "failBeforeModelCalls": true,
+  "generatedAt": "2026-09-02T05:19:21.911Z"
+}
