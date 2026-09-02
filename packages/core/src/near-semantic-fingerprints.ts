@@ -142,10 +142,11 @@ function extractFeatures(sem: LunumSem): WeightedFeatures {
   const features: WeightedFeatures = new Map();
   collectClausesFeatures(features, sem.clauses, 'root', '');
   for (const reference of sem.references ?? []) {
-    addFeature(features, `reference-type:${reference.type}`, 2);
-    if (typeof reference.id === 'string') addFeature(features, `reference-id:${reference.id}`, 2);
-    if (typeof reference.ref === 'string') addFeature(features, `reference-ref:${reference.ref}`, 2);
-    if ('value' in reference) addFeature(features, `reference-value:${stableValue(reference.value)}`, 2);
+    if (reference.referenceKind === 'surface-evidence') continue;
+    // Reference type/token/language are source evidence. Only a grounded
+    // referent participates in near-semantic comparison, matching lfp:2.1.
+    const grounded = typeof reference.ref === 'string' ? reference.ref : reference.id;
+    if (typeof grounded === 'string') addFeature(features, `reference-grounded:${grounded}`, 2);
   }
   return features;
 }
@@ -252,8 +253,8 @@ function hardSignature(sem: LunumSem): HardSignature {
   collectActorBindings(sem.clauses, 'root', '', actorBindings);
   collectRoleShapes(sem.clauses, 'root', '', roleShapes);
   for (const reference of sem.references ?? []) {
+    if (reference.referenceKind === 'surface-evidence') continue;
     if (typeof reference.ref === 'string') literals.push(`ref:${JSON.stringify(reference.ref)}`);
-    if ('value' in reference) collectPrimitiveValues(reference.value, literals);
   }
   return {
     schema: sem.schema,

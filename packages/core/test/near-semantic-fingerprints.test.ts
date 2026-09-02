@@ -58,6 +58,21 @@ test('semantic and fingerprint comparison are symmetric for bounded identifier v
   assert.equal(forward.hardCompatible, true);
 });
 
+test('near-semantic references ignore surface language but retain grounded referents', () => {
+  const generator = new NearSemanticFingerprintGenerator(0.8);
+  const english = createSem();
+  english.references = [{ type: 'pronoun', token: 'she', language: 'en', ref: 'maria' }];
+  const greek = createSem();
+  greek.references = [{ type: 'implicit_subject', token: 'θα', language: 'el', ref: 'maria' }];
+  assert.equal(generator.generate(english), generator.generate(greek));
+
+  const changedReferent = createSem();
+  changedReferent.references = [{ type: 'pronoun', token: 'she', language: 'en', ref: 'daniel' }];
+  const result = generator.compareSem(english, changedReferent);
+  assert.equal(result.similar, false);
+  assert.equal(result.hardCompatible, false);
+});
+
 test('schema, negation, modality, kind, and extra clauses fail closed', () => {
   const generator = new NearSemanticFingerprintGenerator(0.5);
   const mutations: LunumSem[] = [];
