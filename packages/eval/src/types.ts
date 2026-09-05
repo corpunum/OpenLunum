@@ -167,6 +167,18 @@ export interface ItemResult {
   parsedSem?: LunumSem;
   /** Protocol normalization outcome; structural validity alone is not canonical identity. */
   candidateNormalization?: Pick<SemanticNormalizationResult, 'status' | 'canonical' | 'issues' | 'protocolVersion'>;
+  /** Explicit stage state used for deterministic diagnostics and aggregation. */
+  providerSuccess?: boolean;
+  jsonParsed?: boolean;
+  structuralValid?: boolean;
+  protocolCanonical?: boolean;
+  frameCanonical?: boolean;
+  groundedIdentityValid?: boolean;
+  candidateIdentityAvailable?: boolean;
+  goldIdentityAvailable?: boolean;
+  identityComparable?: boolean;
+  identityDifference?: string;
+  protectedAtomsValid?: boolean;
   canonicalExact?: boolean;
   /** Primary exact semantic identity comparison using lfp:2.1. */
   semanticIdentityExact?: boolean;

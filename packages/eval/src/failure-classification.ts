@@ -33,6 +33,18 @@ export interface ClassifiedFailure {
   detail: string;
 }
 
+export type EvaluationFailureStage =
+  | 'provider'
+  | 'json'
+  | 'transport'
+  | 'structural'
+  | 'protocol'
+  | 'frame'
+  | 'grounding'
+  | 'protected-atoms'
+  | 'identity'
+  | 'comparison';
+
 /**
  * Classifies an error, raw text, or semantic comparison discrepancy into
  * a stable machine-readable FailureClass.
@@ -45,6 +57,9 @@ export function classifyFailure(error: unknown, context?: {
   abstained?: boolean;
   expectedOutcome?: 'parse' | 'abstain';
   status?: string;
+  stage?: EvaluationFailureStage;
+  validationErrors?: string[];
+  identityDiff?: string;
 }): ClassifiedFailure {
   if (context?.expectedOutcome === 'abstain' && context?.abstained === false) {
     return {
@@ -59,6 +74,14 @@ export function classifyFailure(error: unknown, context?: {
       detail: 'Expected model to parse, but model abstained'
     };
   }
+
+  if (context?.stage === 'transport') return { failureClass: 'transport_schema_violation', detail: context.validationErrors?.join('; ') || 'Transport schema validation failed' };
+  if (context?.stage === 'json') return { failureClass: 'json_parse_error', detail: context.validationErrors?.join('; ') || 'Response was not valid JSON' };
+  if (context?.stage === 'structural') return { failureClass: 'provider_response_malformed', detail: context.validationErrors?.join('; ') || 'Candidate failed structural semantic validation' };
+  if (context?.stage === 'protocol') return { failureClass: 'protocol_noncanonical', detail: context.validationErrors?.join('; ') || 'Candidate was not protocol-canonical' };
+  if (context?.stage === 'grounding') return { failureClass: 'ungrounded_reference', detail: context.validationErrors?.join('; ') || 'Candidate contains an ungrounded identity reference' };
+  if (context?.stage === 'protected-atoms') return { failureClass: 'protected_literal_mismatch', detail: context.validationErrors?.join('; ') || 'Protected semantic atom mismatch' };
+  if (context?.stage === 'identity') return { failureClass: 'identity_mismatch', detail: context.identityDiff || 'Candidate did not match the canonical semantic identity' };
 
   if (context?.frameIssues && context.frameIssues.length > 0) {
     return {

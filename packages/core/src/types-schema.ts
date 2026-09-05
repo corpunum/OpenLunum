@@ -64,7 +64,7 @@ export interface LunumSemSchema01 {
   annotations?: Record<string, unknown>;
 }
 
-export type v01Term = string | number | boolean | null | {     type: string,     id?: string,     value?: unknown,     language?: string,     ref?: string } | v01Term[];
+export type v01Term = string | number | boolean | null | unknown & unknown | v01Term[];
 export type v01Clause = {     predicate: string,     roles: Record<string, unknown>,     negated?: boolean,     modality?: string | null,     time?: unknown,     conditions?: v01Clause[],     consequences?: v01Clause[],     annotations?: Record<string, unknown> };
 
 export interface ModelProfileSchema01 {

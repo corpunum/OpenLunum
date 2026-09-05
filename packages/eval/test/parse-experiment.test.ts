@@ -60,6 +60,24 @@ test('gold preflight reports frame validity and blocks frame-invalid gold', asyn
   assert.ok((report.invalid[0]?.frameIssues?.length ?? 0) > 0);
 });
 
+test('gold preflight rejects incompatible quantity and date term shapes at transport stage', async () => {
+  const semSchema = JSON.parse(await readFile(path.join(WORKSPACE_ROOT, 'schemas/lunum-sem.schema.json'), 'utf8'));
+  const report = validateEvaluationGold([{
+    id: 'invalid-term-shapes', sourceLanguage: 'en', sourceText: 'bad terms',
+    goldSem: {
+      schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact',
+      clauses: [{ predicate: 'below', roles: {
+        subject: { type: 'metric', id: 'battery' },
+        value: { type: 'quantity', value: { value: 20, unit: 'percent' } },
+        time: { type: 'date', value: { year: 2026 } }
+      } }]
+    }
+  } as any], buildExtractionSchema(semSchema));
+  assert.equal(report.transportValid, 0);
+  assert.equal(report.structuralValid, 0);
+  assert.match(JSON.stringify(report.invalid[0]?.transportErrors), /must be number|must be string|must be integer|must be object/u);
+});
+
 test('parse evidence rejects placeholder model IDs before a request is made', () => {
   assert.throws(() => validateProfile({
     schema: 'openlunum-model-profile/0.1',

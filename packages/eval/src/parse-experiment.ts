@@ -14,7 +14,7 @@ import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from
 import { parsePrompt } from './prompts.js';
 import { parseStrictJsonObject } from './strict-json.js';
 import { checkProtectedLiteralPlacement, checkProtectedSemanticAtoms, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
-import { classifyFailure } from './failure-classification.js';
+import { classifyFailure, type EvaluationFailureStage } from './failure-classification.js';
 import type { DatasetItem, ExperimentManifest, ItemResult, ModelCompletion, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
 
 export type ParseLanguage = 'en' | 'el' | 'es' | 'id' | 'fr' | 'de' | 'ja' | 'zh' | 'pt' | 'ar';
@@ -52,6 +52,12 @@ export interface LanguageMetrics {
   canonicalExactRate: number;
   featureBreakdown: Record<string, FeatureMetric>;
   abstentionAccuracy: number | null;
+  parseTargets: number;
+  parseExact: number;
+  parseExactRate: number | null;
+  abstentionTargets: number;
+  correctAbstentions: number;
+  unexpectedParses: number;
 }
 
 export interface FeatureMetric {
@@ -86,6 +92,13 @@ export interface ParseExperimentReport {
   failureModes: Record<string, number>;
   featureBreakdown: Record<string, FeatureMetric>;
   abstentionAccuracy: number | null;
+  parseTargets: number;
+  parseExact: number;
+  parseExactMicroRate: number | null;
+  abstentionTargets: number;
+  correctAbstentions: number;
+  unexpectedParses: number;
+  overallTaskSuccessRate: number;
   goldValidation: GoldValidationReport;
   provenance: ParseRunProvenance;
 }
@@ -280,6 +293,29 @@ function semanticFeatureSets(sem: LunumSem): Record<string, Set<string>> {
   walk(canonical.clauses, '');
   for (const [index, reference] of (canonical.references ?? []).entries()) sets.reference!.add(`${index}:${stableStringify(reference)}`);
   return sets;
+}
+
+function firstIdentityDifference(expected: LunumSem, actual: LunumSem): string | undefined {
+  const walk = (left: unknown, right: unknown, path: string): string | undefined => {
+    if (stableStringify(left) === stableStringify(right)) return undefined;
+    if (Array.isArray(left) && Array.isArray(right)) {
+      if (left.length !== right.length) return `${path}: array length ${left.length} != ${right.length}`;
+      for (let index = 0; index < left.length; index += 1) {
+        const difference = walk(left[index], right[index], `${path}[${index}]`);
+        if (difference) return difference;
+      }
+      return `${path}: array contents differ`;
+    }
+    if (left && right && typeof left === 'object' && typeof right === 'object') {
+      const keys = [...new Set([...Object.keys(left), ...Object.keys(right)])].sort();
+      for (const key of keys) {
+        const difference = walk((left as Record<string, unknown>)[key], (right as Record<string, unknown>)[key], `${path}.${key}`);
+        if (difference) return difference;
+      }
+    }
+    return `${path}: ${stableStringify(left)} != ${stableStringify(right)}`;
+  };
+  return walk(canonicalizeSem(expected), canonicalizeSem(actual), 'sem');
 }
 
 function featureMetrics(gold: LunumSem, actual: LunumSem): Record<string, FeatureMetric> {
@@ -497,6 +533,8 @@ export async function runParseExperiment(
         let completion: ModelCompletion | undefined;
         let systemPromptSha256: string | null = null;
         let userPromptSha256: string | null = null;
+        let stage: EvaluationFailureStage = 'provider';
+        let validationErrors: string[] = [];
         try {
           const prompt = parsePrompt(item);
           const effectiveSystem = effectiveSystemPrompt(profile, prompt.system);
@@ -504,11 +542,14 @@ export async function runParseExperiment(
           userPromptSha256 = sha256Text(prompt.user);
           calls += 1;
           completion = await model.complete(prompt.system, prompt.user, { structuredOutput });
+          stage = 'json';
           rawOutput = completion.content;
           rawRequest = completion.rawRequest;
           rawResponse = completion.rawResponse;
           const parsed = extractStructuredJson(rawOutput);
+          stage = 'transport';
           if (!transportValidator(parsed)) {
+            validationErrors = (transportValidator.errors ?? []).map((error) => error.message ?? 'invalid');
             throw new Error(`Transport schema validation failed: ${(transportValidator.errors ?? []).map((error) => error.message ?? 'invalid').join('; ')}`);
           }
           const expectedOutcome = item.expectedOutcome ?? 'parse';
@@ -522,6 +563,15 @@ export async function runParseExperiment(
               systemPromptSha256,
               userPromptSha256,
               abstained: true,
+              providerSuccess: true,
+              jsonParsed: true,
+              structuralValid: true,
+              protocolCanonical: true,
+              frameCanonical: false,
+              candidateIdentityAvailable: false,
+              goldIdentityAvailable: false,
+              identityComparable: false,
+              protectedAtomsValid: true,
               transportSchemaValid: true,
               ...(expectedOutcome === 'abstain' || item.goldSem === null ? {} : {
                 featureRecall: 0,
@@ -546,7 +596,11 @@ export async function runParseExperiment(
           }
 
           const validation = validateSemanticCandidate(parsed);
-          if (!validation.ok) throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
+          stage = 'structural';
+          if (!validation.ok) {
+            validationErrors = validation.errors;
+            throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
+          }
           if (expectedOutcome === 'abstain' || item.goldSem === null) {
             finalResult = {
               id: item.id,
@@ -558,6 +612,15 @@ export async function runParseExperiment(
               userPromptSha256,
               parsedSem: parsed as LunumSem,
               abstained: false,
+              providerSuccess: true,
+              jsonParsed: true,
+              structuralValid: true,
+              protocolCanonical: false,
+              frameCanonical: false,
+              candidateIdentityAvailable: false,
+              goldIdentityAvailable: false,
+              identityComparable: false,
+              protectedAtomsValid: false,
               transportSchemaValid: true,
               featureRecall: 0,
               featurePrecision: 0,
@@ -580,6 +643,7 @@ export async function runParseExperiment(
           }
 
           const goldSem = item.goldSem;
+          stage = 'protocol';
           const candidateNormalization = normalizeSemanticCandidate(parsed);
           const parsedSem = (candidateNormalization.sem ?? parsed) as LunumSem;
           const goldNormalization = normalizeSemanticCandidate(goldSem);
@@ -590,20 +654,29 @@ export async function runParseExperiment(
           const nearResult = nearSemantic.compareSem(goldSem, parsedSem, {
             protectedLiterals: item.protectedLiterals ?? []
           });
+          const frameValidation = validateSemFrames(parsedSem);
+          stage = 'frame';
+          const identityAvailable = (candidateNormalization.canonical && frameValidation.valid && candidateNormalization.sem)
+            ? (() => { try { semanticFingerprint(candidateNormalization.sem!); return true; } catch { return false; } })()
+            : false;
+          const goldIdentityAvailable = (goldNormalization.canonical && goldNormalization.sem)
+            ? (() => { try { semanticFingerprint(goldNormalization.sem!); return true; } catch { return false; } })()
+            : false;
+          const identityComparable = identityAvailable && goldIdentityAvailable;
+          const identityDiff = identityComparable ? firstIdentityDifference(goldNormalization.sem!, candidateNormalization.sem!) : undefined;
+          stage = 'comparison';
           let semanticIdentityExact = false;
           try {
-            semanticIdentityExact = Boolean(goldNormalization.canonical && candidateNormalization.canonical && goldNormalization.sem && candidateNormalization.sem
-              && semanticFingerprint(goldNormalization.sem) === semanticFingerprint(candidateNormalization.sem));
+            semanticIdentityExact = identityComparable && semanticFingerprint(goldNormalization.sem!) === semanticFingerprint(candidateNormalization.sem!);
           } catch {
             semanticIdentityExact = false;
           }
           const canonicalExact = semanticIdentityExact;
           const nearOnly = !canonicalExact && nearResult.similar;
-          const frameValidation = validateSemFrames(parsedSem);
           let failureClass = canonicalExact ? undefined
             : !candidateNormalization.canonical ? 'protocol_noncanonical' as const
               : !frameValidation.valid ? classifyFailure(null, { frameIssues: frameValidation.issues }).failureClass
-                : classifyFailure(null, { missingFeatures: comparison.missingFeatures, status: 'identity_mismatch' }).failureClass;
+                : classifyFailure(null, { missingFeatures: comparison.missingFeatures, invariants: comparison.hardInvariants, status: 'identity_mismatch', ...(identityComparable ? { stage: 'identity' as const } : {}), ...(identityDiff ? { identityDiff } : {}), ...(comparison.hardInvariants[0]?.detail ? { identityDiff: comparison.hardInvariants[0].detail } : {}) }).failureClass;
 
           // Placement-aware protected literal check (issue #329): verifies each
           // declared protectedLiteral lands in the same structural role it
@@ -648,6 +721,17 @@ export async function runParseExperiment(
               issues: candidateNormalization.issues,
               protocolVersion: candidateNormalization.protocolVersion
             },
+            providerSuccess: true,
+            jsonParsed: true,
+            structuralValid: true,
+            protocolCanonical: candidateNormalization.canonical,
+            frameCanonical: frameValidation.valid,
+            groundedIdentityValid: identityAvailable,
+            candidateIdentityAvailable: identityAvailable,
+            goldIdentityAvailable,
+            identityComparable,
+            ...(identityDiff ? { identityDifference: identityDiff } : {}),
+            protectedAtomsValid: semanticAtomsValid,
             completion,
             latencyMs: performance.now() - started
           };
@@ -679,7 +763,17 @@ export async function runParseExperiment(
             ...(systemPromptSha256 ? { systemPromptSha256 } : {}),
             ...(userPromptSha256 ? { userPromptSha256 } : {}),
             error: message,
-            failureClass: classifyFailure(error, { rawOutput }).failureClass,
+            providerSuccess: completion !== undefined,
+            jsonParsed: !['provider', 'json'].includes(stage),
+            transportSchemaValid: !['provider', 'json', 'transport'].includes(stage),
+            structuralValid: !['provider', 'json', 'transport', 'structural'].includes(stage),
+            protocolCanonical: !['provider', 'json', 'transport', 'structural', 'protocol'].includes(stage),
+            frameCanonical: !['provider', 'json', 'transport', 'structural', 'protocol', 'frame'].includes(stage),
+            candidateIdentityAvailable: false,
+            goldIdentityAvailable: false,
+            identityComparable: false,
+            protectedAtomsValid: false,
+            failureClass: classifyFailure(error, { rawOutput, stage, validationErrors }).failureClass,
             latencyMs
           };
           attempts.push({
@@ -727,6 +821,9 @@ export async function runParseExperiment(
   let totalLatencyMs = 0;
   let abstentionExpected = 0;
   let abstentionCorrect = 0;
+  let parseTargetCount = 0;
+  let parseExactCount = 0;
+  let unexpectedParseCount = 0;
 
   for (const language of PARSE_LANGUAGES) {
     const results = languageResults.get(language) ?? [];
@@ -734,20 +831,28 @@ export async function runParseExperiment(
     const passed = results.filter((result) => result.status === 'passed').length;
     const failed = results.filter((result) => result.status === 'failed').length;
     const errors = results.filter((result) => result.status === 'error').length;
-    const exactCount = results.filter((result) => result.exact === true).length;
+    const languageItems = byLanguage.get(language) ?? [];
+    const parseTargets = languageItems.filter((item) => item.expectedOutcome !== 'abstain' && item.goldSem !== null).length;
+    const exactCount = results.filter((result, index) => result.exact === true && languageItems[index]?.expectedOutcome !== 'abstain' && languageItems[index]?.goldSem !== null).length;
     const nearCount = results.filter((result) => result.nearSemantic === true).length;
-    const exactRate = total > 0 ? exactCount / total : 0;
+    const exactRate = parseTargets > 0 ? exactCount / parseTargets : 0;
     const nearSemanticRate = total > 0 ? nearCount / total : 0;
     const featureRecall = total > 0 ? results.reduce((sum, result) => sum + (result.featureRecall ?? 0), 0) / total : 0;
     const featurePrecision = total > 0 ? results.reduce((sum, result) => sum + (result.featurePrecision ?? 0), 0) / total : 0;
     const meanLatencyMs = total > 0 ? results.reduce((sum, result) => sum + result.latencyMs, 0) / total : 0;
     const languageFeatures: Record<string, { expected: number; matched: number; observed: number }> = {};
-    const languageItems = byLanguage.get(language) ?? [];
     const expectedAbstentions = languageItems.filter((item) => item.expectedOutcome === 'abstain' || item.goldSem === null).length;
     const correctAbstentions = results.filter((result, index) => {
       const item = languageItems[index];
       return (item?.expectedOutcome === 'abstain' || item?.goldSem === null) && result.abstained === true;
     }).length;
+    const unexpectedParses = results.filter((result, index) => {
+      const item = languageItems[index];
+      return (item?.expectedOutcome === 'abstain' || item?.goldSem === null) && result.abstained !== true;
+    }).length;
+    parseTargetCount += parseTargets;
+    parseExactCount += exactCount;
+    unexpectedParseCount += unexpectedParses;
     abstentionExpected += expectedAbstentions;
     abstentionCorrect += correctAbstentions;
     for (const result of results) {
@@ -791,6 +896,12 @@ export async function runParseExperiment(
       ,canonicalExactRate: exactRate
       ,featureBreakdown: breakdown
       ,abstentionAccuracy: expectedAbstentions > 0 ? correctAbstentions / expectedAbstentions : null
+      ,parseTargets
+      ,parseExact: exactCount
+      ,parseExactRate: parseTargets > 0 ? exactCount / parseTargets : null
+      ,abstentionTargets: expectedAbstentions
+      ,correctAbstentions
+      ,unexpectedParses
     });
 
     languageBreakdown[language] = [passed, failed, errors, total];
@@ -864,7 +975,7 @@ export async function runParseExperiment(
     const goldFingerprints = rows.map((row) => { try { return semanticFingerprint(row.item.goldSem); } catch { return null; } });
     const goldConverges = goldFingerprints.every((fp) => fp !== null && fp === goldFingerprints[0]);
     if (goldConverges) goldConvergentGroups += 1;
-    const successful = rows.filter((row) => row.result?.parsedSem && row.result.semanticIdentityExact === true);
+    const successful = rows.filter((row) => row.result?.parsedSem && row.result.candidateIdentityAvailable === true);
     const modelFingerprints = successful.map((row) => { try { return semanticFingerprint(row.result!.parsedSem); } catch { return null; } });
     const modelConverges = successful.length === rows.length && modelFingerprints.every((fp) => fp !== null && fp === modelFingerprints[0]);
     if (modelConverges) modelConvergentGroups += 1;
@@ -932,7 +1043,7 @@ export async function runParseExperiment(
     expected: totals.expected + value.expected,
     matched: totals.matched + value.matched
   }), { expected: 0, matched: 0 });
-  const microExactRate = totalItems > 0 ? allResults.filter((result) => result.semanticIdentityExact === true && result.status !== 'error').length / totalItems : 0;
+  const microExactRate = parseTargetCount > 0 ? parseExactCount / parseTargetCount : 0;
   const macroExactRate = languageCount > 0 ? totalExactRate / languageCount : 0;
   const microFeatureRecall = totalItems > 0 ? (aggregateFeatureTotals.expected > 0 ? aggregateFeatureTotals.matched / aggregateFeatureTotals.expected : 1) : 0;
   const macroFeatureRecall = languageCount > 0 ? totalFeatureRecall / languageCount : 0;
@@ -959,6 +1070,13 @@ export async function runParseExperiment(
     failureModes,
     featureBreakdown,
     abstentionAccuracy: abstentionExpected > 0 ? abstentionCorrect / abstentionExpected : null,
+    parseTargets: parseTargetCount,
+    parseExact: parseExactCount,
+    parseExactMicroRate: microExactRate,
+    abstentionTargets: abstentionExpected,
+    correctAbstentions: abstentionCorrect,
+    unexpectedParses: unexpectedParseCount,
+    overallTaskSuccessRate: totalItems > 0 ? (parseExactCount + abstentionCorrect) / totalItems : 0,
     goldValidation,
     provenance
   };
@@ -974,7 +1092,8 @@ export async function runParseExperiment(
 - Passed: ${metrics.passedItems}
 - Failed: ${metrics.failedItems}
 - Errors: ${metrics.errorItems}
-- Exact Rate: ${metrics.exactRate.toFixed(4)}
+- Parse Exact: ${metrics.parseExact}/${metrics.parseTargets} (${metrics.parseExactRate === null ? 'n/a' : metrics.parseExactRate.toFixed(4)})
+- Abstentions: ${metrics.correctAbstentions}/${metrics.abstentionTargets} correct; unexpected parses: ${metrics.unexpectedParses}
 - Near-Semantic-Only Rate: ${metrics.nearSemanticRate.toFixed(4)}
 - Feature Recall: ${metrics.featureRecall.toFixed(4)}
 - Feature Precision: ${metrics.featurePrecision.toFixed(4)}

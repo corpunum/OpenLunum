@@ -101,3 +101,19 @@ test('classifyFailure: identity_mismatch for canonical comparison failure', () =
   const result = classifyFailure(null, { status: 'identity_mismatch' });
   assert.equal(result.failureClass, 'identity_mismatch');
 });
+
+test('classifyFailure: structured transport stage wins over message wording', () => {
+  const result = classifyFailure(new Error('Validation failed: quantity value has incompatible shape'), {
+    stage: 'transport',
+    validationErrors: ['must be number']
+  });
+  assert.equal(result.failureClass, 'transport_schema_violation');
+});
+
+test('classifyFailure: structured structural stage is not unknown', () => {
+  const result = classifyFailure(new Error('Validation failed'), {
+    stage: 'structural',
+    validationErrors: ['clauses[0].roles.value quantity requires a finite numeric value']
+  });
+  assert.equal(result.failureClass, 'provider_response_malformed');
+});
