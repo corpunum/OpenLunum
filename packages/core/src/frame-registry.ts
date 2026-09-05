@@ -40,10 +40,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     predicate: 'prefer',
     roles: Object.freeze([
       { name: 'experiencer', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
-      // A preference may be recorded as an incomplete candidate while the
-      // preferred theme is unresolved; exact identity still requires the
-      // resolved term to be present at promotion time.
-      { name: 'theme', required: false }
+      { name: 'theme', required: true }
     ]),
     description: 'An experiencer has a preference for a theme.'
   }),
@@ -267,6 +264,13 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
     }
   }
 
+  if (predicate === 'delete' && !['theme', 'object', 'target'].some((role) => roleMap.has(role))) {
+    issues.push({
+      path: `${pathPrefix}.roles`, predicate, code: 'missing_required_role',
+      message: "Predicate 'delete' requires one target role: 'theme', 'object', or 'target'"
+    });
+  }
+
   const registeredRoles = new Set(SEMANTIC_PROTOCOL_REGISTRY.roles);
   for (const role of roleMap.keys()) {
     if (!registeredRoles.has(role)) {
@@ -282,9 +286,6 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
   // Check required roles
   for (const req of frame.roles) {
     if (req.required && !roleMap.has(req.name)) {
-      if (predicate === 'delete' && (roleMap.has('object') || roleMap.has('theme') || roleMap.has('target'))) {
-        continue;
-      }
       issues.push({
         path: `${pathPrefix}.roles`,
         predicate,

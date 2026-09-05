@@ -82,3 +82,8 @@ test('validateClauseFrame rejects mutually exclusive send destinations', () => {
   });
   assert.ok(issues.some(i => i.code === 'role_conflict'));
 });
+
+test('validateClauseFrame rejects unresolved delete targets', () => {
+  const issues = validateClauseFrame({ predicate: 'delete', roles: {} });
+  assert.ok(issues.some(i => i.code === 'missing_required_role'));
+});
