@@ -78,9 +78,11 @@ function normalizeAtomPath(path: string): string {
   const normalized = normalizePath(path);
   return normalized
     .replace(/^clauses/u, 'root')
-    .replace(/\.roles\./gu, '>roles.')
-    .replace(/\.conditions\./gu, '>conditions.')
-    .replace(/\.consequences\./gu, '>consequences.');
+    // Keep array indices: clauses[0] and clauses[1] are different semantic
+    // locations, as are conditions[0] and conditions[1]. The lookahead also
+    // handles the indexed form (`.conditions[0]`) as well as a terminal or
+    // dotted property form.
+    .replace(/\.(roles|conditions|consequences)(?=\[|\.|$)/gu, '>$1');
 }
 
 function normalizeAtomValue(path: string, value: string | number | boolean | null): string {

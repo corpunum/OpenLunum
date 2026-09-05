@@ -321,3 +321,43 @@ test('semantic atom paths distinguish repeated values in different clauses', () 
   assert.equal(checkProtectedSemanticAtoms(moved, [{ path: 'clauses[1].roles.amount.value', value: 30 }])[0]!.status, 'placed');
   assert.notEqual(checkProtectedSemanticAtoms({ ...sem, clauses: [{ predicate: 'charge', roles: { amount: { type: 'quantity', value: 30, unit: 'eur' } } }, { predicate: 'charge', roles: { amount: { type: 'quantity', value: 20, unit: 'eur' } } }] }, [{ path: 'clauses[1].roles.amount.value', value: 30 }])[0]!.status, 'placed');
 });
+
+test('semantic atom paths distinguish repeated values in different conditions', () => {
+  const sem: LunumSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'conditional_instruction',
+    clauses: [{
+      predicate: 'enable', roles: { agent: { type: 'actor', id: 'system' } }, negated: false,
+      conditions: [
+        { predicate: 'below', roles: { value: { type: 'quantity', value: 30, unit: 'eur' } }, negated: false },
+        { predicate: 'above', roles: { value: { type: 'quantity', value: 30, unit: 'eur' } }, negated: false }
+      ]
+    }]
+  };
+  const first = [{ path: 'clauses[0].conditions[0].roles.value.value', value: 30 }];
+  assert.equal(checkProtectedSemanticAtoms(sem, first)[0]!.status, 'placed');
+  const firstOnly: LunumSem = {
+    ...sem,
+    clauses: [{ ...sem.clauses[0]!, conditions: [sem.clauses[0]!.conditions![0]!] }]
+  };
+  assert.equal(checkProtectedSemanticAtoms(firstOnly, [{ path: 'clauses[0].conditions[1].roles.value.value', value: 30 }])[0]!.status, 'missing');
+});
+
+test('semantic atom paths distinguish repeated values in different consequences', () => {
+  const sem: LunumSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'conditional_instruction',
+    clauses: [{
+      predicate: 'enable', roles: { agent: { type: 'actor', id: 'system' } }, negated: false,
+      consequences: [
+        { predicate: 'notify', roles: { value: { type: 'quantity', value: 5, unit: 'eur' } }, negated: false },
+        { predicate: 'notify', roles: { value: { type: 'quantity', value: 5, unit: 'eur' } }, negated: false }
+      ]
+    }]
+  };
+  const second = [{ path: 'clauses[0].consequences[1].roles.value.value', value: 5 }];
+  assert.equal(checkProtectedSemanticAtoms(sem, second)[0]!.status, 'placed');
+  const firstOnly: LunumSem = {
+    ...sem,
+    clauses: [{ ...sem.clauses[0]!, consequences: [sem.clauses[0]!.consequences![0]!] }]
+  };
+  assert.equal(checkProtectedSemanticAtoms(firstOnly, second)[0]!.status, 'missing');
+});
