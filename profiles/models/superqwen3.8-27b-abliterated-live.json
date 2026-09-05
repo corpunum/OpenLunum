@@ -2,7 +2,7 @@
   "schema": "openlunum-model-profile/0.1",
   "id": "superqwen3.8-27b-abliterated-live",
   "provider": "openai-compatible",
-  "baseUrl": "http://127.0.0.1:58995/v1",
+  "baseUrl": "http://127.0.0.1:8080/v1",
   "model": "openai/superqwen3.8-27b-abliterated",
   "temperature": 0,
   "seed": 42,
