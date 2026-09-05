@@ -19,8 +19,8 @@ test('active transport schema and candidate validator agree on recursive array/n
   }
 });
 
-test('active transport schema rejects malformed term values that candidate validation must not bless', () => {
+test('active transport schema rejects malformed quantity values before semantic validation', () => {
   const value = sem({ type: 'quantity', value: 'five' });
-  assert.equal(validate(value), true, 'draft schema intentionally permits open typed values');
+  assert.equal(validate(value), false, JSON.stringify(validate.errors));
   assert.equal(validateSemanticCandidate(value).ok, false);
 });
