@@ -1,0 +1,84 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  CANONICAL_SEMANTIC_FRAMES,
+  validateClauseFrame,
+  validateSemFrames
+} from '../src/frame-registry.js';
+import type { LunumSem } from '../src/types.js';
+
+test('canonical semantic frames define core predicate roles', () => {
+  assert.ok(CANONICAL_SEMANTIC_FRAMES.prefer);
+  assert.ok(CANONICAL_SEMANTIC_FRAMES.send);
+  assert.ok(CANONICAL_SEMANTIC_FRAMES.receive);
+  assert.ok(CANONICAL_SEMANTIC_FRAMES.believe);
+  assert.ok(CANONICAL_SEMANTIC_FRAMES.publish);
+  assert.ok(CANONICAL_SEMANTIC_FRAMES.retry);
+});
+
+test('prefer frame requires experiencer and theme', () => {
+  const validClause = {
+    predicate: 'prefer',
+    roles: {
+      experiencer: { type: 'actor', id: 'user' },
+      theme: { type: 'concept', id: 'concise_answers' }
+    }
+  };
+  assert.deepEqual(validateClauseFrame(validClause), []);
+
+  const invalidClause = {
+    predicate: 'prefer',
+    roles: {
+      agent: { type: 'actor', id: 'user' },
+      theme: { type: 'concept', id: 'concise_answers' }
+    }
+  };
+  const issues = validateClauseFrame(invalidClause);
+  assert.equal(issues.length, 1);
+  assert.equal(issues[0]!.code, 'missing_required_role');
+  assert.match(issues[0]!.message, /requires role 'experiencer'/);
+});
+
+test('validateSemFrames traverses nested conditions and consequences', () => {
+  const sem: LunumSem = {
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'conditional_instruction',
+    clauses: [{
+      predicate: 'enable',
+      roles: { agent: { type: 'actor', id: 'system' }, theme: { type: 'feature', id: 'power_saving' } },
+      conditions: [{
+        predicate: 'below',
+        roles: { subject: { type: 'metric', id: 'battery_level' }, value: { type: 'quantity', value: 20, unit: 'percent' } }
+      }]
+    }]
+  };
+  const result = validateSemFrames(sem);
+  assert.equal(result.valid, true);
+  assert.equal(result.issues.length, 0);
+});
+
+test('validateClauseFrame rejects disallowed term types for typed roles', () => {
+  const clause = {
+    predicate: 'believe',
+    roles: {
+      agent: { type: 'quantity', value: 42 }, // Agent cannot be quantity!
+      proposition: { type: 'concept', id: 'online' }
+    }
+  };
+  const issues = validateClauseFrame(clause);
+  assert.ok(issues.some(i => i.code === 'disallowed_term_type'));
+});
+
+test('validateClauseFrame rejects mutually exclusive send destinations', () => {
+  const issues = validateClauseFrame({
+    predicate: 'send',
+    roles: {
+      agent: { type: 'actor', id: 'a' },
+      theme: { type: 'entity', id: 'm' },
+      recipient: { type: 'actor', id: 'r' },
+      destination: { type: 'entity', id: 'd' }
+    }
+  });
+  assert.ok(issues.some(i => i.code === 'role_conflict'));
+});

@@ -18,12 +18,35 @@ import type { LunumClause, LunumSem } from './types.js';
  */
 export const SEMANTIC_IDENTITY_FINGERPRINT_VERSION = '2.1' as const;
 
-function identityClause(clause: LunumClause): LunumClause {
-  const { annotations: _annotations, conditions, consequences, ...rest } = clause;
+const IDENTITY_TERM_FIELDS = new Set(['type', 'id', 'ref', 'value', 'unit']);
+const IDENTITY_CLAUSE_FIELDS = new Set(['predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences', 'annotations']);
+
+function identityTerm(term: unknown, path: string): unknown {
+  if (term === null || typeof term !== 'object') return term;
+  if (Array.isArray(term)) return term.map((item, index) => identityTerm(item, `${path}[${index}]`));
+  const object = term as Record<string, unknown>;
+  const unknown = Object.keys(object).filter((key) => !IDENTITY_TERM_FIELDS.has(key));
+  if (unknown.length) throw new TypeError(`Cannot compute semantic identity: unclassified term field(s) at ${path}: ${unknown.join(', ')}`);
+  const out: Record<string, unknown> = {};
+  for (const key of ['type', 'id', 'ref', 'unit', 'value']) {
+    if (key in object && object[key] !== undefined) out[key] = key === 'value' ? identityTerm(object[key], `${path}.${key}`) : object[key];
+  }
+  return out;
+}
+
+function identityClause(clause: LunumClause, path: string): Record<string, unknown> {
+  const unknown = Object.keys(clause).filter((key) => !IDENTITY_CLAUSE_FIELDS.has(key));
+  if (unknown.length) throw new TypeError(`Cannot compute semantic identity: unclassified clause field(s) at ${path}: ${unknown.join(', ')}`);
+  const roles: Record<string, unknown> = {};
+  for (const role of Object.keys(clause.roles ?? {}).sort()) roles[role] = identityTerm(clause.roles[role], `${path}.roles.${role}`);
   return {
-    ...rest,
-    ...(conditions?.length ? { conditions: conditions.map(identityClause) } : {}),
-    ...(consequences?.length ? { consequences: consequences.map(identityClause) } : {})
+    predicate: clause.predicate,
+    roles: roles as LunumClause['roles'],
+    negated: clause.negated === true,
+    ...(clause.modality != null ? { modality: clause.modality } : {}),
+    ...(clause.time !== undefined ? { time: identityTerm(clause.time, `${path}.time`) } : {}),
+    ...(clause.conditions?.length ? { conditions: clause.conditions.map((item, index) => identityClause(item, `${path}.conditions[${index}]`)) } : {}),
+    ...(clause.consequences?.length ? { consequences: clause.consequences.map((item, index) => identityClause(item, `${path}.consequences[${index}]`)) } : {})
   };
 }
 
@@ -45,7 +68,7 @@ export function semanticIdentityProjection(sem: LunumSem): Record<string, unknow
     schema: sem.schema,
     world: sem.world,
     kind: sem.kind,
-    clauses: sem.clauses.map(identityClause),
+    clauses: sem.clauses.map((clause, index) => identityClause(clause, `clauses[${index}]`)),
     ...(semanticReferences.length ? { references: semanticReferences } : {})
   };
 }

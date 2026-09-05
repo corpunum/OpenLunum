@@ -81,6 +81,10 @@ export type {
 // Runner
 export { runExperiment } from './runner.js';
 
+// Failure classification taxonomy (R14.x)
+export { classifyFailure } from './failure-classification.js';
+export type { FailureClass, ClassifiedFailure } from './failure-classification.js';
+
 // Model
 export { ModelResponseError, OpenAICompatibleModel, normalizeModelResponse, openAICompatibleStructuredOutputAdapter } from './model.js';
 export type { StructuredOutputAdapter } from './model.js';

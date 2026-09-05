@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { resolveMaxTokens } from './model.js';
@@ -31,6 +32,29 @@ export async function writeJson(file: string, value: unknown): Promise<void> {
 
 export async function sha256File(file: string): Promise<string> {
   return createHash('sha256').update(await readFile(file)).digest('hex');
+}
+
+/** Hash source and test inputs only; experiment output must not invalidate resume. */
+export async function sourceStateSha256(root: string): Promise<string> {
+  let files: string[] = [];
+  try {
+    files = execFileSync('git', [
+      'ls-files', '-co', '--exclude-standard',
+      'packages/core/src', 'packages/core/test',
+      'packages/eval/src', 'packages/eval/test'
+    ], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+      .split(/\r?\n/u).filter(Boolean).sort();
+  } catch {
+    return '';
+  }
+  const hash = createHash('sha256');
+  for (const file of files) {
+    hash.update(file);
+    hash.update('\0');
+    hash.update(await readFile(path.join(root, file)));
+    hash.update('\0');
+  }
+  return hash.digest('hex');
 }
 
 export async function loadDataset(file: string): Promise<DatasetItem[]> {

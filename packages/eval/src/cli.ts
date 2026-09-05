@@ -61,7 +61,8 @@ async function main(): Promise<void> {
     if (!manifest) throw new Error('run requires --manifest <path> or a positional manifest path');
     const root = await findWorkspaceRoot();
     const resolved = path.isAbsolute(manifest) ? manifest : path.join(root, manifest);
-    console.log(await runExperiment(resolved)); return;
+    const resumeDirectory = flag('resume');
+    console.log(await runExperiment(resolved, resumeDirectory ? { resumeDirectory } : {})); return;
   }
   if (command === 'report') throw new Error('Reports are generated automatically by experiment:run in 0.2.0');
   if (command === 'parse-experiment') { await runParseExperimentCli(); return; }

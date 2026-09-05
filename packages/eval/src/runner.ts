@@ -1,15 +1,18 @@
-import { appendFile, mkdir, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import Ajv2020Module from 'ajv/dist/2020.js';
 import { compareSem, validateSem, renderSem, canonicalizeSem, fingerprintSem, normalizeSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem, LunumRendering } from '@corpunum/lunum';
-import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
+import { findWorkspaceRoot, loadDataset, readJson, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt, realizePrompt } from './prompts.js';
 import { parseStrictJsonObject } from './strict-json.js';
 import { runRenderExperiment, writeRenderReport } from './render-runner.js';
 import { runContextExperiment, writeContextReport } from './context-runner.js';
 import { buildExtractionSchema, extractStructuredJson } from './parse-experiment.js';
+import { classifyFailure } from './failure-classification.js';
 import type { ExperimentManifest, ItemResult, ModelProfile, ExperimentItem } from './types.js';
 export type { ExperimentItem };
 
@@ -29,7 +32,7 @@ function literalCoverage(text: string, literals: string[]): number {
   return found / literals.length;
 }
 
-async function runModelTask(manifest: ExperimentManifest, root: string, output: string, dataset: ExperimentItem[], profile: ModelProfile): Promise<ItemResult[]> {
+async function runModelTask(manifest: ExperimentManifest, root: string, output: string, dataset: ExperimentItem[], profile: ModelProfile, existing: Map<string, ItemResult>, onResult?: (result: ItemResult) => Promise<void>): Promise<ItemResult[]> {
   const model = new OpenAICompatibleModel(profile);
   const parseValidator = manifest.task === 'parse'
     ? new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(
@@ -40,6 +43,10 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
   let calls = 0;
 
   for (const item of dataset as any) {
+    if (existing.has(item.id)) {
+      results.push(existing.get(item.id)!);
+      continue;
+    }
     if (calls >= manifest.limits.maxModelCalls) break;
     let finalResult: ItemResult | null = null;
 
@@ -109,11 +116,16 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
         finalResult = {
           id: item.id, status: 'error', rawOutput,
           error: `attempt ${attempt}: ${error instanceof Error ? error.message : String(error)}`,
+          failureClass: classifyFailure(error).failureClass,
           latencyMs: performance.now() - started
         };
       }
     }
-    if (finalResult) results.push(finalResult);
+    if (finalResult) {
+      results.push(finalResult);
+      existing.set(finalResult.id, finalResult);
+      await onResult?.(finalResult);
+    }
   }
   return results;
 }
@@ -232,7 +244,7 @@ async function runDeterministicTask(manifest: ExperimentManifest, root: string, 
   return results;
 }
 
-export async function runExperiment(manifestPath: string): Promise<string> {
+export async function runExperiment(manifestPath: string, options: { resumeDirectory?: string } = {}): Promise<string> {
   const root = await findWorkspaceRoot();
   const manifest = await readJson<ExperimentManifest>(manifestPath);
   validateManifest(manifest);
@@ -270,9 +282,34 @@ export async function runExperiment(manifestPath: string): Promise<string> {
   }
 
   const runId = new Date().toISOString().replace(/[:.]/gu, '-');
-  const output = path.join(outputRoot, runId);
+  const output = options.resumeDirectory
+    ? (path.isAbsolute(options.resumeDirectory) ? options.resumeDirectory : path.join(root, options.resumeDirectory))
+    : path.join(outputRoot, runId);
   await mkdir(output, { recursive: true });
-  await writeJson(path.join(output, 'manifest.snapshot.json'), manifest);
+  const codeCommit = (() => { try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } })();
+  const profileHash = profile && manifest.modelProfile
+    ? await sha256File(path.isAbsolute(manifest.modelProfile) ? manifest.modelProfile : path.join(root, manifest.modelProfile))
+    : null;
+  const sourceState = await sourceStateSha256(root);
+  const binding = createHash('sha256').update(JSON.stringify({ manifest, datasetSha256: manifest.dataset?.sha256 ?? null, profileHash, codeCommit, sourceState })).digest('hex');
+  const snapshotPath = path.join(output, 'manifest.snapshot.json');
+  const checkpointPath = path.join(output, 'checkpoint.json');
+  const resultPath = path.join(output, 'item-results.jsonl');
+  const existing = new Map<string, ItemResult>();
+  if (options.resumeDirectory) {
+    const checkpoint = await readJson<{ binding: string }>(checkpointPath).catch(() => null);
+    if (!checkpoint || checkpoint.binding !== binding) throw new Error('Resume refused: checkpoint provenance does not match manifest, dataset, profile, or code commit');
+    const lines = (await readFile(resultPath, 'utf8').catch(() => '')).split(/\r?\n/u).filter(Boolean);
+    for (const line of lines) {
+      const result = JSON.parse(line) as ItemResult;
+      if (existing.has(result.id)) throw new Error(`Resume refused: duplicate result for item ${result.id}`);
+      existing.set(result.id, result);
+    }
+  } else {
+    await writeJson(snapshotPath, manifest);
+    await writeFile(resultPath, '', 'utf8');
+    await writeJson(checkpointPath, { schema: 'openlunum-checkpoint/0.1', binding, completedItemIds: [], modelCalls: 0 });
+  }
   await writeJson(path.join(output, 'environment.json'), {
     node: process.version, platform: process.platform, arch: process.arch,
     modelProfile: profile, deterministic: isDeterministic,
@@ -281,14 +318,18 @@ export async function runExperiment(manifestPath: string): Promise<string> {
 
   const results: ItemResult[] = isDeterministic
     ? await runDeterministicTask(manifest, root, output)
-    : profile
-      ? await runModelTask(manifest, root, output, dataset, profile)
+      : profile
+      ? await runModelTask(manifest, root, output, dataset, profile, existing, async (result) => {
+          await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
+          await writeJson(checkpointPath, { schema: 'openlunum-checkpoint/0.1', binding, completedItemIds: [...existing.keys()], modelCalls: [...existing.values()].reduce((sum, item) => sum + (item.attempts?.length ?? 1), 0) });
+        })
       : [];
 
   // Write results
-  const resultPath = path.join(output, 'item-results.jsonl');
-  await writeFile(resultPath, '', 'utf8');
-  for (const result of results) await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
+  if (isDeterministic) {
+    await writeFile(resultPath, '', 'utf8');
+    for (const result of results) await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
+  }
 
   const failures = results.filter((result) => result.status !== 'passed');
   await writeFile(

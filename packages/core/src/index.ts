@@ -1,5 +1,6 @@
 export * from './types.js';
 export * from './semantic-registry.js';
+export * from './frame-registry.js';
 export * from './constants.js';
 export * from './canonicalize.js';
 export * from './fingerprint.js';

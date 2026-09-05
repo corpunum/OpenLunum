@@ -10,6 +10,7 @@ import {
   type SemanticVerification,
 } from './policy.js';
 import { normalizeSemanticCandidate } from './semantic-registry.js';
+import { validateSemFrames } from './frame-registry.js';
 import type { ConfidenceEvidenceFactors } from './fallback-policy.js';
 import type { LunumRecord, LunumSem, LunumSidecar, Risk } from './types.js';
 
@@ -84,19 +85,32 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
     canonicalProtocol: normalization.canonical,
     normalizationIssues: normalization.issues,
   });
+  const frameValidation = validateSemFrames(canonical);
+  const effectiveTrust = frameValidation.valid
+    ? trust
+    : {
+        ...trust,
+        status: 'candidate' as const,
+        promoted: false,
+        requiresHumanReview: true,
+        reasons: [...trust.reasons, ...frameValidation.issues.map((issue) => `semantic frame: ${issue.message}`)]
+      };
   const basePolicy = classifyEligibility({
     category: input.category ?? canonical.kind,
     risk: input.risk ?? 'unknown',
     confidence: trust.confidence,
     sourceText: input.sourceText ?? '',
-    semantic: trust.promoted,
+    semantic: effectiveTrust.promoted,
   });
   const policy = {
     ...basePolicy,
-    eligible: basePolicy.eligible && trust.promoted,
-    reasons: [...new Set([...basePolicy.reasons, ...trust.reasons])],
+    eligible: basePolicy.eligible && effectiveTrust.promoted,
+    reasons: [...new Set([
+      ...basePolicy.reasons,
+      ...effectiveTrust.reasons
+    ])],
   };
-  const semanticIdentity = normalization.canonical ? semanticFingerprint(canonical) : undefined;
+  const semanticIdentity = normalization.canonical && frameValidation.valid ? semanticFingerprint(canonical) : undefined;
   return {
     recordVersion: RECORD_SCHEMA,
     source: { text: input.sourceText ?? '', language: input.sourceLanguage ?? null, role: input.role ?? null, ref: input.sourceRef ?? null },
@@ -109,9 +123,9 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
     meta: {
       generatedAt: input.generatedAt ?? new Date().toISOString(),
       semantic: true,
-      semanticTrustStatus: trust.status,
-      semanticPromoted: trust.promoted,
-      semanticTrust: trust,
+      semanticTrustStatus: effectiveTrust.status,
+      semanticPromoted: effectiveTrust.promoted,
+      semanticTrust: effectiveTrust,
       semanticNormalization: normalization,
     }
   };

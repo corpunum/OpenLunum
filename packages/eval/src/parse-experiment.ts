@@ -2,18 +2,19 @@
  * Parse experiment runner for EN/EL/ES/ID.
  */
 
-import { appendFile, mkdir, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import Ajv2020Module from 'ajv/dist/2020.js';
 import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, semanticFingerprint, stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
-import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
+import { findWorkspaceRoot, loadDataset, readJson, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
 import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
 import { parseStrictJsonObject } from './strict-json.js';
 import { checkProtectedLiteralPlacement, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
+import { classifyFailure } from './failure-classification.js';
 import type { DatasetItem, ExperimentManifest, ItemResult, ModelCompletion, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
 
 export type ParseLanguage = 'en' | 'el' | 'es' | 'id' | 'fr' | 'de' | 'ja' | 'zh' | 'pt' | 'ar';
@@ -332,7 +333,8 @@ async function verifyModelIdentity(model: OpenAICompatibleModel, profile: ModelP
 }
 
 export async function runParseExperiment(
-  manifestPath: string
+  manifestPath: string,
+  options: { resumeDirectory?: string } = {}
 ): Promise<{ report: ParseExperimentReport; outputDirectory: string }> {
   const root = await findWorkspaceRoot();
   const manifest = await readJson<ExperimentManifest>(manifestPath);
@@ -355,6 +357,7 @@ export async function runParseExperiment(
   const items = ((await loadDataset(datasetPath)) as DatasetItem[]).slice(0, manifest.limits.maxItems);
   const profile = await readJson<ModelProfile>(modelProfilePath);
   validateProfile(profile);
+  const modelProfileSha256 = await sha256File(modelProfilePath);
   const schemaPath = path.join(root, 'schemas/lunum-sem.schema.json');
   const semSchema = await readJson<Record<string, unknown>>(schemaPath);
   const extractionSchema = buildExtractionSchema(semSchema);
@@ -372,19 +375,54 @@ export async function runParseExperiment(
     throw new Error(`Evaluation gold failed the complete preflight gate: ${JSON.stringify(goldValidation)}`);
   }
 
-  const startedAt = new Date().toISOString();
+  let startedAt = new Date().toISOString();
   const modelIdentity = await verifyModelIdentity(new OpenAICompatibleModel(profile), profile);
   const codeCommit = gitCommit(root);
   const baselineCommitResolvable = gitCommitResolvable(root, manifest.baselineCommit);
   const promptProbe = items[0] ? parsePrompt(items[0]) : null;
   const effectiveSystemPromptSha256 = promptProbe ? sha256Text(effectiveSystemPrompt(profile, promptProbe.system)) : null;
 
-  const runId = new Date().toISOString().replace(/[:.]/gu, '-');
+  let runId = new Date().toISOString().replace(/[:.]/gu, '-');
   const outputRoot = path.isAbsolute(manifest.outputDirectory)
     ? manifest.outputDirectory
     : path.join(root, manifest.outputDirectory);
-  const output = path.join(outputRoot, runId);
+  const output = options.resumeDirectory
+    ? (path.isAbsolute(options.resumeDirectory) ? options.resumeDirectory : path.join(root, options.resumeDirectory))
+    : path.join(outputRoot, runId);
   await mkdir(output, { recursive: true });
+
+  const sourceState = await sourceStateSha256(root);
+  const binding = createHash('sha256').update(stableStringify({
+    manifest,
+    datasetSha256: actualHash,
+    modelProfileSha256,
+    codeCommit,
+    sourceState,
+    schemaSha256,
+    effectiveSystemPromptSha256
+  })).digest('hex');
+  const checkpointPath = path.join(output, 'checkpoint.json');
+  const existingResults = new Map<string, ItemResult>();
+  if (options.resumeDirectory) {
+    const checkpoint = await readJson<{ binding: string; runId?: string; startedAt?: string }>(checkpointPath).catch(() => null);
+    if (!checkpoint || checkpoint.binding !== binding) {
+      throw new Error('Resume refused: parse checkpoint provenance does not match manifest, dataset, profile, schema, prompt, or source state');
+    }
+    if (checkpoint.runId) runId = checkpoint.runId;
+    if (checkpoint.startedAt) startedAt = checkpoint.startedAt;
+    for (const language of PARSE_LANGUAGES) {
+      const file = path.join(output, `parse-results-${language}.jsonl`);
+      const lines = (await readFile(file, 'utf8').catch(() => '')).split(/\r?\n/u).filter(Boolean);
+      for (const line of lines) {
+        const result = JSON.parse(line) as ItemResult;
+        if (existingResults.has(result.id)) throw new Error(`Resume refused: duplicate parse result for item ${result.id}`);
+        existingResults.set(result.id, result);
+      }
+    }
+  } else {
+    await writeJson(checkpointPath, { schema: 'openlunum-parse-checkpoint/0.1', binding, runId, startedAt, completedItemIds: [], modelCalls: 0 });
+    for (const language of PARSE_LANGUAGES) await writeFile(path.join(output, `parse-results-${language}.jsonl`), '', 'utf8');
+  }
 
   const byLanguage = new Map<ParseLanguage, DatasetItem[]>(PARSE_LANGUAGES.map((language) => [language, []]));
   for (const item of items) {
@@ -394,13 +432,17 @@ export async function runParseExperiment(
 
   const languageResults = new Map<ParseLanguage, ItemResult[]>();
   const nearSemantic = new NearSemanticFingerprintGenerator(0.8);
-  let calls = 0;
+  let calls = [...existingResults.values()].reduce((sum, result) => sum + (result.attempts?.length ?? 1), 0);
 
   for (const [language, languageItems] of byLanguage) {
     if (languageItems.length === 0) continue;
     const model = new OpenAICompatibleModel(profile);
-    const results: ItemResult[] = [];
+    const results: ItemResult[] = languageItems.flatMap((item) => {
+      const result = existingResults.get(item.id);
+      return result ? [result] : [];
+    });
     for (const item of languageItems) {
+      if (existingResults.has(item.id)) continue;
       if (calls >= manifest.limits.maxModelCalls) break;
       let finalResult: ItemResult | null = null;
       const attempts: ParseAttemptEvidence[] = [];
@@ -574,6 +616,7 @@ export async function runParseExperiment(
             ...(systemPromptSha256 ? { systemPromptSha256 } : {}),
             ...(userPromptSha256 ? { userPromptSha256 } : {}),
             error: message,
+            failureClass: classifyFailure(error, { rawOutput }).failureClass,
             latencyMs
           };
           attempts.push({
@@ -590,7 +633,13 @@ export async function runParseExperiment(
         }
       }
 
-      if (finalResult) results.push({ ...finalResult, attempts });
+      if (finalResult) {
+        const persisted = { ...finalResult, attempts };
+        results.push(persisted);
+        existingResults.set(persisted.id, persisted);
+        await appendFile(path.join(output, `parse-results-${language}.jsonl`), `${JSON.stringify(persisted)}\n`, 'utf8');
+        await writeJson(checkpointPath, { schema: 'openlunum-parse-checkpoint/0.1', binding, runId, startedAt, completedItemIds: [...existingResults.keys()], modelCalls: calls });
+      }
     }
 
     languageResults.set(language, results);
@@ -699,7 +748,7 @@ export async function runParseExperiment(
         }
       }
       if (result.status === 'error') {
-        const mode = `error: ${result.error?.slice(0, 50) ?? 'unknown'}`;
+        const mode = `error:${result.failureClass ?? 'unknown_failure'}`;
         failureModes[mode] = (failureModes[mode] ?? 0) + 1;
       }
     }
@@ -810,11 +859,8 @@ export async function runParseExperiment(
     provenance
   };
 
-  for (const [language, results] of languageResults) {
-    const resultPath = path.join(output, `parse-results-${language}.jsonl`);
-    await writeFile(resultPath, '', 'utf8');
-    for (const result of results) await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
-  }
+  // Per-item records are appended during execution. This preserves evidence
+  // if the process exits before aggregate reports can be written.
   await writeJson(path.join(output, 'parse-summary.json'), report);
 
   for (const metrics of languageMetrics) {
@@ -893,7 +939,8 @@ export async function runParseExperimentCli(): Promise<string> {
   if (!manifestArg) throw new Error('Usage: node cli.js parse-experiment <manifest-path>');
   const root = await findWorkspaceRoot();
   const resolved = path.isAbsolute(manifestArg) ? manifestArg : path.join(root, manifestArg);
-  const { outputDirectory } = await runParseExperiment(resolved);
+  const resume = process.argv.includes('--resume') ? process.argv[process.argv.indexOf('--resume') + 1] : undefined;
+  const { outputDirectory } = await runParseExperiment(resolved, resume ? { resumeDirectory: resume } : {});
   console.log(outputDirectory);
   return outputDirectory;
 }

@@ -1,5 +1,6 @@
 import type { LunumSem } from '@corpunum/lunum';
 import type { SemanticNormalizationResult } from '@corpunum/lunum';
+import type { FailureClass } from './failure-classification.js';
 
 export type WorkArea = 'semantic-contract' | 'multilingual-parse' | 'realization' | 'rendering' | 'context' | 'retrieval' | 'integration' | 'infrastructure';
 export type ExperimentTask = 'parse' | 'realize' | 'render' | 'context' | 'retrieval' | 'integration' | 'conformance' | 'infrastructure';
@@ -192,6 +193,7 @@ export interface ItemResult {
   missingFeatures?: string[];
   result?: Record<string, unknown>;
   error?: string | undefined;
+  failureClass?: FailureClass;
   latencyMs: number;
   queryId?: string;
   candidateIds?: string[];
