@@ -16,7 +16,7 @@ test('canonical semantic frames define core predicate roles', () => {
   assert.ok(CANONICAL_SEMANTIC_FRAMES.retry);
 });
 
-test('prefer frame requires experiencer and theme', () => {
+test('prefer frame requires experiencer and accepts a resolved theme', () => {
   const validClause = {
     predicate: 'prefer',
     roles: {
@@ -62,8 +62,8 @@ test('validateClauseFrame rejects disallowed term types for typed roles', () => 
   const clause = {
     predicate: 'believe',
     roles: {
-      agent: { type: 'quantity', value: 42 }, // Agent cannot be quantity!
-      proposition: { type: 'concept', id: 'online' }
+      experiencer: { type: 'quantity', value: 42 }, // Experiencer cannot be quantity!
+      theme: { type: 'concept', id: 'online' }
     }
   };
   const issues = validateClauseFrame(clause);
@@ -75,7 +75,7 @@ test('validateClauseFrame rejects mutually exclusive send destinations', () => {
     predicate: 'send',
     roles: {
       agent: { type: 'actor', id: 'a' },
-      theme: { type: 'entity', id: 'm' },
+      object: { type: 'entity', id: 'm' },
       recipient: { type: 'actor', id: 'r' },
       destination: { type: 'entity', id: 'd' }
     }

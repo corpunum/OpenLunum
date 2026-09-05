@@ -65,6 +65,19 @@ export async function loadDataset(file: string): Promise<DatasetItem[]> {
   });
 }
 
+/** Read an append-only JSONL ledger. Any malformed line is fatal; partial output is never silently skipped. */
+export async function readJsonlLedger<T>(file: string): Promise<T[]> {
+  const content = await readFile(file, 'utf8').catch(() => '');
+  const lines = content.split(/\r?\n/u).filter((line) => line.trim().length > 0);
+  return lines.map((line, index) => {
+    try {
+      return JSON.parse(line) as T;
+    } catch (error) {
+      throw new Error(`Malformed JSONL ledger at ${file}:${index + 1}; refusing resume: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  });
+}
+
 export function validateManifest(value: ExperimentManifest): void {
   if (value.schema !== 'openlunum-experiment/0.1') throw new Error('Unsupported experiment schema');
   const modelKeys = ['id', 'area', 'task', 'hypothesis', 'baselineCommit', 'outputDirectory'] as const;

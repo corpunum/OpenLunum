@@ -51,7 +51,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     predicate: 'send',
     roles: Object.freeze([
       { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
-      { name: 'theme', required: true },
+      { name: 'object', required: true },
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'destination', required: false }
     ]),
@@ -69,8 +69,8 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
   believe: Object.freeze({
     predicate: 'believe',
     roles: Object.freeze([
-      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
-      { name: 'proposition', required: true }
+      { name: 'experiencer', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'theme', required: true }
     ]),
     description: 'An agent holds a belief regarding a proposition.'
   }),
@@ -217,6 +217,14 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'theme', required: false }
     ]),
     description: 'An action or transaction is confirmed, optionally by an agent.'
+  }),
+  confirm: Object.freeze({
+    predicate: 'confirm',
+    roles: Object.freeze([
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'theme', required: false }
+    ]),
+    description: 'An agent confirms an action or transaction.'
   })
 });
 

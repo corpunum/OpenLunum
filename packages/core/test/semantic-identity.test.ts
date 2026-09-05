@@ -81,3 +81,33 @@ test('surface-evidence references never become identity-bearing even when they c
   assert.deepEqual(semanticIdentityProjection(withEvidence), semanticIdentityProjection(withoutEvidence));
   assert.equal(semanticFingerprint(withEvidence), semanticFingerprint(withoutEvidence));
 });
+
+test('grounded reference evidence is order-independent and duplicate-insensitive', () => {
+  const first = { ...sem, references: [{ ref: 'maria' }, { ref: 'daniel' }, { ref: 'maria' }] };
+  const second = { ...sem, references: [{ ref: 'maria' }, { ref: 'daniel' }] };
+  const reversed = { ...sem, references: [{ ref: 'daniel' }, { ref: 'maria' }] };
+  assert.equal(semanticFingerprint(first), semanticFingerprint(second));
+  assert.equal(semanticFingerprint(second), semanticFingerprint(reversed));
+});
+
+test('evidence-only term metadata is excluded while unknown term fields fail closed', () => {
+  const withEvidence = { ...sem, clauses: [{ ...sem.clauses[0]!, roles: {
+    agent: { type: 'actor', id: 'user', language: 'en', token: 'user', span: { start: 0, end: 4 } },
+    theme: { type: 'document', id: 'report', provider: 'model-a' }
+  } }] };
+  assert.equal(semanticFingerprint(sem), semanticFingerprint(withEvidence));
+  const unknown = { ...sem, clauses: [{ ...sem.clauses[0]!, roles: {
+    agent: { type: 'actor', id: 'user', inventedSemanticField: 'x' },
+    theme: { type: 'document', id: 'report' }
+  } }] };
+  assert.throws(() => semanticFingerprint(unknown), /unclassified term field/u);
+});
+
+test('quantity and range identity retains all semantic numeric fields', () => {
+  const quantity = { ...sem, clauses: [{ ...sem.clauses[0]!, roles: { amount: { type: 'quantity', value: 30, unit: 'EUR' } } }] };
+  const changedUnit = { ...quantity, clauses: [{ ...quantity.clauses[0]!, roles: { amount: { type: 'quantity', value: 30, unit: 'USD' } } }] };
+  const range = { ...sem, clauses: [{ ...sem.clauses[0]!, roles: { amount: { type: 'range', min: 1, max: 10, unit: 'EUR' } } }] };
+  const changedRange = { ...range, clauses: [{ ...range.clauses[0]!, roles: { amount: { type: 'range', min: 1, max: 11, unit: 'EUR' } } }] };
+  assert.notEqual(semanticFingerprint(quantity), semanticFingerprint(changedUnit));
+  assert.notEqual(semanticFingerprint(range), semanticFingerprint(changedRange));
+});

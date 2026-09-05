@@ -5,7 +5,7 @@ import path from 'node:path';
 import Ajv2020Module from 'ajv/dist/2020.js';
 import { compareSem, validateSem, renderSem, canonicalizeSem, fingerprintSem, normalizeSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem, LunumRendering } from '@corpunum/lunum';
-import { findWorkspaceRoot, loadDataset, readJson, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
+import { findWorkspaceRoot, loadDataset, readJson, readJsonlLedger, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt, realizePrompt } from './prompts.js';
 import { parseStrictJsonObject } from './strict-json.js';
@@ -290,8 +290,13 @@ export async function runExperiment(manifestPath: string, options: { resumeDirec
   const profileHash = profile && manifest.modelProfile
     ? await sha256File(path.isAbsolute(manifest.modelProfile) ? manifest.modelProfile : path.join(root, manifest.modelProfile))
     : null;
+  const modelIdentity = profile
+    ? await new OpenAICompatibleModel(profile).doctor().catch((error) => ({
+        verificationError: error instanceof Error ? error.message : String(error)
+      }))
+    : null;
   const sourceState = await sourceStateSha256(root);
-  const binding = createHash('sha256').update(JSON.stringify({ manifest, datasetSha256: manifest.dataset?.sha256 ?? null, profileHash, codeCommit, sourceState })).digest('hex');
+  const binding = createHash('sha256').update(JSON.stringify({ manifest, datasetSha256: manifest.dataset?.sha256 ?? null, profileHash, modelIdentity, codeCommit, sourceState })).digest('hex');
   const snapshotPath = path.join(output, 'manifest.snapshot.json');
   const checkpointPath = path.join(output, 'checkpoint.json');
   const resultPath = path.join(output, 'item-results.jsonl');
@@ -299,9 +304,7 @@ export async function runExperiment(manifestPath: string, options: { resumeDirec
   if (options.resumeDirectory) {
     const checkpoint = await readJson<{ binding: string }>(checkpointPath).catch(() => null);
     if (!checkpoint || checkpoint.binding !== binding) throw new Error('Resume refused: checkpoint provenance does not match manifest, dataset, profile, or code commit');
-    const lines = (await readFile(resultPath, 'utf8').catch(() => '')).split(/\r?\n/u).filter(Boolean);
-    for (const line of lines) {
-      const result = JSON.parse(line) as ItemResult;
+    for (const result of await readJsonlLedger<ItemResult>(resultPath)) {
       if (existing.has(result.id)) throw new Error(`Resume refused: duplicate result for item ${result.id}`);
       existing.set(result.id, result);
     }

@@ -75,6 +75,7 @@ function walkTerm(term: LunumTerm | undefined, pathPrefix: string, out: LiteralP
   // LunumTermObject
   if (typeof term.id === 'string') out.push({ path: `${pathPrefix}.id`, value: canonicalPrimitive(term.id) });
   if (typeof term.ref === 'string') out.push({ path: `${pathPrefix}.ref`, value: canonicalPrimitive(term.ref) });
+  if (typeof term.unit === 'string') out.push({ path: `${pathPrefix}.unit`, value: canonicalPrimitive(term.unit).toLocaleLowerCase('und') });
   if ('value' in term) {
     const value = (term as { value?: unknown }).value;
     if (isPrimitive(value)) {

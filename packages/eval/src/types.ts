@@ -226,6 +226,7 @@ export interface ParseAttemptEvidence {
   systemPromptSha256: string | null;
   userPromptSha256: string | null;
   error?: string;
+  failureClass?: FailureClass;
   latencyMs: number;
 }
 

@@ -268,3 +268,26 @@ test('mixed coverage: one placed, one wrong-role averages to 0.5', () => {
   assert.equal(checks.find((c) => c.literal === '2026-09-30')!.status, 'wrong-role');
   assert.equal(protectedLiteralPlacementCoverage(checks), 0.5);
 });
+
+test('quantity placement exposes both value and unit as semantic atoms', () => {
+  const gold: LunumSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact',
+    clauses: [{ predicate: 'charge', roles: {
+      subject: { type: 'actor', id: 'client' }, amount: { type: 'quantity', value: 30, unit: 'EUR' }
+    }, negated: false }]
+  };
+  const checks = checkProtectedLiteralPlacement(gold, gold, ['30', 'eur']);
+  assert.deepEqual(checks.map((check) => check.status), ['placed', 'placed']);
+  assert.match(checks[1]!.expectedPaths[0]!, /amount\.unit/u);
+});
+
+test('quantity value in a different role is not credited as preserved', () => {
+  const gold: LunumSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact',
+    clauses: [{ predicate: 'charge', roles: { amount: { type: 'quantity', value: 30, unit: 'EUR' } }, negated: false }]
+  };
+  const candidate: LunumSem = { ...gold, clauses: [{ ...gold.clauses[0]!, roles: {
+    amount: { type: 'quantity', value: 10, unit: 'EUR' }, limit: { type: 'quantity', value: 30, unit: 'EUR' }
+  } }] };
+  assert.equal(checkProtectedLiteralPlacement(gold, candidate, ['30'])[0]!.status, 'wrong-role');
+});

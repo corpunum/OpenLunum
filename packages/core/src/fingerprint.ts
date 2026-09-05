@@ -18,17 +18,18 @@ import type { LunumClause, LunumSem } from './types.js';
  */
 export const SEMANTIC_IDENTITY_FINGERPRINT_VERSION = '2.1' as const;
 
-const IDENTITY_TERM_FIELDS = new Set(['type', 'id', 'ref', 'value', 'unit']);
+const IDENTITY_TERM_FIELDS = new Set(['type', 'id', 'ref', 'value', 'unit', 'min', 'max', 'format']);
+const EVIDENCE_TERM_FIELDS = new Set(['language', 'token', 'surface', 'span', 'sourceSpan', 'provenance', 'provider', 'metadata']);
 const IDENTITY_CLAUSE_FIELDS = new Set(['predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences', 'annotations']);
 
 function identityTerm(term: unknown, path: string): unknown {
   if (term === null || typeof term !== 'object') return term;
   if (Array.isArray(term)) return term.map((item, index) => identityTerm(item, `${path}[${index}]`));
   const object = term as Record<string, unknown>;
-  const unknown = Object.keys(object).filter((key) => !IDENTITY_TERM_FIELDS.has(key));
+  const unknown = Object.keys(object).filter((key) => !IDENTITY_TERM_FIELDS.has(key) && !EVIDENCE_TERM_FIELDS.has(key));
   if (unknown.length) throw new TypeError(`Cannot compute semantic identity: unclassified term field(s) at ${path}: ${unknown.join(', ')}`);
   const out: Record<string, unknown> = {};
-  for (const key of ['type', 'id', 'ref', 'unit', 'value']) {
+  for (const key of ['type', 'id', 'ref', 'unit', 'min', 'max', 'format', 'value']) {
     if (key in object && object[key] !== undefined) out[key] = key === 'value' ? identityTerm(object[key], `${path}.${key}`) : object[key];
   }
   return out;
@@ -52,7 +53,7 @@ function identityClause(clause: LunumClause, path: string): Record<string, unkno
 
 /** Return only proposition-bearing Sem fields; provenance and annotations are metadata. */
 export function semanticIdentityProjection(sem: LunumSem): Record<string, unknown> {
-  const semanticReferences = (sem.references ?? []).flatMap((reference) => {
+  const semanticReferences = [...new Set((sem.references ?? []).flatMap((reference) => {
     if (reference.referenceKind === 'surface-evidence') return [];
     // `ref` is the grounded, language-neutral referent. `token`, `surface`,
     // `language`, and reference type describe source evidence and must not
@@ -61,8 +62,8 @@ export function semanticIdentityProjection(sem: LunumSem): Record<string, unknow
     const ref = typeof reference.ref === 'string' ? reference.ref.trim() : '';
     const id = typeof reference.id === 'string' ? reference.id.trim() : '';
     const grounded = ref || id;
-    return grounded ? [{ ref: grounded.normalize('NFKC').replace(/\s+/gu, '_').toLocaleLowerCase('und') }] : [];
-  });
+    return grounded ? [grounded.normalize('NFKC').replace(/\s+/gu, '_').toLocaleLowerCase('und')] : [];
+  }))].sort().map((ref) => ({ ref }));
   return {
     protocol: 'lunum-protocol/0.1',
     schema: sem.schema,

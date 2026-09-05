@@ -7,9 +7,9 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import Ajv2020Module from 'ajv/dist/2020.js';
-import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, semanticFingerprint, stableStringify, validateSemanticCandidate } from '@corpunum/lunum';
+import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, semanticFingerprint, stableStringify, validateSemanticCandidate, validateSemFrames } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
-import { findWorkspaceRoot, loadDataset, readJson, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
+import { findWorkspaceRoot, loadDataset, readJson, readJsonlLedger, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
 import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
 import { parseStrictJsonObject } from './strict-json.js';
@@ -396,6 +396,7 @@ export async function runParseExperiment(
     manifest,
     datasetSha256: actualHash,
     modelProfileSha256,
+    modelIdentity,
     codeCommit,
     sourceState,
     schemaSha256,
@@ -412,9 +413,7 @@ export async function runParseExperiment(
     if (checkpoint.startedAt) startedAt = checkpoint.startedAt;
     for (const language of PARSE_LANGUAGES) {
       const file = path.join(output, `parse-results-${language}.jsonl`);
-      const lines = (await readFile(file, 'utf8').catch(() => '')).split(/\r?\n/u).filter(Boolean);
-      for (const line of lines) {
-        const result = JSON.parse(line) as ItemResult;
+      for (const result of await readJsonlLedger<ItemResult>(file)) {
         if (existingResults.has(result.id)) throw new Error(`Resume refused: duplicate parse result for item ${result.id}`);
         existingResults.set(result.id, result);
       }
@@ -484,7 +483,8 @@ export async function runParseExperiment(
               ...(expectedOutcome === 'abstain' || item.goldSem === null ? {} : {
                 featureRecall: 0,
                 featurePrecision: 0,
-                missingFeatures: ['model abstained for a representable item']
+                missingFeatures: ['model abstained for a representable item'],
+                failureClass: classifyFailure(null, { expectedOutcome, abstained: true }).failureClass
               }),
               completion,
               latencyMs: performance.now() - started
@@ -519,6 +519,7 @@ export async function runParseExperiment(
               featureRecall: 0,
               featurePrecision: 0,
               missingFeatures: ['expected abstention but model returned a semantic candidate'],
+              failureClass: classifyFailure(null, { expectedOutcome: 'abstain', abstained: false }).failureClass,
               completion,
               latencyMs: performance.now() - started
             };
@@ -551,6 +552,11 @@ export async function runParseExperiment(
           });
           const canonicalExact = canonicalComparison?.exactFingerprint === true;
           const nearOnly = !canonicalExact && nearResult.similar;
+          const frameValidation = validateSemFrames(parsedSem);
+          const failureClass = canonicalExact ? undefined
+            : !candidateNormalization.canonical ? 'protocol_noncanonical' as const
+              : !frameValidation.valid ? 'frame_requirement_violation' as const
+                : classifyFailure(null, { missingFeatures: comparison.missingFeatures }).failureClass;
 
           // Placement-aware protected literal check (issue #329): verifies each
           // declared protectedLiteral lands in the same structural role it
@@ -577,6 +583,7 @@ export async function runParseExperiment(
             featurePrecision: comparison.featurePrecision,
             featureMetrics: perFeature,
             missingFeatures: comparison.missingFeatures,
+            ...(failureClass ? { failureClass } : {}),
             protectedLiteralPlacement: literalPlacement,
             protectedLiteralPlacementCoverage: protectedLiteralPlacementCoverage(literalPlacement),
             candidateNormalization: {
