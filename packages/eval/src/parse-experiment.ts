@@ -556,7 +556,7 @@ export async function runParseExperiment(
           const failureClass = canonicalExact ? undefined
             : !candidateNormalization.canonical ? 'protocol_noncanonical' as const
               : !frameValidation.valid ? 'frame_requirement_violation' as const
-                : classifyFailure(null, { missingFeatures: comparison.missingFeatures }).failureClass;
+                : classifyFailure(null, { missingFeatures: comparison.missingFeatures, status: 'identity_mismatch' }).failureClass;
 
           // Placement-aware protected literal check (issue #329): verifies each
           // declared protectedLiteral lands in the same structural role it

@@ -24,6 +24,7 @@ export type FailureClass =
   | 'unexpected_parse'
   | 'frame_requirement_violation'
   | 'ungrounded_reference'
+  | 'identity_mismatch'
   | 'unknown_failure';
 
 export interface ClassifiedFailure {
@@ -103,6 +104,10 @@ export function classifyFailure(error: unknown, context?: {
         return { failureClass: 'ungrounded_reference', detail: feat };
       }
     }
+  }
+
+  if (context?.status === 'identity_mismatch') {
+    return { failureClass: 'identity_mismatch', detail: 'Candidate did not match the canonical semantic identity' };
   }
 
   if (error) {

@@ -96,3 +96,8 @@ test('classifyFailure: unknown_failure for generic unrecognized error', () => {
   const result = classifyFailure(new Error('something entirely unexpected happened'));
   assert.equal(result.failureClass, 'unknown_failure');
 });
+
+test('classifyFailure: identity_mismatch for canonical comparison failure', () => {
+  const result = classifyFailure(null, { status: 'identity_mismatch' });
+  assert.equal(result.failureClass, 'identity_mismatch');
+});
