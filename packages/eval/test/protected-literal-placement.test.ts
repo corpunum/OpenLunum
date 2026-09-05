@@ -209,14 +209,14 @@ test('collectLiteralPlacements finds the quantity value under nested conditions'
   const placements = collectLiteralPlacements(batteryGoldSem);
   const match = placements.find((placement) => placement.value === '20');
   assert.ok(match);
-  assert.equal(match!.path, 'root>conditions>roles.value.value');
+  assert.equal(match!.path, 'root[0]>conditions[0]>roles.value.value');
 });
 
 test('collectLiteralPlacements finds the date value at the root time role', () => {
   const placements = collectLiteralPlacements(deadlineGoldSem);
   const match = placements.find((placement) => placement.value === '2026-09-30');
   assert.ok(match);
-  assert.equal(match!.path, 'root>roles.time.value');
+  assert.equal(match!.path, 'root[0]>roles.time.value');
 });
 
 test('mixed coverage: one placed, one wrong-role averages to 0.5', () => {
@@ -308,4 +308,16 @@ test('semantic atoms require exact typed path and independently protect value an
     { path: 'clauses[0].roles.amount.unit', value: 'eur' }
   ]);
   assert.deepEqual(wrong.map((atom) => atom.status), ['wrong-value', 'wrong-value']);
+});
+
+test('semantic atom paths distinguish repeated values in different clauses', () => {
+  const sem: LunumSem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [
+    { predicate: 'charge', roles: { amount: { type: 'quantity', value: 30, unit: 'eur' } } },
+    { predicate: 'charge', roles: { amount: { type: 'quantity', value: 30, unit: 'eur' } } }
+  ] };
+  const checks = checkProtectedSemanticAtoms(sem, [{ path: 'clauses[1].roles.amount.value', value: 30 }]);
+  assert.equal(checks[0]!.status, 'placed');
+  const moved = { ...sem, clauses: [sem.clauses[1]!, sem.clauses[0]!] };
+  assert.equal(checkProtectedSemanticAtoms(moved, [{ path: 'clauses[1].roles.amount.value', value: 30 }])[0]!.status, 'placed');
+  assert.notEqual(checkProtectedSemanticAtoms({ ...sem, clauses: [{ predicate: 'charge', roles: { amount: { type: 'quantity', value: 30, unit: 'eur' } } }, { predicate: 'charge', roles: { amount: { type: 'quantity', value: 20, unit: 'eur' } } }] }, [{ path: 'clauses[1].roles.amount.value', value: 30 }])[0]!.status, 'placed');
 });

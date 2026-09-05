@@ -1,5 +1,5 @@
 import type { DatasetItem } from './types.js';
-import { protocolVocabularyBlock } from '@corpunum/lunum';
+import { canonicalFramePromptBlock, protocolVocabularyBlock } from '@corpunum/lunum';
 
 export function renderPrompt(item: DatasetItem): { system: string; user: string } {
   return {
@@ -114,12 +114,12 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     world: 'real',
     kind: 'conditional_instruction',
     clauses: [{
-      predicate: 'share',
+      predicate: 'request',
       modality: 'permission',
       roles: {
         agent: { type: 'actor', id: 'assistant' },
         theme: { type: 'concept', id: 'report' },
-        object: { type: 'actor', id: 'team' }
+        recipient: { type: 'actor', id: 'team' }
       },
       negated: false,
       conditions: [{ predicate: 'confirmed', roles: { agent: { type: 'actor', id: 'user' } }, negated: false }]
@@ -137,6 +137,8 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       'World MUST be a registered world. Kind MUST be a registered kind. Predicates, roles, modalities, and term types MUST be registered. An x- extension is allowed only when the source cannot be represented otherwise and must remain a candidate, not trusted identity.',
       'Open entity and instance ids are not protocol vocabulary: preserve grounded names as ids, but never treat an arbitrary id as a registered symbol or assume two different open ids denote the same entity.',
       'If faithful representation would require an unsupported protocol symbol, abstain instead of inventing or silently translating it to a different meaning.',
+      'Canonical identity rule: emit only a predicate frame listed below. Registered predicates without a frame are candidate-only and MUST be represented as abstain in this extraction profile. Emit no role outside the listed frame; use the listed required/optional roles and exclusivity rules.',
+      'Canonical channel rules: use roles.time for the deadline predicate and never also set clause.time; use conditions/consequences only as clause arrays (never as role names); represent prohibition with negated=true and do not duplicate it with a negative modality. Top-level grounded references are emitted only when they add a proposition-bearing binding not already present in clause roles; source pronouns/tokens belong in evidence, not identity.',
       'Do not invent facts. Record an annotation warning for a representable uncertainty; use the abstain result when a safe semantic candidate cannot be formed.',
       '',
       'Expected JSON structure:',
@@ -159,6 +161,9 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       `Safety Constraint: ${exampleSafety}`,
       `Project State: ${exampleProjectState}`,
       `Permission: ${examplePermission}`,
+      '',
+      'Canonical identity frames (source of truth: Lunum frame registry):',
+      canonicalFramePromptBlock(),
       '',
       protocolVocabularyBlock()
     ].join('\n'),

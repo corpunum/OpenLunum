@@ -95,3 +95,10 @@ test('frames reject globally registered but undeclared roles and unframed predic
   const unframed = validateClauseFrame({ predicate: 'share', roles: { agent: { type: 'actor', id: 'user' } } });
   assert.ok(unframed.some((issue) => issue.code === 'unframed_predicate'));
 });
+
+test('frames reject duplicate time channels', () => {
+  const issues = validateClauseFrame({ predicate: 'deadline', roles: {
+    subject: { type: 'project', id: 'release' }, time: { type: 'date', value: '2027-01-01' }
+  }, time: { type: 'date', value: '2027-01-01' } });
+  assert.ok(issues.some((issue) => issue.code === 'duplicate_semantic_channel'));
+});

@@ -13,13 +13,29 @@ export interface FrameRoleRequirement {
 export interface PredicateFrameDefinition {
   predicate: string;
   roles: readonly FrameRoleRequirement[];
+  atLeastOneOf?: readonly string[];
   description: string;
+}
+
+/** Compact, generated prompt representation of the canonical identity frames. */
+export function canonicalFramePromptBlock(): string {
+  return Object.values(CANONICAL_SEMANTIC_FRAMES).map((frame) => {
+    const required = frame.roles.filter((role) => role.required).map((role) => role.name);
+    const optional = frame.roles.filter((role) => !role.required).map((role) => role.name);
+    const extras = [
+      ...(optional.length ? [`optional: ${optional.join(', ')}`] : []),
+      ...(frame.atLeastOneOf?.length ? [`at least one of: ${frame.atLeastOneOf.join('|')}`] : []),
+      ...(frame.predicate === 'send' ? ['recipient|destination (mutually exclusive)'] : []),
+      ...(frame.predicate === 'delete' ? ['theme|object|target (mutually exclusive)'] : [])
+    ];
+    return `${frame.predicate}(${required.length ? required.join(', ') : 'no required roles'}${extras.length ? `; ${extras.join('; ')}` : ''})`;
+  }).join('\n');
 }
 
 export interface FrameValidationIssue {
   path: string;
   predicate: string;
-  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate';
+  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel';
   message: string;
 }
 
@@ -87,7 +103,8 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'count', required: false, allowedTermTypes: ['quantity'] },
       { name: 'theme', required: false }
     ]),
-    description: 'An agent attempts an action again, optionally with count or theme.'
+    atLeastOneOf: Object.freeze(['count', 'theme']),
+    description: 'An agent attempts an action again, with a count or action theme.'
   }),
   request: Object.freeze({
     predicate: 'request',
@@ -105,6 +122,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'theme', required: false },
       { name: 'visibility', required: false }
     ]),
+    atLeastOneOf: Object.freeze(['theme', 'visibility']),
     description: 'An agent retains a theme, optionally with an explicit visibility.'
   }),
   delete: Object.freeze({
@@ -222,7 +240,8 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'theme', required: false }
     ]),
-    description: 'An action or transaction is confirmed, optionally by an agent.'
+    atLeastOneOf: Object.freeze(['agent', 'theme']),
+    description: 'An action or transaction is confirmed by an agent or for a theme.'
   }),
   confirm: Object.freeze({
     predicate: 'confirm',
@@ -230,6 +249,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'theme', required: false }
     ]),
+    atLeastOneOf: Object.freeze(['agent', 'theme']),
     description: 'An agent confirms an action or transaction.'
   })
 });
@@ -274,6 +294,10 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
         message: `Predicate '${predicate}' permits only one of [${group.join(', ')}]; found [${present.join(', ')}]`
       });
     }
+  }
+
+  if (clause.time !== undefined && roleMap.has('time')) {
+    issues.push({ path: `${pathPrefix}.time`, predicate, code: 'duplicate_semantic_channel', message: `Predicate '${predicate}' cannot encode time in both roles.time and clause.time` });
   }
 
   if (predicate === 'delete' && !['theme', 'object', 'target'].some((role) => roleMap.has(role))) {
@@ -322,6 +346,10 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
         });
       }
     }
+  }
+
+  if (frame.atLeastOneOf?.length && !frame.atLeastOneOf.some((role) => roleMap.has(role))) {
+    issues.push({ path: `${pathPrefix}.roles`, predicate, code: 'missing_required_role', message: `Predicate '${predicate}' requires at least one of [${frame.atLeastOneOf.join(', ')}]` });
   }
 
   return issues;

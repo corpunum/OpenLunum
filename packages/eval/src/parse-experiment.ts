@@ -71,6 +71,11 @@ export interface ParseExperimentReport {
   totalFailed: number;
   totalErrors: number;
   overallExactRate: number;
+  /** Compatibility alias for the weighted (micro) exact rate. */
+  microExactRate: number;
+  macroExactRate: number;
+  microFeatureRecall: number;
+  macroFeatureRecall: number;
   overallNearSemanticRate: number;
   overallFeatureRecall: number;
   overallFeaturePrecision: number;
@@ -92,6 +97,13 @@ export interface CrossLanguageComparison {
   fastestLanguage: ParseLanguage | null;
   consistencyScore: number;
   variance: Record<string, number>;
+  rowCount: number;
+  semanticGroupCount: number;
+  multilingualGroupCount: number;
+  goldConvergentGroups: number;
+  modelConvergentGroups: number;
+  modelGoldConvergentGroups: number;
+  brokenMultilingualGroups: number;
 }
 
 export function extractStructuredJson(text: string): unknown {
@@ -131,8 +143,9 @@ export interface GoldValidationReport {
   protocolCanonical: number;
   frameCanonical: number;
   identityValid: number;
+  semanticAtomsValid: number;
   abstentionCases: number;
-  invalid: Array<{ id: string; stages: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; identityError?: string }>;
+  invalid: Array<{ id: string; stages: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; semanticAtomErrors?: unknown[]; identityError?: string }>;
 }
 
 /**
@@ -150,6 +163,7 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
     protocolCanonical: 0,
     frameCanonical: 0,
     identityValid: 0,
+    semanticAtomsValid: 0,
     abstentionCases: 0,
     invalid: []
   };
@@ -184,6 +198,9 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
     } else {
       stages.push('semantic-identity');
     }
+    const semanticAtoms = checkProtectedSemanticAtoms(normalization?.sem ?? null, item.protectedSemanticAtoms ?? []);
+    if (semanticAtoms.every((atom) => atom.satisfied)) report.semanticAtomsValid += 1;
+    else stages.push('semantic-atoms');
     if (stages.length > 0) {
       report.invalid.push({
         id: item.id,
@@ -192,8 +209,28 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
         ...(structural.ok ? {} : { structuralErrors: structural.errors }),
         ...(normalization ? { normalizationIssues: normalization.issues } : {}),
         ...(frameValidation && !frameValidation.valid ? { frameIssues: frameValidation.issues } : {}),
+        ...(semanticAtoms.some((atom) => !atom.satisfied) ? { semanticAtomErrors: semanticAtoms.filter((atom) => !atom.satisfied) } : {}),
         ...(identityError ? { identityError } : {})
       });
+    }
+  }
+  const groupFingerprints = new Map<string, Array<{ id: string; fingerprint: string | null }>>();
+  for (const item of items) {
+    if (!item.semanticGroup || item.goldSem === null || item.expectedOutcome === 'abstain') continue;
+    const rows = groupFingerprints.get(item.semanticGroup) ?? [];
+    let fingerprint: string | null = null;
+    try { fingerprint = semanticFingerprint(item.goldSem); } catch { /* existing item-level stages carry the reason */ }
+    rows.push({ id: item.id, fingerprint });
+    groupFingerprints.set(item.semanticGroup, rows);
+  }
+  for (const rows of groupFingerprints.values()) {
+    const expected = rows[0]?.fingerprint;
+    if (rows.length > 1 && (expected === null || rows.some((row) => row.fingerprint !== expected))) {
+      for (const row of rows) {
+        const existing = report.invalid.find((item) => item.id === row.id);
+        if (existing) existing.stages.push('semantic-group-identity');
+        else report.invalid.push({ id: row.id, stages: ['semantic-group-identity'] });
+      }
     }
   }
   return report;
@@ -563,7 +600,7 @@ export async function runParseExperiment(
           const canonicalExact = semanticIdentityExact;
           const nearOnly = !canonicalExact && nearResult.similar;
           const frameValidation = validateSemFrames(parsedSem);
-          const failureClass = canonicalExact ? undefined
+          let failureClass = canonicalExact ? undefined
             : !candidateNormalization.canonical ? 'protocol_noncanonical' as const
               : !frameValidation.valid ? classifyFailure(null, { frameIssues: frameValidation.issues }).failureClass
                 : classifyFailure(null, { missingFeatures: comparison.missingFeatures, status: 'identity_mismatch' }).failureClass;
@@ -579,6 +616,7 @@ export async function runParseExperiment(
           // remain compatibility diagnostics and are not promoted into the
           // semantic contract by this runner.
           const protectedValid = semanticAtomsValid;
+          if (canonicalExact && !semanticAtomsValid) failureClass = 'protected_literal_mismatch';
 
           finalResult = {
             id: item.id,
@@ -767,13 +805,8 @@ export async function runParseExperiment(
     totalLatencyMs += meanLatencyMs;
 
     for (const result of results) {
-      if (result.status === 'failed') {
-        for (const feature of result.missingFeatures ?? []) {
-          failureModes[feature] = (failureModes[feature] ?? 0) + 1;
-        }
-      }
-      if (result.status === 'error') {
-        const mode = `error:${result.failureClass ?? 'unknown_failure'}`;
+      if (result.status === 'failed' || result.status === 'error') {
+        const mode = result.failureClass ?? (result.status === 'error' ? 'unknown_failure' : 'identity_mismatch');
         failureModes[mode] = (failureModes[mode] ?? 0) + 1;
       }
     }
@@ -812,13 +845,47 @@ export async function runParseExperiment(
       }
     : { exactRateVariance: 0, recallVariance: 0, latencyVariance: 0 };
 
+  const allResults = [...languageResults.values()].flat();
+  const groupRows = new Map<string, Array<{ item: DatasetItem; result: ItemResult | undefined }>>();
+  for (const item of items) {
+    if (!item.semanticGroup) continue;
+    const result = allResults.find((candidate) => candidate.id === item.id);
+    const rows = groupRows.get(item.semanticGroup) ?? [];
+    rows.push({ item, result });
+    groupRows.set(item.semanticGroup, rows);
+  }
+  let goldConvergentGroups = 0;
+  let modelConvergentGroups = 0;
+  let modelGoldConvergentGroups = 0;
+  let brokenMultilingualGroups = 0;
+  for (const rows of groupRows.values()) {
+    const languages = new Set(rows.map((row) => row.item.sourceLanguage));
+    if (languages.size < 2) continue;
+    const goldFingerprints = rows.map((row) => { try { return semanticFingerprint(row.item.goldSem); } catch { return null; } });
+    const goldConverges = goldFingerprints.every((fp) => fp !== null && fp === goldFingerprints[0]);
+    if (goldConverges) goldConvergentGroups += 1;
+    const successful = rows.filter((row) => row.result?.parsedSem && row.result.semanticIdentityExact === true);
+    const modelFingerprints = successful.map((row) => { try { return semanticFingerprint(row.result!.parsedSem); } catch { return null; } });
+    const modelConverges = successful.length === rows.length && modelFingerprints.every((fp) => fp !== null && fp === modelFingerprints[0]);
+    if (modelConverges) modelConvergentGroups += 1;
+    const modelGoldConverges = modelConverges && goldConverges && modelFingerprints[0] === goldFingerprints[0];
+    if (modelGoldConverges) modelGoldConvergentGroups += 1;
+    if (!modelGoldConverges) brokenMultilingualGroups += 1;
+  }
   const crossLanguageComparison: CrossLanguageComparison = {
     languagesIncluded,
     bestExactLanguage,
     bestRecallLanguage,
     fastestLanguage,
     consistencyScore,
-    variance
+    variance,
+    rowCount: items.length,
+    semanticGroupCount: groupRows.size,
+    multilingualGroupCount: [...groupRows.values()].filter((rows) => new Set(rows.map((row) => row.item.sourceLanguage)).size > 1).length,
+    goldConvergentGroups,
+    modelConvergentGroups,
+    modelGoldConvergentGroups,
+    brokenMultilingualGroups
   };
   const featureBreakdown = Object.fromEntries(Object.entries(aggregateFeatures).map(([name, values]) => [name, {
     expected: values.expected,
@@ -861,6 +928,14 @@ export async function runParseExperiment(
     evidenceValid: invalidReasons.length === 0,
     invalidReasons
   };
+  const aggregateFeatureTotals = Object.values(aggregateFeatures).reduce((totals, value) => ({
+    expected: totals.expected + value.expected,
+    matched: totals.matched + value.matched
+  }), { expected: 0, matched: 0 });
+  const microExactRate = totalItems > 0 ? allResults.filter((result) => result.semanticIdentityExact === true && result.status !== 'error').length / totalItems : 0;
+  const macroExactRate = languageCount > 0 ? totalExactRate / languageCount : 0;
+  const microFeatureRecall = totalItems > 0 ? (aggregateFeatureTotals.expected > 0 ? aggregateFeatureTotals.matched / aggregateFeatureTotals.expected : 1) : 0;
+  const macroFeatureRecall = languageCount > 0 ? totalFeatureRecall / languageCount : 0;
   const report: ParseExperimentReport = {
     experimentId: manifest.id,
     runId,
@@ -869,7 +944,11 @@ export async function runParseExperiment(
     totalPassed,
     totalFailed,
     totalErrors,
-    overallExactRate: languageCount > 0 ? totalExactRate / languageCount : 0,
+    overallExactRate: microExactRate,
+    microExactRate,
+    macroExactRate,
+    microFeatureRecall,
+    macroFeatureRecall,
     overallNearSemanticRate: languageCount > 0 ? totalNearSemanticRate / languageCount : 0,
     overallFeatureRecall: languageCount > 0 ? totalFeatureRecall / languageCount : 0,
     overallFeaturePrecision: languageCount > 0 ? totalFeaturePrecision / languageCount : 0,

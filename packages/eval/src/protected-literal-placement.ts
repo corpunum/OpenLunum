@@ -21,6 +21,7 @@
  * scored separately via `compareSem`'s feature recall/precision.
  */
 
+import { basicIdentifier } from '@corpunum/lunum';
 import type { LunumClause, LunumSem, LunumTerm } from '@corpunum/lunum';
 
 export interface LiteralPlacement {
@@ -69,18 +70,22 @@ function canonicalPrimitive(value: string | number | boolean | null): string {
   return String(value);
 }
 
-/** Strip array indices so sibling ordering does not fragment the role path. */
 function normalizePath(path: string): string {
-  return path.replace(/\[\d+\]/g, '');
+  return path;
 }
 
 function normalizeAtomPath(path: string): string {
   const normalized = normalizePath(path);
   return normalized
-    .replace(/^clauses(?:\[0\])?/u, 'root')
+    .replace(/^clauses/u, 'root')
     .replace(/\.roles\./gu, '>roles.')
     .replace(/\.conditions\./gu, '>conditions.')
     .replace(/\.consequences\./gu, '>consequences.');
+}
+
+function normalizeAtomValue(path: string, value: string | number | boolean | null): string {
+  const primitive = value === null ? 'null' : typeof value === 'number' ? String(value) : typeof value === 'boolean' ? String(value) : value;
+  return /\.(?:id|ref|unit|type|format)$/u.test(path) ? basicIdentifier(primitive) : primitive;
 }
 
 function walkTerm(term: LunumTerm | undefined, pathPrefix: string, out: LiteralPlacement[]): void {
@@ -114,8 +119,8 @@ function walkClause(clause: LunumClause, pathPrefix: string, out: LiteralPlaceme
     walkTerm(clause.roles[key], `${pathPrefix}>roles.${key}`, out);
   }
   if (clause.time !== undefined) walkTerm(clause.time, `${pathPrefix}>time`, out);
-  for (const condition of clause.conditions ?? []) walkClause(condition, `${pathPrefix}>conditions`, out);
-  for (const consequence of clause.consequences ?? []) walkClause(consequence, `${pathPrefix}>consequences`, out);
+  for (const [index, condition] of (clause.conditions ?? []).entries()) walkClause(condition, `${pathPrefix}>conditions[${index}]`, out);
+  for (const [index, consequence] of (clause.consequences ?? []).entries()) walkClause(consequence, `${pathPrefix}>consequences[${index}]`, out);
 }
 
 /**
@@ -125,7 +130,7 @@ function walkClause(clause: LunumClause, pathPrefix: string, out: LiteralPlaceme
 export function collectLiteralPlacements(sem: LunumSem | null | undefined): LiteralPlacement[] {
   const out: LiteralPlacement[] = [];
   if (!sem) return out;
-  for (const clause of sem.clauses ?? []) walkClause(clause, 'root', out);
+  for (const [index, clause] of (sem.clauses ?? []).entries()) walkClause(clause, `root[${index}]`, out);
   for (const reference of sem.references ?? []) walkTerm(reference as unknown as LunumTerm, 'references', out);
   return out.map((placement) => ({ path: normalizePath(placement.path), value: placement.value }));
 }
@@ -184,8 +189,8 @@ export function checkProtectedSemanticAtoms(candidateSem: LunumSem | null | unde
   return atoms.map((atom) => {
     const path = normalizeAtomPath(atom.path);
     const matches = placements.filter((placement) => placement.path === path);
-    const expected = atom.value === null ? 'null' : typeof atom.value === 'number' ? String(atom.value) : typeof atom.value === 'boolean' ? String(atom.value) : path.endsWith('.unit') ? atom.value.toLocaleLowerCase('und') : atom.value;
-    const status = matches.some((placement) => placement.value === expected) ? 'placed' : matches.length ? 'wrong-value' : 'missing';
+    const expected = normalizeAtomValue(path, atom.value);
+    const status = matches.some((placement) => normalizeAtomValue(path, placement.value) === expected) ? 'placed' : matches.length ? 'wrong-value' : 'missing';
     return { ...atom, status, satisfied: status === 'placed' };
   });
 }

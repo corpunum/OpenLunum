@@ -75,6 +75,11 @@ only after structural validity, protocol canonicality, a registered canonical
 semantic frame for every controlled predicate, and recursive identity-field
 classification all pass. A registered predicate without a frame is not
 identity-safe.
+Canonical channels are exclusive: `deadline` uses framed `roles.time` and
+must not also use `clause.time`; nested meaning uses `conditions` and
+`consequences`, never role lookalikes; and prohibition uses `negated=true`,
+not a duplicate negative modality. Ambiguous duplicate channels are rejected
+for exact identity.
 Surface evidence such as a pronoun token, source language, or provider-added
 reference type remains in the Sem/source artifact but is excluded from exact
 semantic identity. An ungrounded reference cannot establish exact identity.

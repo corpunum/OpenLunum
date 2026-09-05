@@ -657,6 +657,14 @@ test('parsePrompt includes controlled predicate/role vocabulary', () => {
   }
 });
 
+test('parsePrompt is synchronized with canonical frames and teaches no unframed few-shot predicate', () => {
+  const prompt = parsePrompt({ id: 'prompt', sourceLanguage: 'en', sourceText: 'x', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [] } });
+  assert.match(prompt.system, /Canonical identity frames/u);
+  assert.match(prompt.system, /send\(agent, object/u);
+  assert.match(prompt.system, /recipient\|destination \(mutually exclusive\)/u);
+  assert.doesNotMatch(prompt.system, /Permission:.*share/u);
+});
+
 test('parsePrompt includes schema shape and one-shot example', () => {
   // The live test campaign showed validity improved 0/16 → 14/16 when the
   // schema shape and one-shot example were embedded in parsePrompt.
