@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import type { LunumSem } from '@corpunum/lunum';
 import {
   checkProtectedLiteralPlacement,
+  checkProtectedSemanticAtoms,
   collectLiteralPlacements,
   protectedLiteralPlacementCoverage
 } from '../src/protected-literal-placement.js';
@@ -290,4 +291,21 @@ test('quantity value in a different role is not credited as preserved', () => {
     amount: { type: 'quantity', value: 10, unit: 'EUR' }, limit: { type: 'quantity', value: 30, unit: 'EUR' }
   } }] };
   assert.equal(checkProtectedLiteralPlacement(gold, candidate, ['30'])[0]!.status, 'wrong-role');
+});
+
+test('semantic atoms require exact typed path and independently protect value and unit', () => {
+  const gold: LunumSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact',
+    clauses: [{ predicate: 'charge', roles: { amount: { type: 'quantity', value: 30, unit: 'EUR' } }, negated: false }]
+  };
+  const correct = checkProtectedSemanticAtoms(gold, [
+    { path: 'clauses[0].roles.amount.value', value: 30 },
+    { path: 'clauses[0].roles.amount.unit', value: 'eur' }
+  ]);
+  assert.ok(correct.every((atom) => atom.satisfied));
+  const wrong = checkProtectedSemanticAtoms({ ...gold, clauses: [{ ...gold.clauses[0]!, roles: { amount: { type: 'quantity', value: 120, unit: 'USD' } } }] }, [
+    { path: 'clauses[0].roles.amount.value', value: 30 },
+    { path: 'clauses[0].roles.amount.unit', value: 'eur' }
+  ]);
+  assert.deepEqual(wrong.map((atom) => atom.status), ['wrong-value', 'wrong-value']);
 });

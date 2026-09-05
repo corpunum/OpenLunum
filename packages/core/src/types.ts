@@ -131,7 +131,7 @@ export interface LunumRecord {
 export interface LunumSidecar {
   lunumCode: string | null;
   lunumSem: LunumSem | null;
-  /** Compatibility slot; lunumMeta.fingerprintKind disambiguates surface vs exact semantic. */
+  /** Compatibility slot; this remains legacy lfp:0.1 for semantic records. */
   lunumFp: string | null;
   lunumMeta: Record<string, unknown> & { eligible: boolean };
 }

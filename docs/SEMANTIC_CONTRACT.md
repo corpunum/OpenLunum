@@ -66,7 +66,15 @@ actor authority, and critical role/term shapes before scoring softer features.
 Existing `lfp:0.1` output is not reinterpreted. New identity output is
 versioned as `lfp:2.1`; migration code can compare or backfill it explicitly.
 
-Reference identity is grounded through `references[].ref` (or `id`) only.
+Reference identity is grounded through `references[].ref` (or `id`) only. In
+this protocol those grounded top-level references are proposition-bearing
+bindings, so adding a new grounded referent changes identity; ordering and
+duplicates do not. Redundant pronoun/coreference evidence must instead use
+`referenceKind=surface-evidence` and is excluded. Exact identity is available
+only after structural validity, protocol canonicality, a registered canonical
+semantic frame for every controlled predicate, and recursive identity-field
+classification all pass. A registered predicate without a frame is not
+identity-safe.
 Surface evidence such as a pronoun token, source language, or provider-added
 reference type remains in the Sem/source artifact but is excluded from exact
 semantic identity. An ungrounded reference cannot establish exact identity.

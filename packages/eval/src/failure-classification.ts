@@ -23,6 +23,7 @@ export type FailureClass =
   | 'unexpected_abstention'
   | 'unexpected_parse'
   | 'frame_requirement_violation'
+  | 'frame_noncanonical'
   | 'ungrounded_reference'
   | 'identity_mismatch'
   | 'unknown_failure';
@@ -61,7 +62,7 @@ export function classifyFailure(error: unknown, context?: {
 
   if (context?.frameIssues && context.frameIssues.length > 0) {
     return {
-      failureClass: 'frame_requirement_violation',
+      failureClass: context.frameIssues.some((i) => i.code === 'unexpected_role' || i.code === 'unframed_predicate') ? 'frame_noncanonical' : 'frame_requirement_violation',
       detail: context.frameIssues.map((i) => i.message).join('; ')
     };
   }
@@ -96,6 +97,15 @@ export function classifyFailure(error: unknown, context?: {
       }
       if (feat.startsWith('role:') || feat.includes(':role:')) {
         return { failureClass: 'wrong_role', detail: `Missing or incorrect role: ${feat}` };
+      }
+      if (feat.includes(':entity:') || feat.includes(':referent:')) {
+        return { failureClass: 'wrong_entity', detail: `Missing or incorrect entity: ${feat}` };
+      }
+      if (feat.includes(':time:')) {
+        return { failureClass: 'wrong_time', detail: `Missing or incorrect time: ${feat}` };
+      }
+      if (feat.includes(':quantity:') || feat.includes(':value:')) {
+        return { failureClass: 'wrong_quantity', detail: `Missing or incorrect quantity: ${feat}` };
       }
       if (feat.startsWith('literal:') || feat.includes(':literal:')) {
         return { failureClass: 'wrong_quantity', detail: `Missing or incorrect literal value: ${feat}` };

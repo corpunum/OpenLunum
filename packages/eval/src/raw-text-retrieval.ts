@@ -131,7 +131,15 @@ export async function runRawTextRetrievalEvaluation(input: {
         continue;
       }
       if (!entry.sem) { if (query.expectedMemoryIds.includes(entry.memory.id)) matchingFailures.push(entry.memory.id); continue; }
-      const exact = semanticFingerprint(queryExtraction.sem) === semanticFingerprint(entry.sem);
+      // Exact identity is intentionally fail-closed for unframed controlled
+      // predicates. Retrieval must report such records as non-matches rather
+      // than turning an identity precondition failure into a process failure.
+      let exact = false;
+      try {
+        exact = semanticFingerprint(queryExtraction.sem) === semanticFingerprint(entry.sem);
+      } catch {
+        exact = false;
+      }
       const comparison = exact ? null : near.compareSem(queryExtraction.sem, entry.sem);
       const score = exact ? 1 : (comparison?.similar ? comparison.similarity : -1);
       if (score >= threshold) candidates.push({ id: entry.memory.id, score });

@@ -104,10 +104,28 @@ test('evidence-only term metadata is excluded while unknown term fields fail clo
 });
 
 test('quantity and range identity retains all semantic numeric fields', () => {
-  const quantity = { ...sem, clauses: [{ ...sem.clauses[0]!, roles: { amount: { type: 'quantity', value: 30, unit: 'EUR' } } }] };
-  const changedUnit = { ...quantity, clauses: [{ ...quantity.clauses[0]!, roles: { amount: { type: 'quantity', value: 30, unit: 'USD' } } }] };
-  const range = { ...sem, clauses: [{ ...sem.clauses[0]!, roles: { amount: { type: 'range', min: 1, max: 10, unit: 'EUR' } } }] };
-  const changedRange = { ...range, clauses: [{ ...range.clauses[0]!, roles: { amount: { type: 'range', min: 1, max: 11, unit: 'EUR' } } }] };
+  const quantity = { ...sem, clauses: [{ predicate: 'below', roles: { subject: { type: 'metric', id: 'balance' }, value: { type: 'quantity', value: 30, unit: 'EUR' } } }] };
+  const changedUnit = { ...quantity, clauses: [{ ...quantity.clauses[0]!, roles: { ...quantity.clauses[0]!.roles, value: { type: 'quantity', value: 30, unit: 'USD' } } }] };
+  const range = { ...sem, clauses: [{ predicate: 'below', roles: { subject: { type: 'metric', id: 'balance' }, value: { type: 'range', min: 1, max: 10, unit: 'EUR' } } }] };
+  const changedRange = { ...range, clauses: [{ ...range.clauses[0]!, roles: { ...range.clauses[0]!.roles, value: { type: 'range', min: 1, max: 11, unit: 'EUR' } } }] };
   assert.notEqual(semanticFingerprint(quantity), semanticFingerprint(changedUnit));
   assert.notEqual(semanticFingerprint(range), semanticFingerprint(changedRange));
+});
+
+test('semantic identity normalizes identifiers and units but preserves text case', () => {
+  const eurUpper = { ...sem, clauses: [{ predicate: 'below', roles: { subject: { type: 'metric', id: 'balance' }, value: { type: 'quantity', value: 30, unit: 'EUR' } } }] };
+  const eurLower = { ...eurUpper, clauses: [{ ...eurUpper.clauses[0]!, roles: { ...eurUpper.clauses[0]!.roles, value: { type: 'quantity', value: 30, unit: 'eur' } } }] };
+  assert.equal(semanticFingerprint(eurUpper), semanticFingerprint(eurLower));
+  const identifierUpper = { ...sem, clauses: [{ predicate: 'prefer', roles: { theme: { type: 'Concept', id: 'Résumé' }, experiencer: { type: 'actor', id: 'USER' } } }] };
+  const identifierNormalized = { ...sem, clauses: [{ predicate: 'prefer', roles: { theme: { type: 'concept', id: 'résumé' }, experiencer: { type: 'actor', id: 'user' } } }] };
+  assert.equal(semanticFingerprint(identifierUpper), semanticFingerprint(identifierNormalized));
+  const textUpper = { ...sem, clauses: [{ predicate: 'prefer', roles: { theme: { type: 'text', value: 'Report' }, experiencer: { type: 'actor', id: 'user' } } }] };
+  const textLower = { ...textUpper, clauses: [{ predicate: 'prefer', roles: { theme: { type: 'text', value: 'report' }, experiencer: { type: 'actor', id: 'user' } } }] };
+  assert.notEqual(semanticFingerprint(textUpper), semanticFingerprint(textLower));
+});
+
+test('semanticFingerprint fails closed for incomplete, extra-role, and unframed predicates', () => {
+  assert.throws(() => semanticFingerprint({ ...sem, clauses: [{ ...sem.clauses[0]!, roles: { experiencer: { type: 'actor', id: 'user' } } }] }), /frame-invalid/u);
+  assert.throws(() => semanticFingerprint({ ...sem, clauses: [{ ...sem.clauses[0]!, roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'x' }, manner: { type: 'concept', id: 'csv' } } }] }), /frame-invalid/u);
+  assert.throws(() => semanticFingerprint({ ...sem, clauses: [{ predicate: 'share', roles: { agent: { type: 'actor', id: 'user' } } }] }), /frame-invalid/u);
 });

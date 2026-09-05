@@ -13,7 +13,7 @@ import { findWorkspaceRoot, loadDataset, readJson, readJsonlLedger, sha256File, 
 import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
 import { parseStrictJsonObject } from './strict-json.js';
-import { checkProtectedLiteralPlacement, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
+import { checkProtectedLiteralPlacement, checkProtectedSemanticAtoms, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
 import { classifyFailure } from './failure-classification.js';
 import type { DatasetItem, ExperimentManifest, ItemResult, ModelCompletion, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
 
@@ -129,9 +129,10 @@ export interface GoldValidationReport {
   transportValid: number;
   structuralValid: number;
   protocolCanonical: number;
+  frameCanonical: number;
   identityValid: number;
   abstentionCases: number;
-  invalid: Array<{ id: string; stages: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; identityError?: string }>;
+  invalid: Array<{ id: string; stages: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; identityError?: string }>;
 }
 
 /**
@@ -147,6 +148,7 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
     transportValid: 0,
     structuralValid: 0,
     protocolCanonical: 0,
+    frameCanonical: 0,
     identityValid: 0,
     abstentionCases: 0,
     invalid: []
@@ -167,8 +169,11 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
     // implementation-side rewrite.
     if (normalization?.canonical && normalization.status === 'canonical') report.protocolCanonical += 1;
     else if (normalization) stages.push('protocol-canonicality');
+    const frameValidation = normalization?.canonical && normalization.sem ? validateSemFrames(canonicalizeSem(normalization.sem)) : null;
+    if (frameValidation?.valid) report.frameCanonical += 1;
+    else if (frameValidation) stages.push('frame-canonicality');
     let identityError: string | undefined;
-    if (normalization?.canonical && normalization.status === 'canonical' && normalization.sem) {
+    if (normalization?.canonical && normalization.status === 'canonical' && normalization.sem && frameValidation?.valid) {
       try {
         semanticFingerprint(normalization.sem);
         report.identityValid += 1;
@@ -186,6 +191,7 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
         ...(transportValid ? {} : { transportErrors: transportValidator.errors ?? [] }),
         ...(structural.ok ? {} : { structuralErrors: structural.errors }),
         ...(normalization ? { normalizationIssues: normalization.issues } : {}),
+        ...(frameValidation && !frameValidation.valid ? { frameIssues: frameValidation.issues } : {}),
         ...(identityError ? { identityError } : {})
       });
     }
@@ -543,19 +549,23 @@ export async function runParseExperiment(
           // The legacy comparison remains diagnostic. Canonical exactness is
           // only asserted when both sides are protocol-canonical.
           const comparison = compareSem(goldSem, parsedSem);
-          const canonicalComparison = goldNormalization.canonical && candidateNormalization.canonical && goldNormalization.sem && candidateNormalization.sem
-            ? compareSem(goldNormalization.sem, candidateNormalization.sem)
-            : null;
           const perFeature = featureMetrics(goldSem, parsedSem);
           const nearResult = nearSemantic.compareSem(goldSem, parsedSem, {
             protectedLiterals: item.protectedLiterals ?? []
           });
-          const canonicalExact = canonicalComparison?.exactFingerprint === true;
+          let semanticIdentityExact = false;
+          try {
+            semanticIdentityExact = Boolean(goldNormalization.canonical && candidateNormalization.canonical && goldNormalization.sem && candidateNormalization.sem
+              && semanticFingerprint(goldNormalization.sem) === semanticFingerprint(candidateNormalization.sem));
+          } catch {
+            semanticIdentityExact = false;
+          }
+          const canonicalExact = semanticIdentityExact;
           const nearOnly = !canonicalExact && nearResult.similar;
           const frameValidation = validateSemFrames(parsedSem);
           const failureClass = canonicalExact ? undefined
             : !candidateNormalization.canonical ? 'protocol_noncanonical' as const
-              : !frameValidation.valid ? 'frame_requirement_violation' as const
+              : !frameValidation.valid ? classifyFailure(null, { frameIssues: frameValidation.issues }).failureClass
                 : classifyFailure(null, { missingFeatures: comparison.missingFeatures, status: 'identity_mismatch' }).failureClass;
 
           // Placement-aware protected literal check (issue #329): verifies each
@@ -563,19 +573,26 @@ export async function runParseExperiment(
           // occupies in goldSem, not merely anywhere in the serialised output.
           // Diagnostic only - does not affect status/exact/gates.
           const literalPlacement = checkProtectedLiteralPlacement(goldSem, parsedSem, item.protectedLiterals ?? []);
+          const semanticAtoms = checkProtectedSemanticAtoms(parsedSem, item.protectedSemanticAtoms ?? []);
+          const semanticAtomsValid = semanticAtoms.every((atom) => atom.satisfied);
+          // New semantic atoms are an evaluation gate. Legacy protectedLiterals
+          // remain compatibility diagnostics and are not promoted into the
+          // semantic contract by this runner.
+          const protectedValid = semanticAtomsValid;
 
           finalResult = {
             id: item.id,
-            status: canonicalExact ? 'passed' : 'failed',
+            status: canonicalExact && protectedValid ? 'passed' : 'failed',
             rawOutput,
             rawRequest,
             rawResponse,
             systemPromptSha256,
             userPromptSha256,
             parsedSem,
-            exact: canonicalExact,
+            exact: canonicalExact && protectedValid,
             legacyExact: comparison.exactFingerprint,
             canonicalExact,
+            semanticIdentityExact,
             transportSchemaValid: true,
             nearSemantic: nearOnly,
             nearSemanticScore: nearResult.similarity,
@@ -586,6 +603,7 @@ export async function runParseExperiment(
             ...(failureClass ? { failureClass } : {}),
             protectedLiteralPlacement: literalPlacement,
             protectedLiteralPlacementCoverage: protectedLiteralPlacementCoverage(literalPlacement),
+            protectedSemanticAtoms: semanticAtoms,
             candidateNormalization: {
               status: candidateNormalization.status,
               canonical: candidateNormalization.canonical,

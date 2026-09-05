@@ -1,6 +1,7 @@
 import type { LunumSem } from '@corpunum/lunum';
 import type { SemanticNormalizationResult } from '@corpunum/lunum';
 import type { FailureClass } from './failure-classification.js';
+import type { ProtectedSemanticAtom } from './protected-literal-placement.js';
 
 export type WorkArea = 'semantic-contract' | 'multilingual-parse' | 'realization' | 'rendering' | 'context' | 'retrieval' | 'integration' | 'infrastructure';
 export type ExperimentTask = 'parse' | 'realize' | 'render' | 'context' | 'retrieval' | 'integration' | 'conformance' | 'infrastructure';
@@ -145,6 +146,7 @@ export interface DatasetItem {
   goldSem: LunumSem;
   expectedOutcome?: 'parse' | 'abstain';
   protectedLiterals?: string[];
+  protectedSemanticAtoms?: ProtectedSemanticAtom[];
   tags?: string[];
 }
 
@@ -166,6 +168,8 @@ export interface ItemResult {
   /** Protocol normalization outcome; structural validity alone is not canonical identity. */
   candidateNormalization?: Pick<SemanticNormalizationResult, 'status' | 'canonical' | 'issues' | 'protocolVersion'>;
   canonicalExact?: boolean;
+  /** Primary exact semantic identity comparison using lfp:2.1. */
+  semanticIdentityExact?: boolean;
   /** Validated against the exact JSON Schema sent to the provider. */
   transportSchemaValid?: boolean;
   /** Legacy formatting-only fingerprint comparison, retained for migration diagnostics. */
@@ -190,6 +194,7 @@ export interface ItemResult {
   }>;
   /** Fraction of protectedLiteralPlacement checks with status 'placed'; 1 when there are none. */
   protectedLiteralPlacementCoverage?: number;
+  protectedSemanticAtoms?: Array<ProtectedSemanticAtom & { status: 'placed' | 'missing' | 'wrong-value'; satisfied: boolean }>;
   missingFeatures?: string[];
   result?: Record<string, unknown>;
   error?: string | undefined;
@@ -234,6 +239,7 @@ export interface ExperimentItem {
   id: string;
   goldSem?: Record<string, unknown>;
   protectedLiterals?: string[];
+  protectedSemanticAtoms?: ProtectedSemanticAtom[];
   targetLanguage?: string;
   sourceText?: string;
   sourceLanguage?: string;

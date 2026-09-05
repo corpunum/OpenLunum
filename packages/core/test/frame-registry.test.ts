@@ -34,9 +34,8 @@ test('prefer frame requires experiencer and accepts a resolved theme', () => {
     }
   };
   const issues = validateClauseFrame(invalidClause);
-  assert.equal(issues.length, 1);
-  assert.equal(issues[0]!.code, 'missing_required_role');
-  assert.match(issues[0]!.message, /requires role 'experiencer'/);
+  assert.ok(issues.some((issue) => issue.code === 'missing_required_role'));
+  assert.match(issues.map((issue) => issue.message).join('; '), /experiencer/u);
 });
 
 test('validateSemFrames traverses nested conditions and consequences', () => {
@@ -86,4 +85,13 @@ test('validateClauseFrame rejects mutually exclusive send destinations', () => {
 test('validateClauseFrame rejects unresolved delete targets', () => {
   const issues = validateClauseFrame({ predicate: 'delete', roles: {} });
   assert.ok(issues.some(i => i.code === 'missing_required_role'));
+});
+
+test('frames reject globally registered but undeclared roles and unframed predicates', () => {
+  const extra = validateClauseFrame({ predicate: 'prefer', roles: {
+    experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'digest' }, manner: { type: 'concept', id: 'csv' }
+  }});
+  assert.ok(extra.some((issue) => issue.code === 'unexpected_role'));
+  const unframed = validateClauseFrame({ predicate: 'share', roles: { agent: { type: 'actor', id: 'user' } } });
+  assert.ok(unframed.some((issue) => issue.code === 'unframed_predicate'));
 });

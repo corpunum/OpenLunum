@@ -19,7 +19,7 @@ export interface PredicateFrameDefinition {
 export interface FrameValidationIssue {
   path: string;
   predicate: string;
-  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict';
+  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate';
   message: string;
 }
 
@@ -52,7 +52,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'destination', required: false }
     ]),
-    description: 'An agent transmits a theme to a recipient or destination.'
+    description: 'An agent transmits an object to a recipient or destination.'
   }),
   receive: Object.freeze({
     predicate: 'receive',
@@ -69,7 +69,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'experiencer', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'theme', required: true }
     ]),
-    description: 'An agent holds a belief regarding a proposition.'
+    description: 'An experiencer holds a belief regarding a theme or proposition.'
   }),
   publish: Object.freeze({
     predicate: 'publish',
@@ -97,6 +97,15 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system'] }
     ]),
     description: 'An agent requests a theme or action from an optional recipient.'
+  }),
+  keep: Object.freeze({
+    predicate: 'keep',
+    roles: Object.freeze([
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'theme', required: false },
+      { name: 'visibility', required: false }
+    ]),
+    description: 'An agent retains a theme, optionally with an explicit visibility.'
   }),
   delete: Object.freeze({
     predicate: 'delete',
@@ -241,6 +250,9 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
   const frame = CANONICAL_SEMANTIC_FRAMES[predicate];
 
   if (!frame) {
+    if (SEMANTIC_PROTOCOL_REGISTRY.predicates.includes(predicate)) {
+      issues.push({ path: `${pathPrefix}.predicate`, predicate, code: 'unframed_predicate', message: `Registered predicate '${predicate}' has no canonical semantic frame` });
+    }
     return issues;
   }
 
@@ -272,6 +284,7 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
   }
 
   const registeredRoles = new Set(SEMANTIC_PROTOCOL_REGISTRY.roles);
+  const declaredRoles = new Set(frame.roles.map((role) => role.name));
   for (const role of roleMap.keys()) {
     if (!registeredRoles.has(role)) {
       issues.push({
@@ -280,6 +293,9 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
         code: 'unregistered_role',
         message: `Role '${role}' is not registered in the semantic protocol`
       });
+    }
+    if (!declaredRoles.has(role)) {
+      issues.push({ path: `${pathPrefix}.roles.${role}`, predicate, code: 'unexpected_role', message: `Role '${role}' is not allowed by the canonical '${predicate}' frame` });
     }
   }
 

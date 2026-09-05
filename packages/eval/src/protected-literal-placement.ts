@@ -47,6 +47,18 @@ export interface ProtectedLiteralPlacementCheck {
   satisfied: boolean;
 }
 
+export interface ProtectedSemanticAtom {
+  /** Canonical structural path, for example clauses[0].roles.amount.value. */
+  path: string;
+  /** Typed semantic value expected at that path. */
+  value: string | number | boolean | null;
+}
+
+export interface ProtectedSemanticAtomCheck extends ProtectedSemanticAtom {
+  status: 'placed' | 'missing' | 'wrong-value';
+  satisfied: boolean;
+}
+
 function isPrimitive(value: unknown): value is string | number | boolean | null {
   return value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
 }
@@ -60,6 +72,15 @@ function canonicalPrimitive(value: string | number | boolean | null): string {
 /** Strip array indices so sibling ordering does not fragment the role path. */
 function normalizePath(path: string): string {
   return path.replace(/\[\d+\]/g, '');
+}
+
+function normalizeAtomPath(path: string): string {
+  const normalized = normalizePath(path);
+  return normalized
+    .replace(/^clauses(?:\[0\])?/u, 'root')
+    .replace(/\.roles\./gu, '>roles.')
+    .replace(/\.conditions\./gu, '>conditions.')
+    .replace(/\.consequences\./gu, '>consequences.');
 }
 
 function walkTerm(term: LunumTerm | undefined, pathPrefix: string, out: LiteralPlacement[]): void {
@@ -155,4 +176,16 @@ export function protectedLiteralPlacementCoverage(checks: readonly ProtectedLite
   if (checks.length === 0) return 1;
   const satisfied = checks.filter((check) => check.satisfied).length;
   return satisfied / checks.length;
+}
+
+/** Verify declared semantic atoms by exact typed path/value, never by substring. */
+export function checkProtectedSemanticAtoms(candidateSem: LunumSem | null | undefined, atoms: readonly ProtectedSemanticAtom[]): ProtectedSemanticAtomCheck[] {
+  const placements = collectLiteralPlacements(candidateSem);
+  return atoms.map((atom) => {
+    const path = normalizeAtomPath(atom.path);
+    const matches = placements.filter((placement) => placement.path === path);
+    const expected = atom.value === null ? 'null' : typeof atom.value === 'number' ? String(atom.value) : typeof atom.value === 'boolean' ? String(atom.value) : path.endsWith('.unit') ? atom.value.toLocaleLowerCase('und') : atom.value;
+    const status = matches.some((placement) => placement.value === expected) ? 'placed' : matches.length ? 'wrong-value' : 'missing';
+    return { ...atom, status, satisfied: status === 'placed' };
+  });
 }

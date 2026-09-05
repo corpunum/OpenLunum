@@ -193,7 +193,9 @@ export function deriveLunumSidecar(input: {
     lunumMeta: {
       ...record.policy,
       semantic: true,
-      fingerprintKind: 'exact-semantic',
+      // Compatibility slot remains the legacy lfp:0.1 fingerprint. The
+      // record itself exposes lfp:2.1 as `semanticFingerprint`.
+      fingerprintKind: 'legacy-semantic',
       trustedSemantics: (record.meta.semanticTrust as { promoted?: unknown } | undefined)?.promoted === true,
       semanticTrustStatus: (record.meta.semanticTrust as { status?: unknown } | undefined)?.status ?? 'candidate',
       renderer: rendering.profile,

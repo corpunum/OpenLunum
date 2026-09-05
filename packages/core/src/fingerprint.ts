@@ -1,7 +1,8 @@
 import crypto from 'node:crypto';
 import { FP_VERSION } from './constants.js';
-import { canonicalizeSem, stableStringify } from './canonicalize.js';
-import { normalizeSemanticCandidate } from './semantic-registry.js';
+import { canonicalizeSem, stableStringify, validateSem } from './canonicalize.js';
+import { basicIdentifier, normalizeSemanticCandidate } from './semantic-registry.js';
+import { validateSemFrames } from './frame-registry.js';
 import type { LunumClause, LunumSem } from './types.js';
 
 /**
@@ -30,7 +31,13 @@ function identityTerm(term: unknown, path: string): unknown {
   if (unknown.length) throw new TypeError(`Cannot compute semantic identity: unclassified term field(s) at ${path}: ${unknown.join(', ')}`);
   const out: Record<string, unknown> = {};
   for (const key of ['type', 'id', 'ref', 'unit', 'min', 'max', 'format', 'value']) {
-    if (key in object && object[key] !== undefined) out[key] = key === 'value' ? identityTerm(object[key], `${path}.${key}`) : object[key];
+    if (key in object && object[key] !== undefined) {
+      out[key] = key === 'value'
+        ? identityTerm(object[key], `${path}.${key}`)
+        : ['type', 'id', 'ref', 'unit', 'format'].includes(key) && typeof object[key] === 'string'
+          ? basicIdentifier(object[key])
+          : object[key];
+    }
   }
   return out;
 }
@@ -79,11 +86,16 @@ export function semanticIdentityProjection(sem: LunumSem): Record<string, unknow
  * controlled symbols are rejected rather than becoming durable identity.
  */
 export function semanticFingerprint(sem: unknown, options: { length?: number } = {}): string {
-  const normalization = normalizeSemanticCandidate(sem);
+  const structural = validateSem(sem);
+  if (!structural.ok) throw new TypeError(`Cannot compute semantic identity for structurally invalid Sem: ${structural.errors.join('; ')}`);
+  const normalization = normalizeSemanticCandidate(sem, { strict: true });
   if (!normalization.sem || !normalization.canonical) {
     throw new TypeError('Cannot compute semantic identity for a non-canonical protocol candidate');
   }
-  const projection = semanticIdentityProjection(canonicalizeSem(normalization.sem));
+  const canonical = canonicalizeSem(normalization.sem);
+  const frames = validateSemFrames(canonical);
+  if (!frames.valid) throw new TypeError(`Cannot compute semantic identity for frame-invalid Sem: ${frames.issues.map((issue) => issue.message).join('; ')}`);
+  const projection = semanticIdentityProjection(canonical);
   const digest = crypto.createHash('sha256').update(stableStringify(projection)).digest('hex');
   return `lfp:${SEMANTIC_IDENTITY_FINGERPRINT_VERSION}:sha256:${digest.slice(0, boundedLength(options.length ?? 32))}`;
 }
