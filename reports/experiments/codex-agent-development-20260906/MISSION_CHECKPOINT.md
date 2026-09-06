@@ -308,9 +308,11 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   one Greek query. Identity coverage was 3/3 memories and 1/1 query, but exact
   conditional/end-to-end recall was 0 because equivalent open-concept labels
   did not converge. No gold Sem entered extraction.
+- Added stable runtime rejection tests for non-string builder fields; core
+  remains 1,806/1,806 after rebuild.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `f90bd13d647013afd559260f69f2e880c844e5aa`.
+The current code/evidence boundary is `2458efbbf7067611fad4ca9c965bda1fa1b04efd`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
