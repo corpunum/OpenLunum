@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T19:12:00+03:00",
-  "currentHead": "26f1799110b35ed5faef58ab22640694ef78afb0",
+  "lastUpdated": "2026-09-06T19:24:00+03:00",
+  "currentHead": "163c15e4ba65568edaaf336c64f8636d5d0bd19c",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -510,6 +510,13 @@
       "evidence": "Evaluator tests passed 1,888/1,888, including submit-before-next and mismatched source-hash rejection. MCP tests passed 59/59. Default compatibility mode remains unchanged for historical callers.",
       "decision": "Keep strict mode for future protected/source-bound runs; use it to separate transport/provenance failures from semantic extraction failures.",
       "commit": "26f1799110b35ed5faef58ab22640694ef78afb0"
+    },
+    {
+      "hypothesis": "Strict claim-binding mode must itself be part of the durable run manifest and checkpoint binding.",
+      "implementation": "Persisted requireClaimBinding in the blind manifest and included it in the checkpoint binding so strict runs cannot be reopened permissively.",
+      "evidence": "Evaluator build and unit tests passed 1,888/1,888, including strict-run reopen rejection when the option changes.",
+      "decision": "Keep the mode binding as a resume invariant for future source-bound evaluation.",
+      "commit": "163c15e4ba65568edaaf336c64f8636d5d0bd19c"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

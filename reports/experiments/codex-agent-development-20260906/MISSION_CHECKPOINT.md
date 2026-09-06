@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 26f1799110b35ed5faef58ab22640694ef78afb0
+Source/evidence boundary before this checkpoint commit: 163c15e4ba65568edaaf336c64f8636d5d0bd19c
 
 ## Scope and prohibitions
 
@@ -339,6 +339,9 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   version/hash and source hash. Evaluator tests passed 1,888/1,888, while CLI
   and API regressions passed 189/189 and 202/202. Legacy direct-submit mode is
   retained for compatibility; future source-bound runs should use strict mode.
+- Bound strict claim mode into the durable blind manifest and checkpoint
+  binding. Reopening the same run with a different strictness setting now fails
+  closed; the evaluator suite remains 1,888/1,888.
 
 ## Uncommitted state
 
