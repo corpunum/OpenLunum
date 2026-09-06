@@ -268,6 +268,10 @@ export function materializeGroundingResolutions(sem: unknown, resolutions: reado
       issues.push(`resolution canonicalId is outside its resolver namespace: ${resolution.path}`);
       continue;
     }
+    if (!validCanonicalId(canonicalId)) {
+      issues.push(`resolution canonicalId is not a valid namespace-qualified identifier: ${resolution.path}`);
+      continue;
+    }
     const proposal = canonicalizeGroundingProposal(proposals[index]);
     if (!proposal.valid || !proposal.canonical || resolution.groundingFingerprint !== proposal.canonical.groundingFingerprint || resolution.path !== proposal.canonical.path) {
       issues.push(`resolution is not bound to its original grounding proposal: ${resolution.path}`);

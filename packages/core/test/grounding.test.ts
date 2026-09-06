@@ -130,4 +130,8 @@ test('materialization rejects forged or cross-namespace resolver IDs', () => {
   assert.match(forged.issues[0]!, /outside its resolver namespace/u);
   const missingProvenance = materializeGroundingResolutions(sem, [{ path: base.path, status: 'resolved', canonicalId: 'urn:dev:ok', issues: [] }], [proposal('blue')]);
   assert.equal(missingProvenance.status, 'invalid');
+  for (const canonicalId of ['urn:dev:', 'urn:dev:bad value', 'urn:dev:bad\nvalue']) {
+    const malformed = materializeGroundingResolutions(sem, [{ ...base, canonicalId }], [proposal('blue')]);
+    assert.equal(malformed.status, 'invalid');
+  }
 });
