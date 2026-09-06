@@ -43,8 +43,18 @@ const leakage = candidates.flatMap((candidate) => forbidden.filter((field) => Ob
 if (leakage.length) throw new Error(`Candidate ledger contains scoring or gold fields: ${leakage.join(', ')}`);
 
 const sourceManifest = dataset.map((item) => ({ handle: item.id, sourceText: item.text, sourceLanguage: item.language, kind: item.type }));
-const blindRows = candidates.map((candidate) => ({ handle: candidate.id, result: { candidateSem: candidate.status === 'abstain' ? null : candidate.sem } }));
-const blindValidation = validateBlindAgentLedger(sourceManifest, blindRows);
+// A retrieval claim requires provenance binding from the extraction worker.
+// The harness must not manufacture this hash from the manifest after the
+// candidate is returned; doing so would only prove that the harness paired
+// rows, not that the worker saw the corresponding source.
+const blindRows = candidates.map((candidate) => ({
+  handle: candidate.id,
+  result: {
+    candidateSem: candidate.status === 'abstain' ? null : candidate.sem,
+    ...(candidate.provenance ? { provenance: candidate.provenance } : {}),
+  },
+}));
+const blindValidation = validateBlindAgentLedger(sourceManifest, blindRows, { requireSourceHash: true });
 if (!blindValidation.valid) throw new Error(`Blind candidate ledger failed validation: ${blindValidation.errors.join('; ')}`);
 
 const candidateById = new Map();
