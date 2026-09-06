@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T16:50:00+03:00
+Recorded: 2026-09-06T17:03:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 2c5b90d3698b14f28732341fdb3e5f35b910880f
+Current HEAD: e3af69b55eee7e869fb22511a94879fd3b4b0b98
 
 ## Scope and prohibitions
 
@@ -62,6 +62,11 @@ used.
 - Exposed `atLeastOneOf` frame requirements through the typed builder and MCP;
   `retry` now reports its alternative minimum target without changing the
   semantic validator. Core/MCP focused tests pass.
+- Ran a clean source-only frame-first trial with two isolated Codex agents on
+  12 fresh multilingual cases. Each submitted 10 candidates and 2 abstentions;
+  deterministic core accepted 9/10 for identity in each agent. Agent A
+  converged on 3/3 multilingual groups and Agent B on 1/3. Greek and Spanish
+  open-concept naming diverged; the result is development diagnostic only.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -112,5 +117,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 ## Uncommitted state
 
-Only the research ledger/checkpoint updates are pending; unrelated dirty files
+The research ledger/checkpoint and source-only trial artifact are pending;
+unrelated dirty files
 and historical diagnostic directories shown by `git status` are preserved.
