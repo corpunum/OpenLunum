@@ -1,0 +1,18 @@
+{
+  "type": "development-frame-first-agent-trial",
+  "version": 1,
+  "protected": false,
+  "agents": ["Hooke", "Bernoulli"],
+  "modelIdentity": "gpt-5.6-luna",
+  "localInference": false,
+  "caseCount": { "hooke": 8, "bernoulli": 9 },
+  "results": {
+    "hooke": { "builderAccepted": 7, "explicitAbstentions": 1, "builderRejected": 0, "identityAvailableAfterSubmit": 7 },
+    "bernoulli": { "builderAccepted": 5, "explicitAbstentions": 2, "builderRejected": 2, "identityAvailableAfterSubmit": 5 }
+  },
+  "rejections": [
+    "Bernoulli emitted negated prohibit with a disallowed term type",
+    "Bernoulli emitted null world for archive and the builder rejected it"
+  ],
+  "interpretation": "Typed construction materially reduces transport failures for compliant candidates, but identity availability is not semantic exactness; role/kind/frame choices and open-concept grounding remain unsolved."
+}

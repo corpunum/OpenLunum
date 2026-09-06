@@ -1,0 +1,28 @@
+{
+  "type": "development-morphology-research",
+  "version": 1,
+  "resources": [
+    {
+      "name": "UniMorph",
+      "source": "https://unimorph.github.io/",
+      "status": "evaluated_as_candidate_source",
+      "coverageClaim": "The current catalog advertises 169 annotated languages; Indonesian is listed with 27,714 forms and 3,877 paradigms. The listed Greek resource is Ancient Greek (grc), not a direct Modern Greek guarantee.",
+      "licenseDecision": "not bundled; per-language source/license audit required before acquisition",
+      "protocolRole": "surface -> attested lemma/POS candidate evidence only"
+    }
+  ],
+  "architecture": "morphology analyzer candidates -> exact OMW/OdeNet lemma/POS lookup -> unique external identity or fail closed",
+  "safetyRules": [
+    "no stemming, edit distance, nearest lemma, or frequency sense selection",
+    "analyzer snapshot/version/evidence must be retained",
+    "multiple surviving external IDs remain ambiguous",
+    "morphology alone never grants exact identity"
+  ],
+  "implementation": "createMorphologyAugmentedProvider",
+  "fixtureResults": {
+    "attestedInflectionRunningToRun": "resolved_exact",
+    "polysemousBankingToBank": "ambiguous",
+    "unknownSurface": "unresolved"
+  },
+  "decision": "KEEP_GENERIC_ADAPTER; do not add language-specific suffix rules or bundle a resource until each selected language snapshot and license are pinned"
+}
