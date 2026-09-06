@@ -64,10 +64,28 @@ export function getCandidateBuilderSchema(): Record<string, unknown> {
   };
   const variants = Object.values(CANONICAL_SEMANTIC_FRAMES).map((frame) => {
     const roleProperties: Record<string, unknown> = {};
-    for (const role of frame.roles) roleProperties[role.name] = { $ref: '#/$defs/term' };
+    const roleAliases = SEMANTIC_PROTOCOL_REGISTRY.aliases.role;
+    for (const role of frame.roles) {
+      const aliases = Object.entries(roleAliases).filter(([, canonical]) => canonical === role.name).map(([alias]) => alias);
+      const roleSchema = role.allowedTermTypes?.length
+        ? { oneOf: role.allowedTermTypes.map((type) => ({ $ref: '#/$defs/termObject', properties: { type: { const: type } }, required: ['type'] })) }
+        : { $ref: '#/$defs/term' };
+      for (const name of [role.name, ...aliases]) roleProperties[name] = roleSchema;
+    }
     const requiredRoles = frame.roles.filter((role) => role.required).map((role) => role.name);
-    const roleSchema: Record<string, unknown> = { type: 'object', properties: roleProperties, additionalProperties: false, ...(requiredRoles.length ? { required: requiredRoles } : {}) };
-    if (frame.atLeastOneOf?.length) roleSchema.anyOf = frame.atLeastOneOf.map((role) => ({ required: [role] }));
+    const requiredRoleChecks = requiredRoles.map((role) => {
+      const aliases = Object.entries(roleAliases).filter(([, canonical]) => canonical === role).map(([alias]) => alias);
+      return { anyOf: [role, ...aliases].map((name) => ({ properties: { [name]: {} }, required: [name] })) };
+    });
+    const roleSchema: Record<string, unknown> = { type: 'object', properties: roleProperties, additionalProperties: false, ...(requiredRoleChecks.length ? { allOf: requiredRoleChecks } : {}) };
+    if (frame.atLeastOneOf?.length) roleSchema.anyOf = frame.atLeastOneOf.map((role) => {
+      const aliases = Object.entries(roleAliases).filter(([, canonical]) => canonical === role).map(([alias]) => alias);
+      return { anyOf: [role, ...aliases].map((name) => ({ properties: { [name]: {} }, required: [name] })) };
+    });
+    if (frame.exclusiveGroups?.length) roleSchema.allOf = [
+      ...(roleSchema.allOf as unknown[] ?? []),
+      ...frame.exclusiveGroups.flatMap((group) => group.flatMap((left, index) => group.slice(index + 1).map((right) => ({ not: { properties: { [left]: {}, [right]: {} }, required: [left, right] } })))),
+    ];
     return {
       type: 'object',
       properties: { ...commonProperties, predicate: { const: frame.predicate }, roles: roleSchema },
