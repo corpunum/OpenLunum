@@ -202,6 +202,13 @@
       "evidence": "The harness correctly refused the historical ledger: 13 of 22 supplied candidates are structurally normalized but fail lfp:2.1 identity, including unframed or otherwise non-exact cases. This confirms the new custody/identity gate is active; no rescored report was produced.",
       "decision": "Keep the rejection. The historical retrieval result remains diagnostic and cannot be replayed as current evidence until a genuinely source-only ledger is generated and independently validated.",
       "commit": "a837ee37c7f2e2b57b7d3a8f9e67d1547e2f8732"
+    },
+    {
+      "hypothesis": "A larger contract-only source extraction prompt will reliably produce transport-shaped Sem across multiple isolated agents.",
+      "implementation": "Two isolated Codex agents received 24 fresh multilingual sources split into two 12-item batches and were required to return strict JSONL candidateSem objects using the generated contract.",
+      "evidence": "One agent abstained on all 12 items. The other returned 12 non-contract predicate/arguments objects. No candidate passed transport, so semantic metrics are not assigned; no gold or pair labels were exposed. Persisted in source-only-agent-comparison-v6.json.",
+      "decision": "Reject contract-only natural-language prompting as a sufficient adoption mechanism. Preserve the protocol and fail closed; prioritize an actual tool-driven builder workflow before judging semantic capability.",
+      "commit": "pending-agent-trial-commit"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
