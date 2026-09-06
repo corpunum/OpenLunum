@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 1f8743b33cea5e620d740cf9f8e9e01d79123d0f
+Current HEAD: e6ca2c98d3eb67b9c7a7129c2f7990bfc983d8cc
 
 ## Scope and prohibitions
 
@@ -317,6 +317,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `d3487c418d74ad495fe94d6ec5f26223bd2dc1a1`.
+The current code/evidence boundary is `e6ca2c98d3eb67b9c7a7129c2f7990bfc983d8cc`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
