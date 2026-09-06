@@ -11,6 +11,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { findWorkspaceRoot, sha256File } from '../../packages/eval/dist/src/io.js';
 import { runRawTextRetrievalEvaluation } from '../../packages/eval/dist/src/raw-text-retrieval.js';
+import { validateBlindAgentLedger } from '../../packages/eval/dist/src/blind-agent-ledger.js';
 import { normalizeSemanticCandidate, validateSemanticCandidate } from '../../packages/core/dist/src/index.js';
 
 const root = await findWorkspaceRoot();
@@ -41,6 +42,11 @@ const forbidden = ['goldSem', 'expectedMemoryIds', 'semanticEquivalentMemoryIds'
 const leakage = candidates.flatMap((candidate) => forbidden.filter((field) => Object.hasOwn(candidate, field)).map((field) => `${candidate.id ?? '<missing-id>'}:${field}`));
 if (leakage.length) throw new Error(`Candidate ledger contains scoring or gold fields: ${leakage.join(', ')}`);
 
+const sourceManifest = dataset.map((item) => ({ handle: item.id, sourceText: item.text, sourceLanguage: item.language, kind: item.type }));
+const blindRows = candidates.map((candidate) => ({ handle: candidate.id, result: { candidateSem: candidate.status === 'abstain' ? null : candidate.sem } }));
+const blindValidation = validateBlindAgentLedger(sourceManifest, blindRows);
+if (!blindValidation.valid) throw new Error(`Blind candidate ledger failed validation: ${blindValidation.errors.join('; ')}`);
+
 const candidateById = new Map();
 for (const candidate of candidates) {
   if (typeof candidate.id !== 'string' || !candidate.id) throw new Error('Every candidate needs a non-empty id');
@@ -65,7 +71,7 @@ const output = {
   protected: false,
   localInferenceUsed: false,
   embeddingUsed: false,
-  extractor: { kind: 'agent-produced-candidate-ledger', input: 'raw text plus language only', candidatePath, candidateSha256: await sha256File(path.join(root, candidatePath)), candidateCount: candidates.length, acceptedCandidates: [...candidateById.values()].filter(Boolean).length },
+  extractor: { kind: 'agent-produced-candidate-ledger', input: 'raw text plus language only', candidatePath, candidateSha256: await sha256File(path.join(root, candidatePath)), candidateCount: candidates.length, acceptedCandidates: [...candidateById.values()].filter(Boolean).length, blindLedger: { valid: blindValidation.valid, identityAvailable: blindValidation.identityAvailable, abstentions: blindValidation.abstentions } },
   dataset: { path: datasetPath, sha256: await sha256File(path.join(root, datasetPath)), memoryCount: memories.length, queryCount: queries.length },
   evaluator: { implementation: 'packages/eval/src/raw-text-retrieval.ts', inputMode: evaluation.inputMode, mode: evaluation.mode, threshold: evaluation.threshold, topK: evaluation.topK },
   metrics: evaluation.metrics,
