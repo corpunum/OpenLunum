@@ -1,6 +1,6 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:17:38+03:00
+Recorded: 2026-09-06T18:24:30+03:00
 Mission start epoch: 1788697989
 Current local branch: main
 Current HEAD: 8e9e7d53ecb53bc2192e847611066cbc6a11ce10
@@ -234,10 +234,14 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   `verify:strict` 1,886/1,886 plus smoke and typecheck, and MCP typecheck all
   passed. No root recursive verify was run because it traverses out-of-scope
   adapter-openunum.
+- Retrieval harness now requires worker-supplied source-bound provenance and
+  refuses to manufacture hashes. Running it against the historical diagnostic
+  ledger fails closed on missing source hashes and non-identity candidates;
+  no report was overwritten (45af4be).
 
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `8e9e7d53ecb53bc2192e847611066cbc6a11ce10`.
+code/evidence boundary is `45af4bedef8e5c191fe7ee0607fe32d0d858259a`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

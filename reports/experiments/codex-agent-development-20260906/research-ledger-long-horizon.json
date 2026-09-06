@@ -349,6 +349,13 @@
       "evidence": "Evaluator suite passed 1,886/1,886. Strict mode rejects an unbound candidate before identity coverage is counted.",
       "decision": "Use strict source-bound mode for the next clean agent retrieval run; do not rescore historical ledgers.",
       "commit": "working-tree"
+    },
+    {
+      "hypothesis": "The historical diagnostic retrieval harness can be promoted simply by enabling strict source-bound validation.",
+      "implementation": "Enabled strict sourceHash validation in the development retrieval harness and passed through only agent-supplied provenance; the harness never manufactures hashes.",
+      "evidence": "The existing candidate ledger fails closed before report generation: all 22 rows lack sourceHash and several candidates also lack exact identity. No historical report was overwritten.",
+      "decision": "Keep fresh source-only agent generation as a prerequisite for retrieval evidence; fresh provenance-bound candidates are required.",
+      "commit": "45af4be"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
