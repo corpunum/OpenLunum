@@ -159,6 +159,26 @@ function validSnapshotHash(value: string): boolean {
   return /^[0-9a-f]{64}$/u.test(value);
 }
 
+function providerResultIssues(result: unknown): string[] {
+  if (!result || typeof result !== 'object' || Array.isArray(result)) return ['provider returned a non-object result'];
+  const value = result as Record<string, unknown>;
+  const issues: string[] = [];
+  if (!['resolved_exact', 'ambiguous', 'unresolved', 'provider_error'].includes(value.status as string)) issues.push('provider returned an invalid status');
+  if (typeof value.provider !== 'string' || !value.provider.trim()) issues.push('provider returned an invalid provider name');
+  if (typeof value.providerVersion !== 'string' || !value.providerVersion.trim()) issues.push('provider returned an invalid provider version');
+  if (typeof value.snapshotHash !== 'string' || !validSnapshotHash(value.snapshotHash)) issues.push('provider returned an invalid snapshot hash');
+  if (typeof value.language !== 'string' || !value.language.trim()) issues.push('provider returned an invalid language');
+  if (!Array.isArray(value.candidates)) issues.push('provider returned a non-array candidate list');
+  else for (const candidate of value.candidates) {
+    if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) { issues.push('provider returned a non-object candidate'); continue; }
+    const entry = candidate as Record<string, unknown>;
+    if (typeof entry.externalId !== 'string' || !/^\S+$/u.test(entry.externalId)) issues.push('provider returned an invalid external ID');
+    if (!Array.isArray(entry.evidence) || entry.evidence.some((e) => typeof e !== 'string')) issues.push('provider returned invalid candidate evidence');
+  }
+  if (!Array.isArray(value.diagnostics) || value.diagnostics.some((e) => typeof e !== 'string')) issues.push('provider returned invalid diagnostics');
+  return issues;
+}
+
 function canonicalRecord(record: OmwLexicalRecord): OmwLexicalRecord {
   return {
     language: record.language.normalize('NFKC').trim().toLocaleLowerCase('und'),
@@ -474,6 +494,10 @@ export function resolveGroundingCascade(input: GroundingProviderInput, providers
     let result: GroundingProviderResult;
     try { result = provider.resolve(input); } catch (error) {
       result = { status: 'provider_error', provider: provider.provider, providerVersion: provider.providerVersion, snapshotHash: provider.snapshotHash, language: input.language, candidates: [], diagnostics: [`provider threw: ${error instanceof Error ? error.message : String(error)}`] };
+    }
+    const resultIssues = providerResultIssues(result);
+    if (resultIssues.length) {
+      result = { status: 'provider_error', provider: provider.provider, providerVersion: provider.providerVersion, snapshotHash: provider.snapshotHash, language: input.language, candidates: [], diagnostics: Object.freeze(resultIssues) };
     }
     results.push(result);
     if (result.status === 'ambiguous') return { status: 'ambiguous', attempted: results.map((item) => item.provider), results };

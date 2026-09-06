@@ -135,6 +135,17 @@ test('cascade does not equate identical bare IDs across namespaces', () => {
   assert.equal(resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [first, second]).status, 'ambiguous');
 });
 
+test('cascade contains malformed arbitrary provider results', () => {
+  const malformed = {
+    provider: 'malformed', providerVersion: '1', snapshotHash: 'd'.repeat(64),
+    resolve: () => ({ status: 'resolved_exact', provider: 'malformed', providerVersion: '1', snapshotHash: 'd'.repeat(64), language: 'en', candidates: [{ externalId: '', evidence: [] }], diagnostics: [] }),
+    explain: () => [],
+  } as unknown as import('../src/grounding-provider.js').GroundingProvider;
+  const result = resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [malformed]);
+  assert.equal(result.status, 'provider_error');
+  assert.equal(result.candidate, undefined);
+});
+
 test('provider resolution materializes a versioned Lunum namespace ID', () => {
   const result = provider.resolve({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' });
   const resolution = toGroundingResolution(proposal(), result);
