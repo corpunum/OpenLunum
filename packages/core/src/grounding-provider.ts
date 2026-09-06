@@ -41,6 +41,25 @@ export interface GroundingProvider {
   explain(result: GroundingProviderResult): readonly string[];
 }
 
+/** A pinned analyzer may propose lemmas; it cannot assign semantic identity. */
+export interface MorphologyCandidate {
+  lemma: string;
+  partOfSpeech?: OmwLexicalRecord['partOfSpeech'];
+  evidence: readonly string[];
+}
+
+export interface MorphologyAnalyzer {
+  readonly analyzer: string;
+  readonly analyzerVersion: string;
+  readonly snapshotHash: string;
+  analyze(input: { surface: string; language: string; partOfSpeech?: GroundingProviderInput['partOfSpeech'] }): readonly MorphologyCandidate[];
+}
+
+export interface MorphologyProviderOptions {
+  base: GroundingProvider;
+  analyzer: MorphologyAnalyzer;
+}
+
 export interface OmwLexicalRecord {
   language: string;
   lemma: string;
@@ -253,6 +272,45 @@ export function createOmwProvider(options: OmwProviderOptions): GroundingProvide
       }
       const candidates = [...byId.values()].sort((a, b) => a.externalId.localeCompare(b.externalId, 'en'));
       return { ...base, status: candidates.length === 1 ? 'resolved_exact' : candidates.length > 1 ? 'ambiguous' : 'unresolved', candidates, diagnostics: candidates.length === 1 ? ['exact lemma-to-ILI match'] : candidates.length > 1 ? ['lemma maps to multiple ILI senses'] : ['no exact lemma-to-ILI match'] };
+    },
+    explain(result: GroundingProviderResult): readonly string[] { return Object.freeze([...result.diagnostics]); },
+  });
+}
+
+/**
+ * Add morphology as conservative candidate generation around an exact
+ * provider. A surface form is exact only when every surviving analyzer/base
+ * path yields one unique external identity; ambiguity and analyzer failure
+ * remain visible and fail closed.
+ */
+export function createMorphologyAugmentedProvider(options: MorphologyProviderOptions): GroundingProvider {
+  if (!validSnapshotHash(options.analyzer.snapshotHash)) throw new TypeError('morphology analyzer snapshotHash must be a SHA-256 hex digest');
+  const provider = `morphology+${options.base.provider}`;
+  const providerVersion = `${options.analyzer.analyzer}/${options.analyzer.analyzerVersion}+${options.base.providerVersion}`;
+  const snapshotHash = sha256({ analyzer: options.analyzer.snapshotHash, base: options.base.snapshotHash });
+  return Object.freeze({
+    provider, providerVersion, snapshotHash,
+    resolve(input: GroundingProviderInput): GroundingProviderResult {
+      const language = input.language.normalize('NFKC').trim().toLocaleLowerCase('und');
+      const canonical = canonicalizeGroundingProposal(input.proposal);
+      const base = { provider, providerVersion, snapshotHash, language };
+      if (!canonical.valid || !canonical.canonical) return { ...base, status: 'provider_error', candidates: [], diagnostics: ['invalid grounding proposal'] };
+      const morphology = options.analyzer.analyze({ surface: canonical.canonical.head.key, language, ...(input.partOfSpeech ? { partOfSpeech: input.partOfSpeech } : {}) });
+      const candidates = new Map<string, GroundingProviderCandidate>();
+      const diagnostics: string[] = [`analyzer:${options.analyzer.analyzer}@${options.analyzer.analyzerVersion}`, `analyzer-candidates:${morphology.length}`];
+      for (const candidate of morphology) {
+        if (!candidate || typeof candidate.lemma !== 'string' || !candidate.lemma.trim()) continue;
+        const proposal = JSON.parse(JSON.stringify(input.proposal)) as GroundingProposal;
+        proposal.head.key = candidate.lemma;
+        const result = options.base.resolve({ proposal, language, ...(candidate.partOfSpeech ?? input.partOfSpeech ? { partOfSpeech: candidate.partOfSpeech ?? input.partOfSpeech } : {}) });
+        for (const resolved of result.candidates) {
+          candidates.set(resolved.externalId, { ...resolved, evidence: Object.freeze([...resolved.evidence, `morphology:${options.analyzer.analyzer}`, ...candidate.evidence]) });
+        }
+      }
+      const resolvedCandidates = [...candidates.values()].sort((a, b) => a.externalId.localeCompare(b.externalId, 'en'));
+      if (resolvedCandidates.length === 1) return { ...base, status: 'resolved_exact', candidates: resolvedCandidates, diagnostics: Object.freeze([...diagnostics, 'one unique identity after exact lemma resolution']) };
+      if (resolvedCandidates.length > 1) return { ...base, status: 'ambiguous', candidates: resolvedCandidates, diagnostics: Object.freeze([...diagnostics, 'multiple identities survive morphology and exact lookup']) };
+      return { ...base, status: 'unresolved', candidates: [], diagnostics: Object.freeze([...diagnostics, 'no identity survives morphology and exact lookup']) };
     },
     explain(result: GroundingProviderResult): readonly string[] { return Object.freeze([...result.diagnostics]); },
   });

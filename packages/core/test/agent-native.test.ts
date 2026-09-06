@@ -23,6 +23,7 @@ test('frame-first builder creates only a canonical transport envelope', () => {
   assert.deepEqual(built.requiredRoles, ['experiencer', 'theme']);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'simple_fact', predicate: 'share', roles: {} }), /unframed_predicate/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: {} }), /invalid_builder_frame/);
+  assert.throws(() => buildCandidateSem({ world: 'real', kind: 'instruction', predicate: 'send', roles: { agent: 'maria', object: 'report' } }), /invalid_builder_frame/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'instruction', predicate: 'send', roles: {
     agent: { type: 'actor', id: 'maria' }, object: { type: 'concept', id: 'report' }, recipient: { type: 'actor', id: 'lee' }, destination: { type: 'location', id: 'archive' },
   } }), /invalid_builder_frame/);
@@ -45,6 +46,8 @@ test('extraction contract is generated from the protocol and frame registries', 
   assert.match(first.frames.unframedBehavior, /no lfp:2\.1/u);
   assert.equal(first.grounding.version, 'lunum-grounding/0.1');
   assert.equal(first.grounding.identityBehavior.includes('cannot grant lfp:2.1'), true);
+  assert.equal(first.frameFirst.mode, 'builder-then-submit');
+  assert.match(first.frameFirst.roleValues, /typed LunumTerm/iu);
 });
 
 test('candidate submission returns identity but never self-promotes an agent proposal', () => {

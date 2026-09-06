@@ -337,12 +337,12 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
     if (roleMap.has(req.name) && req.allowedTermTypes?.length) {
       const term = roleMap.get(req.name);
       const termType = getTermType(term);
-      if (termType && !req.allowedTermTypes.includes(termType)) {
+      if (!termType || !req.allowedTermTypes.includes(termType)) {
         issues.push({
           path: `${pathPrefix}.roles.${req.name}`,
           predicate,
           code: 'disallowed_term_type',
-          message: `Role '${req.name}' for predicate '${predicate}' has disallowed term type '${termType}'; expected one of [${req.allowedTermTypes.join(', ')}]`
+          message: `Role '${req.name}' for predicate '${predicate}' has ${termType ? `disallowed term type '${termType}'` : 'no typed term'}; expected one of [${req.allowedTermTypes.join(', ')}]`
         });
       }
     }

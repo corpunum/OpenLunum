@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   createOmwProvider,
+  createMorphologyAugmentedProvider,
   createStableEntityProvider,
   importOmwTab,
   importWnLmf,
@@ -49,6 +50,28 @@ test('OMW provider fails closed for polysemy, missing language, and wrong POS', 
   assert.equal(provider.resolve({ proposal: proposal('bank'), language: 'en', partOfSpeech: 'noun' }).status, 'ambiguous');
   assert.equal(provider.resolve({ proposal: proposal(), language: 'fr', partOfSpeech: 'noun' }).status, 'unresolved');
   assert.equal(provider.resolve({ proposal: proposal(), language: 'en', partOfSpeech: 'verb' }).status, 'unresolved');
+});
+
+test('morphology augmentation is candidate generation, exact only after unique provider resolution', () => {
+  const analyzer = {
+    analyzer: 'fixture-morphology', analyzerVersion: '1', snapshotHash: 'e'.repeat(64),
+    analyze: ({ surface }: { surface: string }) => surface === 'running'
+      ? [{ lemma: 'run', partOfSpeech: 'verb' as const, evidence: ['fixture:inflection'] }]
+      : surface === 'banking'
+        ? [{ lemma: 'bank', partOfSpeech: 'noun' as const, evidence: ['fixture:derivation'] }]
+        : [],
+  };
+  const base = createOmwProvider({ version: 'morph-base', records: [
+    { language: 'en', lemma: 'run', interlingualId: 'i-run', partOfSpeech: 'verb' },
+    { language: 'en', lemma: 'bank', interlingualId: 'i-bank-money', partOfSpeech: 'noun' },
+    { language: 'en', lemma: 'bank', interlingualId: 'i-bank-river', partOfSpeech: 'noun' },
+  ] });
+  const augmented = createMorphologyAugmentedProvider({ base, analyzer });
+  const running = augmented.resolve({ proposal: proposal('running'), language: 'en', partOfSpeech: 'verb' });
+  assert.equal(running.status, 'resolved_exact');
+  assert.equal(running.candidates[0]?.externalId, 'ili:i-run');
+  assert.equal(augmented.resolve({ proposal: proposal('banking'), language: 'en', partOfSpeech: 'noun' }).status, 'ambiguous');
+  assert.equal(augmented.resolve({ proposal: proposal('unknown'), language: 'en', partOfSpeech: 'noun' }).status, 'unresolved');
 });
 
 test('stable entity provider accepts only exact prevalidated IDs and deduplicates', () => {

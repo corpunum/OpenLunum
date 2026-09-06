@@ -24,8 +24,8 @@ import { resolveGroundingCascade, toGroundingResolution } from './grounding-prov
 import type { LunumSem, SemanticTrustDecision } from './types.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.1' as const;
-export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.1' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.2' as const;
+export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.2' as const;
 
 // SHA-256 of schemas/lunum-sem.schema.json at this protocol version. Keep
 // this explicit so an agent can bind its candidate to the actual wire schema,
@@ -85,6 +85,12 @@ export interface ExtractionContract {
     registry: typeof CANONICAL_SEMANTIC_FRAMES;
     unframedBehavior: string;
   };
+  frameFirst: {
+    mode: 'builder-then-submit';
+    inputFields: readonly string[];
+    roleValues: string;
+    unframedBehavior: string;
+  };
   grounding: {
     version: typeof GROUNDING_CONTRACT_VERSION;
     identityBehavior: string;
@@ -112,6 +118,12 @@ export function getExtractionContract(): ExtractionContract {
       framedPredicates: Object.freeze(Object.keys(CANONICAL_SEMANTIC_FRAMES).sort()),
       registry: CANONICAL_SEMANTIC_FRAMES,
       unframedBehavior: 'candidate-only; abstain in exact-identity extraction; no lfp:2.1',
+    },
+    frameFirst: {
+      mode: 'builder-then-submit',
+      inputFields: Object.freeze(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences']),
+      roleValues: 'Use typed LunumTerm objects for roles whose frame declares allowedTermTypes; builder rejects missing or disallowed types, missing required roles, extra roles, and exclusive-role conflicts.',
+      unframedBehavior: 'lunum_build_candidate rejects registered-but-unframed predicates; submitCandidate remains available for candidate-only abstention.',
     },
     grounding: {
       version: GROUNDING_CONTRACT_VERSION,
