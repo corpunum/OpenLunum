@@ -433,6 +433,13 @@
       "evidence": "Current OMW reports already provide provider-side diagnostics but not independent agent proposal labels or a clean factorial separation. No protected data was created or used.",
       "decision": "Adopt this as the next highest-leverage development experiment; do not conclude training is necessary until the three stages are measured independently.",
       "commit": "research-review"
+    },
+    {
+      "hypothesis": "A cheap independent corpus agent can produce frame-complete development sources without parent hints or gold leakage.",
+      "implementation": "Audited a fresh 18-equivalent/6-negative proposal restricted to currently framed predicates.",
+      "evidence": "The proposal contained underspecified imperative/passive frames and a confirm/deadline conflation; 0/12 rows were accepted for scoring. Full rejection rationale is recorded in agent-corpus-proposal-audit.json.",
+      "decision": "Require an independent semantic-contract audit and frame completeness before using generated development data. Do not score this proposal.",
+      "commit": "pending"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
