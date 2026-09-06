@@ -281,9 +281,13 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   Because the instruction explicitly supplied the shared canonical concept
   identifier, this is construction/convergence evidence only, not blind
   grounding accuracy.
+- An adversarial audit found a prototype-key role injection risk and prompt
+  synchronization gaps. The builder now rejects non-plain role objects and
+  safely handles `__proto__`; frame exclusivity and allowed term types are
+  generated from registry metadata. Core remains 1,806/1,806.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `fb187960c59b63077ad3aa843eabacb1cafdaf9a`.
+The current code/evidence boundary is `1a27ccaedfc380241e711cb9956f34fb789c3af4`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

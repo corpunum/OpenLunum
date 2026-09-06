@@ -412,6 +412,13 @@
       "evidence": "6/6 candidates passed transport, protocol, frame, grounding, and lfp:2.1 gates and converged to one fingerprint. The shared concept identifier was part of the extraction instruction, so no independent grounding or gold exactness is claimed.",
       "decision": "Keep the typed workflow. Treat this as contract/convergence construction evidence only; a future unbiased trial must allow concept naming to be independently generated and score it against hidden gold.",
       "commit": "fb187960c59b63077ad3aa843eabacb1cafdaf9a"
+    },
+    {
+      "hypothesis": "The typed builder's untrusted role map and generated frame prompt are safe and synchronized under adversarial input.",
+      "implementation": "Rejected non-plain role objects and prototype-key role injection, moved exclusivity into frame metadata, and generated compact allowed-term-type/exclusivity text from the registry.",
+      "evidence": "Core build/typecheck and 1,806 tests passed, including __proto__, inherited-role, generated-type, and registry-exclusivity regressions. No semantic acceptance rule was broadened.",
+      "decision": "Keep the fail-closed builder boundary and registry-derived prompt generation. Continue with MCP propagation verification.",
+      "commit": "1a27ccaedfc380241e711cb9956f34fb789c3af4"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
