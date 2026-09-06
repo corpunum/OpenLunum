@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:25:10+03:00
+Recorded: 2026-09-06T18:38:20+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 055cc3d79cb9b2ef4b49895c2ef79d5dfc505bee
+Current HEAD: d40464601f3c5604f5d6a235a2b2682aacf7f5b9
 
 ## Scope and prohibitions
 
@@ -143,6 +143,11 @@ used.
 - Hardened retrieval/blind input validation for duplicate and unknown IDs,
   malformed source entries, bounds, routing references, and invalid baseline
   partial output. Evaluator suite is now 1,882/1,882.
+- Ran a fresh source-only comparison with the exact generated contract: two
+  isolated agents returned mostly builder-shaped records and abstained on
+  unsupported cases, but still diverged on preference roles, modality/time
+  terms, and open-concept naming. This is transport/convergence diagnostics,
+  not gold-scored extraction evidence.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -195,6 +200,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
 prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `055cc3d79cb9b2ef4b49895c2ef79d5dfc505bee`.
+current code/evidence boundary is `d40464601f3c5604f5d6a235a2b2682aacf7f5b9`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

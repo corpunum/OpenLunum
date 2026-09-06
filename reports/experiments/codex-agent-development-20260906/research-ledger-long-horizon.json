@@ -272,6 +272,13 @@
       "evidence": "Evaluator suite passes 1,882/1,882, including regressions for duplicate IDs, unknown gold references, invalid bounds, malformed source entries, and identity-usable candidate pools. No historical retrieval artifact was rescored.",
       "decision": "Keep strict input and baseline containment. A clean development retrieval run still requires opaque source handles and independently generated candidate rows; this fix only makes invalid evidence fail closed.",
       "commit": "055cc3d79cb9b2ef4b49895c2ef79d5dfc505bee"
+    },
+    {
+      "hypothesis": "Supplying the exact generated extraction contract, rather than a conceptual summary, materially reduces frame-first agent transport failures without exposing gold.",
+      "implementation": "Two fresh isolated Codex agents received the same eight source texts and the exact generated contract, with instructions to return only builderInput objects or abstention. No gold, semantic groups, or expected identities were supplied.",
+      "evidence": "The earlier conceptual-contract trial produced 0/12 contract-shaped candidates from one agent and all abstentions from another. With the exact contract, both agents returned eight ordered records; each abstained on unsupported/uncertain cases and produced mostly builder-shaped objects. They still diverged on preference role conventions, modality/time term shapes, and open-concept naming. This remains diagnostic because outputs were not independently gold-scored.",
+      "decision": "Retain exact contract delivery and typed builder as the adoption path, but do not interpret contract compliance as semantic accuracy. The next clean development benchmark must preserve item IDs externally while keeping evaluator answers private.",
+      "commit": "d40464601f3c5604f5d6a235a2b2682aacf7f5b9"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
