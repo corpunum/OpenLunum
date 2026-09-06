@@ -46,6 +46,12 @@
       "implementation": "Two isolated Codex agents received the same 12 fresh English source sentences and a contract-only abstention rule, then returned builder candidates or abstention.",
       "evidence": "Both agents abstained on 12/12 items. The trial supplied only a summary of the contract rather than the generated frame/term block, so it diagnoses adoption-surface incompleteness rather than model semantic accuracy.",
       "decision": "Do not treat abstention as capability evidence. Run a follow-up with the actual generated extraction contract and separately authored, source-only builder inputs."
+    },
+    {
+      "hypothesis": "The actual generated extraction contract makes frame-first candidate construction reliable for source-only agents.",
+      "implementation": "Two isolated Codex agents received the generated contract artifact and 12 fresh source sentences; candidates were checked through buildCandidateSem.",
+      "evidence": "Pasteur returned 8 candidates and 4 abstentions; all 8 builder candidates were accepted. Anscombe selected the same semantic choices but used termType rather than the required type field, so all 8 were rejected. No gold was supplied.",
+      "decision": "Keep the generated contract and typed builder. Add an executable/schema-level construction aid later if transport errors persist; do not interpret agreement or builder acceptance as semantic extraction accuracy."
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
