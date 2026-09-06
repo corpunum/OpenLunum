@@ -216,6 +216,13 @@
       "evidence": "All 6 builder inputs became transport-, protocol-, frame-, grounding-, and identity-valid submissions. EN/EL prefer, EN/ES retry, and EN/FR conditional disable pairs converged to identical LFPs. No gold semantics were exposed, so this is construction/convergence diagnostics only.",
       "decision": "Retain typed builder plus mandatory submission as the preferred agent-native workflow. It reduces alternate-schema transport failure without granting self-certification; semantic accuracy still requires independently labeled development evaluation.",
       "commit": "e69e44ebb722e621ebf1087de6fe70e65c19e0cf"
+    },
+    {
+      "hypothesis": "Exported grounding conversion helpers could be used as an alternate trust path to manufacture exact identity from caller-forged provider evidence.",
+      "implementation": "Added private in-process capability branding shared by the provider cascade and grounding materializer. Provider results must be authenticated by the metadata-bound cascade, and resolutions must be minted by an authenticated provider or explicitly validated registry path before materialization. Added forged-result and forged-resolution regressions.",
+      "evidence": "Core suite passes 1,803/1,803; evaluator suite passes 1,878/1,878; MCP suite passes 58/58; workspace pnpm verify completed successfully; direct forged `urn:attacker:fake-id` evidence is rejected before Sem mutation. No unrelated dirty files were staged.",
+      "decision": "Keep the capability boundary. Serialized resolutions cannot be replayed directly; replay must re-authenticate through the provider cascade. This closes a genuine semantic-authority bypass without changing lfp:2.1 or frames.",
+      "commit": "744fbd165708c0e9119992f7df5bb039d88fbdfa"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

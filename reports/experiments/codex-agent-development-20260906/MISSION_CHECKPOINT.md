@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:33:55+03:00
+Recorded: 2026-09-06T17:42:30+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: e69e44ebb722e621ebf1087de6fe70e65c19e0cf
+Current HEAD: 744fbd165708c0e9119992f7df5bb039d88fbdfa
 
 ## Scope and prohibitions
 
@@ -117,6 +117,11 @@ used.
   deterministic submissions passed protocol/frame/grounding/identity gates,
   with three multilingual pairs converging. This is construction evidence,
   not source-text exactness evidence.
+- Closed a genuine exported-helper trust bypass: direct forged provider
+  results and forged registry resolutions can no longer mint exact identity.
+  Provider-cascade and resolution capabilities are private, in-process
+  brands; serialized evidence must be re-authenticated. Core 1,803/1,803,
+  evaluator 1,878/1,878, MCP 58/58, and workspace verification passed.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -169,6 +174,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
 prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `47d07fe0a4b999e0ae50cb239d9bee801bae66d4`.
+current code/evidence boundary is `744fbd165708c0e9119992f7df5bb039d88fbdfa`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
