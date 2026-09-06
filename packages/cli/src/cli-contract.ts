@@ -163,6 +163,7 @@ export const COMMANDS: readonly CLICommandSpec[] = [
       { name: 'language', required: false, valueType: 'string', description: 'Source language tag' },
       { name: 'sem', required: true, valueType: 'string', description: 'Path to candidate Sem JSON' },
       { name: 'provenance', required: true, valueType: 'string', description: 'Path to extractor provenance JSON' },
+      { name: 'grounding', required: false, valueType: 'string', description: 'Path to structured grounding proposals JSON' },
     ],
     exitCodes: [
       { code: EXIT_CODES.SUCCESS, meaning: 'Containment result written to stdout' },

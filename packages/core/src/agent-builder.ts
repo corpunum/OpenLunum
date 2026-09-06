@@ -29,6 +29,21 @@ export interface CandidateBuilderResult {
   atLeastOneOf: readonly string[] | null;
 }
 
+function assertNestedFrames(clauses: readonly LunumClause[], field: 'conditions' | 'consequences'): void {
+  for (const [index, clause] of clauses.entries()) {
+    const predicate = basicIdentifier(clause?.predicate ?? '');
+    if (!CANONICAL_SEMANTIC_FRAMES[predicate]) throw new TypeError(`invalid_builder_frame:${field}[${index}].predicate is not framed`);
+    if (clause.conditions !== undefined) {
+      if (!Array.isArray(clause.conditions)) throw new TypeError(`invalid_builder_${field}:${index}.conditions must be an array`);
+      assertNestedFrames(clause.conditions, 'conditions');
+    }
+    if (clause.consequences !== undefined) {
+      if (!Array.isArray(clause.consequences)) throw new TypeError(`invalid_builder_${field}:${index}.consequences must be an array`);
+      assertNestedFrames(clause.consequences, 'consequences');
+    }
+  }
+}
+
 /**
  * Construct a transport-shaped candidate from agent-selected frame slots.
  *
@@ -63,6 +78,14 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
   if (input.time !== undefined) clause.time = input.time;
   if (input.conditions !== undefined) clause.conditions = input.conditions;
   if (input.consequences !== undefined) clause.consequences = input.consequences;
+  if (input.conditions !== undefined) {
+    if (!Array.isArray(input.conditions)) throw new TypeError('invalid_builder_conditions:must be an array');
+    assertNestedFrames(input.conditions, 'conditions');
+  }
+  if (input.consequences !== undefined) {
+    if (!Array.isArray(input.consequences)) throw new TypeError('invalid_builder_consequences:must be an array');
+    assertNestedFrames(input.consequences, 'consequences');
+  }
   const sem: LunumSem = { schema: SEM_SCHEMA, world, kind, clauses: [clause] };
   const transport = validateSem(sem);
   if (!transport.ok) throw new TypeError(`invalid_builder_candidate:${transport.errors.join('; ')}`);
