@@ -482,6 +482,13 @@
       "evidence": "The auditor accepted 9/12 and rejected three send rows containing both mutually exclusive recipient and destination roles. The complete audit is recorded in frame-complete-corpus-audit.json.",
       "decision": "Reject the proposal before scoring. Preserve the frame contract and require corpus repair plus another independent audit before ladder evaluation.",
       "commit": "cc35502550dc86e706e425cabf24402e89401584"
+    },
+    {
+      "hypothesis": "Independent ordinary EN↔EL lexical hypotheses will show that Greek failure is primarily missing lexical coverage rather than polysemy.",
+      "implementation": "Queried 12 fresh agent-proposed EN↔EL noun/verb/adjective pairs against the pinned real OMW/CILI snapshots.",
+      "evidence": "11/12 pairs had both lexical sides covered, 8/12 had a shared CILI candidate, but only 1/12 was uniquely resolved; 10/12 were ambiguous and 1/12 unresolved. Full diagnostic is independent-en-el-grounding-probe.json.",
+      "decision": "Reject the missing-coverage-only hypothesis. Candidate-set/context disambiguation is required, with fail-closed behavior for unresolved senses.",
+      "commit": "pending"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
