@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:29:20+03:00
+Recorded: 2026-09-06T17:31:20+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 6b9fb410d841bc9cf248a38ad88d1432042b5ea6
+Current HEAD: a837ee37c7f2e2b57b7d3a8f9e67d1547e2f8732
 
 ## Scope and prohibitions
 
@@ -110,6 +110,9 @@ used.
   coverage, recursive evaluator-field leakage rejection, strict normalization,
   and lfp:2.1 identity before coverage is counted. Evaluation suite passes
   1,878/1,878.
+- Wired the validator into the retrieval harness. It rejects the historical
+  candidate ledger because 13/22 candidates fail current lfp:2.1 identity;
+  no historical report was rescored.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -151,7 +154,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 116 minutes. Completed real-resource
+Elapsed at recording: approximately 118 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
