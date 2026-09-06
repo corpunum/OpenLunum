@@ -9,8 +9,8 @@ function sem(predicate: string, theme: string, extras: Record<string, unknown> =
 
 test('raw-text retrieval extracts both sides and measures cross-language ranking', async () => {
   const table = new Map<string, LunumSem>([
-    ['The assistant archives the thread.', sem('archive', 'thread')],
-    ['Ο βοηθός αρχειοθετεί το νήμα.', sem('archive', 'thread')],
+    ['The assistant archives the thread.', sem('publish', 'thread')],
+    ['Ο βοηθός αρχειοθετεί το νήμα.', sem('publish', 'thread')],
     ['The assistant deletes all files.', sem('delete', 'all_files')],
     ['The assistant deletes old files.', sem('delete', 'old_files')],
   ]);
@@ -47,8 +47,8 @@ test('raw-text retrieval extracts both sides and measures cross-language ranking
 });
 
 test('raw-text retrieval attributes extractor abstention and rejects wrong-but-valid role binding', async () => {
-  const good = sem('share', 'document', { recipient: { type: 'actor', id: 'team' } });
-  const wrong = sem('share', 'document', { recipient: { type: 'actor', id: 'admin' } });
+  const good = sem('publish', 'document', { audience: { type: 'actor', id: 'team' } });
+  const wrong = sem('publish', 'document', { audience: { type: 'actor', id: 'admin' } });
   const report = await runRawTextRetrievalEvaluation({
     memories: [{ id: 'memory', text: 'Share the document with the team.', language: 'en' }],
     queries: [
@@ -67,7 +67,7 @@ test('raw-text retrieval attributes extractor abstention and rejects wrong-but-v
 });
 
 test('baseline hooks receive raw text only and are reported beside semantic retrieval', async () => {
-  const memory = sem('translate', 'guide', { recipient: { type: 'actor', id: 'team' } });
+  const memory = sem('publish', 'guide', { audience: { type: 'actor', id: 'team' } });
   const seen: string[] = [];
   const report = await runRawTextRetrievalEvaluation({
     memories: [{ id: 'guide-en', text: 'Translate the guide for the team.', language: 'en' }],
@@ -108,7 +108,7 @@ test('baseline failures remain visible instead of disappearing from denominators
 });
 
 test('routing is separate from semantic equivalence and baselines use the routed pool', async () => {
-  const equivalent = sem('translate', 'guide', { recipient: { type: 'actor', id: 'team' } });
+  const equivalent = sem('publish', 'guide', { audience: { type: 'actor', id: 'team' } });
   const report = await runRawTextRetrievalEvaluation({
     memories: [
       { id: 'guide-en', text: 'Translate the guide for the team.', language: 'en' },
@@ -139,4 +139,18 @@ test('noncanonical schema-valid extraction is contained and does not enter seman
   assert.equal(report.metrics.queryIdentityAvailable, 0);
   assert.equal(report.metrics.conditionalQueryCount, 0);
   assert.equal(report.metrics.falsePositives, 0);
+});
+
+test('identity coverage excludes structurally normalized but unframed candidates', async () => {
+  const unframed = sem('share', 'guide');
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [{ id: 'm', text: 'Share the guide.', language: 'en' }],
+    queries: [{ id: 'q', text: 'Share the guide?', language: 'en', expectedMemoryIds: ['m'] }],
+    extract: () => unframed,
+  });
+  assert.equal(report.metrics.memoryExtractionFailures, 1);
+  assert.equal(report.metrics.queryExtractionFailures, 1);
+  assert.equal(report.metrics.memoryIdentityAvailable, 0);
+  assert.equal(report.metrics.queryIdentityAvailable, 0);
+  assert.match(report.queryResults[0]!.extractionError!, /semantic identity unavailable/u);
 });

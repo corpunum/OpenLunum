@@ -101,6 +101,15 @@ async function extract(input: RawTextExtractionInput, extractor: RawTextExtracto
     if (!normalization.sem || !normalization.canonical) {
       return { sem: null, error: `noncanonical extracted Sem: ${normalization.issues.map((issue) => issue.message).join('; ')}` };
     }
+    // Normalization proves transport/protocol canonicality only. Retrieval
+    // coverage must count an item as identity-usable only when the stricter
+    // lfp:2.1 gates (including canonical frame and grounding requirements)
+    // succeed as well.
+    try {
+      semanticFingerprint(normalization.sem);
+    } catch (error) {
+      return { sem: null, error: `semantic identity unavailable: ${error instanceof Error ? error.message : String(error)}` };
+    }
     return { sem: normalization.sem };
   } catch (error) { return { sem: null, error: error instanceof Error ? error.message : String(error) }; }
 }
