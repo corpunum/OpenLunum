@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:42:30+03:00
+Recorded: 2026-09-06T17:45:12+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 744fbd165708c0e9119992f7df5bb039d88fbdfa
+Current HEAD: fbecc2ca89fdc419a42e101eb2a4a8b017822435
 
 ## Scope and prohibitions
 
@@ -122,6 +122,10 @@ used.
   Provider-cascade and resolution capabilities are private, in-process
   brands; serialized evidence must be re-authenticated. Core 1,803/1,803,
   evaluator 1,878/1,878, MCP 58/58, and workspace verification passed.
+- Added a non-circular UniMorph audit scored directly against independent UD
+  lemmas: 353/600 candidate-set recall, 331/333 unique precision, with
+  per-language recall EN 51%, EL 44%, ES 92%, FR 42%, DE 65%, ID 58%.
+  Morphology remains candidate generation, not exact identity proof.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
