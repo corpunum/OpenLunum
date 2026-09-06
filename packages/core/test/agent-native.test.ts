@@ -37,6 +37,8 @@ test('frame-first builder creates only a canonical transport envelope', () => {
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: { experiencer: 'x', theme: 'y', manner: 'z' } }), /unexpected_frame_roles/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: JSON.parse('{"__proto__":{"type":"actor","id":"x"}}') }), /unexpected_frame_roles/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: Object.create({ theme: { type: 'concept', id: 'x' } }) }), /roles_plain_object_required/);
+  assert.throws(() => buildCandidateSem({ world: 1 as never, kind: 'preference', predicate: 'prefer', roles: {} }), /builder_world_string_required/);
+  assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 1 as never, roles: {} }), /builder_predicate_string_required/);
   assert.throws(() => buildCandidateSem({
     world: 'real', kind: 'conditional_instruction', predicate: 'enable',
     roles: { theme: { type: 'feature', id: 'backups' } },
