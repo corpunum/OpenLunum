@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T15:59:00+03:00
+Recorded: 2026-09-06T16:28:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 740444aa99edf5ee9a7896c1cd06ced744cc2be2
+Current HEAD: 4caf6f6db0ede002dfacc28c71af1eb5bfc78d4a
 
 ## Scope and prohibitions
 
@@ -37,6 +37,15 @@ used.
 - `pnpm verify`: PASS, exit 0.
 - `git diff --check`: PASS.
 - Latest full `pnpm verify`: PASS, exit 0 (after retrieval metric changes).
+- Added resolver-namespace and materialization provenance gates; provider
+  status-inconsistent intersections, explicit-POS morphology overrides, and
+  analyzer exceptions now fail closed. Core suite after these fixes: 1,796
+  pass, 0 fail.
+- Independent UD morphology audit: 500 observations across EN/EL/ES/FR/ID;
+  49 unique OMW-eligible gold identities, 23 augmented singleton identities,
+  23/23 correct, candidate-set recall 244/500, zero false singleton outputs
+  among eligible cases. German UD was acquired but OMW identity scoring was
+  unavailable because its OdeNet tab was absent from cache.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -59,6 +68,9 @@ used.
 Keep the typed builder, morphology adapter, and explicit candidate-set
 intersection. Do not enable external morphology as an unconditional exact
 provider or change semantic frames. No fresh protected corpus is justified.
+The diagnostic agent retrieval result is not clean extraction evidence because
+its candidate ledger reproduced gold-shaped paired semantics. Training is not
+yet proven necessary.
 
 ## Next exact work
 
@@ -72,6 +84,15 @@ provider or change semantic frames. No fresh protected corpus is justified.
 4. Use an independent adversarial agent to attack morphology and candidate-set
    intersection before deciding whether training is genuinely justified.
 5. Only after those results, consider a new protected corpus.
+
+## Hourly checkpoint decision
+
+Elapsed at recording: approximately 55 minutes. Completed real-resource
+coverage, unbiased/corrected morphology probes, candidate-set analysis,
+agent-native builder trials, diagnostic retrieval harness, and trust-boundary
+hardening. Highest-leverage next action is an independently authored source-only
+text-to-Sem benchmark with the generated frame contract, followed by explicit
+contextual candidate-set scoring and retrieval. Do not create protected data.
 
 ## Uncommitted state
 
