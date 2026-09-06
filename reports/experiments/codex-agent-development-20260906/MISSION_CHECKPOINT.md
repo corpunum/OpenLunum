@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 310daee4756866881913ef77e77aeb84129e48a3
+Source/evidence boundary before this checkpoint commit: 310daee4756866881913ef77e77aeb84129e48a3
 
 ## Scope and prohibitions
 
@@ -317,6 +317,8 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `310daee4756866881913ef77e77aeb84129e48a3`.
+This checkpoint is committed immediately after the source/evidence boundary
+above; its own commit hash is intentionally not embedded to avoid
+self-referential metadata.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
