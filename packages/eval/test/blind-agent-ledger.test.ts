@@ -46,3 +46,9 @@ test('blind ledger rejects a provenance source hash that is not bound to its sou
   assert.equal(result.valid, false);
   assert.match(result.errors.join('\n'), /sourceHash/u);
 });
+
+test('blind ledger strict source-bound mode rejects missing provenance hashes', () => {
+  const result = validateBlindAgentLedger(source, [{ handle: 'opaque-a', result: { candidateSem: sem } }], { requireSourceHash: true });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some((error) => error.includes('sourceHash is required')));
+});

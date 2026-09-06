@@ -42,7 +42,7 @@ function sourceHash(sourceText: string): string {
 }
 
 /** Validate an opaque, source-only candidate ledger before private scoring. */
-export function validateBlindAgentLedger(source: readonly BlindSourceItem[], rows: readonly BlindCandidateRow[]): BlindLedgerValidation {
+export function validateBlindAgentLedger(source: readonly BlindSourceItem[], rows: readonly BlindCandidateRow[], options: { requireSourceHash?: boolean } = {}): BlindLedgerValidation {
   const errors: string[] = [];
   const sourceHandles = new Set<string>();
   for (const [index, item] of source.entries()) {
@@ -75,6 +75,7 @@ export function validateBlindAgentLedger(source: readonly BlindSourceItem[], row
     const sourceItem = source.find((item) => item && typeof item === 'object' && item.handle === row.handle);
     const declaredSourceHash = row.result.provenance && typeof row.result.provenance === 'object' && !Array.isArray(row.result.provenance)
       ? (row.result.provenance as Record<string, unknown>).sourceHash : undefined;
+    if (options.requireSourceHash && declaredSourceHash === undefined) errors.push(`row[${index}] provenance sourceHash is required for source-bound validation`);
     if (declaredSourceHash !== undefined && (typeof declaredSourceHash !== 'string' || !/^[0-9a-f]{64}$/u.test(declaredSourceHash) || !sourceItem || typeof sourceItem.sourceText !== 'string' || declaredSourceHash !== sourceHash(sourceItem.sourceText))) {
       errors.push(`row[${index}] provenance sourceHash does not match the source manifest`);
     }

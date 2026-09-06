@@ -1,6 +1,6 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:34:20+03:00
+Recorded: 2026-09-06T18:40:05+03:00
 Mission start epoch: 1788697989
 Current local branch: main
 Current HEAD: 03af4e1e4bc9de173a6b3f5a147b05ddb83ef6f8
@@ -227,6 +227,9 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   lfp:2.1 `semanticFingerprint`; `legacyExact` remains diagnostic and the
   explicit `semanticIdentityExact` field is persisted. Eval suite remains
   1,885/1,885.
+- Added opt-in strict source-bound validation for blind candidate ledgers;
+  missing source hashes now fail closed in strict mode while historical
+  diagnostic compatibility remains available. Eval suite is 1,886/1,886.
 
 ## Uncommitted state
 
