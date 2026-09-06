@@ -419,6 +419,13 @@
       "evidence": "Core build/typecheck and 1,806 tests passed, including __proto__, inherited-role, generated-type, and registry-exclusivity regressions. No semantic acceptance rule was broadened.",
       "decision": "Keep the fail-closed builder boundary and registry-derived prompt generation. Continue with MCP propagation verification.",
       "commit": "1a27ccaedfc380241e711cb9956f34fb789c3af4"
+    },
+    {
+      "hypothesis": "The compact frame prompt should expose generated frame meaning in addition to role/type constraints.",
+      "implementation": "Appended each authoritative frame description to the generated frame prompt block and added a synchronization regression.",
+      "evidence": "Core build/typecheck and 1,806 tests passed; no hand-maintained semantic vocabulary or acceptance behavior was added.",
+      "decision": "Keep descriptions generated from the registry; do not invent role descriptions where the registry has none.",
+      "commit": "2f49a8fb2bd4821c8e9c874039aec2c1dc09827b"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

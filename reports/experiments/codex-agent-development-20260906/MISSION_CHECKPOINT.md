@@ -285,9 +285,11 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   synchronization gaps. The builder now rejects non-plain role objects and
   safely handles `__proto__`; frame exclusivity and allowed term types are
   generated from registry metadata. Core remains 1,806/1,806.
+- The compact generated frame block now also carries each registry frame's
+  description, with core 1,806/1,806 after the synchronization regression.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `1a27ccaedfc380241e711cb9956f34fb789c3af4`.
+The current code/evidence boundary is `2f49a8fb2bd4821c8e9c874039aec2c1dc09827b`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
