@@ -38,6 +38,16 @@ test('lunum_build_candidate returns a candidate without certifying it', async ()
   assert.equal(data.promotable, undefined);
 });
 
+test('lunum_build_candidate exposes alternative frame requirements', async () => {
+  const data = JSON.parse(getText(await find('lunum_build_candidate').handler({
+    world: 'real', kind: 'instruction', predicate: 'retry',
+    roles: { theme: { type: 'object', id: 'upload' } },
+  })));
+  assert.equal(data.success, true);
+  assert.deepEqual(data.requiredRoles, []);
+  assert.deepEqual(data.atLeastOneOf, ['count', 'theme']);
+});
+
 test('lunum_get_extraction_contract returns registry-derived hashes and frames', async () => {
   const data = JSON.parse(getText(await find('lunum_get_extraction_contract').handler({})));
   assert.equal(data.success, true);
