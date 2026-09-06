@@ -292,9 +292,12 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   conditional on provider coverage, and protocol-control acceptance, plus
   critical mutations. This is the next development experiment; no protected
   data was created or used.
+- An independent agent-generated 12-row supported-predicate corpus proposal
+  was audited and rejected before scoring because several rows omitted required
+  frame roles or conflated predicates. No rows entered a benchmark.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `cbe1c24fb6e8cc6aa9616fad8d300a865f1f5dcd`.
+The current code/evidence boundary is `d9ab0f93cf1aed53733bdad26eee2a2af8f7fa9f`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
