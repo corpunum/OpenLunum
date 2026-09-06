@@ -40,6 +40,12 @@
       "implementation": "Raw-text-only retrieval harness with lexical baseline and identity/conditional/end-to-end denominators; development candidate ledger checked for gold-field leakage.",
       "evidence": "Harness run reports 10/10 positive retrieval on 10 memories and 12 queries, but the candidate ledger reproduces gold-shaped paired Sem and row IDs expose semantic hints, so this is evaluator plumbing only, not clean extraction evidence.",
       "decision": "Do not count as empirical extraction qualification; retain diagnostic artifact and require an independently source-only generated candidate ledger for future retrieval evidence."
+    },
+    {
+      "hypothesis": "A source-only agent can use the frame-first contract without gold-derived hints.",
+      "implementation": "Two isolated Codex agents received the same 12 fresh English source sentences and a contract-only abstention rule, then returned builder candidates or abstention.",
+      "evidence": "Both agents abstained on 12/12 items. The trial supplied only a summary of the contract rather than the generated frame/term block, so it diagnoses adoption-surface incompleteness rather than model semantic accuracy.",
+      "decision": "Do not treat abstention as capability evidence. Run a follow-up with the actual generated extraction contract and separately authored, source-only builder inputs."
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
