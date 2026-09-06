@@ -177,6 +177,17 @@ test('OMW exact lookup requires POS and normalizes phrase separators conservativ
   assert.equal(provider.resolve({ proposal: proposal('blue\tfolder'), language: 'en', partOfSpeech: 'noun' }).status, 'resolved_exact');
 });
 
+test('OMW indexed lookup preserves duplicate-sense ambiguity and exact results', () => {
+  const indexed = createOmwProvider({ version: 'indexed-fixture', records: [
+    { language: 'en', lemma: 'bank', interlingualId: 'i-money', partOfSpeech: 'noun' },
+    { language: 'en', lemma: 'bank', interlingualId: 'i-river', partOfSpeech: 'noun' },
+    { language: 'en', lemma: 'bank', interlingualId: 'i-bank-verb', partOfSpeech: 'verb' },
+  ] });
+  assert.equal(indexed.resolve({ proposal: proposal('bank'), language: 'en', partOfSpeech: 'noun' }).status, 'ambiguous');
+  assert.equal(indexed.resolve({ proposal: proposal('bank'), language: 'en', partOfSpeech: 'verb' }).status, 'resolved_exact');
+  assert.equal(indexed.resolve({ proposal: proposal('bank'), language: 'en', partOfSpeech: 'adjective' }).status, 'unresolved');
+});
+
 test('provider-backed submission materializes only exact grounding evidence', () => {
   const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'mira' }, theme: { type: 'concept', id: 'folder' } }, negated: false }] };
   const grounded = submitCandidateWithGroundingProviders({

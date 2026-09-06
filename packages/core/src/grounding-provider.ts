@@ -285,6 +285,13 @@ export function importOmwTab(content: string, options: OmwTabImportOptions): Omw
 export function createOmwProvider(options: OmwProviderOptions): GroundingProvider {
   options.records.forEach(validateRecord);
   const records = options.records.map(canonicalRecord).sort((a, b) => stableStringify(a).localeCompare(stableStringify(b), 'en'));
+  const index = new Map<string, OmwLexicalRecord[]>();
+  for (const record of records) {
+    const key = `${record.language}\u0000${record.lemma}\u0000${record.partOfSpeech ?? 'other'}`;
+    const values = index.get(key) ?? [];
+    values.push(record);
+    index.set(key, values);
+  }
   const snapshotHash = options.snapshotHash ?? sha256(records);
   if (!validSnapshotHash(snapshotHash)) throw new TypeError('OMW snapshotHash must be a SHA-256 hex digest');
   const provider = options.provider ?? 'omw-cili';
@@ -300,7 +307,7 @@ export function createOmwProvider(options: OmwProviderOptions): GroundingProvide
       if (canonical.canonical.modifiers.length > 0) return { ...base, status: 'unresolved', candidates: [], diagnostics: ['OMW lexical evidence does not prove a modified composition'] };
       if (!input.partOfSpeech || input.partOfSpeech === 'other') return { ...base, status: 'unresolved', candidates: [], diagnostics: ['part-of-speech is required for exact lexical grounding'] };
       const lemma = canonical.canonical.head.key;
-      const matches = records.filter((record) => record.language === language && record.lemma === lemma && (!input.partOfSpeech || record.partOfSpeech === input.partOfSpeech));
+      const matches = index.get(`${language}\u0000${lemma}\u0000${input.partOfSpeech}`) ?? [];
       const byId = new Map<string, GroundingProviderCandidate>();
       for (const match of matches) {
         if (!match.interlingualId) continue;
