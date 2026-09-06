@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 163c15e4ba65568edaaf336c64f8636d5d0bd19c
+Source/evidence boundary before this checkpoint commit: 39c033bd4a3770bb742da9b3a6230a6fc8501d42
 
 ## Scope and prohibitions
 
@@ -342,6 +342,12 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Bound strict claim mode into the durable blind manifest and checkpoint
   binding. Reopening the same run with a different strictness setting now fails
   closed; the evaluator suite remains 1,888/1,888.
+- An independent adversarial review found three initial generated-schema defects:
+  strict-required compilation, missing role aliases, and under-constrained
+  frame safety. These were corrected generically from the registries. Core
+  agent-native tests pass 9/9, MCP tests 59/59, and no model/protected data was
+  used. Multi-process claim locking remains an explicit future custody concern;
+  single-session strict claim binding is covered and durable.
 
 ## Uncommitted state
 

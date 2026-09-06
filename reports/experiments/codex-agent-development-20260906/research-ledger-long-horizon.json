@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T19:24:00+03:00",
-  "currentHead": "163c15e4ba65568edaaf336c64f8636d5d0bd19c",
+  "lastUpdated": "2026-09-06T19:40:00+03:00",
+  "currentHead": "39c033bd4a3770bb742da9b3a6230a6fc8501d42",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -517,6 +517,13 @@
       "evidence": "Evaluator build and unit tests passed 1,888/1,888, including strict-run reopen rejection when the option changes.",
       "decision": "Keep the mode binding as a resume invariant for future source-bound evaluation.",
       "commit": "163c15e4ba65568edaaf336c64f8636d5d0bd19c"
+    },
+    {
+      "hypothesis": "The generated builder schema is equivalent to builder acceptance and frame safety under strict validation.",
+      "implementation": "Repaired strict-schema required branches, generated canonical role aliases, constrained frame-specific term types, and encoded frame exclusivity; retained the registry as the only source of role semantics.",
+      "evidence": "Independent adversarial review initially found three schema defects; all were corrected. Core agent-native tests passed 9/9, MCP tests passed 59/59, and core/MCP typechecks passed. No protected data or model output informed the change.",
+      "decision": "Keep the generated schema after adversarial correction. A strict external JSON-Schema validator should be run by the consumer; semantic builder validation remains authoritative.",
+      "commit": "39c033bd4a3770bb742da9b3a6230a6fc8501d42"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
