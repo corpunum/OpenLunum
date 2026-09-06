@@ -82,6 +82,7 @@ export interface GroundingResolution {
   path: string;
   status: 'resolved' | 'unresolved' | 'ambiguous' | 'invalid';
   canonicalId?: string;
+  groundingFingerprint?: string;
   registry?: { registryId: string; version: string; snapshotHash: string };
   issues: string[];
 }
@@ -241,21 +242,22 @@ export function resolveGroundingProposal(input: unknown, registry: GroundingRegi
   if (ids.length > 1) return { path, status: 'ambiguous', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry returned multiple exact canonical IDs'] };
   if (!validCanonicalId(ids[0])) return { path, status: 'invalid', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry canonicalId must be namespace-qualified'] };
   if (!ids[0]!.startsWith(`urn:${registry.registryId}:`)) return { path, status: 'invalid', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry canonicalId is outside the resolver namespace'] };
-  return { path, status: 'resolved', canonicalId: ids[0], registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: [] };
+  return { path, status: 'resolved', canonicalId: ids[0], groundingFingerprint: canonical.canonical.groundingFingerprint, registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: [] };
 }
 
 /**
  * Materialize only resolver-produced IDs into the existing Sem term field.
  * Registry evidence is returned separately and remains outside lfp:2.1.
  */
-export function materializeGroundingResolutions(sem: unknown, resolutions: readonly GroundingResolution[]): MaterializedGrounding {
+export function materializeGroundingResolutions(sem: unknown, resolutions: readonly GroundingResolution[], proposals: readonly GroundingProposal[]): MaterializedGrounding {
   const structural = validateSem(sem);
   if (!structural.ok) return { status: 'invalid', sem: null, resolutions: [...resolutions], issues: structural.errors };
+  if (resolutions.length !== proposals.length) return { status: 'invalid', sem: null, resolutions: [...resolutions], issues: ['each grounding resolution must be paired with its original proposal'] };
   if (resolutions.some((resolution) => resolution.status !== 'resolved' || !resolution.canonicalId)) return { status: resolutions.some((resolution) => resolution.status === 'ambiguous') ? 'ambiguous' : 'unresolved', sem: null, resolutions: [...resolutions], issues: ['all grounding resolutions must be resolved before materialization'] };
   const paths = new Set<string>();
   const copy = JSON.parse(JSON.stringify(sem)) as LunumSem;
   const issues: string[] = [];
-  for (const resolution of resolutions) {
+  for (const [index, resolution] of resolutions.entries()) {
     const registry = resolution.registry;
     const canonicalId = resolution.canonicalId;
     if (validRegistryReference(registry).length > 0 || !canonicalId) {
@@ -264,6 +266,11 @@ export function materializeGroundingResolutions(sem: unknown, resolutions: reado
     }
     if (!canonicalId.startsWith(`urn:${registry!.registryId}:`)) {
       issues.push(`resolution canonicalId is outside its resolver namespace: ${resolution.path}`);
+      continue;
+    }
+    const proposal = canonicalizeGroundingProposal(proposals[index]);
+    if (!proposal.valid || !proposal.canonical || resolution.groundingFingerprint !== proposal.canonical.groundingFingerprint || resolution.path !== proposal.canonical.path) {
+      issues.push(`resolution is not bound to its original grounding proposal: ${resolution.path}`);
       continue;
     }
     if (paths.has(resolution.path)) { issues.push(`duplicate resolution path: ${resolution.path}`); continue; }

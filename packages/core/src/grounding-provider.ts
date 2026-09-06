@@ -423,6 +423,7 @@ export function toGroundingResolution(proposal: GroundingProposal, result: Groun
     return {
       path,
       status: result.status === 'ambiguous' ? 'ambiguous' : result.status === 'provider_error' ? 'invalid' : 'unresolved',
+      groundingFingerprint: canonical.canonical.groundingFingerprint,
       registry: { registryId: result.provider, version: result.providerVersion, snapshotHash: result.snapshotHash },
       issues: [...result.diagnostics],
     };
@@ -435,6 +436,7 @@ export function toGroundingResolution(proposal: GroundingProposal, result: Groun
     path,
     status: 'resolved',
     canonicalId: `urn:${result.provider}:${externalId}`,
+    groundingFingerprint: canonical.canonical.groundingFingerprint,
     registry: { registryId: result.provider, version: result.providerVersion, snapshotHash: result.snapshotHash },
     issues: [],
   };

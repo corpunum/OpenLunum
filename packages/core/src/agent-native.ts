@@ -345,7 +345,7 @@ export function submitCandidateWithGroundingProviders(
       return { ...base, candidateIdentityAvailable: false, semanticFingerprint: null, failureClass: result.status === 'provider_error' ? 'grounding_provider_error' : result.status === 'ambiguous' ? 'grounding_ambiguous' : 'grounding_unresolved', diagnostics: [...base.diagnostics, `grounding ${canonical.canonical.path}: ${result.status}`], grounding, providerResults };
     }
   }
-  const materialized = materializeGroundingResolutions(input.candidateSem, resolutions);
+  const materialized = materializeGroundingResolutions(input.candidateSem, resolutions, grounding.proposals);
   if (materialized.status !== 'resolved' || !materialized.sem) {
     return { ...base, candidateIdentityAvailable: false, semanticFingerprint: null, failureClass: 'grounding_materialization_invalid', diagnostics: [...base.diagnostics, ...materialized.issues], grounding, providerResults };
   }

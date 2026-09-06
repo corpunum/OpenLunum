@@ -88,7 +88,7 @@ test('exact registry resolution is pinned, namespace-qualified, and deterministi
   const resolved = resolveGroundingProposal(proposal('blue'), registry);
   assert.equal(resolved.status, 'resolved');
   assert.equal(resolved.canonicalId, 'urn:dev-registry:concept:blue-folder');
-  const materialized = materializeGroundingResolutions(sem, [resolved]);
+  const materialized = materializeGroundingResolutions(sem, [resolved], [proposal('blue')]);
   assert.equal(materialized.status, 'resolved');
   assert.equal((materialized.sem?.clauses[0]?.roles.theme as { id?: string }).id, 'urn:dev-registry:concept:blue-folder');
   assert.ok(candidate.canonical?.groundingFingerprint);
@@ -108,7 +108,7 @@ test('registry misses, ambiguity, and fingerprint mismatch never resolve exact i
   assert.equal(unqualified.status, 'invalid');
   const crossNamespace = resolveGroundingProposal(proposal('blue'), { ...base, lookupExact: ({ groundingFingerprint }: { groundingFingerprint: string }) => [{ groundingFingerprint, canonicalId: 'urn:attacker:blue-folder' }] });
   assert.equal(crossNamespace.status, 'invalid');
-  assert.equal(materializeGroundingResolutions(sem, [missing]).sem, null);
+  assert.equal(materializeGroundingResolutions(sem, [missing], [proposal('blue')]).sem, null);
 });
 
 test('materialization preserves role paths and rejects duplicate or conflicting fields', () => {
@@ -116,18 +116,18 @@ test('materialization preserves role paths and rejects duplicate or conflicting 
     registryId: 'dev', version: '1', snapshotHash: 'c'.repeat(64),
     lookupExact: ({ groundingFingerprint }: { groundingFingerprint: string }) => [{ groundingFingerprint, canonicalId: 'urn:dev:blue' }],
   });
-  const duplicate = materializeGroundingResolutions(sem, [resolved, resolved]);
+  const duplicate = materializeGroundingResolutions(sem, [resolved, resolved], [proposal('blue'), proposal('blue')]);
   assert.equal(duplicate.status, 'invalid');
   const conflict = { ...sem, clauses: [{ predicate: 'prefer', roles: { theme: { type: 'concept', id: 'old', ref: 'old-ref' } }, negated: false }] };
-  const rejected = materializeGroundingResolutions(conflict, [resolved]);
+  const rejected = materializeGroundingResolutions(conflict, [resolved], [proposal('blue')]);
   assert.equal(rejected.status, 'invalid');
 });
 
 test('materialization rejects forged or cross-namespace resolver IDs', () => {
   const base = { path: 'clauses[0].roles.theme', status: 'resolved' as const, registry: { registryId: 'dev', version: '1', snapshotHash: 'a'.repeat(64) }, issues: [] };
-  const forged = materializeGroundingResolutions(sem, [{ ...base, canonicalId: 'urn:attacker:wrong' }]);
+  const forged = materializeGroundingResolutions(sem, [{ ...base, canonicalId: 'urn:attacker:wrong' }], [proposal('blue')]);
   assert.equal(forged.status, 'invalid');
   assert.match(forged.issues[0]!, /outside its resolver namespace/u);
-  const missingProvenance = materializeGroundingResolutions(sem, [{ path: base.path, status: 'resolved', canonicalId: 'urn:dev:ok', issues: [] }]);
+  const missingProvenance = materializeGroundingResolutions(sem, [{ path: base.path, status: 'resolved', canonicalId: 'urn:dev:ok', issues: [] }], [proposal('blue')]);
   assert.equal(missingProvenance.status, 'invalid');
 });

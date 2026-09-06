@@ -64,6 +64,12 @@
       "implementation": "Added resolver-namespace checks for canonical IDs, rejected status-inconsistent/duplicate provider candidate intersections, constrained morphology to explicit POS, and contained analyzer exceptions as provider_error.",
       "evidence": "Adversarial tests cover cross-namespace IDs, missing provenance, unresolved results carrying candidates, repeated provider snapshots, POS override, and throwing analyzers. Core suite: 1,796 pass, 0 fail.",
       "decision": "Keep fixes. Snapshot hashes remain provider-declared evidence because factories cannot verify source bytes without a source snapshot; provenance must remain explicit and replayable."
+    },
+    {
+      "hypothesis": "Exact grounding materialization can be safely replayed from a resolver result without retaining the original proposal.",
+      "implementation": "Bound GroundingResolution to its canonical grounding fingerprint and require the original proposal list during materialization; reject cross-namespace IDs and missing provenance.",
+      "evidence": "Grounding and provider suites pass after tests for forged same-shape IDs, missing resolver provenance, and mismatched proposal bindings. Near-semantic retrieval is now opt-in; exact mode is default.",
+      "decision": "Keep the stronger replay boundary. This prevents a serialized or caller-constructed resolution from being treated as evidence for a different term/path."
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

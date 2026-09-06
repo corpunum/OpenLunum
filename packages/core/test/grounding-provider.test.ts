@@ -128,7 +128,7 @@ test('provider resolution materializes a versioned Lunum namespace ID', () => {
   assert.equal(resolution.status, 'resolved');
   assert.equal(resolution.canonicalId, 'urn:omw-cili:ili:i123');
   const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [{ predicate: 'prefer', roles: { theme: { type: 'concept', id: 'opaque' } }, negated: false }] };
-  const materialized = materializeGroundingResolutions(sem, [resolution]);
+  const materialized = materializeGroundingResolutions(sem, [resolution], [proposal()]);
   assert.equal(materialized.status, 'resolved');
   assert.equal((materialized.sem?.clauses[0]?.roles.theme as { id?: string }).id, 'urn:omw-cili:ili:i123');
 });

@@ -27,9 +27,11 @@ test('raw-text retrieval extracts both sides and measures cross-language ranking
     ],
     extract: ({ text }) => table.get(text) ?? null,
     threshold: 0.8,
+    mode: 'near-semantic',
     topK: 1,
   });
   assert.equal(report.inputMode, 'raw-text-only');
+  assert.equal(report.mode, 'near-semantic');
   assert.equal(report.metrics.queryExtractionFailures, 0);
   assert.equal(report.metrics.memoryExtractionFailures, 0);
   assert.equal(report.metrics.queryIdentityAvailable, 2);
