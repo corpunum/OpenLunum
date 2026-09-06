@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:49:40+03:00
+Recorded: 2026-09-06T17:56:20+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: e2d45801d2e1c0ee9cb4f0e1c09583915bd3b33d
+Current HEAD: 6e92f9489b3a30ed8596f027266b4ea956a9f9eb
 
 ## Scope and prohibitions
 
@@ -130,6 +130,10 @@ used.
   contained provider results and minted resolutions are cloned/frozen before
   capability branding; serialized and forged objects remain rejected.
   Focused security suite is 34/34 and the full workspace gate passed.
+- Replayed the independent UD/UniMorph morphology audit with the pinned
+  German OdeNet WN-LMF snapshot through the existing importer: German
+  augmented identity was 19/100 with 19/19 unique outputs correct and 67/100
+  candidate-set recall. German is now measured rather than marked unavailable.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -182,6 +186,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
 prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `e2d45801d2e1c0ee9cb4f0e1c09583915bd3b33d`.
+current code/evidence boundary is `6e92f9489b3a30ed8596f027266b4ea956a9f9eb`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
