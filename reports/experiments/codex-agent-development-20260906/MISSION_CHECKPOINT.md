@@ -308,11 +308,15 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   one Greek query. Identity coverage was 3/3 memories and 1/1 query, but exact
   conditional/end-to-end recall was 0 because equivalent open-concept labels
   did not converge. No gold Sem entered extraction.
+- Wrote a formal long-horizon training-boundary assessment. Training remains
+  NOT PROVEN because provider coverage, blind agent proposal recall, and
+  protocol-control acceptance have not yet been measured as one independent
+  factorial audit.
 - Added stable runtime rejection tests for non-string builder fields; core
   remains 1,806/1,806 after rebuild.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `2458efbbf7067611fad4ca9c965bda1fa1b04efd`.
+The current code/evidence boundary is `d3487c418d74ad495fe94d6ec5f26223bd2dc1a1`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

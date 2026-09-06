@@ -467,7 +467,7 @@
       "implementation": "Wrote a formal training-boundary assessment separating tested approaches, current grounding evidence, and the missing provider/agent/protocol factorial controls.",
       "evidence": "Training remains NOT PROVEN: protocol control is strong, but independent agent grounding labels and provider-coverage-conditioned proposal recall are still missing. No protected data was used.",
       "decision": "Defer training. Implement the Grounding-Ladder Factorial Audit and obtain independent development labels first.",
-      "commit": "pending"
+      "commit": "d3487c418d74ad495fe94d6ec5f26223bd2dc1a1"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
