@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { canonicalizeSem, stableStringify, validateSem } from './canonicalize.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
 import type { LunumSem, LunumTerm } from './types.js';
+import { authenticatedGroundingResolutions } from './grounding-capability.js';
 
 /**
  * Auxiliary open-concept grounding contract. This is deliberately separate
@@ -93,6 +94,10 @@ export interface MaterializedGrounding {
   resolutions: GroundingResolution[];
   issues: string[];
 }
+
+// Grounding resolutions are capabilities minted by the provider cascade.
+// Keeping this private prevents a caller from forging registry evidence and
+// injecting an arbitrary `urn:<provider>:<id>` into an exact Sem.
 
 const NAMESPACE = /^[a-z][a-z0-9._-]*$/u;
 const PATH = /^clauses\[\d+\](?:\.(?:conditions|consequences)\[\d+\])*\.roles\.([a-z][a-z0-9_-]*)$/u;
@@ -242,7 +247,9 @@ export function resolveGroundingProposal(input: unknown, registry: GroundingRegi
   if (ids.length > 1) return { path, status: 'ambiguous', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry returned multiple exact canonical IDs'] };
   if (!validCanonicalId(ids[0])) return { path, status: 'invalid', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry canonicalId must be namespace-qualified'] };
   if (!ids[0]!.startsWith(`urn:${registry.registryId}:`)) return { path, status: 'invalid', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry canonicalId is outside the resolver namespace'] };
-  return { path, status: 'resolved', canonicalId: ids[0], groundingFingerprint: canonical.canonical.groundingFingerprint, registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: [] };
+  const resolution: GroundingResolution = { path, status: 'resolved', canonicalId: ids[0], groundingFingerprint: canonical.canonical.groundingFingerprint, registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: [] };
+  authenticatedGroundingResolutions.add(resolution);
+  return resolution;
 }
 
 /**
@@ -253,6 +260,9 @@ export function materializeGroundingResolutions(sem: unknown, resolutions: reado
   const structural = validateSem(sem);
   if (!structural.ok) return { status: 'invalid', sem: null, resolutions: [...resolutions], issues: structural.errors };
   if (resolutions.length !== proposals.length) return { status: 'invalid', sem: null, resolutions: [...resolutions], issues: ['each grounding resolution must be paired with its original proposal'] };
+  if (resolutions.some((resolution) => !resolution || typeof resolution !== 'object' || !authenticatedGroundingResolutions.has(resolution))) {
+    return { status: 'invalid', sem: null, resolutions: [...resolutions], issues: ['grounding resolution was not authenticated by the provider cascade'] };
+  }
   if (resolutions.some((resolution) => resolution.status !== 'resolved' || !resolution.canonicalId)) return { status: resolutions.some((resolution) => resolution.status === 'ambiguous') ? 'ambiguous' : 'unresolved', sem: null, resolutions: [...resolutions], issues: ['all grounding resolutions must be resolved before materialization'] };
   const paths = new Set<string>();
   const copy = JSON.parse(JSON.stringify(sem)) as LunumSem;

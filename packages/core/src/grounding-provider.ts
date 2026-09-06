@@ -3,6 +3,7 @@ import { stableStringify } from './canonicalize.js';
 import { canonicalizeGroundingProposal } from './grounding.js';
 import type { GroundingProposal } from './grounding.js';
 import type { GroundingResolution } from './grounding.js';
+import { authenticatedGroundingResolutions, authenticatedProviderResults } from './grounding-capability.js';
 
 /** Provider results are evidence, never an alternate semantic protocol. */
 export type GroundingProviderStatus = 'resolved_exact' | 'ambiguous' | 'unresolved' | 'provider_error';
@@ -32,6 +33,11 @@ export interface GroundingProviderResult {
   /** Stable, machine-readable explanation; no raw provider object is trusted. */
   diagnostics: readonly string[];
 }
+
+// These capabilities deliberately do not survive JSON serialization.  The
+// public conversion helpers therefore cannot be used as a second trust path:
+// only results returned by the local, metadata-bound cascade are eligible for
+// materialization in this process.
 
 export interface GroundingProvider {
   readonly provider: string;
@@ -189,7 +195,9 @@ function containProviderResult(result: unknown, provider: GroundingProvider, inp
     }
   }
   if (issues.length) return { status: 'provider_error', provider: provider.provider, providerVersion: provider.providerVersion, snapshotHash: provider.snapshotHash, language: input.language, candidates: [], diagnostics: Object.freeze(issues) };
-  return result as GroundingProviderResult;
+  const contained = result as GroundingProviderResult;
+  authenticatedProviderResults.add(contained);
+  return contained;
 }
 
 function canonicalRecord(record: OmwLexicalRecord): OmwLexicalRecord {
@@ -482,6 +490,9 @@ export function toGroundingResolution(proposal: GroundingProposal, result: Groun
   if (!canonical.valid || !canonical.canonical) {
     return { path, status: 'invalid', issues: ['provider result cannot materialize an invalid grounding proposal'] };
   }
+  if (!result || typeof result !== 'object' || !authenticatedProviderResults.has(result)) {
+    return { path, status: 'invalid', groundingFingerprint: canonical.canonical.groundingFingerprint, issues: ['provider result was not authenticated by the grounding cascade'] };
+  }
   if (result.status !== 'resolved_exact' || result.candidates.length !== 1) {
     return {
       path,
@@ -495,7 +506,7 @@ export function toGroundingResolution(proposal: GroundingProposal, result: Groun
   if (!/^[a-z][a-z0-9.-]*$/u.test(result.provider) || !/^\S+$/u.test(externalId)) {
     return { path, status: 'invalid', registry: { registryId: result.provider, version: result.providerVersion, snapshotHash: result.snapshotHash }, issues: ['provider or external ID is not safe for a canonical namespace'] };
   }
-  return {
+  const resolution: GroundingResolution = {
     path,
     status: 'resolved',
     canonicalId: `urn:${result.provider}:${externalId}`,
@@ -503,6 +514,8 @@ export function toGroundingResolution(proposal: GroundingProposal, result: Groun
     registry: { registryId: result.provider, version: result.providerVersion, snapshotHash: result.snapshotHash },
     issues: [],
   };
+  authenticatedGroundingResolutions.add(resolution);
+  return resolution;
 }
 
 /** Resolve conservatively: the first exact result wins only if no provider disagrees. */

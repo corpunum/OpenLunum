@@ -88,7 +88,8 @@ test('candidate-set intersection narrows only explicit shared evidence', () => {
     provider: 'omw', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en',
     candidates: result.candidates, diagnostics: result.diagnostics,
   });
-  assert.equal(attemptedMaterialization.status, 'unresolved');
+  assert.equal(attemptedMaterialization.status, 'invalid');
+  assert.match(attemptedMaterialization.issues[0]!, /authenticated/u);
   assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] }], { relation: 'same-concept' }).status, 'ambiguous');
   assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] }, { status: 'ambiguous', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'Q1', evidence: [] }], diagnostics: [] }], { relation: 'same-translation' }).status, 'unresolved');
   assert.match(intersectGroundingCandidateSets([], { relation: 'same-concept' }).diagnostics[0]!, /no provider/u);
@@ -173,14 +174,35 @@ test('cascade binds provider metadata and validates later comparisons', () => {
 });
 
 test('provider resolution materializes a versioned Lunum namespace ID', () => {
-  const result = provider.resolve({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' });
-  const resolution = toGroundingResolution(proposal(), result);
+  const cascade = resolveGroundingCascade({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' }, [provider]);
+  const resolution = toGroundingResolution(proposal(), cascade.results[0]!);
   assert.equal(resolution.status, 'resolved');
   assert.equal(resolution.canonicalId, 'urn:omw-cili:ili:i123');
   const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [{ predicate: 'prefer', roles: { theme: { type: 'concept', id: 'opaque' } }, negated: false }] };
   const materialized = materializeGroundingResolutions(sem, [resolution], [proposal()]);
   assert.equal(materialized.status, 'resolved');
   assert.equal((materialized.sem?.clauses[0]?.roles.theme as { id?: string }).id, 'urn:omw-cili:ili:i123');
+});
+
+test('forged provider evidence and resolutions cannot mint exact identity', () => {
+  const forgedResult = {
+    status: 'resolved_exact', provider: 'attacker', providerVersion: '1', snapshotHash: 'a'.repeat(64),
+    language: 'en', candidates: [{ externalId: 'fake-id', evidence: ['caller-assertion'] }], diagnostics: [],
+  } as import('../src/grounding-provider.js').GroundingProviderResult;
+  const rejected = toGroundingResolution(proposal(), forgedResult);
+  assert.equal(rejected.status, 'invalid');
+  assert.equal(rejected.canonicalId, undefined);
+  const forgedResolution = {
+    path: proposal().path, status: 'resolved', canonicalId: 'urn:attacker:fake-id',
+    groundingFingerprint: 'gnd:0.1:sha256:' + 'b'.repeat(32),
+    registry: { registryId: 'attacker', version: '1', snapshotHash: 'a'.repeat(64) }, issues: [],
+  } as import('../src/grounding.js').GroundingResolution;
+  const materialized = materializeGroundingResolutions(
+    { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [{ predicate: 'prefer', roles: { theme: { type: 'concept', id: 'opaque' } }, negated: false }] },
+    [forgedResolution], [proposal()],
+  );
+  assert.equal(materialized.status, 'invalid');
+  assert.match(materialized.issues[0]!, /authenticated/u);
 });
 
 test('provider failure degrades without guessing', () => {
