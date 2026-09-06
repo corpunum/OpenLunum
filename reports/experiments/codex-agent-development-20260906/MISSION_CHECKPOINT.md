@@ -266,6 +266,12 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   sources produced 3/3 transport-, protocol-, frame-, grounding-, and
   identity-valid candidates. The diagnostic artifact records exact source
   hashes and lfp:2.1 outputs, but no gold or semantic accuracy claim.
+- A fresh source-only multilingual direct-field trial covered six equivalent
+  preference sentences (EN/EL/ES/FR/DE/ID). The agent returned `roles` as a
+  comma-separated string and used language tags as `world`; all 6/6 were
+  correctly rejected by the strict builder. No gold or expected identity was
+  exposed, so this is transport diagnostic evidence only. The builder was not
+  broadened.
 
 ## Uncommitted state
 

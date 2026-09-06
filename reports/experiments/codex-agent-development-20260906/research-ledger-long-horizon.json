@@ -391,6 +391,13 @@
       "evidence": "3/3 candidates passed transport, protocol canonicality, frame validity, grounding, and lfp:2.1 identity gates. The result is persisted in source-only-direct-builder-trial.json; no gold was supplied.",
       "decision": "Retain direct-field constraints as a viable transport mode, but do not infer semantic accuracy from identity availability without independent gold.",
       "commit": "current-diagnostic"
+    },
+    {
+      "hypothesis": "A minimal source-only multilingual direct-field instruction is sufficient for reliable typed-builder transport.",
+      "implementation": "An isolated Codex agent received six English/Greek/Spanish/French/German/Indonesian preference sources and was required to emit direct builder fields only.",
+      "evidence": "All six outputs used roles as a comma-separated string and used language tags as world rather than a protocol world. Transport-valid and identity-available counts were 0/6. No gold or expected identity was exposed.",
+      "decision": "Keep the strict builder and record this as an agent-interface failure. Improve only through explicit generated tool/schema interaction, not permissive parsing or language-specific world aliases.",
+      "commit": "pending"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
