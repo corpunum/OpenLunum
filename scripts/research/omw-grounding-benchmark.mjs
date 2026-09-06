@@ -18,12 +18,12 @@ const recordsByLanguage = {};
 for (const [language, relative] of Object.entries(files)) {
   const imported = importOmwTab(readFileSync(`${root}/${relative}`, 'utf8'), { language, source: 'omw-data/v2.0', license: 'see-resource-manifest', synsetToInterlingualId: map });
   recordsByLanguage[language] = imported.records;
-  imports[language] = { records: imported.records.length, uniqueIli: new Set(imported.records.map((record) => record.interlingualId)).size, unmappedSynsets: imported.unmappedSynsets.length, malformedLines: imported.malformedLines.length };
+  imports[language] = { records: imported.records.length, uniqueIli: new Set(imported.records.map((record) => record.interlingualId)).size, unmappedSynsets: imported.unmappedSynsets.length, malformedLines: imported.malformedLines.length, invalidMappings: imported.invalidMappings.length };
   providers[language] = createOmwProvider({ version: 'omw-data/v2.0+cili/v1.0', records: imported.records });
 }
 const deImported = importWnLmf(readFileSync(odenet, 'utf8'), { language: 'de', source: 'odenet:1.4', license: 'CC BY-SA 4.0' });
 recordsByLanguage.de = deImported.records;
-imports.de = { records: deImported.records.length, uniqueIli: new Set(deImported.records.map((record) => record.interlingualId)).size, unmappedSynsets: deImported.unmappedSynsets.length, malformedEntries: deImported.malformedEntries };
+imports.de = { records: deImported.records.length, uniqueIli: new Set(deImported.records.map((record) => record.interlingualId)).size, unmappedSynsets: deImported.unmappedSynsets.length, malformedEntries: deImported.malformedEntries, invalidMappings: deImported.invalidMappings.length };
 providers.de = createOmwProvider({ version: 'odenet/v1.4+cili/v1.0', records: deImported.records });
 
 function proposal(key) { return { path: 'clauses[0].roles.theme', termType: 'concept', head: { kind: 'symbol', namespace: 'lex', key }, modifiers: [] }; }

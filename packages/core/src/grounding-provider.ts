@@ -73,6 +73,7 @@ export interface OmwTabImportResult {
   records: OmwLexicalRecord[];
   unmappedSynsets: string[];
   malformedLines: number[];
+  invalidMappings: number[];
 }
 
 export interface WnLmfImportOptions {
@@ -85,6 +86,7 @@ export interface WnLmfImportResult {
   records: OmwLexicalRecord[];
   unmappedSynsets: string[];
   malformedEntries: number;
+  invalidMappings: number[];
 }
 
 function normalizeLemma(value: string): string {
@@ -115,6 +117,10 @@ function validateRecord(record: OmwLexicalRecord, index: number): void {
   if (typeof record.language !== 'string' || !/^\p{Letter}[\p{Letter}\p{Number}-]*$/u.test(record.language.normalize('NFKC').trim())) throw new TypeError(`OMW record ${index} has invalid language`);
   if (typeof record.lemma !== 'string' || !normalizeLemma(record.lemma)) throw new TypeError(`OMW record ${index} has an empty lemma`);
   if (typeof record.interlingualId !== 'string' || !/^[A-Za-z][A-Za-z0-9._:-]*$/u.test(record.interlingualId.normalize('NFKC').trim())) throw new TypeError(`OMW record ${index} has an invalid interlingual ID`);
+}
+
+function validInterlingualId(value: string): boolean {
+  return /^i[0-9]+$/u.test(value.normalize('NFKC').trim());
 }
 
 function xmlAttributes(input: string): Map<string, string> {
@@ -150,6 +156,7 @@ export function importWnLmf(content: string, options: WnLmfImportOptions): WnLmf
   }
   const records: OmwLexicalRecord[] = [];
   let malformedEntries = 0;
+  const invalidMappings: number[] = [];
   const entryTag = /<LexicalEntry\b[^>]*>([\s\S]*?)<\/LexicalEntry>/gu;
   for (const entry of content.matchAll(entryTag)) {
     const lemmaMatch = /<Lemma\b([^>]*)\/>/u.exec(entry[1]!);
@@ -161,10 +168,11 @@ export function importWnLmf(content: string, options: WnLmfImportOptions): WnLmf
       const synset = xmlAttributes(sense[1]!).get('synset');
       const mapped = synset ? synsets.get(synset) : undefined;
       if (!mapped) { if (synset) unmapped.add(synset); continue; }
+      if (!validInterlingualId(mapped.ili)) { invalidMappings.push(records.length + 1); continue; }
       records.push({ language: options.language, lemma: decodeXml(writtenForm), interlingualId: mapped.ili, ...(mapped.partOfSpeech ? { partOfSpeech: mapped.partOfSpeech } : {}), ...(options.source ? { source: options.source } : {}), ...(options.license ? { license: options.license } : {}) });
     }
   }
-  return { records, unmappedSynsets: [...unmapped].sort((a, b) => a.localeCompare(b, 'en')), malformedEntries };
+  return { records, unmappedSynsets: [...unmapped].sort((a, b) => a.localeCompare(b, 'en')), malformedEntries, invalidMappings };
 }
 
 /** Import the documented OMW tab format without guessing unmapped synsets. */
@@ -172,6 +180,7 @@ export function importOmwTab(content: string, options: OmwTabImportOptions): Omw
   const records: OmwLexicalRecord[] = [];
   const unmapped = new Set<string>();
   const malformedLines: number[] = [];
+  const invalidMappings: number[] = [];
   for (const [offset, rawLine] of content.split(/\r?\n/u).entries()) {
     const lineNumber = offset + 1;
     const line = rawLine.trim();
@@ -200,12 +209,13 @@ export function importOmwTab(content: string, options: OmwTabImportOptions): Omw
     const mappingKey = synset!;
     const interlingualId = options.synsetToInterlingualId.get(mappingKey);
     if (!interlingualId) { unmapped.add(mappingKey); continue; }
+    if (!validInterlingualId(interlingualId)) { invalidMappings.push(lineNumber); continue; }
     const posCode = (lemmaType === 'lemma' || /^[a-z]{3}:lemma$/u.test(lemmaType!.toLowerCase())) ? synset!.split('-')[1] : lemmaType!.toLowerCase();
     const partOfSpeech = ({ n: 'noun', v: 'verb', a: 'adjective', s: 'adjective', r: 'adverb' } as const)[posCode as 'n' | 'v' | 'a' | 's' | 'r'];
     if (!partOfSpeech || !lemma) { malformedLines.push(lineNumber); continue; }
     records.push({ language: options.language, lemma: lemma.replace(/_/gu, ' '), interlingualId, partOfSpeech, ...(options.source ? { source: options.source } : {}), ...(options.license ? { license: options.license } : {}) });
   }
-  return { records, unmappedSynsets: [...unmapped].sort((a, b) => a.localeCompare(b, 'en')), malformedLines };
+  return { records, unmappedSynsets: [...unmapped].sort((a, b) => a.localeCompare(b, 'en')), malformedLines, invalidMappings };
 }
 
 /**

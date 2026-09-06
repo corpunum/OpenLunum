@@ -99,6 +99,7 @@ test('OMW tab importer maps only explicit CILI synsets and reports gaps', () => 
   assert.equal(imported.records[0]?.lemma, 'folder');
   assert.deepEqual(imported.unmappedSynsets, ['00000002-n']);
   assert.deepEqual(imported.malformedLines, [5]);
+  assert.deepEqual(imported.invalidMappings, []);
 });
 
 test('OMW tab importer supports Wordnet Bahasa language-filtered rows', () => {
@@ -109,6 +110,7 @@ test('OMW tab importer supports Wordnet Bahasa language-filtered rows', () => {
   assert.equal(imported.records.length, 2);
   assert.equal(imported.records[0]?.language, 'id');
   assert.equal(imported.records[0]?.lemma, 'folder');
+  assert.deepEqual(imported.invalidMappings, []);
 });
 
 test('WN-LMF importer preserves only explicit non-proposed ILI mappings', () => {
@@ -118,6 +120,15 @@ test('WN-LMF importer preserves only explicit non-proposed ILI mappings', () => 
   assert.equal(imported.records[0]?.lemma, 'Kernspaltung');
   assert.equal(imported.records[0]?.interlingualId, 'i123');
   assert.deepEqual(imported.unmappedSynsets, ['odenet-2-n']);
+  assert.deepEqual(imported.invalidMappings, []);
+});
+
+test('importers quarantine malformed interlingual IDs', () => {
+  const imported = importOmwTab('00000001-n\teng:lemma\tfolder', {
+    language: 'en', synsetToInterlingualId: new Map([['00000001-n', 'not-a-cili-id']]),
+  });
+  assert.equal(imported.records.length, 0);
+  assert.deepEqual(imported.invalidMappings, [1]);
 });
 
 test('OMW exact lookup requires POS and normalizes phrase separators conservatively', () => {
