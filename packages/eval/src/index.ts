@@ -84,6 +84,10 @@ export { runExperiment } from './runner.js';
 // Failure classification taxonomy (R14.x)
 export { classifyFailure } from './failure-classification.js';
 export type { FailureClass, ClassifiedFailure } from './failure-classification.js';
+
+// Blind agent-native evaluation. Gold is evaluator-private at runtime.
+export { BlindAgentEvaluationSession } from './agent-evaluator.js';
+export type { BlindEvalNextItem, BlindEvalSubmission, BlindEvalResult } from './agent-evaluator.js';
 // Model
 export { ModelResponseError, OpenAICompatibleModel, normalizeModelResponse, openAICompatibleStructuredOutputAdapter } from './model.js';
 export type { StructuredOutputAdapter } from './model.js';

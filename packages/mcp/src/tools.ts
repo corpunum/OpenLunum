@@ -14,6 +14,12 @@ import {
 import type { ContextMode, LunumSem } from '@corpunum/lunum';
 import { resolveConfig } from './config.js';
 
+/** Structural boundary for an evaluator-owned blind session. MCP never sees gold. */
+export interface BlindEvaluationSurface {
+  next(): unknown;
+  submit(input: { runId: string; itemId: string; candidateSem: unknown; provenance: unknown }): Promise<unknown>;
+}
+
 function ok(data: unknown): McpToolResponse {
   return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
 }
@@ -155,6 +161,39 @@ export const submitCandidateTool: LunumToolDefinition = {
     }
   },
 };
+
+/** Build optional blind-evaluation tools around an evaluator-private session. */
+export function createBlindEvaluationTools(session: BlindEvaluationSurface): LunumToolDefinition[] {
+  return [
+    {
+      name: 'lunum_eval_next',
+      description: 'Return the next blind evaluation source item and extraction-contract binding. Gold and scoring metadata are never exposed.',
+      inputSchema: { type: 'object', properties: {} },
+      handler: async (): Promise<McpToolResponse> => ok({ success: true, item: session.next() }),
+    },
+    {
+      name: 'lunum_eval_submit',
+      description: 'Submit an untrusted candidate to a privately configured blind evaluator for deterministic scoring.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          runId: { type: 'string' }, itemId: { type: 'string' }, candidateSem: { type: 'object' }, provenance: { type: 'object' },
+        },
+        required: ['runId', 'itemId', 'candidateSem', 'provenance'],
+      },
+      handler: async (input): Promise<McpToolResponse> => {
+        if (typeof input.runId !== 'string' || typeof input.itemId !== 'string') return err('runId and itemId are required');
+        if (!input.candidateSem || typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem)) return err('candidateSem is required and must be an object');
+        if (!input.provenance || typeof input.provenance !== 'object' || Array.isArray(input.provenance)) return err('provenance is required and must be an object');
+        try {
+          return ok({ success: true, result: await session.submit({ runId: input.runId, itemId: input.itemId, candidateSem: input.candidateSem, provenance: input.provenance }) });
+        } catch (error) {
+          return err((error as Error).message);
+        }
+      },
+    },
+  ];
+}
 
 export const validateTool: LunumToolDefinition = {
   name: 'lunum_validate',

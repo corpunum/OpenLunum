@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
-import { lunumTools } from '../src/tools.js';
+import { createBlindEvaluationTools, lunumTools } from '../src/tools.js';
 
 const find = (name: string) => {
   const tool = lunumTools.find((t) => t.name === name);
@@ -167,4 +167,17 @@ test('lunum_classify returns eligibility decision', async () => {
   const data = JSON.parse(getText(result));
   assert.strictEqual(data.success, true);
   assert.ok('eligible' in data.decision);
+});
+
+test('blind evaluator factory exposes source-only next and forwards opaque submission', async () => {
+  const seen: unknown[] = [];
+  const tools = createBlindEvaluationTools({
+    next: () => ({ runId: 'r', itemId: 'i', sourceLanguage: 'en', sourceText: 'source only', contractVersion: 'v', contractHash: 'h' }),
+    submit: async (input) => { seen.push(input); return { status: 'passed', semanticIdentityExact: true }; },
+  });
+  const next = await tools[0]!.handler({});
+  assert.equal(JSON.parse(next.content[0]!.text!).item.sourceText, 'source only');
+  const submitted = await tools[1]!.handler({ runId: 'r', itemId: 'i', candidateSem: { schema: 'candidate' }, provenance: { extractorType: 'codex_agent' } });
+  assert.equal(JSON.parse(submitted.content[0]!.text!).result.status, 'passed');
+  assert.deepEqual(seen, [{ runId: 'r', itemId: 'i', candidateSem: { schema: 'candidate' }, provenance: { extractorType: 'codex_agent' } }]);
 });

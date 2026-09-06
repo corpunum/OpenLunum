@@ -1,5 +1,6 @@
 export { createLunumMcpServer } from './server.js';
-export { lunumTools } from './tools.js';
+export { lunumTools, createBlindEvaluationTools } from './tools.js';
+export type { BlindEvaluationSurface } from './tools.js';
 export { LunumContextManager } from './context.js';
 export { resolveConfig } from './config.js';
 export type { LunumConfig } from './config.js';
