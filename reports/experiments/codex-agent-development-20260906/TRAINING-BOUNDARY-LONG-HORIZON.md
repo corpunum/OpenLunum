@@ -1,6 +1,6 @@
 # Training boundary assessment
 
-Status: NOT PROVEN
+Status: NOT PROVEN (reaffirmed after large source-only ladder)
 
 The current evidence does not isolate a persistent model ceiling. The real
 OMW/CILI replay has 100/100 shared candidate coverage but only 19/100 exact
@@ -9,6 +9,17 @@ has 6/6 deterministic identity-valid candidates and still fails the equivalent
 EN/EL/ID send group because the agent chose different open identifiers. This
 shows a grounding bottleneck, but it does not distinguish provider coverage
 from agent proposal failure.
+
+The larger opaque-handle development ladder strengthens the extraction
+diagnosis without closing the training question. It contained 72 parse rows
+(60 multilingual positives and 12 critical negatives) and 12 abstention rows.
+The isolated agent produced 70 identity-available candidates and 14
+abstentions; deterministic source-bound validation passed 84/84, parse exact
+was 0/60, abstention accuracy was 12/12, and candidate self-consistency was
+10/10 groups while gold convergence was 0/10. Five of six negative pairs were
+identity-comparable and none falsely collapsed. This demonstrates stable but
+wrong canonical choices, but it remains a development run from one agent and
+does not measure independently repeated provider-guided sense selection.
 
 Already tested: conservative lexical normalization, real OMW/CILI grounding,
 candidate-set intersection, UniMorph morphology as candidate generation,
@@ -29,7 +40,9 @@ with independently authored labels:
 Subsequent deterministic safeguards now include authenticated candidate-set
 intersection, a registry-generated frame-first transport schema, strict
 source/contract claim binding, durable strictness in the run manifest, and
-stage-level blind-evaluation receipts. These reduce evaluator and transport
+stage-level blind-evaluation receipts. Source-manifest validation now also
+rejects unknown keys and recursively rejects evaluator metadata. These reduce
+evaluator and transport
 confounding, but they do not create a sense-selection signal where OMW/CILI
 returns multiple plausible candidates.
 
@@ -46,7 +59,13 @@ Interpretation rule:
 - valid protocol-control failure or critical-mutant collapse indicates a core
   defect and requires repair before any training claim;
 - only a persistent agent-grounding ceiling after these controls justifies a
-  training proposal.
+  training proposal. The current evidence prioritizes a training-boundary
+  study, but does not prove training is the only remaining solution. The next
+  non-training control is an evaluator-sealed comparison in which the agent
+  emits structured grounding proposals and independently pinned provider
+  candidate sets, followed by deterministic context filtering. If that remains
+  near 0/60 exact while provider candidate-set recall is high, the training
+  boundary becomes proven rather than merely plausible.
 
 No protected corpus was created or consumed for this assessment. No local
 inference or OpenUnum surface was used.

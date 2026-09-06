@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-07T00:48:00+03:00
+Recorded: 2026-09-07T01:05:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 2f81916
+Source/evidence boundary before this checkpoint commit: f578a29
 
 ## Scope and prohibitions
 
@@ -395,6 +395,10 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   evaluator metadata leakage. The focused blind-ledger suite passes 8/8.
 - Full evaluator unit verification after the custody fix passed 1,889/1,889;
   no production semantic identity or scoring behavior was changed.
+- Reaffirmed the training-boundary assessment after the large run: training is
+  still NOT PROVEN as unavoidable. The result prioritizes a provider-guided,
+  structured-grounding control (candidate-set recall plus deterministic context
+  filtering) before any training proposal can be considered conclusive.
 
 ## Uncommitted state
 
