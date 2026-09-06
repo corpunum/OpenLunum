@@ -87,6 +87,9 @@ export interface GroundingCandidateIntersectionOptions {
 export function intersectGroundingCandidateSets(results: readonly GroundingProviderResult[], options: GroundingCandidateIntersectionOptions): GroundingCandidateIntersection {
   if (!options || !options.relation) return { status: 'unresolved', candidates: [], diagnostics: ['explicit semantic relation is required for candidate-set intersection'] };
   if (results.length === 0) return { status: 'unresolved', candidates: [], diagnostics: ['no provider candidate sets supplied'] };
+  if (!results.every((result) => result && typeof result === 'object' && authenticatedProviderResults.has(result))) {
+    return { status: 'unresolved', candidates: [], diagnostics: ['provider candidate sets must be authenticated by the local provider cascade'] };
+  }
   if (results.some((result) => result.status === 'provider_error')) return { status: 'unresolved', candidates: [], diagnostics: ['provider error prevents candidate-set intersection'] };
   if (results.some((result) => result.status === 'unresolved' && result.candidates.length > 0) || results.some((result) => result.status !== 'unresolved' && result.candidates.length === 0)) return { status: 'unresolved', candidates: [], diagnostics: ['provider status is inconsistent with its candidate set'] };
   if (new Set(results.map((result) => `${result.provider}\u0000${result.snapshotHash}`)).size !== results.length) return { status: 'unresolved', candidates: [], diagnostics: ['candidate sets are not independently namespaced provider observations'] };

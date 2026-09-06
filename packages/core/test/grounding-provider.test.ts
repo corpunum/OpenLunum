@@ -34,6 +34,16 @@ const records = [
 
 const provider = createOmwProvider({ version: 'omw-data/2.0-dev-fixture', records });
 
+function authenticatedStableResult(providerName: string, language: string, candidates: readonly string[]) {
+  const stable = createStableEntityProvider({
+    provider: providerName,
+    providerVersion: 'intersection-fixture',
+    snapshotHash: `${providerName === 'a' ? 'a' : 'b'}`.repeat(64),
+    resolveExact: () => candidates.map((externalId) => ({ externalId, evidence: ['fixture'] })),
+  });
+  return resolveGroundingCascade({ proposal: proposal(), language }, [stable]).results[0]!;
+}
+
 test('OMW provider converges exact multilingual lemmas and rejects composition overreach', () => {
   const en = provider.resolve({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' });
   const el = provider.resolve({ proposal: proposal('φάκελος'), language: 'el', partOfSpeech: 'noun' });
@@ -77,8 +87,8 @@ test('morphology augmentation is candidate generation, exact only after unique p
 
 test('candidate-set intersection narrows only explicit shared evidence', () => {
   const result = intersectGroundingCandidateSets([
-    { status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] },
-    { status: 'resolved_exact', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
+    authenticatedStableResult('a', 'en', ['ili:i1', 'ili:i2']),
+    authenticatedStableResult('b', 'el', ['ili:i1']),
   ], { relation: 'same-translation' });
   assert.equal(result.status, 'candidate_narrowed');
   assert.equal(result.candidates[0]?.externalId, 'ili:i1');
@@ -90,7 +100,11 @@ test('candidate-set intersection narrows only explicit shared evidence', () => {
   });
   assert.equal(attemptedMaterialization.status, 'invalid');
   assert.match(attemptedMaterialization.issues[0]!, /authenticated/u);
-  assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] }], { relation: 'same-concept' }).status, 'ambiguous');
+  assert.equal(intersectGroundingCandidateSets([
+    { status: 'resolved_exact', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
+    { status: 'resolved_exact', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
+  ], { relation: 'same-translation' }).status, 'unresolved');
+  assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] }], { relation: 'same-concept' }).status, 'unresolved');
   assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] }, { status: 'ambiguous', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'Q1', evidence: [] }], diagnostics: [] }], { relation: 'same-translation' }).status, 'unresolved');
   assert.match(intersectGroundingCandidateSets([], { relation: 'same-concept' }).diagnostics[0]!, /no provider/u);
   assert.match(intersectGroundingCandidateSets([], undefined as never).diagnostics[0]!, /explicit semantic relation/u);
