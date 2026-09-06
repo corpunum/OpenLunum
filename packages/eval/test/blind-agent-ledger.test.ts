@@ -38,3 +38,11 @@ test('blind ledger reports malformed source entries instead of throwing', () => 
   assert.equal(result.valid, false);
   assert.match(result.errors[0]!, /source\[0\] handle/u);
 });
+
+test('blind ledger rejects a provenance source hash that is not bound to its source', () => {
+  const result = validateBlindAgentLedger(source, [{
+    handle: 'opaque-a', result: { candidateSem: sem, provenance: { sourceHash: 'a'.repeat(64) } },
+  }]);
+  assert.equal(result.valid, false);
+  assert.match(result.errors.join('\n'), /sourceHash/u);
+});

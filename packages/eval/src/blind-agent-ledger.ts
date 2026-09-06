@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { normalizeSemanticCandidate, semanticFingerprint, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 
@@ -36,6 +37,10 @@ function findForbidden(value: unknown, path = '$'): string[] {
   ]);
 }
 
+function sourceHash(sourceText: string): string {
+  return createHash('sha256').update(sourceText).digest('hex');
+}
+
 /** Validate an opaque, source-only candidate ledger before private scoring. */
 export function validateBlindAgentLedger(source: readonly BlindSourceItem[], rows: readonly BlindCandidateRow[]): BlindLedgerValidation {
   const errors: string[] = [];
@@ -67,6 +72,12 @@ export function validateBlindAgentLedger(source: readonly BlindSourceItem[], row
     if (!resultKeys.every((key) => key === 'candidateSem' || key === 'provenance')) errors.push(`row[${index}] result contains unsupported fields`);
     const forbidden = findForbidden(row.result, `rows[${index}].result`);
     errors.push(...forbidden.map((key) => `forbidden evaluator field: ${key}`));
+    const sourceItem = source.find((item) => item && typeof item === 'object' && item.handle === row.handle);
+    const declaredSourceHash = row.result.provenance && typeof row.result.provenance === 'object' && !Array.isArray(row.result.provenance)
+      ? (row.result.provenance as Record<string, unknown>).sourceHash : undefined;
+    if (declaredSourceHash !== undefined && (typeof declaredSourceHash !== 'string' || !/^[0-9a-f]{64}$/u.test(declaredSourceHash) || !sourceItem || typeof sourceItem.sourceText !== 'string' || declaredSourceHash !== sourceHash(sourceItem.sourceText))) {
+      errors.push(`row[${index}] provenance sourceHash does not match the source manifest`);
+    }
     if (row.result.candidateSem === null) { abstentions++; continue; }
     if (!row.result.candidateSem || typeof row.result.candidateSem !== 'object' || Array.isArray(row.result.candidateSem)) { errors.push(`row[${index}] candidateSem must be an object or null`); continue; }
     const structural = validateSemanticCandidate(row.result.candidateSem);
