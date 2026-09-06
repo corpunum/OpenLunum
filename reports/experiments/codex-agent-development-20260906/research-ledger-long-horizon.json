@@ -328,6 +328,13 @@
       "evidence": "The custody audit identified the prior all-memory denominator as inflation-prone. Existing retrieval tests and the full evaluator suite pass after correction.",
       "decision": "Keep pair metrics aligned with global identity-coverage denominators.",
       "commit": "working-tree"
+    },
+    {
+      "hypothesis": "Comparison callers need an explicit lfp:2.1 result instead of inferring semantic identity from the compatibility exactFingerprint field.",
+      "implementation": "compareSem now preserves legacy exactFingerprint and additionally reports semanticIdentityExact, computed through semanticFingerprint with fail-closed frame/grounding gates; added an evidence-only field regression.",
+      "evidence": "Core suite passed 1,806/1,806. An evidence-only term annotation makes legacy equality false while semanticIdentityExact remains true.",
+      "decision": "Keep both fields during compatibility migration; new semantic evaluation should consume semanticIdentityExact.",
+      "commit": "working-tree"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

@@ -422,6 +422,20 @@ test('compareSem (core, exact/feature-recall) reports the same hard invariant fi
   assert.ok(comparison.hardInvariants.some((firing) => firing.code === 'negation-flip'));
 });
 
+test('compareSem exposes lfp:2.1 identity separately from legacy exactFingerprint', () => {
+  const sem: LunumSem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: {
+      experiencer: { type: 'actor', id: 'alex' }, theme: { type: 'concept', id: 'quiet_mode' },
+    }, negated: false }],
+  };
+  const annotated = structuredClone(sem) as LunumSem;
+  (annotated.clauses[0]!.roles.theme as Record<string, unknown>).surface = 'quiet mode';
+  const comparison = compareSem(sem, annotated);
+  assert.equal(comparison.exactFingerprint, false);
+  assert.equal(comparison.semanticIdentityExact, true);
+});
+
 test('compareSem (core) reports obligation-permission mismatch as hard invariant', () => {
   const a = baseSem();
   const b = baseSem();

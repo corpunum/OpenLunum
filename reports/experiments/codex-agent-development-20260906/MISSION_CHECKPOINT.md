@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:12:03+03:00
+Recorded: 2026-09-06T18:15:40+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 6270c4c59143d7280aaa3af712c964af80537dc6
+Current HEAD: ae603ca4a0b54ea07ee18aa40373e889d0daf0a3
 
 ## Scope and prohibitions
 
@@ -216,10 +216,13 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Made the MCP compatibility fingerprint response explicitly report
   `identityScope=legacy-compatibility` and `semanticIdentity=false`; lfp:2.1
   hashing remains available only through the contained submission path.
+- Added explicit `semanticIdentityExact` to `compareSem` while preserving the
+  legacy `exactFingerprint` field; evidence-only annotations are now covered
+  by a regression proving the distinction.
 
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `6270c4c59143d7280aaa3af712c964af80537dc6`.
+code/evidence boundary is `ae603ca4a0b54ea07ee18aa40373e889d0daf0a3`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
