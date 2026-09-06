@@ -66,6 +66,30 @@ test('raw-text retrieval attributes extractor abstention and rejects wrong-but-v
   assert.equal(report.queryResults.find((result) => result.queryId === 'wrong-role')?.retrievedMemoryIds.length, 0);
 });
 
+test('negative rejection does not treat query abstention as a comparable safe rejection', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [{ id: 'memory', text: 'Known fact.', language: 'en' }],
+    queries: [{ id: 'negative', text: 'Unknown fact?', language: 'en', expectedMemoryIds: [] }],
+    extract: ({ kind }) => kind === 'memory' ? sem('publish', 'known_fact') : null,
+  });
+  assert.equal(report.metrics.negativeQueryCount, 1);
+  assert.equal(report.metrics.negativeComparableQueryCount, 0);
+  assert.equal(report.metrics.negativeRejectionAccuracy, 0);
+});
+
+test('retrieval candidate count contains only identity-usable memories', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'usable', text: 'Usable fact.', language: 'en' },
+      { id: 'unframed', text: 'Unframed fact.', language: 'en' },
+    ],
+    queries: [{ id: 'q', text: 'Usable fact?', language: 'en', expectedMemoryIds: ['usable'] }],
+    extract: ({ text }) => text.startsWith('Unframed') ? sem('share', 'fact') : sem('publish', 'fact'),
+  });
+  assert.equal(report.metrics.memoryIdentityAvailable, 1);
+  assert.equal(report.queryResults[0]?.candidateCount, 1);
+});
+
 test('baseline hooks receive raw text only and are reported beside semantic retrieval', async () => {
   const memory = sem('publish', 'guide', { audience: { type: 'actor', id: 'team' } });
   const seen: string[] = [];
