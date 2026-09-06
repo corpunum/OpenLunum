@@ -186,7 +186,7 @@ export const buildCandidateTool: LunumToolDefinition = {
   handler: async (input): Promise<McpToolResponse> => {
     try {
       const result = buildCandidateSem(input as unknown as CandidateBuilderInput);
-      return ok({ success: true, candidate: result.sem, frame: result.frame, allowedRoles: result.allowedRoles, requiredRoles: result.requiredRoles });
+      return ok({ success: true, candidate: result.sem, frame: result.frame, allowedRoles: result.allowedRoles, requiredRoles: result.requiredRoles, atLeastOneOf: result.atLeastOneOf });
     } catch (error) {
       return err((error as Error).message);
     }

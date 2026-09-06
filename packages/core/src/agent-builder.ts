@@ -25,6 +25,8 @@ export interface CandidateBuilderResult {
   frame: (typeof CANONICAL_SEMANTIC_FRAMES)[string];
   allowedRoles: readonly string[];
   requiredRoles: readonly string[];
+  /** Explicit alternatives that satisfy a frame's minimum semantic target. */
+  atLeastOneOf: readonly string[] | null;
 }
 
 /**
@@ -71,5 +73,6 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
     frame,
     allowedRoles: Object.freeze(allowedRoles),
     requiredRoles: Object.freeze(frame.roles.filter((role) => role.required).map((role) => role.name)),
+    atLeastOneOf: frame.atLeastOneOf ? Object.freeze([...frame.atLeastOneOf]) : null,
   };
 }

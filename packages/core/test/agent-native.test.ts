@@ -21,6 +21,13 @@ test('frame-first builder creates only a canonical transport envelope', () => {
   assert.equal(built.sem.schema, 'lunum-sem/0.1-draft');
   assert.deepEqual(Object.keys(built.sem.clauses[0]!.roles).sort(), ['experiencer', 'theme']);
   assert.deepEqual(built.requiredRoles, ['experiencer', 'theme']);
+  assert.equal(built.atLeastOneOf, null);
+  const retry = buildCandidateSem({
+    world: 'real', kind: 'instruction', predicate: 'retry',
+    roles: { theme: { type: 'object', id: 'upload' } },
+  });
+  assert.deepEqual(retry.requiredRoles, []);
+  assert.deepEqual(retry.atLeastOneOf, ['count', 'theme']);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'simple_fact', predicate: 'share', roles: {} }), /unframed_predicate/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: {} }), /invalid_builder_frame/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'instruction', predicate: 'send', roles: { agent: 'maria', object: 'report' } }), /invalid_builder_frame/);
