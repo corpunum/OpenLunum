@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: cc35502550dc86e706e425cabf24402e89401584
+Source/evidence boundary before this checkpoint commit: dbabf991ad9f790346c711c93b8b75d51455a9fd
 
 ## Scope and prohibitions
 
@@ -320,6 +320,10 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Independently audited a fresh 12-row supported-predicate corpus proposal;
   9/12 rows passed frame completeness and 3 send rows were rejected for
   recipient/destination exclusivity. No rows were scored.
+- Ran a fresh independent-agent EN↔EL lexical probe against real OMW/CILI:
+  11/12 both-covered, 8/12 shared candidate sets, only 1/12 uniquely resolved,
+  10/12 ambiguous, and 1/12 unresolved. This rejects a coverage-only diagnosis
+  and points to contextual candidate-set disambiguation.
 
 ## Uncommitted state
 
