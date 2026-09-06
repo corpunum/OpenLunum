@@ -237,6 +237,13 @@
       "evidence": "Core suite passes 1,805/1,805; the focused grounding security suite passes 34/34; workspace verification after the change completed with all package gates and the 16-item evaluation smoke succeeding. Attempts to mutate a candidate ID or minted canonical ID throw and leave the trusted value unchanged.",
       "decision": "Keep immutable capability objects. This closes post-validation tampering without altering semantic identity, protocol frames, or provider selection. No protected corpus was created or rescored.",
       "commit": "e2d45801d2e1c0ee9cb4f0e1c09583915bd3b33d"
+    },
+    {
+      "hypothesis": "German identity-conditioned morphology was unavailable because the audit only attempted an OMW tab, while the pinned OdeNet WN-LMF snapshot can provide the same provider boundary.",
+      "implementation": "Extended the existing independent UD/UniMorph audit to load German through importWnLmf and the pinned OdeNet v1.4 XML snapshot; no parallel importer or protocol change was introduced.",
+      "evidence": "German rerun: 100 UD observations, 24 gold identities available, raw identity 6/100 with 1 correct, morphology-augmented identity 19/100 with 19/19 correct, candidate-set recall 67/100, 48 ambiguous, 33 unresolved, zero false exact among unique gold identities. Output is unimorph-ud-independent-odenet-rerun.json; resource provenance remains the pinned OdeNet manifest.",
+      "decision": "Keep the German resource path and report its coverage honestly. The result confirms morphology is high-precision but incomplete candidate evidence; it does not change the fail-closed exact-identity policy or warrant protected evaluation.",
+      "commit": "6c3ad1c5b56a5c51f3ddd794243c05eda8779c17"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

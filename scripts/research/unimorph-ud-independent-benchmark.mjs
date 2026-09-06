@@ -7,15 +7,16 @@
  */
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { createOmwProvider, createMorphologyAugmentedProvider, importOmwTab } from '../../packages/core/dist/src/grounding-provider.js';
+import { createOmwProvider, createMorphologyAugmentedProvider, importOmwTab, importWnLmf } from '../../packages/core/dist/src/grounding-provider.js';
 
 const udRoot = process.env.OPENLUNUM_UD_ROOT;
 if (!udRoot) throw new Error('OPENLUNUM_UD_ROOT is required');
 const omwRoot = process.env.OPENLUNUM_OMW_ROOT ?? '/tmp/openlunum-omw.GONbNp/data';
 const ciliRoot = process.env.OPENLUNUM_CILI_ROOT ?? '/tmp/openlunum-cili-v1.0.kPBzyI/data';
 const uniRoot = process.env.OPENLUNUM_UNIMORPH_ROOT ?? '/tmp/openlunum-unimorph.oLd9sO';
+const odenetXml = process.env.OPENLUNUM_ODENET_XML ?? '/tmp/openlunum-odenet-rerun/odenet-1.4/deWordNet.xml';
 const perLanguage = Number(process.env.OPENLUNUM_UD_SAMPLE ?? 100);
-const files = { en: ['English-EWT', 'en_ewt-ud-dev.conllu', 'eng', 'wns/eng/wn-data-eng.tab'], el: ['Greek-GDT', 'el_gdt-ud-dev.conllu', 'ell', 'wns/ell/wn-data-ell.tab'], es: ['Spanish-AnCora', 'es_ancora-ud-dev.conllu', 'spa', 'wns/mcr/wn-data-spa.tab'], fr: ['French-GSD', 'fr_gsd-ud-dev.conllu', 'fra', 'wns/fra/wn-data-fra.tab'], de: ['German-GSD', 'de_gsd-ud-dev.conllu', 'deu', 'wns/deu/wn-data-deu.tab'], id: ['Indonesian-GSD', 'id_gsd-ud-dev.conllu', 'ind', 'wns/msa/wn-data-ind.tab'] };
+const files = { en: ['English-EWT', 'en_ewt-ud-dev.conllu', 'eng', 'wns/eng/wn-data-eng.tab'], el: ['Greek-GDT', 'el_gdt-ud-dev.conllu', 'ell', 'wns/ell/wn-data-ell.tab'], es: ['Spanish-AnCora', 'es_ancora-ud-dev.conllu', 'spa', 'wns/mcr/wn-data-spa.tab'], fr: ['French-GSD', 'fr_gsd-ud-dev.conllu', 'fra', 'wns/fra/wn-data-fra.tab'], de: ['German-GSD', 'de_gsd-ud-dev.conllu', 'deu', null], id: ['Indonesian-GSD', 'id_gsd-ud-dev.conllu', 'ind', 'wns/msa/wn-data-ind.tab'] };
 const posMap = { NOUN: 'noun', VERB: 'verb', ADJ: 'adjective' };
 const proposal = (key) => ({ path: 'clauses[0].roles.theme', termType: 'concept', head: { kind: 'symbol', namespace: 'lex', key }, modifiers: [] });
 const hash = (text) => createHash('sha256').update(text).digest('hex');
@@ -25,10 +26,12 @@ for (const [language, [treebank, udFile, uniRepo, omwFile]] of Object.entries(fi
   const udPath = `${udRoot}/${treebank}/${udFile}`;
   const udText = readFileSync(udPath, 'utf8');
   const uniText = readFileSync(`${uniRoot}/${uniRepo}/${uniRepo}`, 'utf8');
-  const omwPath = `${omwRoot}/${omwFile}`;
+  const omwPath = omwFile ? `${omwRoot}/${omwFile}` : odenetXml;
   let base;
   try {
-    const imported = importOmwTab(readFileSync(omwPath, 'utf8'), { language, source: 'omw-data/v2.0', synsetToInterlingualId: cili });
+    const imported = omwFile
+      ? importOmwTab(readFileSync(omwPath, 'utf8'), { language, source: 'omw-data/v2.0', synsetToInterlingualId: cili })
+      : importWnLmf(readFileSync(omwPath, 'utf8'), { language, source: 'odenet/v1.4', license: 'CC BY-SA 4.0' });
     base = createOmwProvider({ version: 'omw-data/v2.0+cili/v1.0', records: imported.records });
   } catch (error) {
     out.languages[language] = { treebank, udFile, udSnapshotHash: hash(udText), unimorphSnapshotHash: hash(uniText), status: 'resource_unavailable', error: String(error) };
@@ -75,4 +78,6 @@ for (const [language, [treebank, udFile, uniRepo, omwFile]] of Object.entries(fi
   }
   out.languages[language] = { treebank, udFile, udSnapshotHash: hash(udText), unimorphSnapshotHash: hash(uniText), counts, rates: { goldEligibility: counts.total ? counts.goldIdentityAvailable / counts.total : 0, rawCoverage: counts.total ? counts.rawIdentityAvailable / counts.total : 0, rawAccuracyAll: counts.total ? counts.rawCorrect / counts.total : 0, candidateCoverage: counts.total ? counts.candidateIdentityAvailable / counts.total : 0, candidateAccuracyAll: counts.total ? counts.candidateCorrect / counts.total : 0, candidateSetRecall: counts.total ? counts.candidateSetContainsGold / counts.total : 0, falseExactRateAmongGoldUnique: counts.goldIdentityAvailable ? counts.falseExactWhenGoldUnique / counts.goldIdentityAvailable : 0, ambiguityRate: counts.total ? counts.ambiguous / counts.total : 0, unresolvedRate: counts.total ? counts.unresolved / counts.total : 0 } };
 }
+const outputPath = process.env.OPENLUNUM_UNIMORPH_UD_OUT;
+if (outputPath) writeFileSync(outputPath, `${JSON.stringify(out, null, 2)}\n`);
 console.log(JSON.stringify(out, null, 2));
