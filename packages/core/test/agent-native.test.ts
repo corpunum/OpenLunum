@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getExtractionContract, submitCandidate, submitCandidateWithGrounding } from '../src/agent-native.js';
+import { buildCandidateSem } from '../src/agent-builder.js';
 
 const validPreference = {
   schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
@@ -11,6 +12,18 @@ const validPreference = {
 };
 
 const provenance = { extractorType: 'codex_agent' as const, extractorId: 'test-agent' };
+
+test('frame-first builder creates only a canonical transport envelope', () => {
+  const built = buildCandidateSem({
+    world: 'real', kind: 'preference', predicate: 'prefer',
+    roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'quiet_mode' } },
+  });
+  assert.equal(built.sem.schema, 'lunum-sem/0.1-draft');
+  assert.deepEqual(Object.keys(built.sem.clauses[0]!.roles).sort(), ['experiencer', 'theme']);
+  assert.deepEqual(built.requiredRoles, ['experiencer', 'theme']);
+  assert.throws(() => buildCandidateSem({ world: 'real', kind: 'simple_fact', predicate: 'share', roles: {} }), /unframed_predicate/);
+  assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: { experiencer: 'x', theme: 'y', manner: 'z' } }), /unexpected_frame_roles/);
+});
 
 test('extraction contract is generated from the protocol and frame registries', () => {
   const first = getExtractionContract();

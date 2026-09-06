@@ -99,6 +99,7 @@ describe('CliCommand type', () => {
       'encode',
       'submit-candidate',
       'agent-contract',
+      'build-candidate',
       'compile',
       'migrate',
       'pipeline',

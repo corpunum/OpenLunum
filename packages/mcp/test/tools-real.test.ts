@@ -13,7 +13,7 @@ function getText(result: { content: Array<{ text?: string }> }): string {
 }
 
 test('lunumTools has the real agent-native tools', () => {
-  assert.strictEqual(lunumTools.length, 9);
+  assert.strictEqual(lunumTools.length, 10);
   const names = lunumTools.map((t) => t.name);
   assert.ok(names.includes('lunum_derive'));
   assert.ok(names.includes('lunum_compile_context'));
@@ -24,6 +24,18 @@ test('lunumTools has the real agent-native tools', () => {
   assert.ok(names.includes('lunum_classify'));
   assert.ok(names.includes('lunum_get_extraction_contract'));
   assert.ok(names.includes('lunum_submit_candidate'));
+  assert.ok(names.includes('lunum_build_candidate'));
+});
+
+test('lunum_build_candidate returns a candidate without certifying it', async () => {
+  const data = JSON.parse(getText(await find('lunum_build_candidate').handler({
+    world: 'real', kind: 'preference', predicate: 'prefer',
+    roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'quiet_mode' } },
+  })));
+  assert.equal(data.success, true);
+  assert.equal(data.candidate.schema, 'lunum-sem/0.1-draft');
+  assert.ok(data.frame);
+  assert.equal(data.promotable, undefined);
 });
 
 test('lunum_get_extraction_contract returns registry-derived hashes and frames', async () => {

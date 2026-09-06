@@ -108,6 +108,7 @@ export * from './threshold-calibration.js';
 export * from './release-governance.js';
 export * from './agent-interop.js';
 export * from './agent-native.js';
+export * from './agent-builder.js';
 export * from './grounding.js';
 export * from './grounding-provider.js';
 export * from './multilingual-memory-pilot.js';

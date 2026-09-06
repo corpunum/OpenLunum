@@ -14,7 +14,7 @@ test('createLunumMcpServer accepts custom tools subset', () => {
 });
 
 test('lunumTools contains the real agent-native tools', () => {
-  assert.strictEqual(lunumTools.length, 9);
+  assert.strictEqual(lunumTools.length, 10);
   const names = lunumTools.map((t) => t.name);
   assert.ok(names.includes('lunum_derive'));
   assert.ok(names.includes('lunum_compile_context'));

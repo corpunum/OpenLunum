@@ -1,0 +1,12 @@
+{
+  "id": "agent-typed-builder-20260906",
+  "type": "development",
+  "status": "planned",
+  "hypothesis": "A frame-derived candidate builder will reduce transport and structural failures without granting identity or changing semantic frames.",
+  "baseline": "free-form agent candidate JSON submitted through submitCandidate",
+  "intervention": "buildCandidateSem constructs only the canonical transport envelope for a registered framed predicate; submitCandidate remains mandatory",
+  "protectedData": false,
+  "model": "none; agent-native development workflow",
+  "evaluation": ["transport validity", "protocol canonicality", "frame validity", "candidate identity availability", "exact semantic identity", "critical-negative separation"],
+  "visionConstraints": ["candidate remains untrusted", "no gold exposed", "unframed predicates fail closed", "no identity semantics changed"]
+}

@@ -10,7 +10,7 @@ export const CLI_CONTRACT_VERSION = '1.1.0' as const;
 /**
  * CliCommand: Union of all supported CLI commands
  */
-export type CliCommand = 'inspect' | 'encode' | 'submit-candidate' | 'agent-contract' | 'compile' | 'migrate' | 'pipeline' | 'quality-gate' | 'process-jsonl' | 'contract';
+export type CliCommand = 'inspect' | 'encode' | 'submit-candidate' | 'agent-contract' | 'build-candidate' | 'compile' | 'migrate' | 'pipeline' | 'quality-gate' | 'process-jsonl' | 'contract';
 
 /**
  * CliExitCode: Enumerated exit codes with stable numeric values
@@ -176,6 +176,14 @@ export const COMMANDS: readonly CLICommandSpec[] = [
     description: 'Print the generated machine-readable agent extraction contract',
     flags: [],
     exitCodes: [{ code: EXIT_CODES.SUCCESS, meaning: 'Contract written to stdout' }],
+    stdinSupport: false,
+    stdoutFormat: 'json',
+  },
+  {
+    name: 'build-candidate',
+    description: 'Build an untrusted candidate from canonical frame slots',
+    flags: [{ name: 'spec', required: true, valueType: 'string', description: 'Path to builder input JSON' }],
+    exitCodes: [{ code: EXIT_CODES.SUCCESS, meaning: 'Candidate output written to stdout' }, { code: EXIT_CODES.INPUT_VALIDATION_ERROR, meaning: 'Builder input failed validation' }],
     stdinSupport: false,
     stdoutFormat: 'json',
   },

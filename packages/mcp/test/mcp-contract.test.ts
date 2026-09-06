@@ -16,7 +16,7 @@ describe('MCP contract', () => {
 
   it('MCP_TOOLS includes expected tools', () => {
     const names = MCP_TOOLS.map(t => t.name);
-    for (const expected of ['lunum_derive', 'lunum_get_extraction_contract', 'lunum_submit_candidate', 'lunum_compile_context', 'lunum_fingerprint', 'lunum_validate', 'lunum_render', 'lunum_compare', 'lunum_classify']) {
+    for (const expected of ['lunum_derive', 'lunum_get_extraction_contract', 'lunum_submit_candidate', 'lunum_build_candidate', 'lunum_compile_context', 'lunum_fingerprint', 'lunum_validate', 'lunum_render', 'lunum_compare', 'lunum_classify']) {
       assert.ok(names.includes(expected), `missing tool: ${expected}`);
     }
   });

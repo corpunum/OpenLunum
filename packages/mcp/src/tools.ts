@@ -11,8 +11,9 @@ import {
   getExtractionContract,
   submitCandidate,
   submitCandidateWithGrounding,
+  buildCandidateSem,
 } from '@corpunum/lunum';
-import type { ContextMode, GroundingProposal, LunumSem } from '@corpunum/lunum';
+import type { ContextMode, GroundingProposal, LunumSem, CandidateBuilderInput } from '@corpunum/lunum';
 import { resolveConfig } from './config.js';
 
 /** Structural boundary for an evaluator-owned blind session. MCP never sees gold. */
@@ -169,6 +170,29 @@ export const submitCandidateTool: LunumToolDefinition = {
   },
 };
 
+export const buildCandidateTool: LunumToolDefinition = {
+  name: 'lunum_build_candidate',
+  description: 'Build an untrusted transport-shaped candidate from agent-selected canonical frame slots. The result must still be submitted for deterministic validation and grounding.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      world: { type: 'string' }, kind: { type: 'string' }, predicate: { type: 'string' },
+      roles: { type: 'object', description: 'Agent-selected values keyed by roles in the returned canonical frame.' },
+      negated: { type: 'boolean' }, modality: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+      time: {}, conditions: { type: 'array' }, consequences: { type: 'array' },
+    },
+    required: ['world', 'kind', 'predicate', 'roles'],
+  },
+  handler: async (input): Promise<McpToolResponse> => {
+    try {
+      const result = buildCandidateSem(input as unknown as CandidateBuilderInput);
+      return ok({ success: true, candidate: result.sem, frame: result.frame, allowedRoles: result.allowedRoles, requiredRoles: result.requiredRoles });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
+
 /** Build optional blind-evaluation tools around an evaluator-private session. */
 export function createBlindEvaluationTools(session: BlindEvaluationSurface): LunumToolDefinition[] {
   return [
@@ -305,6 +329,7 @@ export const lunumTools: LunumToolDefinition[] = [
   deriveTool,
   extractionContractTool,
   submitCandidateTool,
+  buildCandidateTool,
   compileContextTool,
   fingerprintTool,
   validateTool,
