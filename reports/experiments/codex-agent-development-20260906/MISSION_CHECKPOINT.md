@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:56:20+03:00
+Recorded: 2026-09-06T18:02:10+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 6e92f9489b3a30ed8596f027266b4ea956a9f9eb
+Current HEAD: 9d2b63c3440bd4e70d564e25cad2bb6d0cb8f36c
 
 ## Scope and prohibitions
 
@@ -134,6 +134,9 @@ used.
   German OdeNet WN-LMF snapshot through the existing importer: German
   augmented identity was 19/100 with 19/19 unique outputs correct and 67/100
   candidate-set recall. German is now measured rather than marked unavailable.
+- Corrected the current morphology research note so the historical circular
+  identity probe is distinguished from the non-circular UD lemma audit and no
+  longer claims German identity evidence is unavailable.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -186,6 +189,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
 prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `6e92f9489b3a30ed8596f027266b4ea956a9f9eb`.
+current code/evidence boundary is `9d2b63c3440bd4e70d564e25cad2bb6d0cb8f36c`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

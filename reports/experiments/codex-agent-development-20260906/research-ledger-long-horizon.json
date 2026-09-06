@@ -244,6 +244,13 @@
       "evidence": "German rerun: 100 UD observations, 24 gold identities available, raw identity 6/100 with 1 correct, morphology-augmented identity 19/100 with 19/19 correct, candidate-set recall 67/100, 48 ambiguous, 33 unresolved, zero false exact among unique gold identities. Output is unimorph-ud-independent-odenet-rerun.json; resource provenance remains the pinned OdeNet manifest.",
       "decision": "Keep the German resource path and report its coverage honestly. The result confirms morphology is high-precision but incomplete candidate evidence; it does not change the fail-closed exact-identity policy or warrant protected evaluation.",
       "commit": "6c3ad1c5b56a5c51f3ddd794243c05eda8779c17"
+    },
+    {
+      "hypothesis": "The general morphology research note should continue to claim German identity evidence is unavailable after the OdeNet replay.",
+      "implementation": "Updated the current morphology research artifact to distinguish its circular identity coverage probe from the non-circular UD lemma audit and to record German OdeNet coverage accurately.",
+      "evidence": "The pinned OdeNet replay is persisted separately at unimorph-ud-independent-odenet-rerun.json; the note now no longer contradicts the measured German path.",
+      "decision": "Keep the historical independent summary immutable and use the new rerun for current diagnostics. No production semantic or identity behavior changed.",
+      "commit": "9d2b63c3440bd4e70d564e25cad2bb6d0cb8f36c"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
