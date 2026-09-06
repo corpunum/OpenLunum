@@ -223,9 +223,16 @@
       "evidence": "Core suite passes 1,803/1,803; evaluator suite passes 1,878/1,878; MCP suite passes 58/58; workspace pnpm verify completed successfully; direct forged `urn:attacker:fake-id` evidence is rejected before Sem mutation. No unrelated dirty files were staged.",
       "decision": "Keep the capability boundary. Serialized resolutions cannot be replayed directly; replay must re-authenticate through the provider cascade. This closes a genuine semantic-authority bypass without changing lfp:2.1 or frames.",
       "commit": "744fbd165708c0e9119992f7df5bb039d88fbdfa"
+    },
+    {
+      "hypothesis": "The UniMorph morphology gain remains valid when evaluated against independent UD lemma/POS annotations rather than OMW-derived identity labels.",
+      "implementation": "Added a development-only audit that samples inflected UD tokens, uses UniMorph only as the analyzer under test, and scores candidate lemma recovery directly against UD lemmas. OMW/CILI is not used in this audit.",
+      "evidence": "600 observations across EN/EL/ES/FR/DE/ID: analyzer coverage 356/600; candidate-set lemma recall 353/600 (58.8%); unique candidate precision 331/333 (99.4%); unique wrong outputs 4; ambiguity containing the UD lemma 21; unresolved 244. Per-language recall: EN 51%, EL 44%, ES 92%, FR 42%, DE 65%, ID 58%. The earlier 23/23 OMW identity result is therefore conservative but not a substitute for lemma accuracy.",
+      "decision": "Keep morphology as candidate generation only. It has high precision when unique but incomplete coverage and measurable ambiguity; do not promote it to unconditional exact identity. Next blocker remains a larger independently labeled source-only extraction benchmark.",
+      "commit": "a2e3b56e3fcbd998c111a1017689f43991cb2e94"
     }
   ],
-  "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
+  "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
   "protectedCorpus": "none created in this mission; prior inspected corpora remain diagnostic",
   "openBlockers": ["unbiased morphology accuracy", "contextual sense disambiguation", "large agent-native text-to-Sem benchmark", "retrieval from agent-extracted Sem", "second independent agent/model comparison"]
 }
