@@ -66,6 +66,11 @@ test('submission scores privately, persists immediately, and resumes without dup
   const session = await BlindAgentEvaluationSession.create('run-resume', items, dir);
   const first = await session.submit({ runId: 'run-resume', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent', extractorId: 'test' } });
   assert.equal(first.semanticIdentityExact, true);
+  assert.equal(first.transportValid, true);
+  assert.equal(first.structuralValid, true);
+  assert.equal(first.protocolCanonical, true);
+  assert.equal(first.frameValid, true);
+  assert.equal(first.grounded, true);
   assert.equal('goldSem' in first, false);
   assert.equal('goldIdentity' in first, false);
   const ledger = await readFile(path.join(dir, 'agent-results.jsonl'), 'utf8');
@@ -79,6 +84,7 @@ test('submission scores privately, persists immediately, and resumes without dup
   assert.deepEqual({ parseTargets: summary.parseTargets, parseExact: summary.parseExact, abstentionTargets: summary.abstentionTargets }, { parseTargets: 1, parseExact: 1, abstentionTargets: 1 });
   assert.equal(summary.parseExactMicro, 1);
   assert.equal(summary.completedItems, 1);
+  assert.deepEqual(summary.stageCounts, { transportValid: 1, structuralValid: 1, protocolCanonical: 1, frameValid: 1, grounded: 1 });
   await assert.rejects(() => resumed.submit({ runId: 'run-resume', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent' } }), /already completed/u);
 });
 
