@@ -397,7 +397,7 @@
       "implementation": "An isolated Codex agent received six English/Greek/Spanish/French/German/Indonesian preference sources and was required to emit direct builder fields only.",
       "evidence": "All six outputs used roles as a comma-separated string and used language tags as world rather than a protocol world. Transport-valid and identity-available counts were 0/6. No gold or expected identity was exposed.",
       "decision": "Keep the strict builder and record this as an agent-interface failure. Improve only through explicit generated tool/schema interaction, not permissive parsing or language-specific world aliases.",
-      "commit": "pending"
+      "commit": "7b56ca3a6d0eb2b1fb82f4d90e7ed05e3aaf2ed7"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

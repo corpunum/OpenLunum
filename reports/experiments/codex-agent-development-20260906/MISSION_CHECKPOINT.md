@@ -275,7 +275,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 ## Uncommitted state
 
-The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `6dda38287b2f9e5b9034f8ce76bbfbaffbf7ca37`.
+The current code/evidence boundary is `7b56ca3a6d0eb2b1fb82f4d90e7ed05e3aaf2ed7`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
