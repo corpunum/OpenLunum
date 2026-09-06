@@ -195,12 +195,25 @@ export const buildCandidateTool: LunumToolDefinition = {
 
 /** Build optional blind-evaluation tools around an evaluator-private session. */
 export function createBlindEvaluationTools(session: BlindEvaluationSurface): LunumToolDefinition[] {
+  function sourceOnlyNext(): unknown {
+    const item = session.next();
+    if (item === null) return null;
+    if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error('blind evaluator returned an invalid source item');
+    const value = item as Record<string, unknown>;
+    const allowed = ['runId', 'itemId', 'sourceLanguage', 'sourceText', 'contractVersion', 'contractHash'] as const;
+    const sanitized: Record<string, unknown> = {};
+    for (const key of allowed) if (value[key] !== undefined) sanitized[key] = value[key];
+    if (typeof sanitized.runId !== 'string' || typeof sanitized.itemId !== 'string' || typeof sanitized.sourceLanguage !== 'string' || typeof sanitized.sourceText !== 'string') throw new Error('blind evaluator returned an incomplete source item');
+    return sanitized;
+  }
   return [
     {
       name: 'lunum_eval_next',
       description: 'Return the next blind evaluation source item and extraction-contract binding. Gold and scoring metadata are never exposed.',
       inputSchema: { type: 'object', properties: {} },
-      handler: async (): Promise<McpToolResponse> => ok({ success: true, item: session.next() }),
+        handler: async (): Promise<McpToolResponse> => {
+          try { return ok({ success: true, item: sourceOnlyNext() }); } catch (error) { return err((error as Error).message); }
+        },
     },
     {
       name: 'lunum_eval_submit',

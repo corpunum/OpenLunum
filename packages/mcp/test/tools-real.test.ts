@@ -83,6 +83,19 @@ test('lunum_submit_candidate accepts explicit null abstention consistently with 
   assert.equal(data.submission.promotable, false);
 });
 
+test('blind eval_next strips evaluator-private fields at the MCP boundary', async () => {
+  const tools = createBlindEvaluationTools({
+    next: () => ({ runId: 'run', itemId: 'item', sourceLanguage: 'en', sourceText: 'source', contractVersion: 'v', contractHash: 'h', goldSem: { secret: true }, expectedFingerprint: 'secret', scoring: { answer: true } }),
+    submit: async () => undefined,
+  });
+  const data = JSON.parse(getText(await tools[0]!.handler({})));
+  assert.equal(data.success, true);
+  assert.equal(data.item.goldSem, undefined);
+  assert.equal(data.item.expectedFingerprint, undefined);
+  assert.equal(data.item.scoring, undefined);
+  assert.equal(data.item.sourceText, 'source');
+});
+
 test('lunum_derive returns real sidecar from text', async () => {
   const tool = find('lunum_derive');
   const result = await tool.handler({ text: 'The quick brown fox jumps over the lazy dog' });

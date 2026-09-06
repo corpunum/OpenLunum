@@ -1,6 +1,7 @@
 import { SEM_SCHEMA } from './constants.js';
-import { CANONICAL_SEMANTIC_FRAMES } from './frame-registry.js';
+import { CANONICAL_SEMANTIC_FRAMES, validateSemFrames } from './frame-registry.js';
 import { SEMANTIC_PROTOCOL_REGISTRY, basicIdentifier } from './semantic-registry.js';
+import { validateSem } from './canonicalize.js';
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 
 /**
@@ -45,7 +46,12 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
   const frame = CANONICAL_SEMANTIC_FRAMES[predicate];
   if (!frame) throw new TypeError(`unframed_predicate:${predicate}`);
   if (!input.roles || typeof input.roles !== 'object' || Array.isArray(input.roles)) throw new TypeError('roles_object_required');
-  const roles = { ...input.roles };
+  const roles: Record<string, LunumTerm> = {};
+  for (const [rawRole, term] of Object.entries(input.roles)) {
+    const normalizedRole = SEMANTIC_PROTOCOL_REGISTRY.aliases.role[basicIdentifier(rawRole)] ?? basicIdentifier(rawRole);
+    if (roles[normalizedRole] !== undefined) throw new TypeError(`role_collision:${rawRole}->${normalizedRole}`);
+    roles[normalizedRole] = term;
+  }
   const allowedRoles = frame.roles.map((role) => role.name);
   const unexpected = Object.keys(roles).filter((role) => !allowedRoles.includes(basicIdentifier(role)));
   if (unexpected.length) throw new TypeError(`unexpected_frame_roles:${unexpected.join(',')}`);
@@ -55,8 +61,13 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
   if (input.time !== undefined) clause.time = input.time;
   if (input.conditions !== undefined) clause.conditions = input.conditions;
   if (input.consequences !== undefined) clause.consequences = input.consequences;
+  const sem: LunumSem = { schema: SEM_SCHEMA, world, kind, clauses: [clause] };
+  const transport = validateSem(sem);
+  if (!transport.ok) throw new TypeError(`invalid_builder_candidate:${transport.errors.join('; ')}`);
+  const frameValidation = validateSemFrames(sem);
+  if (!frameValidation.valid) throw new TypeError(`invalid_builder_frame:${frameValidation.issues.map((issue) => issue.code).join(',')}`);
   return {
-    sem: { schema: SEM_SCHEMA, world, kind, clauses: [clause] },
+    sem,
     frame,
     allowedRoles: Object.freeze(allowedRoles),
     requiredRoles: Object.freeze(frame.roles.filter((role) => role.required).map((role) => role.name)),
