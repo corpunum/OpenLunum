@@ -272,9 +272,13 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   correctly rejected by the strict builder. No gold or expected identity was
   exposed, so this is transport diagnostic evidence only. The builder was not
   broadened.
+- Clarified the generated builder contract to distinguish semantic `world`
+  from source language and to require `roles` as an object of typed terms;
+  core build/typecheck and 1,806 core tests passed. This changes no semantic
+  acceptance rule.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `7b56ca3a6d0eb2b1fb82f4d90e7ed05e3aaf2ed7`.
+The current code/evidence boundary is `116f5fa5bbad8fe26e674be4e1d55cc556d12e6a`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

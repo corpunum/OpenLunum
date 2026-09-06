@@ -398,6 +398,13 @@
       "evidence": "All six outputs used roles as a comma-separated string and used language tags as world rather than a protocol world. Transport-valid and identity-available counts were 0/6. No gold or expected identity was exposed.",
       "decision": "Keep the strict builder and record this as an agent-interface failure. Improve only through explicit generated tool/schema interaction, not permissive parsing or language-specific world aliases.",
       "commit": "7b56ca3a6d0eb2b1fb82f4d90e7ed05e3aaf2ed7"
+    },
+    {
+      "hypothesis": "The generated typed-builder contract should explicitly distinguish semantic world from source language and describe roles as a typed object.",
+      "implementation": "Added generated fieldSemantics metadata and regression assertions; no protocol, frame, identity, or builder acceptance rule changed.",
+      "evidence": "Core build/typecheck and 1,806 core tests passed. The metadata states that world is a protocol value, never a language tag, and roles is an object of typed terms.",
+      "decision": "Keep the clarification as a general agent-interface improvement; future extraction trials must use the actual generated contract rather than abbreviated prose.",
+      "commit": "116f5fa5bbad8fe26e674be4e1d55cc556d12e6a"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
