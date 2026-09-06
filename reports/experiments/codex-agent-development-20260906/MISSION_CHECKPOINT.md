@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: f17f6875119acedeaed51469533ebfd10d1c17a8
+Source/evidence boundary before this checkpoint commit: 78d4f72b349c7ec23d705b5b6deb8fdb86194d6d
 
 ## Scope and prohibitions
 
@@ -330,6 +330,10 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   remains 1,806/1,806. Historical OMW set analysis is now explicitly
   report-only and still shows 78 singleton narrowings, 22 ambiguities, and 19
   independently exact results.
+- Generated a recursive frame-first runtime JSON Schema from the authoritative
+  protocol/frame registries and wired MCP to expose it. Core agent-native tests
+  passed 9/9, core and MCP typechecks passed, and MCP tests passed 59/59.
+  Transport preflight remains distinct from semantic validation and identity.
 
 ## Uncommitted state
 

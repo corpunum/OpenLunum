@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T18:53:00+03:00",
-  "currentHead": "f17f6875119acedeaed51469533ebfd10d1c17a8",
+  "lastUpdated": "2026-09-06T19:02:00+03:00",
+  "currentHead": "78d4f72b349c7ec23d705b5b6deb8fdb86194d6d",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -496,6 +496,13 @@
       "evidence": "Core grounding-provider suite passed 26/26 and the full core unit suite passed 1,806/1,806. A forged same-namespace pair now returns unresolved, while authenticated provider outputs still narrow explicitly shared candidates. OMW replay remains 78 singleton narrowings, 22 ambiguous, and 19 independently exact.",
       "decision": "Keep the trust boundary. Candidate-set narrowing remains evidence only and cannot grant exact identity; callers must use authenticated provider outputs.",
       "commit": "f17f6875119acedeaed51469533ebfd10d1c17a8"
+    },
+    {
+      "hypothesis": "A generated runtime builder schema can reduce agent transport failures without duplicating semantic rules.",
+      "implementation": "Generated a recursive frame-first JSON Schema from the protocol/frame registries and wired MCP to expose it; retained the builder as the semantic authority.",
+      "evidence": "Core agent-native tests passed 9/9, core typecheck passed, and MCP tests passed 59/59 with the generated schema. Every canonical frame has a generated variant with its exact allowed roles; nested clauses recurse through the same generated frame set.",
+      "decision": "Keep the generated schema as transport preflight. It does not claim semantic extraction or identity and must remain synchronized with the registry.",
+      "commit": "78d4f72b349c7ec23d705b5b6deb8fdb86194d6d"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
