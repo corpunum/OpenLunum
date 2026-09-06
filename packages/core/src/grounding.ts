@@ -37,6 +37,8 @@ export interface GroundingProposal {
   /** Evidence only; never part of the grounding identity. */
   surface?: string;
   language?: string;
+  /** Optional lexical lookup hint; never part of grounding identity. */
+  partOfSpeech?: 'noun' | 'verb' | 'adjective' | 'adverb' | 'other';
 }
 
 export interface CanonicalGroundingProposal {

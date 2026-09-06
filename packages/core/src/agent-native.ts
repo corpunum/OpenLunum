@@ -18,6 +18,9 @@ import {
   evaluateGroundingProposals,
 } from './grounding.js';
 import type { GroundingEvaluation, GroundingProposal } from './grounding.js';
+import { materializeGroundingResolutions, canonicalizeGroundingProposal } from './grounding.js';
+import type { GroundingProvider, GroundingProviderResult } from './grounding-provider.js';
+import { resolveGroundingCascade, toGroundingResolution } from './grounding-provider.js';
 import type { LunumSem, SemanticTrustDecision } from './types.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
@@ -191,6 +194,11 @@ export interface GroundedCandidateSubmissionResult extends CandidateSubmissionRe
   grounding: GroundingEvaluation;
 }
 
+export interface ProviderGroundedCandidateSubmissionResult extends CandidateSubmissionResult {
+  grounding: GroundingEvaluation;
+  providerResults: readonly GroundingProviderResult[];
+}
+
 function failureClass(input: { structuralValid: boolean; protocolCanonical: boolean; frameValid: boolean; grounded: boolean; candidateIdentityAvailable: boolean; diagnostics: readonly string[] }): string | null {
   if (!input.structuralValid) return 'transport_or_structural_invalid';
   if (!input.protocolCanonical) return 'protocol_noncanonical';
@@ -286,4 +294,44 @@ export function submitCandidateWithGrounding(input: SubmitGroundedCandidateInput
     diagnostics: [...base.diagnostics, ...grounding.issues],
     grounding,
   };
+}
+
+/**
+ * Resolve explicit agent grounding proposals through caller-supplied,
+ * versioned providers, materialize only exact resolutions, then re-run the
+ * normal candidate gates. Provider evidence never bypasses validation and a
+ * missing/ambiguous provider result never receives exact identity.
+ */
+export function submitCandidateWithGroundingProviders(
+  input: SubmitGroundedCandidateInput,
+  providers: readonly GroundingProvider[],
+): ProviderGroundedCandidateSubmissionResult {
+  const base = submitCandidate(input);
+  const grounding = evaluateGroundingProposals(input.candidateSem, input.grounding);
+  if (grounding.status !== 'pending') {
+    return { ...base, candidateIdentityAvailable: false, semanticFingerprint: null, failureClass: 'grounding_invalid', diagnostics: [...base.diagnostics, ...grounding.issues], grounding, providerResults: [] };
+  }
+  const providerResults: GroundingProviderResult[] = [];
+  const resolutions = [];
+  for (const [index, proposal] of grounding.proposals.entries()) {
+    const sourceProposal: GroundingProposal = input.grounding[index] ?? proposal as GroundingProposal;
+    const canonical = canonicalizeGroundingProposal(sourceProposal);
+    if (!canonical.valid || !canonical.canonical) continue;
+    const result = resolveGroundingCascade({
+      proposal: sourceProposal,
+      language: sourceProposal.language ?? input.sourceLanguage ?? '',
+      ...(sourceProposal.partOfSpeech ? { partOfSpeech: sourceProposal.partOfSpeech } : {}),
+    }, providers);
+    providerResults.push(...result.results);
+    resolutions.push(toGroundingResolution(sourceProposal, result.results.find((item) => item.provider === result.provider) ?? result.results[result.results.length - 1]!));
+    if (result.status !== 'resolved_exact') {
+      return { ...base, candidateIdentityAvailable: false, semanticFingerprint: null, failureClass: result.status === 'provider_error' ? 'grounding_provider_error' : result.status === 'ambiguous' ? 'grounding_ambiguous' : 'grounding_unresolved', diagnostics: [...base.diagnostics, `grounding ${canonical.canonical.path}: ${result.status}`], grounding, providerResults };
+    }
+  }
+  const materialized = materializeGroundingResolutions(input.candidateSem, resolutions);
+  if (materialized.status !== 'resolved' || !materialized.sem) {
+    return { ...base, candidateIdentityAvailable: false, semanticFingerprint: null, failureClass: 'grounding_materialization_invalid', diagnostics: [...base.diagnostics, ...materialized.issues], grounding, providerResults };
+  }
+  const resolved = submitCandidate({ ...input, candidateSem: materialized.sem, provenance: { ...input.provenance, groundingProviders: providerResults.map((result) => ({ provider: result.provider, version: result.providerVersion, snapshotHash: result.snapshotHash })) } });
+  return { ...resolved, grounding, providerResults };
 }

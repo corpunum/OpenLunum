@@ -8,6 +8,7 @@ import {
   resolveGroundingCascade,
   toGroundingResolution,
 } from '../src/grounding-provider.js';
+import { submitCandidateWithGroundingProviders } from '../src/agent-native.js';
 import { materializeGroundingResolutions } from '../src/grounding.js';
 import type { GroundingModifier, GroundingProposal } from '../src/grounding.js';
 
@@ -137,4 +138,23 @@ test('OMW exact lookup requires POS and normalizes phrase separators conservativ
   assert.equal(provider.resolve({ proposal: proposal('blue_folder'), language: 'en' }).status, 'unresolved');
   assert.equal(provider.resolve({ proposal: proposal('blue  folder'), language: 'en', partOfSpeech: 'noun' }).status, 'resolved_exact');
   assert.equal(provider.resolve({ proposal: proposal('blue\tfolder'), language: 'en', partOfSpeech: 'noun' }).status, 'resolved_exact');
+});
+
+test('provider-backed submission materializes only exact grounding evidence', () => {
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'mira' }, theme: { type: 'concept', id: 'folder' } }, negated: false }] };
+  const grounded = submitCandidateWithGroundingProviders({
+    sourceText: 'A folder is preferred.', sourceLanguage: 'en', candidateSem: sem,
+    provenance: { extractorType: 'codex_agent' },
+    grounding: [{ ...proposal('folder'), language: 'en', partOfSpeech: 'noun' }],
+  }, [provider]);
+  assert.equal(grounded.candidateIdentityAvailable, true);
+  assert.match(grounded.semanticFingerprint ?? '', /^lfp:2\.1:/u);
+  assert.equal((grounded.sem?.clauses[0]?.roles.theme as { id?: string }).id, 'urn:omw-cili:ili:i123');
+  assert.equal(grounded.providerResults[0]?.status, 'resolved_exact');
+  const unresolved = submitCandidateWithGroundingProviders({
+    sourceText: 'A blue folder is preferred.', sourceLanguage: 'en', candidateSem: sem,
+    provenance: { extractorType: 'codex_agent' }, grounding: [{ ...proposal('folder', blueModifier), language: 'en', partOfSpeech: 'noun' }],
+  }, [provider]);
+  assert.equal(unresolved.candidateIdentityAvailable, false);
+  assert.equal(unresolved.failureClass, 'grounding_unresolved');
 });
