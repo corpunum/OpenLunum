@@ -89,6 +89,7 @@ export interface ExtractionContract {
   frameFirst: {
     mode: 'builder-then-submit';
     inputFields: readonly string[];
+    fieldSemantics: Readonly<Record<string, string>>;
     termShape: { discriminator: 'type'; identifierFields: readonly string[]; literalFields: readonly string[] };
     framePromptBlock: string;
     roleValues: string;
@@ -125,6 +126,12 @@ export function getExtractionContract(): ExtractionContract {
     frameFirst: {
       mode: 'builder-then-submit',
       inputFields: Object.freeze(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences']),
+      fieldSemantics: Object.freeze({
+        world: 'semantic world from the protocol registry (for example real); never a language tag',
+        kind: 'semantic clause kind from the protocol registry (for example preference)',
+        predicate: 'framed predicate identifier',
+        roles: 'object mapping canonical role names to typed LunumTerm objects; never a comma-separated list',
+      }),
       termShape: Object.freeze({ discriminator: 'type', identifierFields: Object.freeze(['id', 'ref']), literalFields: Object.freeze(['value']) }),
       framePromptBlock: canonicalFramePromptBlock(),
       roleValues: 'Use typed LunumTerm objects with the field name type (never termType). Identifier terms use id or ref; literal terms use value. The builder rejects missing or disallowed types, missing required roles, extra roles, and exclusive-role conflicts.',
