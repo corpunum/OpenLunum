@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:31:20+03:00
+Recorded: 2026-09-06T17:33:55+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: a837ee37c7f2e2b57b7d3a8f9e67d1547e2f8732
+Current HEAD: e69e44ebb722e621ebf1087de6fe70e65c19e0cf
 
 ## Scope and prohibitions
 
@@ -113,6 +113,10 @@ used.
 - Wired the validator into the retrieval harness. It rejects the historical
   candidate ledger because 13/22 candidates fail current lfp:2.1 identity;
   no historical report was rescored.
+- A tool-driven builder trial produced six valid builder inputs; all six
+  deterministic submissions passed protocol/frame/grounding/identity gates,
+  with three multilingual pairs converging. This is construction evidence,
+  not source-text exactness evidence.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -154,7 +158,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 118 minutes. Completed real-resource
+Elapsed at recording: approximately 120 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
