@@ -29,6 +29,61 @@ export interface CandidateBuilderResult {
   atLeastOneOf: readonly string[] | null;
 }
 
+/**
+ * Runtime JSON Schema for the frame-first envelope.  This is generated from
+ * the same registry used by the builder; it is a transport preflight only.
+ * The builder remains authoritative because JSON Schema cannot express every
+ * semantic/frame invariant (grounding and exact identity in particular).
+ */
+export function getCandidateBuilderSchema(): Record<string, unknown> {
+  const termObject: Record<string, unknown> = {
+    type: 'object',
+    properties: {
+      type: { type: 'string', enum: [...SEMANTIC_PROTOCOL_REGISTRY.termTypes] },
+      id: { type: 'string' },
+      value: {},
+    },
+    required: ['type'],
+    additionalProperties: true,
+  };
+  const term: Record<string, unknown> = {
+    oneOf: [
+      { type: 'string' }, { type: 'number' }, { type: 'boolean' }, { type: 'null' },
+      { type: 'array', items: { $ref: '#/$defs/term' } }, { $ref: '#/$defs/termObject' },
+    ],
+  };
+  const clauseRef = { $ref: '#/$defs/clause' };
+  const commonProperties: Record<string, unknown> = {
+    world: { type: 'string', enum: [...SEMANTIC_PROTOCOL_REGISTRY.worlds] },
+    kind: { type: 'string', enum: [...SEMANTIC_PROTOCOL_REGISTRY.kinds] },
+    negated: { type: 'boolean' },
+    modality: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+    time: { $ref: '#/$defs/term' },
+    conditions: { type: 'array', items: clauseRef },
+    consequences: { type: 'array', items: clauseRef },
+  };
+  const variants = Object.values(CANONICAL_SEMANTIC_FRAMES).map((frame) => {
+    const roleProperties: Record<string, unknown> = {};
+    for (const role of frame.roles) roleProperties[role.name] = { $ref: '#/$defs/term' };
+    const requiredRoles = frame.roles.filter((role) => role.required).map((role) => role.name);
+    const roleSchema: Record<string, unknown> = { type: 'object', properties: roleProperties, additionalProperties: false, ...(requiredRoles.length ? { required: requiredRoles } : {}) };
+    if (frame.atLeastOneOf?.length) roleSchema.anyOf = frame.atLeastOneOf.map((role) => ({ required: [role] }));
+    return {
+      type: 'object',
+      properties: { ...commonProperties, predicate: { const: frame.predicate }, roles: roleSchema },
+      required: ['world', 'kind', 'predicate', 'roles'],
+      additionalProperties: false,
+    };
+  });
+  return {
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    $id: 'https://lunum.dev/schema/agent-builder/0.1',
+    title: 'OpenLunum frame-first candidate builder input',
+    oneOf: variants,
+    $defs: { term, termObject, clause: { oneOf: variants }, },
+  };
+}
+
 function assertNestedFrames(clauses: readonly LunumClause[], field: 'conditions' | 'consequences'): void {
   for (const [index, clause] of clauses.entries()) {
     const predicate = basicIdentifier(clause?.predicate ?? '');

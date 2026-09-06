@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getExtractionContract, submitCandidate, submitCandidateWithGrounding } from '../src/agent-native.js';
-import { buildCandidateSem } from '../src/agent-builder.js';
+import { buildCandidateSem, getCandidateBuilderSchema } from '../src/agent-builder.js';
+import { CANONICAL_SEMANTIC_FRAMES } from '../src/frame-registry.js';
 
 const validPreference = {
   schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
@@ -49,6 +50,19 @@ test('frame-first builder creates only a canonical transport envelope', () => {
     roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'quiet_mode' } },
     terms: [], frame: { name: 'prefer' },
   } as never), /unknown_builder_fields:frame,terms/);
+});
+
+test('candidate-builder JSON Schema is generated from every canonical frame', () => {
+  const schema = getCandidateBuilderSchema();
+  const variants = schema.oneOf as Array<Record<string, unknown>>;
+  assert.equal(variants.length, Object.keys(CANONICAL_SEMANTIC_FRAMES).length);
+  for (const [predicate, frame] of Object.entries(CANONICAL_SEMANTIC_FRAMES)) {
+    const variant = variants.find((item) => ((item.properties as Record<string, unknown>).predicate as Record<string, unknown>).const === predicate);
+    assert.ok(variant, `missing generated schema variant for ${predicate}`);
+    const roles = ((variant!.properties as Record<string, unknown>).roles as Record<string, unknown>).properties as Record<string, unknown>;
+    assert.deepEqual(Object.keys(roles).sort(), frame.roles.map((role) => role.name).sort());
+  }
+  assert.deepEqual((schema.$defs as Record<string, unknown>).termObject && ((schema.$defs as Record<string, unknown>).termObject as Record<string, unknown>).required, ['type']);
 });
 
 test('extraction contract is generated from the protocol and frame registries', () => {

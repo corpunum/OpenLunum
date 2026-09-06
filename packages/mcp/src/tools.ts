@@ -12,6 +12,7 @@ import {
   submitCandidate,
   submitCandidateWithGrounding,
   buildCandidateSem,
+  getCandidateBuilderSchema,
 } from '@corpunum/lunum';
 import type { ContextMode, GroundingProposal, LunumSem, CandidateBuilderInput } from '@corpunum/lunum';
 import { resolveConfig } from './config.js';
@@ -179,15 +180,7 @@ export const buildCandidateTool: LunumToolDefinition = {
   name: 'lunum_build_candidate',
   description: 'Build an untrusted transport-shaped candidate from agent-selected canonical frame slots. The result must still be submitted for deterministic validation and grounding.',
   inputSchema: {
-    type: 'object',
-    properties: {
-      world: { type: 'string' }, kind: { type: 'string' }, predicate: { type: 'string' },
-      roles: { type: 'object', description: 'Agent-selected values keyed by roles in the returned canonical frame.' },
-      negated: { type: 'boolean' }, modality: { anyOf: [{ type: 'string' }, { type: 'null' }] },
-      time: {}, conditions: { type: 'array' }, consequences: { type: 'array' },
-    },
-    additionalProperties: false,
-    required: ['world', 'kind', 'predicate', 'roles'],
+    ...getCandidateBuilderSchema() as LunumToolDefinition['inputSchema'],
   },
   handler: async (input): Promise<McpToolResponse> => {
     try {
