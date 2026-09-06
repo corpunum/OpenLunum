@@ -15,7 +15,7 @@ import {
 import type { AgentExtractionProvenance, LunumSem } from '@corpunum/lunum';
 import { readJsonlLedger } from './io.js';
 
-const BLIND_EVALUATION_VERSION = 'openlunum-blind-agent-eval/0.1' as const;
+const BLIND_EVALUATION_VERSION = 'openlunum-blind-agent-eval/0.2' as const;
 
 interface PrivateGoldItem {
   id: string;
@@ -64,6 +64,11 @@ export interface BlindEvalResult {
   candidateIdentityAvailable: boolean;
   identityComparable: boolean;
   semanticIdentityExact: boolean;
+  transportValid: boolean;
+  structuralValid: boolean;
+  protocolCanonical: boolean;
+  frameValid: boolean;
+  grounded: boolean;
   abstained: boolean;
   failureClass: string | null;
   diagnostics: string[];
@@ -104,6 +109,13 @@ export interface BlindEvalSummary {
   comparableNegativePairs: number;
   falseEquivalences: number;
   negativeCoverage: number | null;
+  stageCounts: {
+    transportValid: number;
+    structuralValid: number;
+    protocolCanonical: number;
+    frameValid: number;
+    grounded: number;
+  };
 }
 
 interface DurableBlindResult extends BlindEvalResult {
@@ -356,6 +368,9 @@ export class BlindAgentEvaluationSession {
     const result: DurableBlindResult = {
       schema: BLIND_EVALUATION_VERSION, runId: this.runId, itemId: item.id, status: error ? 'error' : passed ? 'passed' : 'failed',
       candidateIdentityAvailable: candidate?.candidateIdentityAvailable ?? false, identityComparable, semanticIdentityExact, abstained,
+      transportValid: candidate?.transportValid ?? false, structuralValid: candidate?.structuralValid ?? false,
+      protocolCanonical: candidate?.protocolCanonical ?? false, frameValid: candidate?.frameValid ?? false,
+      grounded: candidate?.grounded ?? false,
       failureClass: error ? 'submission_error' : passed ? null : (expectedOutcome === 'abstain' ? 'unexpected_parse' : candidate?.failureClass ?? 'semantic_identity_mismatch'),
       diagnostics: error ? ['candidate submission failed'] : candidate?.diagnostics ?? [], provenance: candidate?.provenance ?? input.provenance, submittedAt: new Date().toISOString(),
     };
@@ -419,6 +434,13 @@ export class BlindAgentEvaluationSession {
       return Boolean(left && right);
     });
     const falseEquivalences = comparableNegativePairs.filter(pair => this.privateResults.get(pair.leftItemId)?.candidateIdentity === this.privateResults.get(pair.rightItemId)?.candidateIdentity).length;
+    const stageCounts = {
+      transportValid: results.filter(result => result.transportValid).length,
+      structuralValid: results.filter(result => result.structuralValid).length,
+      protocolCanonical: results.filter(result => result.protocolCanonical).length,
+      frameValid: results.filter(result => result.frameValid).length,
+      grounded: results.filter(result => result.grounded).length,
+    };
     return {
       runId: this.runId, totalItems: this.itemById.size, completedItems: results.length,
       parseTargets: parseItems.length, parseExact, parseExactMicro: parseItems.length ? parseExact / parseItems.length : null,
@@ -430,6 +452,7 @@ export class BlindAgentEvaluationSession {
       failureClasses, byLanguage, goldGroups: allGoldGroups.size, goldGroupsConverging, modelGroupsAttempted: groups.size, modelGroupsConverging,
       criticalNegativePairs: this.criticalNegativePairs.length, comparableNegativePairs: comparableNegativePairs.length, falseEquivalences,
       negativeCoverage: this.criticalNegativePairs.length ? comparableNegativePairs.length / this.criticalNegativePairs.length : null,
+      stageCounts,
     };
   }
 
@@ -441,9 +464,9 @@ export class BlindAgentEvaluationSession {
   private validateDurableResult(result: DurableBlindResult, privateResult: PrivateBlindResult | undefined): void {
     const item = this.itemById.get(result.itemId);
     if (!item || !privateResult) throw new Error(`invalid blind result record for ${result.itemId}; refusing resume`);
-    const expectedKeys = ['abstained', 'candidateIdentityAvailable', 'diagnostics', 'failureClass', 'identityComparable', 'provenance', 'runId', 'schema', 'semanticIdentityExact', 'status', 'submittedAt', 'itemId'];
+    const expectedKeys = ['abstained', 'candidateIdentityAvailable', 'diagnostics', 'failureClass', 'frameValid', 'grounded', 'identityComparable', 'protocolCanonical', 'provenance', 'runId', 'schema', 'semanticIdentityExact', 'status', 'structuralValid', 'submittedAt', 'itemId', 'transportValid'];
     if (Object.keys(result).sort().join(',') !== expectedKeys.sort().join(',')) throw new Error(`invalid blind result fields for ${result.itemId}; refusing resume`);
-    if (!['passed', 'failed', 'error'].includes(result.status) || typeof result.candidateIdentityAvailable !== 'boolean' || typeof result.identityComparable !== 'boolean' || typeof result.semanticIdentityExact !== 'boolean' || typeof result.abstained !== 'boolean' || !Array.isArray(result.diagnostics) || !result.provenance || typeof result.provenance !== 'object') throw new Error(`invalid blind result fields for ${result.itemId}; refusing resume`);
+    if (!['passed', 'failed', 'error'].includes(result.status) || typeof result.candidateIdentityAvailable !== 'boolean' || typeof result.identityComparable !== 'boolean' || typeof result.semanticIdentityExact !== 'boolean' || typeof result.abstained !== 'boolean' || typeof result.transportValid !== 'boolean' || typeof result.structuralValid !== 'boolean' || typeof result.protocolCanonical !== 'boolean' || typeof result.frameValid !== 'boolean' || typeof result.grounded !== 'boolean' || !Array.isArray(result.diagnostics) || !result.provenance || typeof result.provenance !== 'object') throw new Error(`invalid blind result fields for ${result.itemId}; refusing resume`);
     if (result.status === 'error') {
       if (result.failureClass !== 'submission_error' || result.candidateIdentityAvailable || result.identityComparable || result.semanticIdentityExact || !result.abstained) throw new Error(`invalid blind error result for ${result.itemId}; refusing resume`);
       return;
@@ -454,6 +477,6 @@ export class BlindAgentEvaluationSession {
     const expectedComparable = recomputed.candidateIdentityAvailable && expectedOutcome === 'parse';
     const expectedExact = expectedComparable && recomputed.semanticFingerprint === this.goldIdentityFor(item);
     const expectedPassed = expectedOutcome === 'abstain' ? expectedAbstained : expectedExact;
-    if (recomputed.semanticFingerprint !== privateResult.candidateIdentity || recomputed.candidateIdentityAvailable !== result.candidateIdentityAvailable || result.abstained !== expectedAbstained || result.identityComparable !== expectedComparable || result.semanticIdentityExact !== expectedExact || (result.status === 'passed') !== expectedPassed) throw new Error(`blind result does not match candidate for ${result.itemId}; refusing resume`);
+    if (recomputed.semanticFingerprint !== privateResult.candidateIdentity || recomputed.candidateIdentityAvailable !== result.candidateIdentityAvailable || result.abstained !== expectedAbstained || result.identityComparable !== expectedComparable || result.semanticIdentityExact !== expectedExact || result.transportValid !== recomputed.transportValid || result.structuralValid !== recomputed.structuralValid || result.protocolCanonical !== recomputed.protocolCanonical || result.frameValid !== recomputed.frameValid || result.grounded !== recomputed.grounded || (result.status === 'passed') !== expectedPassed) throw new Error(`blind result does not match candidate for ${result.itemId}; refusing resume`);
   }
 }
