@@ -440,6 +440,13 @@
       "evidence": "The proposal contained underspecified imperative/passive frames and a confirm/deadline conflation; 0/12 rows were accepted for scoring. Full rejection rationale is recorded in agent-corpus-proposal-audit.json.",
       "decision": "Require an independent semantic-contract audit and frame completeness before using generated development data. Do not score this proposal.",
       "commit": "d9ab0f93cf1aed53733bdad26eee2a2af8f7fa9f"
+    },
+    {
+      "hypothesis": "Once sources are frame-complete and the generated builder contract is followed, multilingual extraction failures will mainly be transport failures.",
+      "implementation": "An isolated Codex agent processed six fresh frame-complete EN/EL/ES/FR/DE/ID sources without supplied concept identifiers; candidates were replayed through the strict builder and submission path.",
+      "evidence": "All 6/6 candidates passed transport, protocol, frame, grounding, and lfp:2.1 availability. The equivalent EN/EL/ID send group produced three distinct open-concept identifiers and three distinct LFPs. No gold was exposed.",
+      "decision": "Reject the transport-only hypothesis for this trial. Preserve strict validation and prioritize language-neutral grounding/provider candidate-set measurement.",
+      "commit": "pending"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
