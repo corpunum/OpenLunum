@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:45:12+03:00
+Recorded: 2026-09-06T17:49:40+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: fbecc2ca89fdc419a42e101eb2a4a8b017822435
+Current HEAD: e2d45801d2e1c0ee9cb4f0e1c09583915bd3b33d
 
 ## Scope and prohibitions
 
@@ -126,6 +126,10 @@ used.
   lemmas: 353/600 candidate-set recall, 331/333 unique precision, with
   per-language recall EN 51%, EL 44%, ES 92%, FR 42%, DE 65%, ID 58%.
   Morphology remains candidate generation, not exact identity proof.
+- Hardened authenticated grounding objects against post-validation mutation:
+  contained provider results and minted resolutions are cloned/frozen before
+  capability branding; serialized and forged objects remain rejected.
+  Focused security suite is 34/34 and the full workspace gate passed.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -178,6 +182,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
 prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `744fbd165708c0e9119992f7df5bb039d88fbdfa`.
+current code/evidence boundary is `e2d45801d2e1c0ee9cb4f0e1c09583915bd3b33d`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

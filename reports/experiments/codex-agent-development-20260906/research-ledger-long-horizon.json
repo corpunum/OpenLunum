@@ -230,6 +230,13 @@
       "evidence": "600 observations across EN/EL/ES/FR/DE/ID: analyzer coverage 356/600; candidate-set lemma recall 353/600 (58.8%); unique candidate precision 331/333 (99.4%); unique wrong outputs 4; ambiguity containing the UD lemma 21; unresolved 244. Per-language recall: EN 51%, EL 44%, ES 92%, FR 42%, DE 65%, ID 58%. The earlier 23/23 OMW identity result is therefore conservative but not a substitute for lemma accuracy.",
       "decision": "Keep morphology as candidate generation only. It has high precision when unique but incomplete coverage and measurable ambiguity; do not promote it to unconditional exact identity. Next blocker remains a larger independently labeled source-only extraction benchmark.",
       "commit": "a2e3b56e3fcbd998c111a1017689f43991cb2e94"
+    },
+    {
+      "hypothesis": "In-process authentication alone is sufficient if an authenticated provider result remains mutable after cascade validation.",
+      "implementation": "Defensively cloned and froze contained provider results, candidate evidence, diagnostics, registry metadata, and minted resolutions before granting private capabilities. Added mutation regressions and changed resolution issue collections to readonly.",
+      "evidence": "Core suite passes 1,805/1,805; the focused grounding security suite passes 34/34; workspace verification after the change completed with all package gates and the 16-item evaluation smoke succeeding. Attempts to mutate a candidate ID or minted canonical ID throw and leave the trusted value unchanged.",
+      "decision": "Keep immutable capability objects. This closes post-validation tampering without altering semantic identity, protocol frames, or provider selection. No protected corpus was created or rescored.",
+      "commit": "e2d45801d2e1c0ee9cb4f0e1c09583915bd3b33d"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
