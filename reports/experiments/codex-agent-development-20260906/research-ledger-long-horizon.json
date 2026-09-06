@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:25:55+03:00",
-  "currentHead": "47d07fe0a4b999e0ae50cb239d9bee801bae66d4",
+  "lastUpdated": "2026-09-06T17:29:20+03:00",
+  "currentHead": "6b9fb410d841bc9cf248a38ad88d1432042b5ea6",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -188,6 +188,13 @@
       "evidence": "The previous evaluator could count normalized but unframed candidates as identity-available even though matching later failed closed. After the repair, evaluation suite passes 1,875/1,875 and unframed candidates report identity coverage zero; critical-negative safety is measured only over comparable pairs.",
       "decision": "Keep the stricter denominator and pairwise safety test. Retrieval coverage must mean usable exact identity, and non-comparable safety cases remain explicitly visible rather than silently treated as safe.",
       "commit": "47d07fe0a4b999e0ae50cb239d9bee801bae66d4"
+    },
+    {
+      "hypothesis": "The retrieval candidate-ledger boundary is sufficiently strict when it only rejects a few top-level gold field names.",
+      "implementation": "Added validateBlindAgentLedger to the evaluation package. It requires an opaque source manifest, exact row coverage, recursive evaluator-field rejection, strict candidate normalization, and successful lfp:2.1 generation before identity coverage is counted.",
+      "evidence": "Independent audit found the prior harness allowed row/task hints and did not prove exact source coverage or identity-safe candidates. New blind-ledger tests cover valid candidates, missing/duplicate/unknown handles, nested gold leakage, and unframed identity rejection; evaluation suite passes 1,878/1,878.",
+      "decision": "Keep the thin validator as reusable custody infrastructure. It does not score semantics or expose gold and should be used before any future clean retrieval experiment.",
+      "commit": "6b9fb410d841bc9cf248a38ad88d1432042b5ea6"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

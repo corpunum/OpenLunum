@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:25:55+03:00
+Recorded: 2026-09-06T17:29:20+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 47d07fe0a4b999e0ae50cb239d9bee801bae66d4
+Current HEAD: 6b9fb410d841bc9cf248a38ad88d1432042b5ea6
 
 ## Scope and prohibitions
 
@@ -106,6 +106,10 @@ used.
 - Retrieval identity coverage now requires successful `semanticFingerprint`,
   not only structural normalization. Focused evaluation passes 1,875/1,875;
   critical-negative safety tests count only identity-comparable pairs.
+- Added a reusable blind-agent ledger validator enforcing opaque source-handle
+  coverage, recursive evaluator-field leakage rejection, strict normalization,
+  and lfp:2.1 identity before coverage is counted. Evaluation suite passes
+  1,878/1,878.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -147,7 +151,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 113 minutes. Completed real-resource
+Elapsed at recording: approximately 116 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
