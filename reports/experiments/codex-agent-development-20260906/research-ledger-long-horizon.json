@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:22:05+03:00",
-  "currentHead": "fc253d6a833f7f30b961dd77104a43e6a4f68327",
+  "lastUpdated": "2026-09-06T17:25:10+03:00",
+  "currentHead": "ba1f0139beda592bc65ae1631e4f0ac3b1c0326f",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {

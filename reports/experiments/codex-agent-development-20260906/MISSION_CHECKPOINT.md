@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:22:05+03:00
+Recorded: 2026-09-06T17:25:10+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: fc253d6a833f7f30b961dd77104a43e6a4f68327
+Current HEAD: ba1f0139beda592bc65ae1631e4f0ac3b1c0326f
 
 ## Scope and prohibitions
 
@@ -100,6 +100,9 @@ used.
   cases. Core unit suite and full `pnpm verify` pass after this repair.
 - A follow-up regression now proves a `candidate_narrowed` result is rejected
   by `toGroundingResolution` rather than materialized as exact identity.
+- The independent UD/UniMorph morphology replay remains reproducible with the
+  same low OMW eligibility and zero false singleton identities; no resource
+  or semantic score is being inflated by the intersection repair.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -141,7 +144,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 109 minutes. Completed real-resource
+Elapsed at recording: approximately 112 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
