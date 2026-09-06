@@ -481,7 +481,7 @@
       "implementation": "A corpus agent proposed 12 new multilingual rows and a separate auditor checked them against the canonical frame registry before any extraction call.",
       "evidence": "The auditor accepted 9/12 and rejected three send rows containing both mutually exclusive recipient and destination roles. The complete audit is recorded in frame-complete-corpus-audit.json.",
       "decision": "Reject the proposal before scoring. Preserve the frame contract and require corpus repair plus another independent audit before ladder evaluation.",
-      "commit": "pending"
+      "commit": "cc35502550dc86e706e425cabf24402e89401584"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
