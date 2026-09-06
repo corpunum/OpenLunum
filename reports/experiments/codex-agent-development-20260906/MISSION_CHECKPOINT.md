@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:16:45+03:00
+Recorded: 2026-09-06T17:20:10+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: ec3f8642f27cac0334eef8eaf26dacba3e91001e
+Current HEAD: dd6f8c8cb771e13214b6e8168c64cf6952c054c9
 
 ## Scope and prohibitions
 
@@ -94,6 +94,10 @@ used.
   submitted 16/18 and Heisenberg 15/18; every submitted candidate passed all
   deterministic gates. Indonesian enable was the main agent disagreement.
   Results are diagnostic in `source-only-frame-first-trial-v3.json` and `v4`.
+- An adversarial audit found that singleton candidate intersections were being
+  mislabeled as exact identity. They now return `candidate_narrowed`, and the
+  OMW replay reports 78 narrowed cases while preserving 19 independent exact
+  cases. Core unit suite and full `pnpm verify` pass after this repair.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -135,7 +139,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 85 minutes. Completed real-resource
+Elapsed at recording: approximately 107 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only

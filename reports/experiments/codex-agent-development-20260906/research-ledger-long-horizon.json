@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:16:45+03:00",
-  "currentHead": "ec3f8642f27cac0334eef8eaf26dacba3e91001e",
+  "lastUpdated": "2026-09-06T17:20:10+03:00",
+  "currentHead": "dd6f8c8cb771e13214b6e8168c64cf6952c054c9",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -180,7 +180,7 @@
       "implementation": "Changed the intersection result state from resolved_exact to candidate_narrowed; provider-owned exact resolution remains the only input to toGroundingResolution and materialization. Updated the real OMW intersection replay and regression tests.",
       "evidence": "The adversarial audit demonstrated that caller-supplied relation labels and empty candidate evidence could otherwise produce a singleton resolved result and enable lfp:2.1 materialization. Core suite passes 1,802/1,802 after the change; the OMW replay now reports 78 candidate_narrowed rather than 78 resolved_exact, with 19 independent exact cases unchanged.",
       "decision": "Keep the fail-closed distinction. Candidate-set narrowing is useful evidence but never exact identity without provider-owned resolution; no protocol or frame change is justified.",
-      "commit": "pending-safety-commit"
+      "commit": "dd6f8c8cb771e13214b6e8168c64cf6952c054c9"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
