@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.dev/schemas/lunum-training-example/1.0",
+  "title": "OpenLunum semantic compiler training example",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "split", "source", "target", "provenance", "review"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$" },
+    "split": { "enum": ["train", "dev", "holdout", "protected-template"] },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["text", "language", "semanticGroup", "templateFamily"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "language": { "type": "string", "pattern": "^[a-z]{2,3}$" },
+        "semanticGroup": { "type": "string", "minLength": 1 },
+        "templateFamily": { "type": "string", "minLength": 1 },
+        "entityIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "conceptIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "externalGroundingIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["outcome"],
+      "properties": {
+        "outcome": { "enum": ["parse", "abstain"] },
+        "abstentionReason": { "enum": ["unsupported", "ambiguous", "unresolved"] },
+        "ir": { "type": "object", "additionalProperties": true },
+        "canonicalSem": { "type": "object", "additionalProperties": true },
+        "criticalNegativePairIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceKind", "annotationMethod", "license", "createdAt", "generatorVersion"],
+      "properties": {
+        "sourceKind": { "enum": ["synthetic", "licensed", "human-authored", "imported"] },
+        "annotationMethod": { "type": "string", "minLength": 1 },
+        "license": { "type": "string", "minLength": 1 },
+        "sourceUri": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "generatorVersion": { "type": "string", "minLength": 1 },
+        "providerEvidence": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+      }
+    },
+    "review": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reviewers"],
+      "properties": {
+        "status": { "enum": ["pending", "accepted", "rejected", "needs-review"] },
+        "reviewers": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+        "notes": { "type": "string" },
+        "disagreement": { "type": "boolean" }
+      }
+    }
+  }
+}
