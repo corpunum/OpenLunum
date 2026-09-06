@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T19:40:00+03:00",
-  "currentHead": "39c033bd4a3770bb742da9b3a6230a6fc8501d42",
+  "lastUpdated": "2026-09-06T22:10:00+03:00",
+  "currentHead": "05583454f219de36c3876fa1404354569ebe003d",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -524,6 +524,13 @@
       "evidence": "Independent adversarial review initially found three schema defects; all were corrected. Core agent-native tests passed 9/9, MCP tests passed 59/59, and core/MCP typechecks passed. No protected data or model output informed the change.",
       "decision": "Keep the generated schema after adversarial correction. A strict external JSON-Schema validator should be run by the consumer; semantic builder validation remains authoritative.",
       "commit": "39c033bd4a3770bb742da9b3a6230a6fc8501d42"
+    },
+    {
+      "hypothesis": "Explicit stage receipts will distinguish transport, protocol, frame, and grounding failures in blind evaluation without changing scoring semantics.",
+      "implementation": "Added transportValid, structuralValid, protocolCanonical, frameValid, and grounded fields to durable blind results; bumped the blind ledger schema to 0.2 and added aggregate stage counts with deterministic resume validation.",
+      "evidence": "Eval strict verification passed, including 1,888/1,888 unit tests and the 16-item smoke run. Existing exact identity and abstention scoring remain unchanged; old ledger schemas are rejected rather than reinterpreted.",
+      "decision": "Keep stage receipts for future development/protected diagnostics; they expose the true bottleneck instead of collapsing pipeline failures into semantic mismatch.",
+      "commit": "05583454f219de36c3876fa1404354569ebe003d"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

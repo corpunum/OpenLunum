@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 39c033bd4a3770bb742da9b3a6230a6fc8501d42
+Source/evidence boundary before this checkpoint commit: 05583454f219de36c3876fa1404354569ebe003d
 
 ## Scope and prohibitions
 
@@ -348,6 +348,10 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   agent-native tests pass 9/9, MCP tests 59/59, and no model/protected data was
   used. Multi-process claim locking remains an explicit future custody concern;
   single-session strict claim binding is covered and durable.
+- Added durable blind-evaluation stage receipts for transport, structural,
+  protocol, frame, and grounding validity, with aggregate stage counts and a
+  schema-version bump. Eval strict verification passed 1,888/1,888 plus the
+  16-item smoke run. Exact identity and abstention scoring were not changed.
 
 ## Uncommitted state
 
