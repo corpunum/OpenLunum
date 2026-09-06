@@ -83,6 +83,12 @@ test('candidate-set intersection narrows only explicit shared evidence', () => {
   assert.equal(result.status, 'candidate_narrowed');
   assert.equal(result.candidates[0]?.externalId, 'ili:i1');
   assert.match(result.diagnostics[0]!, /provider-owned exact resolution/u);
+  const attemptedMaterialization = toGroundingResolution(proposal(), {
+    status: result.status as never,
+    provider: 'omw', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en',
+    candidates: result.candidates, diagnostics: result.diagnostics,
+  });
+  assert.equal(attemptedMaterialization.status, 'unresolved');
   assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] }], { relation: 'same-concept' }).status, 'ambiguous');
   assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] }, { status: 'ambiguous', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'Q1', evidence: [] }], diagnostics: [] }], { relation: 'same-translation' }).status, 'unresolved');
   assert.match(intersectGroundingCandidateSets([], { relation: 'same-concept' }).diagnostics[0]!, /no provider/u);
