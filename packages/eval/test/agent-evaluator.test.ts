@@ -41,6 +41,10 @@ test('submission scores privately, persists immediately, and resumes without dup
   const resumed = await BlindAgentEvaluationSession.create('run-resume', items, dir);
   assert.equal(resumed.completedCount(), 1);
   assert.equal(resumed.next()?.itemId, 'blind-abstain');
+  const summary = resumed.summary();
+  assert.deepEqual({ parseTargets: summary.parseTargets, parseExact: summary.parseExact, abstentionTargets: summary.abstentionTargets }, { parseTargets: 1, parseExact: 1, abstentionTargets: 1 });
+  assert.equal(summary.parseExactMicro, 1);
+  assert.equal(summary.completedItems, 1);
   await assert.rejects(() => resumed.submit({ runId: 'run-resume', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent' } }), /already completed/u);
 });
 

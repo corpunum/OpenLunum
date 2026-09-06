@@ -57,8 +57,41 @@ export interface BlindEvalResult {
   submittedAt: string;
 }
 
+export interface BlindEvalLanguageSummary {
+  language: string;
+  parseTargets: number;
+  exact: number;
+  exactRate: number;
+  candidateIdentityAvailable: number;
+}
+
+export interface BlindEvalSummary {
+  runId: string;
+  totalItems: number;
+  completedItems: number;
+  parseTargets: number;
+  parseExact: number;
+  parseExactMicro: number | null;
+  abstentionTargets: number;
+  correctAbstentions: number;
+  unexpectedParses: number;
+  abstentionAccuracy: number | null;
+  candidateIdentityAvailable: number;
+  identityComparable: number;
+  identityExact: number;
+  comparableButNonExact: number;
+  failureClasses: Record<string, number>;
+  byLanguage: BlindEvalLanguageSummary[];
+  goldGroups: number;
+  goldGroupsConverging: number;
+  modelGroupsAttempted: number;
+  modelGroupsConverging: number;
+}
+
 interface DurableBlindResult extends BlindEvalResult {
   schema: typeof BLIND_EVALUATION_VERSION;
+  /** Kept evaluator-private; never returned by submit(). */
+  candidateIdentity?: string | null;
 }
 
 interface BlindManifest {
@@ -223,6 +256,7 @@ export class BlindAgentEvaluationSession {
       candidateIdentityAvailable: candidate.candidateIdentityAvailable, identityComparable, semanticIdentityExact, abstained,
       failureClass: passed ? null : (expectedOutcome === 'abstain' ? 'unexpected_parse' : candidate.failureClass ?? 'semantic_identity_mismatch'),
       diagnostics: candidate.diagnostics, provenance: candidate.provenance, submittedAt: new Date().toISOString(),
+      candidateIdentity: candidate.semanticFingerprint,
     };
     await appendFile(this.ledgerPath, `${JSON.stringify(result)}\n`, 'utf8');
     this.completed.set(item.id, result);
@@ -233,4 +267,50 @@ export class BlindAgentEvaluationSession {
 
   completedCount(): number { return this.completed.size; }
   totalCount(): number { return this.itemById.size; }
+
+  /** Rebuild evaluator metrics from the durable item ledger and private gold. */
+  summary(): BlindEvalSummary {
+    const results = [...this.completed.values()];
+    const parseItems = [...this.itemById.values()].filter(item => safeExpectedOutcome(item) === 'parse');
+    const abstentionTargets = this.itemById.size - parseItems.length;
+    const parseExact = results.filter(result => result.expectedOutcome === 'parse' && result.semanticIdentityExact).length;
+    const correctAbstentions = results.filter(result => result.expectedOutcome === 'abstain' && result.abstained).length;
+    const unexpectedParses = results.filter(result => result.expectedOutcome === 'abstain' && !result.abstained).length;
+    const failureClasses: Record<string, number> = {};
+    for (const result of results) if (result.failureClass) failureClasses[result.failureClass] = (failureClasses[result.failureClass] ?? 0) + 1;
+    const languages = [...new Set([...this.itemById.values()].map(item => item.sourceLanguage))].sort();
+    const byLanguage = languages.map(language => {
+      const ids = new Set([...this.itemById.values()].filter(item => item.sourceLanguage === language && safeExpectedOutcome(item) === 'parse').map(item => item.id));
+      const rows = results.filter(result => ids.has(result.itemId));
+      return { language, parseTargets: ids.size, exact: rows.filter(row => row.semanticIdentityExact).length, exactRate: ids.size ? rows.filter(row => row.semanticIdentityExact).length / ids.size : 0, candidateIdentityAvailable: rows.filter(row => row.candidateIdentityAvailable).length };
+    });
+    const groups = new Map<string, DurableBlindResult[]>();
+    for (const result of results) {
+      const group = this.itemById.get(result.itemId)?.semanticGroup;
+      if (group) groups.set(group, [...(groups.get(group) ?? []), result]);
+    }
+    let goldGroupsConverging = 0;
+    let modelGroupsConverging = 0;
+    for (const [group, rows] of groups) {
+      const goldIds = new Set(rows.map(row => this.goldIdentityFor(this.itemById.get(row.itemId)!)).filter((id): id is string => id !== null));
+      if (goldIds.size === 1) goldGroupsConverging++;
+      const modelIds = new Set(rows.map(row => row.candidateIdentity).filter((id): id is string => Boolean(id)));
+      if (rows.length > 0 && rows.every(row => Boolean(row.candidateIdentity)) && modelIds.size === 1) modelGroupsConverging++;
+    }
+    return {
+      runId: this.runId, totalItems: this.itemById.size, completedItems: results.length,
+      parseTargets: parseItems.length, parseExact, parseExactMicro: parseItems.length ? parseExact / parseItems.length : null,
+      abstentionTargets, correctAbstentions, unexpectedParses, abstentionAccuracy: abstentionTargets ? correctAbstentions / abstentionTargets : null,
+      candidateIdentityAvailable: results.filter(result => result.candidateIdentityAvailable).length,
+      identityComparable: results.filter(result => result.identityComparable).length,
+      identityExact: results.filter(result => result.semanticIdentityExact).length,
+      comparableButNonExact: results.filter(result => result.identityComparable && !result.semanticIdentityExact).length,
+      failureClasses, byLanguage, goldGroups: groups.size, goldGroupsConverging, modelGroupsAttempted: groups.size, modelGroupsConverging,
+    };
+  }
+
+  private goldIdentityFor(item: PrivateGoldItem): string | null {
+    if (safeExpectedOutcome(item) !== 'parse') return null;
+    return submitCandidate({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, candidateSem: item.goldSem, provenance: { extractorType: 'other' } }).semanticFingerprint;
+  }
 }
