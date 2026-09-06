@@ -265,6 +265,13 @@
       "evidence": "Evaluator suite passes 1,880/1,880. A negative query that abstains is reported as one negative target but zero comparable negatives and zero rejection accuracy; unframed memories are excluded from the comparable candidate pool. Independent retrieval audit also found the historical ledger gold-shaped, so no historical report was rescored.",
       "decision": "Keep the stricter retrieval denominators. End-to-end failures remain failures, while conditional safety/retrieval claims require a real extracted identity pool. No protected corpus was created.",
       "commit": "ce3abe754aa2b74181301f07003f90a86dd7fc63"
+    },
+    {
+      "hypothesis": "Retrieval and blind-ledger inputs are sufficiently validated when semantic metrics are denominator-correct.",
+      "implementation": "Added runtime validation for duplicate/unknown memory and query IDs, expected/equivalent routing references, threshold/topK/mode bounds, and malformed blind source entries. Baseline outputs with any invalid ID now fail closed instead of retaining valid partial IDs.",
+      "evidence": "Evaluator suite passes 1,882/1,882, including regressions for duplicate IDs, unknown gold references, invalid bounds, malformed source entries, and identity-usable candidate pools. No historical retrieval artifact was rescored.",
+      "decision": "Keep strict input and baseline containment. A clean development retrieval run still requires opaque source handles and independently generated candidate rows; this fix only makes invalid evidence fail closed.",
+      "commit": "055cc3d79cb9b2ef4b49895c2ef79d5dfc505bee"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

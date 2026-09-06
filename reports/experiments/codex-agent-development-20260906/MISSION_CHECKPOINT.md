@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:12:40+03:00
+Recorded: 2026-09-06T18:25:10+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: ce3abe754aa2b74181301f07003f90a86dd7fc63
+Current HEAD: 055cc3d79cb9b2ef4b49895c2ef79d5dfc505bee
 
 ## Scope and prohibitions
 
@@ -140,6 +140,9 @@ used.
 - Repaired retrieval metric denominators: only lfp:2.1-usable memories count
   as comparable candidates, and query abstentions/empty identity pools no
   longer count as negative safety successes. Evaluator suite is 1,880/1,880.
+- Hardened retrieval/blind input validation for duplicate and unknown IDs,
+  malformed source entries, bounds, routing references, and invalid baseline
+  partial output. Evaluator suite is now 1,882/1,882.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -192,6 +195,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
 prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `ce3abe754aa2b74181301f07003f90a86dd7fc63`.
+current code/evidence boundary is `055cc3d79cb9b2ef4b49895c2ef79d5dfc505bee`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
