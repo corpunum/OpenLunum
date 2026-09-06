@@ -44,6 +44,10 @@ export function validateBlindAgentLedger(source: readonly BlindSourceItem[], row
     if (!item || typeof item.handle !== 'string' || !item.handle.trim()) errors.push(`source[${index}] handle must be non-empty`);
     else if (sourceHandles.has(item.handle)) errors.push(`duplicate source handle: ${item.handle}`);
     else sourceHandles.add(item.handle);
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      errors.push(`source[${index}] must be an object`);
+      continue;
+    }
     if (typeof item.sourceText !== 'string' || !item.sourceText.trim()) errors.push(`source[${index}] sourceText must be non-empty`);
     if (typeof item.sourceLanguage !== 'string' || !item.sourceLanguage.trim()) errors.push(`source[${index}] sourceLanguage must be non-empty`);
     if (item.kind !== 'memory' && item.kind !== 'query') errors.push(`source[${index}] kind is invalid`);

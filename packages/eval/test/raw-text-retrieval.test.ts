@@ -90,6 +90,14 @@ test('retrieval candidate count contains only identity-usable memories', async (
   assert.equal(report.queryResults[0]?.candidateCount, 1);
 });
 
+test('retrieval input rejects duplicate IDs, unknown gold references, and invalid bounds', async () => {
+  const base = { memories: [{ id: 'm', text: 'Fact.', language: 'en' }], queries: [{ id: 'q', text: 'Fact?', language: 'en', expectedMemoryIds: ['m'] }], extract: () => sem('publish', 'fact') };
+  await assert.rejects(() => runRawTextRetrievalEvaluation({ ...base, memories: [...base.memories, { id: 'm', text: 'Other.', language: 'en' }] }), /duplicate memory id/u);
+  await assert.rejects(() => runRawTextRetrievalEvaluation({ ...base, queries: [{ id: base.queries[0]!.id, text: base.queries[0]!.text, language: base.queries[0]!.language, expectedMemoryIds: ['missing'] }] }), /unknown expected memory/u);
+  await assert.rejects(() => runRawTextRetrievalEvaluation({ ...base, memories: [...base.memories], queries: [...base.queries], topK: 0 }), /topK/u);
+  await assert.rejects(() => runRawTextRetrievalEvaluation({ ...base, memories: [...base.memories], queries: [...base.queries], threshold: 2 }), /threshold/u);
+});
+
 test('baseline hooks receive raw text only and are reported beside semantic retrieval', async () => {
   const memory = sem('publish', 'guide', { audience: { type: 'actor', id: 'team' } });
   const seen: string[] = [];

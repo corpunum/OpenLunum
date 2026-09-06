@@ -32,3 +32,9 @@ test('blind ledger rejects unframed candidates instead of inflating identity cov
   assert.equal(result.identityAvailable, 0);
   assert.ok(result.errors.some((error) => error.includes('no exact semantic identity')));
 });
+
+test('blind ledger reports malformed source entries instead of throwing', () => {
+  const result = validateBlindAgentLedger([null as never], []);
+  assert.equal(result.valid, false);
+  assert.match(result.errors[0]!, /source\[0\] handle/u);
+});
