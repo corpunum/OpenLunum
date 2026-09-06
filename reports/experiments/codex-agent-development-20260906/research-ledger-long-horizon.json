@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:13:20+03:00",
-  "currentHead": "966cb7f0c12c9abf571e002206f91f6bf98ea7a2",
+  "lastUpdated": "2026-09-06T17:16:45+03:00",
+  "currentHead": "ec3f8642f27cac0334eef8eaf26dacba3e91001e",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -173,7 +173,7 @@
       "implementation": "Two isolated Codex agents received six fresh source items and only the generated extraction contract; candidates were submitted through the built core and their raw outputs were retained in the session transcript.",
       "evidence": "Both agents abstained on the unframed archive pair. All four scored submissions passed structural, protocol, frame, grounding, and identity-availability gates. The conditional enable candidates converged to one LFP; retry candidates diverged because one used actor/concept and the other system/task for scheduler/export. The trial is development-only and source-only custody is declared, not independently proven.",
       "decision": "The typed interface contains transport failures, but cannot resolve unverified open kind and term-type choices. Preserve fail-closed exact identity and prioritize independently adjudicated development labels for semantic extraction and grounding.",
-      "commit": "pending-evidence-commit"
+      "commit": "ec3f8642f27cac0334eef8eaf26dacba3e91001e"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
