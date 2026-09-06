@@ -279,9 +279,37 @@
       "evidence": "The earlier conceptual-contract trial produced 0/12 contract-shaped candidates from one agent and all abstentions from another. With the exact contract, both agents returned eight ordered records; each abstained on unsupported/uncertain cases and produced mostly builder-shaped objects. They still diverged on preference role conventions, modality/time term shapes, and open-concept naming. This remains diagnostic because outputs were not independently gold-scored.",
       "decision": "Retain exact contract delivery and typed builder as the adoption path, but do not interpret contract compliance as semantic accuracy. The next clean development benchmark must preserve item IDs externally while keeping evaluator answers private.",
       "commit": "d40464601f3c5604f5d6a235a2b2682aacf7f5b9"
+    },
+    {
+      "hypothesis": "Blind retrieval evidence must bind each candidate to its advertised source text before identity or retrieval metrics are trusted.",
+      "implementation": "Added optional provenance sourceHash validation to the blind-agent ledger validator; a supplied hash must equal SHA-256(sourceText).",
+      "evidence": "Mismatched source-bound candidates fail closed before retrieval metrics; evaluator suite passed 1,883/1,883. Historical ledgers were not rescored.",
+      "decision": "Require source-bound provenance for future clean agent retrieval evidence.",
+      "commit": "358de09"
+    },
+    {
+      "hypothesis": "Nested agent-built clauses must satisfy the same canonical frame policy as top-level clauses.",
+      "implementation": "Builder validation now recursively rejects registered-but-unframed nested predicates; the CLI contract declares grounding input.",
+      "evidence": "Nested unframed predicates fail at construction; core and CLI focused suites remain green.",
+      "decision": "Keep recursive frame gating without broadening the registry.",
+      "commit": "dcfb2f0"
+    },
+    {
+      "hypothesis": "Retrieval input integrity must be enforced before semantic quality metrics are computed.",
+      "implementation": "Added duplicate/unknown ID checks, routing-reference validation, bounds/mode checks, malformed source handling, identity-only candidate pools, and fail-closed invalid baseline handling.",
+      "evidence": "Evaluator suite passed 1,882/1,882 after hardening; invalid inputs no longer produce partial or inflated metrics.",
+      "decision": "Keep strict validation and treat historical gold-shaped retrieval artifacts as diagnostic only.",
+      "commit": "055cc3d"
+    },
+    {
+      "hypothesis": "The exact generated contract improves agent transport, but contract compliance alone is not semantic evidence.",
+      "implementation": "Ran two isolated source-only Codex trials using the generated contract and typed builder-shaped outputs without gold or expected semantic data.",
+      "evidence": "Agents produced mostly builder-shaped candidates and abstained on unsupported cases, but diverged on role conventions, modality/time terms, and open-concept names.",
+      "decision": "Retain exact contract and builder; next evidence must use opaque handles and independent development gold.",
+      "commit": "d185cae"
     }
   ],
-  "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
+  "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
   "protectedCorpus": "none created in this mission; prior inspected corpora remain diagnostic",
   "openBlockers": ["unbiased morphology accuracy", "contextual sense disambiguation", "large agent-native text-to-Sem benchmark", "retrieval from agent-extracted Sem", "second independent agent/model comparison"]
 }

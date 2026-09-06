@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:38:20+03:00
+Recorded: 2026-09-06T18:04:21+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: d40464601f3c5604f5d6a235a2b2682aacf7f5b9
+Current HEAD: d185cae421d9f874d2a06b2236d061d7136fcc3c
 
 ## Scope and prohibitions
 
@@ -196,10 +196,20 @@ hardening. Highest-leverage next action is an independently authored source-only
 text-to-Sem benchmark with the generated frame contract, followed by explicit
 contextual candidate-set scoring and retrieval. Do not create protected data.
 
+## Latest continuation updates
+
+- Blind candidate provenance can now bind a candidate to the SHA-256 of its
+  source text; mismatches fail closed before retrieval metrics (358de09).
+- Typed builder validation now recurses through nested conditions and
+  consequences, and the CLI contract declares grounding input (dcfb2f0).
+- Retrieval inputs, routing references, identity-only candidate pools, and
+  invalid baseline handling are hardened (055cc3d).
+- The exact-contract source-only extraction trial remains diagnostic only;
+  no gold or expected semantic data was exposed (d185cae).
+
 ## Uncommitted state
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
-prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `d40464601f3c5604f5d6a235a2b2682aacf7f5b9`.
+current code/evidence boundary is `d185cae421d9f874d2a06b2236d061d7136fcc3c`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
