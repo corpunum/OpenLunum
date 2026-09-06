@@ -57,7 +57,7 @@ for (const candidate of candidates) {
 const memories = dataset.filter((item) => item.type === 'memory');
 const queries = dataset.filter((item) => item.type === 'query');
 const extract = async ({ id }) => candidateById.get(id) ?? null;
-const evaluation = await runRawTextRetrievalEvaluation({ memories, queries, extract, threshold: 0.8, topK: 3, baselines: { lexical: lexicalBaseline } });
+const evaluation = await runRawTextRetrievalEvaluation({ memories, queries, extract, mode: 'exact', threshold: 0.8, topK: 3, baselines: { lexical: lexicalBaseline } });
 const output = {
   type: 'codex-agent-development-raw-text-retrieval',
   version: 1,
@@ -67,7 +67,7 @@ const output = {
   embeddingUsed: false,
   extractor: { kind: 'agent-produced-candidate-ledger', input: 'raw text plus language only', candidatePath, candidateSha256: await sha256File(path.join(root, candidatePath)), candidateCount: candidates.length, acceptedCandidates: [...candidateById.values()].filter(Boolean).length },
   dataset: { path: datasetPath, sha256: await sha256File(path.join(root, datasetPath)), memoryCount: memories.length, queryCount: queries.length },
-  evaluator: { implementation: 'packages/eval/src/raw-text-retrieval.ts', inputMode: evaluation.inputMode, threshold: evaluation.threshold, topK: evaluation.topK },
+  evaluator: { implementation: 'packages/eval/src/raw-text-retrieval.ts', inputMode: evaluation.inputMode, mode: evaluation.mode, threshold: evaluation.threshold, topK: evaluation.topK },
   metrics: evaluation.metrics,
   baselines: evaluation.baselines,
   queryResults: evaluation.queryResults,

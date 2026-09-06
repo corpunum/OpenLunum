@@ -22,6 +22,7 @@
   "evaluator": {
     "implementation": "packages/eval/src/raw-text-retrieval.ts",
     "inputMode": "raw-text-only",
+    "mode": "exact",
     "threshold": 0.8,
     "topK": 3
   },
@@ -35,54 +36,54 @@
     "queryIdentityCoverage": 0.9166666666666666,
     "memoryIdentityCoverage": 1,
     "conditionalQueryCount": 10,
-    "conditionalTop1Accuracy": 1,
-    "conditionalRecall": 1,
-    "semanticMatchingFailures": 0,
+    "conditionalTop1Accuracy": 0.4,
+    "conditionalRecall": 0.4,
+    "semanticMatchingFailures": 6,
     "rankingFailures": 0,
-    "truePositives": 10,
+    "truePositives": 4,
     "falsePositives": 0,
-    "falseNegatives": 0,
+    "falseNegatives": 6,
     "trueNegatives": 33,
     "precision": 1,
-    "recall": 1,
-    "f1": 1,
+    "recall": 0.4,
+    "f1": 0.5714285714285715,
     "falsePositiveRate": 0,
-    "top1Accuracy": 1,
-    "positiveTop1Accuracy": 1,
+    "top1Accuracy": 0.4,
+    "positiveTop1Accuracy": 0.4,
     "negativeRejectionAccuracy": 1,
-    "topKRecall": 1,
+    "topKRecall": 0.4,
     "byLanguagePair": {
       "el-en": {
         "queries": 4,
         "precision": 1,
-        "recall": 1,
-        "f1": 1,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
         "falsePositiveRate": 0,
-        "topKRecall": 1
+        "topKRecall": 0.5
       },
       "en-el": {
         "queries": 5,
         "precision": 1,
-        "recall": 1,
-        "f1": 1,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
         "falsePositiveRate": 0,
-        "topKRecall": 1
+        "topKRecall": 0.5
       },
       "es-en": {
         "queries": 1,
         "precision": 1,
-        "recall": 1,
-        "f1": 1,
+        "recall": 0,
+        "f1": 0,
         "falsePositiveRate": 0,
-        "topKRecall": 1
+        "topKRecall": 0
       },
       "en-es": {
         "queries": 2,
         "precision": 1,
-        "recall": 1,
-        "f1": 1,
+        "recall": 0,
+        "f1": 0,
         "falsePositiveRate": 0,
-        "topKRecall": 1
+        "topKRecall": 0
       }
     }
   },
@@ -169,21 +170,19 @@
         "m-en-production"
       ],
       "routedOutEquivalentMemoryIds": [],
-      "retrievedMemoryIds": [
-        "m-en-production"
-      ],
-      "matchedMemoryIds": [
-        "m-en-production"
-      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
       "extracted": true,
       "candidateCount": 5,
-      "semanticMatchingFailures": [],
+      "semanticMatchingFailures": [
+        "m-en-production"
+      ],
       "rankingFailures": [],
       "precision": 1,
-      "recall": 1,
-      "f1": 1,
+      "recall": 0,
+      "f1": 0,
       "falsePositiveRate": 0,
-      "top1Correct": true
+      "top1Correct": false
     },
     {
       "queryId": "q-en-production-to-el",
@@ -196,21 +195,19 @@
         "m-el-production"
       ],
       "routedOutEquivalentMemoryIds": [],
-      "retrievedMemoryIds": [
-        "m-el-production"
-      ],
-      "matchedMemoryIds": [
-        "m-el-production"
-      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
       "extracted": true,
       "candidateCount": 4,
-      "semanticMatchingFailures": [],
+      "semanticMatchingFailures": [
+        "m-el-production"
+      ],
       "rankingFailures": [],
       "precision": 1,
-      "recall": 1,
-      "f1": 1,
+      "recall": 0,
+      "f1": 0,
       "falsePositiveRate": 0,
-      "top1Correct": true
+      "top1Correct": false
     },
     {
       "queryId": "q-el-deadline-to-en",
@@ -277,21 +274,19 @@
         "m-en-retry"
       ],
       "routedOutEquivalentMemoryIds": [],
-      "retrievedMemoryIds": [
-        "m-en-retry"
-      ],
-      "matchedMemoryIds": [
-        "m-en-retry"
-      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
       "extracted": true,
       "candidateCount": 5,
-      "semanticMatchingFailures": [],
+      "semanticMatchingFailures": [
+        "m-en-retry"
+      ],
       "rankingFailures": [],
       "precision": 1,
-      "recall": 1,
-      "f1": 1,
+      "recall": 0,
+      "f1": 0,
       "falsePositiveRate": 0,
-      "top1Correct": true
+      "top1Correct": false
     },
     {
       "queryId": "q-en-retry-to-es",
@@ -304,21 +299,19 @@
         "m-es-retry"
       ],
       "routedOutEquivalentMemoryIds": [],
-      "retrievedMemoryIds": [
-        "m-es-retry"
-      ],
-      "matchedMemoryIds": [
-        "m-es-retry"
-      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
       "extracted": true,
       "candidateCount": 1,
-      "semanticMatchingFailures": [],
+      "semanticMatchingFailures": [
+        "m-es-retry"
+      ],
       "rankingFailures": [],
       "precision": 1,
-      "recall": 1,
-      "f1": 1,
+      "recall": 0,
+      "f1": 0,
       "falsePositiveRate": 0,
-      "top1Correct": true
+      "top1Correct": false
     },
     {
       "queryId": "q-el-private-to-en",
@@ -331,21 +324,19 @@
         "m-en-private"
       ],
       "routedOutEquivalentMemoryIds": [],
-      "retrievedMemoryIds": [
-        "m-en-private"
-      ],
-      "matchedMemoryIds": [
-        "m-en-private"
-      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
       "extracted": true,
       "candidateCount": 5,
-      "semanticMatchingFailures": [],
+      "semanticMatchingFailures": [
+        "m-en-private"
+      ],
       "rankingFailures": [],
       "precision": 1,
-      "recall": 1,
-      "f1": 1,
+      "recall": 0,
+      "f1": 0,
       "falsePositiveRate": 0,
-      "top1Correct": true
+      "top1Correct": false
     },
     {
       "queryId": "q-en-private-to-el",
@@ -358,21 +349,19 @@
         "m-el-private"
       ],
       "routedOutEquivalentMemoryIds": [],
-      "retrievedMemoryIds": [
-        "m-el-private"
-      ],
-      "matchedMemoryIds": [
-        "m-el-private"
-      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
       "extracted": true,
       "candidateCount": 4,
-      "semanticMatchingFailures": [],
+      "semanticMatchingFailures": [
+        "m-el-private"
+      ],
       "rankingFailures": [],
       "precision": 1,
-      "recall": 1,
-      "f1": 1,
+      "recall": 0,
+      "f1": 0,
       "falsePositiveRate": 0,
-      "top1Correct": true
+      "top1Correct": false
     },
     {
       "queryId": "q-en-staging-negative",
