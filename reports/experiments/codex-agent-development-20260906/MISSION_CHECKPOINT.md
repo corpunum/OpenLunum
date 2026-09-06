@@ -295,9 +295,14 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - An independent agent-generated 12-row supported-predicate corpus proposal
   was audited and rejected before scoring because several rows omitted required
   frame roles or conflated predicates. No rows entered a benchmark.
+- A fresh frame-complete source-only trial separated transport from grounding:
+  6/6 EN/EL/ES/FR/DE/ID candidates passed deterministic gates, but the
+  equivalent EN/EL/ID send group produced three open-concept IDs and three
+  LFPs. No gold was exposed; this confirms the grounding bottleneck without
+  weakening exact identity.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `d9ab0f93cf1aed53733bdad26eee2a2af8f7fa9f`.
+The current code/evidence boundary is `c1fae73fc8b8e8b0a907a77f082e27514914545a`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
