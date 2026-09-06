@@ -1,0 +1,19 @@
+{
+  "type": "development-unimorph-unbiased-grounding",
+  "version": 1,
+  "script": "scripts/research/unimorph-unbiased-benchmark.mjs",
+  "samplePerLanguage": 500,
+  "total": 2500,
+  "selection": "deterministically hash-ordered non-lemma surface forms; all selected forms remain in the denominator",
+  "goldPolicy": "gold lemma/POS comes from UniMorph; exact identity correctness requires one OMW/CILI identity for that lemma",
+  "languages": {
+    "en": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.122, "candidateExactAccuracyAll": 0.122, "candidateSetRecallAll": 0.224, "ambiguousRate": 0.102, "unresolvedRate": 0.776, "goldUnique": 61, "falsePositiveIdentity": 0 },
+    "el": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.104, "candidateExactAccuracyAll": 0.104, "candidateSetRecallAll": 0.15, "ambiguousRate": 0.046, "unresolvedRate": 0.85, "goldUnique": 83, "falsePositiveIdentity": 0 },
+    "es": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.166, "candidateExactAccuracyAll": 0.166, "candidateSetRecallAll": 0.582, "ambiguousRate": 0.416, "unresolvedRate": 0.418, "goldUnique": 87, "falsePositiveIdentity": 0 },
+    "fr": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.09, "candidateExactAccuracyAll": 0.09, "candidateSetRecallAll": 0.294, "ambiguousRate": 0.204, "unresolvedRate": 0.706, "goldUnique": 45, "falsePositiveIdentity": 0 },
+    "id": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.16, "candidateExactAccuracyAll": 0.16, "candidateSetRecallAll": 0.556, "ambiguousRate": 0.396, "unresolvedRate": 0.444, "goldUnique": 80, "falsePositiveIdentity": 0 }
+  },
+  "aggregate": { "goldUnique": 356, "candidateIdentityAvailable": 321, "candidateSetRecallSum": 903, "falsePositiveIdentity": 0 },
+  "safety": "No false-positive exact identities in the 2,500-case probe; this does not replace a dedicated hard-negative morphology benchmark.",
+  "decision": "MORPHOLOGY_IS_SAFE_BUT_NOT_SUFFICIENT; keep as optional candidate evidence, do not make it unconditional exact grounding"
+}
