@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:03:00+03:00
+Recorded: 2026-09-06T17:18:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: e3af69b55eee7e869fb22511a94879fd3b4b0b98
+Current HEAD: 128fa6f5559bf89c38ea5a4f67bd1cef9008ee27
 
 ## Scope and prohibitions
 
@@ -67,6 +67,9 @@ used.
   deterministic core accepted 9/10 for identity in each agent. Agent A
   converged on 3/3 multilingual groups and Agent B on 1/3. Greek and Spanish
   open-concept naming diverged; the result is development diagnostic only.
+- Hardened stable-ID grounding against malformed IDs, direct resolver
+  exceptions, and identical bare IDs from different namespaces. Core suite is
+  1,798/1,798 after rebuilding the package.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -108,7 +111,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 85 minutes. Completed real-resource
+Elapsed at recording: approximately 105 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only

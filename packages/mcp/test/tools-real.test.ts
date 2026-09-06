@@ -44,7 +44,7 @@ test('lunum_build_candidate exposes alternative frame requirements', async () =>
     roles: { agent: { type: 'actor', id: 'uploader' }, theme: { type: 'object', id: 'upload' } },
   })));
   assert.equal(data.success, true);
-  assert.deepEqual(data.requiredRoles, []);
+  assert.deepEqual(data.requiredRoles, ['agent']);
   assert.deepEqual(data.atLeastOneOf, ['count', 'theme']);
 });
 

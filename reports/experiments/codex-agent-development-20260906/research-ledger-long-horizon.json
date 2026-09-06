@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:03:00+03:00",
-  "currentHead": "e3af69b55eee7e869fb22511a94879fd3b4b0b98",
+  "lastUpdated": "2026-09-06T17:18:00+03:00",
+  "currentHead": "128fa6f5559bf89c38ea5a4f67bd1cef9008ee27",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -96,7 +96,14 @@
       "implementation": "Two isolated Codex agents received 12 fresh source items plus the generated extraction contract, with no gold, pair labels, or expected identities. Their candidates were submitted through the deterministic core.",
       "evidence": "Each agent produced 10 candidates and 2 abstentions; 10/10 submitted candidates were transport-valid, 9/10 frame-valid and identity-available, with one contained retry frame failure. Agent A converged on 3/3 multilingual groups, Agent B on 1/3; open-concept naming diverged for Greek and Spanish lexicalizations.",
       "decision": "Keep frame-first as a transport/adoption aid, but do not treat identity availability as semantic accuracy. The remaining bottleneck is grounding and context-sensitive concept identity. Persisted in source-only-frame-first-trial-v2.json.",
-      "commit": "pending-evidence-commit"
+      "commit": "671ed0a"
+    },
+    {
+      "hypothesis": "Stable-ID provider inputs and provider agreement are safe enough to accept arbitrary resolver output.",
+      "implementation": "Added fail-closed handling for direct stable resolver exceptions and malformed/blank external IDs; cascade agreement now compares the effective identifier namespace as well as the ID.",
+      "evidence": "Core suite passes 1,798/1,798. Tests cover blank IDs, resolver failure, and identical bare IDs returned by distinct provider namespaces. Existing versioned materialization and untrusted-candidate gates remain unchanged.",
+      "decision": "Keep the generic boundary hardening. Provider snapshots remain optional evidence and malformed/unavailable providers cannot manufacture exact identity.",
+      "commit": "128fa6f"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
