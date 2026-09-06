@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:05:00+03:00
+Recorded: 2026-09-06T16:58:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 74cc982704607563725acd3faf8d9271547cf09b
+Current HEAD: cbf227ec3b6aa8f7845bf8032206b1dbc9ee51c8
 
 ## Scope and prohibitions
 
@@ -75,6 +75,8 @@ used.
   Core suite is 1,799/1,799.
 - Rebuilt and reran the complete repository gate after the provider safety
   changes: `pnpm verify` passed with exit 0 and `git diff --check` passed.
+- Hardened the OMW tab importer to classify malformed mapped/unmapped rows
+  before coverage lookup; core suite is 1,801/1,801 after rebuild.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -116,7 +118,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 152 minutes. Completed real-resource
+Elapsed at recording: approximately 85 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only

@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T18:05:00+03:00",
-  "currentHead": "74cc982704607563725acd3faf8d9271547cf09b",
+  "lastUpdated": "2026-09-06T16:58:00+03:00",
+  "currentHead": "cbf227ec3b6aa8f7845bf8032206b1dbc9ee51c8",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -118,6 +118,13 @@
       "evidence": "pnpm verify passed with exit 0, including workspace tests and evaluation smoke; git diff --check passed. Core provider suite is 1,799/1,799 and MCP is 57/57.",
       "decision": "Keep the changes. No new protected or model evaluation is justified yet; continue development-only research and retain all prior corpora as diagnostic.",
       "commit": "74cc982"
+    },
+    {
+      "hypothesis": "Lexical importer malformed-input accounting is already complete and cannot misstate resource coverage.",
+      "implementation": "Validated line structure before mapping lookup for three-field OMW rows and matching Wordnet Bahasa rows; malformed mapped and unmapped examples now classify consistently as malformed.",
+      "evidence": "Core suite passes 1,801/1,801 after the importer correction. Existing definition-row ignore behavior remains unchanged and intentionally separate from malformed data.",
+      "decision": "Keep the correction. It improves reproducibility of resource scale/coverage diagnostics without changing semantic identity or provider resolution.",
+      "commit": "cbf227e"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
