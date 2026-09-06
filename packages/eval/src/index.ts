@@ -181,6 +181,8 @@ export type {
 
 // Raw-text retrieval: the extraction and retrieval stages are both exercised.
 export { runRawTextRetrievalEvaluation } from './raw-text-retrieval.js';
+export { validateBlindAgentLedger } from './blind-agent-ledger.js';
+export type { BlindSourceItem, BlindCandidateRow, BlindLedgerValidation } from './blind-agent-ledger.js';
 export type {
   RawTextMemory,
   RawTextQuery,
