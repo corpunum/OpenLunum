@@ -189,6 +189,8 @@ test('fingerprint tool: accepts valid sem', async () => {
   const response = JSON.parse(getText(result));
   assert.strictEqual(response.success, true);
   assert.ok(response.fingerprint.startsWith('lfp:'));
+  assert.strictEqual(response.identityScope, 'legacy-compatibility');
+  assert.strictEqual(response.semanticIdentity, false);
 });
 
 test('validate tool: validates required sem field', async () => {

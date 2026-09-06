@@ -156,12 +156,14 @@ export async function runRawTextRetrievalEvaluation(input: {
   const near = mode === 'near-semantic' ? new NearSemanticFingerprintGenerator(threshold) : null;
   const extractedMemories: ExtractedMemory[] = [];
   for (const memory of input.memories) {
-    const result = await extract({ ...memory, kind: 'memory' }, input.extract);
+    const result = await extract({ id: memory.id, text: memory.text, language: memory.language, kind: 'memory' }, input.extract);
     extractedMemories.push({ memory, sem: result.sem, ...(result.error ? { error: result.error } : {}) });
   }
   const queryResults: RawTextRetrievalQueryResult[] = [];
   for (const query of input.queries) {
-    const queryExtraction = await extract({ ...query, kind: 'query' }, input.extract);
+    // The extractor receives only the raw source contract. Expected IDs and
+    // semantic-equivalence labels are evaluator-private scoring metadata.
+    const queryExtraction = await extract({ id: query.id, text: query.text, language: query.language, kind: 'query' }, input.extract);
     if (!queryExtraction.sem) {
       queryResults.push({ queryId: query.id, queryLanguage: query.language, targetLanguage: query.targetLanguage ?? null, expectedMemoryIds: [...query.expectedMemoryIds], semanticEquivalentMemoryIds: [...(query.semanticEquivalentMemoryIds ?? query.expectedMemoryIds)], routedOutEquivalentMemoryIds: [], retrievedMemoryIds: [], matchedMemoryIds: [], extracted: false, candidateCount: 0, extractionError: queryExtraction.error ?? 'extractor abstained', semanticMatchingFailures: [...query.expectedMemoryIds], rankingFailures: [], precision: query.expectedMemoryIds.length === 0 ? 1 : 0, recall: 0, f1: 0, top1Correct: false });
       continue;
@@ -215,7 +217,14 @@ export async function runRawTextRetrievalEvaluation(input: {
     const pairTp = results.reduce((sum, result) => sum + result.matchedMemoryIds.length, 0);
     const pairFp = results.reduce((sum, result) => sum + result.retrievedMemoryIds.filter((id) => !result.expectedMemoryIds.includes(id)).length, 0);
     const pairFn = results.reduce((sum, result) => sum + result.expectedMemoryIds.filter((id) => !result.retrievedMemoryIds.includes(id)).length, 0);
-    const pairTn = results.reduce((sum, result) => sum + Math.max(0, extractedMemories.length - result.retrievedMemoryIds.length - result.expectedMemoryIds.length), 0);
+    const pairTn = results.reduce((sum, result) => {
+      const query = input.queries.find((candidate) => candidate.id === result.queryId);
+      const eligibleExpected = query?.expectedMemoryIds.filter((id) => {
+        const entry = extractedMemories.find((memory) => memory.memory.id === id);
+        return entry?.sem !== null && (!query.targetLanguage || entry?.memory.language === query.targetLanguage);
+      }).length ?? 0;
+      return sum + Math.max(0, result.candidateCount - result.retrievedMemoryIds.length - eligibleExpected + result.matchedMemoryIds.length);
+    }, 0);
     const positiveResults = results.filter((result) => result.expectedMemoryIds.length > 0);
     byLanguagePair[pair] = { queries: results.length, ...metrics(pairTp, pairFp, pairFn, pairTn), topKRecall: positiveResults.length > 0 ? positiveResults.reduce((sum, result) => sum + result.recall, 0) / positiveResults.length : 0 };
   }

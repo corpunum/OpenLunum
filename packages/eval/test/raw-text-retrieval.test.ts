@@ -128,6 +128,22 @@ test('baseline hooks receive raw text only and are reported beside semantic retr
   assert.equal(report.baselines.lexical?.falseNegatives, 1);
 });
 
+test('extractor receives no evaluator-private retrieval labels', async () => {
+  const seen: Array<Record<string, unknown>> = [];
+  const candidate = sem('publish', 'fact');
+  await runRawTextRetrievalEvaluation({
+    memories: [{ id: 'memory', text: 'Memory text.', language: 'en' }],
+    queries: [{ id: 'query', text: 'Query text?', language: 'en', targetLanguage: 'en', expectedMemoryIds: ['memory'], semanticEquivalentMemoryIds: ['memory'] }],
+    extract: async (input) => { seen.push(input as unknown as Record<string, unknown>); return candidate; },
+  });
+  assert.equal(seen.length, 2);
+  for (const input of seen) {
+    assert.deepEqual(Object.keys(input).sort(), ['id', 'kind', 'language', 'text']);
+    assert.equal('expectedMemoryIds' in input, false);
+    assert.equal('semanticEquivalentMemoryIds' in input, false);
+  }
+});
+
 test('baseline failures remain visible instead of disappearing from denominators', async () => {
   const report = await runRawTextRetrievalEvaluation({
     memories: [{ id: 'm', text: 'A fact.', language: 'en' }],

@@ -36,6 +36,20 @@ test('next reserves an item so concurrent workers cannot receive the same claim'
   assert.equal(session.next()?.itemId, 'blind-abstain');
 });
 
+test('concurrent submissions cannot append duplicate results for one item', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
+  const session = await BlindAgentEvaluationSession.create('run-submit-race', items, dir);
+  const submissions = await Promise.allSettled([
+    session.submit({ runId: 'run-submit-race', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent' } }),
+    session.submit({ runId: 'run-submit-race', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent' } }),
+  ]);
+  assert.equal(submissions.filter((result) => result.status === 'fulfilled').length, 1);
+  assert.equal(submissions.filter((result) => result.status === 'rejected').length, 1);
+  assert.equal(session.completedCount(), 1);
+  const ledger = await readFile(path.join(dir, 'agent-results.jsonl'), 'utf8');
+  assert.equal(ledger.split('\n').filter(Boolean).length, 1);
+});
+
 test('submission scores privately, persists immediately, and resumes without duplication', async () => {
   const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
   const session = await BlindAgentEvaluationSession.create('run-resume', items, dir);

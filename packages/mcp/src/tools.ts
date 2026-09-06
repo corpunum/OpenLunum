@@ -120,7 +120,12 @@ export const fingerprintTool: LunumToolDefinition = {
       if (!sem || typeof sem !== 'object') return err('sem is required and must be an object');
       const length = typeof input.length === 'number' ? input.length : undefined;
       const fp = fingerprintSem(sem, length !== undefined ? { length } : {});
-      return ok({ success: true, fingerprint: fp });
+      return ok({
+        success: true,
+        fingerprint: fp,
+        identityScope: 'legacy-compatibility',
+        semanticIdentity: false,
+      });
     } catch (error) {
       return err((error as Error).message);
     }

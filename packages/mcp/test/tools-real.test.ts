@@ -165,6 +165,8 @@ test('lunum_fingerprint produces real lfp digest', async () => {
   assert.strictEqual(data.success, true);
   assert.ok(data.fingerprint.startsWith('lfp:'));
   assert.ok(data.fingerprint.includes('sha256:'));
+  assert.equal(data.identityScope, 'legacy-compatibility');
+  assert.equal(data.semanticIdentity, false);
 });
 
 test('lunum_fingerprint is deterministic', async () => {

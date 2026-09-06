@@ -168,6 +168,7 @@ export class BlindAgentEvaluationSession {
   private readonly completed = new Map<string, DurableBlindResult>();
   private readonly privateResults = new Map<string, PrivateBlindResult>();
   private readonly claimed = new Set<string>();
+  private readonly submitting = new Set<string>();
   private readonly criticalNegativePairs: readonly BlindCriticalNegativePair[];
   private readonly criticalNegativePairsHash: string;
   private readonly contractHashValue: string;
@@ -254,6 +255,7 @@ export class BlindAgentEvaluationSession {
     const ledger = await readJsonlLedger<DurableBlindResult>(this.ledgerPath);
     const privateLedger = await readJsonlLedger<PrivateBlindResult>(this.privateLedgerPath);
     for (const result of privateLedger) {
+      if (Object.keys(result).sort().join(',') !== 'candidateIdentity,candidateSem,itemId,provenance,runId,schema') throw new Error('invalid private blind evaluation ledger; refusing resume');
       if (result.schema !== 'openlunum-blind-private/0.1' || result.runId !== this.runId || !this.itemById.has(result.itemId) || this.privateResults.has(result.itemId)) throw new Error('invalid private blind evaluation ledger; refusing resume');
       this.privateResults.set(result.itemId, result);
     }
@@ -317,7 +319,9 @@ export class BlindAgentEvaluationSession {
     if (input.runId !== this.runId) throw new Error('blind evaluation run ID mismatch');
     const item = this.itemById.get(input.itemId);
     if (!item) throw new Error('unknown blind evaluation item');
-    if (this.completed.has(item.id)) throw new Error('blind evaluation item already completed');
+    if (this.completed.has(item.id) || this.submitting.has(item.id)) throw new Error('blind evaluation item already completed or in progress');
+    this.submitting.add(item.id);
+    try {
     const expectedOutcome = safeExpectedOutcome(item);
     let candidate: ReturnType<typeof submitCandidate> | null = null;
     let error: string | null = null;
@@ -344,9 +348,14 @@ export class BlindAgentEvaluationSession {
     this.completed.set(item.id, result);
     this.privateResults.set(item.id, privateResult);
     this.claimed.delete(item.id);
+    this.submitting.delete(item.id);
     await this.persistCheckpoint();
     const { schema: _schema, ...publicResult } = result;
     return publicResult;
+    } catch (error) {
+      this.submitting.delete(item.id);
+      throw error;
+    }
   }
 
   completedCount(): number { return this.completed.size; }
@@ -414,6 +423,8 @@ export class BlindAgentEvaluationSession {
   private validateDurableResult(result: DurableBlindResult, privateResult: PrivateBlindResult | undefined): void {
     const item = this.itemById.get(result.itemId);
     if (!item || !privateResult) throw new Error(`invalid blind result record for ${result.itemId}; refusing resume`);
+    const expectedKeys = ['abstained', 'candidateIdentityAvailable', 'diagnostics', 'failureClass', 'identityComparable', 'provenance', 'runId', 'schema', 'semanticIdentityExact', 'status', 'submittedAt', 'itemId'];
+    if (Object.keys(result).sort().join(',') !== expectedKeys.sort().join(',')) throw new Error(`invalid blind result fields for ${result.itemId}; refusing resume`);
     if (!['passed', 'failed', 'error'].includes(result.status) || typeof result.candidateIdentityAvailable !== 'boolean' || typeof result.identityComparable !== 'boolean' || typeof result.semanticIdentityExact !== 'boolean' || typeof result.abstained !== 'boolean' || !Array.isArray(result.diagnostics) || !result.provenance || typeof result.provenance !== 'object') throw new Error(`invalid blind result fields for ${result.itemId}; refusing resume`);
     if (result.status === 'error') {
       if (result.failureClass !== 'submission_error' || result.candidateIdentityAvailable || result.identityComparable || result.semanticIdentityExact || !result.abstained) throw new Error(`invalid blind error result for ${result.itemId}; refusing resume`);
