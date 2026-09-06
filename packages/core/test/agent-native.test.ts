@@ -47,7 +47,9 @@ test('extraction contract is generated from the protocol and frame registries', 
   assert.equal(first.grounding.version, 'lunum-grounding/0.1');
   assert.equal(first.grounding.identityBehavior.includes('cannot grant lfp:2.1'), true);
   assert.equal(first.frameFirst.mode, 'builder-then-submit');
-  assert.match(first.frameFirst.roleValues, /typed LunumTerm/iu);
+  assert.match(first.frameFirst.roleValues, /field name type/iu);
+  assert.match(first.frameFirst.framePromptBlock, /prefer\(/u);
+  assert.equal(first.frameFirst.termShape.discriminator, 'type');
 });
 
 test('candidate submission returns identity but never self-promotes an agent proposal', () => {

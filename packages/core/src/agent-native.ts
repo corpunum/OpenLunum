@@ -5,6 +5,7 @@ import { semanticFingerprint, SEMANTIC_IDENTITY_FINGERPRINT_VERSION } from './fi
 import {
   CANONICAL_SEMANTIC_FRAMES,
   SEMANTIC_FRAME_REGISTRY_VERSION,
+  canonicalFramePromptBlock,
   validateSemFrames,
 } from './frame-registry.js';
 import {
@@ -88,6 +89,8 @@ export interface ExtractionContract {
   frameFirst: {
     mode: 'builder-then-submit';
     inputFields: readonly string[];
+    termShape: { discriminator: 'type'; identifierFields: readonly string[]; literalFields: readonly string[] };
+    framePromptBlock: string;
     roleValues: string;
     unframedBehavior: string;
   };
@@ -122,7 +125,9 @@ export function getExtractionContract(): ExtractionContract {
     frameFirst: {
       mode: 'builder-then-submit',
       inputFields: Object.freeze(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences']),
-      roleValues: 'Use typed LunumTerm objects for roles whose frame declares allowedTermTypes; builder rejects missing or disallowed types, missing required roles, extra roles, and exclusive-role conflicts.',
+      termShape: Object.freeze({ discriminator: 'type', identifierFields: Object.freeze(['id', 'ref']), literalFields: Object.freeze(['value']) }),
+      framePromptBlock: canonicalFramePromptBlock(),
+      roleValues: 'Use typed LunumTerm objects with the field name type (never termType). Identifier terms use id or ref; literal terms use value. The builder rejects missing or disallowed types, missing required roles, extra roles, and exclusive-role conflicts.',
       unframedBehavior: 'lunum_build_candidate rejects registered-but-unframed predicates; submitCandidate remains available for candidate-only abstention.',
     },
     grounding: {
