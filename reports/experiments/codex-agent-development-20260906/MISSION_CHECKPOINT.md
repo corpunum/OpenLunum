@@ -371,6 +371,11 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   with zero false equivalences. Results are recorded in
   `experiments/development-grounding-ladder-20260906/results-summary.json` and
   are diagnostic development evidence, not a protected claim.
+- An independent audit recomputed the ladder with true candidate LFPs rather
+  than row IDs: candidate self-consistency is 8/8 groups, gold convergence is
+  1/8, exact parse is 3/24, and negative safety is 6/6 comparable with 0 false
+  equivalences. The ledger audit found no forbidden gold metadata. Repeated
+  shared kind/type/identifier choices can converge while remaining wrong.
 
 ## Uncommitted state
 

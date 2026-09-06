@@ -42,7 +42,8 @@
     "groups": 8,
     "groupsAllCanonical": 8,
     "groupsConvergingToOneCandidateLfp": 8,
-    "groupsConvergingToGoldLfp": 1
+    "groupsConvergingToGoldLfp": 1,
+    "interpretation": "Candidate self-consistency only; repeated shared wrong kind/type/identifier choices still count as convergence and are not semantic correctness."
   },
   "criticalNegatives": {
     "pairsDefined": 6,
@@ -55,5 +56,5 @@
     "note": "The corpus contains private development gold by design; the extraction ledger does not.",
     "protectedClaim": false
   },
-  "interpretation": "Typed transport and deterministic containment succeeded on this ladder. Exact identity remains limited by agent-selected semantic naming/types; this is not protected or generalization evidence."
+  "interpretation": "Typed transport and deterministic containment succeeded on this ladder. Exact identity remains limited by agent-selected kind/type/open-concept naming. The source-only agent ledger is a deterministic development artifact, not independent model generalization or protected evidence."
 }
