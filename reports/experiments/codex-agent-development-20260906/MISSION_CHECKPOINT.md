@@ -304,9 +304,13 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   is unchanged at 19/100 exact cross-language convergence with 100/100 shared
   candidate coverage and the same ambiguity categories. No historical report
   was overwritten.
+- Ran a source-only raw retrieval probe with three agent-extracted memories and
+  one Greek query. Identity coverage was 3/3 memories and 1/1 query, but exact
+  conditional/end-to-end recall was 0 because equivalent open-concept labels
+  did not converge. No gold Sem entered extraction.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `e1fea725f57ddab12497bc4a22b02999d948dfe9`.
+The current code/evidence boundary is `f90bd13d647013afd559260f69f2e880c844e5aa`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
