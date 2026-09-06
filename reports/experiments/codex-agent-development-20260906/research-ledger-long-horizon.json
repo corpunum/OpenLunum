@@ -559,9 +559,23 @@
       "evidence": "24/24 memory identities and 24/24 query identities were available. Exact semantic retrieval was 24/24 with zero false positives; lexical retrieval on the same raw pool recalled 7/24 (29.17%). The result is intentionally diagnostic: repeated candidate structures from one source-only ledger make this conditional evaluator evidence, not general raw-text extraction or protected capability evidence.",
       "decision": "Keep the harness and report coverage separately from conditional and end-to-end retrieval. Do not claim retrieval qualification until candidates come from a genuinely blind, independently repeated extraction run.",
       "commit": "752f285"
+    },
+    {
+      "hypothesis": "A larger opaque-handle source-only extraction run will distinguish genuine multilingual extraction from repeated candidate construction.",
+      "implementation": "An independent corpus agent authored 72 parse rows (60 multilingual positives and 12 critical-negative rows) plus 12 abstention rows across 10 semantic groups. A separate extraction agent received only 84 opaque handles with source text/language and the generated contract. A reproducible scorer validated strict source binding and compared private gold fingerprints.",
+      "evidence": "Blind source validation passed 84/84 rows. The extractor produced 70 Sem candidates and 14 abstentions; all 70 candidates were identity-available and stage-valid. Positive parse exactness was 0/60, abstention accuracy 12/12, candidate self-consistency 10/10 groups, gold convergence 0/10, and critical-negative safety 5/6 comparable with 0 false equivalences. The run is development-only; the source ledger contains no gold metadata.",
+      "decision": "Reject the hypothesis that the small ladder was merely noisy: stable candidate outputs still fail private gold systematically. Keep the typed/strict source boundary. The highest-leverage unresolved problem is canonical semantic choice (kind, term type, open concept), requiring a materially different extraction/grounding approach rather than transport tweaks.",
+      "commit": "2f81916"
+    },
+    {
+      "hypothesis": "Blind source manifests must reject evaluator metadata before a larger source-only run is admissible.",
+      "implementation": "Blind ledger validation now enforces the exact source object key set and recursively scans source entries for forbidden evaluator fields, in addition to candidate-result checks.",
+      "evidence": "The adversarial source-manifest leakage regression passes; the scoped evaluator suite passed 8/8 focused tests. The larger source-only run then passed strict source validation with no forbidden fields.",
+      "decision": "Keep this custody fix for future blind/protected runs; it is independent of semantic scoring and does not grant candidates trust.",
+      "commit": "5801779"
     }
   ],
-  "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
+  "nextHighestLeverage": "Run a held-out source-only extraction architecture that supplies structured grounding proposals or deterministic provider candidate sets, then compare exact identity against the current stable-wrong baseline without changing lfp:2.1.",
   "protectedCorpus": "none created in this mission; prior inspected corpora remain diagnostic",
   "openBlockers": ["unbiased morphology accuracy", "contextual sense disambiguation", "large agent-native text-to-Sem benchmark", "retrieval from agent-extracted Sem", "second independent agent/model comparison"]
 }

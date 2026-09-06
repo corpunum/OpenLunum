@@ -382,6 +382,17 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   while the same-pool lexical baseline recalled 7/24 (29.17%). This is only
   diagnostic because the source-only ledger repeats candidate structures across
   each semantic group; it is not general extraction or protected evidence.
+- A larger independent source-only run used 84 opaque handles: 72 parse rows
+  (60 multilingual positives plus 12 critical negatives) and 12 abstention
+  rows. The agent returned 70 candidates and 14 abstentions. Strict source
+  validation passed 84/84, all 70 candidates were identity-available and
+  stage-valid, parse exactness was 0/60, abstention accuracy was 12/12,
+  candidate self-consistency was 10/10 groups, gold convergence was 0/10,
+  and 5/6 negative pairs were comparable with zero false equivalences. This is
+  development-only and confirms stable wrong canonical choices, not transport
+  failure or protected capability.
+- Hardened blind source-manifest validation to reject unknown keys and recursive
+  evaluator metadata leakage. The focused blind-ledger suite passes 8/8.
 
 ## Uncommitted state
 
