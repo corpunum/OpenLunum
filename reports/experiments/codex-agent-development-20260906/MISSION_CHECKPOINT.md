@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:38:45+03:00
+Recorded: 2026-09-06T18:52:40+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 106ce83a2e986b57accb56ff5c27366dca459603
+Current HEAD: 37cf53e5dec5789f3c7978fa93c9be5271c153bf
 
 ## Scope and prohibitions
 
@@ -248,10 +248,12 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   instead of direct builder fields. Seven records failed builder transport;
   no gold or expected semantics were exposed. Keep this diagnostic result and
   do not weaken the typed builder contract.
+- The trial is recorded as transport diagnostics only; it produced no clean
+  retrieval or semantic-capability evidence.
 
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `106ce83a2e986b57accb56ff5c27366dca459603`.
+code/evidence boundary is `37cf53e5dec5789f3c7978fa93c9be5271c153bf`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
