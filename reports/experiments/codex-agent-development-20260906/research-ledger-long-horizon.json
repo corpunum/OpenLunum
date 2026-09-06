@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T15:55:00+03:00",
-  "currentHead": "45ef82b1914828a3e85c0414468b2b1cf676a3f7",
+  "lastUpdated": "2026-09-06T16:12:00+03:00",
+  "currentHead": "pending-next-commit",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -26,11 +26,23 @@
     {
       "hypothesis": "Explicit candidate-set intersection can safely narrow multilingual ambiguity.",
       "implementation": "intersectGroundingCandidateSets, requiring explicit caller relation and rejecting provider errors.",
-      "evidence": "Real OMW report shows 78/100 cross-language pairs have one shared candidate identity; 22 retain multiple candidates.",
-      "decision": "Keep as explicit evidence operation; never silently infer equivalence for an isolated source."
+      "evidence": "Real OMW report shows 78/100 cross-language pairs have one shared candidate identity; 22 retain multiple candidates. A relation-conditioned replay confirms 78 singleton intersections, but only 19 were independently monosemous; 59 were narrowed from ambiguity.",
+      "decision": "Keep as explicit evidence operation; require a machine-readable relation, compatible identity namespace, and preserve merged evidence. Never silently infer equivalence for an isolated source."
+    },
+    {
+      "hypothesis": "An unbiased morphology probe can measure real surface-form coverage without overstating accuracy.",
+      "implementation": "Version-2 probe samples surface/POS observations, passes identical POS to raw and augmented providers, records the actual UniMorph file hash, and labels OMW-derived labels as coverage diagnostics.",
+      "evidence": "Across 2,500 observations: morphology singleton identity coverage was EN 13.4%, EL 8.2%, ES 19.4%, FR 11.0%, ID 17.4%; candidate-set recall was 22.8%, 17.4%, 54.4%, 30.0%, 57.0%. The raw baseline remains low because sampled forms are inflected; labels are circular with respect to OMW and do not prove analyzer accuracy.",
+      "decision": "Retain as honest resource coverage evidence, not a precision/safety claim. Independent morphology gold remains a blocker."
+    },
+    {
+      "hypothesis": "Agent-extracted semantic records can demonstrate useful raw retrieval on development data.",
+      "implementation": "Raw-text-only retrieval harness with lexical baseline and identity/conditional/end-to-end denominators; development candidate ledger checked for gold-field leakage.",
+      "evidence": "Harness run reports 10/10 positive retrieval on 10 memories and 12 queries, but the candidate ledger reproduces gold-shaped paired Sem and row IDs expose semantic hints, so this is evaluator plumbing only, not clean extraction evidence.",
+      "decision": "Do not count as empirical extraction qualification; retain diagnostic artifact and require an independently source-only generated candidate ledger for future retrieval evidence."
     }
   ],
-  "nextHighestLeverage": "Build an unbiased 100+ development morphology benchmark with held-out surface forms and explicit hard negatives, then use the typed builder plus candidate-set grounding in a larger blind-development extraction comparison before any protected corpus.",
+  "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
   "protectedCorpus": "none created in this mission; prior inspected corpora remain diagnostic",
   "openBlockers": ["unbiased morphology accuracy", "contextual sense disambiguation", "large agent-native text-to-Sem benchmark", "retrieval from agent-extracted Sem", "second independent agent/model comparison"]
 }

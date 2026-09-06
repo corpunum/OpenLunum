@@ -1,0 +1,87 @@
+{
+  "type": "development-omw-candidate-intersection-analysis",
+  "version": 1,
+  "status": "diagnostic",
+  "inputPath": "reports/experiments/codex-agent-development-20260906/real-omw-grounding.json",
+  "relation": "same-translation",
+  "byPair": {
+    "en-el": {
+      "total": 20,
+      "resolvedExact": 19,
+      "ambiguous": 1,
+      "unresolved": 0,
+      "candidateSizes": {
+        "1": 19,
+        "2": 1
+      },
+      "independentExact": 1,
+      "narrowedFromAmbiguous": 18
+    },
+    "en-es": {
+      "total": 20,
+      "resolvedExact": 15,
+      "ambiguous": 5,
+      "unresolved": 0,
+      "candidateSizes": {
+        "1": 15,
+        "2": 2,
+        "4": 1,
+        "6": 1,
+        "11": 1
+      },
+      "independentExact": 8,
+      "narrowedFromAmbiguous": 7
+    },
+    "en-fr": {
+      "total": 20,
+      "resolvedExact": 12,
+      "ambiguous": 8,
+      "unresolved": 0,
+      "candidateSizes": {
+        "1": 12,
+        "2": 4,
+        "3": 1,
+        "6": 1,
+        "8": 1,
+        "11": 1
+      },
+      "independentExact": 5,
+      "narrowedFromAmbiguous": 7
+    },
+    "en-de": {
+      "total": 20,
+      "resolvedExact": 20,
+      "ambiguous": 0,
+      "unresolved": 0,
+      "candidateSizes": {
+        "1": 20
+      },
+      "independentExact": 2,
+      "narrowedFromAmbiguous": 18
+    },
+    "en-id": {
+      "total": 20,
+      "resolvedExact": 12,
+      "ambiguous": 8,
+      "unresolved": 0,
+      "candidateSizes": {
+        "1": 12,
+        "2": 5,
+        "3": 1,
+        "9": 1,
+        "12": 1
+      },
+      "independentExact": 3,
+      "narrowedFromAmbiguous": 9
+    }
+  },
+  "aggregate": {
+    "total": 100,
+    "resolvedExact": 78,
+    "ambiguous": 22,
+    "unresolved": 0,
+    "independentExact": 19,
+    "narrowedFromAmbiguous": 59
+  },
+  "interpretation": "Intersection is an explicitly relation-conditioned narrowing operation. A singleton is not evidence that an isolated observation can be safely resolved; the translation relation must be independently justified."
+}

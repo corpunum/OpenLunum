@@ -67,18 +67,29 @@ export interface GroundingCandidateIntersection {
   diagnostics: readonly string[];
 }
 
+export interface GroundingCandidateIntersectionOptions {
+  /** The caller's explicit semantic relation between the observations. */
+  relation: 'same-concept' | 'same-reference' | 'same-translation';
+}
+
 /**
  * Narrow candidate sets only when the caller has an explicit relation between
  * the observations (for example, a judged translation pair). This operation
  * never invents a candidate and never turns lexical proximity into identity.
  */
-export function intersectGroundingCandidateSets(results: readonly GroundingProviderResult[]): GroundingCandidateIntersection {
+export function intersectGroundingCandidateSets(results: readonly GroundingProviderResult[], options: GroundingCandidateIntersectionOptions): GroundingCandidateIntersection {
+  if (!options || !options.relation) return { status: 'unresolved', candidates: [], diagnostics: ['explicit semantic relation is required for candidate-set intersection'] };
   if (results.length === 0) return { status: 'unresolved', candidates: [], diagnostics: ['no provider candidate sets supplied'] };
   if (results.some((result) => result.status === 'provider_error')) return { status: 'unresolved', candidates: [], diagnostics: ['provider error prevents candidate-set intersection'] };
+  const namespaces = new Set(results.flatMap((result) => result.candidates.map((candidate) => candidate.externalId.split(':', 1)[0])));
+  if (namespaces.size > 1) return { status: 'unresolved', candidates: [], diagnostics: ['candidate identity namespaces are incompatible'] };
   let current = new Map(results[0]!.candidates.map((candidate) => [candidate.externalId, candidate]));
   for (const result of results.slice(1)) {
     const next = new Map(result.candidates.map((candidate) => [candidate.externalId, candidate]));
-    current = new Map([...current.entries()].filter(([externalId]) => next.has(externalId)));
+    current = new Map([...current.entries()].flatMap(([externalId, candidate]) => {
+      const other = next.get(externalId);
+      return other ? [[externalId, { ...candidate, evidence: Object.freeze([...new Set([...candidate.evidence, ...other.evidence, `relation:${options.relation}`])]) }] ] : [];
+    }));
   }
   const candidates = [...current.values()].sort((a, b) => a.externalId.localeCompare(b.externalId, 'en'));
   if (candidates.length === 1) return { status: 'resolved_exact', candidates, diagnostics: ['one identity remains in the explicit candidate-set intersection'] };

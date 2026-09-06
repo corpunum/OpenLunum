@@ -79,10 +79,13 @@ test('candidate-set intersection narrows only explicit shared evidence', () => {
   const result = intersectGroundingCandidateSets([
     { status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] },
     { status: 'resolved_exact', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
-  ]);
+  ], { relation: 'same-translation' });
   assert.equal(result.status, 'resolved_exact');
   assert.equal(result.candidates[0]?.externalId, 'ili:i1');
-  assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] }]).status, 'ambiguous');
+  assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] }], { relation: 'same-concept' }).status, 'ambiguous');
+  assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] }, { status: 'ambiguous', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'Q1', evidence: [] }], diagnostics: [] }], { relation: 'same-translation' }).status, 'unresolved');
+  assert.match(intersectGroundingCandidateSets([], { relation: 'same-concept' }).diagnostics[0]!, /no provider/u);
+  assert.match(intersectGroundingCandidateSets([], undefined as never).diagnostics[0]!, /explicit semantic relation/u);
 });
 
 test('stable entity provider accepts only exact prevalidated IDs and deduplicates', () => {

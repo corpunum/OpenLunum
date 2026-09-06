@@ -1,0 +1,417 @@
+{
+  "type": "codex-agent-development-raw-text-retrieval",
+  "version": 1,
+  "status": "diagnostic",
+  "protected": false,
+  "localInferenceUsed": false,
+  "embeddingUsed": false,
+  "extractor": {
+    "kind": "agent-produced-candidate-ledger",
+    "input": "raw text plus language only",
+    "candidatePath": "reports/experiments/codex-agent-development-20260906/agent-extracted-retrieval-candidates.jsonl",
+    "candidateSha256": "d24422355f726ec5449412fb7d81962b15ebf19b8e4914d83610dc759c2443cb",
+    "candidateCount": 22,
+    "acceptedCandidates": 21
+  },
+  "dataset": {
+    "path": "datasets/dev/stage2-retrieval-v1.jsonl",
+    "sha256": "1235f3b750e0fbee35d7fe86dd3aaa7381235ded8ca230b9adf22294096b800a",
+    "memoryCount": 10,
+    "queryCount": 12
+  },
+  "evaluator": {
+    "implementation": "packages/eval/src/raw-text-retrieval.ts",
+    "inputMode": "raw-text-only",
+    "threshold": 0.8,
+    "topK": 3
+  },
+  "metrics": {
+    "queries": 12,
+    "memoryCount": 10,
+    "queryExtractionFailures": 1,
+    "memoryExtractionFailures": 0,
+    "queryIdentityAvailable": 11,
+    "memoryIdentityAvailable": 10,
+    "queryIdentityCoverage": 0.9166666666666666,
+    "memoryIdentityCoverage": 1,
+    "conditionalQueryCount": 10,
+    "conditionalTop1Accuracy": 1,
+    "conditionalRecall": 1,
+    "semanticMatchingFailures": 0,
+    "rankingFailures": 0,
+    "truePositives": 10,
+    "falsePositives": 0,
+    "falseNegatives": 0,
+    "trueNegatives": 33,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1,
+    "falsePositiveRate": 0,
+    "top1Accuracy": 1,
+    "positiveTop1Accuracy": 1,
+    "negativeRejectionAccuracy": 1,
+    "topKRecall": 1,
+    "byLanguagePair": {
+      "el-en": {
+        "queries": 4,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "en-el": {
+        "queries": 5,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "es-en": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "en-es": {
+        "queries": 2,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      }
+    }
+  },
+  "baselines": {
+    "lexical": {
+      "precision": 1,
+      "recall": 0.3,
+      "f1": 0.4615384615384615,
+      "falsePositiveRate": 0,
+      "top1Accuracy": 0.4166666666666667,
+      "positiveTop1Accuracy": 0.3,
+      "negativeRejectionAccuracy": 1,
+      "topKRecall": 0.3,
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 7,
+      "trueNegatives": 37,
+      "failures": 0
+    }
+  },
+  "queryResults": [
+    {
+      "queryId": "q-el-preference-to-en",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-preference"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-en-preference"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-en-preference"
+      ],
+      "matchedMemoryIds": [
+        "m-en-preference"
+      ],
+      "extracted": true,
+      "candidateCount": 5,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-en-preference-to-el",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "m-el-preference"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-el-preference"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-el-preference"
+      ],
+      "matchedMemoryIds": [
+        "m-el-preference"
+      ],
+      "extracted": true,
+      "candidateCount": 4,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-el-production-to-en",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-production"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-en-production"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-en-production"
+      ],
+      "matchedMemoryIds": [
+        "m-en-production"
+      ],
+      "extracted": true,
+      "candidateCount": 5,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-en-production-to-el",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "m-el-production"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-el-production"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-el-production"
+      ],
+      "matchedMemoryIds": [
+        "m-el-production"
+      ],
+      "extracted": true,
+      "candidateCount": 4,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-el-deadline-to-en",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-deadline"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-en-deadline"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-en-deadline"
+      ],
+      "matchedMemoryIds": [
+        "m-en-deadline"
+      ],
+      "extracted": true,
+      "candidateCount": 5,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-en-deadline-to-el",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "m-el-deadline"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-el-deadline"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-el-deadline"
+      ],
+      "matchedMemoryIds": [
+        "m-el-deadline"
+      ],
+      "extracted": true,
+      "candidateCount": 4,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-es-retry-to-en",
+      "queryLanguage": "es",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-retry"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-en-retry"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-en-retry"
+      ],
+      "matchedMemoryIds": [
+        "m-en-retry"
+      ],
+      "extracted": true,
+      "candidateCount": 5,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-en-retry-to-es",
+      "queryLanguage": "en",
+      "targetLanguage": "es",
+      "expectedMemoryIds": [
+        "m-es-retry"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-es-retry"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-es-retry"
+      ],
+      "matchedMemoryIds": [
+        "m-es-retry"
+      ],
+      "extracted": true,
+      "candidateCount": 1,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-el-private-to-en",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-private"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-en-private"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-en-private"
+      ],
+      "matchedMemoryIds": [
+        "m-en-private"
+      ],
+      "extracted": true,
+      "candidateCount": 5,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-en-private-to-el",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "m-el-private"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "m-el-private"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "m-el-private"
+      ],
+      "matchedMemoryIds": [
+        "m-el-private"
+      ],
+      "extracted": true,
+      "candidateCount": 4,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-en-staging-negative",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [],
+      "semanticEquivalentMemoryIds": [],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-en-retry-fifty-negative",
+      "queryLanguage": "en",
+      "targetLanguage": "es",
+      "expectedMemoryIds": [],
+      "semanticEquivalentMemoryIds": [],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 1,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    }
+  ],
+  "interpretation": "Development evidence only. Candidate coverage, conditional retrieval, and lexical comparison do not qualify raw-text retrieval for production or protected evaluation."
+}

@@ -3,7 +3,7 @@
 import { NearSemanticFingerprintGenerator, semanticFingerprint, normalizeSemanticCandidate, validateSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 
-export const RAW_TEXT_RETRIEVAL_VERSION = '0.1.0';
+export const RAW_TEXT_RETRIEVAL_VERSION = '0.2.0';
 export interface RawTextMemory { id: string; text: string; language: string }
 export interface RawTextQuery {
   id: string; text: string; language: string; targetLanguage?: string;
@@ -39,6 +39,9 @@ export interface RawTextRetrievalQueryResult {
 }
 export interface RawTextRetrievalMetrics {
   queries: number; memoryCount: number; queryExtractionFailures: number; memoryExtractionFailures: number;
+  queryIdentityAvailable: number; memoryIdentityAvailable: number;
+  queryIdentityCoverage: number; memoryIdentityCoverage: number;
+  conditionalQueryCount: number; conditionalTop1Accuracy: number; conditionalRecall: number;
   semanticMatchingFailures: number; rankingFailures: number; truePositives: number; falsePositives: number;
   falseNegatives: number; trueNegatives: number; precision: number; recall: number; f1: number;
   top1Accuracy: number; topKRecall: number; falsePositiveRate: number;
@@ -194,5 +197,10 @@ export async function runRawTextRetrievalEvaluation(input: {
     baselines[name] = retrievalMetrics(baselineResults);
   }
   const positiveQueryResults = queryResults.filter((result) => result.expectedMemoryIds.length > 0);
-  return { version: RAW_TEXT_RETRIEVAL_VERSION, threshold, topK, inputMode: 'raw-text-only', metrics: { queries: queryResults.length, memoryCount: input.memories.length, queryExtractionFailures: queryResults.filter((result) => !result.extracted).length, memoryExtractionFailures: extractedMemories.filter((entry) => !entry.sem).length, semanticMatchingFailures: queryResults.reduce((sum, result) => sum + result.semanticMatchingFailures.length, 0), rankingFailures: queryResults.reduce((sum, result) => sum + result.rankingFailures.length, 0), truePositives: tp, falsePositives: fp, falseNegatives: fn, trueNegatives: tn, ...metrics(tp, fp, fn, tn), top1Accuracy: positiveQueryResults.length > 0 ? positiveQueryResults.filter((result) => result.top1Correct).length / positiveQueryResults.length : 0, positiveTop1Accuracy: positiveQueryResults.length > 0 ? positiveQueryResults.filter((result) => result.top1Correct).length / positiveQueryResults.length : 0, negativeRejectionAccuracy: queryResults.filter((result) => result.expectedMemoryIds.length === 0).length > 0 ? queryResults.filter((result) => result.expectedMemoryIds.length === 0 && result.retrievedMemoryIds.length === 0).length / queryResults.filter((result) => result.expectedMemoryIds.length === 0).length : 0, topKRecall: positiveQueryResults.length > 0 ? positiveQueryResults.reduce((sum, result) => sum + result.recall, 0) / positiveQueryResults.length : 0, byLanguagePair }, queryResults, baselines };
+  const queryIdentityAvailable = queryResults.filter((result) => result.extracted).length;
+  const memoryIdentityAvailable = extractedMemories.filter((entry) => entry.sem).length;
+  const conditionalResults = positiveQueryResults.filter((result) => result.extracted && result.expectedMemoryIds.some((id) => extractedMemories.some((entry) => entry.memory.id === id && entry.sem)));
+  const conditionalTop1Accuracy = conditionalResults.length > 0 ? conditionalResults.filter((result) => result.top1Correct).length / conditionalResults.length : 0;
+  const conditionalRecall = conditionalResults.length > 0 ? conditionalResults.reduce((sum, result) => sum + result.recall, 0) / conditionalResults.length : 0;
+  return { version: RAW_TEXT_RETRIEVAL_VERSION, threshold, topK, inputMode: 'raw-text-only', metrics: { queries: queryResults.length, memoryCount: input.memories.length, queryExtractionFailures: queryResults.filter((result) => !result.extracted).length, memoryExtractionFailures: extractedMemories.filter((entry) => !entry.sem).length, queryIdentityAvailable, memoryIdentityAvailable, queryIdentityCoverage: input.queries.length > 0 ? queryIdentityAvailable / input.queries.length : 0, memoryIdentityCoverage: input.memories.length > 0 ? memoryIdentityAvailable / input.memories.length : 0, conditionalQueryCount: conditionalResults.length, conditionalTop1Accuracy, conditionalRecall, semanticMatchingFailures: queryResults.reduce((sum, result) => sum + result.semanticMatchingFailures.length, 0), rankingFailures: queryResults.reduce((sum, result) => sum + result.rankingFailures.length, 0), truePositives: tp, falsePositives: fp, falseNegatives: fn, trueNegatives: tn, ...metrics(tp, fp, fn, tn), top1Accuracy: positiveQueryResults.length > 0 ? positiveQueryResults.filter((result) => result.top1Correct).length / positiveQueryResults.length : 0, positiveTop1Accuracy: positiveQueryResults.length > 0 ? positiveQueryResults.filter((result) => result.top1Correct).length / positiveQueryResults.length : 0, negativeRejectionAccuracy: queryResults.filter((result) => result.expectedMemoryIds.length === 0).length > 0 ? queryResults.filter((result) => result.expectedMemoryIds.length === 0 && result.retrievedMemoryIds.length === 0).length / queryResults.filter((result) => result.expectedMemoryIds.length === 0).length : 0, topKRecall: positiveQueryResults.length > 0 ? positiveQueryResults.reduce((sum, result) => sum + result.recall, 0) / positiveQueryResults.length : 0, byLanguagePair }, queryResults, baselines };
 }

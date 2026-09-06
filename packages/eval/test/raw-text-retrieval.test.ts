@@ -32,6 +32,12 @@ test('raw-text retrieval extracts both sides and measures cross-language ranking
   assert.equal(report.inputMode, 'raw-text-only');
   assert.equal(report.metrics.queryExtractionFailures, 0);
   assert.equal(report.metrics.memoryExtractionFailures, 0);
+  assert.equal(report.metrics.queryIdentityAvailable, 2);
+  assert.equal(report.metrics.memoryIdentityAvailable, 4);
+  assert.equal(report.metrics.queryIdentityCoverage, 1);
+  assert.equal(report.metrics.memoryIdentityCoverage, 1);
+  assert.equal(report.metrics.conditionalQueryCount, 2);
+  assert.equal(report.metrics.conditionalTop1Accuracy, 1);
   assert.equal(report.metrics.top1Accuracy, 1);
   assert.equal(report.metrics.falsePositives, 0);
   assert.equal(report.metrics.falsePositiveRate, 0);
@@ -127,5 +133,8 @@ test('noncanonical schema-valid extraction is contained and does not enter seman
   });
   assert.equal(report.metrics.memoryExtractionFailures, 1);
   assert.equal(report.metrics.queryExtractionFailures, 1);
+  assert.equal(report.metrics.memoryIdentityAvailable, 0);
+  assert.equal(report.metrics.queryIdentityAvailable, 0);
+  assert.equal(report.metrics.conditionalQueryCount, 0);
   assert.equal(report.metrics.falsePositives, 0);
 });
