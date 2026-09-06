@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T22:42:00+03:00
+Recorded: 2026-09-06T22:54:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 6d1dc3f
+Source/evidence boundary before this checkpoint commit: 752f285
 
 ## Scope and prohibitions
 
@@ -376,6 +376,12 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   1/8, exact parse is 3/24, and negative safety is 6/6 comparable with 0 false
   equivalences. The ledger audit found no forbidden gold metadata. Repeated
   shared kind/type/identifier choices can converge while remaining wrong.
+- Replayed raw-text retrieval using the existing evaluator over all 24 ladder
+  rows as memories and cross-language queries. Identity coverage was 24/24 for
+  memories and queries; exact retrieval was 24/24 with zero false positives,
+  while the same-pool lexical baseline recalled 7/24 (29.17%). This is only
+  diagnostic because the source-only ledger repeats candidate structures across
+  each semantic group; it is not general extraction or protected evidence.
 
 ## Uncommitted state
 

@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T22:42:00+03:00",
-  "currentHead": "6d1dc3f",
+  "lastUpdated": "2026-09-06T22:54:00+03:00",
+  "currentHead": "752f285",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -552,6 +552,13 @@
       "evidence": "Gold preflight passed 8/8 groups and 6/6 negative pairs. All 36 candidate submissions passed transport, structural, protocol, frame, grounding, and identity gates with no avoidable failure class. Parse exactness was 3/24 (12.5%); all 6/6 negative pairs were comparable and separated, with zero false equivalences. The 8 multilingual groups converged to one candidate identity per group, but only the sequence-check group matched gold. Evidence is development-only and not protected.",
       "decision": "Keep the source-only transport separation and treat the remaining deficit as semantic extraction/open-concept canonicalization. Do not tune the contract or claim protected capability from this constructed ladder.",
       "commit": "d2be10b"
+    },
+    {
+      "hypothesis": "Agent-extracted identities from the fresh development ladder can support a measurable cross-language raw-text retrieval replay.",
+      "implementation": "Added a development-only retrieval harness using the existing raw-text retrieval evaluator. Each row is used as a raw memory and queried against another language row in the same group; the callback receives only the source-bound candidate ledger.",
+      "evidence": "24/24 memory identities and 24/24 query identities were available. Exact semantic retrieval was 24/24 with zero false positives; lexical retrieval on the same raw pool recalled 7/24 (29.17%). The result is intentionally diagnostic: repeated candidate structures from one source-only ledger make this conditional evaluator evidence, not general raw-text extraction or protected capability evidence.",
+      "decision": "Keep the harness and report coverage separately from conditional and end-to-end retrieval. Do not claim retrieval qualification until candidates come from a genuinely blind, independently repeated extraction run.",
+      "commit": "752f285"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
