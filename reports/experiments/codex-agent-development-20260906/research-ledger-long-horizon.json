@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T16:31:00+03:00",
-  "currentHead": "9ee1c63a7433a126d34db0ca8f65f992b140a8df",
+  "lastUpdated": "2026-09-06T16:48:00+03:00",
+  "currentHead": "2c5b90d3698b14f28732341fdb3e5f35b910880f",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -70,6 +70,26 @@
       "implementation": "Bound GroundingResolution to its canonical grounding fingerprint and require the original proposal list during materialization; reject cross-namespace IDs and missing provenance.",
       "evidence": "Grounding and provider suites pass after tests for forged same-shape IDs, missing resolver provenance, and mismatched proposal bindings. Near-semantic retrieval is now opt-in; exact mode is default.",
       "decision": "Keep the stronger replay boundary. This prevents a serialized or caller-constructed resolution from being treated as evidence for a different term/path."
+    },
+    {
+      "hypothesis": "The previous agent retrieval score reflects exact semantic identity retrieval.",
+      "implementation": "Re-ran the same diagnostic harness with the evaluator's explicit exact mode after making near-semantic matching opt-in.",
+      "evidence": "Identity coverage remained 11/12 queries and 10/10 memories, but exact end-to-end and conditional recall fell to 4/10; EN↔EL was 50%, ES↔EN 0%, with zero false positives. The prior 10/10 was near-semantic fallback and the candidate ledger is still gold-shaped.",
+      "decision": "Reject the prior interpretation. Retrieval has useful fail-closed precision on this diagnostic but insufficient recall and no clean extraction evidence. Exact and near-semantic results must remain separate."
+    },
+    {
+      "hypothesis": "The OMW cross-language development result can be explained without conflating lexical coverage, ambiguity, and exact convergence.",
+      "implementation": "Added omw-failure-decomposition.mjs and replayed all 100 recorded cross-language pairs into a machine-readable report grouped by pair, POS, resource, provider status, candidate coverage, and convergence.",
+      "evidence": "All 100 pairs have source and target lexical coverage and a shared candidate. 19 independently converge; 81 are ambiguity-driven (25 source-only, 15 target-only, 41 both). EN-EL is 1/20, with 12 source-only, 2 target-only, and 5 both-ambiguous cases. No pair was unexplained.",
+      "decision": "Keep provider coverage and candidate-set work as the next research path. Do not add language-specific aliases or change identity semantics; contextual sense evidence is the dominant unresolved issue.",
+      "commit": "2c5b90d"
+    },
+    {
+      "hypothesis": "Frame-first agents need explicit metadata for alternative minimum requirements to construct candidates correctly.",
+      "implementation": "Exposed generated frame.atLeastOneOf as immutable builder and MCP result metadata while retaining deterministic validation and mandatory untrusted submission.",
+      "evidence": "Core builder and MCP suites pass; retry reports requiredRoles=[] and atLeastOneOf=[count,theme], while prefer reports null. Full pnpm verify passed before this metadata-only change.",
+      "decision": "Keep the metadata correction. It improves agent adoption without broadening frames or granting semantic identity.",
+      "commit": "5e6ef9d"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

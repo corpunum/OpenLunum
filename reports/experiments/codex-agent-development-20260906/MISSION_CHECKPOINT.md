@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T16:31:00+03:00
+Recorded: 2026-09-06T16:50:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 9ee1c63a7433a126d34db0ca8f65f992b140a8df
+Current HEAD: 2c5b90d3698b14f28732341fdb3e5f35b910880f
 
 ## Scope and prohibitions
 
@@ -50,6 +50,18 @@ used.
   proposal during materialization. Raw retrieval is exact by default; near
   semantic matching is explicit opt-in. Eval suite after this change: 1,874
   pass, 0 fail.
+- Re-ran the diagnostic agent-candidate retrieval harness in exact mode:
+  identity coverage 11/12 queries and 10/10 memories; exact and conditional
+  recall 4/10, EN↔EL 50%, ES↔EN 0%, zero false positives. The candidate ledger
+  remains gold-shaped, so this is evaluator/precision evidence only.
+- Added a replayable OMW failure decomposition for all 100 cross-language
+  pairs. It records 100/100 source and target lexical coverage, 100/100 shared
+  candidate coverage, 19 independent convergences, and 81 ambiguity-driven
+  cases; no pair is unexplained. EN-EL is 1/20 (12 source-only ambiguous, 2
+  target-only ambiguous, 5 both ambiguous).
+- Exposed `atLeastOneOf` frame requirements through the typed builder and MCP;
+  `retry` now reports its alternative minimum target without changing the
+  semantic validator. Core/MCP focused tests pass.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -91,7 +103,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 70 minutes. Completed real-resource
+Elapsed at recording: approximately 85 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
@@ -100,5 +112,5 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 ## Uncommitted state
 
-No uncommitted OpenLunum changes. Preserve unrelated dirty files and historical
-diagnostic directories shown by `git status`.
+Only the research ledger/checkpoint updates are pending; unrelated dirty files
+and historical diagnostic directories shown by `git status` are preserved.
