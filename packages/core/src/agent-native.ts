@@ -13,6 +13,11 @@ import {
   normalizeSemanticCandidate,
 } from './semantic-registry.js';
 import { evaluateSemanticTrust, validateSemanticCandidate } from './policy.js';
+import {
+  GROUNDING_CONTRACT_VERSION,
+  evaluateGroundingProposals,
+} from './grounding.js';
+import type { GroundingEvaluation, GroundingProposal } from './grounding.js';
 import type { LunumSem, SemanticTrustDecision } from './types.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
@@ -77,6 +82,12 @@ export interface ExtractionContract {
     registry: typeof CANONICAL_SEMANTIC_FRAMES;
     unframedBehavior: string;
   };
+  grounding: {
+    version: typeof GROUNDING_CONTRACT_VERSION;
+    identityBehavior: string;
+    proposalFields: readonly string[];
+    evidenceFields: readonly string[];
+  };
   canonicalRules: readonly string[];
   groundingRules: readonly string[];
   abstentionRules: readonly string[];
@@ -98,6 +109,12 @@ export function getExtractionContract(): ExtractionContract {
       framedPredicates: Object.freeze(Object.keys(CANONICAL_SEMANTIC_FRAMES).sort()),
       registry: CANONICAL_SEMANTIC_FRAMES,
       unframedBehavior: 'candidate-only; abstain in exact-identity extraction; no lfp:2.1',
+    },
+    grounding: {
+      version: GROUNDING_CONTRACT_VERSION,
+      identityBehavior: 'agent proposals receive deterministic gnd keys for evidence only; unresolved proposals remain grounding-pending and cannot grant lfp:2.1',
+      proposalFields: Object.freeze(['path', 'termType', 'head', 'modifiers']),
+      evidenceFields: Object.freeze(['surface', 'language']),
     },
     instructions: {
       version: AGENT_EXTRACTION_INSTRUCTIONS_VERSION,
@@ -148,6 +165,11 @@ export interface SubmitCandidateInput {
   provenance: AgentExtractionProvenance;
 }
 
+export interface SubmitGroundedCandidateInput extends SubmitCandidateInput {
+  /** Structured agent proposal; it is evidence and remains unresolved here. */
+  grounding: readonly GroundingProposal[];
+}
+
 export interface CandidateSubmissionResult {
   source: { text: string; language: string | null; sha256: string };
   provenance: AgentExtractionProvenance & { contractVersion: string; contractHash: string; schemaHash: string; frameRegistryHash: string; sourceHash: string; timestamp: string };
@@ -163,6 +185,10 @@ export interface CandidateSubmissionResult {
   failureClass: string | null;
   diagnostics: string[];
   sem: LunumSem | null;
+}
+
+export interface GroundedCandidateSubmissionResult extends CandidateSubmissionResult {
+  grounding: GroundingEvaluation;
 }
 
 function failureClass(input: { structuralValid: boolean; protocolCanonical: boolean; frameValid: boolean; grounded: boolean; candidateIdentityAvailable: boolean; diagnostics: readonly string[] }): string | null {
@@ -231,5 +257,33 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
     transportValid, structuralValid: true, protocolCanonical, frameValid, grounded,
     candidateIdentityAvailable, semanticFingerprint: identity, promotable: trust.promoted && candidateIdentityAvailable,
     trust, failureClass: failure, diagnostics, sem,
+  };
+}
+
+/**
+ * Submit a candidate together with an agent-generated grounding proposal.
+ * Structured proposals make composition explicit, but do not establish
+ * synonymy or durable identity without an external, versioned resolution.
+ */
+export function submitCandidateWithGrounding(input: SubmitGroundedCandidateInput): GroundedCandidateSubmissionResult {
+  const base = submitCandidate(input);
+  const grounding = evaluateGroundingProposals(input.candidateSem, input.grounding);
+  if (grounding.status === 'pending') {
+    return {
+      ...base,
+      candidateIdentityAvailable: false,
+      semanticFingerprint: null,
+      failureClass: 'grounding_pending',
+      diagnostics: [...base.diagnostics, 'agent grounding is a proposal only; exact identity requires an external resolution'],
+      grounding,
+    };
+  }
+  return {
+    ...base,
+    candidateIdentityAvailable: false,
+    semanticFingerprint: null,
+    failureClass: 'grounding_invalid',
+    diagnostics: [...base.diagnostics, ...grounding.issues],
+    grounding,
   };
 }

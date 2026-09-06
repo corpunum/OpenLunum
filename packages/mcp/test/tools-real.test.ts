@@ -47,6 +47,21 @@ test('lunum_submit_candidate contains an untrusted candidate', async () => {
   assert.equal(data.submission.trust.promoted, false);
 });
 
+test('lunum_submit_candidate contains structured grounding proposals without granting identity', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'blue_folder' } }, negated: false }]
+  };
+  const data = JSON.parse(getText(await find('lunum_submit_candidate').handler({
+    sourceText: 'Maria prefers a blue folder.', candidateSem: sem, provenance: { extractorType: 'codex_agent' },
+    grounding: [{ path: 'clauses[0].roles.theme', termType: 'concept', head: { kind: 'symbol', namespace: 'open-concept', key: 'folder' }, modifiers: [{ relation: { kind: 'symbol', namespace: 'open-concept-relation', key: 'color' }, value: { kind: 'symbol', namespace: 'controlled-value', key: 'blue' } }] }],
+  })));
+  assert.equal(data.success, true);
+  assert.equal(data.submission.grounding.status, 'pending');
+  assert.equal(data.submission.candidateIdentityAvailable, false);
+  assert.equal(data.submission.semanticFingerprint, null);
+});
+
 test('lunum_derive returns real sidecar from text', async () => {
   const tool = find('lunum_derive');
   const result = await tool.handler({ text: 'The quick brown fox jumps over the lazy dog' });

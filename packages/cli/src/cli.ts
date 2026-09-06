@@ -20,8 +20,9 @@ import {
   SEM_SCHEMA_02,
   validateSem,
   submitCandidate,
+  submitCandidateWithGrounding,
 } from '@corpunum/lunum';
-import type { ContextMessage, LunumSem, LunumRecord, MigrationWarning, QualityGateCIReport } from '@corpunum/lunum';
+import type { ContextMessage, GroundingProposal, LunumSem, LunumRecord, MigrationWarning, QualityGateCIReport } from '@corpunum/lunum';
 
 type MigrationVersion = '0.1' | '0.2';
 
@@ -763,15 +764,26 @@ async function main(): Promise<void> {
     if (!semPath || source === undefined || !provenancePath) throw new Error('--sem, --source, and --provenance are required');
     const candidateSem = await readJson<unknown>(semPath);
     const provenance = await readJson<Record<string, unknown>>(provenancePath);
-    console.log(JSON.stringify(submitCandidate({
+    const groundingPath = flag('grounding');
+    const grounding = groundingPath ? await readJson<GroundingProposal[]>(groundingPath) : undefined;
+    const result = grounding
+      ? submitCandidateWithGrounding({
+        sourceText: source,
+        sourceLanguage: flag('language') ?? null,
+        candidateSem,
+        provenance: provenance as never,
+        grounding,
+      })
+      : submitCandidate({
       sourceText: source,
       sourceLanguage: flag('language') ?? null,
       candidateSem,
       provenance: provenance as never,
-    }), null, 2));
+    });
+    console.log(JSON.stringify(result, null, 2));
     return;
   }
-  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | submit-candidate --source <text> --sem <file> --provenance <file> [--language en] | agent-contract | compile --messages <file> [--mode mixed] | migrate <file> --from 0.1 --to 0.2 [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full] | quality-gate [--input <file>|-] [--strict] [--min-pass-rate <n>] [--format json|markdown] [--output <file>] | process-jsonl --input <file> --operation validate|fingerprint|classify [--output <file>] | contract');
+  console.error('Usage: lunum inspect --text <text> | encode --sem <file> | submit-candidate --source <text> --sem <file> --provenance <file> [--grounding <file>] [--language en] | agent-contract | compile --messages <file> [--mode mixed] | migrate <file> --from 0.1 --to 0.2 [--dry-run] | pipeline --text <text> [--language en] [--category simple_fact] [--risk low] [--mode full] | quality-gate [--input <file>|-] [--strict] [--min-pass-rate <n>] [--format json|markdown] [--output <file>] | process-jsonl --input <file> --operation validate|fingerprint|classify [--output <file>] | contract');
   process.exitCode = 2;
 }
 

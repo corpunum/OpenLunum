@@ -1,0 +1,29 @@
+{
+  "type": "development-grounding-research",
+  "date": "2026-09-06",
+  "protectedDataUsed": false,
+  "localInferenceUsed": false,
+  "hypotheses": {
+    "opaqueIdentifiers": "Different agent-generated open IDs cannot provide deterministic cross-language identity.",
+    "structuredProposal": "Typed head/modifier structure can canonicalize compositional evidence while remaining non-authoritative.",
+    "exactRegistry": "A pinned registry can safely resolve an exact structured grounding fingerprint to a shared namespace-qualified ID."
+  },
+  "observed": {
+    "opaqueIdentityAvailable": "2/2",
+    "opaqueEquivalentConvergence": "0/1",
+    "structuredBlueProposalConvergence": "1/1",
+    "registryBlueResolution": "2/2",
+    "registryEquivalentLfpConvergence": "1/1",
+    "registryRedNegativeSeparation": "1/1",
+    "unresolvedGreenStatus": "unresolved",
+    "agentProposalExactIdentity": false
+  },
+  "decision": "KEEP",
+  "reason": "The sidecar improves compositional diagnosability and enables safe exact resolution when an external registry makes an explicit assertion, while unresolved agent proposals remain unavailable for lfp:2.1. No fuzzy matching, benchmark alias, or protocol identity rewrite was introduced.",
+  "remainingResearch": [
+    "language-specific morphology adapters",
+    "scoped signed registry implementation",
+    "independent grounding consensus",
+    "fresh protected evaluation after development stabilization"
+  ]
+}

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getExtractionContract, submitCandidate } from '../src/agent-native.js';
+import { getExtractionContract, submitCandidate, submitCandidateWithGrounding } from '../src/agent-native.js';
 
 const validPreference = {
   schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
@@ -26,6 +26,8 @@ test('extraction contract is generated from the protocol and frame registries', 
   assert.match(first.instructions.hash, /^[0-9a-f]{64}$/u);
   assert.match(first.instructions.semTemplate, /"clauses":\[\{.*"roles":\{\}/u);
   assert.match(first.frames.unframedBehavior, /no lfp:2\.1/u);
+  assert.equal(first.grounding.version, 'lunum-grounding/0.1');
+  assert.equal(first.grounding.identityBehavior.includes('cannot grant lfp:2.1'), true);
 });
 
 test('candidate submission returns identity but never self-promotes an agent proposal', () => {
@@ -93,4 +95,27 @@ test('runtime provenance cannot omit or invent extractor identity', () => {
     candidateSem: validPreference,
     provenance: { extractorType: 'model_that_was_not_reported' } as never,
   }), /invalid_provenance/u);
+});
+
+test('agent grounding proposals are deterministic evidence but cannot grant exact identity', () => {
+  const result = submitCandidateWithGrounding({
+    sourceText: 'Maria prefers a blue folder.',
+    candidateSem: validPreference,
+    grounding: [{
+      path: 'clauses[0].roles.theme', termType: 'concept',
+      head: { kind: 'symbol', namespace: 'open-concept', key: 'folder' },
+      modifiers: [{
+        relation: { kind: 'symbol', namespace: 'open-concept-relation', key: 'color' },
+        value: { kind: 'symbol', namespace: 'controlled-value', key: 'blue' },
+      }],
+      surface: 'blue folder', language: 'en',
+    }],
+    provenance,
+  });
+  assert.equal(result.grounding.status, 'pending');
+  assert.equal(result.grounding.exactIdentityAvailable, false);
+  assert.equal(result.candidateIdentityAvailable, false);
+  assert.equal(result.semanticFingerprint, null);
+  assert.equal(result.failureClass, 'grounding_pending');
+  assert.match(result.grounding.proposals[0]?.groundingFingerprint ?? '', /^gnd:/u);
 });

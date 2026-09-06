@@ -10,8 +10,9 @@ import {
   classifyByCategory,
   getExtractionContract,
   submitCandidate,
+  submitCandidateWithGrounding,
 } from '@corpunum/lunum';
-import type { ContextMode, LunumSem } from '@corpunum/lunum';
+import type { ContextMode, GroundingProposal, LunumSem } from '@corpunum/lunum';
 import { resolveConfig } from './config.js';
 
 /** Structural boundary for an evaluator-owned blind session. MCP never sees gold. */
@@ -142,6 +143,7 @@ export const submitCandidateTool: LunumToolDefinition = {
       sourceLanguage: { type: 'string', description: 'Source language tag when known.' },
       candidateSem: { anyOf: [{ type: 'object' }, { type: 'null' }], description: 'Untrusted agent-proposed Lunum-Sem candidate, or null for an explicit abstention.' },
       provenance: { type: 'object', description: 'Extractor provenance; unavailable fields must be omitted.' },
+      grounding: { type: 'array', description: 'Optional structured grounding proposal. Agent proposals remain pending and cannot grant lfp:2.1 identity.' },
     },
     required: ['sourceText', 'candidateSem', 'provenance'],
   },
@@ -150,12 +152,17 @@ export const submitCandidateTool: LunumToolDefinition = {
       if (typeof input.sourceText !== 'string') return err('sourceText is required and must be a string');
       if (!input.candidateSem || typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem)) return err('candidateSem is required and must be an object');
       if (!input.provenance || typeof input.provenance !== 'object' || Array.isArray(input.provenance)) return err('provenance is required and must be an object');
-      return ok({ success: true, submission: submitCandidate({
+      if (input.grounding !== undefined && !Array.isArray(input.grounding)) return err('grounding must be an array when supplied');
+      const submissionInput = {
         sourceText: input.sourceText,
         sourceLanguage: typeof input.sourceLanguage === 'string' ? input.sourceLanguage : null,
         candidateSem: input.candidateSem,
         provenance: input.provenance as never,
-      }) });
+      };
+      const submission = input.grounding === undefined
+        ? submitCandidate(submissionInput)
+        : submitCandidateWithGrounding({ ...submissionInput, grounding: input.grounding as GroundingProposal[] });
+      return ok({ success: true, submission });
     } catch (error) {
       return err((error as Error).message);
     }
