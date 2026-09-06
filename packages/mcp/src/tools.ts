@@ -140,7 +140,7 @@ export const submitCandidateTool: LunumToolDefinition = {
     properties: {
       sourceText: { type: 'string', description: 'Original source evidence; retained in the result.' },
       sourceLanguage: { type: 'string', description: 'Source language tag when known.' },
-      candidateSem: { type: 'object', description: 'Untrusted agent-proposed Lunum-Sem candidate.' },
+      candidateSem: { anyOf: [{ type: 'object' }, { type: 'null' }], description: 'Untrusted agent-proposed Lunum-Sem candidate, or null for an explicit abstention.' },
       provenance: { type: 'object', description: 'Extractor provenance; unavailable fields must be omitted.' },
     },
     required: ['sourceText', 'candidateSem', 'provenance'],
@@ -177,13 +177,13 @@ export function createBlindEvaluationTools(session: BlindEvaluationSurface): Lun
       inputSchema: {
         type: 'object',
         properties: {
-          runId: { type: 'string' }, itemId: { type: 'string' }, candidateSem: { type: 'object' }, provenance: { type: 'object' },
+          runId: { type: 'string' }, itemId: { type: 'string' }, candidateSem: { anyOf: [{ type: 'object' }, { type: 'null' }], description: 'Candidate Sem object, or null for explicit abstention.' }, provenance: { type: 'object' },
         },
         required: ['runId', 'itemId', 'candidateSem', 'provenance'],
       },
       handler: async (input): Promise<McpToolResponse> => {
         if (typeof input.runId !== 'string' || typeof input.itemId !== 'string') return err('runId and itemId are required');
-        if (!input.candidateSem || typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem)) return err('candidateSem is required and must be an object');
+        if (input.candidateSem !== null && (typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem))) return err('candidateSem must be an object or null for explicit abstention');
         if (!input.provenance || typeof input.provenance !== 'object' || Array.isArray(input.provenance)) return err('provenance is required and must be an object');
         try {
           return ok({ success: true, result: await session.submit({ runId: input.runId, itemId: input.itemId, candidateSem: input.candidateSem, provenance: input.provenance }) });

@@ -181,3 +181,14 @@ test('blind evaluator factory exposes source-only next and forwards opaque submi
   assert.equal(JSON.parse(submitted.content[0]!.text!).result.status, 'passed');
   assert.deepEqual(seen, [{ runId: 'r', itemId: 'i', candidateSem: { schema: 'candidate' }, provenance: { extractorType: 'codex_agent' } }]);
 });
+
+test('blind evaluator factory permits explicit null abstention', async () => {
+  let received: unknown;
+  const tools = createBlindEvaluationTools({
+    next: () => null,
+    submit: async (input) => { received = input.candidateSem; return { status: 'passed' }; },
+  });
+  const result = await tools[1]!.handler({ runId: 'r', itemId: 'i', candidateSem: null, provenance: { extractorType: 'codex_agent' } });
+  assert.equal(JSON.parse(result.content[0]!.text!).result.status, 'passed');
+  assert.equal(received, null);
+});
