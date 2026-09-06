@@ -42,6 +42,18 @@ export interface BlindEvalSubmission {
   provenance: AgentExtractionProvenance;
 }
 
+export interface BlindCriticalNegativePair {
+  pairId: string;
+  leftItemId: string;
+  rightItemId: string;
+  criticalDimension: string;
+  expectedRelationship: 'not_equivalent';
+}
+
+export interface BlindEvaluationOptions {
+  criticalNegativePairs?: readonly BlindCriticalNegativePair[];
+}
+
 export interface BlindEvalResult {
   runId: string;
   itemId: string;
@@ -85,6 +97,10 @@ export interface BlindEvalSummary {
   goldGroupsConverging: number;
   modelGroupsAttempted: number;
   modelGroupsConverging: number;
+  criticalNegativePairs: number;
+  comparableNegativePairs: number;
+  falseEquivalences: number;
+  negativeCoverage: number | null;
 }
 
 interface DurableBlindResult extends BlindEvalResult {
@@ -108,6 +124,7 @@ interface BlindManifest {
   transportSchemaHash: string;
   datasetHash: string;
   itemCount: number;
+  criticalNegativePairsHash: string;
 }
 
 interface BlindCheckpoint {
@@ -151,6 +168,8 @@ export class BlindAgentEvaluationSession {
   private readonly completed = new Map<string, DurableBlindResult>();
   private readonly privateResults = new Map<string, PrivateBlindResult>();
   private readonly claimed = new Set<string>();
+  private readonly criticalNegativePairs: readonly BlindCriticalNegativePair[];
+  private readonly criticalNegativePairsHash: string;
   private readonly contractHashValue: string;
   private readonly datasetHashValue: string;
   private initialized = false;
@@ -159,22 +178,45 @@ export class BlindAgentEvaluationSession {
     private readonly runId: string,
     items: readonly PrivateGoldItem[],
     private readonly outputDirectory: string,
+    options: BlindEvaluationOptions,
   ) {
     if (!runId || !outputDirectory || items.length === 0) throw new Error('blind evaluation requires runId, outputDirectory, and gold items');
     if (new Set(items.map(item => item.id)).size !== items.length) throw new Error('blind evaluation item IDs must be unique');
     this.itemById = new Map(items.map(item => [item.id, item]));
+    this.criticalNegativePairs = options.criticalNegativePairs ?? [];
+    if (new Set(this.criticalNegativePairs.map(pair => pair.pairId)).size !== this.criticalNegativePairs.length) throw new Error('blind evaluation critical pair IDs must be unique');
+    for (const pair of this.criticalNegativePairs) {
+      if (pair.expectedRelationship !== 'not_equivalent' || !this.itemById.has(pair.leftItemId) || !this.itemById.has(pair.rightItemId) || pair.leftItemId === pair.rightItemId) throw new Error(`invalid blind critical pair: ${pair.pairId}`);
+    }
+    this.criticalNegativePairsHash = hash(this.criticalNegativePairs);
     this.contractHashValue = contractHash();
-    this.datasetHashValue = datasetHash(items);
+    this.datasetHashValue = hash({ items: datasetHash(items), criticalNegativePairs: this.criticalNegativePairs });
     for (const item of items) {
       if (safeExpectedOutcome(item) !== 'parse') continue;
       const gold = submitCandidate({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, candidateSem: item.goldSem, provenance: { extractorType: 'other' } });
       if (!gold.candidateIdentityAvailable) throw new Error(`blind evaluation gold preflight failed for item ${item.id}`);
     }
+    const goldGroups = new Map<string, Set<string>>();
+    for (const item of items.filter(candidate => safeExpectedOutcome(candidate) === 'parse' && candidate.semanticGroup)) {
+      const identity = this.goldIdentityFor(item);
+      const group = item.semanticGroup!;
+      const identities = goldGroups.get(group) ?? new Set<string>();
+      if (identity) identities.add(identity);
+      goldGroups.set(group, identities);
+    }
+    for (const [group, identities] of goldGroups) if (identities.size > 1) throw new Error(`blind evaluation gold group does not converge: ${group}`);
+    for (const pair of this.criticalNegativePairs) {
+      const left = this.itemById.get(pair.leftItemId)!;
+      const right = this.itemById.get(pair.rightItemId)!;
+      const leftIdentity = this.goldIdentityFor(left);
+      const rightIdentity = this.goldIdentityFor(right);
+      if (!leftIdentity || !rightIdentity || leftIdentity === rightIdentity) throw new Error(`blind evaluation gold critical pair is not separated: ${pair.pairId}`);
+    }
   }
 
   /** Create a new evaluator-private session. Gold is never returned by this API. */
-  static async create(runId: string, items: readonly PrivateGoldItem[], outputDirectory: string): Promise<BlindAgentEvaluationSession> {
-    const session = new BlindAgentEvaluationSession(runId, items, outputDirectory);
+  static async create(runId: string, items: readonly PrivateGoldItem[], outputDirectory: string, options: BlindEvaluationOptions = {}): Promise<BlindAgentEvaluationSession> {
+    const session = new BlindAgentEvaluationSession(runId, items, outputDirectory, options);
     await session.initialize();
     return session;
   }
@@ -198,9 +240,10 @@ export class BlindAgentEvaluationSession {
       transportSchemaHash: SEMANTIC_TRANSPORT_SCHEMA_SHA256,
       datasetHash: this.datasetHashValue,
       itemCount: this.itemById.size,
+      criticalNegativePairsHash: this.criticalNegativePairsHash,
     };
     const existingManifest = await this.readOptionalJson<BlindManifest>(this.manifestPath);
-    if (existingManifest && (existingManifest.schema !== BLIND_EVALUATION_VERSION || existingManifest.runId !== this.runId || existingManifest.itemCount !== this.itemById.size || existingManifest.contractHash !== this.contractHashValue || existingManifest.datasetHash !== this.datasetHashValue || existingManifest.transportSchemaHash !== SEMANTIC_TRANSPORT_SCHEMA_SHA256)) {
+    if (existingManifest && (existingManifest.schema !== BLIND_EVALUATION_VERSION || existingManifest.runId !== this.runId || existingManifest.itemCount !== this.itemById.size || existingManifest.contractHash !== this.contractHashValue || existingManifest.datasetHash !== this.datasetHashValue || existingManifest.transportSchemaHash !== SEMANTIC_TRANSPORT_SCHEMA_SHA256 || existingManifest.criticalNegativePairsHash !== this.criticalNegativePairsHash)) {
       throw new Error('blind evaluation manifest is invalid or mismatched; refusing resume');
     }
     if (existingManifest && JSON.stringify(existingManifest) !== JSON.stringify(manifest)) {
@@ -330,14 +373,25 @@ export class BlindAgentEvaluationSession {
       const group = this.itemById.get(result.itemId)?.semanticGroup;
       if (group) groups.set(group, [...(groups.get(group) ?? []), result]);
     }
-    let goldGroupsConverging = 0;
+    const allGoldGroups = new Map<string, Set<string>>();
+    for (const item of this.itemById.values()) {
+      if (safeExpectedOutcome(item) !== 'parse' || !item.semanticGroup) continue;
+      const identities = allGoldGroups.get(item.semanticGroup) ?? new Set<string>();
+      const identity = this.goldIdentityFor(item); if (identity) identities.add(identity);
+      allGoldGroups.set(item.semanticGroup, identities);
+    }
+    let goldGroupsConverging = [...allGoldGroups.values()].filter(identities => identities.size === 1).length;
     let modelGroupsConverging = 0;
-    for (const [group, rows] of groups) {
-      const goldIds = new Set(rows.map(row => this.goldIdentityFor(this.itemById.get(row.itemId)!)).filter((id): id is string => id !== null));
-      if (goldIds.size === 1) goldGroupsConverging++;
+    for (const rows of groups.values()) {
       const modelIds = new Set(rows.map(row => this.privateResults.get(row.itemId)?.candidateIdentity).filter((id): id is string => Boolean(id)));
       if (rows.length > 0 && rows.every(row => Boolean(this.privateResults.get(row.itemId)?.candidateIdentity)) && modelIds.size === 1) modelGroupsConverging++;
     }
+    const comparableNegativePairs = this.criticalNegativePairs.filter(pair => {
+      const left = this.privateResults.get(pair.leftItemId)?.candidateIdentity;
+      const right = this.privateResults.get(pair.rightItemId)?.candidateIdentity;
+      return Boolean(left && right);
+    });
+    const falseEquivalences = comparableNegativePairs.filter(pair => this.privateResults.get(pair.leftItemId)?.candidateIdentity === this.privateResults.get(pair.rightItemId)?.candidateIdentity).length;
     return {
       runId: this.runId, totalItems: this.itemById.size, completedItems: results.length,
       parseTargets: parseItems.length, parseExact, parseExactMicro: parseItems.length ? parseExact / parseItems.length : null,
@@ -346,7 +400,9 @@ export class BlindAgentEvaluationSession {
       identityComparable: results.filter(result => result.identityComparable).length,
       identityExact: results.filter(result => result.semanticIdentityExact).length,
       comparableButNonExact: results.filter(result => result.identityComparable && !result.semanticIdentityExact).length,
-      failureClasses, byLanguage, goldGroups: groups.size, goldGroupsConverging, modelGroupsAttempted: groups.size, modelGroupsConverging,
+      failureClasses, byLanguage, goldGroups: allGoldGroups.size, goldGroupsConverging, modelGroupsAttempted: groups.size, modelGroupsConverging,
+      criticalNegativePairs: this.criticalNegativePairs.length, comparableNegativePairs: comparableNegativePairs.length, falseEquivalences,
+      negativeCoverage: this.criticalNegativePairs.length ? comparableNegativePairs.length / this.criticalNegativePairs.length : null,
     };
   }
 

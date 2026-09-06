@@ -88,6 +88,24 @@ test('gold preflight rejects an identity-unavailable parse item', async () => {
   }], dir), /gold preflight failed/u);
 });
 
+test('gold preflight enforces multilingual group convergence and negative separation', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
+  const equivalent = [
+    { id: 'group-a', sourceLanguage: 'en', sourceText: 'Alex prefers quiet mode.', goldSem, semanticGroup: 'same-meaning' },
+    { id: 'group-b', sourceLanguage: 'el', sourceText: 'Ο Αλέξης προτιμά την ήσυχη λειτουργία.', goldSem, semanticGroup: 'same-meaning' },
+  ];
+  await assert.doesNotReject(() => BlindAgentEvaluationSession.create('run-groups-ok', equivalent, dir, { criticalNegativePairs: [] }));
+  const different = { ...goldSem, clauses: [{ ...goldSem.clauses[0], roles: { ...goldSem.clauses[0]!.roles, theme: { type: 'concept', id: 'loud_mode' } } }] } as never;
+  const divergentDir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
+  await assert.rejects(() => BlindAgentEvaluationSession.create('run-groups-bad', [
+    { ...equivalent[0]!, goldSem }, { ...equivalent[1]!, goldSem: different },
+  ], divergentDir), /gold group does not converge/u);
+  const negativeDir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
+  await assert.rejects(() => BlindAgentEvaluationSession.create('run-negative-bad', [
+    ...equivalent, { id: 'negative', sourceLanguage: 'en', sourceText: 'Alex prefers loud mode.', goldSem: different },
+  ], negativeDir, { criticalNegativePairs: [{ pairId: 'n', leftItemId: 'group-a', rightItemId: 'group-b', criticalDimension: 'meaning', expectedRelationship: 'not_equivalent' }] }), /critical pair is not separated/u);
+});
+
 test('abstention is scored without exposing abstention gold metadata', async () => {
   const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
   const session = await BlindAgentEvaluationSession.create('run-abstain', items, dir);
