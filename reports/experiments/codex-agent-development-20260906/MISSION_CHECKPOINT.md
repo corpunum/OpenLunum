@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T15:59:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 12ede8ea6d9d041f3382a6654fbd086e88f07dac
+Current HEAD: 740444aa99edf5ee9a7896c1cd06ced744cc2be2
 
 ## Scope and prohibitions
 
@@ -23,10 +23,20 @@ used.
 - Added provider-neutral `createMorphologyAugmentedProvider`.
 - Acquired and probed real UniMorph snapshots for en/el/es/fr/id.
 - Added explicit `intersectGroundingCandidateSets` with provider-error fail
-  closed behavior.
+  closed behavior, explicit relation requirement, namespace compatibility,
+  and merged evidence.
+- Corrected the unbiased UniMorph probe to sample surface/POS observations,
+  pass POS symmetrically to raw and morphology paths, and record real
+  per-language snapshot hashes. Its output remains OMW-derived coverage
+  diagnostics, not independent accuracy.
+- Added identity coverage and conditional retrieval denominators to the raw
+  text evaluator.
+- Ran a diagnostic agent-candidate retrieval harness; its candidate ledger
+  reproduces gold-shaped paired semantics and is not clean extraction evidence.
 - Added deterministic tests and research artifacts.
 - `pnpm verify`: PASS, exit 0.
 - `git diff --check`: PASS.
+- Latest full `pnpm verify`: PASS, exit 0 (after retrieval metric changes).
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -52,14 +62,13 @@ provider or change semantic frames. No fresh protected corpus is justified.
 
 ## Next exact work
 
-1. Build an unbiased 100+ development morphology benchmark with held-out
-   surface forms, language/POS partitions, and explicit hard negatives.
-2. Use source-only Codex agents on that common set through the typed builder;
-   compare free-form, frame-first, and morphology-assisted construction with
-   deterministic stage attribution.
-3. Add an explicit cross-language raw-text retrieval development run using
-   agent-produced candidates only; report identity coverage, conditional and
-   end-to-end recall against lexical baseline.
+1. Obtain independent morphology/grounding labels; current UniMorph labels are
+   circular with OMW and cannot prove analyzer precision.
+2. Use genuinely source-only Codex agents on a fresh common development set
+   through the typed builder; compare free-form, frame-first, and
+   morphology-assisted construction with deterministic stage attribution.
+3. Repeat raw-text retrieval with a candidate ledger independently generated
+   from source text and contract only; the current ledger is harness-only.
 4. Use an independent adversarial agent to attack morphology and candidate-set
    intersection before deciding whether training is genuinely justified.
 5. Only after those results, consider a new protected corpus.
