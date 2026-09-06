@@ -35,6 +35,8 @@ test('frame-first builder creates only a canonical transport envelope', () => {
     agent: { type: 'actor', id: 'maria' }, object: { type: 'concept', id: 'report' }, recipient: { type: 'actor', id: 'lee' }, destination: { type: 'location', id: 'archive' },
   } }), /invalid_builder_frame/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: { experiencer: 'x', theme: 'y', manner: 'z' } }), /unexpected_frame_roles/);
+  assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: JSON.parse('{"__proto__":{"type":"actor","id":"x"}}') }), /unexpected_frame_roles/);
+  assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: Object.create({ theme: { type: 'concept', id: 'x' } }) }), /roles_plain_object_required/);
   assert.throws(() => buildCandidateSem({
     world: 'real', kind: 'conditional_instruction', predicate: 'enable',
     roles: { theme: { type: 'feature', id: 'backups' } },
@@ -68,6 +70,8 @@ test('extraction contract is generated from the protocol and frame registries', 
   assert.match(first.frameFirst.fieldSemantics.world ?? '', /never a language tag/iu);
   assert.match(first.frameFirst.fieldSemantics.roles ?? '', /object mapping/iu);
   assert.match(first.frameFirst.framePromptBlock, /prefer\(/u);
+  assert.match(first.frameFirst.framePromptBlock, /experiencer: actor\|entity\|system/u);
+  assert.match(first.frameFirst.framePromptBlock, /recipient\|destination \(mutually exclusive\)/u);
   assert.equal(first.frameFirst.termShape.discriminator, 'type');
 });
 

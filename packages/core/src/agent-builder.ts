@@ -57,6 +57,9 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
   const allowedInputFields = new Set(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences']);
   const unknownInputFields = Object.keys(input as unknown as Record<string, unknown>).filter((key) => !allowedInputFields.has(key));
   if (unknownInputFields.length) throw new TypeError(`unknown_builder_fields:${unknownInputFields.sort().join(',')}`);
+  if (typeof input.world !== 'string') throw new TypeError('builder_world_string_required');
+  if (typeof input.kind !== 'string') throw new TypeError('builder_kind_string_required');
+  if (typeof input.predicate !== 'string') throw new TypeError('builder_predicate_string_required');
   const world = basicIdentifier(input.world);
   const kind = basicIdentifier(input.kind);
   const predicate = basicIdentifier(input.predicate);
@@ -66,8 +69,11 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
   const frame = CANONICAL_SEMANTIC_FRAMES[predicate];
   if (!frame) throw new TypeError(`unframed_predicate:${predicate}`);
   if (!input.roles || typeof input.roles !== 'object' || Array.isArray(input.roles)) throw new TypeError('roles_object_required');
-  const roles: Record<string, LunumTerm> = {};
+  const rolePrototype = Object.getPrototypeOf(input.roles);
+  if (rolePrototype !== Object.prototype && rolePrototype !== null) throw new TypeError('roles_plain_object_required');
+  const roles: Record<string, LunumTerm> = Object.create(null) as Record<string, LunumTerm>;
   for (const [rawRole, term] of Object.entries(input.roles)) {
+    if (typeof rawRole !== 'string') throw new TypeError('builder_role_string_required');
     const normalizedRole = SEMANTIC_PROTOCOL_REGISTRY.aliases.role[basicIdentifier(rawRole)] ?? basicIdentifier(rawRole);
     if (roles[normalizedRole] !== undefined) throw new TypeError(`role_collision:${rawRole}->${normalizedRole}`);
     roles[normalizedRole] = term;

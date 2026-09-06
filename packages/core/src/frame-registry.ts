@@ -14,6 +14,7 @@ export interface PredicateFrameDefinition {
   predicate: string;
   roles: readonly FrameRoleRequirement[];
   atLeastOneOf?: readonly string[];
+  exclusiveGroups?: readonly (readonly string[])[];
   description: string;
 }
 
@@ -25,8 +26,8 @@ export function canonicalFramePromptBlock(): string {
     const extras = [
       ...(optional.length ? [`optional: ${optional.join(', ')}`] : []),
       ...(frame.atLeastOneOf?.length ? [`at least one of: ${frame.atLeastOneOf.join('|')}`] : []),
-      ...(frame.predicate === 'send' ? ['recipient|destination (mutually exclusive)'] : []),
-      ...(frame.predicate === 'delete' ? ['theme|object|target (mutually exclusive)'] : [])
+      ...(frame.exclusiveGroups?.flatMap((group) => [`${group.join('|')} (mutually exclusive)`]) ?? []),
+      ...frame.roles.flatMap((role) => role.allowedTermTypes?.length ? [`${role.name}: ${role.allowedTermTypes.join('|')}`] : [])
     ];
     return `${frame.predicate}(${required.length ? required.join(', ') : 'no required roles'}${extras.length ? `; ${extras.join('; ')}` : ''})`;
   }).join('\n');
@@ -68,6 +69,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'destination', required: false }
     ]),
+    exclusiveGroups: Object.freeze([Object.freeze(['recipient', 'destination'])]),
     description: 'An agent transmits an object to a recipient or destination.'
   }),
   receive: Object.freeze({
@@ -133,6 +135,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'object', required: false },
       { name: 'target', required: false }
     ]),
+    exclusiveGroups: Object.freeze([Object.freeze(['theme', 'object', 'target'])]),
     description: 'An agent removes or deletes an object/theme/target.'
   }),
   enable: Object.freeze({
@@ -281,11 +284,7 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
     roleMap.set(basicIdentifier(k), v);
   }
 
-  const exclusiveGroups: readonly (readonly string[])[] = predicate === 'send'
-    ? [['recipient', 'destination']]
-    : predicate === 'delete'
-      ? [['theme', 'object', 'target']]
-      : [];
+  const exclusiveGroups = frame.exclusiveGroups ?? [];
   for (const group of exclusiveGroups) {
     const present = group.filter((role) => roleMap.has(role));
     if (present.length > 1) {
