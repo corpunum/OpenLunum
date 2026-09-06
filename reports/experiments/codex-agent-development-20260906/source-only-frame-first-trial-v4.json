@@ -1,0 +1,27 @@
+{
+  "type": "development-source-only-frame-first-trial",
+  "version": 4,
+  "status": "diagnostic",
+  "provenance": {
+    "goldProvidedToAgents": false,
+    "pairLabelsProvidedToAgents": false,
+    "localInferenceUsed": false,
+    "contractSource": "generated getExtractionContract()",
+    "agents": ["gpt-5.6-luna/isolated-agent-Dirac", "gpt-5.6-luna/isolated-agent-Heisenberg"],
+    "outputTransport": "JSONL, one isolated item per line"
+  },
+  "items": 18,
+  "languages": ["en", "el", "es", "fr", "de", "id"],
+  "deterministicSubmission": {
+    "Dirac": {"submitted": 16, "abstentions": 2, "transportValid": 16, "protocolCanonical": 16, "frameValid": 16, "candidateIdentityAvailable": 16, "failureClasses": {}},
+    "Heisenberg": {"submitted": 15, "abstentions": 3, "transportValid": 15, "protocolCanonical": 15, "frameValid": 15, "candidateIdentityAvailable": 15, "failureClasses": {}}
+  },
+  "agreement": {
+    "sameCandidateStructure": "15/15 submitted item overlaps",
+    "notableDifference": "Dirac emitted an enable candidate for Indonesian b10; Heisenberg abstained",
+    "supportedGroups": "prefer EN/EL, send ES/EN, believe FR/EN, publish DE/EN, and confirm EL converged structurally in both outputs",
+    "goldExactness": "not scored; this development trial exposed no gold semantics to agents"
+  },
+  "interpretation": "JSONL removes batch-level transport loss observed in v3. The generated contract and core validator accepted every submitted candidate in this trial, but identity availability still does not establish semantic correctness. Agent disagreement on Indonesian support and abstention policy remains evidence of extraction/grounding uncertainty.",
+  "decision": "Retain JSONL/item isolation for future agent-native evaluation. Do not create protected evidence or alter frames based on this small development sample. Next high-leverage work remains independently adjudicated grounding labels and a larger blind development corpus."
+}

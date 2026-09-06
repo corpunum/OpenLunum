@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T16:59:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: ee4751964cede16352189c86bacb69f4493083d3
+Current HEAD: eb18757b7d947e5c5272061ee8ca43a61f251082
 
 ## Scope and prohibitions
 
@@ -89,6 +89,11 @@ used.
   adapter was added. Findings are in `external-resource-research-20260906.json`.
 - WN-LMF importer now counts truncated lexical-entry starts as malformed;
   rebuilt core suite passes 1,802/1,802.
+- A fresh 18-item batch-array trial failed transport parsing in both agents due
+  to one trailing comma. The same items were rerun as strict JSONL: Dirac
+  submitted 16/18 and Heisenberg 15/18; every submitted candidate passed all
+  deterministic gates. Indonesian enable was the main agent disagreement.
+  Results are diagnostic in `source-only-frame-first-trial-v3.json` and `v4`.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
