@@ -426,6 +426,13 @@
       "evidence": "Core build/typecheck and 1,806 tests passed; no hand-maintained semantic vocabulary or acceptance behavior was added.",
       "decision": "Keep descriptions generated from the registry; do not invent role descriptions where the registry has none.",
       "commit": "2f49a8fb2bd4821c8e9c874039aec2c1dc09827b"
+    },
+    {
+      "hypothesis": "The next useful experiment must factor provider coverage, agent grounding, and protocol control instead of treating all failed convergence as one cause.",
+      "implementation": "Independent read-only review proposed a Grounding-Ladder Factorial Audit on fresh development labels: provider candidate-set recall, blind agent proposal recall conditional on provider coverage, and independently constructed protocol-control acceptance, with mutation safety checks.",
+      "evidence": "Current OMW reports already provide provider-side diagnostics but not independent agent proposal labels or a clean factorial separation. No protected data was created or used.",
+      "decision": "Adopt this as the next highest-leverage development experiment; do not conclude training is necessary until the three stages are measured independently.",
+      "commit": "research-review"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

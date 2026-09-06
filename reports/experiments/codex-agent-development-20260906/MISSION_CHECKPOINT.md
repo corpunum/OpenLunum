@@ -287,6 +287,11 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   generated from registry metadata. Core remains 1,806/1,806.
 - The compact generated frame block now also carries each registry frame's
   description, with core 1,806/1,806 after the synchronization regression.
+- An independent research review proposed a Grounding-Ladder Factorial Audit:
+  separate provider candidate-set recall, blind agent proposal recall
+  conditional on provider coverage, and protocol-control acceptance, plus
+  critical mutations. This is the next development experiment; no protected
+  data was created or used.
 
 ## Uncommitted state
 
