@@ -115,11 +115,24 @@ test('stable entity provider accepts only exact prevalidated IDs and deduplicate
   assert.equal(result.candidates[0]?.externalId, 'Q42');
 });
 
+test('stable entity provider rejects malformed IDs and resolver failures', () => {
+  const malformed = createStableEntityProvider({ provider: 'wikidata', providerVersion: '1', snapshotHash: 'a'.repeat(64), resolveExact: () => [{ externalId: '', evidence: [] }] });
+  assert.equal(malformed.resolve({ proposal: proposal('x'), language: 'en' }).status, 'provider_error');
+  const throwing = createStableEntityProvider({ provider: 'wikidata', providerVersion: '1', snapshotHash: 'a'.repeat(64), resolveExact: () => { throw new Error('offline'); } });
+  assert.equal(throwing.resolve({ proposal: proposal('x'), language: 'en' }).status, 'provider_error');
+});
+
 test('cascade does not majority-vote provider disagreement', () => {
   const first = createStableEntityProvider({ provider: 'omw-cili', providerVersion: '1', snapshotHash: 'b'.repeat(64), resolveExact: () => [{ externalId: 'ili:i1', evidence: [] }] });
   const second = createStableEntityProvider({ provider: 'wikidata', providerVersion: '1', snapshotHash: 'c'.repeat(64), resolveExact: () => [{ externalId: 'Q1', evidence: [] }] });
   const result = resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [first, second]);
   assert.equal(result.status, 'ambiguous');
+});
+
+test('cascade does not equate identical bare IDs across namespaces', () => {
+  const first = createStableEntityProvider({ provider: 'wikidata', providerVersion: '1', snapshotHash: 'b'.repeat(64), resolveExact: () => [{ externalId: 'Q1', evidence: [] }] });
+  const second = createStableEntityProvider({ provider: 'other', providerVersion: '1', snapshotHash: 'c'.repeat(64), resolveExact: () => [{ externalId: 'Q1', evidence: [] }] });
+  assert.equal(resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [first, second]).status, 'ambiguous');
 });
 
 test('provider resolution materializes a versioned Lunum namespace ID', () => {

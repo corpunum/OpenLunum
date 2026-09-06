@@ -388,7 +388,32 @@ export function createStableEntityProvider(options: StableEntityProviderOptions)
     providerVersion: options.providerVersion,
     snapshotHash: options.snapshotHash,
     resolve(input: GroundingProviderInput): GroundingProviderResult {
-      const candidates = [...options.resolveExact(input)].sort((a, b) => a.externalId.localeCompare(b.externalId, 'en'));
+      let rawCandidates: readonly GroundingProviderCandidate[];
+      try {
+        rawCandidates = options.resolveExact(input);
+      } catch (error) {
+        return {
+          provider: options.provider,
+          providerVersion: options.providerVersion,
+          snapshotHash: options.snapshotHash,
+          language: input.language,
+          status: 'provider_error',
+          candidates: [],
+          diagnostics: [`stable-ID resolver failed: ${error instanceof Error ? error.message : String(error)}`],
+        };
+      }
+      if (!Array.isArray(rawCandidates) || rawCandidates.some((candidate) => !candidate || typeof candidate.externalId !== 'string' || !/^\S+$/u.test(candidate.externalId))) {
+        return {
+          provider: options.provider,
+          providerVersion: options.providerVersion,
+          snapshotHash: options.snapshotHash,
+          language: input.language,
+          status: 'provider_error',
+          candidates: [],
+          diagnostics: ['stable-ID resolver returned an invalid external ID'],
+        };
+      }
+      const candidates = [...rawCandidates].sort((a, b) => a.externalId.localeCompare(b.externalId, 'en'));
       const unique = [...new Map(candidates.map((candidate) => [candidate.externalId, candidate])).values()];
       return {
         provider: options.provider,
@@ -460,7 +485,12 @@ export function resolveGroundingCascade(input: GroundingProviderInput, providers
       try { comparison = other.resolve(input); } catch { continue; }
       results.push(comparison);
       if (comparison.status === 'ambiguous') return { status: 'ambiguous', attempted: results.map((item) => item.provider), results };
-      if (comparison.status === 'resolved_exact' && comparison.candidates.length === 1 && comparison.candidates[0]!.externalId !== candidate.externalId) return { status: 'ambiguous', attempted: results.map((item) => item.provider), results };
+      if (comparison.status === 'resolved_exact' && comparison.candidates.length === 1) {
+        const namespace = (provider: string, externalId: string): string => externalId.includes(':') ? externalId.slice(0, externalId.indexOf(':')) : provider;
+        const agrees = namespace(comparison.provider, comparison.candidates[0]!.externalId) === namespace(result.provider, candidate.externalId)
+          && comparison.candidates[0]!.externalId === candidate.externalId;
+        if (!agrees) return { status: 'ambiguous', attempted: results.map((item) => item.provider), results };
+      }
     }
     return { status: 'resolved_exact', provider: result.provider, candidate, attempted: results.map((item) => item.provider), results };
   }

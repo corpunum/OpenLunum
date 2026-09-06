@@ -24,9 +24,9 @@ test('frame-first builder creates only a canonical transport envelope', () => {
   assert.equal(built.atLeastOneOf, null);
   const retry = buildCandidateSem({
     world: 'real', kind: 'instruction', predicate: 'retry',
-    roles: { theme: { type: 'object', id: 'upload' } },
+    roles: { agent: { type: 'actor', id: 'uploader' }, theme: { type: 'object', id: 'upload' } },
   });
-  assert.deepEqual(retry.requiredRoles, []);
+  assert.deepEqual(retry.requiredRoles, ['agent']);
   assert.deepEqual(retry.atLeastOneOf, ['count', 'theme']);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'simple_fact', predicate: 'share', roles: {} }), /unframed_predicate/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: {} }), /invalid_builder_frame/);

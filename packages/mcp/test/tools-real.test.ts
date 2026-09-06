@@ -41,7 +41,7 @@ test('lunum_build_candidate returns a candidate without certifying it', async ()
 test('lunum_build_candidate exposes alternative frame requirements', async () => {
   const data = JSON.parse(getText(await find('lunum_build_candidate').handler({
     world: 'real', kind: 'instruction', predicate: 'retry',
-    roles: { theme: { type: 'object', id: 'upload' } },
+    roles: { agent: { type: 'actor', id: 'uploader' }, theme: { type: 'object', id: 'upload' } },
   })));
   assert.equal(data.success, true);
   assert.deepEqual(data.requiredRoles, []);
