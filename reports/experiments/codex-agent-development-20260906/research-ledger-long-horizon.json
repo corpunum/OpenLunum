@@ -384,6 +384,13 @@
       "evidence": "The API `/parse` path fabricates a default Sem from text and `/retrieve` returns an empty placeholder result path; neither consumes the untrusted candidate-submission contract or raw-text retrieval evaluator.",
       "decision": "Reject the API as current empirical extraction/retrieval evidence. Keep core as authority, MCP as primary agent surface, and CLI as deterministic fallback.",
       "commit": "audit-only"
+    },
+    {
+      "hypothesis": "A tightly constrained direct-field agent contract can achieve reliable transport without changing OpenLunum semantics.",
+      "implementation": "An isolated Codex agent received three fresh English sources and was required to emit only itemId plus direct world/kind/predicate/roles builderInput fields. OpenLunum built and submitted every candidate with source-bound provenance.",
+      "evidence": "3/3 candidates passed transport, protocol canonicality, frame validity, grounding, and lfp:2.1 identity gates. The result is persisted in source-only-direct-builder-trial.json; no gold was supplied.",
+      "decision": "Retain direct-field constraints as a viable transport mode, but do not infer semantic accuracy from identity availability without independent gold.",
+      "commit": "current-diagnostic"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

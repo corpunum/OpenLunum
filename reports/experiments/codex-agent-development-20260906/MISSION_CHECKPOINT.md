@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T19:18:10+03:00
+Recorded: 2026-09-06T19:27:30+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 2ed9c259a7a26a25e05c067709f4dcdbb3c7bdb9
+Current HEAD: 6dda38287b2f9e5b9034f8ce76bbfbaffbf7ca37
 
 ## Scope and prohibitions
 
@@ -262,10 +262,14 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - API regression gate passed: 202 unit tests, build, and typecheck. This
   confirms the legacy surface is stable but does not upgrade it to semantic
   extraction evidence.
+- A tightly constrained direct-field Codex trial on three fresh English
+  sources produced 3/3 transport-, protocol-, frame-, grounding-, and
+  identity-valid candidates. The diagnostic artifact records exact source
+  hashes and lfp:2.1 outputs, but no gold or semantic accuracy claim.
 
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `2ed9c259a7a26a25e05c067709f4dcdbb3c7bdb9`.
+code/evidence boundary is `6dda38287b2f9e5b9034f8ce76bbfbaffbf7ca37`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

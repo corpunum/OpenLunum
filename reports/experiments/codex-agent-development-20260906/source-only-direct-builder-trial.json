@@ -1,0 +1,53 @@
+{
+  "type": "codex-agent-source-only-direct-builder-trial",
+  "version": 1,
+  "status": "diagnostic",
+  "protected": false,
+  "localInferenceUsed": false,
+  "goldExposed": false,
+  "agent": "gpt-5.6-luna",
+  "contract": {
+    "mode": "direct-builder-fields",
+    "unknownFieldsForbidden": true,
+    "sourceTextOnly": true
+  },
+  "items": [
+    {
+      "id": "x1",
+      "language": "en",
+      "sourceText": "Nadia sends the invoice to Omar.",
+      "sourceHash": "ac18e7d6b8f20a1ce0b6dd9468a47109fcbe2f099c9629ac8352f7bb54c39769",
+      "transportValid": true,
+      "protocolCanonical": true,
+      "frameValid": true,
+      "grounded": true,
+      "candidateIdentityAvailable": true,
+      "semanticFingerprint": "lfp:2.1:sha256:ca73e138987b9383978857ab9de1aae3"
+    },
+    {
+      "id": "x2",
+      "language": "en",
+      "sourceText": "The service publishes the audit report.",
+      "sourceHash": "cb5bd8ad0688ccfac40af0ece1a36b3da0c8c2073775e10d0b52d045fcb4d57e",
+      "transportValid": true,
+      "protocolCanonical": true,
+      "frameValid": true,
+      "grounded": true,
+      "candidateIdentityAvailable": true,
+      "semanticFingerprint": "lfp:2.1:sha256:b4f90c543d54f6ee6ec8661f112eb2f7"
+    },
+    {
+      "id": "x3",
+      "language": "en",
+      "sourceText": "Nadia prefers quiet mode.",
+      "sourceHash": "59ee0561a653765b0c0138c2515213ee6bee20859fb915a3c78f40a05d048f5c",
+      "transportValid": true,
+      "protocolCanonical": true,
+      "frameValid": true,
+      "grounded": true,
+      "candidateIdentityAvailable": true,
+      "semanticFingerprint": "lfp:2.1:sha256:c334dc8b91e2a39051dccf81ff087f53"
+    }
+  ],
+  "interpretation": "All three candidates passed deterministic gates. No independently labeled gold was supplied, so exact semantic accuracy and convergence are not claimed."
+}
