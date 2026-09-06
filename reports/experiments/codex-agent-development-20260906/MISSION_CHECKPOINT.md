@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T16:58:00+03:00
+Recorded: 2026-09-06T16:59:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: cbf227ec3b6aa8f7845bf8032206b1dbc9ee51c8
+Current HEAD: 72283aff1810e3b99905e314785c366531f32dfe
 
 ## Scope and prohibitions
 
@@ -77,6 +77,8 @@ used.
   changes: `pnpm verify` passed with exit 0 and `git diff --check` passed.
 - Hardened the OMW tab importer to classify malformed mapped/unmapped rows
   before coverage lookup; core suite is 1,801/1,801 after rebuild.
+- Full `pnpm verify` after the importer/cascade changes passed with exit 0;
+  evaluation smoke remained 16 items across 4 groups.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.

@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T16:58:00+03:00",
-  "currentHead": "cbf227ec3b6aa8f7845bf8032206b1dbc9ee51c8",
+  "lastUpdated": "2026-09-06T16:59:00+03:00",
+  "currentHead": "72283aff1810e3b99905e314785c366531f32dfe",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -125,6 +125,13 @@
       "evidence": "Core suite passes 1,801/1,801 after the importer correction. Existing definition-row ignore behavior remains unchanged and intentionally separate from malformed data.",
       "decision": "Keep the correction. It improves reproducibility of resource scale/coverage diagnostics without changing semantic identity or provider resolution.",
       "commit": "cbf227e"
+    },
+    {
+      "hypothesis": "The importer/cascade repairs are locally correct but may break the workspace contract outside core unit tests.",
+      "implementation": "Rebuilt packages and reran pnpm verify after provider-result containment and malformed lexical-row classification.",
+      "evidence": "pnpm verify passed with exit 0; git diff --check passed. Evaluation smoke remained 16 items/4 groups with the existing deterministic dataset hash.",
+      "decision": "Keep the fixes. No protected corpus is created; current agent extraction/retrieval evidence remains development diagnostic.",
+      "commit": "72283af"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
