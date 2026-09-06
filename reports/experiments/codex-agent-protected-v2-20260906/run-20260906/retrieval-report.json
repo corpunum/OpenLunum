@@ -1,0 +1,46 @@
+{
+  "method": "same frozen agent-extracted candidate identities; no gold Sem",
+  "pairsAttempted": 4,
+  "identityEligiblePairs": 4,
+  "conditionalRecall": 0.5,
+  "endToEndRecall": 0.5,
+  "lexicalBaselineTop1": 0,
+  "paired": [
+    {
+      "group": "prefer-ergonomic-keyboard",
+      "memory": "q01",
+      "query": "q02",
+      "memoryIdentity": "lfp:2.1:sha256:0d9dacee517823913dc2ec0b6c9b3681",
+      "queryIdentity": "lfp:2.1:sha256:0d9dacee517823913dc2ec0b6c9b3681",
+      "exactIdentityMatch": true,
+      "lexicalOverlap": 0
+    },
+    {
+      "group": "send-invoice-finance",
+      "memory": "q03",
+      "query": "q04",
+      "memoryIdentity": "lfp:2.1:sha256:9673a1ee1c8d0a82707d94db443ece67",
+      "queryIdentity": "lfp:2.1:sha256:4c86531ecb1fcdc330e5a5a658eb256b",
+      "exactIdentityMatch": false,
+      "lexicalOverlap": 0
+    },
+    {
+      "group": "publish-maintenance-bulletin",
+      "memory": "q05",
+      "query": "q06",
+      "memoryIdentity": "lfp:2.1:sha256:10ea9d2c979c4b4236a706aa8aacb331",
+      "queryIdentity": "lfp:2.1:sha256:10ea9d2c979c4b4236a706aa8aacb331",
+      "exactIdentityMatch": true,
+      "lexicalOverlap": 0
+    },
+    {
+      "group": "enable-safety-monitor",
+      "memory": "q07",
+      "query": "q08",
+      "memoryIdentity": "lfp:2.1:sha256:ca669bd8b5943ee5da446807c3732c57",
+      "queryIdentity": "lfp:2.1:sha256:da99898fbd26c88ae8f94b0e7a372184",
+      "exactIdentityMatch": false,
+      "lexicalOverlap": 0
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "openlunum-blind-agent-eval/0.1",
+  "runId": "codex-agent-protected-v2-20260906",
+  "contractVersion": "lunum-agent/0.1",
+  "contractHash": "fb2b09f4deb32388985ca9140a854850836278481b46636be54210475a199fe0",
+  "transportSchemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+  "datasetHash": "5bf2387a888b740024aee86e696788db3835de7535f8239ee80baa91a47ab4c6",
+  "itemCount": 14,
+  "criticalNegativePairsHash": "66bffc19d2537aef36c56dfb5334fcf495129089164e91f50f1279d5fe631498"
+}

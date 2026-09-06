@@ -1,0 +1,15 @@
+{
+  "corpusPath": "reports/experiments/codex-agent-protected-v2-20260906",
+  "corpusSha256": "4f92f17d87dc7fe29a6142780559add348414a55367861770516e1fad2ebdba0",
+  "implementationSha": "48f559f7c242b6cbbc79b5b992378727371566ef",
+  "corpusCreator": "parent OpenLunum agent; reduced independence",
+  "extractionAgent": "Euclid / Codex subagent",
+  "extractionIdentity": "runtime model/build unavailable",
+  "label": "CODEX_AGENT_EMPIRICAL",
+  "rows": 14,
+  "parseTargets": 11,
+  "abstentionTargets": 3,
+  "semanticGroups": 10,
+  "criticalNegativePairs": 5,
+  "frozenAt": "2026-09-06T10:12:44.033Z"
+}

@@ -1,0 +1,87 @@
+{
+  "resume": {
+    "completedItems": 14,
+    "totalItems": 14,
+    "nextAfterResume": null,
+    "summary": {
+      "runId": "codex-agent-protected-v2-20260906",
+      "totalItems": 14,
+      "completedItems": 14,
+      "parseTargets": 11,
+      "parseExact": 3,
+      "parseExactMicro": 0.2727272727272727,
+      "abstentionTargets": 3,
+      "correctAbstentions": 3,
+      "unexpectedParses": 0,
+      "abstentionAccuracy": 1,
+      "candidateIdentityAvailable": 11,
+      "identityComparable": 11,
+      "identityExact": 3,
+      "comparableButNonExact": 8,
+      "failureClasses": {
+        "semantic_identity_mismatch": 8
+      },
+      "byLanguage": [
+        {
+          "language": "de",
+          "parseTargets": 1,
+          "exact": 0,
+          "exactRate": 0,
+          "candidateIdentityAvailable": 1
+        },
+        {
+          "language": "el",
+          "parseTargets": 2,
+          "exact": 1,
+          "exactRate": 0.5,
+          "candidateIdentityAvailable": 2
+        },
+        {
+          "language": "en",
+          "parseTargets": 3,
+          "exact": 1,
+          "exactRate": 0.3333333333333333,
+          "candidateIdentityAvailable": 3
+        },
+        {
+          "language": "es",
+          "parseTargets": 1,
+          "exact": 0,
+          "exactRate": 0,
+          "candidateIdentityAvailable": 1
+        },
+        {
+          "language": "fr",
+          "parseTargets": 2,
+          "exact": 1,
+          "exactRate": 0.5,
+          "candidateIdentityAvailable": 2
+        },
+        {
+          "language": "id",
+          "parseTargets": 2,
+          "exact": 0,
+          "exactRate": 0,
+          "candidateIdentityAvailable": 2
+        }
+      ],
+      "goldGroups": 7,
+      "goldGroupsConverging": 7,
+      "modelGroupsAttempted": 10,
+      "modelGroupsConverging": 5,
+      "criticalNegativePairs": 5,
+      "comparableNegativePairs": 5,
+      "falseEquivalences": 0,
+      "negativeCoverage": 1
+    }
+  },
+  "leakage": {
+    "publicRows": 14,
+    "privateRows": 14,
+    "uniquePublicIds": 14,
+    "uniquePrivateIds": 14,
+    "publicContainsCandidateSem": false,
+    "publicContainsGold": false,
+    "checkpointMatches": true
+  }
+}

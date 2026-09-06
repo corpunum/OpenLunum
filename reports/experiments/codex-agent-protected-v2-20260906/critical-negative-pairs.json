@@ -1,0 +1,7 @@
+[
+  {"pairId":"n01","leftItemId":"q01","rightItemId":"q07","criticalDimension":"predicate","expectedRelationship":"not_equivalent"},
+  {"pairId":"n02","leftItemId":"q03","rightItemId":"q11","criticalDimension":"predicate","expectedRelationship":"not_equivalent"},
+  {"pairId":"n03","leftItemId":"q05","rightItemId":"q09","criticalDimension":"predicate","expectedRelationship":"not_equivalent"},
+  {"pairId":"n04","leftItemId":"q09","rightItemId":"q10","criticalDimension":"temporal_structure","expectedRelationship":"not_equivalent"},
+  {"pairId":"n05","leftItemId":"q07","rightItemId":"q11","criticalDimension":"predicate","expectedRelationship":"not_equivalent"}
+]
