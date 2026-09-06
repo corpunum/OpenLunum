@@ -14,6 +14,9 @@ Open Multilingual Wordnet release and its Collaborative Interlingual Index.
 part of speech, and an ILI identifier. It performs exact lemma lookup only.
 Polysemy is ambiguous; missing language or sense is unresolved; modified
 compositions are unresolved because a head synset does not prove the modifier.
+`importOmwTab()` imports the standard three-field tab records when the caller
+also supplies an explicit synset-to-CILI map; unmapped synsets are reported,
+never guessed.
 
 The provider deliberately does not download data or call a network service.
 An application supplies a locally cached, hashed snapshot and must retain the

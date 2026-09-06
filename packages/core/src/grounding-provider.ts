@@ -58,6 +58,20 @@ export interface OmwProviderOptions {
   provider?: string;
 }
 
+export interface OmwTabImportOptions {
+  language: string;
+  source?: string;
+  license?: string;
+  /** Maps the tab file's `offset-pos` key to a CILI/ILI identifier. */
+  synsetToInterlingualId: ReadonlyMap<string, string>;
+}
+
+export interface OmwTabImportResult {
+  records: OmwLexicalRecord[];
+  unmappedSynsets: string[];
+  malformedLines: number[];
+}
+
 function normalizeLemma(value: string): string {
   return value.normalize('NFKC').trim().toLocaleLowerCase('und').replace(/\\s+/gu, ' ');
 }
@@ -86,6 +100,28 @@ function validateRecord(record: OmwLexicalRecord, index: number): void {
   if (typeof record.language !== 'string' || !/^\p{Letter}[\p{Letter}\p{Number}-]*$/u.test(record.language.normalize('NFKC').trim())) throw new TypeError(`OMW record ${index} has invalid language`);
   if (typeof record.lemma !== 'string' || !normalizeLemma(record.lemma)) throw new TypeError(`OMW record ${index} has an empty lemma`);
   if (typeof record.interlingualId !== 'string' || !/^[A-Za-z][A-Za-z0-9._:-]*$/u.test(record.interlingualId.normalize('NFKC').trim())) throw new TypeError(`OMW record ${index} has an invalid interlingual ID`);
+}
+
+/** Import the documented OMW tab format without guessing unmapped synsets. */
+export function importOmwTab(content: string, options: OmwTabImportOptions): OmwTabImportResult {
+  const records: OmwLexicalRecord[] = [];
+  const unmapped = new Set<string>();
+  const malformedLines: number[] = [];
+  for (const [offset, rawLine] of content.split(/\r?\n/u).entries()) {
+    const lineNumber = offset + 1;
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    const fields = line.split('\t');
+    if (fields.length !== 3) { malformedLines.push(lineNumber); continue; }
+    const [synset, lemmaType, lemma] = fields;
+    const mappingKey = synset!;
+    const interlingualId = options.synsetToInterlingualId.get(mappingKey);
+    if (!interlingualId) { unmapped.add(mappingKey); continue; }
+    const partOfSpeech = ({ n: 'noun', v: 'verb', a: 'adjective', s: 'adjective', r: 'adverb' } as const)[lemmaType!.toLowerCase() as 'n' | 'v' | 'a' | 's' | 'r'];
+    if (!partOfSpeech || !lemma) { malformedLines.push(lineNumber); continue; }
+    records.push({ language: options.language, lemma: lemma.replace(/_/gu, ' '), interlingualId, partOfSpeech, ...(options.source ? { source: options.source } : {}), ...(options.license ? { license: options.license } : {}) });
+  }
+  return { records, unmappedSynsets: [...unmapped].sort((a, b) => a.localeCompare(b, 'en')), malformedLines };
 }
 
 /**

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   createOmwProvider,
   createStableEntityProvider,
+  importOmwTab,
   resolveGroundingCascade,
   toGroundingResolution,
 } from '../src/grounding-provider.js';
@@ -86,4 +87,15 @@ test('provider failure degrades without guessing', () => {
 
 test('malformed pinned snapshots are rejected instead of partially indexed', () => {
   assert.throws(() => createOmwProvider({ version: 'bad', records: [{ language: 'en', lemma: 'folder', interlingualId: '' }] }), /invalid interlingual ID/u);
+});
+
+test('OMW tab importer maps only explicit CILI synsets and reports gaps', () => {
+  const imported = importOmwTab('# header\n00000001-n\tn\tfolder\n00000002-n\tn\tfolder\n00000003-v\tv\tfile\nnot-a-record', {
+    language: 'en', source: 'omw-en/2.0', license: 'OPEN',
+    synsetToInterlingualId: new Map([['00000001-n', 'i123'], ['00000003-v', 'i456']]),
+  });
+  assert.equal(imported.records.length, 2);
+  assert.equal(imported.records[0]?.lemma, 'folder');
+  assert.deepEqual(imported.unmappedSynsets, ['00000002-n']);
+  assert.deepEqual(imported.malformedLines, [5]);
 });
