@@ -146,6 +146,25 @@ test('cascade contains malformed arbitrary provider results', () => {
   assert.equal(result.candidate, undefined);
 });
 
+test('cascade binds provider metadata and validates later comparisons', () => {
+  const trusted = createStableEntityProvider({ provider: 'trusted', providerVersion: '1', snapshotHash: 'e'.repeat(64), resolveExact: () => [{ externalId: 'Q1', evidence: [] }] });
+  const impersonating = {
+    provider: 'untrusted', providerVersion: '1', snapshotHash: 'f'.repeat(64),
+    resolve: () => ({ status: 'resolved_exact', provider: 'trusted', providerVersion: '1', snapshotHash: 'e'.repeat(64), language: 'en', candidates: [{ externalId: 'Q1', evidence: [] }], diagnostics: [] }),
+    explain: () => [],
+  } as unknown as import('../src/grounding-provider.js').GroundingProvider;
+  assert.equal(resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [impersonating]).status, 'provider_error');
+  const malformedLater = {
+    provider: 'later', providerVersion: '1', snapshotHash: 'f'.repeat(64),
+    resolve: () => ({ status: 'resolved_exact', provider: 'later', providerVersion: '1', snapshotHash: 'f'.repeat(64), language: 'en', candidates: [{ externalId: 'Q1' }], diagnostics: [] }),
+    explain: () => [],
+  } as unknown as import('../src/grounding-provider.js').GroundingProvider;
+  const first = createStableEntityProvider({ provider: 'first', providerVersion: '1', snapshotHash: 'e'.repeat(64), resolveExact: () => [{ externalId: 'Q1', evidence: [] }] });
+  const result = resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [first, malformedLater]);
+  assert.equal(result.status, 'resolved_exact');
+  assert.equal(result.results.at(-1)?.status, 'provider_error');
+});
+
 test('provider resolution materializes a versioned Lunum namespace ID', () => {
   const result = provider.resolve({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' });
   const resolution = toGroundingResolution(proposal(), result);

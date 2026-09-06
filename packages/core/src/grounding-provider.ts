@@ -179,6 +179,18 @@ function providerResultIssues(result: unknown): string[] {
   return issues;
 }
 
+function containProviderResult(result: unknown, provider: GroundingProvider, input: GroundingProviderInput): GroundingProviderResult {
+  const issues = providerResultIssues(result);
+  if (issues.length === 0) {
+    const value = result as GroundingProviderResult;
+    if (value.provider !== provider.provider || value.providerVersion !== provider.providerVersion || value.snapshotHash !== provider.snapshotHash) {
+      issues.push('provider result metadata does not match its provider instance');
+    }
+  }
+  if (issues.length) return { status: 'provider_error', provider: provider.provider, providerVersion: provider.providerVersion, snapshotHash: provider.snapshotHash, language: input.language, candidates: [], diagnostics: Object.freeze(issues) };
+  return result as GroundingProviderResult;
+}
+
 function canonicalRecord(record: OmwLexicalRecord): OmwLexicalRecord {
   return {
     language: record.language.normalize('NFKC').trim().toLocaleLowerCase('und'),
@@ -491,22 +503,22 @@ export function toGroundingResolution(proposal: GroundingProposal, result: Groun
 export function resolveGroundingCascade(input: GroundingProviderInput, providers: readonly GroundingProvider[]): GroundingCascadeResult {
   const results: GroundingProviderResult[] = [];
   for (const provider of providers) {
-    let result: GroundingProviderResult;
-    try { result = provider.resolve(input); } catch (error) {
-      result = { status: 'provider_error', provider: provider.provider, providerVersion: provider.providerVersion, snapshotHash: provider.snapshotHash, language: input.language, candidates: [], diagnostics: [`provider threw: ${error instanceof Error ? error.message : String(error)}`] };
+    let rawResult: unknown;
+    try { rawResult = provider.resolve(input); } catch (error) {
+      rawResult = { status: 'provider_error', provider: provider.provider, providerVersion: provider.providerVersion, snapshotHash: provider.snapshotHash, language: input.language, candidates: [], diagnostics: [`provider threw: ${error instanceof Error ? error.message : String(error)}`] };
     }
-    const resultIssues = providerResultIssues(result);
-    if (resultIssues.length) {
-      result = { status: 'provider_error', provider: provider.provider, providerVersion: provider.providerVersion, snapshotHash: provider.snapshotHash, language: input.language, candidates: [], diagnostics: Object.freeze(resultIssues) };
-    }
+    const result = containProviderResult(rawResult, provider, input);
     results.push(result);
     if (result.status === 'ambiguous') return { status: 'ambiguous', attempted: results.map((item) => item.provider), results };
     if (result.status !== 'resolved_exact' || result.candidates.length !== 1) continue;
     const candidate = result.candidates[0]!;
     const later = providers.slice(providers.indexOf(provider) + 1);
     for (const other of later) {
-      let comparison: GroundingProviderResult;
-      try { comparison = other.resolve(input); } catch { continue; }
+      let rawComparison: unknown;
+      try { rawComparison = other.resolve(input); } catch (error) {
+        rawComparison = { status: 'provider_error', provider: other.provider, providerVersion: other.providerVersion, snapshotHash: other.snapshotHash, language: input.language, candidates: [], diagnostics: [`provider threw: ${error instanceof Error ? error.message : String(error)}`] };
+      }
+      const comparison = containProviderResult(rawComparison, other, input);
       results.push(comparison);
       if (comparison.status === 'ambiguous') return { status: 'ambiguous', attempted: results.map((item) => item.provider), results };
       if (comparison.status === 'resolved_exact' && comparison.candidates.length === 1) {
