@@ -1,0 +1,15 @@
+{
+  "type": "development-resource-manifest",
+  "version": 1,
+  "resource": "Universal Dependencies development treebanks",
+  "source": "https://github.com/UniversalDependencies",
+  "repositories": {
+    "English-EWT": { "commit": "4a4d77f599ea53cc405f85d0cec4b2f14f81d42b", "license": "CC BY-SA 4.0", "fileSha256": "39239e0a60db3ae68f4b7036189f11b6692741d10ff8240dd91f74f2760d90f8" },
+    "Greek-GDT": { "commit": "005bb3e0853a40f95162aab35177250c6f1c7328", "license": "CC BY-NC-SA 3.0", "fileSha256": "53de54735051eecef04aa8c0f5f0fbf2466e0e0d4fd9dfd3d313560c394ddf41" },
+    "Spanish-AnCora": { "commit": "20adddbfcdd773c6dc97ba48ea11ca9364e74185", "license": "CC BY 4.0", "fileSha256": "1a132068062edf2654fb45b41cd4c59ba7e5c18e7c5f642ed5a9cc351fd9f0fe" },
+    "French-GSD": { "commit": "94d5b68e185fc22a9ef292040e84f476d36d9b0e", "license": "CC BY-SA 4.0", "fileSha256": "9221e5084cc6a1b1540671cfbd2fc0456efc223b2fe8dd2146c2bad921be02d4" },
+    "German-GSD": { "commit": "ce54dbe9c6a5640c93e9952f069f582f6cd1f9fc", "license": "CC BY-SA 4.0", "fileSha256": "01e8e674973592747ffe9a8c77fcf9d2f5936a8484e731ad4f76254318a8952c" },
+    "Indonesian-GSD": { "commit": "bc23d75691fd97255bbd420c4dbacd423b0ede95", "license": "CC BY-SA 4.0", "fileSha256": "56d4ab12267317d33511326da9fcd5b7eff641435c3b6365401937a33ce05e4b" }
+  },
+  "note": "Treebanks retain their individual licenses; this manifest does not relicense them. The snapshots were used only for local development diagnostics and are not bundled."
+}
