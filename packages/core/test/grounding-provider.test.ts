@@ -229,6 +229,13 @@ test('WN-LMF importer preserves only explicit non-proposed ILI mappings', () => 
   assert.deepEqual(imported.invalidMappings, []);
 });
 
+test('WN-LMF importer counts truncated lexical entries as malformed', () => {
+  const xml = '<LexicalResource><Lexicon><LexicalEntry id="w1"><Lemma writtenForm="broken" partOfSpeech="n"/></Lexicon></LexicalResource>';
+  const imported = importWnLmf(xml, { language: 'de' });
+  assert.equal(imported.records.length, 0);
+  assert.equal(imported.malformedEntries, 1);
+});
+
 test('importers quarantine malformed interlingual IDs', () => {
   const imported = importOmwTab('00000001-n\teng:lemma\tfolder', {
     language: 'en', synsetToInterlingualId: new Map([['00000001-n', 'not-a-cili-id']]),

@@ -247,8 +247,10 @@ export function importWnLmf(content: string, options: WnLmfImportOptions): WnLmf
   const records: OmwLexicalRecord[] = [];
   let malformedEntries = 0;
   const invalidMappings: number[] = [];
+  const lexicalEntryStarts = [...content.matchAll(/<LexicalEntry\b/gu)].length;
   const entryTag = /<LexicalEntry\b[^>]*>([\s\S]*?)<\/LexicalEntry>/gu;
-  for (const entry of content.matchAll(entryTag)) {
+  const matchedEntries = [...content.matchAll(entryTag)];
+  for (const entry of matchedEntries) {
     const lemmaMatch = /<Lemma\b([^>]*)\/>/u.exec(entry[1]!);
     const lemmaAttributes = lemmaMatch ? xmlAttributes(lemmaMatch[1]!) : null;
     const writtenForm = lemmaAttributes?.get('writtenForm');
@@ -262,6 +264,7 @@ export function importWnLmf(content: string, options: WnLmfImportOptions): WnLmf
       records.push({ language: options.language, lemma: decodeXml(writtenForm), interlingualId: mapped.ili, ...(mapped.partOfSpeech ? { partOfSpeech: mapped.partOfSpeech } : {}), ...(options.source ? { source: options.source } : {}), ...(options.license ? { license: options.license } : {}) });
     }
   }
+  malformedEntries += Math.max(0, lexicalEntryStarts - matchedEntries.length);
   return { records, unmappedSynsets: [...unmapped].sort((a, b) => a.localeCompare(b, 'en')), malformedEntries, invalidMappings };
 }
 
