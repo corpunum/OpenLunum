@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:33:55+03:00",
-  "currentHead": "e69e44ebb722e621ebf1087de6fe70e65c19e0cf",
+  "lastUpdated": "2026-09-06T18:44:00+03:00",
+  "currentHead": "2ae6c92e0471ef30e754957f0f53fdf258d7de2d",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -488,7 +488,7 @@
       "implementation": "Queried 12 fresh agent-proposed EN↔EL noun/verb/adjective pairs against the pinned real OMW/CILI snapshots.",
       "evidence": "11/12 pairs had both lexical sides covered, 8/12 had a shared CILI candidate, but only 1/12 was uniquely resolved; 10/12 were ambiguous and 1/12 unresolved. Full diagnostic is independent-en-el-grounding-probe.json.",
       "decision": "Reject the missing-coverage-only hypothesis. Candidate-set/context disambiguation is required, with fail-closed behavior for unresolved senses.",
-      "commit": "pending"
+      "commit": "dbabf991ad9f790346c711c93b8b75d51455a9fd"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
