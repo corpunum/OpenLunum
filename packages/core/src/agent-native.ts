@@ -17,6 +17,12 @@ import type { LunumSem, SemanticTrustDecision } from './types.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
 export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.1' as const;
+export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.1' as const;
+
+// SHA-256 of schemas/lunum-sem.schema.json at this protocol version. Keep
+// this explicit so an agent can bind its candidate to the actual wire schema,
+// while the descriptor hash below fingerprints the core structural checks.
+export const SEMANTIC_TRANSPORT_SCHEMA_SHA256 = '8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593' as const;
 
 /** Stable description of the structural transport contract enforced by core. */
 const TRANSPORT_SCHEMA_DESCRIPTOR = Object.freeze({
@@ -37,12 +43,20 @@ function sha256Text(value: string): string {
 const TRANSPORT_SCHEMA_HASH = sha256Value(TRANSPORT_SCHEMA_DESCRIPTOR);
 const FRAME_REGISTRY_HASH = sha256Value(CANONICAL_SEMANTIC_FRAMES);
 const PROTOCOL_REGISTRY_HASH = sha256Value(SEMANTIC_PROTOCOL_REGISTRY);
+const CANONICAL_RULES = Object.freeze([
+  'Use only registered protocol symbols or explicit x- extensions.',
+  'Use the canonical frame roles exactly; unexpected roles fail exact identity.',
+  'deadline encodes time in roles.time, not clause.time.',
+  'conditions and consequences are clause arrays, not role lookalikes.',
+  'prohibition uses negated=true, not a duplicate negative modality.',
+]);
 
 export interface ExtractionContract {
   contractVersion: typeof AGENT_NATIVE_CONTRACT_VERSION;
   transport: {
     schema: typeof SEM_SCHEMA;
     schemaHash: string;
+    descriptorHash: string;
     descriptor: typeof TRANSPORT_SCHEMA_DESCRIPTOR;
   };
   protocol: {
@@ -54,6 +68,7 @@ export interface ExtractionContract {
     version: typeof SEMANTIC_IDENTITY_FINGERPRINT_VERSION;
     exactIdentityRequires: readonly string[];
   };
+  instructions: { version: typeof AGENT_EXTRACTION_INSTRUCTIONS_VERSION; hash: string };
   frames: {
     version: typeof SEMANTIC_FRAME_REGISTRY_VERSION;
     registryHash: string;
@@ -70,7 +85,7 @@ export interface ExtractionContract {
 export function getExtractionContract(): ExtractionContract {
   return {
     contractVersion: AGENT_NATIVE_CONTRACT_VERSION,
-    transport: { schema: SEM_SCHEMA, schemaHash: TRANSPORT_SCHEMA_HASH, descriptor: TRANSPORT_SCHEMA_DESCRIPTOR },
+    transport: { schema: SEM_SCHEMA, schemaHash: SEMANTIC_TRANSPORT_SCHEMA_SHA256, descriptorHash: TRANSPORT_SCHEMA_HASH, descriptor: TRANSPORT_SCHEMA_DESCRIPTOR },
     protocol: { version: SEMANTIC_PROTOCOL_VERSION, registryHash: PROTOCOL_REGISTRY_HASH, registry: SEMANTIC_PROTOCOL_REGISTRY },
     identity: {
       version: SEMANTIC_IDENTITY_FINGERPRINT_VERSION,
@@ -83,13 +98,11 @@ export function getExtractionContract(): ExtractionContract {
       registry: CANONICAL_SEMANTIC_FRAMES,
       unframedBehavior: 'candidate-only; abstain in exact-identity extraction; no lfp:2.1',
     },
-    canonicalRules: Object.freeze([
-      'Use only registered protocol symbols or explicit x- extensions.',
-      'Use the canonical frame roles exactly; unexpected roles fail exact identity.',
-      'deadline encodes time in roles.time, not clause.time.',
-      'conditions and consequences are clause arrays, not role lookalikes.',
-      'prohibition uses negated=true, not a duplicate negative modality.',
-    ]),
+    instructions: {
+      version: AGENT_EXTRACTION_INSTRUCTIONS_VERSION,
+      hash: sha256Value({ version: AGENT_EXTRACTION_INSTRUCTIONS_VERSION, canonicalRules: CANONICAL_RULES }),
+    },
+    canonicalRules: CANONICAL_RULES,
     groundingRules: Object.freeze([
       'Open instance identifiers remain data and are never inferred equivalent.',
       'A semantic reference requires ref or id; surface-evidence references do not establish identity.',
@@ -104,6 +117,12 @@ export function getExtractionContract(): ExtractionContract {
 }
 
 export type AgentExtractorType = 'agent' | 'codex_agent' | 'human' | 'other';
+
+const AGENT_EXTRACTOR_TYPES: readonly AgentExtractorType[] = ['agent', 'codex_agent', 'human', 'other'];
+
+function isAgentExtractorType(value: unknown): value is AgentExtractorType {
+  return typeof value === 'string' && AGENT_EXTRACTOR_TYPES.includes(value as AgentExtractorType);
+}
 
 export interface AgentExtractionProvenance {
   extractorType: AgentExtractorType;
@@ -158,10 +177,13 @@ function failureClass(input: { structuralValid: boolean; protocolCanonical: bool
  * This function never promotes a candidate merely because it is schema-valid.
  */
 export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissionResult {
+  if (!input || typeof input !== 'object' || !isAgentExtractorType(input.provenance?.extractorType)) {
+    throw new TypeError('invalid_provenance: extractorType must be one of agent, codex_agent, human, or other');
+  }
   const sourceText = input.sourceText ?? '';
   const sourceHash = sha256Text(sourceText);
   const contract = getExtractionContract();
-  const suppliedProvenance = input.provenance ?? { extractorType: 'other' as const };
+  const suppliedProvenance = input.provenance;
   const provenance = {
     ...suppliedProvenance,
     contractVersion: contract.contractVersion,

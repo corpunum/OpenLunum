@@ -19,9 +19,11 @@ test('extraction contract is generated from the protocol and frame registries', 
   assert.equal(first.transport.schema, 'lunum-sem/0.1-draft');
   assert.equal(first.identity.version, '2.1');
   assert.ok(first.frames.framedPredicates.includes('prefer'));
-  assert.match(first.transport.schemaHash, /^[0-9a-f]{64}$/u);
+  assert.equal(first.transport.schemaHash, '8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593');
+  assert.match(first.transport.descriptorHash, /^[0-9a-f]{64}$/u);
   assert.match(first.frames.registryHash, /^[0-9a-f]{64}$/u);
   assert.match(first.protocol.registryHash, /^[0-9a-f]{64}$/u);
+  assert.match(first.instructions.hash, /^[0-9a-f]{64}$/u);
   assert.match(first.frames.unframedBehavior, /no lfp:2\.1/u);
 });
 
@@ -77,4 +79,17 @@ test('ungrounded references fail closed while source evidence remains in the res
   assert.equal(result.candidateIdentityAvailable, false);
   assert.equal(result.failureClass, 'protocol_noncanonical');
   assert.equal(result.source.text, 'She prefers quiet mode.');
+});
+
+test('runtime provenance cannot omit or invent extractor identity', () => {
+  assert.throws(() => submitCandidate({
+    sourceText: 'the agent proposes a meaning',
+    candidateSem: validPreference,
+    provenance: {} as never,
+  }), /invalid_provenance/u);
+  assert.throws(() => submitCandidate({
+    sourceText: 'the agent proposes a meaning',
+    candidateSem: validPreference,
+    provenance: { extractorType: 'model_that_was_not_reported' } as never,
+  }), /invalid_provenance/u);
 });
