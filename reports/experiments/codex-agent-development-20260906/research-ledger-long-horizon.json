@@ -335,6 +335,13 @@
       "evidence": "Core suite passed 1,806/1,806. An evidence-only term annotation makes legacy equality false while semanticIdentityExact remains true.",
       "decision": "Keep both fields during compatibility migration; new semantic evaluation should consume semanticIdentityExact.",
       "commit": "6d48e7930e9d92d39af1c07876e4a1eaa683071c"
+    },
+    {
+      "hypothesis": "The legacy parse runner must use lfp:2.1 semantic identity for its primary exact result, not compareSem's compatibility fingerprint.",
+      "implementation": "Changed runner parse scoring to compare semanticFingerprint outputs with fail-closed identity gates; legacyExact remains diagnostic and semanticIdentityExact is persisted explicitly.",
+      "evidence": "Evaluator suite passed 1,885/1,885, including existing parse-runner tests. No model or protected corpus was used.",
+      "decision": "Keep legacy exact as compatibility diagnostics only; all new primary semantic exact scoring uses lfp:2.1.",
+      "commit": "working-tree"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

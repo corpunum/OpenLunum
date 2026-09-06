@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import Ajv2020Module from 'ajv/dist/2020.js';
-import { compareSem, validateSem, renderSem, canonicalizeSem, fingerprintSem, normalizeSemanticCandidate } from '@corpunum/lunum';
+import { compareSem, validateSem, renderSem, canonicalizeSem, fingerprintSem, semanticFingerprint, normalizeSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem, LunumRendering } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, readJsonlLedger, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
@@ -82,12 +82,15 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
           const candidate = normalizeSemanticCandidate(parsed);
           const gold = normalizeSemanticCandidate((item as any).goldSem);
           const comparison = compareSem((item as any).goldSem as any, parsedSem);
-          const canonicalExact = candidate.canonical && gold.canonical && candidate.sem && gold.sem
-            ? compareSem(gold.sem, candidate.sem).exactFingerprint
-            : false;
+          let semanticIdentityExact = false;
+          if (candidate.canonical && gold.canonical && candidate.sem && gold.sem) {
+            try { semanticIdentityExact = semanticFingerprint(gold.sem) === semanticFingerprint(candidate.sem); }
+            catch { semanticIdentityExact = false; }
+          }
+          const canonicalExact = semanticIdentityExact;
           finalResult = {
             id: item.id, status: canonicalExact ? 'passed' : 'failed', rawOutput, rawRequest: completion.rawRequest, rawResponse: completion.rawResponse, completion, parsedSem,
-            exact: canonicalExact, legacyExact: comparison.exactFingerprint, canonicalExact, transportSchemaValid: true,
+            exact: canonicalExact, legacyExact: comparison.exactFingerprint, canonicalExact, semanticIdentityExact, transportSchemaValid: true,
             candidateNormalization: { status: candidate.status, canonical: candidate.canonical, issues: candidate.issues, protocolVersion: candidate.protocolVersion }, featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision, missingFeatures: comparison.missingFeatures,
             latencyMs: performance.now() - started

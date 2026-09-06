@@ -1,6 +1,6 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:27:10+03:00
+Recorded: 2026-09-06T18:34:20+03:00
 Mission start epoch: 1788697989
 Current local branch: main
 Current HEAD: 03af4e1e4bc9de173a6b3f5a147b05ddb83ef6f8
@@ -223,6 +223,10 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   MCP build/tests, and core/eval/CLI/MCP typechecks; evaluator smoke reported
   16 items across 4 groups. Root recursive verification remains intentionally
   avoided because it traverses out-of-scope adapter-openunum.
+- Corrected the legacy parse runner's primary exact scoring to use
+  lfp:2.1 `semanticFingerprint`; `legacyExact` remains diagnostic and the
+  explicit `semanticIdentityExact` field is persisted. Eval suite remains
+  1,885/1,885.
 
 ## Uncommitted state
 
