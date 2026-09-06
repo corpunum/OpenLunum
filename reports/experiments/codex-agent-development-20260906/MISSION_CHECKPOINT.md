@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:52:40+03:00
+Recorded: 2026-09-06T18:57:10+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 37cf53e5dec5789f3c7978fa93c9be5271c153bf
+Current HEAD: f1162504859c39717e8a2c48b16007178aa88777
 
 ## Scope and prohibitions
 
@@ -250,10 +250,13 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   do not weaken the typed builder contract.
 - The trial is recorded as transport diagnostics only; it produced no clean
   retrieval or semantic-capability evidence.
+- The next exact corrective action is a tool-driven MCP builder interaction;
+  free-form agent output continues to invent wrapper shapes even when the
+  protocol enumerations are explicitly supplied.
 
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `37cf53e5dec5789f3c7978fa93c9be5271c153bf`.
+code/evidence boundary is `f1162504859c39717e8a2c48b16007178aa88777`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
