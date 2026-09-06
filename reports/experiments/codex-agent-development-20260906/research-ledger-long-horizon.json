@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:04:00+03:00",
-  "currentHead": "af4ca43d2ec5f9fbd6194520f125d5c58a6c981f",
+  "lastUpdated": "2026-09-06T17:06:00+03:00",
+  "currentHead": "ee4751964cede16352189c86bacb69f4493083d3",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -146,6 +146,13 @@
       "evidence": "DBnary supplies broad multilingual RDF lexical data but no universal independently adjudicated concept identity; Wikidata Lexeme IDs identify lexical records, while Q-item links require contextual verification. Findings are recorded in external-resource-research-20260906.json.",
       "decision": "Reject a new exact adapter for now. Keep DBnary as possible candidate evidence only and retain pinned Wikidata stable-entity evidence; do not shift the ambiguity problem into an external ontology.",
       "commit": "pending-research-commit"
+    },
+    {
+      "hypothesis": "WN-LMF truncation and malformed lexical-entry accounting are already complete.",
+      "implementation": "Count unmatched `<LexicalEntry>` starts as malformed entries in importWnLmf and add a truncated-input regression test.",
+      "evidence": "Core suite passes 1,802/1,802 after rebuild; the truncated fixture reports one malformed entry and no record.",
+      "decision": "Keep the importer integrity fix. It improves resource provenance without affecting accepted semantic identities.",
+      "commit": "ee47519"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

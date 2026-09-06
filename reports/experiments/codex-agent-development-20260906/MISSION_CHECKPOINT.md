@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T16:59:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 1efe620141ce6dc3626dcfc3f6818b5c234faea7
+Current HEAD: ee4751964cede16352189c86bacb69f4493083d3
 
 ## Scope and prohibitions
 
@@ -87,6 +87,8 @@ used.
 - Audited DBnary and Wikidata Lexeme resources. Neither provides a safe
   universal exact identity layer beyond pinned provider evidence; no new exact
   adapter was added. Findings are in `external-resource-research-20260906.json`.
+- WN-LMF importer now counts truncated lexical-entry starts as malformed;
+  rebuilt core suite passes 1,802/1,802.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
