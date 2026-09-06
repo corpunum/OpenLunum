@@ -475,6 +475,13 @@
       "evidence": "2/2 tests passed; the adversarial fixture correctly detected one false equivalence among comparable different pairs. The utility performs no resolution or identity mutation.",
       "decision": "Keep the utility for the next fresh development ladder dataset; do not treat its fixture as empirical capability evidence.",
       "commit": "438a2001925f7cea537371784b16d5fb35cd6cdd"
+    },
+    {
+      "hypothesis": "A fresh agent-generated corpus restricted to supported predicates will be frame-complete after one authoring pass.",
+      "implementation": "A corpus agent proposed 12 new multilingual rows and a separate auditor checked them against the canonical frame registry before any extraction call.",
+      "evidence": "The auditor accepted 9/12 and rejected three send rows containing both mutually exclusive recipient and destination roles. The complete audit is recorded in frame-complete-corpus-audit.json.",
+      "decision": "Reject the proposal before scoring. Preserve the frame contract and require corpus repair plus another independent audit before ladder evaluation.",
+      "commit": "pending"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
