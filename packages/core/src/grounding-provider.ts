@@ -81,6 +81,8 @@ export function intersectGroundingCandidateSets(results: readonly GroundingProvi
   if (!options || !options.relation) return { status: 'unresolved', candidates: [], diagnostics: ['explicit semantic relation is required for candidate-set intersection'] };
   if (results.length === 0) return { status: 'unresolved', candidates: [], diagnostics: ['no provider candidate sets supplied'] };
   if (results.some((result) => result.status === 'provider_error')) return { status: 'unresolved', candidates: [], diagnostics: ['provider error prevents candidate-set intersection'] };
+  if (results.some((result) => result.status === 'unresolved' && result.candidates.length > 0) || results.some((result) => result.status !== 'unresolved' && result.candidates.length === 0)) return { status: 'unresolved', candidates: [], diagnostics: ['provider status is inconsistent with its candidate set'] };
+  if (new Set(results.map((result) => `${result.provider}\u0000${result.snapshotHash}`)).size !== results.length) return { status: 'unresolved', candidates: [], diagnostics: ['candidate sets are not independently namespaced provider observations'] };
   const namespaces = new Set(results.flatMap((result) => result.candidates.map((candidate) => candidate.externalId.split(':', 1)[0])));
   if (namespaces.size > 1) return { status: 'unresolved', candidates: [], diagnostics: ['candidate identity namespaces are incompatible'] };
   let current = new Map(results[0]!.candidates.map((candidate) => [candidate.externalId, candidate]));
@@ -339,14 +341,21 @@ export function createMorphologyAugmentedProvider(options: MorphologyProviderOpt
       const canonical = canonicalizeGroundingProposal(input.proposal);
       const base = { provider, providerVersion, snapshotHash, language };
       if (!canonical.valid || !canonical.canonical) return { ...base, status: 'provider_error', candidates: [], diagnostics: ['invalid grounding proposal'] };
-      const morphology = options.analyzer.analyze({ surface: canonical.canonical.head.key, language, ...(input.partOfSpeech ? { partOfSpeech: input.partOfSpeech } : {}) });
+      let morphology: readonly MorphologyCandidate[];
+      try {
+        morphology = options.analyzer.analyze({ surface: canonical.canonical.head.key, language, ...(input.partOfSpeech ? { partOfSpeech: input.partOfSpeech } : {}) });
+      } catch (error) {
+        return { ...base, status: 'provider_error', candidates: [], diagnostics: Object.freeze([`morphology analyzer failed: ${error instanceof Error ? error.message : String(error)}`]) };
+      }
       const candidates = new Map<string, GroundingProviderCandidate>();
       const diagnostics: string[] = [`analyzer:${options.analyzer.analyzer}@${options.analyzer.analyzerVersion}`, `analyzer-candidates:${morphology.length}`];
       for (const candidate of morphology) {
         if (!candidate || typeof candidate.lemma !== 'string' || !candidate.lemma.trim()) continue;
         const proposal = JSON.parse(JSON.stringify(input.proposal)) as GroundingProposal;
         proposal.head.key = candidate.lemma;
-        const result = options.base.resolve({ proposal, language, ...(candidate.partOfSpeech ?? input.partOfSpeech ? { partOfSpeech: candidate.partOfSpeech ?? input.partOfSpeech } : {}) });
+        const selectedPartOfSpeech = input.partOfSpeech ?? candidate.partOfSpeech;
+        if (input.partOfSpeech && candidate.partOfSpeech && candidate.partOfSpeech !== input.partOfSpeech) continue;
+        const result = options.base.resolve({ proposal, language, ...(selectedPartOfSpeech ? { partOfSpeech: selectedPartOfSpeech } : {}) });
         for (const resolved of result.candidates) {
           candidates.set(resolved.externalId, { ...resolved, evidence: Object.freeze([...resolved.evidence, `morphology:${options.analyzer.analyzer}`, ...candidate.evidence]) });
         }

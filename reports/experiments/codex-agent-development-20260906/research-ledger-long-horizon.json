@@ -58,6 +58,12 @@
       "implementation": "Downloaded pinned UD English-EWT, Greek-GDT, Spanish-AnCora, French-GSD, German-GSD, and Indonesian-GSD dev snapshots; compared 100 held-out inflected NOUN/VERB/ADJ observations per language against UniMorph candidates and OMW/CILI lemma identities.",
       "evidence": "Five languages had 500 observations: 49 had a unique OMW identity for the UD gold lemma; the augmented provider returned 23 singleton identities and all 23 matched those eligible gold identities; candidate sets contained gold in 244/500. No false singleton identity occurred among eligible cases. German OMW identity metrics were unavailable because the pinned German tab was absent.",
       "decision": "This falsifies the claim that the earlier circular probe established morphology safety, but does not establish broad accuracy: eligibility is only 49/500 and candidate coverage remains low. Keep morphology optional and fail closed; next work is contextual candidate-set disambiguation and larger independently adjudicated coverage."
+    },
+    {
+      "hypothesis": "Provider and resolver provenance gates are sufficient against forged grounding materialization.",
+      "implementation": "Added resolver-namespace checks for canonical IDs, rejected status-inconsistent/duplicate provider candidate intersections, constrained morphology to explicit POS, and contained analyzer exceptions as provider_error.",
+      "evidence": "Adversarial tests cover cross-namespace IDs, missing provenance, unresolved results carrying candidates, repeated provider snapshots, POS override, and throwing analyzers. Core suite: 1,796 pass, 0 fail.",
+      "decision": "Keep fixes. Snapshot hashes remain provider-declared evidence because factories cannot verify source bytes without a source snapshot; provenance must remain explicit and replayable."
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

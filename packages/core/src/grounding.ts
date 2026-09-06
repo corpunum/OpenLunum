@@ -205,6 +205,15 @@ function validRegistry(registry: GroundingRegistry): string[] {
   return issues;
 }
 
+function validRegistryReference(registry: GroundingResolution['registry']): string[] {
+  if (!registry || typeof registry !== 'object') return ['registry provenance must be present'];
+  const issues: string[] = [];
+  if (typeof registry.registryId !== 'string' || !normalizeText(registry.registryId)) issues.push('registryId must be non-empty');
+  if (typeof registry.version !== 'string' || !normalizeText(registry.version)) issues.push('registry version must be non-empty');
+  if (typeof registry.snapshotHash !== 'string' || !/^[0-9a-f]{64}$/u.test(registry.snapshotHash)) issues.push('registry snapshotHash must be a SHA-256 hex digest');
+  return issues;
+}
+
 function validCanonicalId(value: unknown): value is string {
   return typeof value === 'string' && /^[^\s/:]+(?:[:/])[^\s]+$/u.test(value);
 }
@@ -231,6 +240,7 @@ export function resolveGroundingProposal(input: unknown, registry: GroundingRegi
   if (ids.length === 0) return { path, status: 'unresolved', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['no exact registry grounding assertion'] };
   if (ids.length > 1) return { path, status: 'ambiguous', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry returned multiple exact canonical IDs'] };
   if (!validCanonicalId(ids[0])) return { path, status: 'invalid', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry canonicalId must be namespace-qualified'] };
+  if (!ids[0]!.startsWith(`urn:${registry.registryId}:`)) return { path, status: 'invalid', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry canonicalId is outside the resolver namespace'] };
   return { path, status: 'resolved', canonicalId: ids[0], registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: [] };
 }
 
@@ -246,6 +256,16 @@ export function materializeGroundingResolutions(sem: unknown, resolutions: reado
   const copy = JSON.parse(JSON.stringify(sem)) as LunumSem;
   const issues: string[] = [];
   for (const resolution of resolutions) {
+    const registry = resolution.registry;
+    const canonicalId = resolution.canonicalId;
+    if (validRegistryReference(registry).length > 0 || !canonicalId) {
+      issues.push(`resolution lacks valid resolver registry provenance: ${resolution.path}`);
+      continue;
+    }
+    if (!canonicalId.startsWith(`urn:${registry!.registryId}:`)) {
+      issues.push(`resolution canonicalId is outside its resolver namespace: ${resolution.path}`);
+      continue;
+    }
     if (paths.has(resolution.path)) { issues.push(`duplicate resolution path: ${resolution.path}`); continue; }
     paths.add(resolution.path);
     const term = termAtPath(copy, resolution.path);

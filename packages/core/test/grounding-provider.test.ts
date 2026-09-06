@@ -86,6 +86,22 @@ test('candidate-set intersection narrows only explicit shared evidence', () => {
   assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] }, { status: 'ambiguous', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'Q1', evidence: [] }], diagnostics: [] }], { relation: 'same-translation' }).status, 'unresolved');
   assert.match(intersectGroundingCandidateSets([], { relation: 'same-concept' }).diagnostics[0]!, /no provider/u);
   assert.match(intersectGroundingCandidateSets([], undefined as never).diagnostics[0]!, /explicit semantic relation/u);
+  assert.equal(intersectGroundingCandidateSets([
+    { status: 'unresolved', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
+    { status: 'resolved_exact', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
+  ], { relation: 'same-translation' }).status, 'unresolved');
+  assert.equal(intersectGroundingCandidateSets([
+    { status: 'ambiguous', provider: 'same', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
+    { status: 'ambiguous', provider: 'same', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'el', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
+  ], { relation: 'same-translation' }).status, 'unresolved');
+});
+
+test('morphology cannot override an explicit POS and analyzer failures fail closed', () => {
+  const base = createOmwProvider({ version: 'morph-pos', records: [{ language: 'en', lemma: 'run', interlingualId: 'i-run', partOfSpeech: 'verb' }] });
+  const wrongPos = createMorphologyAugmentedProvider({ base, analyzer: { analyzer: 'bad-pos', analyzerVersion: '1', snapshotHash: 'f'.repeat(64), analyze: () => [{ lemma: 'run', partOfSpeech: 'verb', evidence: [] }] } });
+  assert.equal(wrongPos.resolve({ proposal: proposal('running'), language: 'en', partOfSpeech: 'noun' }).status, 'unresolved');
+  const throwing = createMorphologyAugmentedProvider({ base, analyzer: { analyzer: 'throwing', analyzerVersion: '1', snapshotHash: 'f'.repeat(64), analyze: () => { throw new Error('offline'); } } });
+  assert.equal(throwing.resolve({ proposal: proposal('running'), language: 'en', partOfSpeech: 'verb' }).status, 'provider_error');
 });
 
 test('stable entity provider accepts only exact prevalidated IDs and deduplicates', () => {
