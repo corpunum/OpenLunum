@@ -26,6 +26,17 @@ with independently authored labels:
 4. critical-mutation false equivalence and abstention safety;
 5. retrieval coverage and recall using only agent-produced candidates.
 
+Subsequent deterministic safeguards now include authenticated candidate-set
+intersection, a registry-generated frame-first transport schema, strict
+source/contract claim binding, durable strictness in the run manifest, and
+stage-level blind-evaluation receipts. These reduce evaluator and transport
+confounding, but they do not create a sense-selection signal where OMW/CILI
+returns multiple plausible candidates.
+
+The current unresolved custody item is multi-process claim locking for shared
+output directories. It is a reproducibility/concurrency hardening task, not
+evidence that the semantic contract or identity projection is incorrect.
+
 Interpretation rule:
 
 - provider absence with high protocol control indicates a resource/coverage

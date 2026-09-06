@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T22:10:00+03:00",
-  "currentHead": "05583454f219de36c3876fa1404354569ebe003d",
+  "lastUpdated": "2026-09-06T22:18:00+03:00",
+  "currentHead": "d9ea1a9ae12b531327e6623bb77cc17822ad4f47",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -531,6 +531,13 @@
       "evidence": "Eval strict verification passed, including 1,888/1,888 unit tests and the 16-item smoke run. Existing exact identity and abstention scoring remain unchanged; old ledger schemas are rejected rather than reinterpreted.",
       "decision": "Keep stage receipts for future development/protected diagnostics; they expose the true bottleneck instead of collapsing pipeline failures into semantic mismatch.",
       "commit": "05583454f219de36c3876fa1404354569ebe003d"
+    },
+    {
+      "hypothesis": "After custody/schema hardening, the training boundary can be declared from the existing development evidence.",
+      "implementation": "Updated the formal training-boundary note with the new authenticated intersection, generated schema, strict claim binding, manifest binding, and stage-receipt controls.",
+      "evidence": "Training remains not proven necessary: real OMW has 100/100 shared lexical coverage but only 19/100 independent convergence; source-only frame-complete candidates can be deterministic-valid yet diverge in open-concept naming; no protected corpus or local inference was used.",
+      "decision": "Do not start training. The next high-value experiment is a fresh independently labeled development grounding ladder; multi-process claim locking remains separate custody hardening.",
+      "commit": "d9ea1a9ae12b531327e6623bb77cc17822ad4f47"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
