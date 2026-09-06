@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:15:40+03:00
+Recorded: 2026-09-06T18:22:52+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: ae603ca4a0b54ea07ee18aa40373e889d0daf0a3
+Current HEAD: 6d48e7930e9d92d39af1c07876e4a1eaa683071c
 
 ## Scope and prohibitions
 
@@ -219,10 +219,14 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Added explicit `semanticIdentityExact` to `compareSem` while preserving the
   legacy `exactFingerprint` field; evidence-only annotations are now covered
   by a regression proving the distinction.
+- Scoped verification passed: core 1,806/1,806, evaluator 1,885/1,885,
+  MCP build/tests, and core/eval/CLI/MCP typechecks; evaluator smoke reported
+  16 items across 4 groups. Root recursive verification remains intentionally
+  avoided because it traverses out-of-scope adapter-openunum.
 
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `ae603ca4a0b54ea07ee18aa40373e889d0daf0a3`.
+code/evidence boundary is `6d48e7930e9d92d39af1c07876e4a1eaa683071c`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.

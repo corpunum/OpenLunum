@@ -313,28 +313,28 @@
       "implementation": "Changed memory/query extraction calls to construct the four-field raw source input explicitly; added a regression that captures extractor inputs and rejects evaluator labels.",
       "evidence": "The independent custody audit found the prior object spread exposed expectedMemoryIds and semanticEquivalentMemoryIds. Evaluator suite passed 1,884/1,884 after the fix.",
       "decision": "Keep the raw-text-only extractor boundary; retrieval scoring metadata remains private to the evaluator.",
-      "commit": "working-tree"
+      "commit": "6270c4c59143d7280aaa3af712c964af80537dc6"
     },
     {
       "hypothesis": "Concurrent blind submissions and tampered durable records must fail closed without changing legacy direct-submit compatibility.",
       "implementation": "Added an in-flight submission guard and exact public/private durable-record key validation; direct submit remains supported for compatibility.",
       "evidence": "An adversarial race regression shows one success and one rejection with exactly one ledger record. Eval suite passed 1,885/1,885; core passed 1,805/1,805; MCP build/tests passed.",
       "decision": "Keep the in-flight and exact-schema custody gates. The historical protected artifacts remain diagnostic and were not rescored.",
-      "commit": "working-tree"
+      "commit": "6270c4c59143d7280aaa3af712c964af80537dc6"
     },
     {
       "hypothesis": "Per-language-pair retrieval false-positive denominators must use identity-usable, routed candidate pools rather than all memories.",
       "implementation": "Recomputed pair true negatives from each query's routed identity-usable candidate pool and eligible expected records.",
       "evidence": "The custody audit identified the prior all-memory denominator as inflation-prone. Existing retrieval tests and the full evaluator suite pass after correction.",
       "decision": "Keep pair metrics aligned with global identity-coverage denominators.",
-      "commit": "working-tree"
+      "commit": "6270c4c59143d7280aaa3af712c964af80537dc6"
     },
     {
       "hypothesis": "Comparison callers need an explicit lfp:2.1 result instead of inferring semantic identity from the compatibility exactFingerprint field.",
       "implementation": "compareSem now preserves legacy exactFingerprint and additionally reports semanticIdentityExact, computed through semanticFingerprint with fail-closed frame/grounding gates; added an evidence-only field regression.",
       "evidence": "Core suite passed 1,806/1,806. An evidence-only term annotation makes legacy equality false while semanticIdentityExact remains true.",
       "decision": "Keep both fields during compatibility migration; new semantic evaluation should consume semanticIdentityExact.",
-      "commit": "working-tree"
+      "commit": "6d48e7930e9d92d39af1c07876e4a1eaa683071c"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
