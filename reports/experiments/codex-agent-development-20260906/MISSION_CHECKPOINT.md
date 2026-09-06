@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:04:21+03:00
+Recorded: 2026-09-06T18:12:03+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: d185cae421d9f874d2a06b2236d061d7136fcc3c
+Current HEAD: 6270c4c59143d7280aaa3af712c964af80537dc6
 
 ## Scope and prohibitions
 
@@ -206,10 +206,20 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   invalid baseline handling are hardened (055cc3d).
 - The exact-contract source-only extraction trial remains diagnostic only;
   no gold or expected semantic data was exposed (d185cae).
+- Fixed raw-text retrieval leakage: extractor callbacks now receive only the
+  raw source fields, never expected or equivalent-memory labels; added a
+  regression (6270c4c).
+- Corrected language-pair retrieval false-negative denominators to use routed,
+  identity-usable candidate pools.
+- Added exact public/private durable-ledger key validation and an in-flight
+  submission guard; concurrent duplicate submissions now fail closed.
+- Made the MCP compatibility fingerprint response explicitly report
+  `identityScope=legacy-compatibility` and `semanticIdentity=false`; lfp:2.1
+  hashing remains available only through the contained submission path.
 
 ## Uncommitted state
 
-The research ledger/checkpoint are pending working-tree evidence updates; the
-current code/evidence boundary is `d185cae421d9f874d2a06b2236d061d7136fcc3c`.
+The checkpoint itself is pending this final evidence commit; the current
+code/evidence boundary is `6270c4c59143d7280aaa3af712c964af80537dc6`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
