@@ -205,6 +205,21 @@ test('forged provider evidence and resolutions cannot mint exact identity', () =
   assert.match(materialized.issues[0]!, /authenticated/u);
 });
 
+test('serialized grounding evidence must be re-authenticated before reuse', () => {
+  const cascade = resolveGroundingCascade({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' }, [provider]);
+  const result = JSON.parse(JSON.stringify(cascade.results[0]));
+  const resolution = toGroundingResolution(proposal(), result);
+  assert.equal(resolution.status, 'invalid');
+  const original = toGroundingResolution(proposal(), cascade.results[0]!);
+  const replayed = JSON.parse(JSON.stringify(original));
+  const materialized = materializeGroundingResolutions(
+    { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [{ predicate: 'prefer', roles: { theme: { type: 'concept', id: 'opaque' } }, negated: false }] },
+    [replayed], [proposal()],
+  );
+  assert.equal(materialized.status, 'invalid');
+  assert.match(materialized.issues[0]!, /authenticated/u);
+});
+
 test('provider failure degrades without guessing', () => {
   const broken = createStableEntityProvider({ provider: 'broken', providerVersion: '1', snapshotHash: 'd'.repeat(64), resolveExact: () => { throw new Error('offline'); } });
   const result = resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [broken]);
