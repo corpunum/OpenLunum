@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:02:00+03:00",
-  "currentHead": "1efe620141ce6dc3626dcfc3f6818b5c234faea7",
+  "lastUpdated": "2026-09-06T17:04:00+03:00",
+  "currentHead": "af4ca43d2ec5f9fbd6194520f125d5c58a6c981f",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -139,6 +139,13 @@
       "evidence": "Replay completed with 34/150 total convergence, 19/100 cross-language convergence, EN-EL 1/20, and zero resource-derived false equivalences. Import counts remained en 186642, el 23853, es 133347 with 1196 malformed lines, fr 95762, id 100869, de 88394 with 2118 malformed XML entries. Replay output SHA-256: c1bd932afafe6188ac7dd80a007e23126896457b4b2015aa2cead32384be1cec.",
       "decision": "Keep the generic importer/provider fixes. The unchanged result confirms they improve evidence integrity without benchmark-specific tuning; the OMW fixture remains diagnostic, not independent accuracy evidence.",
       "commit": "development-replay-uncommitted"
+    },
+    {
+      "hypothesis": "An additional open lexical resource will provide a safe universal exact identity layer beyond OMW/CILI.",
+      "implementation": "Audited current DBnary and Wikidata Lexeme documentation, formats, licensing, identifiers, and provenance properties using official/current sources.",
+      "evidence": "DBnary supplies broad multilingual RDF lexical data but no universal independently adjudicated concept identity; Wikidata Lexeme IDs identify lexical records, while Q-item links require contextual verification. Findings are recorded in external-resource-research-20260906.json.",
+      "decision": "Reject a new exact adapter for now. Keep DBnary as possible candidate evidence only and retain pinned Wikidata stable-entity evidence; do not shift the ambiguity problem into an external ontology.",
+      "commit": "pending-research-commit"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

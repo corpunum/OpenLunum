@@ -84,6 +84,9 @@ used.
   replayed the real resource benchmark to `/tmp`; result was unchanged at
   34/150 total convergence, 19/100 cross-language, EN-EL 1/20, zero resource
   false equivalences. Replay output SHA is recorded in the research ledger.
+- Audited DBnary and Wikidata Lexeme resources. Neither provides a safe
+  universal exact identity layer beyond pinned provider evidence; no new exact
+  adapter was added. Findings are in `external-resource-research-20260906.json`.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
