@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 41c9a8d3874431ab61ae9e77e5ada4281a9df603
+Source/evidence boundary before this checkpoint commit: ad9323c8ad88094ee82c90d82f4de4f723d3ca77
 
 ## Scope and prohibitions
 
@@ -357,6 +357,10 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   unresolved scientific bottlenecks, while multi-process claim locking is a
   separate future custody task. No protected corpus or local inference was
   used.
+- A fresh development corpus-author attempt was rejected before evaluation:
+  its negative judgments were not actual left/right item pairs suitable for
+  deterministic preflight. Added direct stage-receipt assertions; focused
+  evaluator tests pass 11/11 and the candidate remains unscored.
 
 ## Uncommitted state
 

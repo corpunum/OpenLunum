@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T22:18:00+03:00",
-  "currentHead": "d9ea1a9ae12b531327e6623bb77cc17822ad4f47",
+  "lastUpdated": "2026-09-06T22:30:00+03:00",
+  "currentHead": "ad9323c8ad88094ee82c90d82f4de4f723d3ca77",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -538,6 +538,13 @@
       "evidence": "Training remains not proven necessary: real OMW has 100/100 shared lexical coverage but only 19/100 independent convergence; source-only frame-complete candidates can be deterministic-valid yet diverge in open-concept naming; no protected corpus or local inference was used.",
       "decision": "Do not start training. The next high-value experiment is a fresh independently labeled development grounding ladder; multi-process claim locking remains separate custody hardening.",
       "commit": "d9ea1a9ae12b531327e6623bb77cc17822ad4f47"
+    },
+    {
+      "hypothesis": "Evaluator stage receipts need direct regression assertions so transport/protocol/grounding metrics cannot silently disappear.",
+      "implementation": "Added assertions for all five stage booleans and aggregate stageCounts on a durable blind result.",
+      "evidence": "Focused evaluator tests passed 11/11 after rebuild; the full evaluator suite had previously passed 1,888/1,888. A fresh corpus-author proposal was rejected before scoring because its negative metadata was not item-pair structured.",
+      "decision": "Keep the regression. Do not score the rejected proposal or treat its source/gold content as protected evidence.",
+      "commit": "ad9323c8ad88094ee82c90d82f4de4f723d3ca77"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
