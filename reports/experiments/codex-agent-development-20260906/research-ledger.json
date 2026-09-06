@@ -1,0 +1,11 @@
+{
+  "type": "openlunum-research-ledger",
+  "date": "2026-09-06",
+  "startingSha": "4293dd2d8f20eea712837a8d00c284d40d094511",
+  "cycles": [
+    { "hypothesis": "Pinned OMW/CILI lexical evidence materially improves language-neutral grounding.", "implementation": "Real OMW v2.0/CILI v1.0 and OdeNet v1.4 importers plus reproducible benchmark.", "metrics": "150 comparisons; 19/100 comparable cross-language pairs converged; 15/15 comparable hard negatives separated; 0 false equivalences.", "decision": "Keep as optional conservative evidence provider; insufficient alone for broad open-concept grounding." },
+    { "hypothesis": "Importer/provider boundaries need stronger fail-closed handling before broader use.", "implementation": "Canonical phrase separators, explicit POS requirement, invalid interlingual mapping quarantine, MCP null abstention acceptance.", "metrics": "12 focused provider tests and 17 MCP tests pass; full verify passed after isolated API flake rerun.", "decision": "Keep fixes; do not alter lfp:2.1 or make external labels authoritative." },
+    { "hypothesis": "Source-only Codex agents can reliably emit contract-compliant Sem with a concise contract summary.", "implementation": "Two isolated development extraction trials and deterministic MCP submission.", "metrics": "Initial agent: 6 structural-shape failures; second agent: 5 structural-shape failures; corrected manual contract check: 4/4 valid, 2 equivalent preference records converged.", "decision": "Agent extraction adherence remains the dominant bottleneck; no protected run justified." }
+  ],
+  "nextAction": "Evaluate a general constrained extraction/decomposition interface on fresh DEVELOPMENT data, without changing semantic identity or using protected evidence."
+}
