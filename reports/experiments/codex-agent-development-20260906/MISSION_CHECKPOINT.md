@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:22:52+03:00
+Recorded: 2026-09-06T18:27:10+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 6d48e7930e9d92d39af1c07876e4a1eaa683071c
+Current HEAD: 03af4e1e4bc9de173a6b3f5a147b05ddb83ef6f8
 
 ## Scope and prohibitions
 
@@ -227,6 +227,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `6d48e7930e9d92d39af1c07876e4a1eaa683071c`.
+code/evidence boundary is `03af4e1e4bc9de173a6b3f5a147b05ddb83ef6f8`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
