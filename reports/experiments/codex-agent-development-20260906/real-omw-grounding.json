@@ -148,6 +148,14 @@
         "polysemousEither": 20
       }
     },
+    "candidateSetAnalysis": {
+      "crossLanguageTotal": 100,
+      "crossLanguageBothCovered": 100,
+      "crossLanguageSharedCandidateSet": 100,
+      "crossLanguageUniqueSharedCandidate": 78,
+      "crossLanguageMultipleSharedCandidates": 22,
+      "interpretation": "An explicit, externally justified relation between two observations could narrow 78 pairs to one shared candidate; this is not an independent single-text exact-resolution result."
+    },
     "failureCategories": {
       "SOURCE_AMBIGUOUS": 30,
       "TARGET_AMBIGUOUS": 28,

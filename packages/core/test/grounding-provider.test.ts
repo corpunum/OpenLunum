@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   createOmwProvider,
   createMorphologyAugmentedProvider,
+  intersectGroundingCandidateSets,
   createStableEntityProvider,
   importOmwTab,
   importWnLmf,
@@ -72,6 +73,16 @@ test('morphology augmentation is candidate generation, exact only after unique p
   assert.equal(running.candidates[0]?.externalId, 'ili:i-run');
   assert.equal(augmented.resolve({ proposal: proposal('banking'), language: 'en', partOfSpeech: 'noun' }).status, 'ambiguous');
   assert.equal(augmented.resolve({ proposal: proposal('unknown'), language: 'en', partOfSpeech: 'noun' }).status, 'unresolved');
+});
+
+test('candidate-set intersection narrows only explicit shared evidence', () => {
+  const result = intersectGroundingCandidateSets([
+    { status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] },
+    { status: 'resolved_exact', provider: 'b', providerVersion: '1', snapshotHash: 'b'.repeat(64), language: 'el', candidates: [{ externalId: 'ili:i1', evidence: [] }], diagnostics: [] },
+  ]);
+  assert.equal(result.status, 'resolved_exact');
+  assert.equal(result.candidates[0]?.externalId, 'ili:i1');
+  assert.equal(intersectGroundingCandidateSets([{ status: 'ambiguous', provider: 'a', providerVersion: '1', snapshotHash: 'a'.repeat(64), language: 'en', candidates: [{ externalId: 'ili:i1', evidence: [] }, { externalId: 'ili:i2', evidence: [] }], diagnostics: [] }]).status, 'ambiguous');
 });
 
 test('stable entity provider accepts only exact prevalidated IDs and deduplicates', () => {

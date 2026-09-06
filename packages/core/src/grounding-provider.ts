@@ -60,6 +60,32 @@ export interface MorphologyProviderOptions {
   analyzer: MorphologyAnalyzer;
 }
 
+/** Result of intersecting independently obtained candidate sets. */
+export interface GroundingCandidateIntersection {
+  status: 'resolved_exact' | 'ambiguous' | 'unresolved';
+  candidates: readonly GroundingProviderCandidate[];
+  diagnostics: readonly string[];
+}
+
+/**
+ * Narrow candidate sets only when the caller has an explicit relation between
+ * the observations (for example, a judged translation pair). This operation
+ * never invents a candidate and never turns lexical proximity into identity.
+ */
+export function intersectGroundingCandidateSets(results: readonly GroundingProviderResult[]): GroundingCandidateIntersection {
+  if (results.length === 0) return { status: 'unresolved', candidates: [], diagnostics: ['no provider candidate sets supplied'] };
+  if (results.some((result) => result.status === 'provider_error')) return { status: 'unresolved', candidates: [], diagnostics: ['provider error prevents candidate-set intersection'] };
+  let current = new Map(results[0]!.candidates.map((candidate) => [candidate.externalId, candidate]));
+  for (const result of results.slice(1)) {
+    const next = new Map(result.candidates.map((candidate) => [candidate.externalId, candidate]));
+    current = new Map([...current.entries()].filter(([externalId]) => next.has(externalId)));
+  }
+  const candidates = [...current.values()].sort((a, b) => a.externalId.localeCompare(b.externalId, 'en'));
+  if (candidates.length === 1) return { status: 'resolved_exact', candidates, diagnostics: ['one identity remains in the explicit candidate-set intersection'] };
+  if (candidates.length > 1) return { status: 'ambiguous', candidates, diagnostics: [`${candidates.length} identities remain in the explicit candidate-set intersection`] };
+  return { status: 'unresolved', candidates: [], diagnostics: ['candidate-set intersection is empty'] };
+}
+
 export interface OmwLexicalRecord {
   language: string;
   lemma: string;
