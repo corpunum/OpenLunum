@@ -1,0 +1,29 @@
+{
+  "type": "development-source-only-builder-trial",
+  "version": 7,
+  "status": "diagnostic",
+  "provenance": {
+    "goldProvidedToAgent": false,
+    "pairLabelsProvidedToAgent": false,
+    "localInferenceUsed": false,
+    "agent": "gpt-5.6-luna/isolated-agent-Nietzsche",
+    "output": "builderInput JSONL only",
+    "custody": "development-only declared source-only trial"
+  },
+  "items": 6,
+  "deterministicSubmission": {
+    "builderInputs": 6,
+    "transportValid": 6,
+    "protocolCanonical": 6,
+    "frameValid": 6,
+    "grounded": 6,
+    "candidateIdentityAvailable": 6,
+    "failureClasses": {}
+  },
+  "convergence": {
+    "en-el-prefer": "same LFP",
+    "en-es-retry": "same LFP",
+    "en-fr-conditional-disable": "same LFP"
+  },
+  "interpretation": "The typed builder workflow eliminated the alternate predicate/arguments transport shape and produced identity-available candidates. Because the trial had no independent gold semantics, it demonstrates reliable construction and deterministic containment, not source-text semantic accuracy."
+}

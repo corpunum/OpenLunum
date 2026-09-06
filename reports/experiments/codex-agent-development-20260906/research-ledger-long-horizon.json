@@ -209,6 +209,13 @@
       "evidence": "One agent abstained on all 12 items. The other returned 12 non-contract predicate/arguments objects. No candidate passed transport, so semantic metrics are not assigned; no gold or pair labels were exposed. Persisted in source-only-agent-comparison-v6.json.",
       "decision": "Reject contract-only natural-language prompting as a sufficient adoption mechanism. Preserve the protocol and fail closed; prioritize an actual tool-driven builder workflow before judging semantic capability.",
       "commit": "pending-agent-trial-commit"
+    },
+    {
+      "hypothesis": "A tool-driven frame-first workflow is more reliable than free-form contract-only JSON generation while preserving OpenLunum authority.",
+      "implementation": "An isolated agent returned only six builderInput objects for fresh multilingual sources. The parent invoked buildCandidateSem and then submitCandidate for every input; no Sem was accepted directly from the agent.",
+      "evidence": "All 6 builder inputs became transport-, protocol-, frame-, grounding-, and identity-valid submissions. EN/EL prefer, EN/ES retry, and EN/FR conditional disable pairs converged to identical LFPs. No gold semantics were exposed, so this is construction/convergence diagnostics only.",
+      "decision": "Retain typed builder plus mandatory submission as the preferred agent-native workflow. It reduces alternate-schema transport failure without granting self-certification; semantic accuracy still requires independently labeled development evaluation.",
+      "commit": "pending-builder-trial-commit"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
