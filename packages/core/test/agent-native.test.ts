@@ -72,6 +72,7 @@ test('extraction contract is generated from the protocol and frame registries', 
   assert.match(first.frameFirst.framePromptBlock, /prefer\(/u);
   assert.match(first.frameFirst.framePromptBlock, /experiencer: actor\|entity\|system/u);
   assert.match(first.frameFirst.framePromptBlock, /recipient\|destination \(mutually exclusive\)/u);
+  assert.match(first.frameFirst.framePromptBlock, /An experiencer has a preference for a theme/u);
   assert.equal(first.frameFirst.termShape.discriminator, 'type');
 });
 

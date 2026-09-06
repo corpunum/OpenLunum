@@ -29,7 +29,7 @@ export function canonicalFramePromptBlock(): string {
       ...(frame.exclusiveGroups?.flatMap((group) => [`${group.join('|')} (mutually exclusive)`]) ?? []),
       ...frame.roles.flatMap((role) => role.allowedTermTypes?.length ? [`${role.name}: ${role.allowedTermTypes.join('|')}`] : [])
     ];
-    return `${frame.predicate}(${required.length ? required.join(', ') : 'no required roles'}${extras.length ? `; ${extras.join('; ')}` : ''})`;
+    return `${frame.predicate}(${required.length ? required.join(', ') : 'no required roles'}${extras.length ? `; ${extras.join('; ')}` : ''}) — ${frame.description}`;
   }).join('\n');
 }
 
