@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:10:00+03:00",
-  "currentHead": "eb18757b7d947e5c5272061ee8ca43a61f251082",
+  "lastUpdated": "2026-09-06T17:13:20+03:00",
+  "currentHead": "966cb7f0c12c9abf571e002206f91f6bf98ea7a2",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -145,7 +145,7 @@
       "implementation": "Audited current DBnary and Wikidata Lexeme documentation, formats, licensing, identifiers, and provenance properties using official/current sources.",
       "evidence": "DBnary supplies broad multilingual RDF lexical data but no universal independently adjudicated concept identity; Wikidata Lexeme IDs identify lexical records, while Q-item links require contextual verification. Findings are recorded in external-resource-research-20260906.json.",
       "decision": "Reject a new exact adapter for now. Keep DBnary as possible candidate evidence only and retain pinned Wikidata stable-entity evidence; do not shift the ambiguity problem into an external ontology.",
-      "commit": "pending-research-commit"
+      "commit": "edf8c8d913c5d36e725db757b2beadb62bb6594c"
     },
     {
       "hypothesis": "WN-LMF truncation and malformed lexical-entry accounting are already complete.",
@@ -165,8 +165,8 @@
       "hypothesis": "JSONL item isolation improves source-only frame-first evaluation without relaxing semantic gates.",
       "implementation": "The same 18 cases were rerun by two fresh isolated agents with one strict JSON object per line; every candidate was submitted through core.",
       "evidence": "Dirac submitted 16 and abstained 2; Heisenberg submitted 15 and abstained 3. Every submitted candidate passed transport, protocol, frame, and identity-availability gates. Agents disagreed on the Indonesian enable case; no gold exactness claim is made.",
-      "decision": "Retain JSONL for future development/protected item ledgers. The remaining uncertainty is extraction/grounding and abstention calibration, not core validation. Persisted in source-only-frame-first-trial-v4.json.",
-      "commit": "pending-evidence-commit"
+      "decision": "Retain JSONL for future development/protected item ledgers. The remaining uncertainty is extraction/grounding and abstention calibration, not core validation. Persisted in source-only-frame-first-trial-v4.json. The retained summary does not independently prove source-only custody because raw JSONL and contract/source hashes were not retained.",
+      "commit": "b38d17a99e62822496c33c57aadc83296f1a13ad"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

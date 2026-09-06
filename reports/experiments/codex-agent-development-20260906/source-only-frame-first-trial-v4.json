@@ -8,7 +8,8 @@
     "localInferenceUsed": false,
     "contractSource": "generated getExtractionContract()",
     "agents": ["gpt-5.6-luna/isolated-agent-Dirac", "gpt-5.6-luna/isolated-agent-Heisenberg"],
-    "outputTransport": "JSONL, one isolated item per line"
+    "outputTransport": "JSONL, one isolated item per line",
+    "custodyEvidence": "declared trial condition only; raw JSONL outputs, source-item hashes, prompt hash, and contract hash were not retained"
   },
   "items": 18,
   "languages": ["en", "el", "es", "fr", "de", "id"],
@@ -22,6 +23,6 @@
     "supportedGroups": "prefer EN/EL, send ES/EN, believe FR/EN, publish DE/EN, and confirm EL converged structurally in both outputs",
     "goldExactness": "not scored; this development trial exposed no gold semantics to agents"
   },
-  "interpretation": "JSONL removes batch-level transport loss observed in v3. The generated contract and core validator accepted every submitted candidate in this trial, but identity availability still does not establish semantic correctness. Agent disagreement on Indonesian support and abstention policy remains evidence of extraction/grounding uncertainty.",
+  "interpretation": "JSONL reduces the blast radius of batch-level transport loss observed in v3. The generated contract and core validator accepted every submitted candidate in this retained summary, but identity availability still does not establish semantic correctness. Agent disagreement on Indonesian support and abstention policy remains evidence of extraction/grounding uncertainty. Because raw JSONL and hashes were not retained, source-only custody is declared rather than independently reproducible.",
   "decision": "Retain JSONL/item isolation for future agent-native evaluation. Do not create protected evidence or alter frames based on this small development sample. Next high-leverage work remains independently adjudicated grounding labels and a larger blind development corpus."
 }

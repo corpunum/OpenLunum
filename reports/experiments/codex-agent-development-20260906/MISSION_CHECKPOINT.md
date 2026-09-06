@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T16:59:00+03:00
+Recorded: 2026-09-06T17:13:20+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: eb18757b7d947e5c5272061ee8ca43a61f251082
+Current HEAD: 966cb7f0c12c9abf571e002206f91f6bf98ea7a2
 
 ## Scope and prohibitions
 
@@ -144,6 +144,8 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 ## Uncommitted state
 
-The research ledger/checkpoint and source-only trial artifact are pending;
-unrelated dirty files
-and historical diagnostic directories shown by `git status` are preserved.
+The research ledger/checkpoint are pending working-tree evidence updates; the
+prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
+current code/evidence boundary is `966cb7f0c12c9abf571e002206f91f6bf98ea7a2`.
+Unrelated dirty files and historical diagnostic directories shown by `git
+status` are preserved.
