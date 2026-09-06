@@ -341,14 +341,14 @@
       "implementation": "Changed runner parse scoring to compare semanticFingerprint outputs with fail-closed identity gates; legacyExact remains diagnostic and semanticIdentityExact is persisted explicitly.",
       "evidence": "Evaluator suite passed 1,885/1,885, including existing parse-runner tests. No model or protected corpus was used.",
       "decision": "Keep legacy exact as compatibility diagnostics only; all new primary semantic exact scoring uses lfp:2.1.",
-      "commit": "working-tree"
+      "commit": "e6ec661d0ac7b6bb9295bc8373ff74cfa63d9065"
     },
     {
       "hypothesis": "Future raw-text retrieval evidence must be able to require source-bound provenance rather than accepting candidates with no binding.",
       "implementation": "Added opt-in requireSourceHash validation to the blind ledger validator and a regression for missing hashes; compatibility mode still permits historical diagnostic ledgers.",
       "evidence": "Evaluator suite passed 1,886/1,886. Strict mode rejects an unbound candidate before identity coverage is counted.",
       "decision": "Use strict source-bound mode for the next clean agent retrieval run; do not rescore historical ledgers.",
-      "commit": "working-tree"
+      "commit": "8e9e7d53ecb53bc2192e847611066cbc6a11ce10"
     },
     {
       "hypothesis": "The historical diagnostic retrieval harness can be promoted simply by enabling strict source-bound validation.",
@@ -362,7 +362,7 @@
       "implementation": "Added a positive fixture with a worker-supplied SHA-256 sourceHash, identity-safe candidate, exact opaque-handle coverage, and no evaluator-private fields.",
       "evidence": "Evaluator suite passed 1,887/1,887; strict mode accepts the complete fixture and reports one identity-available row.",
       "decision": "Keep strict mode as the required future retrieval path; the historical candidate artifact remains permanently diagnostic.",
-      "commit": "working-tree"
+      "commit": "106ce83a2e986b57accb56ff5c27366dca459603"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

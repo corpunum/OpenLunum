@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:31:10+03:00
+Recorded: 2026-09-06T18:38:45+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 8e9e7d53ecb53bc2192e847611066cbc6a11ce10
+Current HEAD: 106ce83a2e986b57accb56ff5c27366dca459603
 
 ## Scope and prohibitions
 
@@ -241,10 +241,12 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Added a positive strict-custody fixture proving a complete source-bound
   candidate ledger passes validation with exact opaque-handle coverage and no
   scoring leakage; evaluator suite is 1,887/1,887.
+- Reconciled research-ledger commit references for the parse-runner, strict
+  custody, and positive custody milestones; no evidence status was changed.
 
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `45af4bedef8e5c191fe7ee0607fe32d0d858259a`.
+code/evidence boundary is `106ce83a2e986b57accb56ff5c27366dca459603`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
