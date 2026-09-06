@@ -307,6 +307,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `c1fae73fc8b8e8b0a907a77f082e27514914545a`.
+The current code/evidence boundary is `e1fea725f57ddab12497bc4a22b02999d948dfe9`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
