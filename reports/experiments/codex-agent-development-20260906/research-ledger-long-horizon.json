@@ -377,6 +377,13 @@
       "evidence": "Core suite passed 1,806/1,806 and MCP suite passed 59/59. The terms/frame wrapper from the fresh agent trial now fails explicitly as unknown_builder_fields.",
       "decision": "Keep direct builder fields strict; agent transport must use the generated tool contract or abstain.",
       "commit": "working-tree"
+    },
+    {
+      "hypothesis": "The HTTP API is already a trustworthy agent-native text-to-Sem and retrieval surface after the core/MCP custody repairs.",
+      "implementation": "Audited the current OpenLunum API implementation without editing it.",
+      "evidence": "The API `/parse` path fabricates a default Sem from text and `/retrieve` returns an empty placeholder result path; neither consumes the untrusted candidate-submission contract or raw-text retrieval evaluator.",
+      "decision": "Reject the API as current empirical extraction/retrieval evidence. Keep core as authority, MCP as primary agent surface, and CLI as deterministic fallback.",
+      "commit": "audit-only"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

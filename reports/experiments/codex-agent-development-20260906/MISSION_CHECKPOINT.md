@@ -1,6 +1,6 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T19:06:30+03:00
+Recorded: 2026-09-06T19:12:20+03:00
 Mission start epoch: 1788697989
 Current local branch: main
 Current HEAD: a054348a7f612fdd80e86d17ac715af7367b1e90
@@ -256,6 +256,9 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Tightened the builder/MCP transport boundary: unknown direct-builder fields
   now fail explicitly and the MCP schema forbids alternate wrapper fields.
   Core remains 1,806/1,806 and MCP 59/59.
+- Read-only API audit: `/parse` still fabricates a default Sem from raw text
+  and `/retrieve` remains an empty placeholder path. Neither is accepted as
+  empirical extraction/retrieval evidence; no API files were changed.
 
 ## Uncommitted state
 
