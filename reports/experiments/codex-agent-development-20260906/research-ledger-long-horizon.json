@@ -251,6 +251,20 @@
       "evidence": "The pinned OdeNet replay is persisted separately at unimorph-ud-independent-odenet-rerun.json; the note now no longer contradicts the measured German path.",
       "decision": "Keep the historical independent summary immutable and use the new rerun for current diagnostics. No production semantic or identity behavior changed.",
       "commit": "9d2b63c3440bd4e70d564e25cad2bb6d0cb8f36c"
+    },
+    {
+      "hypothesis": "The typed builder's top-level frame validation is sufficient when nested conditions or consequences are supplied by an agent.",
+      "implementation": "Audited the builder and added recursive rejection of registered-but-unframed predicates in nested conditions/consequences, plus a CLI contract declaration for the already-supported grounding proposal flag.",
+      "evidence": "The independent builder audit found nested raw clauses could pass the frame registry's registered-but-unframed path and fail only later during submission. A regression now rejects an enable candidate containing nested share. Core suite remains 1,805/1,805 and CLI suite 189/189.",
+      "decision": "Keep recursive frame gating. Nested exact-identity construction must use canonical frames at every clause depth; no new frames or aliases were added.",
+      "commit": "dcfb2f0a7469e5638554c4ac5e37798b3020207c"
+    },
+    {
+      "hypothesis": "Raw retrieval safety metrics and candidate-pool denominators remain valid when extraction failures or structurally normalized but identity-unsafe memories are present.",
+      "implementation": "Changed semantic retrieval candidateCount to count only memories with successful lfp:2.1 identity; added negativeQueryCount and negativeComparableQueryCount; negative rejection accuracy now excludes query abstentions and empty identity pools. Added regressions.",
+      "evidence": "Evaluator suite passes 1,880/1,880. A negative query that abstains is reported as one negative target but zero comparable negatives and zero rejection accuracy; unframed memories are excluded from the comparable candidate pool. Independent retrieval audit also found the historical ledger gold-shaped, so no historical report was rescored.",
+      "decision": "Keep the stricter retrieval denominators. End-to-end failures remain failures, while conditional safety/retrieval claims require a real extracted identity pool. No protected corpus was created.",
+      "commit": "ce3abe754aa2b74181301f07003f90a86dd7fc63"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

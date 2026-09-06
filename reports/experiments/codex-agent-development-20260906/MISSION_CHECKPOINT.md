@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:02:10+03:00
+Recorded: 2026-09-06T18:12:40+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 9d2b63c3440bd4e70d564e25cad2bb6d0cb8f36c
+Current HEAD: ce3abe754aa2b74181301f07003f90a86dd7fc63
 
 ## Scope and prohibitions
 
@@ -137,6 +137,9 @@ used.
 - Corrected the current morphology research note so the historical circular
   identity probe is distinguished from the non-circular UD lemma audit and no
   longer claims German identity evidence is unavailable.
+- Repaired retrieval metric denominators: only lfp:2.1-usable memories count
+  as comparable candidates, and query abstentions/empty identity pools no
+  longer count as negative safety successes. Evaluator suite is 1,880/1,880.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -189,6 +192,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
 prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `9d2b63c3440bd4e70d564e25cad2bb6d0cb8f36c`.
+current code/evidence boundary is `ce3abe754aa2b74181301f07003f90a86dd7fc63`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
