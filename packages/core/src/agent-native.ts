@@ -50,6 +50,7 @@ const CANONICAL_RULES = Object.freeze([
   'conditions and consequences are clause arrays, not role lookalikes.',
   'prohibition uses negated=true, not a duplicate negative modality.',
 ]);
+const EXTRACTION_SEM_TEMPLATE = `{"schema":"${SEM_SCHEMA}","world":"real","kind":"simple_fact","clauses":[{"predicate":"<registered-predicate>","roles":{},"negated":false}]}`;
 
 export interface ExtractionContract {
   contractVersion: typeof AGENT_NATIVE_CONTRACT_VERSION;
@@ -68,7 +69,7 @@ export interface ExtractionContract {
     version: typeof SEMANTIC_IDENTITY_FINGERPRINT_VERSION;
     exactIdentityRequires: readonly string[];
   };
-  instructions: { version: typeof AGENT_EXTRACTION_INSTRUCTIONS_VERSION; hash: string };
+  instructions: { version: typeof AGENT_EXTRACTION_INSTRUCTIONS_VERSION; hash: string; semTemplate: string };
   frames: {
     version: typeof SEMANTIC_FRAME_REGISTRY_VERSION;
     registryHash: string;
@@ -100,7 +101,8 @@ export function getExtractionContract(): ExtractionContract {
     },
     instructions: {
       version: AGENT_EXTRACTION_INSTRUCTIONS_VERSION,
-      hash: sha256Value({ version: AGENT_EXTRACTION_INSTRUCTIONS_VERSION, canonicalRules: CANONICAL_RULES }),
+      hash: sha256Value({ version: AGENT_EXTRACTION_INSTRUCTIONS_VERSION, canonicalRules: CANONICAL_RULES, semTemplate: EXTRACTION_SEM_TEMPLATE }),
+      semTemplate: EXTRACTION_SEM_TEMPLATE,
     },
     canonicalRules: CANONICAL_RULES,
     groundingRules: Object.freeze([

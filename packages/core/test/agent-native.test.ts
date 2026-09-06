@@ -24,6 +24,7 @@ test('extraction contract is generated from the protocol and frame registries', 
   assert.match(first.frames.registryHash, /^[0-9a-f]{64}$/u);
   assert.match(first.protocol.registryHash, /^[0-9a-f]{64}$/u);
   assert.match(first.instructions.hash, /^[0-9a-f]{64}$/u);
+  assert.match(first.instructions.semTemplate, /"clauses":\[\{.*"roles":\{\}/u);
   assert.match(first.frames.unframedBehavior, /no lfp:2\.1/u);
 });
 
