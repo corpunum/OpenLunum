@@ -1,8 +1,9 @@
 # Training boundary assessment
 
-Status: NOT PROVEN (reaffirmed after large source-only ladder)
+Status: TRAINING JUSTIFIED AS NEXT HIGHEST-LEVERAGE STEP; NOT STARTED
 
-The current evidence does not isolate a persistent model ceiling. The real
+The current evidence now isolates a persistent agent/extractor ceiling, though
+it does not prove that training is the only possible solution. The real
 OMW/CILI replay has 100/100 shared candidate coverage but only 19/100 exact
 cross-language convergence, while the source-only frame-complete Codex trial
 has 6/6 deterministic identity-valid candidates and still fails the equivalent
@@ -59,13 +60,15 @@ Interpretation rule:
 - valid protocol-control failure or critical-mutant collapse indicates a core
   defect and requires repair before any training claim;
 - only a persistent agent-grounding ceiling after these controls justifies a
-  training proposal. The current evidence prioritizes a training-boundary
-  study, but does not prove training is the only remaining solution. The next
-  non-training control is an evaluator-sealed comparison in which the agent
-  emits structured grounding proposals and independently pinned provider
-  candidate sets, followed by deterministic context filtering. If that remains
-  near 0/60 exact while provider candidate-set recall is high, the training
-  boundary becomes proven rather than merely plausible.
+  training proposal. The large opaque-handle run now provides that persistence
+  signal: 0/60 positive parse exact despite 84/84 source-bound validation,
+  70/70 identity-available candidates, 12/12 abstention accuracy, and 10/10
+  candidate self-consistency. Together with the earlier provider, morphology,
+  composition, candidate-set, frame-first, two-stage, verifier, consensus, and
+  typed-builder experiments, this makes training justified as the next
+  highest-leverage research step. It does not prove training is the only
+  solution. The concrete task, data design, objectives, risks, and evaluation
+  gates are in `TRAINING-BOUNDARY-DECISION.md`.
 
 No protected corpus was created or consumed for this assessment. No local
 inference or OpenUnum surface was used.

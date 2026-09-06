@@ -573,9 +573,16 @@
       "evidence": "The adversarial source-manifest leakage regression passes; the scoped evaluator suite passed 8/8 focused tests. The larger source-only run then passed strict source validation with no forbidden fields.",
       "decision": "Keep this custody fix for future blind/protected runs; it is independent of semantic scoring and does not grant candidates trust.",
       "commit": "5801779"
+    },
+    {
+      "hypothesis": "After the large source-only run and prior general approaches, training is the next highest-leverage step rather than an unsupported conclusion.",
+      "implementation": "Reconciled the real OMW/CILI, morphology, composition, candidate-set, frame-first, two-stage, verifier/consensus, typed-builder, retrieval, and large opaque-handle extraction evidence in TRAINING-BOUNDARY-DECISION.md.",
+      "evidence": "The larger run produced 0/60 positive parse exact while passing 84/84 source custody, 70/70 identity availability, 12/12 abstention accuracy, and 10/10 candidate self-consistency. The remaining failure is stable canonical kind/type/open-concept selection, not transport or identity containment.",
+      "decision": "Training is justified as the next research investment, but is not started without explicit compute/data authorization. The OpenLunum protocol remains unchanged and the proposed model must emit structured intermediate semantics while OpenLunum retains authority.",
+      "commit": "pending-training-boundary-commit"
     }
   ],
-  "nextHighestLeverage": "Run a held-out source-only extraction architecture that supplies structured grounding proposals or deterministic provider candidate sets, then compare exact identity against the current stable-wrong baseline without changing lfp:2.1.",
+  "nextHighestLeverage": "Obtain explicit authorization/resources for the training proposal, then build a concept-disjoint multilingual structured-extraction dataset and compare a trained candidate generator against the current source-only baseline through OpenLunum.",
   "protectedCorpus": "none created in this mission; prior inspected corpora remain diagnostic",
   "openBlockers": ["unbiased morphology accuracy", "contextual sense disambiguation", "large agent-native text-to-Sem benchmark", "retrieval from agent-extracted Sem", "second independent agent/model comparison"]
 }
