@@ -232,9 +232,12 @@ export function createBlindEvaluationTools(session: BlindEvaluationSurface): Lun
         try {
           await session.submit({ runId: input.runId, itemId: input.itemId, candidateSem: input.candidateSem, provenance: input.provenance });
           return ok({ success: true, receipt: { runId: input.runId, itemId: input.itemId, accepted: true } });
-        } catch (error) {
-          return err((error as Error).message);
-        }
+        } catch {
+            // The evaluator owns gold and may include private diagnostics in an
+            // internal exception. Never reflect that text through the agent
+            // surface; otherwise a failed submission becomes an oracle.
+            return err('blind evaluation submission rejected');
+          }
       },
     },
   ];

@@ -106,6 +106,19 @@ test('blind eval_next strips evaluator-private fields at the MCP boundary', asyn
   assert.equal(data.item.sourceText, 'source');
 });
 
+test('blind eval_submit does not reflect evaluator-private failure diagnostics', async () => {
+  const tools = createBlindEvaluationTools({
+    next: () => null,
+    submit: async () => { throw new Error('goldSem.secret expectedFingerprint scoring details'); },
+  });
+  const result = await tools[1]!.handler({ runId: 'run', itemId: 'item', candidateSem: null, provenance: { extractorType: 'codex_agent' } });
+  const text = getText(result);
+  assert.equal(result.isError, true);
+  assert.equal(text.includes('goldSem'), false);
+  assert.equal(text.includes('expectedFingerprint'), false);
+  assert.match(text, /blind evaluation submission rejected/);
+});
+
 test('lunum_derive returns real sidecar from text', async () => {
   const tool = find('lunum_derive');
   const result = await tool.handler({ text: 'The quick brown fox jumps over the lazy dog' });
