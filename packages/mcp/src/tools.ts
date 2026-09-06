@@ -8,6 +8,8 @@ import {
   renderSem,
   compareSem,
   classifyByCategory,
+  getExtractionContract,
+  submitCandidate,
 } from '@corpunum/lunum';
 import type { ContextMode, LunumSem } from '@corpunum/lunum';
 import { resolveConfig } from './config.js';
@@ -22,7 +24,7 @@ function err(message: string): McpToolResponse {
 
 export const deriveTool: LunumToolDefinition = {
   name: 'lunum_derive',
-  description: 'Derive a Lunum sidecar (semantic representation + fingerprint + compact code) from input text. If no pre-parsed Sem is provided, uses surface telegraph (heuristic, no LLM needed, ~22% char savings).',
+  description: 'Build a sidecar from source text and an already-produced candidate Sem. Without sem this is explicitly a surface-only telegraph, never semantic extraction or semantic identity.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -95,7 +97,7 @@ export const compileContextTool: LunumToolDefinition = {
 
 export const fingerprintTool: LunumToolDefinition = {
   name: 'lunum_fingerprint',
-  description: 'Generate a deterministic semantic fingerprint (lfp:VERSION:sha256:DIGEST) for a Lunum-Sem object. Identical meaning always produces the same fingerprint.',
+  description: 'Generate the compatibility legacy fingerprint (lfp:0.1) for a Sem. Use lunum_submit_candidate for contained lfp:2.1 identity.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -111,6 +113,43 @@ export const fingerprintTool: LunumToolDefinition = {
       const length = typeof input.length === 'number' ? input.length : undefined;
       const fp = fingerprintSem(sem, length !== undefined ? { length } : {});
       return ok({ success: true, fingerprint: fp });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
+
+export const extractionContractTool: LunumToolDefinition = {
+  name: 'lunum_get_extraction_contract',
+  description: 'Return the machine-readable agent extraction contract generated from the core protocol and canonical frame registries.',
+  inputSchema: { type: 'object', properties: {} },
+  handler: async (): Promise<McpToolResponse> => ok({ success: true, contract: getExtractionContract() }),
+};
+
+export const submitCandidateTool: LunumToolDefinition = {
+  name: 'lunum_submit_candidate',
+  description: 'Submit untrusted agent-proposed semantics for deterministic validation, canonical frame checks, grounding, lfp:2.1 identity, and trust containment. Caller confidence cannot promote a candidate.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      sourceText: { type: 'string', description: 'Original source evidence; retained in the result.' },
+      sourceLanguage: { type: 'string', description: 'Source language tag when known.' },
+      candidateSem: { type: 'object', description: 'Untrusted agent-proposed Lunum-Sem candidate.' },
+      provenance: { type: 'object', description: 'Extractor provenance; unavailable fields must be omitted.' },
+    },
+    required: ['sourceText', 'candidateSem', 'provenance'],
+  },
+  handler: async (input): Promise<McpToolResponse> => {
+    try {
+      if (typeof input.sourceText !== 'string') return err('sourceText is required and must be a string');
+      if (!input.candidateSem || typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem)) return err('candidateSem is required and must be an object');
+      if (!input.provenance || typeof input.provenance !== 'object' || Array.isArray(input.provenance)) return err('provenance is required and must be an object');
+      return ok({ success: true, submission: submitCandidate({
+        sourceText: input.sourceText,
+        sourceLanguage: typeof input.sourceLanguage === 'string' ? input.sourceLanguage : null,
+        candidateSem: input.candidateSem,
+        provenance: input.provenance as never,
+      }) });
     } catch (error) {
       return err((error as Error).message);
     }
@@ -217,6 +256,8 @@ export const classifyTool: LunumToolDefinition = {
 
 export const lunumTools: LunumToolDefinition[] = [
   deriveTool,
+  extractionContractTool,
+  submitCandidateTool,
   compileContextTool,
   fingerprintTool,
   validateTool,

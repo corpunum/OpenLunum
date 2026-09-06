@@ -12,8 +12,8 @@ function getText(result: { content: Array<{ text?: string }> }): string {
   return result.content[0]?.text ?? '';
 }
 
-test('lunumTools has 7 real tools', () => {
-  assert.strictEqual(lunumTools.length, 7);
+test('lunumTools has the real agent-native tools', () => {
+  assert.strictEqual(lunumTools.length, 9);
   const names = lunumTools.map((t) => t.name);
   assert.ok(names.includes('lunum_derive'));
   assert.ok(names.includes('lunum_compile_context'));
@@ -22,6 +22,29 @@ test('lunumTools has 7 real tools', () => {
   assert.ok(names.includes('lunum_render'));
   assert.ok(names.includes('lunum_compare'));
   assert.ok(names.includes('lunum_classify'));
+  assert.ok(names.includes('lunum_get_extraction_contract'));
+  assert.ok(names.includes('lunum_submit_candidate'));
+});
+
+test('lunum_get_extraction_contract returns registry-derived hashes and frames', async () => {
+  const data = JSON.parse(getText(await find('lunum_get_extraction_contract').handler({})));
+  assert.equal(data.success, true);
+  assert.ok(data.contract.frames.framedPredicates.includes('prefer'));
+  assert.match(data.contract.frames.registryHash, /^[0-9a-f]{64}$/u);
+});
+
+test('lunum_submit_candidate contains an untrusted candidate', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'quiet_mode' } }, negated: false }]
+  };
+  const data = JSON.parse(getText(await find('lunum_submit_candidate').handler({
+    sourceText: 'Maria prefers quiet mode.', candidateSem: sem, provenance: { extractorType: 'codex_agent' }
+  })));
+  assert.equal(data.success, true);
+  assert.equal(data.submission.candidateIdentityAvailable, true);
+  assert.equal(data.submission.promotable, false);
+  assert.equal(data.submission.trust.promoted, false);
 });
 
 test('lunum_derive returns real sidecar from text', async () => {

@@ -1,0 +1,80 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { getExtractionContract, submitCandidate } from '../src/agent-native.js';
+
+const validPreference = {
+  schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+  clauses: [{ predicate: 'prefer', roles: {
+    experiencer: { type: 'actor', id: 'maria' },
+    theme: { type: 'concept', id: 'quiet_mode' }
+  }, negated: false }]
+};
+
+const provenance = { extractorType: 'codex_agent' as const, extractorId: 'test-agent' };
+
+test('extraction contract is generated from the protocol and frame registries', () => {
+  const first = getExtractionContract();
+  const second = getExtractionContract();
+  assert.deepEqual(first, second);
+  assert.equal(first.transport.schema, 'lunum-sem/0.1-draft');
+  assert.equal(first.identity.version, '2.1');
+  assert.ok(first.frames.framedPredicates.includes('prefer'));
+  assert.match(first.transport.schemaHash, /^[0-9a-f]{64}$/u);
+  assert.match(first.frames.registryHash, /^[0-9a-f]{64}$/u);
+  assert.match(first.protocol.registryHash, /^[0-9a-f]{64}$/u);
+  assert.match(first.frames.unframedBehavior, /no lfp:2\.1/u);
+});
+
+test('candidate submission returns identity but never self-promotes an agent proposal', () => {
+  const result = submitCandidate({ sourceText: 'Maria prefers quiet mode.', candidateSem: validPreference, provenance });
+  assert.equal(result.transportValid, true);
+  assert.equal(result.structuralValid, true);
+  assert.equal(result.protocolCanonical, true);
+  assert.equal(result.frameValid, true);
+  assert.equal(result.grounded, true);
+  assert.equal(result.candidateIdentityAvailable, true);
+  assert.match(result.semanticFingerprint ?? '', /^lfp:2\.1:sha256:/u);
+  assert.equal(result.promotable, false);
+  assert.equal(result.trust.promoted, false);
+  assert.equal(result.provenance.extractorType, 'codex_agent');
+  assert.equal(result.provenance.sourceHash, result.source.sha256);
+});
+
+test('frame-invalid candidates cannot receive semantic identity', () => {
+  const result = submitCandidate({
+    sourceText: 'Maria sends a report.',
+    candidateSem: { ...validPreference, clauses: [{ predicate: 'send', roles: validPreference.clauses[0]!.roles, negated: false }] },
+    provenance,
+  });
+  assert.equal(result.protocolCanonical, true);
+  assert.equal(result.frameValid, false);
+  assert.equal(result.candidateIdentityAvailable, false);
+  assert.equal(result.semanticFingerprint, null);
+  assert.equal(result.failureClass, 'frame_noncanonical');
+});
+
+test('unknown identity fields fail closed rather than becoming identity-bearing', () => {
+  const result = submitCandidate({
+    sourceText: 'Maria prefers quiet mode.',
+    candidateSem: { ...validPreference, clauses: [{ ...validPreference.clauses[0], roles: {
+      ...validPreference.clauses[0]!.roles,
+      theme: { type: 'concept', id: 'quiet_mode', agentHint: 'ignored' }
+    } }] },
+    provenance,
+  });
+  assert.equal(result.frameValid, true);
+  assert.equal(result.candidateIdentityAvailable, false);
+  assert.equal(result.failureClass, 'semantic_identity_unavailable');
+  assert.equal(result.promotable, false);
+});
+
+test('ungrounded references fail closed while source evidence remains in the result', () => {
+  const result = submitCandidate({
+    sourceText: 'She prefers quiet mode.',
+    candidateSem: { ...validPreference, references: [{ referenceKind: 'semantic', surface: 'She' }] },
+    provenance,
+  });
+  assert.equal(result.candidateIdentityAvailable, false);
+  assert.equal(result.failureClass, 'protocol_noncanonical');
+  assert.equal(result.source.text, 'She prefers quiet mode.');
+});

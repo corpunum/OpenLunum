@@ -5,12 +5,12 @@
  * and structured error/success output. All types are frozen and semver-stable.
  */
 
-export const CLI_CONTRACT_VERSION = '1.0.0' as const;
+export const CLI_CONTRACT_VERSION = '1.1.0' as const;
 
 /**
  * CliCommand: Union of all supported CLI commands
  */
-export type CliCommand = 'inspect' | 'encode' | 'compile' | 'migrate' | 'pipeline' | 'quality-gate' | 'process-jsonl' | 'contract';
+export type CliCommand = 'inspect' | 'encode' | 'submit-candidate' | 'agent-contract' | 'compile' | 'migrate' | 'pipeline' | 'quality-gate' | 'process-jsonl' | 'contract';
 
 /**
  * CliExitCode: Enumerated exit codes with stable numeric values
@@ -152,6 +152,30 @@ export const COMMANDS: readonly CLICommandSpec[] = [
       { code: EXIT_CODES.SUCCESS, meaning: 'Compiled context written to stdout' },
       { code: EXIT_CODES.INPUT_VALIDATION_ERROR, meaning: 'Messages failed to parse' },
     ],
+    stdinSupport: false,
+    stdoutFormat: 'json',
+  },
+  {
+    name: 'submit-candidate',
+    description: 'Submit an untrusted agent Sem for deterministic validation and containment',
+    flags: [
+      { name: 'source', required: true, valueType: 'string', description: 'Original source text' },
+      { name: 'language', required: false, valueType: 'string', description: 'Source language tag' },
+      { name: 'sem', required: true, valueType: 'string', description: 'Path to candidate Sem JSON' },
+      { name: 'provenance', required: true, valueType: 'string', description: 'Path to extractor provenance JSON' },
+    ],
+    exitCodes: [
+      { code: EXIT_CODES.SUCCESS, meaning: 'Containment result written to stdout' },
+      { code: EXIT_CODES.INPUT_VALIDATION_ERROR, meaning: 'Candidate failed deterministic validation' },
+    ],
+    stdinSupport: false,
+    stdoutFormat: 'json',
+  },
+  {
+    name: 'agent-contract',
+    description: 'Print the generated machine-readable agent extraction contract',
+    flags: [],
+    exitCodes: [{ code: EXIT_CODES.SUCCESS, meaning: 'Contract written to stdout' }],
     stdinSupport: false,
     stdoutFormat: 'json',
   },

@@ -22,8 +22,8 @@ describe('CLI contract', () => {
     assert.match(CLI_CONTRACT_VERSION, /^\d+\.\d+\.\d+$/u);
   });
 
-  it('contract version is 1.0.0', () => {
-    assert.strictEqual(CLI_CONTRACT_VERSION, '1.0.0');
+  it('contract version is 1.1.0', () => {
+    assert.strictEqual(CLI_CONTRACT_VERSION, '1.1.0');
   });
 
   it('exit codes are unique integers', () => {
@@ -54,7 +54,7 @@ describe('CLI contract', () => {
 
   it('COMMANDS includes all expected subcommands', () => {
     const names = COMMANDS.map(c => c.name);
-    for (const expected of ['inspect', 'encode', 'compile', 'migrate', 'pipeline', 'quality-gate', 'process-jsonl']) {
+    for (const expected of ['inspect', 'encode', 'submit-candidate', 'agent-contract', 'compile', 'migrate', 'pipeline', 'quality-gate', 'process-jsonl']) {
       assert.ok(names.includes(expected), `missing command: ${expected}`);
     }
   });
@@ -97,6 +97,8 @@ describe('CliCommand type', () => {
     const expectedCommands: CliCommand[] = [
       'inspect',
       'encode',
+      'submit-candidate',
+      'agent-contract',
       'compile',
       'migrate',
       'pipeline',
