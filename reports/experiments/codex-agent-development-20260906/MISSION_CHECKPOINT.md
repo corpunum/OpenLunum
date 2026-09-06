@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-07T01:18:00+03:00
+Recorded: 2026-09-07T01:34:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 8eb6dca
+Source/evidence boundary before this checkpoint commit: a6a3484
 
 ## Scope and prohibitions
 
@@ -396,9 +396,16 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Full evaluator unit verification after the custody fix passed 1,889/1,889;
   no production semantic identity or scoring behavior was changed.
 - Reaffirmed the training-boundary assessment after the large run: training is
-  still NOT PROVEN as unavoidable. The result prioritizes a provider-guided,
+  not proven as the only possible solution, but is now justified as the next
+  highest-leverage research step. The result prioritizes a provider-guided,
   structured-grounding control (candidate-set recall plus deterministic context
   filtering) before any training proposal can be considered conclusive.
+- After reconciling all prior general approaches with the 0/60 larger
+  source-only exact result, formalized training as the next highest-leverage
+  research step, without starting training. The concrete task, data design,
+  objectives, risks, and protected evaluation gates are recorded in
+  `TRAINING-BOUNDARY-DECISION.md`; OpenLunum protocol and identity semantics
+  remain unchanged.
 
 ## Uncommitted state
 
