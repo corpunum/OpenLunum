@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T16:28:00+03:00
+Recorded: 2026-09-06T16:31:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 4caf6f6db0ede002dfacc28c71af1eb5bfc78d4a
+Current HEAD: 9ee1c63a7433a126d34db0ca8f65f992b140a8df
 
 ## Scope and prohibitions
 
@@ -46,6 +46,10 @@ used.
   23/23 correct, candidate-set recall 244/500, zero false singleton outputs
   among eligible cases. German UD was acquired but OMW identity scoring was
   unavailable because its OdeNet tab was absent from cache.
+- Resolver results are now bound to the original grounding fingerprint and
+  proposal during materialization. Raw retrieval is exact by default; near
+  semantic matching is explicit opt-in. Eval suite after this change: 1,874
+  pass, 0 fail.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -87,7 +91,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 55 minutes. Completed real-resource
+Elapsed at recording: approximately 70 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
