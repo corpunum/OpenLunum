@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T16:59:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 72283aff1810e3b99905e314785c366531f32dfe
+Current HEAD: 1efe620141ce6dc3626dcfc3f6818b5c234faea7
 
 ## Scope and prohibitions
 
@@ -79,6 +79,11 @@ used.
   before coverage lookup; core suite is 1,801/1,801 after rebuild.
 - Full `pnpm verify` after the importer/cascade changes passed with exit 0;
   evaluation smoke remained 16 items across 4 groups.
+- Re-acquired OdeNet v1.4 with verified archive SHA
+  `d55407c48056ab3bc20d14d4d376de1799541fa0c9e34a82617dbb531c67ba2b` and
+  replayed the real resource benchmark to `/tmp`; result was unchanged at
+  34/150 total convergence, 19/100 cross-language, EN-EL 1/20, zero resource
+  false equivalences. Replay output SHA is recorded in the research ledger.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
