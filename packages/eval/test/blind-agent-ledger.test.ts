@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { createHash } from 'node:crypto';
 import { validateBlindAgentLedger } from '../src/blind-agent-ledger.js';
 import type { BlindSourceItem } from '../src/blind-agent-ledger.js';
 
@@ -51,4 +52,15 @@ test('blind ledger strict source-bound mode rejects missing provenance hashes', 
   const result = validateBlindAgentLedger(source, [{ handle: 'opaque-a', result: { candidateSem: sem } }], { requireSourceHash: true });
   assert.equal(result.valid, false);
   assert.ok(result.errors.some((error) => error.includes('sourceHash is required')));
+});
+
+test('blind ledger strict source-bound mode accepts a complete clean ledger', () => {
+  const sourceHash = createHash('sha256').update(source[0]!.sourceText).digest('hex');
+  const result = validateBlindAgentLedger(source, [{
+    handle: 'opaque-a',
+    result: { candidateSem: sem, provenance: { extractorType: 'codex_agent', sourceHash } },
+  }], { requireSourceHash: true });
+  assert.equal(result.valid, true);
+  assert.equal(result.identityAvailable, 1);
+  assert.equal(result.abstentions, 0);
 });

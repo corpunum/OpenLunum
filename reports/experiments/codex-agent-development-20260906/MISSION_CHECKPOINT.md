@@ -1,6 +1,6 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:24:30+03:00
+Recorded: 2026-09-06T18:31:10+03:00
 Mission start epoch: 1788697989
 Current local branch: main
 Current HEAD: 8e9e7d53ecb53bc2192e847611066cbc6a11ce10
@@ -238,6 +238,9 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   refuses to manufacture hashes. Running it against the historical diagnostic
   ledger fails closed on missing source hashes and non-identity candidates;
   no report was overwritten (45af4be).
+- Added a positive strict-custody fixture proving a complete source-bound
+  candidate ledger passes validation with exact opaque-handle coverage and no
+  scoring leakage; evaluator suite is 1,887/1,887.
 
 ## Uncommitted state
 

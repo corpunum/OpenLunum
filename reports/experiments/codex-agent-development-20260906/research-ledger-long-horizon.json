@@ -356,6 +356,13 @@
       "evidence": "The existing candidate ledger fails closed before report generation: all 22 rows lack sourceHash and several candidates also lack exact identity. No historical report was overwritten.",
       "decision": "Keep fresh source-only agent generation as a prerequisite for retrieval evidence; fresh provenance-bound candidates are required.",
       "commit": "45af4be"
+    },
+    {
+      "hypothesis": "Strict source-bound custody is usable for a future clean retrieval ledger, not only as a rejection gate.",
+      "implementation": "Added a positive fixture with a worker-supplied SHA-256 sourceHash, identity-safe candidate, exact opaque-handle coverage, and no evaluator-private fields.",
+      "evidence": "Evaluator suite passed 1,887/1,887; strict mode accepts the complete fixture and reports one identity-available row.",
+      "decision": "Keep strict mode as the required future retrieval path; the historical candidate artifact remains permanently diagnostic.",
+      "commit": "working-tree"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
