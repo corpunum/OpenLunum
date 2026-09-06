@@ -7,7 +7,7 @@
   "byPair": {
     "en-el": {
       "total": 20,
-      "resolvedExact": 19,
+      "candidateNarrowed": 19,
       "ambiguous": 1,
       "unresolved": 0,
       "candidateSizes": {
@@ -19,7 +19,7 @@
     },
     "en-es": {
       "total": 20,
-      "resolvedExact": 15,
+      "candidateNarrowed": 15,
       "ambiguous": 5,
       "unresolved": 0,
       "candidateSizes": {
@@ -34,7 +34,7 @@
     },
     "en-fr": {
       "total": 20,
-      "resolvedExact": 12,
+      "candidateNarrowed": 12,
       "ambiguous": 8,
       "unresolved": 0,
       "candidateSizes": {
@@ -50,7 +50,7 @@
     },
     "en-de": {
       "total": 20,
-      "resolvedExact": 20,
+      "candidateNarrowed": 20,
       "ambiguous": 0,
       "unresolved": 0,
       "candidateSizes": {
@@ -61,7 +61,7 @@
     },
     "en-id": {
       "total": 20,
-      "resolvedExact": 12,
+      "candidateNarrowed": 12,
       "ambiguous": 8,
       "unresolved": 0,
       "candidateSizes": {
@@ -77,7 +77,7 @@
   },
   "aggregate": {
     "total": 100,
-    "resolvedExact": 78,
+    "candidateNarrowed": 78,
     "ambiguous": 22,
     "unresolved": 0,
     "independentExact": 19,

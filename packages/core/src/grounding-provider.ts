@@ -62,7 +62,8 @@ export interface MorphologyProviderOptions {
 
 /** Result of intersecting independently obtained candidate sets. */
 export interface GroundingCandidateIntersection {
-  status: 'resolved_exact' | 'ambiguous' | 'unresolved';
+  /** Candidate-set narrowing is evidence, not provider-owned exact identity. */
+  status: 'candidate_narrowed' | 'ambiguous' | 'unresolved';
   candidates: readonly GroundingProviderCandidate[];
   diagnostics: readonly string[];
 }
@@ -94,7 +95,7 @@ export function intersectGroundingCandidateSets(results: readonly GroundingProvi
     }));
   }
   const candidates = [...current.values()].sort((a, b) => a.externalId.localeCompare(b.externalId, 'en'));
-  if (candidates.length === 1) return { status: 'resolved_exact', candidates, diagnostics: ['one identity remains in the explicit candidate-set intersection'] };
+  if (candidates.length === 1) return { status: 'candidate_narrowed', candidates, diagnostics: ['one identity remains in the explicit candidate-set intersection; provider-owned exact resolution is still required'] };
   if (candidates.length > 1) return { status: 'ambiguous', candidates, diagnostics: [`${candidates.length} identities remain in the explicit candidate-set intersection`] };
   return { status: 'unresolved', candidates: [], diagnostics: ['candidate-set intersection is empty'] };
 }
