@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:20:10+03:00
+Recorded: 2026-09-06T17:22:05+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: dd6f8c8cb771e13214b6e8168c64cf6952c054c9
+Current HEAD: fc253d6a833f7f30b961dd77104a43e6a4f68327
 
 ## Scope and prohibitions
 
@@ -98,6 +98,8 @@ used.
   mislabeled as exact identity. They now return `candidate_narrowed`, and the
   OMW replay reports 78 narrowed cases while preserving 19 independent exact
   cases. Core unit suite and full `pnpm verify` pass after this repair.
+- A follow-up regression now proves a `candidate_narrowed` result is rejected
+  by `toGroundingResolution` rather than materialized as exact identity.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -139,7 +141,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 107 minutes. Completed real-resource
+Elapsed at recording: approximately 109 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
