@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T18:44:00+03:00",
-  "currentHead": "2ae6c92e0471ef30e754957f0f53fdf258d7de2d",
+  "lastUpdated": "2026-09-06T18:53:00+03:00",
+  "currentHead": "f17f6875119acedeaed51469533ebfd10d1c17a8",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -489,6 +489,13 @@
       "evidence": "11/12 pairs had both lexical sides covered, 8/12 had a shared CILI candidate, but only 1/12 was uniquely resolved; 10/12 were ambiguous and 1/12 unresolved. Full diagnostic is independent-en-el-grounding-probe.json.",
       "decision": "Reject the missing-coverage-only hypothesis. Candidate-set/context disambiguation is required, with fail-closed behavior for unresolved senses.",
       "commit": "dbabf991ad9f790346c711c93b8b75d51455a9fd"
+    },
+    {
+      "hypothesis": "Candidate-set intersection must reject recorded or forged provider results even when external IDs share a namespace.",
+      "implementation": "Required authenticated provider-result capabilities for core candidate-set intersection; added authenticated fixture coverage and kept the historical OMW analysis as report-only set arithmetic.",
+      "evidence": "Core grounding-provider suite passed 26/26 and the full core unit suite passed 1,806/1,806. A forged same-namespace pair now returns unresolved, while authenticated provider outputs still narrow explicitly shared candidates. OMW replay remains 78 singleton narrowings, 22 ambiguous, and 19 independently exact.",
+      "decision": "Keep the trust boundary. Candidate-set narrowing remains evidence only and cannot grant exact identity; callers must use authenticated provider outputs.",
+      "commit": "f17f6875119acedeaed51469533ebfd10d1c17a8"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

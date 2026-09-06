@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: dbabf991ad9f790346c711c93b8b75d51455a9fd
+Source/evidence boundary before this checkpoint commit: f17f6875119acedeaed51469533ebfd10d1c17a8
 
 ## Scope and prohibitions
 
@@ -324,6 +324,12 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   11/12 both-covered, 8/12 shared candidate sets, only 1/12 uniquely resolved,
   10/12 ambiguous, and 1/12 unresolved. This rejects a coverage-only diagnosis
   and points to contextual candidate-set disambiguation.
+- Hardened candidate-set intersection so only provider results authenticated by
+  the local cascade may be intersected; forged same-namespace results now fail
+  closed. The core grounding suite remains 26/26 and the full core suite
+  remains 1,806/1,806. Historical OMW set analysis is now explicitly
+  report-only and still shows 78 singleton narrowings, 22 ambiguities, and 19
+  independently exact results.
 
 ## Uncommitted state
 
