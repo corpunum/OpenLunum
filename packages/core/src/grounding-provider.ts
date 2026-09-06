@@ -88,7 +88,7 @@ export interface WnLmfImportResult {
 }
 
 function normalizeLemma(value: string): string {
-  return value.normalize('NFKC').trim().toLocaleLowerCase('und').replace(/\\s+/gu, ' ');
+  return value.normalize('NFKC').trim().toLocaleLowerCase('und').replace(/[\s_]+/gu, '_');
 }
 
 function sha256(value: unknown): string {
@@ -232,6 +232,7 @@ export function createOmwProvider(options: OmwProviderOptions): GroundingProvide
       const base = { provider, providerVersion: options.version, snapshotHash, language };
       if (!canonical.valid || !canonical.canonical) return { ...base, status: 'provider_error', candidates: [], diagnostics: ['invalid grounding proposal'] };
       if (canonical.canonical.modifiers.length > 0) return { ...base, status: 'unresolved', candidates: [], diagnostics: ['OMW lexical evidence does not prove a modified composition'] };
+      if (!input.partOfSpeech || input.partOfSpeech === 'other') return { ...base, status: 'unresolved', candidates: [], diagnostics: ['part-of-speech is required for exact lexical grounding'] };
       const lemma = canonical.canonical.head.key;
       const matches = records.filter((record) => record.language === language && record.lemma === lemma && (!input.partOfSpeech || record.partOfSpeech === input.partOfSpeech));
       const byId = new Map<string, GroundingProviderCandidate>();

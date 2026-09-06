@@ -119,3 +119,11 @@ test('WN-LMF importer preserves only explicit non-proposed ILI mappings', () => 
   assert.equal(imported.records[0]?.interlingualId, 'i123');
   assert.deepEqual(imported.unmappedSynsets, ['odenet-2-n']);
 });
+
+test('OMW exact lookup requires POS and normalizes phrase separators conservatively', () => {
+  const provider = createOmwProvider({ version: 'test', records: [{ language: 'en', lemma: 'blue folder', interlingualId: 'i123', partOfSpeech: 'noun' }] });
+  const proposal = (key: string): GroundingProposal => ({ path: 'clauses[0].roles.theme', termType: 'concept', head: { kind: 'symbol', namespace: 'lex', key }, modifiers: [] });
+  assert.equal(provider.resolve({ proposal: proposal('blue_folder'), language: 'en' }).status, 'unresolved');
+  assert.equal(provider.resolve({ proposal: proposal('blue  folder'), language: 'en', partOfSpeech: 'noun' }).status, 'resolved_exact');
+  assert.equal(provider.resolve({ proposal: proposal('blue\tfolder'), language: 'en', partOfSpeech: 'noun' }).status, 'resolved_exact');
+});
