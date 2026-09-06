@@ -29,6 +29,13 @@ test('next exposes source and contract only, never hidden gold', async () => {
   assert.equal(JSON.stringify(next).includes('gold'), false);
 });
 
+test('next reserves an item so concurrent workers cannot receive the same claim', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
+  const session = await BlindAgentEvaluationSession.create('run-claim', items, dir);
+  assert.equal(session.next()?.itemId, 'blind-1');
+  assert.equal(session.next()?.itemId, 'blind-abstain');
+});
+
 test('submission scores privately, persists immediately, and resumes without duplication', async () => {
   const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
   const session = await BlindAgentEvaluationSession.create('run-resume', items, dir);
@@ -38,6 +45,8 @@ test('submission scores privately, persists immediately, and resumes without dup
   assert.equal('goldIdentity' in first, false);
   const ledger = await readFile(path.join(dir, 'agent-results.jsonl'), 'utf8');
   assert.equal(ledger.split('\n').filter(Boolean).length, 1);
+  assert.equal(ledger.includes('expectedOutcome'), false);
+  assert.equal(ledger.includes('"candidateIdentity":'), false);
   const resumed = await BlindAgentEvaluationSession.create('run-resume', items, dir);
   assert.equal(resumed.completedCount(), 1);
   assert.equal(resumed.next()?.itemId, 'blind-abstain');
@@ -54,6 +63,23 @@ test('malformed ledger and mismatched checkpoint fail closed', async () => {
   await assert.rejects(() => BlindAgentEvaluationSession.create('run-corrupt', items, dir), /Malformed JSONL ledger/u);
 });
 
+test('tampered terminal result is rejected during resume', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
+  const session = await BlindAgentEvaluationSession.create('run-tamper', items, dir);
+  await session.submit({ runId: 'run-tamper', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent' } });
+  const ledgerPath = path.join(dir, 'agent-results.jsonl');
+  const record = JSON.parse(await readFile(ledgerPath, 'utf8')) as Record<string, unknown>;
+  record.semanticIdentityExact = false;
+  await writeFile(ledgerPath, `${JSON.stringify(record)}\n`);
+  await assert.rejects(() => BlindAgentEvaluationSession.create('run-tamper', items, dir), /does not match candidate/u);
+});
+
+test('malformed manifest metadata is rejected rather than recreated', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
+  await writeFile(path.join(dir, 'agent-manifest.json'), '{truncated\n');
+  await assert.rejects(() => BlindAgentEvaluationSession.create('run-metadata', items, dir), /Malformed blind evaluation metadata/u);
+});
+
 test('gold preflight rejects an identity-unavailable parse item', async () => {
   const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
   const invalidGold = { ...goldSem, clauses: [{ ...goldSem.clauses[0], predicate: 'unframed_controlled_predicate' }] } as never;
@@ -68,6 +94,7 @@ test('abstention is scored without exposing abstention gold metadata', async () 
   await session.submit({ runId: 'run-abstain', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent' } });
   const result = await session.submit({ runId: 'run-abstain', itemId: 'blind-abstain', candidateSem: null, provenance: { extractorType: 'codex_agent' } });
   assert.equal(result.status, 'passed');
-  assert.equal(result.expectedOutcome, 'abstain');
+  assert.equal(result.abstained, true);
+  assert.equal('expectedOutcome' in result, false);
   assert.equal(JSON.stringify(result).includes('unsupported'), false);
 });

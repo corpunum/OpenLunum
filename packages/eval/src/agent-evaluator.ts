@@ -46,7 +46,6 @@ export interface BlindEvalResult {
   runId: string;
   itemId: string;
   status: 'passed' | 'failed' | 'error';
-  expectedOutcome: 'parse' | 'abstain';
   candidateIdentityAvailable: boolean;
   identityComparable: boolean;
   semanticIdentityExact: boolean;
@@ -90,8 +89,15 @@ export interface BlindEvalSummary {
 
 interface DurableBlindResult extends BlindEvalResult {
   schema: typeof BLIND_EVALUATION_VERSION;
-  /** Kept evaluator-private; never returned by submit(). */
-  candidateIdentity?: string | null;
+}
+
+interface PrivateBlindResult {
+  schema: 'openlunum-blind-private/0.1';
+  runId: string;
+  itemId: string;
+  candidateSem: unknown;
+  candidateIdentity: string | null;
+  provenance: AgentExtractionProvenance;
 }
 
 interface BlindManifest {
@@ -143,6 +149,8 @@ function safeExpectedOutcome(item: PrivateGoldItem): 'parse' | 'abstain' {
 export class BlindAgentEvaluationSession {
   private readonly itemById: ReadonlyMap<string, PrivateGoldItem>;
   private readonly completed = new Map<string, DurableBlindResult>();
+  private readonly privateResults = new Map<string, PrivateBlindResult>();
+  private readonly claimed = new Set<string>();
   private readonly contractHashValue: string;
   private readonly datasetHashValue: string;
   private initialized = false;
@@ -172,6 +180,7 @@ export class BlindAgentEvaluationSession {
   }
 
   private get ledgerPath(): string { return `${this.outputDirectory}/agent-results.jsonl`; }
+  private get privateLedgerPath(): string { return `${this.outputDirectory}.private/agent-results.jsonl`; }
   private get checkpointPath(): string { return `${this.outputDirectory}/agent-checkpoint.json`; }
   private get manifestPath(): string { return `${this.outputDirectory}/agent-manifest.json`; }
 
@@ -190,21 +199,32 @@ export class BlindAgentEvaluationSession {
       datasetHash: this.datasetHashValue,
       itemCount: this.itemById.size,
     };
-    const existingManifest = await readFile(this.manifestPath, 'utf8').then(raw => JSON.parse(raw) as BlindManifest).catch(() => null);
+    const existingManifest = await this.readOptionalJson<BlindManifest>(this.manifestPath);
+    if (existingManifest && (existingManifest.schema !== BLIND_EVALUATION_VERSION || existingManifest.runId !== this.runId || existingManifest.itemCount !== this.itemById.size || existingManifest.contractHash !== this.contractHashValue || existingManifest.datasetHash !== this.datasetHashValue || existingManifest.transportSchemaHash !== SEMANTIC_TRANSPORT_SCHEMA_SHA256)) {
+      throw new Error('blind evaluation manifest is invalid or mismatched; refusing resume');
+    }
     if (existingManifest && JSON.stringify(existingManifest) !== JSON.stringify(manifest)) {
       throw new Error('blind evaluation manifest mismatch; refusing to reuse output directory');
     }
     if (!existingManifest) await writeFile(this.manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 
     const ledger = await readJsonlLedger<DurableBlindResult>(this.ledgerPath);
+    const privateLedger = await readJsonlLedger<PrivateBlindResult>(this.privateLedgerPath);
+    for (const result of privateLedger) {
+      if (result.schema !== 'openlunum-blind-private/0.1' || result.runId !== this.runId || !this.itemById.has(result.itemId) || this.privateResults.has(result.itemId)) throw new Error('invalid private blind evaluation ledger; refusing resume');
+      this.privateResults.set(result.itemId, result);
+    }
     for (const result of ledger) {
       if (result.schema !== BLIND_EVALUATION_VERSION || result.runId !== this.runId || !this.itemById.has(result.itemId)) {
         throw new Error('invalid blind evaluation ledger record; refusing resume');
       }
       if (this.completed.has(result.itemId)) throw new Error(`duplicate blind evaluation item: ${result.itemId}`);
+      this.validateDurableResult(result, this.privateResults.get(result.itemId));
       this.completed.set(result.itemId, result);
     }
-    const checkpoint = await readFile(this.checkpointPath, 'utf8').then(raw => JSON.parse(raw) as BlindCheckpoint).catch(() => null);
+    if (this.privateResults.size !== this.completed.size) throw new Error('private and public blind ledgers disagree; refusing resume');
+    const checkpoint = await this.readOptionalJson<BlindCheckpoint>(this.checkpointPath);
+    if (checkpoint && (checkpoint.schema !== 'openlunum-blind-checkpoint/0.1' || !Array.isArray(checkpoint.completedItemIds) || new Set(checkpoint.completedItemIds).size !== checkpoint.completedItemIds.length)) throw new Error('invalid blind evaluation checkpoint; refusing resume');
     if (checkpoint && (checkpoint.binding !== this.binding() || checkpoint.runId !== this.runId)) {
       throw new Error('blind evaluation checkpoint provenance mismatch; refusing resume');
     }
@@ -213,6 +233,15 @@ export class BlindAgentEvaluationSession {
     }
     await this.persistCheckpoint();
     this.initialized = true;
+  }
+
+  private async readOptionalJson<T>(file: string): Promise<T | null> {
+    try {
+      return JSON.parse(await readFile(file, 'utf8')) as T;
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
+      throw new Error(`Malformed blind evaluation metadata at ${file}; refusing resume`);
+    }
   }
 
   private async persistCheckpoint(): Promise<void> {
@@ -228,6 +257,8 @@ export class BlindAgentEvaluationSession {
     if (!this.initialized) throw new Error('blind evaluation is not initialized');
     for (const item of this.itemById.values()) {
       if (!this.completed.has(item.id)) {
+        if (this.claimed.has(item.id)) continue;
+        this.claimed.add(item.id);
         return {
           runId: this.runId, itemId: item.id, sourceLanguage: item.sourceLanguage, sourceText: item.sourceText,
           contractVersion: getExtractionContract().contractVersion, contractHash: this.contractHashValue,
@@ -244,22 +275,32 @@ export class BlindAgentEvaluationSession {
     const item = this.itemById.get(input.itemId);
     if (!item) throw new Error('unknown blind evaluation item');
     if (this.completed.has(item.id)) throw new Error('blind evaluation item already completed');
-    const candidate = submitCandidate({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, candidateSem: input.candidateSem, provenance: input.provenance });
     const expectedOutcome = safeExpectedOutcome(item);
-    const abstained = !candidate.candidateIdentityAvailable;
-    const identityComparable = candidate.candidateIdentityAvailable && expectedOutcome === 'parse';
-    const goldIdentity = expectedOutcome === 'parse' ? submitCandidate({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, candidateSem: item.goldSem, provenance: { extractorType: 'other' } }).semanticFingerprint : null;
-    const semanticIdentityExact = Boolean(identityComparable && goldIdentity && candidate.semanticFingerprint === goldIdentity);
-    const passed = expectedOutcome === 'abstain' ? abstained : semanticIdentityExact;
+    let candidate: ReturnType<typeof submitCandidate> | null = null;
+    let error: string | null = null;
+    try {
+      candidate = submitCandidate({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, candidateSem: input.candidateSem, provenance: input.provenance });
+    } catch (cause) {
+      error = cause instanceof Error ? cause.message : String(cause);
+    }
+    const abstained = candidate ? !candidate.candidateIdentityAvailable : true;
+    const identityComparable = Boolean(candidate?.candidateIdentityAvailable && expectedOutcome === 'parse');
+    const goldIdentity = expectedOutcome === 'parse' ? this.goldIdentityFor(item) : null;
+    const semanticIdentityExact = Boolean(identityComparable && goldIdentity && candidate?.semanticFingerprint === goldIdentity);
+    const passed = Boolean(candidate && (expectedOutcome === 'abstain' ? abstained : semanticIdentityExact));
     const result: DurableBlindResult = {
-      schema: BLIND_EVALUATION_VERSION, runId: this.runId, itemId: item.id, status: passed ? 'passed' : 'failed', expectedOutcome,
-      candidateIdentityAvailable: candidate.candidateIdentityAvailable, identityComparable, semanticIdentityExact, abstained,
-      failureClass: passed ? null : (expectedOutcome === 'abstain' ? 'unexpected_parse' : candidate.failureClass ?? 'semantic_identity_mismatch'),
-      diagnostics: candidate.diagnostics, provenance: candidate.provenance, submittedAt: new Date().toISOString(),
-      candidateIdentity: candidate.semanticFingerprint,
+      schema: BLIND_EVALUATION_VERSION, runId: this.runId, itemId: item.id, status: error ? 'error' : passed ? 'passed' : 'failed',
+      candidateIdentityAvailable: candidate?.candidateIdentityAvailable ?? false, identityComparable, semanticIdentityExact, abstained,
+      failureClass: error ? 'submission_error' : passed ? null : (expectedOutcome === 'abstain' ? 'unexpected_parse' : candidate?.failureClass ?? 'semantic_identity_mismatch'),
+      diagnostics: error ? ['candidate submission failed'] : candidate?.diagnostics ?? [], provenance: candidate?.provenance ?? input.provenance, submittedAt: new Date().toISOString(),
     };
+    const privateResult: PrivateBlindResult = { schema: 'openlunum-blind-private/0.1', runId: this.runId, itemId: item.id, candidateSem: input.candidateSem, candidateIdentity: candidate?.semanticFingerprint ?? null, provenance: candidate?.provenance ?? input.provenance };
     await appendFile(this.ledgerPath, `${JSON.stringify(result)}\n`, 'utf8');
+    await mkdir(`${this.outputDirectory}.private`, { recursive: true, mode: 0o700 });
+    await appendFile(this.privateLedgerPath, `${JSON.stringify(privateResult)}\n`, 'utf8');
     this.completed.set(item.id, result);
+    this.privateResults.set(item.id, privateResult);
+    this.claimed.delete(item.id);
     await this.persistCheckpoint();
     const { schema: _schema, ...publicResult } = result;
     return publicResult;
@@ -273,9 +314,9 @@ export class BlindAgentEvaluationSession {
     const results = [...this.completed.values()];
     const parseItems = [...this.itemById.values()].filter(item => safeExpectedOutcome(item) === 'parse');
     const abstentionTargets = this.itemById.size - parseItems.length;
-    const parseExact = results.filter(result => result.expectedOutcome === 'parse' && result.semanticIdentityExact).length;
-    const correctAbstentions = results.filter(result => result.expectedOutcome === 'abstain' && result.abstained).length;
-    const unexpectedParses = results.filter(result => result.expectedOutcome === 'abstain' && !result.abstained).length;
+    const parseExact = results.filter(result => this.itemById.get(result.itemId) && safeExpectedOutcome(this.itemById.get(result.itemId)!) === 'parse' && result.semanticIdentityExact).length;
+    const correctAbstentions = results.filter(result => this.itemById.get(result.itemId) && safeExpectedOutcome(this.itemById.get(result.itemId)!) === 'abstain' && result.abstained).length;
+    const unexpectedParses = results.filter(result => this.itemById.get(result.itemId) && safeExpectedOutcome(this.itemById.get(result.itemId)!) === 'abstain' && !result.abstained).length;
     const failureClasses: Record<string, number> = {};
     for (const result of results) if (result.failureClass) failureClasses[result.failureClass] = (failureClasses[result.failureClass] ?? 0) + 1;
     const languages = [...new Set([...this.itemById.values()].map(item => item.sourceLanguage))].sort();
@@ -294,8 +335,8 @@ export class BlindAgentEvaluationSession {
     for (const [group, rows] of groups) {
       const goldIds = new Set(rows.map(row => this.goldIdentityFor(this.itemById.get(row.itemId)!)).filter((id): id is string => id !== null));
       if (goldIds.size === 1) goldGroupsConverging++;
-      const modelIds = new Set(rows.map(row => row.candidateIdentity).filter((id): id is string => Boolean(id)));
-      if (rows.length > 0 && rows.every(row => Boolean(row.candidateIdentity)) && modelIds.size === 1) modelGroupsConverging++;
+      const modelIds = new Set(rows.map(row => this.privateResults.get(row.itemId)?.candidateIdentity).filter((id): id is string => Boolean(id)));
+      if (rows.length > 0 && rows.every(row => Boolean(this.privateResults.get(row.itemId)?.candidateIdentity)) && modelIds.size === 1) modelGroupsConverging++;
     }
     return {
       runId: this.runId, totalItems: this.itemById.size, completedItems: results.length,
@@ -312,5 +353,22 @@ export class BlindAgentEvaluationSession {
   private goldIdentityFor(item: PrivateGoldItem): string | null {
     if (safeExpectedOutcome(item) !== 'parse') return null;
     return submitCandidate({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, candidateSem: item.goldSem, provenance: { extractorType: 'other' } }).semanticFingerprint;
+  }
+
+  private validateDurableResult(result: DurableBlindResult, privateResult: PrivateBlindResult | undefined): void {
+    const item = this.itemById.get(result.itemId);
+    if (!item || !privateResult) throw new Error(`invalid blind result record for ${result.itemId}; refusing resume`);
+    if (!['passed', 'failed', 'error'].includes(result.status) || typeof result.candidateIdentityAvailable !== 'boolean' || typeof result.identityComparable !== 'boolean' || typeof result.semanticIdentityExact !== 'boolean' || typeof result.abstained !== 'boolean' || !Array.isArray(result.diagnostics) || !result.provenance || typeof result.provenance !== 'object') throw new Error(`invalid blind result fields for ${result.itemId}; refusing resume`);
+    if (result.status === 'error') {
+      if (result.failureClass !== 'submission_error' || result.candidateIdentityAvailable || result.identityComparable || result.semanticIdentityExact || !result.abstained) throw new Error(`invalid blind error result for ${result.itemId}; refusing resume`);
+      return;
+    }
+    const recomputed = submitCandidate({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, candidateSem: privateResult.candidateSem, provenance: privateResult.provenance });
+    const expectedOutcome = safeExpectedOutcome(item);
+    const expectedAbstained = !recomputed.candidateIdentityAvailable;
+    const expectedComparable = recomputed.candidateIdentityAvailable && expectedOutcome === 'parse';
+    const expectedExact = expectedComparable && recomputed.semanticFingerprint === this.goldIdentityFor(item);
+    const expectedPassed = expectedOutcome === 'abstain' ? expectedAbstained : expectedExact;
+    if (recomputed.semanticFingerprint !== privateResult.candidateIdentity || recomputed.candidateIdentityAvailable !== result.candidateIdentityAvailable || result.abstained !== expectedAbstained || result.identityComparable !== expectedComparable || result.semanticIdentityExact !== expectedExact || (result.status === 'passed') !== expectedPassed) throw new Error(`blind result does not match candidate for ${result.itemId}; refusing resume`);
   }
 }

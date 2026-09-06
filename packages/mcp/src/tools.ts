@@ -186,7 +186,8 @@ export function createBlindEvaluationTools(session: BlindEvaluationSurface): Lun
         if (input.candidateSem !== null && (typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem))) return err('candidateSem must be an object or null for explicit abstention');
         if (!input.provenance || typeof input.provenance !== 'object' || Array.isArray(input.provenance)) return err('provenance is required and must be an object');
         try {
-          return ok({ success: true, result: await session.submit({ runId: input.runId, itemId: input.itemId, candidateSem: input.candidateSem, provenance: input.provenance }) });
+          await session.submit({ runId: input.runId, itemId: input.itemId, candidateSem: input.candidateSem, provenance: input.provenance });
+          return ok({ success: true, receipt: { runId: input.runId, itemId: input.itemId, accepted: true } });
         } catch (error) {
           return err((error as Error).message);
         }
