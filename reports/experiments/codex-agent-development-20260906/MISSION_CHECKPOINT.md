@@ -1,6 +1,6 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:57:10+03:00
+Recorded: 2026-09-06T19:04:05+03:00
 Mission start epoch: 1788697989
 Current local branch: main
 Current HEAD: f1162504859c39717e8a2c48b16007178aa88777
@@ -253,6 +253,9 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - The next exact corrective action is a tool-driven MCP builder interaction;
   free-form agent output continues to invent wrapper shapes even when the
   protocol enumerations are explicitly supplied.
+- Tightened the builder/MCP transport boundary: unknown direct-builder fields
+  now fail explicitly and the MCP schema forbids alternate wrapper fields.
+  Core remains 1,806/1,806 and MCP 59/59.
 
 ## Uncommitted state
 

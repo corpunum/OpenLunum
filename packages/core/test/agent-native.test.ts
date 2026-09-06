@@ -40,6 +40,11 @@ test('frame-first builder creates only a canonical transport envelope', () => {
     roles: { theme: { type: 'feature', id: 'backups' } },
     conditions: [{ predicate: 'share', roles: {} }],
   }), /invalid_builder_frame/);
+  assert.throws(() => buildCandidateSem({
+    world: 'real', kind: 'preference', predicate: 'prefer',
+    roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'quiet_mode' } },
+    terms: [], frame: { name: 'prefer' },
+  } as never), /unknown_builder_fields:frame,terms/);
 });
 
 test('extraction contract is generated from the protocol and frame registries', () => {

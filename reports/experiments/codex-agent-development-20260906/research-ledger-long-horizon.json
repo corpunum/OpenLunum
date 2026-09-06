@@ -370,6 +370,13 @@
       "evidence": "The agent corrected the invalid world but emitted an alternate terms/frame wrapper rather than direct world/kind/predicate/roles. Seven attempted records failed builder transport; one scheduling case and one unsupported case abstained. Diagnostic only.",
       "decision": "Do not broaden the builder to accept agent-specific wrapper shapes. Preserve the strict typed construction contract.",
       "commit": "current-diagnostic"
+    },
+    {
+      "hypothesis": "The typed builder and MCP boundary should reject alternate wrapper fields rather than silently ignoring them.",
+      "implementation": "Added unknown-field rejection to buildCandidateSem, declared additionalProperties=false for the MCP builder schema, and added a schema regression.",
+      "evidence": "Core suite passed 1,806/1,806 and MCP suite passed 59/59. The terms/frame wrapper from the fresh agent trial now fails explicitly as unknown_builder_fields.",
+      "decision": "Keep direct builder fields strict; agent transport must use the generated tool contract or abstain.",
+      "commit": "working-tree"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

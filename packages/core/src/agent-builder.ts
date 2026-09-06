@@ -54,6 +54,9 @@ function assertNestedFrames(clauses: readonly LunumClause[], field: 'conditions'
  */
 export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilderResult {
   if (!input || typeof input !== 'object') throw new TypeError('builder_input_required');
+  const allowedInputFields = new Set(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences']);
+  const unknownInputFields = Object.keys(input as unknown as Record<string, unknown>).filter((key) => !allowedInputFields.has(key));
+  if (unknownInputFields.length) throw new TypeError(`unknown_builder_fields:${unknownInputFields.sort().join(',')}`);
   const world = basicIdentifier(input.world);
   const kind = basicIdentifier(input.kind);
   const predicate = basicIdentifier(input.predicate);

@@ -186,6 +186,7 @@ export const buildCandidateTool: LunumToolDefinition = {
       negated: { type: 'boolean' }, modality: { anyOf: [{ type: 'string' }, { type: 'null' }] },
       time: {}, conditions: { type: 'array' }, consequences: { type: 'array' },
     },
+    additionalProperties: false,
     required: ['world', 'kind', 'predicate', 'roles'],
   },
   handler: async (input): Promise<McpToolResponse> => {

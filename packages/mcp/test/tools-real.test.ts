@@ -38,6 +38,11 @@ test('lunum_build_candidate returns a candidate without certifying it', async ()
   assert.equal(data.promotable, undefined);
 });
 
+test('lunum_build_candidate schema rejects alternate wrapper fields', () => {
+  const tool = find('lunum_build_candidate');
+  assert.equal(tool.inputSchema.additionalProperties, false);
+});
+
 test('lunum_build_candidate exposes alternative frame requirements', async () => {
   const data = JSON.parse(getText(await find('lunum_build_candidate').handler({
     world: 'real', kind: 'instruction', predicate: 'retry',
