@@ -220,6 +220,15 @@ test('serialized grounding evidence must be re-authenticated before reuse', () =
   assert.match(materialized.issues[0]!, /authenticated/u);
 });
 
+test('authenticated provider evidence and resolutions are immutable', () => {
+  const cascade = resolveGroundingCascade({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' }, [provider]);
+  const result = cascade.results[0]!;
+  assert.throws(() => { (result.candidates[0] as { externalId: string }).externalId = 'ili:attacker'; }, TypeError);
+  const resolution = toGroundingResolution(proposal(), result);
+  assert.throws(() => { (resolution as { canonicalId: string }).canonicalId = 'urn:attacker:fake'; }, TypeError);
+  assert.equal(resolution.canonicalId, 'urn:omw-cili:ili:i123');
+});
+
 test('provider failure degrades without guessing', () => {
   const broken = createStableEntityProvider({ provider: 'broken', providerVersion: '1', snapshotHash: 'd'.repeat(64), resolveExact: () => { throw new Error('offline'); } });
   const result = resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [broken]);

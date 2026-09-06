@@ -85,7 +85,7 @@ export interface GroundingResolution {
   canonicalId?: string;
   groundingFingerprint?: string;
   registry?: { registryId: string; version: string; snapshotHash: string };
-  issues: string[];
+  issues: readonly string[];
 }
 
 export interface MaterializedGrounding {
@@ -247,7 +247,7 @@ export function resolveGroundingProposal(input: unknown, registry: GroundingRegi
   if (ids.length > 1) return { path, status: 'ambiguous', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry returned multiple exact canonical IDs'] };
   if (!validCanonicalId(ids[0])) return { path, status: 'invalid', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry canonicalId must be namespace-qualified'] };
   if (!ids[0]!.startsWith(`urn:${registry.registryId}:`)) return { path, status: 'invalid', registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: ['registry canonicalId is outside the resolver namespace'] };
-  const resolution: GroundingResolution = { path, status: 'resolved', canonicalId: ids[0], groundingFingerprint: canonical.canonical.groundingFingerprint, registry: { registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }, issues: [] };
+  const resolution: GroundingResolution = Object.freeze({ path, status: 'resolved', canonicalId: ids[0], groundingFingerprint: canonical.canonical.groundingFingerprint, registry: Object.freeze({ registryId: registry.registryId, version: registry.version, snapshotHash: registry.snapshotHash }), issues: Object.freeze([]) });
   authenticatedGroundingResolutions.add(resolution);
   return resolution;
 }

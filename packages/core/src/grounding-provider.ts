@@ -181,6 +181,8 @@ function providerResultIssues(result: unknown): string[] {
     const entry = candidate as Record<string, unknown>;
     if (typeof entry.externalId !== 'string' || !/^\S+$/u.test(entry.externalId)) issues.push('provider returned an invalid external ID');
     if (!Array.isArray(entry.evidence) || entry.evidence.some((e) => typeof e !== 'string')) issues.push('provider returned invalid candidate evidence');
+    if (entry.label !== undefined && typeof entry.label !== 'string') issues.push('provider returned an invalid candidate label');
+    if (entry.language !== undefined && typeof entry.language !== 'string') issues.push('provider returned an invalid candidate language');
   }
   if (!Array.isArray(value.diagnostics) || value.diagnostics.some((e) => typeof e !== 'string')) issues.push('provider returned invalid diagnostics');
   return issues;
@@ -195,7 +197,21 @@ function containProviderResult(result: unknown, provider: GroundingProvider, inp
     }
   }
   if (issues.length) return { status: 'provider_error', provider: provider.provider, providerVersion: provider.providerVersion, snapshotHash: provider.snapshotHash, language: input.language, candidates: [], diagnostics: Object.freeze(issues) };
-  const contained = result as GroundingProviderResult;
+  const value = result as GroundingProviderResult;
+  const contained = Object.freeze({
+    status: value.status,
+    provider: value.provider,
+    providerVersion: value.providerVersion,
+    snapshotHash: value.snapshotHash,
+    language: value.language,
+    candidates: Object.freeze(value.candidates.map((candidate) => Object.freeze({
+      externalId: candidate.externalId,
+      ...(candidate.label !== undefined ? { label: candidate.label } : {}),
+      ...(candidate.language !== undefined ? { language: candidate.language } : {}),
+      evidence: Object.freeze([...candidate.evidence]),
+    }))),
+    diagnostics: Object.freeze([...value.diagnostics]),
+  });
   authenticatedProviderResults.add(contained);
   return contained;
 }
@@ -506,14 +522,14 @@ export function toGroundingResolution(proposal: GroundingProposal, result: Groun
   if (!/^[a-z][a-z0-9.-]*$/u.test(result.provider) || !/^\S+$/u.test(externalId)) {
     return { path, status: 'invalid', registry: { registryId: result.provider, version: result.providerVersion, snapshotHash: result.snapshotHash }, issues: ['provider or external ID is not safe for a canonical namespace'] };
   }
-  const resolution: GroundingResolution = {
+  const resolution: GroundingResolution = Object.freeze({
     path,
     status: 'resolved',
     canonicalId: `urn:${result.provider}:${externalId}`,
     groundingFingerprint: canonical.canonical.groundingFingerprint,
-    registry: { registryId: result.provider, version: result.providerVersion, snapshotHash: result.snapshotHash },
-    issues: [],
-  };
+    registry: Object.freeze({ registryId: result.provider, version: result.providerVersion, snapshotHash: result.snapshotHash }),
+    issues: Object.freeze([]),
+  });
   authenticatedGroundingResolutions.add(resolution);
   return resolution;
 }
