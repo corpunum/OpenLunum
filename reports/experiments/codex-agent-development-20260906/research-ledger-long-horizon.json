@@ -447,6 +447,13 @@
       "evidence": "All 6/6 candidates passed transport, protocol, frame, grounding, and lfp:2.1 availability. The equivalent EN/EL/ID send group produced three distinct open-concept identifiers and three distinct LFPs. No gold was exposed.",
       "decision": "Reject the transport-only hypothesis for this trial. Preserve strict validation and prioritize language-neutral grounding/provider candidate-set measurement.",
       "commit": "c1fae73fc8b8e8b0a907a77f082e27514914545a"
+    },
+    {
+      "hypothesis": "Builder and prompt hardening may have changed the established real OMW provider baseline.",
+      "implementation": "Replayed the existing 100-pair real OMW/CILI decomposition to a temporary output without overwriting historical evidence.",
+      "evidence": "Baseline remains 100/100 lexeme coverage, 100/100 shared candidate coverage, 19/100 exact convergence; categories remain SOURCE_AMBIGUOUS 25, TARGET_AMBIGUOUS 15, BOTH_AMBIGUOUS 41, BOTH_RESOLVED_SAME_CILI 19.",
+      "decision": "No provider regression detected. The next gain must come from independent grounding labels, candidate-set/context disambiguation, or extraction architecture—not relaxed identity rules.",
+      "commit": "diagnostic-replay"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

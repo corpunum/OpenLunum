@@ -300,6 +300,10 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   equivalent EN/EL/ID send group produced three open-concept IDs and three
   LFPs. No gold was exposed; this confirms the grounding bottleneck without
   weakening exact identity.
+- Replayed the real OMW/CILI decomposition to `/tmp`; the established baseline
+  is unchanged at 19/100 exact cross-language convergence with 100/100 shared
+  candidate coverage and the same ambiguity categories. No historical report
+  was overwritten.
 
 ## Uncommitted state
 
