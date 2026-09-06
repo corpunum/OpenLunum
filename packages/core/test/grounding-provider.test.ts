@@ -199,6 +199,15 @@ test('OMW tab importer maps only explicit CILI synsets and reports gaps', () => 
   assert.deepEqual(imported.invalidMappings, []);
 });
 
+test('OMW tab importer classifies malformed mapped and unmapped rows before coverage gaps', () => {
+  const imported = importOmwTab('00000001-n\teng:lemma\t\n00000002-n\tbad\tterm\n00000003-n\teng:lemma\tterm', {
+    language: 'en', source: 'fixture', synsetToInterlingualId: new Map([['00000001-n', 'i1'], ['00000003-n', 'i3']]),
+  });
+  assert.deepEqual(imported.malformedLines, [1, 2]);
+  assert.deepEqual(imported.unmappedSynsets, []);
+  assert.equal(imported.records.length, 1);
+});
+
 test('OMW tab importer supports Wordnet Bahasa language-filtered rows', () => {
   const imported = importOmwTab('00000001-n\tB\tY\tfolder\n00000001-n\tI\tY\tfolder\n00000002-n\tI\tX\tother', {
     language: 'id', format: 'wordnet-bahasa', languageColumnValue: 'I',

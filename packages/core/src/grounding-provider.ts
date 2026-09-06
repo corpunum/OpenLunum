@@ -281,7 +281,8 @@ export function importOmwTab(content: string, options: OmwTabImportOptions): Omw
     let lemma: string | undefined;
     if (fields.length === 3 && options.format !== 'wordnet-bahasa') {
       [synset, lemmaType, lemma] = fields;
-      if (lemmaType !== 'lemma' && !/^[a-z]{3}:lemma$/u.test(lemmaType!)) {
+      if (!synset || !lemma || (lemmaType !== 'lemma' && !/^[a-z]{3}:lemma$/u.test(lemmaType!))) {
+        malformedLines.push(lineNumber);
         continue;
       }
     } else if (fields.length >= 4 && options.format !== 'wordnet-bahasa' && /(?:^|:)def$/u.test(fields[1]!)) {
@@ -289,6 +290,7 @@ export function importOmwTab(content: string, options: OmwTabImportOptions): Omw
     } else if (fields.length === 4 && options.format === 'wordnet-bahasa') {
       const [bahasaSynset, languageCode, , bahasaLemma] = fields;
       if (options.languageColumnValue && languageCode !== options.languageColumnValue) continue;
+      if (!bahasaSynset || !bahasaLemma) { malformedLines.push(lineNumber); continue; }
       synset = bahasaSynset;
       lemmaType = bahasaSynset?.split('-')[1];
       lemma = bahasaLemma;
