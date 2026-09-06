@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-07T00:24:00+03:00
+Recorded: 2026-09-07T00:48:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: af3e964
+Source/evidence boundary before this checkpoint commit: 2f81916
 
 ## Scope and prohibitions
 
@@ -393,6 +393,8 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   failure or protected capability.
 - Hardened blind source-manifest validation to reject unknown keys and recursive
   evaluator metadata leakage. The focused blind-ledger suite passes 8/8.
+- Full evaluator unit verification after the custody fix passed 1,889/1,889;
+  no production semantic identity or scoring behavior was changed.
 
 ## Uncommitted state
 
