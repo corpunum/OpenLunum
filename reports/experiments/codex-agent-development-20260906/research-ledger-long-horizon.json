@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T17:18:00+03:00",
-  "currentHead": "b8f85475e2e30a10216f3fa3d17fd11fe36bb2e6",
+  "lastUpdated": "2026-09-06T17:42:00+03:00",
+  "currentHead": "3bae7e58a19f7089387d72e6448c72c0a77f8f63",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -104,6 +104,13 @@
       "evidence": "Core suite passes 1,798/1,798. Tests cover blank IDs, resolver failure, and identical bare IDs returned by distinct provider namespaces. Existing versioned materialization and untrusted-candidate gates remain unchanged.",
       "decision": "Keep the generic boundary hardening. Provider snapshots remain optional evidence and malformed/unavailable providers cannot manufacture exact identity.",
       "commit": "128fa6f"
+    },
+    {
+      "hypothesis": "An arbitrary GroundingProvider can safely return a resolved result without cascade-level structural validation.",
+      "implementation": "Added deterministic cascade validation of provider status, provenance, candidate IDs/evidence, and diagnostics; malformed arbitrary provider results now become provider_error before resolution or materialization.",
+      "evidence": "Core suite passes 1,799/1,799, including an adversarial provider returning a blank external ID while claiming resolved_exact. No provider-specific semantics were added.",
+      "decision": "Keep the containment boundary. The cascade remains fail-closed for malformed evidence while optional provider availability remains explicit.",
+      "commit": "3bae7e5"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",

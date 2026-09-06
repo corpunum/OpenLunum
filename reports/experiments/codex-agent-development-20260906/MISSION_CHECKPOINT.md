@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:18:00+03:00
+Recorded: 2026-09-06T17:42:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: b8f85475e2e30a10216f3fa3d17fd11fe36bb2e6
+Current HEAD: 3bae7e58a19f7089387d72e6448c72c0a77f8f63
 
 ## Scope and prohibitions
 
@@ -70,6 +70,9 @@ used.
 - Hardened stable-ID grounding against malformed IDs, direct resolver
   exceptions, and identical bare IDs from different namespaces. Core suite is
   1,798/1,798 after rebuilding the package.
+- Added cascade-level validation for arbitrary provider results, so malformed
+  status/provenance/candidate evidence cannot escape as `resolved_exact`.
+  Core suite is 1,799/1,799.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -111,7 +114,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 105 minutes. Completed real-resource
+Elapsed at recording: approximately 130 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
