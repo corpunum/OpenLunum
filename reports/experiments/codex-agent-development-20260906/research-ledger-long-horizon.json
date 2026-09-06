@@ -167,6 +167,13 @@
       "evidence": "Dirac submitted 16 and abstained 2; Heisenberg submitted 15 and abstained 3. Every submitted candidate passed transport, protocol, frame, and identity-availability gates. Agents disagreed on the Indonesian enable case; no gold exactness claim is made.",
       "decision": "Retain JSONL for future development/protected item ledgers. The remaining uncertainty is extraction/grounding and abstention calibration, not core validation. Persisted in source-only-frame-first-trial-v4.json. The retained summary does not independently prove source-only custody because raw JSONL and contract/source hashes were not retained.",
       "commit": "b38d17a99e62822496c33c57aadc83296f1a13ad"
+    },
+    {
+      "hypothesis": "A fresh source-only agent comparison will show whether the remaining failures are transport or semantic naming/kind selection.",
+      "implementation": "Two isolated Codex agents received six fresh source items and only the generated extraction contract; candidates were submitted through the built core and their raw outputs were retained in the session transcript.",
+      "evidence": "Both agents abstained on the unframed archive pair. All four scored submissions passed structural, protocol, frame, grounding, and identity-availability gates. The conditional enable candidates converged to one LFP; retry candidates diverged because one used actor/concept and the other system/task for scheduler/export. The trial is development-only and source-only custody is declared, not independently proven.",
+      "decision": "The typed interface contains transport failures, but cannot resolve unverified open kind and term-type choices. Preserve fail-closed exact identity and prioritize independently adjudicated development labels for semantic extraction and grounding.",
+      "commit": "pending-evidence-commit"
     }
   ],
   "nextHighestLeverage": "Obtain independently adjudicated morphology/grounding labels and run a larger source-only frame-first text-to-Sem comparison; only then evaluate retrieval with candidates that do not reproduce hidden gold.",
