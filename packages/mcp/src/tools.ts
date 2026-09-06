@@ -150,7 +150,7 @@ export const submitCandidateTool: LunumToolDefinition = {
   handler: async (input): Promise<McpToolResponse> => {
     try {
       if (typeof input.sourceText !== 'string') return err('sourceText is required and must be a string');
-      if (!input.candidateSem || typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem)) return err('candidateSem is required and must be an object');
+      if (input.candidateSem !== null && (!input.candidateSem || typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem))) return err('candidateSem must be an object or null for explicit abstention');
       if (!input.provenance || typeof input.provenance !== 'object' || Array.isArray(input.provenance)) return err('provenance is required and must be an object');
       if (input.grounding !== undefined && !Array.isArray(input.grounding)) return err('grounding must be an array when supplied');
       const submissionInput = {

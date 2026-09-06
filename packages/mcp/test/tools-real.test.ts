@@ -62,6 +62,15 @@ test('lunum_submit_candidate contains structured grounding proposals without gra
   assert.equal(data.submission.semanticFingerprint, null);
 });
 
+test('lunum_submit_candidate accepts explicit null abstention consistently with its schema', async () => {
+  const data = JSON.parse(getText(await find('lunum_submit_candidate').handler({
+    sourceText: 'The concept is unsupported.', candidateSem: null, provenance: { extractorType: 'codex_agent' },
+  })));
+  assert.equal(data.success, true);
+  assert.equal(data.submission.candidateIdentityAvailable, false);
+  assert.equal(data.submission.promotable, false);
+});
+
 test('lunum_derive returns real sidecar from text', async () => {
   const tool = find('lunum_derive');
   const result = await tool.handler({ text: 'The quick brown fox jumps over the lazy dog' });
