@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:42:00+03:00
+Recorded: 2026-09-06T18:05:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: 3bae7e58a19f7089387d72e6448c72c0a77f8f63
+Current HEAD: 74cc982704607563725acd3faf8d9271547cf09b
 
 ## Scope and prohibitions
 
@@ -73,6 +73,8 @@ used.
 - Added cascade-level validation for arbitrary provider results, so malformed
   status/provenance/candidate evidence cannot escape as `resolved_exact`.
   Core suite is 1,799/1,799.
+- Rebuilt and reran the complete repository gate after the provider safety
+  changes: `pnpm verify` passed with exit 0 and `git diff --check` passed.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -114,7 +116,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 130 minutes. Completed real-resource
+Elapsed at recording: approximately 152 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
