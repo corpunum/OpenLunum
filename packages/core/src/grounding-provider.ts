@@ -62,6 +62,9 @@ export interface OmwTabImportOptions {
   language: string;
   source?: string;
   license?: string;
+  /** `wordnet-bahasa` supports synset, language, quality, lemma rows. */
+  format?: 'wordnet' | 'wordnet-bahasa';
+  languageColumnValue?: string;
   /** Maps the tab file's `offset-pos` key to a CILI/ILI identifier. */
   synsetToInterlingualId: ReadonlyMap<string, string>;
 }
@@ -70,6 +73,18 @@ export interface OmwTabImportResult {
   records: OmwLexicalRecord[];
   unmappedSynsets: string[];
   malformedLines: number[];
+}
+
+export interface WnLmfImportOptions {
+  language: string;
+  source?: string;
+  license?: string;
+}
+
+export interface WnLmfImportResult {
+  records: OmwLexicalRecord[];
+  unmappedSynsets: string[];
+  malformedEntries: number;
 }
 
 function normalizeLemma(value: string): string {
@@ -102,6 +117,56 @@ function validateRecord(record: OmwLexicalRecord, index: number): void {
   if (typeof record.interlingualId !== 'string' || !/^[A-Za-z][A-Za-z0-9._:-]*$/u.test(record.interlingualId.normalize('NFKC').trim())) throw new TypeError(`OMW record ${index} has an invalid interlingual ID`);
 }
 
+function xmlAttributes(input: string): Map<string, string> {
+  const attributes = new Map<string, string>();
+  const pattern = /([A-Za-z_][A-Za-z0-9_.:-]*)\s*=\s*(['"])(.*?)\2/gu;
+  for (const match of input.matchAll(pattern)) attributes.set(match[1]!, match[3]!);
+  return attributes;
+}
+
+function decodeXml(value: string): string {
+  return value.replace(/&(?:amp|lt|gt|quot|apos);|&#x[0-9a-f]+;|&#\d+;/giu, (entity) => {
+    const named: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&apos;': "'" };
+    if (named[entity]) return named[entity];
+    const number = entity.startsWith('&#x') || entity.startsWith('&#X') ? Number.parseInt(entity.slice(3, -1), 16) : Number.parseInt(entity.slice(2, -1), 10);
+    return Number.isFinite(number) ? String.fromCodePoint(number) : entity;
+  });
+}
+
+/** Import the lexical entries and explicit ILI attributes from WN-LMF XML. */
+export function importWnLmf(content: string, options: WnLmfImportOptions): WnLmfImportResult {
+  const synsets = new Map<string, { ili: string; partOfSpeech: OmwLexicalRecord['partOfSpeech'] }>();
+  const unmapped = new Set<string>();
+  const synsetTag = /<Synset\b([^>]*)>/gu;
+  for (const match of content.matchAll(synsetTag)) {
+    const attributes = xmlAttributes(match[1]!);
+    const id = attributes.get('id');
+    const ili = attributes.get('ili')?.trim() ?? '';
+    const posCode = attributes.get('partOfSpeech')?.toLowerCase();
+    const partOfSpeech = ({ n: 'noun', v: 'verb', a: 'adjective', s: 'adjective', r: 'adverb' } as const)[posCode as 'n' | 'v' | 'a' | 's' | 'r'];
+    if (!id || !partOfSpeech) continue;
+    if (!ili || ili === 'in') unmapped.add(id);
+    else synsets.set(id, { ili, partOfSpeech });
+  }
+  const records: OmwLexicalRecord[] = [];
+  let malformedEntries = 0;
+  const entryTag = /<LexicalEntry\b[^>]*>([\s\S]*?)<\/LexicalEntry>/gu;
+  for (const entry of content.matchAll(entryTag)) {
+    const lemmaMatch = /<Lemma\b([^>]*)\/>/u.exec(entry[1]!);
+    const lemmaAttributes = lemmaMatch ? xmlAttributes(lemmaMatch[1]!) : null;
+    const writtenForm = lemmaAttributes?.get('writtenForm');
+    const senses = [...entry[1]!.matchAll(/<Sense\b([^>]*)\/>/gu)];
+    if (!writtenForm || senses.length === 0) { malformedEntries += 1; continue; }
+    for (const sense of senses) {
+      const synset = xmlAttributes(sense[1]!).get('synset');
+      const mapped = synset ? synsets.get(synset) : undefined;
+      if (!mapped) { if (synset) unmapped.add(synset); continue; }
+      records.push({ language: options.language, lemma: decodeXml(writtenForm), interlingualId: mapped.ili, ...(mapped.partOfSpeech ? { partOfSpeech: mapped.partOfSpeech } : {}), ...(options.source ? { source: options.source } : {}), ...(options.license ? { license: options.license } : {}) });
+    }
+  }
+  return { records, unmappedSynsets: [...unmapped].sort((a, b) => a.localeCompare(b, 'en')), malformedEntries };
+}
+
 /** Import the documented OMW tab format without guessing unmapped synsets. */
 export function importOmwTab(content: string, options: OmwTabImportOptions): OmwTabImportResult {
   const records: OmwLexicalRecord[] = [];
@@ -112,12 +177,31 @@ export function importOmwTab(content: string, options: OmwTabImportOptions): Omw
     const line = rawLine.trim();
     if (!line || line.startsWith('#')) continue;
     const fields = line.split('\t');
-    if (fields.length !== 3) { malformedLines.push(lineNumber); continue; }
-    const [synset, lemmaType, lemma] = fields;
+    let synset: string | undefined;
+    let lemmaType: string | undefined;
+    let lemma: string | undefined;
+    if (fields.length === 3 && options.format !== 'wordnet-bahasa') {
+      [synset, lemmaType, lemma] = fields;
+      if (lemmaType !== 'lemma' && !/^[a-z]{3}:lemma$/u.test(lemmaType!)) {
+        continue;
+      }
+    } else if (fields.length >= 4 && options.format !== 'wordnet-bahasa' && /(?:^|:)def$/u.test(fields[1]!)) {
+      continue;
+    } else if (fields.length === 4 && options.format === 'wordnet-bahasa') {
+      const [bahasaSynset, languageCode, , bahasaLemma] = fields;
+      if (options.languageColumnValue && languageCode !== options.languageColumnValue) continue;
+      synset = bahasaSynset;
+      lemmaType = bahasaSynset?.split('-')[1];
+      lemma = bahasaLemma;
+    } else {
+      malformedLines.push(lineNumber);
+      continue;
+    }
     const mappingKey = synset!;
     const interlingualId = options.synsetToInterlingualId.get(mappingKey);
     if (!interlingualId) { unmapped.add(mappingKey); continue; }
-    const partOfSpeech = ({ n: 'noun', v: 'verb', a: 'adjective', s: 'adjective', r: 'adverb' } as const)[lemmaType!.toLowerCase() as 'n' | 'v' | 'a' | 's' | 'r'];
+    const posCode = (lemmaType === 'lemma' || /^[a-z]{3}:lemma$/u.test(lemmaType!.toLowerCase())) ? synset!.split('-')[1] : lemmaType!.toLowerCase();
+    const partOfSpeech = ({ n: 'noun', v: 'verb', a: 'adjective', s: 'adjective', r: 'adverb' } as const)[posCode as 'n' | 'v' | 'a' | 's' | 'r'];
     if (!partOfSpeech || !lemma) { malformedLines.push(lineNumber); continue; }
     records.push({ language: options.language, lemma: lemma.replace(/_/gu, ' '), interlingualId, partOfSpeech, ...(options.source ? { source: options.source } : {}), ...(options.license ? { license: options.license } : {}) });
   }

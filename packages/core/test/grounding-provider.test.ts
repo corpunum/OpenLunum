@@ -4,6 +4,7 @@ import {
   createOmwProvider,
   createStableEntityProvider,
   importOmwTab,
+  importWnLmf,
   resolveGroundingCascade,
   toGroundingResolution,
 } from '../src/grounding-provider.js';
@@ -90,7 +91,7 @@ test('malformed pinned snapshots are rejected instead of partially indexed', () 
 });
 
 test('OMW tab importer maps only explicit CILI synsets and reports gaps', () => {
-  const imported = importOmwTab('# header\n00000001-n\tn\tfolder\n00000002-n\tn\tfolder\n00000003-v\tv\tfile\nnot-a-record', {
+  const imported = importOmwTab('# header\n00000001-n\teng:lemma\tfolder\n00000002-n\teng:lemma\tfolder\n00000003-v\teng:lemma\tfile\nnot-a-record', {
     language: 'en', source: 'omw-en/2.0', license: 'OPEN',
     synsetToInterlingualId: new Map([['00000001-n', 'i123'], ['00000003-v', 'i456']]),
   });
@@ -98,4 +99,23 @@ test('OMW tab importer maps only explicit CILI synsets and reports gaps', () => 
   assert.equal(imported.records[0]?.lemma, 'folder');
   assert.deepEqual(imported.unmappedSynsets, ['00000002-n']);
   assert.deepEqual(imported.malformedLines, [5]);
+});
+
+test('OMW tab importer supports Wordnet Bahasa language-filtered rows', () => {
+  const imported = importOmwTab('00000001-n\tB\tY\tfolder\n00000001-n\tI\tY\tfolder\n00000002-n\tI\tX\tother', {
+    language: 'id', format: 'wordnet-bahasa', languageColumnValue: 'I',
+    synsetToInterlingualId: new Map([['00000001-n', 'i123'], ['00000002-n', 'i456']]),
+  });
+  assert.equal(imported.records.length, 2);
+  assert.equal(imported.records[0]?.language, 'id');
+  assert.equal(imported.records[0]?.lemma, 'folder');
+});
+
+test('WN-LMF importer preserves only explicit non-proposed ILI mappings', () => {
+  const xml = `<LexicalResource><Lexicon language="de"><LexicalEntry id="w1"><Lemma writtenForm="Kernspaltung" partOfSpeech="n"/><Sense synset="odenet-1-n"/></LexicalEntry><LexicalEntry id="w2"><Lemma writtenForm="Atomspaltung" partOfSpeech="n"/><Sense synset="odenet-2-n"/></LexicalEntry><Synset id="odenet-1-n" ili="i123" partOfSpeech="n"/><Synset id="odenet-2-n" ili="" partOfSpeech="n"/></Lexicon></LexicalResource>`;
+  const imported = importWnLmf(xml, { language: 'de', source: 'odenet:1.4', license: 'CC BY-SA 4.0' });
+  assert.equal(imported.records.length, 1);
+  assert.equal(imported.records[0]?.lemma, 'Kernspaltung');
+  assert.equal(imported.records[0]?.interlingualId, 'i123');
+  assert.deepEqual(imported.unmappedSynsets, ['odenet-2-n']);
 });
