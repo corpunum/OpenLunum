@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T22:30:00+03:00",
-  "currentHead": "ad9323c8ad88094ee82c90d82f4de4f723d3ca77",
+  "lastUpdated": "2026-09-06T22:36:00+03:00",
+  "currentHead": "d2be10b",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -545,6 +545,13 @@
       "evidence": "Focused evaluator tests passed 11/11 after rebuild; the full evaluator suite had previously passed 1,888/1,888. A fresh corpus-author proposal was rejected before scoring because its negative metadata was not item-pair structured.",
       "decision": "Keep the regression. Do not score the rejected proposal or treat its source/gold content as protected evidence.",
       "commit": "ad9323c8ad88094ee82c90d82f4de4f723d3ca77"
+    },
+    {
+      "hypothesis": "A fresh source-only frame-complete development ladder can separate agent transport from semantic naming and grounding failures.",
+      "implementation": "An independent corpus agent authored 24 multilingual parse rows in 8 semantic groups plus 12 negative rows and 6 explicit negative pairs. A separate source-only extraction agent returned candidate Sem without gold metadata; the parent submitted every candidate through the deterministic core.",
+      "evidence": "Gold preflight passed 8/8 groups and 6/6 negative pairs. All 36 candidate submissions passed transport, structural, protocol, frame, grounding, and identity gates with no avoidable failure class. Parse exactness was 3/24 (12.5%); all 6/6 negative pairs were comparable and separated, with zero false equivalences. The 8 multilingual groups converged to one candidate identity per group, but only the sequence-check group matched gold. Evidence is development-only and not protected.",
+      "decision": "Keep the source-only transport separation and treat the remaining deficit as semantic extraction/open-concept canonicalization. Do not tune the contract or claim protected capability from this constructed ladder.",
+      "commit": "d2be10b"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

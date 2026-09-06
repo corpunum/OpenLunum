@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:36:24+03:00
+Recorded: 2026-09-06T22:36:00+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: ad9323c8ad88094ee82c90d82f4de4f723d3ca77
+Source/evidence boundary before this checkpoint commit: d2be10b
 
 ## Scope and prohibitions
 
@@ -361,6 +361,16 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   its negative judgments were not actual left/right item pairs suitable for
   deterministic preflight. Added direct stage-receipt assertions; focused
   evaluator tests pass 11/11 and the candidate remains unscored.
+- A repaired, development-only grounding ladder was authored independently and
+  passed gold preflight: 24 parse rows across 8 multilingual groups, 12
+  negative rows, and 6 explicit negative pairs. A source-only extraction
+  ledger contains no gold metadata. All 36 candidate submissions passed the
+  deterministic transport/protocol/frame/grounding/identity gates. Parse exact
+  micro was 3/24 (12.5%); all 8 groups converged to one candidate LFP but only
+  1/8 converged to gold. All 6 negative pairs were comparable and separated,
+  with zero false equivalences. Results are recorded in
+  `experiments/development-grounding-ladder-20260906/results-summary.json` and
+  are diagnostic development evidence, not a protected claim.
 
 ## Uncommitted state
 
