@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T17:23:07+03:00
+Recorded: 2026-09-06T17:25:55+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: ba1f0139beda592bc65ae1631e4f0ac3b1c0326f
+Current HEAD: 47d07fe0a4b999e0ae50cb239d9bee801bae66d4
 
 ## Scope and prohibitions
 
@@ -103,6 +103,9 @@ used.
 - The independent UD/UniMorph morphology replay remains reproducible with the
   same low OMW eligibility and zero false singleton identities; no resource
   or semantic score is being inflated by the intersection repair.
+- Retrieval identity coverage now requires successful `semanticFingerprint`,
+  not only structural normalization. Focused evaluation passes 1,875/1,875;
+  critical-negative safety tests count only identity-comparable pairs.
 - Core unit suite after intersection: 1,792 pass, 0 fail.
 - MCP unit suite after builder/leakage hardening: 56 pass, 0 fail.
 - CLI unit suite after builder command: 189 pass, 0 fail.
@@ -144,7 +147,7 @@ yet proven necessary.
 
 ## Hourly checkpoint decision
 
-Elapsed at recording: approximately 110 minutes. Completed real-resource
+Elapsed at recording: approximately 113 minutes. Completed real-resource
 coverage, unbiased/corrected morphology probes, candidate-set analysis,
 agent-native builder trials, diagnostic retrieval harness, and trust-boundary
 hardening. Highest-leverage next action is an independently authored source-only
@@ -155,6 +158,6 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 
 The research ledger/checkpoint are pending working-tree evidence updates; the
 prior trial evidence is at `b38d17a99e62822496c33c57aadc83296f1a13ad` and the
-current code/evidence boundary is `ec3f8642f27cac0334eef8eaf26dacba3e91001e`.
+current code/evidence boundary is `47d07fe0a4b999e0ae50cb239d9bee801bae66d4`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
