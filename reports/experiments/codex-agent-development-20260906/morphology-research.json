@@ -35,18 +35,20 @@
       "fra": { "commit": "f672f8cceb2d5f5a1e2241b5622c8845f8274635", "fileSha256": "4760fc36435a9ffba9b4de6f0787d8eca5b15022e6b141e3b242b129f0d88dcb", "rows": 367733 },
       "ind": { "commit": "4663cf3b8127fb85cb7e8a0c1a4f07e96103fe34", "fileSha256": "77c709f98b581a80051d0e18aa899e0d84d70436223054efa09831d71cdc2ac6", "rows": 27714 }
     },
-    "sampleDesign": "20 non-lemma surface forms per language; retain only forms with a UniMorph-attested lemma and a unique exact OMW/CILI identity for that lemma",
+    "sampleDesign": "500 non-lemma surface forms per language; retain only forms with a UniMorph-attested lemma and a unique exact OMW/CILI identity for that lemma",
     "results": {
-      "total": 100,
-      "rawExact": 0,
-      "morphologyExact": 97,
-      "morphologyAmbiguous": 3,
+      "total": 2500,
+      "rawExact": 33,
+      "morphologyExact": 2144,
+      "morphologyAmbiguous": 16,
+      "safetyPairs": 125,
+      "falseEquivalences": 0,
       "byLanguage": {
-        "en": { "sample": 20, "rawExact": 0, "morphologyExact": 19, "ambiguous": 1 },
-        "el": { "sample": 20, "rawExact": 0, "morphologyExact": 18, "ambiguous": 1 },
-        "es": { "sample": 20, "rawExact": 0, "morphologyExact": 20, "ambiguous": 0 },
-        "fr": { "sample": 20, "rawExact": 0, "morphologyExact": 20, "ambiguous": 0 },
-        "id": { "sample": 20, "rawExact": 0, "morphologyExact": 20, "ambiguous": 0 }
+        "en": { "sample": 500, "rawExact": 3, "morphologyExact": 494, "ambiguous": 6, "safetyPairs": 25, "falseEquivalences": 0 },
+        "el": { "sample": 500, "rawExact": 0, "morphologyExact": 184, "ambiguous": 10, "safetyPairs": 25, "falseEquivalences": 0 },
+        "es": { "sample": 500, "rawExact": 1, "morphologyExact": 480, "ambiguous": 0, "safetyPairs": 25, "falseEquivalences": 0 },
+        "fr": { "sample": 500, "rawExact": 0, "morphologyExact": 486, "ambiguous": 0, "safetyPairs": 25, "falseEquivalences": 0 },
+        "id": { "sample": 500, "rawExact": 29, "morphologyExact": 500, "ambiguous": 0, "safetyPairs": 25, "falseEquivalences": 0 }
       }
     },
     "limitations": ["This is a coverage probe conditioned on a known exact gold lemma, not an independent morphology accuracy benchmark.", "No German repository was found in this acquisition pass; OdeNet remains the German lexical source.", "Critical-negative morphology stress and full-context disambiguation remain outstanding."]

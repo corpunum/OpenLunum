@@ -11,7 +11,7 @@ for (const line of readFileSync(`${ciliRoot}/ili-map-pwn30.tab`, 'utf8').split(/
   const fields = line.split('\t');
   if (fields.length >= 2 && fields[0] && fields[1] && !fields[0].startsWith('#')) ili.set(fields[1], fields[0]);
 }
-const report = { type: 'development-unimorph-grounding-probe', version: 1, samplePerLanguage: 20, languages: {} };
+const report = { type: 'development-unimorph-grounding-probe', version: 1, samplePerLanguage: 500, languages: {} };
 for (const [language, [repository, omwFile]] of Object.entries(files)) {
   const imported = importOmwTab(readFileSync(`${root}/${omwFile}`, 'utf8'), { language, source: 'omw-data/v2.0', synsetToInterlingualId: ili });
   const base = createOmwProvider({ version: 'omw-data/v2.0+cili/v1.0', records: imported.records });
@@ -28,15 +28,26 @@ for (const [language, [repository, omwFile]] of Object.entries(files)) {
   }
   const analyzer = { analyzer: 'unimorph', analyzerVersion: repository, snapshotHash: 'a'.repeat(64), analyze: ({ surface, partOfSpeech }) => (forms.get(surface) ?? []).filter((candidate) => !partOfSpeech || candidate.partOfSpeech === partOfSpeech) };
   const augmented = createMorphologyAugmentedProvider({ base, analyzer });
-  let sample = 0; let rawExact = 0; let morphologyExact = 0; let ambiguous = 0;
+  let sample = 0; let rawExact = 0; let morphologyExact = 0; let ambiguous = 0; const groundedForms = [];
   for (const [surface, candidates] of forms) {
-    if (sample >= 20) break;
+    if (sample >= 500) break;
     const gold = candidates.find((candidate) => base.resolve({ proposal: proposal(candidate.lemma), language, partOfSpeech: candidate.partOfSpeech }).status === 'resolved_exact');
     if (!gold) continue;
     const raw = base.resolve({ proposal: proposal(surface), language, partOfSpeech: gold.partOfSpeech });
     const resolved = augmented.resolve({ proposal: proposal(surface), language, partOfSpeech: gold.partOfSpeech });
-    sample++; if (raw.status === 'resolved_exact') rawExact++; if (resolved.status === 'resolved_exact') morphologyExact++; if (resolved.status === 'ambiguous') ambiguous++;
+    sample++; if (raw.status === 'resolved_exact') rawExact++; if (resolved.status === 'resolved_exact') { morphologyExact++; groundedForms.push({ surface, identity: resolved.candidates[0].externalId }); } if (resolved.status === 'ambiguous') ambiguous++;
   }
-  report.languages[language] = { surfaceCandidates: forms.size, sample, rawExact, morphologyExact, ambiguous };
+  let safetyPairs = 0; let falseEquivalences = 0;
+  for (let leftIndex = 0; leftIndex < groundedForms.length && safetyPairs < 25; leftIndex++) {
+    for (let rightIndex = leftIndex + 1; rightIndex < groundedForms.length && safetyPairs < 25; rightIndex++) {
+      const left = groundedForms[leftIndex]; const right = groundedForms[rightIndex];
+      if (left.identity === right.identity) continue;
+      safetyPairs++;
+      const leftAgain = augmented.resolve({ proposal: proposal(left.surface), language, partOfSpeech: undefined });
+      const rightAgain = augmented.resolve({ proposal: proposal(right.surface), language, partOfSpeech: undefined });
+      if (leftAgain.status === 'resolved_exact' && rightAgain.status === 'resolved_exact' && leftAgain.candidates[0].externalId === rightAgain.candidates[0].externalId) falseEquivalences++;
+    }
+  }
+  report.languages[language] = { surfaceCandidates: forms.size, sample, rawExact, morphologyExact, ambiguous, safetyPairs, falseEquivalences };
 }
 console.log(JSON.stringify(report, null, 2));
