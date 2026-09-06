@@ -461,6 +461,13 @@
       "evidence": "Identity coverage was 3/3 memories and 1/1 query, but conditional and end-to-end recall were 0 because the Greek query did not share an LFP with the English/Indonesian equivalent memories; two expected semantic matches failed and one non-equivalent memory was retrieved.",
       "decision": "Do not claim retrieval utility from identity coverage alone. Treat multilingual grounding as the retrieval bottleneck and preserve exact matching fail-closed.",
       "commit": "f90bd13d647013afd559260f69f2e880c844e5aa"
+    },
+    {
+      "hypothesis": "The accumulated evidence is sufficient to declare training the unavoidable next boundary.",
+      "implementation": "Wrote a formal training-boundary assessment separating tested approaches, current grounding evidence, and the missing provider/agent/protocol factorial controls.",
+      "evidence": "Training remains NOT PROVEN: protocol control is strong, but independent agent grounding labels and provider-coverage-conditioned proposal recall are still missing. No protected data was used.",
+      "decision": "Defer training. Implement the Grounding-Ladder Factorial Audit and obtain independent development labels first.",
+      "commit": "pending"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
