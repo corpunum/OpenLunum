@@ -199,7 +199,7 @@ export function createBlindEvaluationTools(session: BlindEvaluationSurface): Lun
     if (item === null) return null;
     if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error('blind evaluator returned an invalid source item');
     const value = item as Record<string, unknown>;
-    const allowed = ['runId', 'itemId', 'sourceLanguage', 'sourceText', 'contractVersion', 'contractHash'] as const;
+    const allowed = ['runId', 'itemId', 'sourceLanguage', 'sourceText', 'contractVersion', 'contractHash', 'sourceHash'] as const;
     const sanitized: Record<string, unknown> = {};
     for (const key of allowed) if (value[key] !== undefined) sanitized[key] = value[key];
     if (typeof sanitized.runId !== 'string' || typeof sanitized.itemId !== 'string' || typeof sanitized.sourceLanguage !== 'string' || typeof sanitized.sourceText !== 'string') throw new Error('blind evaluator returned an incomplete source item');

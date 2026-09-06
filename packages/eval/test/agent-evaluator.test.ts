@@ -24,9 +24,19 @@ test('next exposes source and contract only, never hidden gold', async () => {
   const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
   const session = await BlindAgentEvaluationSession.create('run-leakage', items, dir);
   const next = session.next();
-  assert.deepEqual(Object.keys(next ?? {}).sort(), ['contractHash', 'contractVersion', 'itemId', 'runId', 'sourceLanguage', 'sourceText'].sort());
+  assert.deepEqual(Object.keys(next ?? {}).sort(), ['contractHash', 'contractVersion', 'itemId', 'runId', 'sourceHash', 'sourceLanguage', 'sourceText'].sort());
   assert.equal(JSON.stringify(next).includes('quiet_mode'), false);
   assert.equal(JSON.stringify(next).includes('gold'), false);
+});
+
+test('strict claim binding requires next() and matching source/contract provenance', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'openlunum-blind-'));
+  const session = await BlindAgentEvaluationSession.create('run-strict-claim', items, dir, { requireClaimBinding: true });
+  await assert.rejects(() => session.submit({ runId: 'run-strict-claim', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent' } }), /must be claimed/u);
+  const next = session.next()!;
+  await assert.rejects(() => session.submit({ runId: 'run-strict-claim', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent', contractVersion: next.contractVersion, contractHash: next.contractHash, sourceHash: '0'.repeat(64) } }), /claim provenance mismatch/u);
+  const result = await session.submit({ runId: 'run-strict-claim', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent', contractVersion: next.contractVersion, contractHash: next.contractHash, sourceHash: next.sourceHash } });
+  assert.equal(result.semanticIdentityExact, true);
 });
 
 test('next reserves an item so concurrent workers cannot receive the same claim', async () => {

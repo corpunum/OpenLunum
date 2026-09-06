@@ -31,6 +31,7 @@ export interface BlindEvalNextItem {
   itemId: string;
   sourceLanguage: string;
   sourceText: string;
+  sourceHash: string;
   contractVersion: string;
   contractHash: string;
 }
@@ -52,6 +53,8 @@ export interface BlindCriticalNegativePair {
 
 export interface BlindEvaluationOptions {
   criticalNegativePairs?: readonly BlindCriticalNegativePair[];
+  /** Require submissions to be bound to an item claim and its source contract. */
+  requireClaimBinding?: boolean;
 }
 
 export interface BlindEvalResult {
@@ -138,6 +141,10 @@ function hash(value: unknown): string {
   return createHash('sha256').update(stableJson(value)).digest('hex');
 }
 
+function sourceHash(value: string): string {
+  return createHash('sha256').update(value, 'utf8').digest('hex');
+}
+
 function stableJson(value: unknown): string {
   if (value === null || typeof value !== 'object') return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`;
@@ -170,6 +177,7 @@ export class BlindAgentEvaluationSession {
   private readonly claimed = new Set<string>();
   private readonly submitting = new Set<string>();
   private readonly criticalNegativePairs: readonly BlindCriticalNegativePair[];
+  private readonly requireClaimBinding: boolean;
   private readonly criticalNegativePairsHash: string;
   private readonly contractHashValue: string;
   private readonly datasetHashValue: string;
@@ -185,6 +193,7 @@ export class BlindAgentEvaluationSession {
     if (new Set(items.map(item => item.id)).size !== items.length) throw new Error('blind evaluation item IDs must be unique');
     this.itemById = new Map(items.map(item => [item.id, item]));
     this.criticalNegativePairs = options.criticalNegativePairs ?? [];
+    this.requireClaimBinding = options.requireClaimBinding === true;
     if (new Set(this.criticalNegativePairs.map(pair => pair.pairId)).size !== this.criticalNegativePairs.length) throw new Error('blind evaluation critical pair IDs must be unique');
     for (const pair of this.criticalNegativePairs) {
       if (pair.expectedRelationship !== 'not_equivalent' || !this.itemById.has(pair.leftItemId) || !this.itemById.has(pair.rightItemId) || pair.leftItemId === pair.rightItemId) throw new Error(`invalid blind critical pair: ${pair.pairId}`);
@@ -306,7 +315,7 @@ export class BlindAgentEvaluationSession {
         this.claimed.add(item.id);
         return {
           runId: this.runId, itemId: item.id, sourceLanguage: item.sourceLanguage, sourceText: item.sourceText,
-          contractVersion: getExtractionContract().contractVersion, contractHash: this.contractHashValue,
+          contractVersion: getExtractionContract().contractVersion, contractHash: this.contractHashValue, sourceHash: sourceHash(item.sourceText),
         };
       }
     }
@@ -320,6 +329,13 @@ export class BlindAgentEvaluationSession {
     const item = this.itemById.get(input.itemId);
     if (!item) throw new Error('unknown blind evaluation item');
     if (this.completed.has(item.id) || this.submitting.has(item.id)) throw new Error('blind evaluation item already completed or in progress');
+    if (this.requireClaimBinding) {
+      if (!this.claimed.has(item.id)) throw new Error('blind evaluation item must be claimed by next() before submission');
+      const provenance = input.provenance as unknown as Record<string, unknown>;
+      if (provenance.contractVersion !== getExtractionContract().contractVersion || provenance.contractHash !== this.contractHashValue || provenance.sourceHash !== sourceHash(item.sourceText)) {
+        throw new Error('blind evaluation claim provenance mismatch');
+      }
+    }
     this.submitting.add(item.id);
     try {
     const expectedOutcome = safeExpectedOutcome(item);
