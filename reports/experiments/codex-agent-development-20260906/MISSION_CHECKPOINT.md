@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 310daee4756866881913ef77e77aeb84129e48a3
+Source/evidence boundary before this checkpoint commit: 438a2001925f7cea537371784b16d5fb35cd6cdd
 
 ## Scope and prohibitions
 
@@ -314,6 +314,9 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   factorial audit.
 - Added stable runtime rejection tests for non-string builder fields; core
   remains 1,806/1,806 after rebuild.
+- Added a reusable development Grounding-Ladder audit utility separating
+  provider coverage, blind agent proposal recall, protocol control,
+  abstention, and false-equivalence safety. Its adversarial suite is 2/2.
 
 ## Uncommitted state
 

@@ -468,6 +468,13 @@
       "evidence": "Training remains NOT PROVEN: protocol control is strong, but independent agent grounding labels and provider-coverage-conditioned proposal recall are still missing. No protected data was used.",
       "decision": "Defer training. Implement the Grounding-Ladder Factorial Audit and obtain independent development labels first.",
       "commit": "d3487c418d74ad495fe94d6ec5f26223bd2dc1a1"
+    },
+    {
+      "hypothesis": "A reusable audit utility can prevent provider coverage, agent proposal recall, protocol control, and safety from being conflated.",
+      "implementation": "Added grounding-ladder-audit.mjs with strict evaluator-private input validation and a node:test suite covering coverage separation, abstention, protocol control, and false-equivalence detection.",
+      "evidence": "2/2 tests passed; the adversarial fixture correctly detected one false equivalence among comparable different pairs. The utility performs no resolution or identity mutation.",
+      "decision": "Keep the utility for the next fresh development ladder dataset; do not treat its fixture as empirical capability evidence.",
+      "commit": "438a2001925f7cea537371784b16d5fb35cd6cdd"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
