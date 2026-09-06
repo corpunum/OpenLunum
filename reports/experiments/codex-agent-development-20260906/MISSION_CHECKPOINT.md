@@ -243,6 +243,11 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   scoring leakage; evaluator suite is 1,887/1,887.
 - Reconciled research-ledger commit references for the parse-runner, strict
   custody, and positive custody milestones; no evidence status was changed.
+- A fresh isolated source-only Codex trial with explicit protocol enumerations
+  corrected the invalid world but still emitted `terms`/`frame` wrappers
+  instead of direct builder fields. Seven records failed builder transport;
+  no gold or expected semantics were exposed. Keep this diagnostic result and
+  do not weaken the typed builder contract.
 
 ## Uncommitted state
 

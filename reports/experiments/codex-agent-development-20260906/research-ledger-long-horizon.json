@@ -363,6 +363,13 @@
       "evidence": "Evaluator suite passed 1,887/1,887; strict mode accepts the complete fixture and reports one identity-available row.",
       "decision": "Keep strict mode as the required future retrieval path; the historical candidate artifact remains permanently diagnostic.",
       "commit": "106ce83a2e986b57accb56ff5c27366dca459603"
+    },
+    {
+      "hypothesis": "Giving an isolated extraction agent explicit protocol enumerations will make its fresh builder submissions transport-compatible.",
+      "implementation": "Provided eight new multilingual development sources plus exact world/kind/term-type/frame enumerations and required direct builderInput JSONL output; no gold or expected semantics were supplied.",
+      "evidence": "The agent corrected the invalid world but emitted an alternate terms/frame wrapper rather than direct world/kind/predicate/roles. Seven attempted records failed builder transport; one scheduling case and one unsupported case abstained. Diagnostic only.",
+      "decision": "Do not broaden the builder to accept agent-specific wrapper shapes. Preserve the strict typed construction contract.",
+      "commit": "current-diagnostic"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",
