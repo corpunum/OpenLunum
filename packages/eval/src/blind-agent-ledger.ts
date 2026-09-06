@@ -27,6 +27,7 @@ const FORBIDDEN_KEYS = new Set([
   'semanticEquivalentMemoryIds', 'protectedSemanticAtoms', 'semanticGroup',
   'criticalPairId', 'criticalDimension', 'expectedOutcome', 'scoring',
 ]);
+const SOURCE_KEYS = new Set(['handle', 'sourceText', 'sourceLanguage', 'kind']);
 
 function findForbidden(value: unknown, path = '$'): string[] {
   if (!value || typeof value !== 'object') return [];
@@ -53,6 +54,9 @@ export function validateBlindAgentLedger(source: readonly BlindSourceItem[], row
       errors.push(`source[${index}] must be an object`);
       continue;
     }
+    const sourceKeys = Object.keys(item as unknown as Record<string, unknown>).sort();
+    if (sourceKeys.some((key) => !SOURCE_KEYS.has(key))) errors.push(`source[${index}] contains unsupported fields`);
+    errors.push(...findForbidden(item, `source[${index}]`).map((key) => `forbidden evaluator field: ${key}`));
     if (typeof item.sourceText !== 'string' || !item.sourceText.trim()) errors.push(`source[${index}] sourceText must be non-empty`);
     if (typeof item.sourceLanguage !== 'string' || !item.sourceLanguage.trim()) errors.push(`source[${index}] sourceLanguage must be non-empty`);
     if (item.kind !== 'memory' && item.kind !== 'query') errors.push(`source[${index}] kind is invalid`);

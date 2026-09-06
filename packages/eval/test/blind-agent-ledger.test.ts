@@ -40,6 +40,15 @@ test('blind ledger reports malformed source entries instead of throwing', () => 
   assert.match(result.errors[0]!, /source\[0\] handle/u);
 });
 
+test('blind ledger rejects evaluator metadata smuggled into the source manifest', () => {
+  const leaked = { ...source[0]!, semanticGroup: 'hidden-group', goldSem: sem } as never;
+  const result = validateBlindAgentLedger([leaked], [{ handle: 'opaque-a', result: { candidateSem: sem } }]);
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some((error) => error.includes('unsupported fields')));
+  assert.ok(result.errors.some((error) => error.includes('source[0].semanticGroup')));
+  assert.ok(result.errors.some((error) => error.includes('source[0].goldSem')));
+});
+
 test('blind ledger rejects a provenance source hash that is not bound to its source', () => {
   const result = validateBlindAgentLedger(source, [{
     handle: 'opaque-a', result: { candidateSem: sem, provenance: { sourceHash: 'a'.repeat(64) } },
