@@ -1,0 +1,89 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  createOmwProvider,
+  createStableEntityProvider,
+  resolveGroundingCascade,
+  toGroundingResolution,
+} from '../src/grounding-provider.js';
+import { materializeGroundingResolutions } from '../src/grounding.js';
+import type { GroundingModifier, GroundingProposal } from '../src/grounding.js';
+
+const proposal = (head = 'folder', modifiers: readonly GroundingModifier[] = []): GroundingProposal => ({
+  path: 'clauses[0].roles.theme', termType: 'concept',
+  head: { kind: 'symbol' as const, namespace: 'open-concept', key: head }, modifiers,
+});
+
+const blueModifier = [{
+  relation: { kind: 'symbol' as const, namespace: 'open-concept-relation', key: 'color' },
+  value: { kind: 'symbol' as const, namespace: 'controlled-value', key: 'blue' },
+}];
+
+const records = [
+  { language: 'en', lemma: 'folder', interlingualId: 'i123', partOfSpeech: 'noun' as const, source: 'dev-en', license: 'OPEN' },
+  { language: 'el', lemma: 'φάκελος', interlingualId: 'i123', partOfSpeech: 'noun' as const, source: 'dev-el', license: 'OPEN' },
+  { language: 'es', lemma: 'carpeta', interlingualId: 'i123', partOfSpeech: 'noun' as const, source: 'dev-es', license: 'OPEN' },
+  { language: 'en', lemma: 'bank', interlingualId: 'i-bank-money', partOfSpeech: 'noun' as const },
+  { language: 'en', lemma: 'bank', interlingualId: 'i-bank-river', partOfSpeech: 'noun' as const },
+];
+
+const provider = createOmwProvider({ version: 'omw-data/2.0-dev-fixture', records });
+
+test('OMW provider converges exact multilingual lemmas and rejects composition overreach', () => {
+  const en = provider.resolve({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' });
+  const el = provider.resolve({ proposal: proposal('φάκελος'), language: 'el', partOfSpeech: 'noun' });
+  const es = provider.resolve({ proposal: proposal('carpeta'), language: 'es', partOfSpeech: 'noun' });
+  assert.equal(en.status, 'resolved_exact');
+  assert.equal(el.status, 'resolved_exact');
+  assert.equal(es.status, 'resolved_exact');
+  assert.equal(en.candidates[0]?.externalId, el.candidates[0]?.externalId);
+  assert.equal(el.candidates[0]?.externalId, es.candidates[0]?.externalId);
+  const composed = provider.resolve({ proposal: proposal('folder', blueModifier), language: 'en', partOfSpeech: 'noun' });
+  assert.equal(composed.status, 'unresolved');
+});
+
+test('OMW provider fails closed for polysemy, missing language, and wrong POS', () => {
+  assert.equal(provider.resolve({ proposal: proposal('bank'), language: 'en', partOfSpeech: 'noun' }).status, 'ambiguous');
+  assert.equal(provider.resolve({ proposal: proposal(), language: 'fr', partOfSpeech: 'noun' }).status, 'unresolved');
+  assert.equal(provider.resolve({ proposal: proposal(), language: 'en', partOfSpeech: 'verb' }).status, 'unresolved');
+});
+
+test('stable entity provider accepts only exact prevalidated IDs and deduplicates', () => {
+  const entity = createStableEntityProvider({
+    provider: 'wikidata', providerVersion: 'snapshot-fixture', snapshotHash: 'a'.repeat(64),
+    resolveExact: () => [{ externalId: 'Q42', label: 'Douglas Adams', evidence: ['description:writer'] }, { externalId: 'Q42', label: 'Douglas Adams', evidence: ['alias'] }],
+  });
+  const result = entity.resolve({ proposal: proposal('douglas_adams'), language: 'en' });
+  assert.equal(result.status, 'resolved_exact');
+  assert.equal(result.candidates.length, 1);
+  assert.equal(result.candidates[0]?.externalId, 'Q42');
+});
+
+test('cascade does not majority-vote provider disagreement', () => {
+  const first = createStableEntityProvider({ provider: 'omw-cili', providerVersion: '1', snapshotHash: 'b'.repeat(64), resolveExact: () => [{ externalId: 'ili:i1', evidence: [] }] });
+  const second = createStableEntityProvider({ provider: 'wikidata', providerVersion: '1', snapshotHash: 'c'.repeat(64), resolveExact: () => [{ externalId: 'Q1', evidence: [] }] });
+  const result = resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [first, second]);
+  assert.equal(result.status, 'ambiguous');
+});
+
+test('provider resolution materializes a versioned Lunum namespace ID', () => {
+  const result = provider.resolve({ proposal: proposal(), language: 'en', partOfSpeech: 'noun' });
+  const resolution = toGroundingResolution(proposal(), result);
+  assert.equal(resolution.status, 'resolved');
+  assert.equal(resolution.canonicalId, 'urn:omw-cili:ili:i123');
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [{ predicate: 'prefer', roles: { theme: { type: 'concept', id: 'opaque' } }, negated: false }] };
+  const materialized = materializeGroundingResolutions(sem, [resolution]);
+  assert.equal(materialized.status, 'resolved');
+  assert.equal((materialized.sem?.clauses[0]?.roles.theme as { id?: string }).id, 'urn:omw-cili:ili:i123');
+});
+
+test('provider failure degrades without guessing', () => {
+  const broken = createStableEntityProvider({ provider: 'broken', providerVersion: '1', snapshotHash: 'd'.repeat(64), resolveExact: () => { throw new Error('offline'); } });
+  const result = resolveGroundingCascade({ proposal: proposal(), language: 'en' }, [broken]);
+  assert.equal(result.status, 'provider_error');
+  assert.equal(result.candidate, undefined);
+});
+
+test('malformed pinned snapshots are rejected instead of partially indexed', () => {
+  assert.throws(() => createOmwProvider({ version: 'bad', records: [{ language: 'en', lemma: 'folder', interlingualId: '' }] }), /invalid interlingual ID/u);
+});
