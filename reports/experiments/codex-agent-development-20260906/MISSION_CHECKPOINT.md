@@ -1,9 +1,9 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T19:12:20+03:00
+Recorded: 2026-09-06T19:18:10+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Current HEAD: a054348a7f612fdd80e86d17ac715af7367b1e90
+Current HEAD: 2ed9c259a7a26a25e05c067709f4dcdbb3c7bdb9
 
 ## Scope and prohibitions
 
@@ -259,10 +259,13 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Read-only API audit: `/parse` still fabricates a default Sem from raw text
   and `/retrieve` remains an empty placeholder path. Neither is accepted as
   empirical extraction/retrieval evidence; no API files were changed.
+- API regression gate passed: 202 unit tests, build, and typecheck. This
+  confirms the legacy surface is stable but does not upgrade it to semantic
+  extraction evidence.
 
 ## Uncommitted state
 
 The checkpoint itself is pending this final evidence commit; the current
-code/evidence boundary is `a054348a7f612fdd80e86d17ac715af7367b1e90`.
+code/evidence boundary is `2ed9c259a7a26a25e05c067709f4dcdbb3c7bdb9`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
