@@ -1,6 +1,6 @@
 # MISSION CHECKPOINT — CONTINUATION REQUIRED
 
-Recorded: 2026-09-06T18:42:15+03:00
+Recorded: 2026-09-06T18:17:38+03:00
 Mission start epoch: 1788697989
 Current local branch: main
 Current HEAD: 8e9e7d53ecb53bc2192e847611066cbc6a11ce10
@@ -230,6 +230,10 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
 - Added opt-in strict source-bound validation for blind candidate ledgers;
   missing source hashes now fail closed in strict mode while historical
   diagnostic compatibility remains available. Eval suite is 1,886/1,886.
+- Final scoped gates in this continuation: CLI 189/189, evaluator
+  `verify:strict` 1,886/1,886 plus smoke and typecheck, and MCP typecheck all
+  passed. No root recursive verify was run because it traverses out-of-scope
+  adapter-openunum.
 
 ## Uncommitted state
 
