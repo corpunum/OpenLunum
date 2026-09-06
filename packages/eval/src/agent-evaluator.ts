@@ -128,6 +128,7 @@ interface BlindManifest {
   datasetHash: string;
   itemCount: number;
   criticalNegativePairsHash: string;
+  requireClaimBinding: boolean;
 }
 
 interface BlindCheckpoint {
@@ -237,7 +238,7 @@ export class BlindAgentEvaluationSession {
   private get manifestPath(): string { return `${this.outputDirectory}/agent-manifest.json`; }
 
   private binding(): string {
-    return hash({ runId: this.runId, contractHash: this.contractHashValue, datasetHash: this.datasetHashValue, transportSchemaHash: SEMANTIC_TRANSPORT_SCHEMA_SHA256 });
+    return hash({ runId: this.runId, contractHash: this.contractHashValue, datasetHash: this.datasetHashValue, transportSchemaHash: SEMANTIC_TRANSPORT_SCHEMA_SHA256, requireClaimBinding: this.requireClaimBinding });
   }
 
   private async initialize(): Promise<void> {
@@ -251,9 +252,10 @@ export class BlindAgentEvaluationSession {
       datasetHash: this.datasetHashValue,
       itemCount: this.itemById.size,
       criticalNegativePairsHash: this.criticalNegativePairsHash,
+      requireClaimBinding: this.requireClaimBinding,
     };
     const existingManifest = await this.readOptionalJson<BlindManifest>(this.manifestPath);
-    if (existingManifest && (existingManifest.schema !== BLIND_EVALUATION_VERSION || existingManifest.runId !== this.runId || existingManifest.itemCount !== this.itemById.size || existingManifest.contractHash !== this.contractHashValue || existingManifest.datasetHash !== this.datasetHashValue || existingManifest.transportSchemaHash !== SEMANTIC_TRANSPORT_SCHEMA_SHA256 || existingManifest.criticalNegativePairsHash !== this.criticalNegativePairsHash)) {
+    if (existingManifest && (existingManifest.schema !== BLIND_EVALUATION_VERSION || existingManifest.runId !== this.runId || existingManifest.itemCount !== this.itemById.size || existingManifest.contractHash !== this.contractHashValue || existingManifest.datasetHash !== this.datasetHashValue || existingManifest.transportSchemaHash !== SEMANTIC_TRANSPORT_SCHEMA_SHA256 || existingManifest.criticalNegativePairsHash !== this.criticalNegativePairsHash || existingManifest.requireClaimBinding !== this.requireClaimBinding)) {
       throw new Error('blind evaluation manifest is invalid or mismatched; refusing resume');
     }
     if (existingManifest && JSON.stringify(existingManifest) !== JSON.stringify(manifest)) {

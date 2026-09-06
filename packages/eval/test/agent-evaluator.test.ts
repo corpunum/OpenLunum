@@ -37,6 +37,7 @@ test('strict claim binding requires next() and matching source/contract provenan
   await assert.rejects(() => session.submit({ runId: 'run-strict-claim', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent', contractVersion: next.contractVersion, contractHash: next.contractHash, sourceHash: '0'.repeat(64) } }), /claim provenance mismatch/u);
   const result = await session.submit({ runId: 'run-strict-claim', itemId: 'blind-1', candidateSem: goldSem, provenance: { extractorType: 'codex_agent', contractVersion: next.contractVersion, contractHash: next.contractHash, sourceHash: next.sourceHash } });
   assert.equal(result.semanticIdentityExact, true);
+  await assert.rejects(() => BlindAgentEvaluationSession.create('run-strict-claim', items, dir), /manifest is invalid or mismatched/u);
 });
 
 test('next reserves an item so concurrent workers cannot receive the same claim', async () => {
