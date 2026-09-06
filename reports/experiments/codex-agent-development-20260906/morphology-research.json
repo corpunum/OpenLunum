@@ -24,5 +24,32 @@
     "polysemousBankingToBank": "ambiguous",
     "unknownSurface": "unresolved"
   },
+  "realUniMorphProbe": {
+    "status": "development_diagnostic_only",
+    "source": "https://github.com/unimorph",
+    "snapshotRoot": "/tmp/openlunum-unimorph.oLd9sO",
+    "repositories": {
+      "eng": { "commit": "66e0e9e8e2dcd196da081a25a48e5c1fe3d8b49b", "fileSha256": "20a191cefdc7cad6fa74b00f49d6f658684f17b14541aae372e5a3d5a8c15c67", "rows": 652477 },
+      "ell": { "commit": "fce1186efc7c8036fe2b6a13c110c2f2cd140e38", "fileSha256": "68f71b889fa29d31d975ebbc29f9f0f1b3a2dd6cca4f40a21b2c06f443811941", "rows": 211923 },
+      "spa": { "commit": "b9655efb0e5ce0f99809badaa7f4e93017ab8430", "fileSha256": "7a165d4b44eb078d23964f3eee3813f5140c5df0ffab0143c806c562e67f8771", "rows": 1196245 },
+      "fra": { "commit": "f672f8cceb2d5f5a1e2241b5622c8845f8274635", "fileSha256": "4760fc36435a9ffba9b4de6f0787d8eca5b15022e6b141e3b242b129f0d88dcb", "rows": 367733 },
+      "ind": { "commit": "4663cf3b8127fb85cb7e8a0c1a4f07e96103fe34", "fileSha256": "77c709f98b581a80051d0e18aa899e0d84d70436223054efa09831d71cdc2ac6", "rows": 27714 }
+    },
+    "sampleDesign": "20 non-lemma surface forms per language; retain only forms with a UniMorph-attested lemma and a unique exact OMW/CILI identity for that lemma",
+    "results": {
+      "total": 100,
+      "rawExact": 0,
+      "morphologyExact": 97,
+      "morphologyAmbiguous": 3,
+      "byLanguage": {
+        "en": { "sample": 20, "rawExact": 0, "morphologyExact": 19, "ambiguous": 1 },
+        "el": { "sample": 20, "rawExact": 0, "morphologyExact": 18, "ambiguous": 1 },
+        "es": { "sample": 20, "rawExact": 0, "morphologyExact": 20, "ambiguous": 0 },
+        "fr": { "sample": 20, "rawExact": 0, "morphologyExact": 20, "ambiguous": 0 },
+        "id": { "sample": 20, "rawExact": 0, "morphologyExact": 20, "ambiguous": 0 }
+      }
+    },
+    "limitations": ["This is a coverage probe conditioned on a known exact gold lemma, not an independent morphology accuracy benchmark.", "No German repository was found in this acquisition pass; OdeNet remains the German lexical source.", "Critical-negative morphology stress and full-context disambiguation remain outstanding."]
+  },
   "decision": "KEEP_GENERIC_ADAPTER; do not add language-specific suffix rules or bundle a resource until each selected language snapshot and license are pinned"
 }
