@@ -1,8 +1,8 @@
 {
   "mission": "long-horizon-openlunum-research-20260906",
   "startEpoch": 1788697989,
-  "lastUpdated": "2026-09-06T19:02:00+03:00",
-  "currentHead": "78d4f72b349c7ec23d705b5b6deb8fdb86194d6d",
+  "lastUpdated": "2026-09-06T19:12:00+03:00",
+  "currentHead": "26f1799110b35ed5faef58ab22640694ef78afb0",
   "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
   "cycles": [
     {
@@ -503,6 +503,13 @@
       "evidence": "Core agent-native tests passed 9/9, core typecheck passed, and MCP tests passed 59/59 with the generated schema. Every canonical frame has a generated variant with its exact allowed roles; nested clauses recurse through the same generated frame set.",
       "decision": "Keep the generated schema as transport preflight. It does not claim semantic extraction or identity and must remain synchronized with the registry.",
       "commit": "78d4f72b349c7ec23d705b5b6deb8fdb86194d6d"
+    },
+    {
+      "hypothesis": "Strict blind evaluator claim binding can prevent stale or unclaimed source substitutions while preserving legacy compatibility.",
+      "implementation": "Added opt-in requireClaimBinding mode requiring next() claim, contract version/hash, and exact source hash; exposed sourceHash in the source-only next item and MCP whitelist.",
+      "evidence": "Evaluator tests passed 1,888/1,888, including submit-before-next and mismatched source-hash rejection. MCP tests passed 59/59. Default compatibility mode remains unchanged for historical callers.",
+      "decision": "Keep strict mode for future protected/source-bound runs; use it to separate transport/provenance failures from semantic extraction failures.",
+      "commit": "26f1799110b35ed5faef58ab22640694ef78afb0"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

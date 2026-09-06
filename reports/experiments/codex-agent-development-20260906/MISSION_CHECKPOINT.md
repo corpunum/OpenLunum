@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 78d4f72b349c7ec23d705b5b6deb8fdb86194d6d
+Source/evidence boundary before this checkpoint commit: 26f1799110b35ed5faef58ab22640694ef78afb0
 
 ## Scope and prohibitions
 
@@ -334,6 +334,11 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   protocol/frame registries and wired MCP to expose it. Core agent-native tests
   passed 9/9, core and MCP typechecks passed, and MCP tests passed 59/59.
   Transport preflight remains distinct from semantic validation and identity.
+- Added opt-in strict blind-evaluation claim binding: `next()` now exposes a
+  source hash, and strict sessions require a prior claim plus matching contract
+  version/hash and source hash. Evaluator tests passed 1,888/1,888, while CLI
+  and API regressions passed 189/189 and 202/202. Legacy direct-submit mode is
+  retained for compatibility; future source-bound runs should use strict mode.
 
 ## Uncommitted state
 
