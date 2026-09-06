@@ -6,7 +6,7 @@
       "name": "UniMorph",
       "source": "https://unimorph.github.io/",
       "status": "evaluated_as_candidate_source",
-      "coverageClaim": "The current catalog advertises 169 annotated languages; Indonesian is listed with 27,714 forms and 3,877 paradigms. The listed Greek resource is Ancient Greek (grc), not a direct Modern Greek guarantee.",
+      "coverageClaim": "The current catalog advertises 169 annotated languages; Indonesian is listed with 27,714 forms and 3,877 paradigms. The listed Greek resource is Ancient Greek (grc), not a direct Modern Greek guarantee. A separate UD/UniMorph lemma audit measures analyzer recovery independently of identity labels.",
       "licenseDecision": "not bundled; per-language source/license audit required before acquisition",
       "protocolRole": "surface -> attested lemma/POS candidate evidence only"
     }
@@ -51,7 +51,7 @@
         "id": { "sample": 500, "rawExact": 29, "morphologyExact": 500, "ambiguous": 0, "safetyPairs": 25, "falseEquivalences": 0 }
       }
     },
-    "limitations": ["This is a coverage probe conditioned on a known exact gold lemma, not an independent morphology accuracy benchmark.", "No German repository was found in this acquisition pass; OdeNet remains the German lexical source.", "Critical-negative morphology stress and full-context disambiguation remain outstanding."]
+    "limitations": ["The identity probe is conditioned on a known exact gold lemma; the separate UD lemma audit is the non-circular morphology-accuracy measurement.", "Modern Greek analyzer coverage is limited by the available UniMorph snapshot; German identity evidence uses pinned OdeNet v1.4.", "Critical-negative morphology stress and full-context disambiguation remain outstanding."]
   },
   "decision": "KEEP_GENERIC_ADAPTER; do not add language-specific suffix rules or bundle a resource until each selected language snapshot and license are pinned"
 }
