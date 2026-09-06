@@ -3,7 +3,7 @@
 Recorded: 2026-09-06T18:36:24+03:00
 Mission start epoch: 1788697989
 Current local branch: main
-Source/evidence boundary before this checkpoint commit: 05583454f219de36c3876fa1404354569ebe003d
+Source/evidence boundary before this checkpoint commit: 41c9a8d3874431ab61ae9e77e5ada4281a9df603
 
 ## Scope and prohibitions
 
@@ -352,6 +352,11 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   protocol, frame, and grounding validity, with aggregate stage counts and a
   schema-version bump. Eval strict verification passed 1,888/1,888 plus the
   16-item smoke run. Exact identity and abstention scoring were not changed.
+- Refreshed the training-boundary assessment after these safeguards. Training
+  remains NOT PROVEN: OMW ambiguity and agent open-concept grounding remain
+  unresolved scientific bottlenecks, while multi-process claim locking is a
+  separate future custody task. No protected corpus or local inference was
+  used.
 
 ## Uncommitted state
 
