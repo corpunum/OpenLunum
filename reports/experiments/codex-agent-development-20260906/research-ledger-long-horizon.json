@@ -1,0 +1,36 @@
+{
+  "mission": "long-horizon-openlunum-research-20260906",
+  "startEpoch": 1788697989,
+  "lastUpdated": "2026-09-06T15:55:00+03:00",
+  "currentHead": "45ef82b1914828a3e85c0414468b2b1cf676a3f7",
+  "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
+  "cycles": [
+    {
+      "hypothesis": "Real OMW failure rate is primarily missing lexical coverage.",
+      "implementation": "Full 150-case real OMW/CILI report with per-case candidate sets and categories.",
+      "evidence": "100/100 cross-language pairs have both lexical candidate coverage and a shared candidate; 78 have exactly one shared candidate, 22 have multiple; 19 independent lookups are monosemous/convergent.",
+      "decision": "Rejected as primary cause; conservative polysemy resolution is dominant."
+    },
+    {
+      "hypothesis": "A frame-derived typed builder reduces agent transport failures without semantic weakening.",
+      "implementation": "buildCandidateSem in core, lunum_build_candidate MCP, build-candidate CLI, generated frame-first contract.",
+      "evidence": "Two isolated agent trials: first typed trial accepted 7/8 with one abstention; second accepted 5, abstained 2, rejected 2 invalid outputs. Correctly typed candidates remained identity-available only after submitCandidate.",
+      "decision": "Keep as general adoption surface; it does not solve role/kind/open-concept extraction."
+    },
+    {
+      "hypothesis": "Attested morphology can improve recall safely if it remains candidate generation.",
+      "implementation": "createMorphologyAugmentedProvider plus real UniMorph probe for en/el/es/fr/id.",
+      "evidence": "On 2,500 forms conditioned on an attested lemma with unique exact OMW identity: raw exact 33, morphology exact 2,144, ambiguous 16; 125 distinct-identity safety pairs, zero false equivalences. Probe is coverage-conditioned, not independent accuracy.",
+      "decision": "Keep generic adapter as optional evidence provider; do not default-enable without an unbiased benchmark and pinned per-language licensing."
+    },
+    {
+      "hypothesis": "Explicit candidate-set intersection can safely narrow multilingual ambiguity.",
+      "implementation": "intersectGroundingCandidateSets, requiring explicit caller relation and rejecting provider errors.",
+      "evidence": "Real OMW report shows 78/100 cross-language pairs have one shared candidate identity; 22 retain multiple candidates.",
+      "decision": "Keep as explicit evidence operation; never silently infer equivalence for an isolated source."
+    }
+  ],
+  "nextHighestLeverage": "Build an unbiased 100+ development morphology benchmark with held-out surface forms and explicit hard negatives, then use the typed builder plus candidate-set grounding in a larger blind-development extraction comparison before any protected corpus.",
+  "protectedCorpus": "none created in this mission; prior inspected corpora remain diagnostic",
+  "openBlockers": ["unbiased morphology accuracy", "contextual sense disambiguation", "large agent-native text-to-Sem benchmark", "retrieval from agent-extracted Sem", "second independent agent/model comparison"]
+}
