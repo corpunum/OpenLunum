@@ -1,0 +1,192 @@
+{
+  "type": "openlunum-development-agent-large-results",
+  "version": "2026-09-07",
+  "status": "diagnostic-development-only",
+  "protected": false,
+  "localInferenceUsed": false,
+  "corpus": {
+    "path": "experiments/development-agent-large-20260907/corpus.json",
+    "rows": 84,
+    "parseTargets": 60,
+    "negativeParseTargets": 12,
+    "abstentionTargets": 12
+  },
+  "ledger": {
+    "path": "experiments/development-agent-large-20260907/candidate-ledger.json",
+    "handles": 84,
+    "blindValidation": {
+      "valid": true,
+      "errors": [],
+      "identityAvailable": 70,
+      "abstentions": 14
+    },
+    "forbiddenGoldMetadata": []
+  },
+  "stages": {
+    "transportValid": 70,
+    "structuralValid": 70,
+    "protocolCanonical": 70,
+    "frameValid": 70,
+    "grounded": 70
+  },
+  "parse": {
+    "exact": 0,
+    "total": 60,
+    "rate": 0,
+    "candidateIdentityAvailable": 60,
+    "identityComparable": 60,
+    "byLanguage": {
+      "en": {
+        "exact": 0,
+        "total": 10,
+        "identity": 10
+      },
+      "el": {
+        "exact": 0,
+        "total": 10,
+        "identity": 10
+      },
+      "es": {
+        "exact": 0,
+        "total": 10,
+        "identity": 10
+      },
+      "fr": {
+        "exact": 0,
+        "total": 10,
+        "identity": 10
+      },
+      "de": {
+        "exact": 0,
+        "total": 10,
+        "identity": 10
+      },
+      "id": {
+        "exact": 0,
+        "total": 10,
+        "identity": 10
+      }
+    }
+  },
+  "abstention": {
+    "targets": 12,
+    "correct": 12,
+    "unexpectedParses": 0,
+    "accuracy": 1
+  },
+  "multilingual": {
+    "groups": 10,
+    "candidateGroupsConverging": 10,
+    "groupsConvergingToGold": 0,
+    "groupStats": {
+      "prefer-tea": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "receive-parcel": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "send-report": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "request-review": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "keep-draft-private": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "delete-cache": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "deploy-release": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "copy-blueprint": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "rotate-credential": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      },
+      "launch-deadline": {
+        "rows": 6,
+        "distinctCandidateLfps": 1,
+        "distinctGoldLfps": 1,
+        "convergesToOne": true,
+        "convergesToGold": false
+      }
+    }
+  },
+  "criticalNegatives": {
+    "pairsDefined": 6,
+    "pairsComparable": 5,
+    "falseEquivalences": 0,
+    "pairs": [
+      {
+        "pairId": "n01",
+        "comparable": true,
+        "falseEquivalent": false
+      },
+      {
+        "pairId": "n02",
+        "comparable": true,
+        "falseEquivalent": false
+      },
+      {
+        "pairId": "n03",
+        "comparable": true,
+        "falseEquivalent": false
+      },
+      {
+        "pairId": "n04",
+        "comparable": false,
+        "falseEquivalent": false
+      },
+      {
+        "pairId": "n05",
+        "comparable": true,
+        "falseEquivalent": false
+      },
+      {
+        "pairId": "n06",
+        "comparable": true,
+        "falseEquivalent": false
+      }
+    ]
+  },
+  "interpretation": "Development-only source-blind agent evidence. Candidate self-consistency is reported separately from private gold correctness; no protected claim is made."
+}
