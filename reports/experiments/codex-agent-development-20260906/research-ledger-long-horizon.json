@@ -411,7 +411,7 @@
       "implementation": "A fresh source-only Codex trial covered EN/EL/ES/FR/DE/ID and required direct fields, world=real, typed actor/concept terms, and one canonical concept identifier; each candidate was replayed through OpenLunum.",
       "evidence": "6/6 candidates passed transport, protocol, frame, grounding, and lfp:2.1 gates and converged to one fingerprint. The shared concept identifier was part of the extraction instruction, so no independent grounding or gold exactness is claimed.",
       "decision": "Keep the typed workflow. Treat this as contract/convergence construction evidence only; a future unbiased trial must allow concept naming to be independently generated and score it against hidden gold.",
-      "commit": "pending"
+      "commit": "fb187960c59b63077ad3aa843eabacb1cafdaf9a"
     }
   ],
   "nextHighestLeverage": "Run a larger independently labeled source-only frame-first text-to-Sem comparison using the typed builder, with morphology candidate generation measured separately from exact identity; require source-bound candidate provenance before retrieval.",

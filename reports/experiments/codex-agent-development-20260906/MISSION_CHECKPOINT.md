@@ -276,9 +276,14 @@ contextual candidate-set scoring and retrieval. Do not create protected data.
   from source language and to require `roles` as an object of typed terms;
   core build/typecheck and 1,806 core tests passed. This changes no semantic
   acceptance rule.
+- A fairer source-only multilingual typed-builder trial then produced 6/6
+  transport/frame/grounding/identity-valid candidates converging to one LFP.
+  Because the instruction explicitly supplied the shared canonical concept
+  identifier, this is construction/convergence evidence only, not blind
+  grounding accuracy.
 
 ## Uncommitted state
 
-The current code/evidence boundary is `116f5fa5bbad8fe26e674be4e1d55cc556d12e6a`.
+The current code/evidence boundary is `fb187960c59b63077ad3aa843eabacb1cafdaf9a`.
 Unrelated dirty files and historical diagnostic directories shown by `git
 status` are preserved.
