@@ -4,7 +4,7 @@ import { classifyFailureState, summarizeTrainingDataset, validateConceptDisjoint
 
 const example = (overrides = {}) => ({
   id: 'x-001', split: 'train',
-  source: { text: 'A courier sends the parcel to the depot.', language: 'en', semanticGroup: 'g-x', templateFamily: 'send-v1', conceptIds: ['parcel-x'], entityIds: ['courier-x', 'depot-x'] },
+  source: { text: 'A courier sends the parcel to the depot.', language: 'en', semanticGroup: 'g-x', templateFamily: 'send-v1', difficultyLevel: 2, conceptIds: ['parcel-x'], entityIds: ['courier-x', 'depot-x'] },
   target: { outcome: 'parse', ir: { predicate: 'send', roles: { agent: 'courier-x', object: 'parcel-x', recipient: 'depot-x' } } },
   provenance: { sourceKind: 'synthetic', annotationMethod: 'deterministic-template', license: 'CC0-1.0', createdAt: '2026-09-06T00:00:00Z', generatorVersion: 'fixture/1' },
   review: { status: 'accepted', reviewers: ['deterministic-contract'] }, ...overrides

@@ -70,7 +70,7 @@ export type v01Clause = {     predicate: string,     roles: Record<string, unkno
 export interface LunumTrainingExampleSchema10 {
   id: string;
   split: "train" | "dev" | "holdout" | "protected-template";
-  source: {     text: string,     language: string,     semanticGroup: string,     templateFamily: string,     entityIds?: string[],     conceptIds?: string[],     externalGroundingIds?: string[] };
+  source: {     text: string,     language: string,     semanticGroup: string,     templateFamily: string,     difficultyLevel: number,     entityIds?: string[],     conceptIds?: string[],     externalGroundingIds?: string[] };
   target: {     outcome: "parse" | "abstain",     abstentionReason?: "unsupported" | "ambiguous" | "unresolved",     ir?: Record<string, unknown>,     canonicalSem?: Record<string, unknown>,     criticalNegativePairIds?: string[] };
   provenance: {     sourceKind: "synthetic" | "licensed" | "human-authored" | "imported",     annotationMethod: string,     license: string,     sourceUri?: string,     createdAt: string,     generatorVersion: string,     providerEvidence?: Record<string, unknown>[] };
   review: {     status: "pending" | "accepted" | "rejected" | "needs-review",     reviewers: string[],     notes?: string,     disagreement?: boolean };

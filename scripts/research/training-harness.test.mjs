@@ -4,7 +4,7 @@ import { buildTrainingRunManifest, resumeTrainingCheckpoint, writeTrainingCheckp
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-const row = (split = 'train') => ({ id: `row-${split}`, split, source: { text: `unique ${split} text`, language: 'en', semanticGroup: `group-${split}`, templateFamily: `template-${split}`, conceptIds: [`concept-${split}`] }, target: { outcome: 'parse', ir: { predicate: 'prefer' } }, provenance: { sourceKind: 'synthetic', annotationMethod: 'rule-derived', license: 'CC0-1.0', createdAt: '2026-09-06T00:00:00Z', generatorVersion: 'test/1' }, review: { status: 'accepted', reviewers: ['rule-review'] } });
+const row = (split = 'train') => ({ id: `row-${split}`, split, source: { text: `unique ${split} text`, language: 'en', semanticGroup: `group-${split}`, templateFamily: `template-${split}`, difficultyLevel: 1, conceptIds: [`concept-${split}`] }, target: { outcome: 'parse', ir: { predicate: 'prefer' } }, provenance: { sourceKind: 'synthetic', annotationMethod: 'rule-derived', license: 'CC0-1.0', createdAt: '2026-09-06T00:00:00Z', generatorVersion: 'test/1' }, review: { status: 'accepted', reviewers: ['rule-review'] } });
 test('harness records immutable dataset and split hashes and forbids local inference', () => {
   const manifest = buildTrainingRunManifest({ codeSha: 'a'.repeat(40), examples: [row('train'), row('dev')], splitManifest: { train: ['group-train'], dev: ['group-dev'] }, model: { class: 'multilingual-encoder', baseRevision: 'external:pending', tokenizerRevision: 'external:pending' } });
   assert.match(manifest.datasetSha256, /^[0-9a-f]{64}$/); assert.equal(manifest.localInferenceUsed, false); assert.equal(manifest.embeddingUsed, false);

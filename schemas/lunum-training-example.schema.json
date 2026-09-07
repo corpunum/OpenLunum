@@ -10,12 +10,13 @@
     "split": { "enum": ["train", "dev", "holdout", "protected-template"] },
     "source": {
       "type": "object", "additionalProperties": false,
-      "required": ["text", "language", "semanticGroup", "templateFamily"],
+      "required": ["text", "language", "semanticGroup", "templateFamily", "difficultyLevel"],
       "properties": {
         "text": { "type": "string", "minLength": 1 },
         "language": { "type": "string", "pattern": "^[a-z]{2,3}$" },
         "semanticGroup": { "type": "string", "minLength": 1 },
         "templateFamily": { "type": "string", "minLength": 1 },
+        "difficultyLevel": { "type": "integer", "minimum": 1, "maximum": 8 },
         "entityIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
         "conceptIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
         "externalGroundingIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }

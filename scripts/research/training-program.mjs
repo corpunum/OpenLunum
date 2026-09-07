@@ -22,6 +22,7 @@ export function validateTrainingExample(example) {
     if (typeof source.text !== 'string' || !source.text.trim()) errors.push('source.text missing');
     if (!LANGUAGES.has(source.language)) errors.push('source.language unsupported');
     for (const field of ['semanticGroup', 'templateFamily']) if (typeof source[field] !== 'string' || !source[field]) errors.push(`source.${field} missing`);
+    if (!Number.isInteger(source.difficultyLevel) || source.difficultyLevel < 1 || source.difficultyLevel > 8) errors.push('source.difficultyLevel invalid');
     for (const field of ['entityIds', 'conceptIds', 'externalGroundingIds']) {
       if (source[field] !== undefined && (!Array.isArray(source[field]) || source[field].some((v) => typeof v !== 'string'))) errors.push(`source.${field} invalid`);
     }
