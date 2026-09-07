@@ -1,0 +1,3323 @@
+{
+  "format": "openlunum-natural-source-only-extraction/0.1",
+  "status": "diagnostic-development-only",
+  "protected": false,
+  "localInferenceUsed": false,
+  "procedure": {
+    "oneFirstPassPerItem": true,
+    "deterministicRepair": false,
+    "sourceOnlyRequest": "experiments/natural-development-v5/extraction/source-only-request.jsonl",
+    "contract": "experiments/natural-development-v5/extraction/source-only-contract.json",
+    "extractor": "fresh isolated Codex agent; packet restricted to source-only request and frozen contract",
+    "goldIsolation": "extractor was instructed not to read certified subset, reviews, manifests, or generator files; parent scorer accessed gold privately"
+  },
+  "corpus": {
+    "rows": 42,
+    "parseTargets": 36,
+    "abstentionTargets": 6,
+    "languages": [
+      "de",
+      "el",
+      "en",
+      "es",
+      "fr",
+      "id"
+    ],
+    "datasetSha256": "84bddebe9c9268115155020635b7218c9d17d40950eb0f66a7dbc272e762d3e7"
+  },
+  "stages": {
+    "submitted": 36,
+    "transportValid": 36,
+    "structuralValid": 36,
+    "protocolCanonical": 36,
+    "frameValid": 36,
+    "grounded": 36,
+    "identityAvailable": 36
+  },
+  "parse": {
+    "attempts": 36,
+    "exact": 0,
+    "identityComparable": 0,
+    "falseAbstentions": 0,
+    "structural": {
+      "world": 36,
+      "kind": 0,
+      "predicate": 36,
+      "negated": 30,
+      "roleNames": 36,
+      "roleTypes": 0
+    },
+    "byLanguage": {
+      "de": {
+        "attempts": 6,
+        "submitted": 6,
+        "exact": 0,
+        "identityComparable": 0
+      },
+      "el": {
+        "attempts": 6,
+        "submitted": 6,
+        "exact": 0,
+        "identityComparable": 0
+      },
+      "en": {
+        "attempts": 6,
+        "submitted": 6,
+        "exact": 0,
+        "identityComparable": 0
+      },
+      "es": {
+        "attempts": 6,
+        "submitted": 6,
+        "exact": 0,
+        "identityComparable": 0
+      },
+      "fr": {
+        "attempts": 6,
+        "submitted": 6,
+        "exact": 0,
+        "identityComparable": 0
+      },
+      "id": {
+        "attempts": 6,
+        "submitted": 6,
+        "exact": 0,
+        "identityComparable": 0
+      }
+    }
+  },
+  "abstention": {
+    "targets": 6,
+    "correct": 6,
+    "unexpectedParses": 0
+  },
+  "multilingual": {
+    "groups": 7,
+    "groupsWithAllOutputs": 6,
+    "candidateConverging": 6,
+    "groupResults": [
+      {
+        "group": "allow-archive",
+        "rows": 6,
+        "outputsAvailable": 6,
+        "candidateConverges": true,
+        "exact": false
+      },
+      {
+        "group": "prohibit-archive",
+        "rows": 6,
+        "outputsAvailable": 6,
+        "candidateConverges": true,
+        "exact": false
+      },
+      {
+        "group": "publish-audit",
+        "rows": 6,
+        "outputsAvailable": 6,
+        "candidateConverges": true,
+        "exact": false
+      },
+      {
+        "group": "withhold-audit",
+        "rows": 6,
+        "outputsAvailable": 6,
+        "candidateConverges": true,
+        "exact": false
+      },
+      {
+        "group": "retry-five",
+        "rows": 6,
+        "outputsAvailable": 6,
+        "candidateConverges": true,
+        "exact": false
+      },
+      {
+        "group": "retry-fifty",
+        "rows": 6,
+        "outputsAvailable": 6,
+        "candidateConverges": true,
+        "exact": false
+      },
+      {
+        "group": "ambiguous-bank",
+        "rows": 6,
+        "outputsAvailable": 0,
+        "candidateConverges": false,
+        "exact": true
+      }
+    ]
+  },
+  "criticalContrasts": {
+    "note": "No gold-derived labels were exposed to extractor; contrast scoring is intentionally not inferred from candidate absence in this first source-only run."
+  },
+  "items": [
+    {
+      "handle": "extract-001-98a3e9a3d227",
+      "sourceRowId": "natural-allow-archive-en",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "The security officer allows the contractor to access the archive.",
+          "language": "en",
+          "sha256": "dbd7ff388238b9386973a54b4c88d19f84b45599c9463948c0dc14bd2b63daac"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "dbd7ff388238b9386973a54b4c88d19f84b45599c9463948c0dc14bd2b63daac",
+          "timestamp": "2026-09-07T14:31:45.246Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:2009a68db891cd3857c59c9662115097",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "high_risk_semantics:predicate 'allow' is safety-critical",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "allow",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "dbd7ff388238b9386973a54b4c88d19f84b45599c9463948c0dc14bd2b63daac"
+    },
+    {
+      "handle": "extract-002-765d4cfe7cdb",
+      "sourceRowId": "natural-allow-archive-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο υπεύθυνος ασφαλείας επιτρέπει στον εργολάβο να έχει πρόσβαση στο αρχείο.",
+          "language": "el",
+          "sha256": "efacf04828d9a6f2fd6706b2f1366440df1990df755654560397140f1b5492c1"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "efacf04828d9a6f2fd6706b2f1366440df1990df755654560397140f1b5492c1",
+          "timestamp": "2026-09-07T14:31:45.256Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:2009a68db891cd3857c59c9662115097",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "high_risk_semantics:predicate 'allow' is safety-critical",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "allow",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "efacf04828d9a6f2fd6706b2f1366440df1990df755654560397140f1b5492c1"
+    },
+    {
+      "handle": "extract-003-bebfebc301ed",
+      "sourceRowId": "natural-allow-archive-es",
+      "language": "es",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "El responsable de seguridad permite al contratista acceder al archivo.",
+          "language": "es",
+          "sha256": "f213123011d94e0c13ecf4b2f3252ce4ad6ec4b0de711f567f87805685720f85"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "f213123011d94e0c13ecf4b2f3252ce4ad6ec4b0de711f567f87805685720f85",
+          "timestamp": "2026-09-07T14:31:45.260Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:2009a68db891cd3857c59c9662115097",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "high_risk_semantics:predicate 'allow' is safety-critical",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "allow",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "f213123011d94e0c13ecf4b2f3252ce4ad6ec4b0de711f567f87805685720f85"
+    },
+    {
+      "handle": "extract-004-5d7a06b02874",
+      "sourceRowId": "natural-allow-archive-fr",
+      "language": "fr",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "L’agent de sécurité autorise le contractant à accéder aux archives.",
+          "language": "fr",
+          "sha256": "a5826ba218dcb486f1acc954a87082613a6d1dd19283cf217558ae18bed2ac6d"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "a5826ba218dcb486f1acc954a87082613a6d1dd19283cf217558ae18bed2ac6d",
+          "timestamp": "2026-09-07T14:31:45.262Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:2009a68db891cd3857c59c9662115097",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "high_risk_semantics:predicate 'allow' is safety-critical",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "allow",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "a5826ba218dcb486f1acc954a87082613a6d1dd19283cf217558ae18bed2ac6d"
+    },
+    {
+      "handle": "extract-005-10fb36e0c695",
+      "sourceRowId": "natural-allow-archive-de",
+      "language": "de",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Der Sicherheitsbeauftragte erlaubt dem Auftragnehmer den Zugriff auf das Archiv.",
+          "language": "de",
+          "sha256": "22e8ae231b70820b7c801306130770b487007c4995e54e77d99b7f02f83a3e20"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "22e8ae231b70820b7c801306130770b487007c4995e54e77d99b7f02f83a3e20",
+          "timestamp": "2026-09-07T14:31:45.264Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:2009a68db891cd3857c59c9662115097",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "high_risk_semantics:predicate 'allow' is safety-critical",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "allow",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "22e8ae231b70820b7c801306130770b487007c4995e54e77d99b7f02f83a3e20"
+    },
+    {
+      "handle": "extract-006-f16fbcbd1865",
+      "sourceRowId": "natural-allow-archive-id",
+      "language": "id",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Petugas keamanan mengizinkan kontraktor mengakses arsip.",
+          "language": "id",
+          "sha256": "31e75e82b49a19af6fe0eb0587751f834172181cf195a0a6cda851c4e3185c74"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "31e75e82b49a19af6fe0eb0587751f834172181cf195a0a6cda851c4e3185c74",
+          "timestamp": "2026-09-07T14:31:45.267Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:2009a68db891cd3857c59c9662115097",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "high_risk_semantics:predicate 'allow' is safety-critical",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "allow",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "31e75e82b49a19af6fe0eb0587751f834172181cf195a0a6cda851c4e3185c74"
+    },
+    {
+      "handle": "extract-007-06393521c56d",
+      "sourceRowId": "natural-prohibit-archive-en",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "The security officer prohibits the contractor from accessing the archive.",
+          "language": "en",
+          "sha256": "6de7aac707b00fec3aa8f77a96280e54e02b3b76ec05b29edc755c49783beb82"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "6de7aac707b00fec3aa8f77a96280e54e02b3b76ec05b29edc755c49783beb82",
+          "timestamp": "2026-09-07T14:31:45.270Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:32b3be3a65981be41256c294e34d8c87",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:safety_constraint",
+            "high_risk_semantics:predicate 'prohibit' is safety-critical",
+            "high_risk_semantics:negated safety-critical predicate 'prohibit'",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "safety_constraint",
+          "clauses": [
+            {
+              "predicate": "prohibit",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": false,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "6de7aac707b00fec3aa8f77a96280e54e02b3b76ec05b29edc755c49783beb82"
+    },
+    {
+      "handle": "extract-008-72d10648da5c",
+      "sourceRowId": "natural-prohibit-archive-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο υπεύθυνος ασφαλείας απαγορεύει στον εργολάβο να έχει πρόσβαση στο αρχείο.",
+          "language": "el",
+          "sha256": "bce3f509909feec18a959fc1d5c629da39e6e92b105bb42243eb4df3dbe7d02c"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "bce3f509909feec18a959fc1d5c629da39e6e92b105bb42243eb4df3dbe7d02c",
+          "timestamp": "2026-09-07T14:31:45.272Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:32b3be3a65981be41256c294e34d8c87",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:safety_constraint",
+            "high_risk_semantics:predicate 'prohibit' is safety-critical",
+            "high_risk_semantics:negated safety-critical predicate 'prohibit'",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "safety_constraint",
+          "clauses": [
+            {
+              "predicate": "prohibit",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": false,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "bce3f509909feec18a959fc1d5c629da39e6e92b105bb42243eb4df3dbe7d02c"
+    },
+    {
+      "handle": "extract-009-67c8c504ccd2",
+      "sourceRowId": "natural-prohibit-archive-es",
+      "language": "es",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "El responsable de seguridad prohíbe al contratista acceder al archivo.",
+          "language": "es",
+          "sha256": "7a9a8b78e3a9c5a7385f078d23c80dd89f1887b8afb0c4ace0a682f11c659b7e"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "7a9a8b78e3a9c5a7385f078d23c80dd89f1887b8afb0c4ace0a682f11c659b7e",
+          "timestamp": "2026-09-07T14:31:45.274Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:32b3be3a65981be41256c294e34d8c87",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:safety_constraint",
+            "high_risk_semantics:predicate 'prohibit' is safety-critical",
+            "high_risk_semantics:negated safety-critical predicate 'prohibit'",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "safety_constraint",
+          "clauses": [
+            {
+              "predicate": "prohibit",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": false,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "7a9a8b78e3a9c5a7385f078d23c80dd89f1887b8afb0c4ace0a682f11c659b7e"
+    },
+    {
+      "handle": "extract-010-038337c3935c",
+      "sourceRowId": "natural-prohibit-archive-fr",
+      "language": "fr",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "L’agent de sécurité interdit au contractant d’accéder aux archives.",
+          "language": "fr",
+          "sha256": "b7131b2514b5cacaa8b429bf326f057e7c01376584cfd1793029bffd8ce2dd11"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "b7131b2514b5cacaa8b429bf326f057e7c01376584cfd1793029bffd8ce2dd11",
+          "timestamp": "2026-09-07T14:31:45.277Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:32b3be3a65981be41256c294e34d8c87",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:safety_constraint",
+            "high_risk_semantics:predicate 'prohibit' is safety-critical",
+            "high_risk_semantics:negated safety-critical predicate 'prohibit'",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "safety_constraint",
+          "clauses": [
+            {
+              "predicate": "prohibit",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": false,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "b7131b2514b5cacaa8b429bf326f057e7c01376584cfd1793029bffd8ce2dd11"
+    },
+    {
+      "handle": "extract-011-056efecf4672",
+      "sourceRowId": "natural-prohibit-archive-de",
+      "language": "de",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Der Sicherheitsbeauftragte verbietet dem Auftragnehmer den Zugriff auf das Archiv.",
+          "language": "de",
+          "sha256": "986da81ec0accdc9ca196372b2aa2de291ef668c3713da6a3a68df10c7d93752"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "986da81ec0accdc9ca196372b2aa2de291ef668c3713da6a3a68df10c7d93752",
+          "timestamp": "2026-09-07T14:31:45.279Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:32b3be3a65981be41256c294e34d8c87",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:safety_constraint",
+            "high_risk_semantics:predicate 'prohibit' is safety-critical",
+            "high_risk_semantics:negated safety-critical predicate 'prohibit'",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "safety_constraint",
+          "clauses": [
+            {
+              "predicate": "prohibit",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": false,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "986da81ec0accdc9ca196372b2aa2de291ef668c3713da6a3a68df10c7d93752"
+    },
+    {
+      "handle": "extract-012-7fd63da1f162",
+      "sourceRowId": "natural-prohibit-archive-id",
+      "language": "id",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Petugas keamanan melarang kontraktor mengakses arsip.",
+          "language": "id",
+          "sha256": "176e494f25b2ff1b74f0c7ddb08370f9320a962023eb586c3b2003d97112e7b5"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "176e494f25b2ff1b74f0c7ddb08370f9320a962023eb586c3b2003d97112e7b5",
+          "timestamp": "2026-09-07T14:31:45.281Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:32b3be3a65981be41256c294e34d8c87",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:safety_constraint",
+            "high_risk_semantics:predicate 'prohibit' is safety-critical",
+            "high_risk_semantics:negated safety-critical predicate 'prohibit'",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "safety_constraint",
+          "clauses": [
+            {
+              "predicate": "prohibit",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "security officer"
+                },
+                "theme": {
+                  "type": "access",
+                  "value": "archive"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "value": "contractor"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": false,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "176e494f25b2ff1b74f0c7ddb08370f9320a962023eb586c3b2003d97112e7b5"
+    },
+    {
+      "handle": "extract-013-20a508fc7e0e",
+      "sourceRowId": "natural-publish-audit-en",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "The editor publishes the audit report for the public.",
+          "language": "en",
+          "sha256": "b09e0a428cf5fddabb5150ca80b935c0c71794e65f150cb9b33782bb6a0034d2"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "b09e0a428cf5fddabb5150ca80b935c0c71794e65f150cb9b33782bb6a0034d2",
+          "timestamp": "2026-09-07T14:31:45.283Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:41452c5b00a376d222fc8b4e383ab5fb",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "b09e0a428cf5fddabb5150ca80b935c0c71794e65f150cb9b33782bb6a0034d2"
+    },
+    {
+      "handle": "extract-014-1710b2025927",
+      "sourceRowId": "natural-publish-audit-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο συντάκτης δημοσιεύει την έκθεση ελέγχου για το κοινό.",
+          "language": "el",
+          "sha256": "0ca0152c5af2ef7b79e0989479187b51255b5bfc86a9b554667f0b3b87379b1e"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "0ca0152c5af2ef7b79e0989479187b51255b5bfc86a9b554667f0b3b87379b1e",
+          "timestamp": "2026-09-07T14:31:45.285Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:41452c5b00a376d222fc8b4e383ab5fb",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "0ca0152c5af2ef7b79e0989479187b51255b5bfc86a9b554667f0b3b87379b1e"
+    },
+    {
+      "handle": "extract-015-b05eb53ba8e0",
+      "sourceRowId": "natural-publish-audit-es",
+      "language": "es",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "El editor publica el informe de auditoría para el público.",
+          "language": "es",
+          "sha256": "2ccf2c9e9d429f766ec245d049f3e208091d9ec333e44c2a41052e60e4c74791"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "2ccf2c9e9d429f766ec245d049f3e208091d9ec333e44c2a41052e60e4c74791",
+          "timestamp": "2026-09-07T14:31:45.287Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:41452c5b00a376d222fc8b4e383ab5fb",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "2ccf2c9e9d429f766ec245d049f3e208091d9ec333e44c2a41052e60e4c74791"
+    },
+    {
+      "handle": "extract-016-3c33d3d4a9d3",
+      "sourceRowId": "natural-publish-audit-fr",
+      "language": "fr",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Le rédacteur publie le rapport d’audit pour le public.",
+          "language": "fr",
+          "sha256": "63b5d14a83543d7a0eee0f22e44d3187355aca028fa4c65d515b59fcb0bf496a"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "63b5d14a83543d7a0eee0f22e44d3187355aca028fa4c65d515b59fcb0bf496a",
+          "timestamp": "2026-09-07T14:31:45.288Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:41452c5b00a376d222fc8b4e383ab5fb",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "63b5d14a83543d7a0eee0f22e44d3187355aca028fa4c65d515b59fcb0bf496a"
+    },
+    {
+      "handle": "extract-017-16e18d54db18",
+      "sourceRowId": "natural-publish-audit-de",
+      "language": "de",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Der Redakteur veröffentlicht den Prüfbericht für die Öffentlichkeit.",
+          "language": "de",
+          "sha256": "6bd1fb0fe90934a7cdddcc266a6859d02c2895ba238f32576a079afb4045e528"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "6bd1fb0fe90934a7cdddcc266a6859d02c2895ba238f32576a079afb4045e528",
+          "timestamp": "2026-09-07T14:31:45.290Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:41452c5b00a376d222fc8b4e383ab5fb",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "6bd1fb0fe90934a7cdddcc266a6859d02c2895ba238f32576a079afb4045e528"
+    },
+    {
+      "handle": "extract-018-8448b04f0f11",
+      "sourceRowId": "natural-publish-audit-id",
+      "language": "id",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Editor menerbitkan laporan audit untuk umum.",
+          "language": "id",
+          "sha256": "e990e2588f8080f75795136cc1da774caa53997bf59b27f523ec8fb90f3e3845"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "e990e2588f8080f75795136cc1da774caa53997bf59b27f523ec8fb90f3e3845",
+          "timestamp": "2026-09-07T14:31:45.291Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:41452c5b00a376d222fc8b4e383ab5fb",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "e990e2588f8080f75795136cc1da774caa53997bf59b27f523ec8fb90f3e3845"
+    },
+    {
+      "handle": "extract-019-d09b3994985b",
+      "sourceRowId": "natural-withhold-audit-en",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "The editor does not publish the audit report for the public.",
+          "language": "en",
+          "sha256": "1548ba9256ada60b88efa297a156128224691b649d2d9602f308251618399a56"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "1548ba9256ada60b88efa297a156128224691b649d2d9602f308251618399a56",
+          "timestamp": "2026-09-07T14:31:45.293Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4532dabe7619d59f52e2a702e6304028",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "1548ba9256ada60b88efa297a156128224691b649d2d9602f308251618399a56"
+    },
+    {
+      "handle": "extract-020-8fd3a389aa45",
+      "sourceRowId": "natural-withhold-audit-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο συντάκτης δεν δημοσιεύει την έκθεση ελέγχου για το κοινό.",
+          "language": "el",
+          "sha256": "7f775e058c4aff823192fa7b6d4a89cf855debd1565f5ed7317578d1cad66cae"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "7f775e058c4aff823192fa7b6d4a89cf855debd1565f5ed7317578d1cad66cae",
+          "timestamp": "2026-09-07T14:31:45.295Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4532dabe7619d59f52e2a702e6304028",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "7f775e058c4aff823192fa7b6d4a89cf855debd1565f5ed7317578d1cad66cae"
+    },
+    {
+      "handle": "extract-021-137de681d81f",
+      "sourceRowId": "natural-withhold-audit-es",
+      "language": "es",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "El editor no publica el informe de auditoría para el público.",
+          "language": "es",
+          "sha256": "9049aec41dba87608db8371adbade16442573d56cd31c25e7f45b0549ff2e598"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "9049aec41dba87608db8371adbade16442573d56cd31c25e7f45b0549ff2e598",
+          "timestamp": "2026-09-07T14:31:45.296Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4532dabe7619d59f52e2a702e6304028",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "9049aec41dba87608db8371adbade16442573d56cd31c25e7f45b0549ff2e598"
+    },
+    {
+      "handle": "extract-022-7a0683abd60a",
+      "sourceRowId": "natural-withhold-audit-fr",
+      "language": "fr",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Le rédacteur ne publie pas le rapport d’audit pour le public.",
+          "language": "fr",
+          "sha256": "b8d19cc7f2ae56e2b8449b9bf8d44ad0f519d2b9716db96011f9e0075abaa33d"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "b8d19cc7f2ae56e2b8449b9bf8d44ad0f519d2b9716db96011f9e0075abaa33d",
+          "timestamp": "2026-09-07T14:31:45.297Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4532dabe7619d59f52e2a702e6304028",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "b8d19cc7f2ae56e2b8449b9bf8d44ad0f519d2b9716db96011f9e0075abaa33d"
+    },
+    {
+      "handle": "extract-023-d46be889c21b",
+      "sourceRowId": "natural-withhold-audit-de",
+      "language": "de",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Der Redakteur veröffentlicht den Prüfbericht nicht für die Öffentlichkeit.",
+          "language": "de",
+          "sha256": "b870311ff8097a2fedca5646066895298d7ba304647b51e571cd7aee18d86624"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "b870311ff8097a2fedca5646066895298d7ba304647b51e571cd7aee18d86624",
+          "timestamp": "2026-09-07T14:31:45.299Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4532dabe7619d59f52e2a702e6304028",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "b870311ff8097a2fedca5646066895298d7ba304647b51e571cd7aee18d86624"
+    },
+    {
+      "handle": "extract-024-e42a4508aeae",
+      "sourceRowId": "natural-withhold-audit-id",
+      "language": "id",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Editor tidak menerbitkan laporan audit untuk umum.",
+          "language": "id",
+          "sha256": "63f089b13182acc40f73c0e6b2222e576743282d13c61a547d7219c50ac6dc57"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "63f089b13182acc40f73c0e6b2222e576743282d13c61a547d7219c50ac6dc57",
+          "timestamp": "2026-09-07T14:31:45.301Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4532dabe7619d59f52e2a702e6304028",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "editor"
+                },
+                "theme": {
+                  "type": "document",
+                  "value": "audit report"
+                },
+                "audience": {
+                  "type": "audience",
+                  "value": "public"
+                }
+              },
+              "negated": true
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "63f089b13182acc40f73c0e6b2222e576743282d13c61a547d7219c50ac6dc57"
+    },
+    {
+      "handle": "extract-025-e18f8ea2a433",
+      "sourceRowId": "natural-retry-five-en",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "The operator retries the upload five times.",
+          "language": "en",
+          "sha256": "0ccbd1a3f9fb5696b6246044ea0b72dee71056e0ddfa2047a4861fd87df1693b"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "0ccbd1a3f9fb5696b6246044ea0b72dee71056e0ddfa2047a4861fd87df1693b",
+          "timestamp": "2026-09-07T14:31:45.302Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4d78b5015a3f2d3d28973d2bb19e7725",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 5
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "0ccbd1a3f9fb5696b6246044ea0b72dee71056e0ddfa2047a4861fd87df1693b"
+    },
+    {
+      "handle": "extract-026-cb00e01fe4fb",
+      "sourceRowId": "natural-retry-five-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο χειριστής επαναλαμβάνει τη μεταφόρτωση πέντε φορές.",
+          "language": "el",
+          "sha256": "f91743f91242e706a13dd9a81ec885df6b57673bb7829b993bed2ad79ba2419c"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "f91743f91242e706a13dd9a81ec885df6b57673bb7829b993bed2ad79ba2419c",
+          "timestamp": "2026-09-07T14:31:45.304Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4d78b5015a3f2d3d28973d2bb19e7725",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 5
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "f91743f91242e706a13dd9a81ec885df6b57673bb7829b993bed2ad79ba2419c"
+    },
+    {
+      "handle": "extract-027-0ad8adbbd4c0",
+      "sourceRowId": "natural-retry-five-es",
+      "language": "es",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "El operador repite la carga cinco veces.",
+          "language": "es",
+          "sha256": "7f26cbac99cf4c400cd86ac6f94644456a440a0a6a3294e500a295a4fe8a9a90"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "7f26cbac99cf4c400cd86ac6f94644456a440a0a6a3294e500a295a4fe8a9a90",
+          "timestamp": "2026-09-07T14:31:45.306Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4d78b5015a3f2d3d28973d2bb19e7725",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 5
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "7f26cbac99cf4c400cd86ac6f94644456a440a0a6a3294e500a295a4fe8a9a90"
+    },
+    {
+      "handle": "extract-028-1d0e3a54ea5e",
+      "sourceRowId": "natural-retry-five-fr",
+      "language": "fr",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "L’opérateur relance le téléversement cinq fois.",
+          "language": "fr",
+          "sha256": "d097b84263b64ac8b6f0f1cb4e6a6460e5e8a83bfe4d56f5a1144d27a70d614f"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "d097b84263b64ac8b6f0f1cb4e6a6460e5e8a83bfe4d56f5a1144d27a70d614f",
+          "timestamp": "2026-09-07T14:31:45.307Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4d78b5015a3f2d3d28973d2bb19e7725",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 5
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "d097b84263b64ac8b6f0f1cb4e6a6460e5e8a83bfe4d56f5a1144d27a70d614f"
+    },
+    {
+      "handle": "extract-029-c56fef31f863",
+      "sourceRowId": "natural-retry-five-de",
+      "language": "de",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Der Bediener wiederholt den Upload fünfmal.",
+          "language": "de",
+          "sha256": "1e45550a5c25a767cf86452fbe12fe42231e6cffe454184603261748a670fa59"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "1e45550a5c25a767cf86452fbe12fe42231e6cffe454184603261748a670fa59",
+          "timestamp": "2026-09-07T14:31:45.309Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4d78b5015a3f2d3d28973d2bb19e7725",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 5
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "1e45550a5c25a767cf86452fbe12fe42231e6cffe454184603261748a670fa59"
+    },
+    {
+      "handle": "extract-030-bf6ace6f37a1",
+      "sourceRowId": "natural-retry-five-id",
+      "language": "id",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Operator mengulangi pengunggahan lima kali.",
+          "language": "id",
+          "sha256": "34bfc544d076cb2381700b15be72b200951756b8f9b1cc8f96aecf234df7143e"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "34bfc544d076cb2381700b15be72b200951756b8f9b1cc8f96aecf234df7143e",
+          "timestamp": "2026-09-07T14:31:45.310Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4d78b5015a3f2d3d28973d2bb19e7725",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 5
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "34bfc544d076cb2381700b15be72b200951756b8f9b1cc8f96aecf234df7143e"
+    },
+    {
+      "handle": "extract-031-5727e26bc3d2",
+      "sourceRowId": "natural-retry-fifty-en",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "The operator retries the upload fifty times.",
+          "language": "en",
+          "sha256": "5493222a56efd84b6b70c9a387891d443dc2a9bc928b1cccb32f3f4dabb2d2b6"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "5493222a56efd84b6b70c9a387891d443dc2a9bc928b1cccb32f3f4dabb2d2b6",
+          "timestamp": "2026-09-07T14:31:45.312Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:8dc4eaff9749a3f7d0c223877f1048a7",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 50
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "5493222a56efd84b6b70c9a387891d443dc2a9bc928b1cccb32f3f4dabb2d2b6"
+    },
+    {
+      "handle": "extract-032-3a2c0f6f44e6",
+      "sourceRowId": "natural-retry-fifty-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο χειριστής επαναλαμβάνει τη μεταφόρτωση πενήντα φορές.",
+          "language": "el",
+          "sha256": "4f178a024728cc5dcf944e056604c53f35d018631b8e9cf254ff1db173f6a9ca"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "4f178a024728cc5dcf944e056604c53f35d018631b8e9cf254ff1db173f6a9ca",
+          "timestamp": "2026-09-07T14:31:45.313Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:8dc4eaff9749a3f7d0c223877f1048a7",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 50
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "4f178a024728cc5dcf944e056604c53f35d018631b8e9cf254ff1db173f6a9ca"
+    },
+    {
+      "handle": "extract-033-2d5f8a5cbcf0",
+      "sourceRowId": "natural-retry-fifty-es",
+      "language": "es",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "El operador repite la carga cincuenta veces.",
+          "language": "es",
+          "sha256": "c1106863ffcbee72c186876e4ae0cbd8d19000205fb2b7c18525191853f2bf0c"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "c1106863ffcbee72c186876e4ae0cbd8d19000205fb2b7c18525191853f2bf0c",
+          "timestamp": "2026-09-07T14:31:45.315Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:8dc4eaff9749a3f7d0c223877f1048a7",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 50
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "c1106863ffcbee72c186876e4ae0cbd8d19000205fb2b7c18525191853f2bf0c"
+    },
+    {
+      "handle": "extract-034-b331c15f88ce",
+      "sourceRowId": "natural-retry-fifty-fr",
+      "language": "fr",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "L’opérateur relance le téléversement cinquante fois.",
+          "language": "fr",
+          "sha256": "667d2a206959f29add6adcdec36b1dca356bc8d2a2d31cbb28743ef5be10aa83"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "667d2a206959f29add6adcdec36b1dca356bc8d2a2d31cbb28743ef5be10aa83",
+          "timestamp": "2026-09-07T14:31:45.316Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:8dc4eaff9749a3f7d0c223877f1048a7",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 50
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "667d2a206959f29add6adcdec36b1dca356bc8d2a2d31cbb28743ef5be10aa83"
+    },
+    {
+      "handle": "extract-035-2ffa2e165df4",
+      "sourceRowId": "natural-retry-fifty-de",
+      "language": "de",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Der Bediener wiederholt den Upload fünfzigmal.",
+          "language": "de",
+          "sha256": "575cec889052b8aa8520d66965a9fc8b2afa0afb655edca7f46e84e62eabb2ab"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "575cec889052b8aa8520d66965a9fc8b2afa0afb655edca7f46e84e62eabb2ab",
+          "timestamp": "2026-09-07T14:31:45.317Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:8dc4eaff9749a3f7d0c223877f1048a7",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 50
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "575cec889052b8aa8520d66965a9fc8b2afa0afb655edca7f46e84e62eabb2ab"
+    },
+    {
+      "handle": "extract-036-62d0ac1768cd",
+      "sourceRowId": "natural-retry-fifty-id",
+      "language": "id",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Operator mengulangi pengunggahan lima puluh kali.",
+          "language": "id",
+          "sha256": "521155ecac0cc78e4a872eb244051a3362412e5e4bd2f63599c97e5b9cfc357d"
+        },
+        "provenance": {
+          "extractorType": "codex_agent",
+          "extractorId": "fresh-source-only-v5",
+          "contractHash": "95e0b7390c7441811b7945f584c293ee4ba2e0f677dd238a341ff1f97ee79de1",
+          "contractVersion": "lunum-agent/0.2",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "521155ecac0cc78e4a872eb244051a3362412e5e4bd2f63599c97e5b9cfc357d",
+          "timestamp": "2026-09-07T14:31:45.319Z"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:8dc4eaff9749a3f7d0c223877f1048a7",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "simple_fact",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "value": "operator"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 50
+                },
+                "theme": {
+                  "type": "task",
+                  "value": "upload"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": false,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": false
+      },
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": false,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "521155ecac0cc78e4a872eb244051a3362412e5e4bd2f63599c97e5b9cfc357d"
+    },
+    {
+      "handle": "extract-037-c406c8cc4748",
+      "sourceRowId": "natural-ambiguous-bank-en",
+      "language": "en",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": true,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "d319be26bf6538c0887f7fc868313bb9abda7630b052fa8f45397a29b7451a67"
+    },
+    {
+      "handle": "extract-038-e8b1b037b839",
+      "sourceRowId": "natural-ambiguous-bank-el",
+      "language": "el",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": true,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "163aec5bab83bfb05ad2f2004f10131a9691a079b839bc14e6588716cf0224e0"
+    },
+    {
+      "handle": "extract-039-50abe7180847",
+      "sourceRowId": "natural-ambiguous-bank-es",
+      "language": "es",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": true,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "03a530193ddcd1eef9910df73bb61adf58c922ec7855de6bb5e18e269dff9de0"
+    },
+    {
+      "handle": "extract-040-ed9d94f3f2ca",
+      "sourceRowId": "natural-ambiguous-bank-fr",
+      "language": "fr",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": true,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "e8a7a457e44240d2d649565cb1cf04e3b7b06151d216390b9fbdcec4fd63cc34"
+    },
+    {
+      "handle": "extract-041-db6cac28a71e",
+      "sourceRowId": "natural-ambiguous-bank-de",
+      "language": "de",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": true,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "330f58f4a7c491c1411a0e5124ff3baa4fb73b35f87616a356a08260780a6b60"
+    },
+    {
+      "handle": "extract-042-deff03037176",
+      "sourceRowId": "natural-ambiguous-bank-id",
+      "language": "id",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "identityComparable": false,
+      "exact": false,
+      "abstentionCorrect": true,
+      "goldIdentityAvailable": false,
+      "sourceSha256": "acdbc997ea58f56f555a5eeca4076f246177b35a59628ec961722124912e41bd"
+    }
+  ]
+}

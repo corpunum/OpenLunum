@@ -1,0 +1,20 @@
+{
+  "format": "openlunum-natural-review-evidence/0.1",
+  "datasetSha256": "84bddebe9c9268115155020635b7218c9d17d40950eb0f66a7dbc272e762d3e7",
+  "packetCount": 42,
+  "reviewerFiles": [
+    "reviewer-independent-a.jsonl",
+    "reviewer-independent-b.jsonl"
+  ],
+  "ledgerRows": 64,
+  "negativeReviewCount": 3,
+  "status": "ready-for-certifier",
+  "normalization": [
+    "Reviewer decisions are required to use uppercase protocol values; no semantic decision is inferred from reviewer identity."
+  ],
+  "reviewerLimitations": [
+    "Agent reviewers are independent Codex contexts, not human certification.",
+    "Reviewer B covered the Greek, publication, and abstention packets in its restricted review pass.",
+    "Contrast reviewer supplied source-level representative pair judgments; endpoint lists bind all language realizations."
+  ]
+}

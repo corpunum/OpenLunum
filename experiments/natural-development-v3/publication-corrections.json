@@ -1,0 +1,69 @@
+{
+  "format": "openlunum-natural-development-correction/0.1",
+  "baseDatasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+  "correctedDatasetSha256": "a0f93941a665275ffa178593fc2536c2e6b52d66ea6952ffd422453f1d83de1d",
+  "sourceDataset": "experiments/natural-development-v2/dataset.jsonl",
+  "correctedRows": 6,
+  "corrections": [
+    {
+      "sourceRowId": "natural-publish-audit-en",
+      "baseDatasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+      "baseCandidateSha256": "18ea93bd8fb76423e7c67c631645288cee4ff1bc740b2f5ee88cd700d52fe78d",
+      "correctedCandidateSha256": "c28f7e4639bac537fb87dd2929b74c9bafd6cc06422ade386d7240d25851f9f3",
+      "correctionReason": "The source explicitly expresses a publication audience; V2 target omitted the optional audience role.",
+      "correctionAuthor": "codex-parent-session",
+      "correctionAuthorType": "agent",
+      "reviewerRequired": true
+    },
+    {
+      "sourceRowId": "natural-publish-audit-el",
+      "baseDatasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+      "baseCandidateSha256": "18ea93bd8fb76423e7c67c631645288cee4ff1bc740b2f5ee88cd700d52fe78d",
+      "correctedCandidateSha256": "c28f7e4639bac537fb87dd2929b74c9bafd6cc06422ade386d7240d25851f9f3",
+      "correctionReason": "The source explicitly expresses a publication audience; V2 target omitted the optional audience role.",
+      "correctionAuthor": "codex-parent-session",
+      "correctionAuthorType": "agent",
+      "reviewerRequired": true
+    },
+    {
+      "sourceRowId": "natural-publish-audit-es",
+      "baseDatasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+      "baseCandidateSha256": "18ea93bd8fb76423e7c67c631645288cee4ff1bc740b2f5ee88cd700d52fe78d",
+      "correctedCandidateSha256": "c28f7e4639bac537fb87dd2929b74c9bafd6cc06422ade386d7240d25851f9f3",
+      "correctionReason": "The source explicitly expresses a publication audience; V2 target omitted the optional audience role.",
+      "correctionAuthor": "codex-parent-session",
+      "correctionAuthorType": "agent",
+      "reviewerRequired": true
+    },
+    {
+      "sourceRowId": "natural-publish-audit-fr",
+      "baseDatasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+      "baseCandidateSha256": "18ea93bd8fb76423e7c67c631645288cee4ff1bc740b2f5ee88cd700d52fe78d",
+      "correctedCandidateSha256": "c28f7e4639bac537fb87dd2929b74c9bafd6cc06422ade386d7240d25851f9f3",
+      "correctionReason": "The source explicitly expresses a publication audience; V2 target omitted the optional audience role.",
+      "correctionAuthor": "codex-parent-session",
+      "correctionAuthorType": "agent",
+      "reviewerRequired": true
+    },
+    {
+      "sourceRowId": "natural-publish-audit-de",
+      "baseDatasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+      "baseCandidateSha256": "18ea93bd8fb76423e7c67c631645288cee4ff1bc740b2f5ee88cd700d52fe78d",
+      "correctedCandidateSha256": "c28f7e4639bac537fb87dd2929b74c9bafd6cc06422ade386d7240d25851f9f3",
+      "correctionReason": "The source explicitly expresses a publication audience; V2 target omitted the optional audience role.",
+      "correctionAuthor": "codex-parent-session",
+      "correctionAuthorType": "agent",
+      "reviewerRequired": true
+    },
+    {
+      "sourceRowId": "natural-publish-audit-id",
+      "baseDatasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+      "baseCandidateSha256": "18ea93bd8fb76423e7c67c631645288cee4ff1bc740b2f5ee88cd700d52fe78d",
+      "correctedCandidateSha256": "c28f7e4639bac537fb87dd2929b74c9bafd6cc06422ade386d7240d25851f9f3",
+      "correctionReason": "The source explicitly expresses a publication audience; V2 target omitted the optional audience role.",
+      "correctionAuthor": "codex-parent-session",
+      "correctionAuthorType": "agent",
+      "reviewerRequired": true
+    }
+  ]
+}
