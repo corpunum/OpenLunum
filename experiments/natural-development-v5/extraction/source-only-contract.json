@@ -1,0 +1,881 @@
+{
+  "contractVersion": "lunum-agent/0.2",
+  "transport": {
+    "schema": "lunum-sem/0.1-draft",
+    "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+    "descriptorHash": "ec30197c0782a24666062d95904f463592561abeeb5018389351446d1b8b0784",
+    "descriptor": {
+      "schema": "lunum-sem/0.1-draft",
+      "required": [
+        "schema",
+        "world",
+        "kind",
+        "clauses"
+      ],
+      "clause": {
+        "required": [
+          "predicate",
+          "roles"
+        ],
+        "arrays": [
+          "conditions",
+          "consequences"
+        ]
+      },
+      "term": {
+        "typed": true,
+        "quantityValue": "finite-number",
+        "dateValue": "string-or-number"
+      }
+    }
+  },
+  "protocol": {
+    "version": "lunum-protocol/0.1",
+    "registryHash": "116e90d37bbb2b769e6d6727b02a5518d28742fa7c34f1c07cbdaa91eeeca289",
+    "registry": {
+      "version": "lunum-protocol/0.1",
+      "worlds": [
+        "real",
+        "fiction",
+        "tool",
+        "dream",
+        "belief",
+        "metaphor"
+      ],
+      "kinds": [
+        "simple_fact",
+        "preference",
+        "instruction",
+        "command",
+        "plan",
+        "plan_instruction",
+        "event",
+        "observation",
+        "belief_state",
+        "fiction",
+        "uncertainty",
+        "condition",
+        "safety_constraint",
+        "project_state",
+        "tool_event",
+        "conditional_instruction"
+      ],
+      "predicates": [
+        "prefer",
+        "request",
+        "confirm",
+        "delete",
+        "enable",
+        "disable",
+        "allow",
+        "prohibit",
+        "require",
+        "believe",
+        "observe",
+        "remind",
+        "deadline",
+        "below",
+        "above",
+        "before",
+        "after",
+        "share",
+        "store",
+        "access",
+        "send",
+        "receive",
+        "create",
+        "update",
+        "read",
+        "write",
+        "deploy",
+        "notify",
+        "authenticate",
+        "grant",
+        "revoke",
+        "archive",
+        "translate",
+        "state",
+        "approve",
+        "copy",
+        "publish",
+        "restart",
+        "retry",
+        "rotate",
+        "run",
+        "confirmed",
+        "is_healthy",
+        "keep",
+        "wait",
+        "request_extension"
+      ],
+      "roles": [
+        "agent",
+        "experiencer",
+        "subject",
+        "actor",
+        "recipient",
+        "object",
+        "theme",
+        "patient",
+        "target",
+        "source",
+        "destination",
+        "location",
+        "time",
+        "manner",
+        "value",
+        "reason",
+        "evidence",
+        "proposition",
+        "condition",
+        "consequence",
+        "threshold",
+        "amount",
+        "scope",
+        "purpose",
+        "audience",
+        "visibility",
+        "instrument",
+        "channel",
+        "region",
+        "order",
+        "duration",
+        "parallelism",
+        "result",
+        "benefit",
+        "capability",
+        "from",
+        "to",
+        "id",
+        "issuer",
+        "terms",
+        "role",
+        "window",
+        "unit",
+        "count"
+      ],
+      "termTypes": [
+        "actor",
+        "concept",
+        "object",
+        "metric",
+        "feature",
+        "project",
+        "quantity",
+        "date",
+        "time",
+        "identifier",
+        "document",
+        "event",
+        "state",
+        "resource",
+        "service",
+        "location",
+        "url",
+        "path",
+        "range",
+        "text",
+        "entity",
+        "group",
+        "release",
+        "environment",
+        "audience",
+        "weekday",
+        "system",
+        "tool",
+        "place",
+        "signal",
+        "measure",
+        "access",
+        "credential",
+        "process",
+        "task",
+        "transaction",
+        "collection"
+      ],
+      "modalities": [
+        "fact",
+        "opinion",
+        "belief",
+        "possibility",
+        "necessity",
+        "obligation",
+        "permission",
+        "ability",
+        "intention",
+        "certainty"
+      ],
+      "aliases": {
+        "world": {
+          "actual": "real",
+          "existent": "real"
+        },
+        "kind": {
+          "fact": "simple_fact",
+          "statement": "simple_fact",
+          "claim": "simple_fact",
+          "belief": "belief_state",
+          "agent_belief": "belief_state",
+          "directive": "instruction"
+        },
+        "role": {
+          "receiver": "recipient",
+          "addressee": "recipient"
+        },
+        "predicate": {
+          "ask": "request",
+          "inquire": "request",
+          "client_request": "request",
+          "customer_request": "request",
+          "permit": "allow",
+          "forbid": "prohibit",
+          "keep_private": "keep"
+        },
+        "term_type": {
+          "person": "actor",
+          "human": "actor",
+          "datetime": "date"
+        },
+        "modality": {
+          "must": "obligation",
+          "mandatory": "obligation",
+          "required": "obligation",
+          "must_not": "obligation",
+          "shall_not": "obligation",
+          "prohibited": "obligation",
+          "forbidden": "obligation",
+          "may": "permission",
+          "allowed": "permission",
+          "optional": "permission",
+          "might": "possibility",
+          "possible": "possibility",
+          "certain": "certainty",
+          "believed": "belief"
+        }
+      }
+    }
+  },
+  "identity": {
+    "version": "2.1",
+    "exactIdentityRequires": [
+      "structural-validity",
+      "protocol-canonicality",
+      "canonical-frame",
+      "grounded-identity",
+      "classified-identity-fields"
+    ]
+  },
+  "frames": {
+    "version": "lunum-frame/0.1",
+    "registryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+    "framedPredicates": [
+      "above",
+      "after",
+      "allow",
+      "before",
+      "believe",
+      "below",
+      "confirm",
+      "confirmed",
+      "copy",
+      "deadline",
+      "delete",
+      "deploy",
+      "disable",
+      "enable",
+      "keep",
+      "prefer",
+      "prohibit",
+      "publish",
+      "receive",
+      "request",
+      "retry",
+      "rotate",
+      "send"
+    ],
+    "registry": {
+      "prefer": {
+        "predicate": "prefer",
+        "roles": [
+          {
+            "name": "experiencer",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          }
+        ],
+        "description": "An experiencer has a preference for a theme."
+      },
+      "send": {
+        "predicate": "send",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "object",
+            "required": true
+          },
+          {
+            "name": "recipient",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "destination",
+            "required": false
+          }
+        ],
+        "exclusiveGroups": [
+          [
+            "recipient",
+            "destination"
+          ]
+        ],
+        "description": "An agent transmits an object to a recipient or destination."
+      },
+      "receive": {
+        "predicate": "receive",
+        "roles": [
+          {
+            "name": "recipient",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          },
+          {
+            "name": "source",
+            "required": false
+          }
+        ],
+        "description": "A recipient accepts or receives a theme from a source."
+      },
+      "believe": {
+        "predicate": "believe",
+        "roles": [
+          {
+            "name": "experiencer",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          }
+        ],
+        "description": "An experiencer holds a belief regarding a theme or proposition."
+      },
+      "publish": {
+        "predicate": "publish",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          },
+          {
+            "name": "audience",
+            "required": false
+          }
+        ],
+        "description": "An agent makes a theme available to an audience or public."
+      },
+      "retry": {
+        "predicate": "retry",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "count",
+            "required": false,
+            "allowedTermTypes": [
+              "quantity"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": false
+          }
+        ],
+        "atLeastOneOf": [
+          "count",
+          "theme"
+        ],
+        "description": "An agent attempts an action again, with a count or action theme."
+      },
+      "request": {
+        "predicate": "request",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          },
+          {
+            "name": "recipient",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          }
+        ],
+        "description": "An agent requests a theme or action from an optional recipient."
+      },
+      "keep": {
+        "predicate": "keep",
+        "roles": [
+          {
+            "name": "agent",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": false
+          },
+          {
+            "name": "visibility",
+            "required": false
+          }
+        ],
+        "atLeastOneOf": [
+          "theme",
+          "visibility"
+        ],
+        "description": "An agent retains a theme, optionally with an explicit visibility."
+      },
+      "delete": {
+        "predicate": "delete",
+        "roles": [
+          {
+            "name": "agent",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": false
+          },
+          {
+            "name": "object",
+            "required": false
+          },
+          {
+            "name": "target",
+            "required": false
+          }
+        ],
+        "exclusiveGroups": [
+          [
+            "theme",
+            "object",
+            "target"
+          ]
+        ],
+        "description": "An agent removes or deletes an object/theme/target."
+      },
+      "enable": {
+        "predicate": "enable",
+        "roles": [
+          {
+            "name": "agent",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          }
+        ],
+        "description": "An agent enables a feature, system, or capability."
+      },
+      "disable": {
+        "predicate": "disable",
+        "roles": [
+          {
+            "name": "agent",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          }
+        ],
+        "description": "An agent disables a feature, system, or capability."
+      },
+      "allow": {
+        "predicate": "allow",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "recipient",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          }
+        ],
+        "description": "An agent permits a recipient to perform an action or access a theme."
+      },
+      "prohibit": {
+        "predicate": "prohibit",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "recipient",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          }
+        ],
+        "description": "An agent forbids a recipient from performing an action or accessing a theme."
+      },
+      "deploy": {
+        "predicate": "deploy",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "destination",
+            "required": true
+          }
+        ],
+        "description": "An agent deploys to an environment or destination."
+      },
+      "copy": {
+        "predicate": "copy",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "source",
+            "required": true
+          },
+          {
+            "name": "destination",
+            "required": true
+          }
+        ],
+        "description": "An agent copies a resource from source to destination."
+      },
+      "rotate": {
+        "predicate": "rotate",
+        "roles": [
+          {
+            "name": "agent",
+            "required": true,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": true
+          }
+        ],
+        "description": "An agent rotates a credential or key."
+      },
+      "deadline": {
+        "predicate": "deadline",
+        "roles": [
+          {
+            "name": "subject",
+            "required": true
+          },
+          {
+            "name": "time",
+            "required": true
+          }
+        ],
+        "description": "A subject has a deadline at time."
+      },
+      "below": {
+        "predicate": "below",
+        "roles": [
+          {
+            "name": "subject",
+            "required": true
+          },
+          {
+            "name": "value",
+            "required": true
+          }
+        ],
+        "description": "A metric or subject is below a threshold or value."
+      },
+      "above": {
+        "predicate": "above",
+        "roles": [
+          {
+            "name": "subject",
+            "required": true
+          },
+          {
+            "name": "value",
+            "required": true
+          }
+        ],
+        "description": "A metric or subject is above a threshold or value."
+      },
+      "before": {
+        "predicate": "before",
+        "roles": [
+          {
+            "name": "subject",
+            "required": true
+          },
+          {
+            "name": "object",
+            "required": true
+          }
+        ],
+        "description": "A subject event precedes an object event."
+      },
+      "after": {
+        "predicate": "after",
+        "roles": [
+          {
+            "name": "subject",
+            "required": true
+          },
+          {
+            "name": "object",
+            "required": true
+          }
+        ],
+        "description": "A subject event follows an object event."
+      },
+      "confirmed": {
+        "predicate": "confirmed",
+        "roles": [
+          {
+            "name": "agent",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": false
+          }
+        ],
+        "atLeastOneOf": [
+          "agent",
+          "theme"
+        ],
+        "description": "An action or transaction is confirmed by an agent or for a theme."
+      },
+      "confirm": {
+        "predicate": "confirm",
+        "roles": [
+          {
+            "name": "agent",
+            "required": false,
+            "allowedTermTypes": [
+              "actor",
+              "entity",
+              "system"
+            ]
+          },
+          {
+            "name": "theme",
+            "required": false
+          }
+        ],
+        "atLeastOneOf": [
+          "agent",
+          "theme"
+        ],
+        "description": "An agent confirms an action or transaction."
+      }
+    },
+    "unframedBehavior": "candidate-only; abstain in exact-identity extraction; no lfp:2.1"
+  },
+  "frameFirst": {
+    "mode": "builder-then-submit",
+    "inputFields": [
+      "world",
+      "kind",
+      "predicate",
+      "roles",
+      "negated",
+      "modality",
+      "time",
+      "conditions",
+      "consequences"
+    ],
+    "fieldSemantics": {
+      "world": "semantic world from the protocol registry (for example real); never a language tag",
+      "kind": "semantic clause kind from the protocol registry (for example preference)",
+      "predicate": "framed predicate identifier",
+      "roles": "object mapping canonical role names to typed LunumTerm objects; never a comma-separated list"
+    },
+    "termShape": {
+      "discriminator": "type",
+      "identifierFields": [
+        "id",
+        "ref"
+      ],
+      "literalFields": [
+        "value"
+      ]
+    },
+    "framePromptBlock": "prefer(experiencer, theme; experiencer: actor|entity|system) — An experiencer has a preference for a theme.\nsend(agent, object; optional: recipient, destination; recipient|destination (mutually exclusive); agent: actor|entity|system; recipient: actor|entity|system) — An agent transmits an object to a recipient or destination.\nreceive(recipient, theme; optional: source; recipient: actor|entity|system) — A recipient accepts or receives a theme from a source.\nbelieve(experiencer, theme; experiencer: actor|entity|system) — An experiencer holds a belief regarding a theme or proposition.\npublish(agent, theme; optional: audience; agent: actor|entity|system) — An agent makes a theme available to an audience or public.\nretry(agent; optional: count, theme; at least one of: count|theme; agent: actor|entity|system; count: quantity) — An agent attempts an action again, with a count or action theme.\nrequest(agent, theme; optional: recipient; agent: actor|entity|system; recipient: actor|entity|system) — An agent requests a theme or action from an optional recipient.\nkeep(no required roles; optional: agent, theme, visibility; at least one of: theme|visibility; agent: actor|entity|system) — An agent retains a theme, optionally with an explicit visibility.\ndelete(no required roles; optional: agent, theme, object, target; theme|object|target (mutually exclusive); agent: actor|entity|system) — An agent removes or deletes an object/theme/target.\nenable(theme; optional: agent; agent: actor|entity|system) — An agent enables a feature, system, or capability.\ndisable(theme; optional: agent; agent: actor|entity|system) — An agent disables a feature, system, or capability.\nallow(agent, theme; optional: recipient; agent: actor|entity|system; recipient: actor|entity|system) — An agent permits a recipient to perform an action or access a theme.\nprohibit(agent, theme; optional: recipient; agent: actor|entity|system; recipient: actor|entity|system) — An agent forbids a recipient from performing an action or accessing a theme.\ndeploy(agent, destination; agent: actor|entity|system) — An agent deploys to an environment or destination.\ncopy(agent, source, destination; agent: actor|entity|system) — An agent copies a resource from source to destination.\nrotate(agent, theme; agent: actor|entity|system) — An agent rotates a credential or key.\ndeadline(subject, time) — A subject has a deadline at time.\nbelow(subject, value) — A metric or subject is below a threshold or value.\nabove(subject, value) — A metric or subject is above a threshold or value.\nbefore(subject, object) — A subject event precedes an object event.\nafter(subject, object) — A subject event follows an object event.\nconfirmed(no required roles; optional: agent, theme; at least one of: agent|theme; agent: actor|entity|system) — An action or transaction is confirmed by an agent or for a theme.\nconfirm(no required roles; optional: agent, theme; at least one of: agent|theme; agent: actor|entity|system) — An agent confirms an action or transaction.",
+    "roleValues": "Use typed LunumTerm objects with the field name type (never termType). Identifier terms use id or ref; literal terms use value. The builder rejects missing or disallowed types, missing required roles, extra roles, and exclusive-role conflicts.",
+    "unframedBehavior": "lunum_build_candidate rejects registered-but-unframed predicates; submitCandidate remains available for candidate-only abstention."
+  },
+  "grounding": {
+    "version": "lunum-grounding/0.1",
+    "identityBehavior": "agent proposals receive deterministic gnd keys for evidence only; unresolved proposals remain grounding-pending and cannot grant lfp:2.1",
+    "proposalFields": [
+      "path",
+      "termType",
+      "head",
+      "modifiers"
+    ],
+    "evidenceFields": [
+      "surface",
+      "language"
+    ]
+  },
+  "instructions": {
+    "version": "agent-extraction-instructions/0.2",
+    "hash": "ff69d67a5c0fc66492b2b1470590a39fd7d1bd080c275a023371ff2426ae67a8",
+    "semTemplate": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"<registered-predicate>\",\"roles\":{},\"negated\":false}]}"
+  },
+  "canonicalRules": [
+    "Use only registered protocol symbols or explicit x- extensions.",
+    "Use the canonical frame roles exactly; unexpected roles fail exact identity.",
+    "deadline encodes time in roles.time, not clause.time.",
+    "conditions and consequences are clause arrays, not role lookalikes.",
+    "prohibition uses negated=true, not a duplicate negative modality."
+  ],
+  "groundingRules": [
+    "Open instance identifiers remain data and are never inferred equivalent.",
+    "A semantic reference requires ref or id; surface-evidence references do not establish identity.",
+    "Ungrounded or unresolved references fail closed for exact identity."
+  ],
+  "abstentionRules": [
+    "Abstain when meaning is ambiguous, unsupported, ungrounded, or requires invented protocol symbols.",
+    "Retain source text and provenance even when candidate semantics are rejected.",
+    "Caller confidence never promotes a candidate."
+  ]
+}

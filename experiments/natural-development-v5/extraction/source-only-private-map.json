@@ -1,0 +1,128 @@
+{
+  "extract-001-98a3e9a3d227": {
+    "sourceRowId": "natural-allow-archive-en"
+  },
+  "extract-002-765d4cfe7cdb": {
+    "sourceRowId": "natural-allow-archive-el"
+  },
+  "extract-003-bebfebc301ed": {
+    "sourceRowId": "natural-allow-archive-es"
+  },
+  "extract-004-5d7a06b02874": {
+    "sourceRowId": "natural-allow-archive-fr"
+  },
+  "extract-005-10fb36e0c695": {
+    "sourceRowId": "natural-allow-archive-de"
+  },
+  "extract-006-f16fbcbd1865": {
+    "sourceRowId": "natural-allow-archive-id"
+  },
+  "extract-007-06393521c56d": {
+    "sourceRowId": "natural-prohibit-archive-en"
+  },
+  "extract-008-72d10648da5c": {
+    "sourceRowId": "natural-prohibit-archive-el"
+  },
+  "extract-009-67c8c504ccd2": {
+    "sourceRowId": "natural-prohibit-archive-es"
+  },
+  "extract-010-038337c3935c": {
+    "sourceRowId": "natural-prohibit-archive-fr"
+  },
+  "extract-011-056efecf4672": {
+    "sourceRowId": "natural-prohibit-archive-de"
+  },
+  "extract-012-7fd63da1f162": {
+    "sourceRowId": "natural-prohibit-archive-id"
+  },
+  "extract-013-20a508fc7e0e": {
+    "sourceRowId": "natural-publish-audit-en"
+  },
+  "extract-014-1710b2025927": {
+    "sourceRowId": "natural-publish-audit-el"
+  },
+  "extract-015-b05eb53ba8e0": {
+    "sourceRowId": "natural-publish-audit-es"
+  },
+  "extract-016-3c33d3d4a9d3": {
+    "sourceRowId": "natural-publish-audit-fr"
+  },
+  "extract-017-16e18d54db18": {
+    "sourceRowId": "natural-publish-audit-de"
+  },
+  "extract-018-8448b04f0f11": {
+    "sourceRowId": "natural-publish-audit-id"
+  },
+  "extract-019-d09b3994985b": {
+    "sourceRowId": "natural-withhold-audit-en"
+  },
+  "extract-020-8fd3a389aa45": {
+    "sourceRowId": "natural-withhold-audit-el"
+  },
+  "extract-021-137de681d81f": {
+    "sourceRowId": "natural-withhold-audit-es"
+  },
+  "extract-022-7a0683abd60a": {
+    "sourceRowId": "natural-withhold-audit-fr"
+  },
+  "extract-023-d46be889c21b": {
+    "sourceRowId": "natural-withhold-audit-de"
+  },
+  "extract-024-e42a4508aeae": {
+    "sourceRowId": "natural-withhold-audit-id"
+  },
+  "extract-025-e18f8ea2a433": {
+    "sourceRowId": "natural-retry-five-en"
+  },
+  "extract-026-cb00e01fe4fb": {
+    "sourceRowId": "natural-retry-five-el"
+  },
+  "extract-027-0ad8adbbd4c0": {
+    "sourceRowId": "natural-retry-five-es"
+  },
+  "extract-028-1d0e3a54ea5e": {
+    "sourceRowId": "natural-retry-five-fr"
+  },
+  "extract-029-c56fef31f863": {
+    "sourceRowId": "natural-retry-five-de"
+  },
+  "extract-030-bf6ace6f37a1": {
+    "sourceRowId": "natural-retry-five-id"
+  },
+  "extract-031-5727e26bc3d2": {
+    "sourceRowId": "natural-retry-fifty-en"
+  },
+  "extract-032-3a2c0f6f44e6": {
+    "sourceRowId": "natural-retry-fifty-el"
+  },
+  "extract-033-2d5f8a5cbcf0": {
+    "sourceRowId": "natural-retry-fifty-es"
+  },
+  "extract-034-b331c15f88ce": {
+    "sourceRowId": "natural-retry-fifty-fr"
+  },
+  "extract-035-2ffa2e165df4": {
+    "sourceRowId": "natural-retry-fifty-de"
+  },
+  "extract-036-62d0ac1768cd": {
+    "sourceRowId": "natural-retry-fifty-id"
+  },
+  "extract-037-c406c8cc4748": {
+    "sourceRowId": "natural-ambiguous-bank-en"
+  },
+  "extract-038-e8b1b037b839": {
+    "sourceRowId": "natural-ambiguous-bank-el"
+  },
+  "extract-039-50abe7180847": {
+    "sourceRowId": "natural-ambiguous-bank-es"
+  },
+  "extract-040-ed9d94f3f2ca": {
+    "sourceRowId": "natural-ambiguous-bank-fr"
+  },
+  "extract-041-db6cac28a71e": {
+    "sourceRowId": "natural-ambiguous-bank-de"
+  },
+  "extract-042-deff03037176": {
+    "sourceRowId": "natural-ambiguous-bank-id"
+  }
+}
