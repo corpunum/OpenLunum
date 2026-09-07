@@ -1,0 +1,24 @@
+{
+  "format": "openlunum-natural-development/0.1",
+  "status": "awaiting-independent-review",
+  "datasetSha256": "28a99f454b688abb87d9c8f8362faa79f5b99ac174337185d378273e3f950f48",
+  "rows": 42,
+  "semanticGroups": 7,
+  "languages": [
+    "en",
+    "el",
+    "es",
+    "fr",
+    "de",
+    "id"
+  ],
+  "contrastFamilies": [
+    "allow-prohibit-archive",
+    "publish-withhold-audit",
+    "retry-count-upload"
+  ],
+  "abstentionGroups": [
+    "ambiguous-bank"
+  ],
+  "authoringPolicy": "Natural multilingual development-only examples with explicit source-visible contrasts; no protected evaluation or training use."
+}
