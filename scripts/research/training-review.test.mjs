@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { createReviewPackets, validateReviewDecision, summarizeReviewLedger } from './training-review.mjs';
+import { assertBlindPacket, createReviewPackets, validateReviewDecision, summarizeReviewLedger } from './training-review.mjs';
 
 test('review packets contain source and candidate but no answer-bearing dataset metadata', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lunum-review-'));
@@ -25,6 +25,10 @@ test('review decisions reject gold leakage and dataset drift', () => {
   assert.throws(() => validateReviewDecision({ ...base, expectedAnswer: 'gold' }, base.datasetSha256), /answer_leakage/);
   assert.throws(() => validateReviewDecision({ ...base, datasetSha256: 'b'.repeat(64) }, base.datasetSha256), /hash_mismatch/);
   assert.throws(() => validateReviewDecision({ ...base, decision: 'PROMOTE' }, base.datasetSha256), /decision_invalid/);
+});
+
+test('blind packet guard rejects nested answer-bearing keys', () => {
+  assert.throws(() => assertBlindPacket({ itemId: 'x', candidate: { roles: { subject: { gold: 'hidden' } } } }), /review_packet_leakage/);
 });
 
 test('empty review ledger remains uncertified and reports all items pending', () => {
