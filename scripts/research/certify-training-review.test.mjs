@@ -25,8 +25,11 @@ test('certifier derives a reviewed safe subset and fails closed without safety p
   fs.writeFileSync(ledgerFile, rows.map((row) => JSON.stringify({ itemId: reviewItemIdForSourceId(row.id), datasetSha256, decision: 'ACCEPT', reviewerId: 'agent', reviewerType: 'agent' })).join('\n') + '\n');
   const outputFile = path.join(dir, 'out.jsonl');
   const reportFile = path.join(dir, 'report.json');
-  const report = certifyTrainingReview({ datasetFile, ledgerFile, outputFile, reportFile });
+  const bindingFile = path.join(dir, 'bindings.jsonl');
+  const report = certifyTrainingReview({ datasetFile, ledgerFile, outputFile, reportFile, bindingFile });
   assert.equal(report.outputRows, 6);
+  assert.equal(report.finalAcceptedRows, 6);
+  assert.equal(report.rowBindingCount, 6);
   assert.equal(report.deterministicValidation.pass, true);
   assert.equal(report.trainingGoldEligible, false);
   assert.match(report.failureReasons.join(','), /critical_negative/);
