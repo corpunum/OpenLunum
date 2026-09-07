@@ -21,7 +21,7 @@ function correctedRow(row, proposal) {
  * its six realizations has exclusively ACCEPT reviews after accepted review-
  * backed corrections. Invalid safety links are excluded rather than edited.
  */
-export function certifyTrainingReview({ datasetFile, ledgerFile, correctionFile, negativeFile, outputFile, reportFile }) {
+export function certifyTrainingReview({ datasetFile, ledgerFile, correctionFile, negativeFile, outputFile, reportFile, bindingFile }) {
   const rows = readJsonl(datasetFile);
   const datasetSha256 = sha256(fs.readFileSync(datasetFile));
   const reviews = readJsonl(ledgerFile);
@@ -59,27 +59,39 @@ export function certifyTrainingReview({ datasetFile, ledgerFile, correctionFile,
   const unsafeGroups = new Set([...pairManifest.values()].filter((pair) => !pair.safe).flatMap((pair) => pair.groups));
   const outputGroups = new Set([...eligibleGroups].filter((group) => !unsafeGroups.has(group)));
   const outputRows = prepared.filter((entry) => outputGroups.has(entry.row.source.semanticGroup)).map((entry) => entry.row);
+  const bindings = prepared.filter((entry) => outputGroups.has(entry.row.source.semanticGroup)).map((entry) => ({
+    outputRowId: entry.row.id,
+    sourceRowId: entry.row.id,
+    reviewItemId: entry.itemId,
+    datasetSha256,
+    reviewCount: entry.reviews,
+    correctionApplied: entry.corrected,
+    packetSha256s: [...new Set((decisions.get(entry.itemId) ?? []).map((review) => review.packetSha256))].sort()
+  }));
   const rowErrors = outputRows.flatMap((row) => validateTrainingExample(row).map((error) => `${row.id}: ${error}`));
   const splitErrors = validateConceptDisjointSplits(outputRows);
   if (outputFile) fs.writeFileSync(outputFile, outputRows.map((row) => JSON.stringify(row)).join('\n') + (outputRows.length ? '\n' : ''));
+  if (bindingFile) fs.writeFileSync(bindingFile, bindings.map((binding) => JSON.stringify(binding)).join('\n') + (bindings.length ? '\n' : ''));
   const report = {
     format: 'openlunum-certified-training-review/0.1',
     datasetSha256,
     inputRows: rows.length,
     submittedReviewRows: reviews.length,
     reviewedRows: prepared.filter((entry) => entry.reviews > 0).length,
-    acceptedRows: prepared.filter((entry) => entry.accepted).length,
-    correctedRows: prepared.filter((entry) => entry.corrected).length,
-    eligibleGroups: eligibleGroups.size,
+    finalAcceptedRows: prepared.filter((entry) => entry.accepted).length,
+    correctionsAppliedRows: prepared.filter((entry) => entry.corrected).length,
+    eligibleGroupsBeforeSafety: eligibleGroups.size,
     outputGroups: outputGroups.size,
     outputRows: outputRows.length,
+    excludedRows: rows.length - outputRows.length,
+    rowBindingCount: bindings.length,
     pairReviews: negativeReviews.length,
     safeNegativePairs: safeNegativePairs.size,
     deterministicValidation: { rowErrors, splitErrors, pass: rowErrors.length === 0 && splitErrors.length === 0 },
     trainingGoldEligible: outputRows.length > 0 && rowErrors.length === 0 && splitErrors.length === 0 && safeNegativePairs.size > 0 && prepared.every((entry) => entry.reviews > 0),
     failureReasons: [
       ...(prepared.some((entry) => entry.reviews === 0) ? ['unreviewed_rows_excluded_or_present'] : []),
-      ...(prepared.some((entry) => !entry.accepted) ? ['non_accept_reviews_present'] : []),
+      ...(prepared.some((entry) => !entry.accepted) ? ['non_accept_final_reviews_present'] : []),
       ...(safeNegativePairs.size === 0 ? ['no_reviewed_safe_critical_negative_pairs'] : []),
       ...(rowErrors.length || splitErrors.length ? ['deterministic_validation_failed'] : [])
     ],
@@ -90,7 +102,7 @@ export function certifyTrainingReview({ datasetFile, ledgerFile, correctionFile,
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const [datasetFile, ledgerFile, correctionFile, negativeFile, outputFile, reportFile] = process.argv.slice(2);
+  const [datasetFile, ledgerFile, correctionFile, negativeFile, outputFile, reportFile, bindingFile] = process.argv.slice(2);
   if (!datasetFile || !ledgerFile || !outputFile || !reportFile) throw new Error('usage: certify-training-review.mjs <dataset> <ledger> <corrections> <negative-reviews> <output> <report>');
-  console.log(JSON.stringify(certifyTrainingReview({ datasetFile: path.resolve(datasetFile), ledgerFile: path.resolve(ledgerFile), correctionFile: correctionFile && path.resolve(correctionFile), negativeFile: negativeFile && path.resolve(negativeFile), outputFile: path.resolve(outputFile), reportFile: path.resolve(reportFile) }), null, 2));
+  console.log(JSON.stringify(certifyTrainingReview({ datasetFile: path.resolve(datasetFile), ledgerFile: path.resolve(ledgerFile), correctionFile: correctionFile && path.resolve(correctionFile), negativeFile: negativeFile && path.resolve(negativeFile), outputFile: path.resolve(outputFile), reportFile: path.resolve(reportFile), bindingFile: bindingFile && path.resolve(bindingFile) }), null, 2));
 }

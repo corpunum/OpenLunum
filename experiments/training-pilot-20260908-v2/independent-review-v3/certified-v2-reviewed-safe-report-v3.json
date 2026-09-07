@@ -4,11 +4,13 @@
   "inputRows": 720,
   "submittedReviewRows": 1146,
   "reviewedRows": 720,
-  "acceptedRows": 720,
-  "correctedRows": 144,
-  "eligibleGroups": 120,
+  "finalAcceptedRows": 720,
+  "correctionsAppliedRows": 144,
+  "eligibleGroupsBeforeSafety": 120,
   "outputGroups": 108,
   "outputRows": 648,
+  "excludedRows": 72,
+  "rowBindingCount": 648,
   "pairReviews": 6,
   "safeNegativePairs": 0,
   "deterministicValidation": {
@@ -20,5 +22,5 @@
   "failureReasons": [
     "no_reviewed_safe_critical_negative_pairs"
   ],
-  "generatedAt": "2026-09-07T10:41:29.568Z"
+  "generatedAt": "2026-09-07T11:06:44.175Z"
 }

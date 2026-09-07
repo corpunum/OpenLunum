@@ -109,16 +109,20 @@
   "certificationDecision": {
     "trainingGoldEligible": false,
     "blockingReasons": [
-      "18 corrected rows remain unresolved after independent review",
-      "all six hard-negative pairs were independently judged NOT_DISTINCT",
-      "V1 uses synthetic template gold and has no valid reviewed safety negatives"
+      "all six critical-negative pairs were independently judged NOT_DISTINCT; no safe reviewed critical-negative coverage exists"
     ],
-    "nextAction": "author a new independently reviewed dataset with natural multilingual text and real critical-negative distinctions"
+    "correctionStatus": {
+      "rowsWithAcceptedCorrections": 144,
+      "unresolvedFinalCorrections": 0
+    },
+    "nextAction": "author a new independently reviewed dataset with natural multilingual text and genuine critical-negative distinctions"
   },
   "finalCertification": {
     "reportPath": "certified-v2-reviewed-safe-report-v3.json",
     "datasetPath": "certified-v2-reviewed-safe-subset-v3.jsonl",
-    "reportSha256": "e9e6fd3eb04e8a7b7b9cb59adf4a76f9f2f3e2281b2f5dd3bfb460c4ff399ed0",
-    "datasetSha256": "5f48b76f2e50946e02c8a2ce9b6a96adfdeaaad2ac0b40b841af215bb58aed87"
+    "bindingPath": "certified-v2-reviewed-safe-bindings-v3.jsonl",
+    "reportSha256": "3ab785f1138c7b34b94f6509137cd503d03ddb6bd153d875e444077cb7872f55",
+    "datasetSha256": "5f48b76f2e50946e02c8a2ce9b6a96adfdeaaad2ac0b40b841af215bb58aed87",
+    "bindingSha256": "39ba99d3edc7b74d560a32ebc7289e7672ac151dc3692dae38d5737d8436ad02"
   }
 }
