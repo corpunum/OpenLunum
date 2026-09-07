@@ -7,6 +7,7 @@ import { loadJsonLines } from './training-program.mjs';
 
 export const REVIEW_SCHEMA = 'openlunum-training-review/0.1';
 const DECISIONS = new Set(['ACCEPT', 'REJECT', 'CORRECTION_REQUIRED', 'AMBIGUOUS']);
+const WITHHELD_KEYS = new Set(['semanticGroup', 'criticalNegativePairIds', 'conceptIds', 'entityIds', 'provenance', 'review', 'split', 'generatorVersion', 'expectedAnswer', 'gold']);
 
 const sha256 = (value) => crypto.createHash('sha256').update(value).digest('hex');
 
@@ -40,20 +41,35 @@ function reviewCandidate(row) {
   };
 }
 
+export function assertBlindPacket(packet) {
+  const leaked = [];
+  const visit = (value, pathName) => {
+    if (Array.isArray(value)) return value.forEach((item, index) => visit(item, `${pathName}[${index}]`));
+    if (!value || typeof value !== 'object') return;
+    for (const [key, child] of Object.entries(value)) {
+      if (WITHHELD_KEYS.has(key)) leaked.push(`${pathName}.${key}`);
+      visit(child, `${pathName}.${key}`);
+    }
+  };
+  visit(packet, '$');
+  if (leaked.length) throw new Error(`review_packet_leakage:${leaked.join(',')}`);
+  return packet;
+}
+
 export function createReviewPackets(datasetFile, outputDir) {
   const rows = datasetRows(datasetFile);
   const datasetHash = sha256(datasetBytes(datasetFile));
   fs.mkdirSync(outputDir, { recursive: true });
   const packetFile = path.join(outputDir, 'packets.jsonl');
   const manifestFile = path.join(outputDir, 'manifest.json');
-  const packets = rows.map((row) => ({
+  const packets = rows.map((row) => assertBlindPacket({
     reviewSchema: REVIEW_SCHEMA,
     itemId: row.id,
     datasetSha256: datasetHash,
     sourceLanguage: row.source?.language,
     sourceText: row.source?.text,
     candidate: reviewCandidate(row)
-  }));
+  }))
   if (packets.some((packet) => !packet.itemId || !packet.sourceLanguage || !packet.sourceText || packet.candidate === null)) {
     throw new Error('review_packet_source_or_candidate_missing');
   }
@@ -64,7 +80,7 @@ export function createReviewPackets(datasetFile, outputDir) {
     packetCount: packets.length,
     status: 'awaiting-independent-review',
     blindFields: ['itemId', 'sourceLanguage', 'sourceText', 'candidate'],
-    withheldFields: ['semanticGroup', 'criticalNegativePairIds', 'conceptIds', 'entityIds', 'provenance', 'review', 'split', 'generator metadata'],
+    withheldFields: [...WITHHELD_KEYS, 'generator metadata'],
     generatedAt: new Date().toISOString()
   };
   fs.writeFileSync(manifestFile, `${JSON.stringify(manifest, null, 2)}\n`, { flag: 'wx' });
