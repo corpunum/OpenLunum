@@ -17,8 +17,8 @@ const assignments = Array.from({ length: 120 }, (_, index) => {
   const split = index < 72 ? 'train' : index < 96 ? 'dev' : 'holdout';
   return { index, split };
 });
-const negativeDimensions = ['predicate', 'role-direction', 'visibility', 'modality', 'quantity', 'unit'];
-const negativePairs = Array.from({ length: 6 }, (_, index) => ({ pairId: `pilot-negative-${index + 1}`, leftGroup: index * 2, rightGroup: index * 2 + 1, criticalDimension: negativeDimensions[index] }));
+const negativeDimensions = ['concept-identity', 'concept-identity', 'concept-identity', 'concept-identity', 'concept-identity', 'concept-identity'];
+const negativePairs = Array.from({ length: 6 }, (_, index) => ({ pairId: `pilot-negative-${index + 1}`, leftGroup: index, rightGroup: index + 6, criticalDimension: negativeDimensions[index] }));
 const pairForGroup = new Map(negativePairs.flatMap((pair) => [[pair.leftGroup, pair], [pair.rightGroup, pair]]));
 
 function rowFor(groupIndex, split, language, frame, outcome = 'parse') {

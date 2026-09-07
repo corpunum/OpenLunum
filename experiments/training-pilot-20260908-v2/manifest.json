@@ -150,50 +150,50 @@
     "accepted": 720,
     "pendingReview": 0,
     "hardNegativeRows": 72,
-    "datasetSha256": "09ae3f375974d8d3f7f90d9aeb11071c7a035d7013d872e2165eb31fb3365273",
-    "datasetFileSha256": "e0bd048d3e234b385e1025c9a6f339ba9a7992351a463ea33cc589d6486906df"
+    "datasetSha256": "19f5a0522cb743b785bd0a458fb87dd0d9767766a8bb16b5e82713484928f3ba",
+    "datasetFileSha256": "fc3d8896849ce88feeb2a64976146c3ed8d8aaf2c4b1981983dce15fe8debb44"
   },
   "criticalNegativePairs": [
     {
       "pairId": "pilot-negative-1",
       "leftGroup": 0,
-      "rightGroup": 1,
-      "criticalDimension": "predicate",
+      "rightGroup": 6,
+      "criticalDimension": "concept-identity",
       "expectedRelationship": "not_semantically_equivalent"
     },
     {
       "pairId": "pilot-negative-2",
-      "leftGroup": 2,
-      "rightGroup": 3,
-      "criticalDimension": "role-direction",
+      "leftGroup": 1,
+      "rightGroup": 7,
+      "criticalDimension": "concept-identity",
       "expectedRelationship": "not_semantically_equivalent"
     },
     {
       "pairId": "pilot-negative-3",
-      "leftGroup": 4,
-      "rightGroup": 5,
-      "criticalDimension": "visibility",
+      "leftGroup": 2,
+      "rightGroup": 8,
+      "criticalDimension": "concept-identity",
       "expectedRelationship": "not_semantically_equivalent"
     },
     {
       "pairId": "pilot-negative-4",
-      "leftGroup": 6,
-      "rightGroup": 7,
-      "criticalDimension": "modality",
+      "leftGroup": 3,
+      "rightGroup": 9,
+      "criticalDimension": "concept-identity",
       "expectedRelationship": "not_semantically_equivalent"
     },
     {
       "pairId": "pilot-negative-5",
-      "leftGroup": 8,
-      "rightGroup": 9,
-      "criticalDimension": "quantity",
+      "leftGroup": 4,
+      "rightGroup": 10,
+      "criticalDimension": "concept-identity",
       "expectedRelationship": "not_semantically_equivalent"
     },
     {
       "pairId": "pilot-negative-6",
-      "leftGroup": 10,
+      "leftGroup": 5,
       "rightGroup": 11,
-      "criticalDimension": "unit",
+      "criticalDimension": "concept-identity",
       "expectedRelationship": "not_semantically_equivalent"
     }
   ],

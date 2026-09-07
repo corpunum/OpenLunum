@@ -1,8 +1,12 @@
 # OpenCode integration — Lunum MCP server
 
-**Status:** Working — native MCP via `opencode mcp add`.
+**Status:** Working — native MCP via `opencode mcp add` (interactive TUI only).
 
 OpenCode has built-in MCP support. The Lunum MCP server connects directly over stdio.
+
+> **Note:** `opencode mcp add` is interactive-only (TUI prompt). There is no CLI-flag form
+> and the `opencode.jsonc` config file does not accept a `mcpServers` key. You must add the
+> server through the TUI.
 
 ## Setup
 
@@ -15,25 +19,6 @@ When prompted, provide:
 - **Type:** stdio
 - **Command:** `node`
 - **Args:** `/home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js`
-
-Or add directly to `~/.config/opencode/opencode.jsonc`:
-
-```jsonc
-{
-  // ... existing config ...
-  "mcpServers": {
-    "lunum": {
-      "command": "node",
-      "args": ["/home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js"],
-      "env": {
-        "LUNUM_COMPACTION": "auto",
-        "LUNUM_MULTILINGUAL": "off",
-        "LUNUM_CONTEXT_MODE": "mixed"
-      }
-    }
-  }
-}
-```
 
 Verify:
 

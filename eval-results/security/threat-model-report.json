@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-08T07:14:03.175Z",
+  "timestamp": "2026-09-07T05:34:50.894Z",
   "threatModel": {
     "version": "0.1.0",
     "scope": "OpenLunum: semantic parsing, representation, and fingerprinting",
@@ -223,13 +223,13 @@
         "status": "mitigated"
       }
     ],
-    "lastReviewed": "2026-08-08T07:14:03.174Z"
+    "lastReviewed": "2026-09-07T05:34:50.892Z"
   },
   "dependencyAudit": {
     "pnpmLockExists": true,
     "auditStatus": "success",
     "auditMessage": "pnpm-lock.yaml exists and dependency hashes are pinned",
-    "lockfileTimestamp": "2026-07-19T07:47:12.254Z"
+    "lockfileTimestamp": "2026-08-08T10:21:45.840Z"
   },
   "incidentExercises": [
     {
