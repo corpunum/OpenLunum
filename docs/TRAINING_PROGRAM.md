@@ -67,3 +67,21 @@ No local inference or training was used for this program. Meaningful external
 training spend or compute requires explicit authorization. Until that exists,
 the deterministic dataset/split/harness work is the reproducible preparation
 boundary, not evidence of learned capability.
+
+## Current certification status
+
+`experiments/training-pilot-20260908-v2` is a development harness fixture. Its
+contract and split checks pass, but the deterministic generator is not an
+independent semantic reviewer. Run
+`scripts/research/audit-training-pilot.mjs` before considering any future
+training material; the audit intentionally reports `trainingGoldEligible:
+false` until independent review exists. The audit also checks that each
+multilingual group has six consistent language rows and that each declared
+critical-negative pair preserves its non-concept structure while changing its
+concept identity.
+
+The preprocessing-only dry run in
+`scripts/research/training-dry-run.mjs` validates batches, objective inputs,
+run-manifest hashes, checkpoint creation, and resume. Its estimates are not
+training or capability metrics. Current model-class considerations are
+recorded in `docs/TRAINING_MODEL_RESEARCH.md`.
