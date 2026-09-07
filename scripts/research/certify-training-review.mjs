@@ -36,8 +36,9 @@ export function certifyTrainingReview({ datasetFile, ledgerFile, correctionFile,
     const itemId = reviewItemIdForSourceId(row.id);
     const itemReviews = decisions.get(itemId) ?? [];
     const proposal = proposals.get(itemId);
-    const corrected = itemReviews.some((review) => ['correction-reviewer', 'final-correction-reviewer'].includes(review.reviewerId) && review.decision === 'ACCEPT');
-    const accepted = itemReviews.length > 0 && (itemReviews.every((review) => review.decision === 'ACCEPT') || (corrected && proposal?.action === 'CORRECTED' && !itemReviews.some((review) => ['REJECT', 'AMBIGUOUS'].includes(review.decision))));
+    const corrected = itemReviews.some((review) => ['correction-reviewer', 'final-correction-reviewer', 'rejected-correction-reviewer'].includes(review.reviewerId) && review.decision === 'ACCEPT');
+    const finalCorrectionReject = itemReviews.some((review) => ['correction-reviewer', 'final-correction-reviewer', 'rejected-correction-reviewer'].includes(review.reviewerId) && ['REJECT', 'AMBIGUOUS'].includes(review.decision));
+    const accepted = itemReviews.length > 0 && (itemReviews.every((review) => review.decision === 'ACCEPT') || (corrected && proposal?.action === 'CORRECTED' && !finalCorrectionReject));
     return { row: correctedRow(row, corrected ? proposal : null), itemId, accepted, reviews: itemReviews.length, corrected };
   });
   const byGroup = new Map();

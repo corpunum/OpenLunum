@@ -6,7 +6,7 @@
     "group-review.jsonl": 720,
     "greek-review.jsonl": 120
   },
-  "ledgerSha256": "be0c5eb5bd5652a3f1ed7135140c5f798df60fd7b5a4f61d56efdfbb5edac0b7",
+  "ledgerSha256": "e4529fc89626ebfe1fd0d49f6dabb36ab9d5607c29586f10d8f7593c1dcf3092",
   "eligibility": {
     "eligible": false,
     "reason": "review_disagreement",
@@ -100,7 +100,11 @@
     "sourceOnlyNegativeNotDistinct": 6,
     "unresolvedCorrectionProposals": 18,
     "unresolvedCorrectionReviews": 18,
-    "unresolvedCorrectionAccepted": 18
+    "unresolvedCorrectionAccepted": 18,
+    "rejectedRereview": 108,
+    "rejectedCorrections": 108,
+    "rejectedCorrectionReviews": 108,
+    "rejectedCorrectionAccepted": 108
   },
   "certificationDecision": {
     "trainingGoldEligible": false,
@@ -110,5 +114,11 @@
       "V1 uses synthetic template gold and has no valid reviewed safety negatives"
     ],
     "nextAction": "author a new independently reviewed dataset with natural multilingual text and real critical-negative distinctions"
+  },
+  "finalCertification": {
+    "reportPath": "certified-v2-reviewed-safe-report-v3.json",
+    "datasetPath": "certified-v2-reviewed-safe-subset-v3.jsonl",
+    "reportSha256": "e9e6fd3eb04e8a7b7b9cb59adf4a76f9f2f3e2281b2f5dd3bfb460c4ff399ed0",
+    "datasetSha256": "5f48b76f2e50946e02c8a2ce9b6a96adfdeaaad2ac0b40b841af215bb58aed87"
   }
 }
