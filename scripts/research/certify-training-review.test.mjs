@@ -110,4 +110,11 @@ test('certifier accepts a fully bound positive safety case only with valid IR', 
   assert.equal(report.safeNegativePairs, 1);
   assert.equal(report.trainingGoldEligible, true);
   assert.equal(report.deterministicValidation.pass, true);
+  const badEndpointFile = path.join(dir, 'bad-endpoints.jsonl');
+  const validNegative = JSON.parse(fs.readFileSync(negativeFile, 'utf8'));
+  fs.writeFileSync(badEndpointFile, JSON.stringify({ ...validNegative, rightSourceRowIds: validNegative.leftSourceRowIds }) + '\n');
+  assert.throws(() => certifyTrainingReview({ datasetFile, packetFile, ledgerFile, negativeFile: badEndpointFile, outputFile: path.join(dir, 'bad-out'), reportFile: path.join(dir, 'bad-report') }), /endpoints_mismatch/);
+  const conflictFile = path.join(dir, 'conflict.jsonl');
+  fs.writeFileSync(conflictFile, `${JSON.stringify(validNegative)}\n${JSON.stringify({ ...validNegative, decision: 'NOT_DISTINCT' })}\n`);
+  assert.throws(() => certifyTrainingReview({ datasetFile, packetFile, ledgerFile, negativeFile: conflictFile, outputFile: path.join(dir, 'conflict-out'), reportFile: path.join(dir, 'conflict-report') }), /negative_review_conflict/);
 });
