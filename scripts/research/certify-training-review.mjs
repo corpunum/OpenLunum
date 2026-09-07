@@ -36,7 +36,7 @@ export function certifyTrainingReview({ datasetFile, ledgerFile, correctionFile,
     const itemId = reviewItemIdForSourceId(row.id);
     const itemReviews = decisions.get(itemId) ?? [];
     const proposal = proposals.get(itemId);
-    const corrected = itemReviews.some((review) => review.reviewerId === 'correction-reviewer' && review.decision === 'ACCEPT');
+    const corrected = itemReviews.some((review) => ['correction-reviewer', 'final-correction-reviewer'].includes(review.reviewerId) && review.decision === 'ACCEPT');
     const accepted = itemReviews.length > 0 && (itemReviews.every((review) => review.decision === 'ACCEPT') || (corrected && proposal?.action === 'CORRECTED' && !itemReviews.some((review) => ['REJECT', 'AMBIGUOUS'].includes(review.decision))));
     return { row: correctedRow(row, corrected ? proposal : null), itemId, accepted, reviews: itemReviews.length, corrected };
   });

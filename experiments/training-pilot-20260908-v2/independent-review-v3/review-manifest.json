@@ -6,7 +6,7 @@
     "group-review.jsonl": 720,
     "greek-review.jsonl": 120
   },
-  "ledgerSha256": "a44338768b035b322d629bbed12897e773896b1a589410bd00cbfb57710311d3",
+  "ledgerSha256": "be0c5eb5bd5652a3f1ed7135140c5f798df60fd7b5a4f61d56efdfbb5edac0b7",
   "eligibility": {
     "eligible": false,
     "reason": "review_disagreement",
@@ -97,7 +97,10 @@
     },
     "sourceOnlyNegativePairs": 6,
     "sourceOnlyNegativeDistinct": 0,
-    "sourceOnlyNegativeNotDistinct": 6
+    "sourceOnlyNegativeNotDistinct": 6,
+    "unresolvedCorrectionProposals": 18,
+    "unresolvedCorrectionReviews": 18,
+    "unresolvedCorrectionAccepted": 18
   },
   "certificationDecision": {
     "trainingGoldEligible": false,
