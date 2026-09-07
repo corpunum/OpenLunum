@@ -1,0 +1,194 @@
+{
+  "type": "development-unimorph-independent-ud-benchmark",
+  "version": 1,
+  "status": "diagnostic",
+  "protected": false,
+  "perLanguage": 100,
+  "languages": {
+    "en": {
+      "treebank": "English-EWT",
+      "udFile": "en_ewt-ud-dev.conllu",
+      "udSnapshotHash": "39239e0a60db3ae68f4b7036189f11b6692741d10ff8240dd91f74f2760d90f8",
+      "unimorphSnapshotHash": "20a191cefdc7cad6fa74b00f49d6f658684f17b14541aae372e5a3d5a8c15c67",
+      "counts": {
+        "total": 100,
+        "goldIdentityAvailable": 8,
+        "rawIdentityAvailable": 11,
+        "rawCorrect": 3,
+        "candidateIdentityAvailable": 5,
+        "candidateCorrect": 5,
+        "candidateSetContainsGold": 50,
+        "falseExactWhenGoldUnique": 0,
+        "ambiguous": 45,
+        "unresolved": 50,
+        "uniMorphAnalysisAvailable": 51
+      },
+      "rates": {
+        "goldEligibility": 0.08,
+        "rawCoverage": 0.11,
+        "rawAccuracyAll": 0.03,
+        "candidateCoverage": 0.05,
+        "candidateAccuracyAll": 0.05,
+        "candidateSetRecall": 0.5,
+        "falseExactRateAmongGoldUnique": 0,
+        "ambiguityRate": 0.45,
+        "unresolvedRate": 0.5
+      }
+    },
+    "el": {
+      "treebank": "Greek-GDT",
+      "udFile": "el_gdt-ud-dev.conllu",
+      "udSnapshotHash": "53de54735051eecef04aa8c0f5f0fbf2466e0e0d4fd9dfd3d313560c394ddf41",
+      "unimorphSnapshotHash": "68f71b889fa29d31d975ebbc29f9f0f1b3a2dd6cca4f40a21b2c06f443811941",
+      "counts": {
+        "total": 100,
+        "goldIdentityAvailable": 21,
+        "rawIdentityAvailable": 0,
+        "rawCorrect": 0,
+        "candidateIdentityAvailable": 7,
+        "candidateCorrect": 7,
+        "candidateSetContainsGold": 36,
+        "falseExactWhenGoldUnique": 0,
+        "ambiguous": 29,
+        "unresolved": 64,
+        "uniMorphAnalysisAvailable": 44
+      },
+      "rates": {
+        "goldEligibility": 0.21,
+        "rawCoverage": 0,
+        "rawAccuracyAll": 0,
+        "candidateCoverage": 0.07,
+        "candidateAccuracyAll": 0.07,
+        "candidateSetRecall": 0.36,
+        "falseExactRateAmongGoldUnique": 0,
+        "ambiguityRate": 0.29,
+        "unresolvedRate": 0.64
+      }
+    },
+    "es": {
+      "treebank": "Spanish-AnCora",
+      "udFile": "es_ancora-ud-dev.conllu",
+      "udSnapshotHash": "1a132068062edf2654fb45b41cd4c59ba7e5c18e7c5f642ed5a9cc351fd9f0fe",
+      "unimorphSnapshotHash": "7a165d4b44eb078d23964f3eee3813f5140c5df0ffab0143c806c562e67f8771",
+      "counts": {
+        "total": 100,
+        "goldIdentityAvailable": 4,
+        "rawIdentityAvailable": 4,
+        "rawCorrect": 0,
+        "candidateIdentityAvailable": 4,
+        "candidateCorrect": 4,
+        "candidateSetContainsGold": 88,
+        "falseExactWhenGoldUnique": 0,
+        "ambiguous": 84,
+        "unresolved": 12,
+        "uniMorphAnalysisAvailable": 92
+      },
+      "rates": {
+        "goldEligibility": 0.04,
+        "rawCoverage": 0.04,
+        "rawAccuracyAll": 0,
+        "candidateCoverage": 0.04,
+        "candidateAccuracyAll": 0.04,
+        "candidateSetRecall": 0.88,
+        "falseExactRateAmongGoldUnique": 0,
+        "ambiguityRate": 0.84,
+        "unresolvedRate": 0.12
+      }
+    },
+    "fr": {
+      "treebank": "French-GSD",
+      "udFile": "fr_gsd-ud-dev.conllu",
+      "udSnapshotHash": "9221e5084cc6a1b1540671cfbd2fc0456efc223b2fe8dd2146c2bad921be02d4",
+      "unimorphSnapshotHash": "4760fc36435a9ffba9b4de6f0787d8eca5b15022e6b141e3b242b129f0d88dcb",
+      "counts": {
+        "total": 100,
+        "goldIdentityAvailable": 6,
+        "rawIdentityAvailable": 5,
+        "rawCorrect": 2,
+        "candidateIdentityAvailable": 1,
+        "candidateCorrect": 1,
+        "candidateSetContainsGold": 41,
+        "falseExactWhenGoldUnique": 0,
+        "ambiguous": 40,
+        "unresolved": 59,
+        "uniMorphAnalysisAvailable": 44
+      },
+      "rates": {
+        "goldEligibility": 0.06,
+        "rawCoverage": 0.05,
+        "rawAccuracyAll": 0.02,
+        "candidateCoverage": 0.01,
+        "candidateAccuracyAll": 0.01,
+        "candidateSetRecall": 0.41,
+        "falseExactRateAmongGoldUnique": 0,
+        "ambiguityRate": 0.4,
+        "unresolvedRate": 0.59
+      }
+    },
+    "de": {
+      "treebank": "German-GSD",
+      "udFile": "de_gsd-ud-dev.conllu",
+      "udSnapshotHash": "01e8e674973592747ffe9a8c77fcf9d2f5936a8484e731ad4f76254318a8952c",
+      "unimorphSnapshotHash": "8bc98487e3caf86188e2c072ebf2dc734f2ca35afef016bb399eb5a43e69d7c0",
+      "counts": {
+        "total": 100,
+        "goldIdentityAvailable": 24,
+        "rawIdentityAvailable": 6,
+        "rawCorrect": 1,
+        "candidateIdentityAvailable": 19,
+        "candidateCorrect": 19,
+        "candidateSetContainsGold": 67,
+        "falseExactWhenGoldUnique": 0,
+        "ambiguous": 48,
+        "unresolved": 33,
+        "uniMorphAnalysisAvailable": 74
+      },
+      "rates": {
+        "goldEligibility": 0.24,
+        "rawCoverage": 0.06,
+        "rawAccuracyAll": 0.01,
+        "candidateCoverage": 0.19,
+        "candidateAccuracyAll": 0.19,
+        "candidateSetRecall": 0.67,
+        "falseExactRateAmongGoldUnique": 0,
+        "ambiguityRate": 0.48,
+        "unresolvedRate": 0.33
+      }
+    },
+    "id": {
+      "treebank": "Indonesian-GSD",
+      "udFile": "id_gsd-ud-dev.conllu",
+      "udSnapshotHash": "56d4ab12267317d33511326da9fcd5b7eff641435c3b6365401937a33ce05e4b",
+      "unimorphSnapshotHash": "77c709f98b581a80051d0e18aa899e0d84d70436223054efa09831d71cdc2ac6",
+      "counts": {
+        "total": 100,
+        "goldIdentityAvailable": 10,
+        "rawIdentityAvailable": 5,
+        "rawCorrect": 1,
+        "candidateIdentityAvailable": 6,
+        "candidateCorrect": 6,
+        "candidateSetContainsGold": 29,
+        "falseExactWhenGoldUnique": 0,
+        "ambiguous": 24,
+        "unresolved": 70,
+        "uniMorphAnalysisAvailable": 59
+      },
+      "rates": {
+        "goldEligibility": 0.1,
+        "rawCoverage": 0.05,
+        "rawAccuracyAll": 0.01,
+        "candidateCoverage": 0.06,
+        "candidateAccuracyAll": 0.06,
+        "candidateSetRecall": 0.29,
+        "falseExactRateAmongGoldUnique": 0,
+        "ambiguityRate": 0.24,
+        "unresolvedRate": 0.7
+      }
+    }
+  },
+  "limitations": [
+    "UD lemma/POS are independent of UniMorph but OMW/CILI still supplies the external identity mapping.",
+    "German OMW file/resource availability is recorded as unresolved if absent.",
+    "Only NOUN/VERB/ADJ tokens with surface != lemma are sampled."
+  ]
+}

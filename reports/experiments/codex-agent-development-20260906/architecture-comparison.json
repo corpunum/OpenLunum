@@ -1,0 +1,29 @@
+{
+  "type": "development-only-extraction-architecture-comparison",
+  "date": "2026-09-06",
+  "protectedDataUsed": false,
+  "modelOrEndpointUsed": false,
+  "contractVersion": "lunum-agent/0.1",
+  "cases": 9,
+  "architectures": [
+    {
+      "name": "frame-first",
+      "identityAvailable": 8,
+      "exactAgainstDevelopmentGold": 1,
+      "notes": "All supported candidates were framed and identity-available; compound identifiers and term types diverged from gold."
+    },
+    {
+      "name": "two-stage-meaning-decomposition",
+      "identityAvailable": 7,
+      "exactAgainstDevelopmentGold": 1,
+      "notes": "One candidate used an invalid world value; supported candidates still diverged on identifiers and term typing."
+    },
+    {
+      "name": "independent-verifier-repair",
+      "identityAvailable": 8,
+      "exactAgainstDevelopmentGold": 1,
+      "notes": "Verifier repaired entity/system typing but selected a different open compound identifier convention."
+    }
+  ],
+  "interpretation": "Deterministic OpenLunum validation remains sound. The limiting error is language-neutral grounding and canonical naming of open instance concepts; adding aliases or ontology entries would overfit and violate the model-independent contract."
+}

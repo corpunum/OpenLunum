@@ -1,0 +1,20 @@
+{
+  "type": "codex-agent-source-only-frame-complete-grounding-trial",
+  "version": 1,
+  "status": "diagnostic",
+  "protected": false,
+  "localInferenceUsed": false,
+  "goldExposed": false,
+  "agent": "gpt-5.6-luna",
+  "contract": { "mode": "direct-builder-fields", "world": "real", "kind": "simple_fact", "sourceOnly": true },
+  "items": [
+    { "id": "q1", "language": "en", "sourceText": "Maya sends the signed contract to Leo.", "predicate": "send", "openIds": ["maya", "signed_contract", "leo"], "transportValid": true, "protocolCanonical": true, "frameValid": true, "grounded": true, "candidateIdentityAvailable": true, "semanticFingerprint": "lfp:2.1:sha256:39f869b1ee4811adc0baf19edcb20aa2" },
+    { "id": "q2", "language": "el", "sourceText": "Η Μάγια στέλνει το υπογεγραμμένο συμβόλαιο στον Λέοντα.", "predicate": "send", "openIds": ["maya", "ypogegrammeno_symvolaio", "leon"], "transportValid": true, "protocolCanonical": true, "frameValid": true, "grounded": true, "candidateIdentityAvailable": true, "semanticFingerprint": "lfp:2.1:sha256:87d058f39d61e469ded66d98055afbac" },
+    { "id": "q3", "language": "es", "sourceText": "Maya publica el informe semanal.", "predicate": "publish", "openIds": ["maya", "informe_semanal"], "transportValid": true, "protocolCanonical": true, "frameValid": true, "grounded": true, "candidateIdentityAvailable": true, "semanticFingerprint": "lfp:2.1:sha256:c08c1f2dccbb455ad0f6adedc062aff8" },
+    { "id": "q4", "language": "fr", "sourceText": "Leo préfère le mode silencieux.", "predicate": "prefer", "openIds": ["leo", "mode_silencieux"], "transportValid": true, "protocolCanonical": true, "frameValid": true, "grounded": true, "candidateIdentityAvailable": true, "semanticFingerprint": "lfp:2.1:sha256:7e60a424ff98ea2650abdd1a2a1c5225" },
+    { "id": "q5", "language": "de", "sourceText": "Der Dienst veröffentlicht den Sicherheitsbericht.", "predicate": "publish", "openIds": ["dienst", "sicherheitsbericht"], "transportValid": true, "protocolCanonical": true, "frameValid": true, "grounded": true, "candidateIdentityAvailable": true, "semanticFingerprint": "lfp:2.1:sha256:345a3d9e235eb0ff66dab8263eec5e20" },
+    { "id": "q6", "language": "id", "sourceText": "Maya mengirim kontrak yang ditandatangani kepada Leo.", "predicate": "send", "openIds": ["maya", "kontrak_yang_ditandatangani", "leo"], "transportValid": true, "protocolCanonical": true, "frameValid": true, "grounded": true, "candidateIdentityAvailable": true, "semanticFingerprint": "lfp:2.1:sha256:1741b10f4249e54105e6636dfabeec2a" }
+  ],
+  "summary": { "rows": 6, "transportValid": 6, "protocolCanonical": 6, "frameValid": 6, "identityAvailable": 6, "equivalentSendGroup": { "items": ["q1", "q2", "q6"], "uniqueLfps": 3, "converged": false } },
+  "interpretation": "Frame-complete source-only extraction removes transport confounding, but open-concept identifiers diverge across languages. No gold was exposed and no exact accuracy claim is made. This is evidence for a grounding bottleneck, not permission to normalize labels by string heuristics."
+}

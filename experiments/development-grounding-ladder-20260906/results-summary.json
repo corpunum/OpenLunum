@@ -1,0 +1,60 @@
+{
+  "type": "openlunum-development-agent-results",
+  "version": "2026-09-06",
+  "status": "diagnostic-development-only",
+  "localInferenceUsed": false,
+  "corpus": "experiments/development-grounding-ladder-20260906/corpus.json",
+  "candidateLedger": "experiments/development-grounding-ladder-20260906/candidate-ledger.json",
+  "rows": 36,
+  "parseTargets": 24,
+  "negativeRows": 12,
+  "goldPreflight": {
+    "groups": 8,
+    "frameValidGroups": 8,
+    "identityValidGroups": 8,
+    "criticalNegativePairs": 6,
+    "criticalNegativeGoldSeparated": 6,
+    "errors": 0
+  },
+  "candidateStages": {
+    "transportValid": 36,
+    "structuralValid": 36,
+    "protocolCanonical": 36,
+    "frameValid": 36,
+    "grounded": 36,
+    "candidateIdentityAvailable": 36,
+    "failureClasses": {}
+  },
+  "parseExactMicro": {
+    "exact": 3,
+    "total": 24,
+    "rate": 0.125
+  },
+  "parseExactByLanguage": {
+    "en": {"exact": 1, "total": 8, "rate": 0.125},
+    "el": {"exact": 1, "total": 4, "rate": 0.25},
+    "fr": {"exact": 0, "total": 3, "rate": 0},
+    "es": {"exact": 0, "total": 3, "rate": 0},
+    "de": {"exact": 1, "total": 3, "rate": 0.3333333333333333},
+    "id": {"exact": 0, "total": 3, "rate": 0}
+  },
+  "multilingual": {
+    "groups": 8,
+    "groupsAllCanonical": 8,
+    "groupsConvergingToOneCandidateLfp": 8,
+    "groupsConvergingToGoldLfp": 1,
+    "interpretation": "Candidate self-consistency only; repeated shared wrong kind/type/identifier choices still count as convergence and are not semantic correctness."
+  },
+  "criticalNegatives": {
+    "pairsDefined": 6,
+    "pairsComparable": 6,
+    "falseEquivalences": 0,
+    "coverage": 1
+  },
+  "sourceOnlyLedgerLeakCheck": {
+    "forbiddenGoldMetadataTokensFound": [],
+    "note": "The corpus contains private development gold by design; the extraction ledger does not.",
+    "protectedClaim": false
+  },
+  "interpretation": "Typed transport and deterministic containment succeeded on this ladder. Exact identity remains limited by agent-selected kind/type/open-concept naming. The source-only agent ledger is a deterministic development artifact, not independent model generalization or protected evidence."
+}

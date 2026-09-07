@@ -1,7 +1,7 @@
 /**
  * Fingerprint Support Contract (R4.6)
  *
- * This module freezes the 1.0 fingerprint algorithm contract and declares the
+ * This module freezes the compatibility 1.0 fingerprint algorithm contract and declares the
  * versioning, compatibility, and migration guarantees that must hold across all
  * future releases while the contract remains active.
  *
@@ -33,7 +33,10 @@
  * Collision resistance claims
  * ---------------------------------------------------------------------------
  *
- * - **Semantic fingerprint** (`lfp`): default 32 hex chars → 128 bits.
+ * - **Compatibility semantic fingerprint** (`lfp:1.0`): default 32 hex chars → 128 bits.
+ *   This registry is separate from the `lfp:2.1` exact semantic identity
+ *   contract implemented by `semanticFingerprint`; it is not proof of
+ *   canonical frame identity.
  *   Collision probability ≈ 2⁻¹²⁸ per pair (birthday bound applies at scale).
  * - **Surface fingerprint** (`lsf`): default 24 hex chars → 96 bits.
  *   Slightly lower due to text normalization reducing entropy.

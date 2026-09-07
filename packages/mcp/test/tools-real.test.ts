@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert';
-import { lunumTools } from '../src/tools.js';
+import { createBlindEvaluationTools, lunumTools } from '../src/tools.js';
 
 const find = (name: string) => {
   const tool = lunumTools.find((t) => t.name === name);
@@ -12,8 +12,8 @@ function getText(result: { content: Array<{ text?: string }> }): string {
   return result.content[0]?.text ?? '';
 }
 
-test('lunumTools has 7 real tools', () => {
-  assert.strictEqual(lunumTools.length, 7);
+test('lunumTools has the real agent-native tools', () => {
+  assert.strictEqual(lunumTools.length, 10);
   const names = lunumTools.map((t) => t.name);
   assert.ok(names.includes('lunum_derive'));
   assert.ok(names.includes('lunum_compile_context'));
@@ -22,6 +22,109 @@ test('lunumTools has 7 real tools', () => {
   assert.ok(names.includes('lunum_render'));
   assert.ok(names.includes('lunum_compare'));
   assert.ok(names.includes('lunum_classify'));
+  assert.ok(names.includes('lunum_get_extraction_contract'));
+  assert.ok(names.includes('lunum_submit_candidate'));
+  assert.ok(names.includes('lunum_build_candidate'));
+});
+
+test('lunum_build_candidate returns a candidate without certifying it', async () => {
+  const data = JSON.parse(getText(await find('lunum_build_candidate').handler({
+    world: 'real', kind: 'preference', predicate: 'prefer',
+    roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'quiet_mode' } },
+  })));
+  assert.equal(data.success, true);
+  assert.equal(data.candidate.schema, 'lunum-sem/0.1-draft');
+  assert.ok(data.frame);
+  assert.equal(data.promotable, undefined);
+});
+
+test('lunum_build_candidate schema rejects alternate wrapper fields', () => {
+  const tool = find('lunum_build_candidate');
+  const variants = (tool.inputSchema as unknown as { oneOf?: Array<{ additionalProperties?: boolean }> }).oneOf;
+  assert.ok(Array.isArray(variants));
+  assert.ok(variants.length > 0);
+  assert.ok(variants.every((variant) => variant.additionalProperties === false));
+});
+
+test('lunum_build_candidate exposes alternative frame requirements', async () => {
+  const data = JSON.parse(getText(await find('lunum_build_candidate').handler({
+    world: 'real', kind: 'instruction', predicate: 'retry',
+    roles: { agent: { type: 'actor', id: 'uploader' }, theme: { type: 'object', id: 'upload' } },
+  })));
+  assert.equal(data.success, true);
+  assert.deepEqual(data.requiredRoles, ['agent']);
+  assert.deepEqual(data.atLeastOneOf, ['count', 'theme']);
+});
+
+test('lunum_get_extraction_contract returns registry-derived hashes and frames', async () => {
+  const data = JSON.parse(getText(await find('lunum_get_extraction_contract').handler({})));
+  assert.equal(data.success, true);
+  assert.ok(data.contract.frames.framedPredicates.includes('prefer'));
+  assert.match(data.contract.frames.registryHash, /^[0-9a-f]{64}$/u);
+});
+
+test('lunum_submit_candidate contains an untrusted candidate', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'quiet_mode' } }, negated: false }]
+  };
+  const data = JSON.parse(getText(await find('lunum_submit_candidate').handler({
+    sourceText: 'Maria prefers quiet mode.', candidateSem: sem, provenance: { extractorType: 'codex_agent' }
+  })));
+  assert.equal(data.success, true);
+  assert.equal(data.submission.candidateIdentityAvailable, true);
+  assert.equal(data.submission.promotable, false);
+  assert.equal(data.submission.trust.promoted, false);
+});
+
+test('lunum_submit_candidate contains structured grounding proposals without granting identity', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'maria' }, theme: { type: 'concept', id: 'blue_folder' } }, negated: false }]
+  };
+  const data = JSON.parse(getText(await find('lunum_submit_candidate').handler({
+    sourceText: 'Maria prefers a blue folder.', candidateSem: sem, provenance: { extractorType: 'codex_agent' },
+    grounding: [{ path: 'clauses[0].roles.theme', termType: 'concept', head: { kind: 'symbol', namespace: 'open-concept', key: 'folder' }, modifiers: [{ relation: { kind: 'symbol', namespace: 'open-concept-relation', key: 'color' }, value: { kind: 'symbol', namespace: 'controlled-value', key: 'blue' } }] }],
+  })));
+  assert.equal(data.success, true);
+  assert.equal(data.submission.grounding.status, 'pending');
+  assert.equal(data.submission.candidateIdentityAvailable, false);
+  assert.equal(data.submission.semanticFingerprint, null);
+});
+
+test('lunum_submit_candidate accepts explicit null abstention consistently with its schema', async () => {
+  const data = JSON.parse(getText(await find('lunum_submit_candidate').handler({
+    sourceText: 'The concept is unsupported.', candidateSem: null, provenance: { extractorType: 'codex_agent' },
+  })));
+  assert.equal(data.success, true);
+  assert.equal(data.submission.candidateIdentityAvailable, false);
+  assert.equal(data.submission.promotable, false);
+});
+
+test('blind eval_next strips evaluator-private fields at the MCP boundary', async () => {
+  const tools = createBlindEvaluationTools({
+    next: () => ({ runId: 'run', itemId: 'item', sourceLanguage: 'en', sourceText: 'source', contractVersion: 'v', contractHash: 'h', goldSem: { secret: true }, expectedFingerprint: 'secret', scoring: { answer: true } }),
+    submit: async () => undefined,
+  });
+  const data = JSON.parse(getText(await tools[0]!.handler({})));
+  assert.equal(data.success, true);
+  assert.equal(data.item.goldSem, undefined);
+  assert.equal(data.item.expectedFingerprint, undefined);
+  assert.equal(data.item.scoring, undefined);
+  assert.equal(data.item.sourceText, 'source');
+});
+
+test('blind eval_submit does not reflect evaluator-private failure diagnostics', async () => {
+  const tools = createBlindEvaluationTools({
+    next: () => null,
+    submit: async () => { throw new Error('goldSem.secret expectedFingerprint scoring details'); },
+  });
+  const result = await tools[1]!.handler({ runId: 'run', itemId: 'item', candidateSem: null, provenance: { extractorType: 'codex_agent' } });
+  const text = getText(result);
+  assert.equal(result.isError, true);
+  assert.equal(text.includes('goldSem'), false);
+  assert.equal(text.includes('expectedFingerprint'), false);
+  assert.match(text, /blind evaluation submission rejected/);
 });
 
 test('lunum_derive returns real sidecar from text', async () => {
@@ -70,6 +173,8 @@ test('lunum_fingerprint produces real lfp digest', async () => {
   assert.strictEqual(data.success, true);
   assert.ok(data.fingerprint.startsWith('lfp:'));
   assert.ok(data.fingerprint.includes('sha256:'));
+  assert.equal(data.identityScope, 'legacy-compatibility');
+  assert.equal(data.semanticIdentity, false);
 });
 
 test('lunum_fingerprint is deterministic', async () => {
@@ -144,4 +249,28 @@ test('lunum_classify returns eligibility decision', async () => {
   const data = JSON.parse(getText(result));
   assert.strictEqual(data.success, true);
   assert.ok('eligible' in data.decision);
+});
+
+test('blind evaluator factory exposes source-only next and forwards opaque submission', async () => {
+  const seen: unknown[] = [];
+  const tools = createBlindEvaluationTools({
+    next: () => ({ runId: 'r', itemId: 'i', sourceLanguage: 'en', sourceText: 'source only', contractVersion: 'v', contractHash: 'h' }),
+    submit: async (input) => { seen.push(input); return { status: 'passed', semanticIdentityExact: true }; },
+  });
+  const next = await tools[0]!.handler({});
+  assert.equal(JSON.parse(next.content[0]!.text!).item.sourceText, 'source only');
+  const submitted = await tools[1]!.handler({ runId: 'r', itemId: 'i', candidateSem: { schema: 'candidate' }, provenance: { extractorType: 'codex_agent' } });
+  assert.equal(JSON.parse(submitted.content[0]!.text!).receipt.accepted, true);
+  assert.deepEqual(seen, [{ runId: 'r', itemId: 'i', candidateSem: { schema: 'candidate' }, provenance: { extractorType: 'codex_agent' } }]);
+});
+
+test('blind evaluator factory permits explicit null abstention', async () => {
+  let received: unknown;
+  const tools = createBlindEvaluationTools({
+    next: () => null,
+    submit: async (input) => { received = input.candidateSem; return { status: 'passed' }; },
+  });
+  const result = await tools[1]!.handler({ runId: 'r', itemId: 'i', candidateSem: null, provenance: { extractorType: 'codex_agent' } });
+  assert.equal(JSON.parse(result.content[0]!.text!).receipt.accepted, true);
+  assert.equal(received, null);
 });

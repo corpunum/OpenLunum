@@ -1,0 +1,15 @@
+{
+  "evidenceClass": "CODEX_AGENT_EMPIRICAL_DIAGNOSTIC",
+  "pairsDefined": 6,
+  "pairsComparable": 0,
+  "falseEquivalences": 0,
+  "coverage": 0,
+  "criticalNegativeSafety": "NOT_ESTABLISHED",
+  "falseEquivalencePairs": [],
+  "rawRetrieval": "NOT_RUN: zero parse candidate identities available",
+  "derivedFrom": {
+    "publicLedger": "reports/experiments/codex-agent-protected-v1-20260906/run/agent-results.jsonl",
+    "privateLedger": "reports/experiments/codex-agent-protected-v1-20260906/run.private/agent-results.jsonl",
+    "corpusSha256": "7b8d92c1319bfc62d1ec1f5f33cec1278ab8eb9414bf1897adacf866f6328e03"
+  }
+}

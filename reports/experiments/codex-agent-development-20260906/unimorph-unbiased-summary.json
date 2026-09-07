@@ -1,0 +1,19 @@
+{
+  "type": "development-unimorph-unbiased-grounding",
+  "version": 2,
+  "script": "scripts/research/unimorph-unbiased-benchmark.mjs",
+  "status": "coverage-diagnostic-not-independent-accuracy",
+  "samplePerLanguage": 500,
+  "total": 2500,
+  "selection": "deterministically hash-ordered surface/POS observations; all selected observations remain in the denominator",
+  "goldPolicy": "lemma/POS and candidate identities are derived from UniMorph plus the same OMW/CILI provider; this is circular coverage evidence, not independent analyzer accuracy",
+  "languages": {
+    "en": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.134, "candidateSetRecallAll": 0.228, "ambiguousRate": 0.094, "unresolvedRate": 0.772, "goldUnique": 67, "multiAnalysisRate": 0.006, "unimorphSnapshotHash": "20a191cefdc7cad6fa74b00f49d6f658684f17b14541aae372e5a3d5a8c15c67" },
+    "el": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.082, "candidateSetRecallAll": 0.174, "ambiguousRate": 0.092, "unresolvedRate": 0.826, "goldUnique": 77, "multiAnalysisRate": 0.054, "unimorphSnapshotHash": "68f71b889fa29d31d975ebbc29f9f0f1b3a2dd6cca4f40a21b2c06f443811941" },
+    "es": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.194, "candidateSetRecallAll": 0.544, "ambiguousRate": 0.35, "unresolvedRate": 0.456, "goldUnique": 102, "multiAnalysisRate": 0.008, "unimorphSnapshotHash": "7a165d4b44eb078d23964f3eee3813f5140c5df0ffab0143c806c562e67f8771" },
+    "fr": { "rawIdentityCoverage": 0.0, "candidateIdentityCoverage": 0.11, "candidateSetRecallAll": 0.3, "ambiguousRate": 0.19, "unresolvedRate": 0.7, "goldUnique": 56, "multiAnalysisRate": 0.012, "unimorphSnapshotHash": "4760fc36435a9ffba9b4de6f0787d8eca5b15022e6b141e3b242b129f0d88dcb" },
+    "id": { "rawIdentityCoverage": 0.066, "candidateIdentityCoverage": 0.174, "candidateSetRecallAll": 0.57, "ambiguousRate": 0.396, "unresolvedRate": 0.43, "goldUnique": 87, "multiAnalysisRate": 0.0, "unimorphSnapshotHash": "77c709f98b581a80051d0e18aa899e0d84d70436223054efa09831d71cdc2ac6" }
+  },
+  "aggregate": { "goldUnique": 389, "candidateIdentityAvailable": 347, "candidateSetRecallSum": 908, "falsePositiveIdentity": 0 },
+  "interpretation": "Morphology expands candidate coverage but its precision and safety remain unproven because labels are generated from the analyzer and OMW path under test. Keep as optional candidate evidence; do not make it unconditional exact grounding."
+}

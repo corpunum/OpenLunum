@@ -42,7 +42,7 @@ test('ShadowModeAdapter processes record when enabled', () => {
   const result = adapter.process(record, shadowSem);
   
   assert.ok(result.shadow);
-  assert.ok(result.shadow!.fingerprint.startsWith('lfp:shadow:'));
+  assert.match(result.shadow!.fingerprint, /^lfp:0\.1:sha256:[a-f0-9]+$/);
 });
 
 test('ShadowModeAdapter returns null shadow when disabled', () => {

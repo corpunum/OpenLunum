@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { canonicalizeSem, compareSem, compileContext, deriveLunumSidecar, fingerprintSem, renderSem, stableStringify, surfaceTelegraph } from '../src/index.js';
+import { canonicalizeSem, compareSem, compileContext, createRecord, deriveLunumSidecar, fingerprintSem, renderSem, semanticFingerprint, stableStringify, surfaceTelegraph } from '../src/index.js';
 import type { LunumSem } from '../src/index.js';
 
 const sem: LunumSem = {
@@ -86,6 +86,15 @@ test('surface heuristic is honestly marked non-semantic and ineligible', () => {
   assert.equal(sidecar.lunumMeta.semantic, false);
   assert.equal(sidecar.lunumMeta.eligible, false);
   assert.match(sidecar.lunumFp ?? '', /^lsf:/);
+});
+
+test('semantic records expose legacy and lfp:2.1 identities distinctly', () => {
+  const record = createRecord({ sourceText: 'The user requests the report.', role: 'user', sem });
+  assert.match(record.fingerprint, /^lfp:0\.1:sha256:/);
+  assert.equal(record.semanticFingerprint, semanticFingerprint(sem));
+  const sidecar = deriveLunumSidecar({ role: 'user', content: 'The user requests the report.', sem });
+  assert.equal(sidecar.lunumFp, record.fingerprint);
+  assert.equal(sidecar.lunumMeta.fingerprintKind, 'legacy-semantic');
 });
 
 test('mixed context falls back when record is ineligible', () => {

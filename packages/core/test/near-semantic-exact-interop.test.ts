@@ -75,7 +75,7 @@ test('a record can carry valid exact and generated near-semantic fingerprints', 
   assert.match(EXACT_RECORD.fingerprint, /^lfp:0\.2:sha256:[a-f0-9]{32}$/u);
   assert.match(
     EXACT_RECORD.nearSemanticFingerprint ?? '',
-    /^nfp:2:sha256:[a-f0-9]{64}:[a-f0-9]{64}:/u,
+    /^nfp:3:sha256:[a-f0-9]{64}:[a-f0-9]{64}:/u,
   );
   assert.equal(generator.generateFromRecord(EXACT_RECORD), EXACT_RECORD.nearSemanticFingerprint);
 });

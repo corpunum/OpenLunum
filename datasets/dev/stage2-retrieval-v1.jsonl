@@ -1,0 +1,22 @@
+{"type":"memory","id":"m-en-preference","language":"en","text":"Maya prefers concise bullet-point summaries in English."}
+{"type":"memory","id":"m-el-preference","language":"el","text":"Η Μάγια προτιμά συνοπτικές περιλήψεις με κουκκίδες στα αγγλικά."}
+{"type":"memory","id":"m-en-production","language":"en","text":"The operator deploys the billing service to production."}
+{"type":"memory","id":"m-el-production","language":"el","text":"Ο χειριστής αναπτύσσει την υπηρεσία χρέωσης στην παραγωγή."}
+{"type":"memory","id":"m-en-deadline","language":"en","text":"The Aurora migration deadline is Monday 2026-09-07."}
+{"type":"memory","id":"m-el-deadline","language":"el","text":"Η προθεσμία της μετάβασης Aurora είναι τη Δευτέρα 2026-09-07."}
+{"type":"memory","id":"m-en-retry","language":"en","text":"The client may retry the request five times."}
+{"type":"memory","id":"m-es-retry","language":"es","text":"El cliente puede reintentar la solicitud cinco veces."}
+{"type":"memory","id":"m-en-private","language":"en","text":"The owner keeps the audit report private."}
+{"type":"memory","id":"m-el-private","language":"el","text":"Ο ιδιοκτήτης διατηρεί την αναφορά ελέγχου ιδιωτική."}
+{"type":"query","id":"q-el-preference-to-en","language":"el","targetLanguage":"en","text":"Η Μάγια θέλει σύντομες περιλήψεις σε μορφή λίστας στα αγγλικά.","expectedMemoryIds":["m-en-preference"]}
+{"type":"query","id":"q-en-preference-to-el","language":"en","targetLanguage":"el","text":"Maya wants short summaries as English bullet points.","expectedMemoryIds":["m-el-preference"]}
+{"type":"query","id":"q-el-production-to-en","language":"el","targetLanguage":"en","text":"Ο χειριστής κάνει ανάπτυξη της υπηρεσίας χρέωσης στο production.","expectedMemoryIds":["m-en-production"]}
+{"type":"query","id":"q-en-production-to-el","language":"en","targetLanguage":"el","text":"The operator deploys the billing service in production.","expectedMemoryIds":["m-el-production"]}
+{"type":"query","id":"q-el-deadline-to-en","language":"el","targetLanguage":"en","text":"Η μετάβαση Aurora πρέπει να ολοκληρωθεί έως τη Δευτέρα 2026-09-07.","expectedMemoryIds":["m-en-deadline"]}
+{"type":"query","id":"q-en-deadline-to-el","language":"en","targetLanguage":"el","text":"Aurora migration is due on Monday 2026-09-07.","expectedMemoryIds":["m-el-deadline"]}
+{"type":"query","id":"q-es-retry-to-en","language":"es","targetLanguage":"en","text":"El cliente puede volver a intentar la solicitud cinco veces.","expectedMemoryIds":["m-en-retry"]}
+{"type":"query","id":"q-en-retry-to-es","language":"en","targetLanguage":"es","text":"The client is allowed to retry the request five times.","expectedMemoryIds":["m-es-retry"]}
+{"type":"query","id":"q-el-private-to-en","language":"el","targetLanguage":"en","text":"Ο ιδιοκτήτης κρατά ιδιωτική την αναφορά ελέγχου.","expectedMemoryIds":["m-en-private"]}
+{"type":"query","id":"q-en-private-to-el","language":"en","targetLanguage":"el","text":"The owner keeps the audit report private.","expectedMemoryIds":["m-el-private"]}
+{"type":"query","id":"q-en-staging-negative","language":"en","targetLanguage":"el","text":"The operator deploys the billing service to staging.","expectedMemoryIds":[]}
+{"type":"query","id":"q-en-retry-fifty-negative","language":"en","targetLanguage":"es","text":"The client may retry the request fifty times.","expectedMemoryIds":[]}

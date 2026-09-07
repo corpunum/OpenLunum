@@ -1,0 +1,395 @@
+{
+  "schema": "openlunum-current-schema-compaction/0.1",
+  "benchmarkVersion": "0.1.0",
+  "provenance": {
+    "codeCommit": "f6b6d2971e8a2a42faf16df3c8f5a0c925c9ba0a",
+    "fixtureHash": "6c8a8ae306f64d3ca07cbb8aed88b07623f6ac13f0575ce098a36f757c5ed8d0",
+    "schemaVersions": [
+      "lunum-sem/0.1-draft"
+    ],
+    "startedAt": "2026-09-01T04:47:14.766Z",
+    "renderer": "ProfileGenerator",
+    "contextCompiler": "compileContext",
+    "tokenizer": null,
+    "liveModel": "NOT_RUN"
+  },
+  "fixtures": [
+    {
+      "id": "rate-limit-fact",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "policy": {
+        "eligible": true,
+        "category": "system_fact",
+        "risk": "low",
+        "confidence": 0.99,
+        "reasons": []
+      }
+    },
+    {
+      "id": "language-preference",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "policy": {
+        "eligible": true,
+        "category": "preference",
+        "risk": "low",
+        "confidence": 0.99,
+        "reasons": []
+      }
+    },
+    {
+      "id": "safety-constraint-fallback",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "policy": {
+        "eligible": false,
+        "category": "safety_constraint",
+        "risk": "high",
+        "confidence": 0.99,
+        "reasons": [
+          "risk_high",
+          "natural_only_category_safety_constraint"
+        ]
+      }
+    },
+    {
+      "id": "executable-text-fallback",
+      "schemaValid": true,
+      "schemaErrors": [],
+      "policy": {
+        "eligible": false,
+        "category": "system_fact",
+        "risk": "low",
+        "confidence": 0.99,
+        "reasons": [
+          "exact_or_executable_text_detected"
+        ]
+      }
+    }
+  ],
+  "measurements": [
+    {
+      "fixtureId": "rate-limit-fact",
+      "mode": "natural",
+      "content": "Authenticated API clients may send at most 1,000 requests per minute.",
+      "bytes": 69,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "not_applicable",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "rate-limit-fact",
+      "mode": "lunum-safe",
+      "content": "LUNUM-SAFE/0.1:{\"clauses\":[{\"modality\":\"may\",\"negated\":false,\"predicate\":\"limit\",\"roles\":{\"rate\":{\"type\":\"quantity\",\"unit\":\"requests per minute\",\"value\":1000},\"scope\":\"authenticated clients\",\"theme\":\"API requests\"}}],\"kind\":\"system_fact\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "bytes": 284,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "rate-limit-fact",
+      "mode": "lunum-short",
+      "content": "LUNUM-SHORT/0.1:{\"c\":[{\"m\":\"may\",\"p\":\"limit\",\"r\":{\"rate\":{\"type\":\"quantity\",\"unit\":\"requests per minute\",\"value\":1000},\"scope\":\"authenticated clients\",\"theme\":\"API requests\"}}],\"k\":\"system_fact\",\"s\":\"lunum-sem/0.1-draft\",\"w\":\"real\"}",
+      "bytes": 232,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "rate-limit-fact",
+      "mode": "lunum-tight",
+      "content": "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"system_fact\",[[\"limit\",{\"rate\":{\"type\":\"quantity\",\"unit\":\"requests per minute\",\"value\":1000},\"scope\":\"authenticated clients\",\"theme\":\"API requests\"},null,\"may\"]]]",
+      "bytes": 209,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "rate-limit-fact",
+      "mode": "mixed",
+      "content": "LUNUM-SHORT/0.1:{\"c\":[{\"m\":\"may\",\"p\":\"limit\",\"r\":{\"rate\":{\"type\":\"quantity\",\"unit\":\"requests per minute\",\"value\":1000},\"scope\":\"authenticated clients\",\"theme\":\"API requests\"}}],\"k\":\"system_fact\",\"s\":\"lunum-sem/0.1-draft\",\"w\":\"real\"}",
+      "bytes": 232,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": true,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "language-preference",
+      "mode": "natural",
+      "content": "I prefer technical updates in Greek when a Greek translation is available.",
+      "bytes": 74,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "not_applicable",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "language-preference",
+      "mode": "lunum-safe",
+      "content": "LUNUM-SAFE/0.1:{\"clauses\":[{\"conditions\":[{\"negated\":false,\"predicate\":\"available\",\"roles\":{\"theme\":\"Greek translation\"}}],\"negated\":false,\"predicate\":\"prefer\",\"roles\":{\"experiencer\":\"user\",\"theme\":\"technical updates in Greek\"}}],\"kind\":\"preference\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "bytes": 296,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "language-preference",
+      "mode": "lunum-short",
+      "content": "LUNUM-SHORT/0.1:{\"c\":[{\"i\":[{\"p\":\"available\",\"r\":{\"theme\":\"Greek translation\"}}],\"p\":\"prefer\",\"r\":{\"experiencer\":\"user\",\"theme\":\"technical updates in Greek\"}}],\"k\":\"preference\",\"s\":\"lunum-sem/0.1-draft\",\"w\":\"real\"}",
+      "bytes": 214,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "language-preference",
+      "mode": "lunum-tight",
+      "content": "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"preference\",[[\"prefer\",{\"experiencer\":\"user\",\"theme\":\"technical updates in Greek\"},null,null,null,[[\"available\",{\"theme\":\"Greek translation\"}]]]]]",
+      "bytes": 193,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "language-preference",
+      "mode": "mixed",
+      "content": "LUNUM-SHORT/0.1:{\"c\":[{\"i\":[{\"p\":\"available\",\"r\":{\"theme\":\"Greek translation\"}}],\"p\":\"prefer\",\"r\":{\"experiencer\":\"user\",\"theme\":\"technical updates in Greek\"}}],\"k\":\"preference\",\"s\":\"lunum-sem/0.1-draft\",\"w\":\"real\"}",
+      "bytes": 214,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": true,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "safety-constraint-fallback",
+      "mode": "natural",
+      "content": "Do not disclose customer email addresses without written consent.",
+      "bytes": 65,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "not_applicable",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "safety-constraint-fallback",
+      "mode": "lunum-safe",
+      "content": "LUNUM-SAFE/0.1:{\"clauses\":[{\"conditions\":[{\"negated\":true,\"predicate\":\"consent\",\"roles\":{\"form\":\"written\"}}],\"modality\":\"must_not\",\"negated\":true,\"predicate\":\"disclose\",\"roles\":{\"agent\":\"operator\",\"theme\":\"customer email addresses\"}}],\"kind\":\"safety_constraint\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\"}",
+      "bytes": 308,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "safety-constraint-fallback",
+      "mode": "lunum-short",
+      "content": "LUNUM-SHORT/0.1:{\"c\":[{\"i\":[{\"n\":true,\"p\":\"consent\",\"r\":{\"form\":\"written\"}}],\"m\":\"must_not\",\"n\":true,\"p\":\"disclose\",\"r\":{\"agent\":\"operator\",\"theme\":\"customer email addresses\"}}],\"k\":\"safety_constraint\",\"s\":\"lunum-sem/0.1-draft\",\"w\":\"real\"}",
+      "bytes": 239,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "safety-constraint-fallback",
+      "mode": "lunum-tight",
+      "content": "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"real\",\"safety_constraint\",[[\"disclose\",{\"agent\":\"operator\",\"theme\":\"customer email addresses\"},1,\"must_not\",null,[[\"consent\",{\"form\":\"written\"},1]]]]]",
+      "bytes": 190,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "safety-constraint-fallback",
+      "mode": "mixed",
+      "content": "Do not disclose customer email addresses without written consent.",
+      "bytes": 65,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "not_applicable",
+      "policySelected": false,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "executable-text-fallback",
+      "mode": "natural",
+      "content": "Run git checkout -- config.yaml only after the approved rollback decision.",
+      "bytes": 74,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "not_applicable",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "executable-text-fallback",
+      "mode": "lunum-safe",
+      "content": "LUNUM-SAFE/0.1:{\"clauses\":[{\"conditions\":[{\"negated\":false,\"predicate\":\"approve\",\"roles\":{\"theme\":\"rollback decision\"}}],\"negated\":false,\"predicate\":\"run\",\"roles\":{\"agent\":\"operator\",\"theme\":\"git checkout -- config.yaml\"}}],\"kind\":\"system_fact\",\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"tool\"}",
+      "bytes": 291,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "executable-text-fallback",
+      "mode": "lunum-short",
+      "content": "LUNUM-SHORT/0.1:{\"c\":[{\"i\":[{\"p\":\"approve\",\"r\":{\"theme\":\"rollback decision\"}}],\"p\":\"run\",\"r\":{\"agent\":\"operator\",\"theme\":\"git checkout -- config.yaml\"}}],\"k\":\"system_fact\",\"s\":\"lunum-sem/0.1-draft\",\"w\":\"tool\"}",
+      "bytes": 209,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "executable-text-fallback",
+      "mode": "lunum-tight",
+      "content": "LUNUM-TIGHT/0.1:[\"lunum-sem/0.1-draft\",\"tool\",\"system_fact\",[[\"run\",{\"agent\":\"operator\",\"theme\":\"git checkout -- config.yaml\"},null,null,null,[[\"approve\",{\"theme\":\"rollback decision\"}]]]]]",
+      "bytes": 188,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "pass",
+      "policySelected": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    {
+      "fixtureId": "executable-text-fallback",
+      "mode": "mixed",
+      "content": "Run git checkout -- config.yaml only after the approved rollback decision.",
+      "bytes": 74,
+      "tokens": null,
+      "tokenCounting": "not_measured_no_verified_tokenizer",
+      "semanticRoundTrip": "not_applicable",
+      "policySelected": false,
+      "taskAccuracy": null,
+      "latencyMs": null
+    }
+  ],
+  "byMode": {
+    "natural": {
+      "fixtures": 4,
+      "averageBytes": 70.5,
+      "bytesRatioVsNatural": 1,
+      "semanticRoundTrips": {
+        "assessed": 0,
+        "passed": 0,
+        "failed": 0
+      },
+      "averageTokens": null,
+      "tokensRatioVsNatural": null,
+      "tokensPerSuccessfulTask": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    "lunum-safe": {
+      "fixtures": 4,
+      "averageBytes": 294.75,
+      "bytesRatioVsNatural": 4.180851063829787,
+      "semanticRoundTrips": {
+        "assessed": 4,
+        "passed": 4,
+        "failed": 0
+      },
+      "averageTokens": null,
+      "tokensRatioVsNatural": null,
+      "tokensPerSuccessfulTask": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    "lunum-short": {
+      "fixtures": 4,
+      "averageBytes": 223.5,
+      "bytesRatioVsNatural": 3.1702127659574466,
+      "semanticRoundTrips": {
+        "assessed": 4,
+        "passed": 4,
+        "failed": 0
+      },
+      "averageTokens": null,
+      "tokensRatioVsNatural": null,
+      "tokensPerSuccessfulTask": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    "lunum-tight": {
+      "fixtures": 4,
+      "averageBytes": 195,
+      "bytesRatioVsNatural": 2.765957446808511,
+      "semanticRoundTrips": {
+        "assessed": 4,
+        "passed": 4,
+        "failed": 0
+      },
+      "averageTokens": null,
+      "tokensRatioVsNatural": null,
+      "tokensPerSuccessfulTask": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    },
+    "mixed": {
+      "fixtures": 4,
+      "averageBytes": 146.25,
+      "bytesRatioVsNatural": 2.074468085106383,
+      "semanticRoundTrips": {
+        "assessed": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "averageTokens": null,
+      "tokensRatioVsNatural": null,
+      "tokensPerSuccessfulTask": null,
+      "taskAccuracy": null,
+      "latencyMs": null
+    }
+  },
+  "limitations": [
+    "No expected answers or expected summaries are supplied to this benchmark.",
+    "Task accuracy, downstream preservation, latency, and tokens per successful task are NOT_RUN.",
+    "Byte counts are deterministic representation sizes, not token measurements."
+  ]
+}

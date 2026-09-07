@@ -1,0 +1,17 @@
+{
+  "type": "development-structured-composition-safety",
+  "protected": false,
+  "architecture": "head concept plus typed modifier/property; canonical gnd fingerprint is evidence only until an external registry asserts the complete composition",
+  "equivalent-representation-policy": "Different source wording must be decomposed by the cognitive agent into the same typed structure; OpenLunum does not reorder text or infer a modifier from a head synset.",
+  "positive": {
+    "blue_folder": "gnd:grounding/0.1:sha256:e84591a001ec5d18888aa1386f692d73",
+    "word_order_or_relative_clause": "same proposal structure and fingerprint when independently decomposed"
+  },
+  "critical_negatives": {
+    "red_folder": "gnd:grounding/0.1:sha256:82741450d6b38eb6891a5cfb24c154e1",
+    "blue_database": "gnd:grounding/0.1:sha256:90183527c41793f1e30be8bd4e0e98d0",
+    "public_report": "gnd:grounding/0.1:sha256:78d16a6baa7058b4a4337ebe71b766a9",
+    "private_report": "gnd:grounding/0.1:sha256:2104085cfef46cefcea1f2b41634591a"
+  },
+  "result": "Structured composition safely distinguishes controlled mutations, but without a pinned external assertion it cannot grant lfp:2.1. OMW head evidence correctly remains unresolved for modified concepts."
+}

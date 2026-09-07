@@ -1,0 +1,23 @@
+{
+  "schema": "openlunum-blind-checkpoint/0.1",
+  "runId": "codex-protected-v1",
+  "binding": "761ca952ed263a3b492119526c75599af3672c7bd6996562e594b9d31753ddc8",
+  "completedItemIds": [
+    "p01",
+    "p02",
+    "p03",
+    "p04",
+    "p05",
+    "p06",
+    "p07",
+    "p08",
+    "p09",
+    "p10",
+    "p11",
+    "p12",
+    "a01",
+    "a02",
+    "a03",
+    "a04"
+  ]
+}

@@ -51,6 +51,10 @@
     "noThink": {
       "type": "boolean"
     },
+    "chatTemplateKwargs": {
+      "type": "object",
+      "additionalProperties": true
+    },
     "timeoutMs": {
       "type": "integer",
       "minimum": 1000

@@ -53,6 +53,12 @@ function tsType(prop, depth = 0, parentDefs = null, versionPrefix = '', currentD
     if (refSchema) return tsObject(refSchema, refSchema.$defs || null, versionPrefix);
     return capitalize(ref.split('/').pop().replace(/\.schema\.json$/, ''));
   }
+  if (prop.oneOf) {
+    const members = prop.oneOf.map(p => tsType(p, depth + 1, parentDefs, versionPrefix, currentDefName));
+    const unique = [...new Set(members)];
+    if (unique.length === 1) return unique[0];
+    return unique.map(type => type.includes(' | ') ? `(${type})` : type).join(' | ');
+  }
   if (prop.anyOf) return prop.anyOf.map(p => tsType(p, depth + 1, parentDefs, versionPrefix, currentDefName)).join(' | ');
   if (prop.allOf) return prop.allOf.map(p => tsType(p, depth + 1, parentDefs, versionPrefix, currentDefName)).join(' & ');
   if (prop.type) {

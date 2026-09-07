@@ -13,8 +13,8 @@ test('createLunumMcpServer accepts custom tools subset', () => {
   assert.ok(server);
 });
 
-test('lunumTools contains 7 real tools', () => {
-  assert.strictEqual(lunumTools.length, 7);
+test('lunumTools contains the real agent-native tools', () => {
+  assert.strictEqual(lunumTools.length, 10);
   const names = lunumTools.map((t) => t.name);
   assert.ok(names.includes('lunum_derive'));
   assert.ok(names.includes('lunum_compile_context'));
@@ -23,6 +23,8 @@ test('lunumTools contains 7 real tools', () => {
   assert.ok(names.includes('lunum_render'));
   assert.ok(names.includes('lunum_compare'));
   assert.ok(names.includes('lunum_classify'));
+  assert.ok(names.includes('lunum_get_extraction_contract'));
+  assert.ok(names.includes('lunum_submit_candidate'));
 });
 
 test('deriveTool has correct schema', () => {

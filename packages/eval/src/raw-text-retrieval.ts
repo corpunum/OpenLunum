@@ -1,0 +1,259 @@
+/** End-to-end retrieval boundary: raw text enters on both sides; Sem is never supplied by the dataset. */
+
+import { NearSemanticFingerprintGenerator, semanticFingerprint, normalizeSemanticCandidate, validateSemanticCandidate } from '@corpunum/lunum';
+import type { LunumSem } from '@corpunum/lunum';
+
+export const RAW_TEXT_RETRIEVAL_VERSION = '0.3.0';
+export interface RawTextMemory { id: string; text: string; language: string }
+export interface RawTextQuery {
+  id: string; text: string; language: string; targetLanguage?: string;
+  /** Expected records after routing. */
+  expectedMemoryIds: string[];
+  /** All semantically equivalent records, including routed-out languages. */
+  semanticEquivalentMemoryIds?: string[];
+}
+export interface RawTextExtractionInput { id: string; text: string; language: string; kind: 'memory' | 'query' }
+export type RawTextExtractor = (input: RawTextExtractionInput) => LunumSem | null | Promise<LunumSem | null>;
+
+/** A baseline must consume the same raw text as the semantic system. */
+export type RawTextBaseline = (input: {
+  query: Omit<RawTextQuery, 'expectedMemoryIds'>;
+  memories: RawTextMemory[];
+  topK: number;
+}) => string[] | Promise<string[]>;
+
+export interface RawTextBaselineMetrics {
+  precision: number; recall: number; f1: number; top1Accuracy: number;
+  topKRecall: number; falsePositiveRate: number; truePositives: number;
+  falsePositives: number; falseNegatives: number; trueNegatives: number;
+  failures: number;
+  positiveTop1Accuracy: number;
+  negativeRejectionAccuracy: number;
+}
+
+export interface RawTextRetrievalQueryResult {
+  queryId: string; queryLanguage: string; targetLanguage: string | null; expectedMemoryIds: string[]; semanticEquivalentMemoryIds: string[]; routedOutEquivalentMemoryIds: string[];
+  retrievedMemoryIds: string[]; matchedMemoryIds: string[]; extracted: boolean; candidateCount: number;
+  extractionError?: string; semanticMatchingFailures: string[]; rankingFailures: string[];
+  precision: number; recall: number; f1: number; top1Correct: boolean;
+}
+export interface RawTextRetrievalMetrics {
+  queries: number; memoryCount: number; queryExtractionFailures: number; memoryExtractionFailures: number;
+  queryIdentityAvailable: number; memoryIdentityAvailable: number;
+  queryIdentityCoverage: number; memoryIdentityCoverage: number;
+  conditionalQueryCount: number; conditionalTop1Accuracy: number; conditionalRecall: number;
+  semanticMatchingFailures: number; rankingFailures: number; truePositives: number; falsePositives: number;
+  falseNegatives: number; trueNegatives: number; precision: number; recall: number; f1: number;
+  top1Accuracy: number; topKRecall: number; falsePositiveRate: number;
+  positiveTop1Accuracy: number; negativeRejectionAccuracy: number;
+  negativeQueryCount: number; negativeComparableQueryCount: number;
+  byLanguagePair: Record<string, { queries: number; precision: number; recall: number; f1: number; topKRecall: number; falsePositiveRate: number }>;
+}
+export interface RawTextRetrievalReport {
+  version: string; threshold: number; topK: number; mode: 'exact' | 'near-semantic'; inputMode: 'raw-text-only';
+  metrics: RawTextRetrievalMetrics; queryResults: RawTextRetrievalQueryResult[];
+  baselines: Record<string, RawTextBaselineMetrics>;
+}
+
+function validateRetrievalInput(input: { memories: RawTextMemory[]; queries: RawTextQuery[]; threshold?: number; topK?: number; mode?: 'exact' | 'near-semantic' }): void {
+  if (!input || !Array.isArray(input.memories) || !Array.isArray(input.queries)) throw new TypeError('memories and queries must be arrays');
+  const memoryIds = new Set<string>();
+  for (const [index, memory] of input.memories.entries()) {
+    if (!memory || typeof memory.id !== 'string' || !memory.id.trim() || typeof memory.text !== 'string' || !memory.text.trim() || typeof memory.language !== 'string' || !memory.language.trim()) throw new TypeError(`invalid memory at index ${index}`);
+    if (memoryIds.has(memory.id)) throw new TypeError(`duplicate memory id: ${memory.id}`);
+    memoryIds.add(memory.id);
+  }
+  const queryIds = new Set<string>();
+  for (const [index, query] of input.queries.entries()) {
+    if (!query || typeof query.id !== 'string' || !query.id.trim() || typeof query.text !== 'string' || !query.text.trim() || typeof query.language !== 'string' || !query.language.trim() || !Array.isArray(query.expectedMemoryIds) || query.expectedMemoryIds.some((id) => typeof id !== 'string')) throw new TypeError(`invalid query at index ${index}`);
+    if (queryIds.has(query.id)) throw new TypeError(`duplicate query id: ${query.id}`);
+    queryIds.add(query.id);
+    const expected = new Set(query.expectedMemoryIds);
+    if (expected.size !== query.expectedMemoryIds.length) throw new TypeError(`duplicate expected memory id in query: ${query.id}`);
+    if ([...expected].some((id) => !memoryIds.has(id))) throw new TypeError(`query ${query.id} references an unknown expected memory`);
+    if (query.semanticEquivalentMemoryIds !== undefined) {
+      if (!Array.isArray(query.semanticEquivalentMemoryIds) || query.semanticEquivalentMemoryIds.some((id) => typeof id !== 'string')) throw new TypeError(`invalid semantic equivalent IDs in query: ${query.id}`);
+      if (new Set(query.semanticEquivalentMemoryIds).size !== query.semanticEquivalentMemoryIds.length) throw new TypeError(`duplicate semantic equivalent memory id in query: ${query.id}`);
+      if (query.semanticEquivalentMemoryIds.some((id) => !memoryIds.has(id))) throw new TypeError(`query ${query.id} references an unknown semantic equivalent memory`);
+      if (query.expectedMemoryIds.some((id) => !query.semanticEquivalentMemoryIds!.includes(id))) throw new TypeError(`query ${query.id} expected IDs must be semantic equivalents`);
+    }
+  }
+  const threshold = input.threshold ?? 0.8;
+  if (!Number.isFinite(threshold) || threshold < 0 || threshold > 1) throw new TypeError('threshold must be finite and between 0 and 1');
+  const topK = input.topK ?? 5;
+  if (!Number.isInteger(topK) || topK < 1) throw new TypeError('topK must be a positive integer');
+  if (input.mode !== undefined && input.mode !== 'exact' && input.mode !== 'near-semantic') throw new TypeError('mode must be exact or near-semantic');
+}
+
+interface ExtractedMemory { memory: RawTextMemory; sem: LunumSem | null; error?: string }
+function metrics(tp: number, fp: number, fn: number, tn: number): Pick<RawTextRetrievalMetrics, 'precision' | 'recall' | 'f1' | 'falsePositiveRate'> {
+  const precision = tp + fp > 0 ? tp / (tp + fp) : 1;
+  const recall = tp + fn > 0 ? tp / (tp + fn) : 0;
+  return { precision, recall, f1: precision + recall > 0 ? 2 * precision * recall / (precision + recall) : 0, falsePositiveRate: fp + tn > 0 ? fp / (fp + tn) : 0 };
+}
+
+function retrievalMetrics(
+  results: Array<{ retrievedMemoryIds: string[]; expectedMemoryIds: string[]; candidateCount: number; failed?: boolean }>,
+): RawTextBaselineMetrics {
+  let tp = 0; let fp = 0; let fn = 0; let tn = 0; let top1 = 0;
+  for (const result of results) {
+    const expected = new Set(result.expectedMemoryIds);
+    const retrieved = [...new Set(result.retrievedMemoryIds)];
+    const matched = retrieved.filter(id => expected.has(id));
+    tp += matched.length;
+    fp += retrieved.filter(id => !expected.has(id)).length;
+    fn += result.expectedMemoryIds.filter(id => !retrieved.includes(id)).length;
+    tn += Math.max(0, result.candidateCount - retrieved.length - expected.size + matched.length);
+    if (expected.size === 0 ? retrieved.length === 0 : retrieved[0] !== undefined && expected.has(retrieved[0])) top1 += 1;
+  }
+  const aggregate = metrics(tp, fp, fn, tn);
+  return {
+    ...aggregate,
+    top1Accuracy: results.length > 0 ? top1 / results.length : 0,
+    positiveTop1Accuracy: results.filter((result) => result.expectedMemoryIds.length > 0).length > 0
+      ? results.filter((result) => result.expectedMemoryIds.length > 0).filter((result) => result.retrievedMemoryIds[0] !== undefined && result.expectedMemoryIds.includes(result.retrievedMemoryIds[0]!)).length / results.filter((result) => result.expectedMemoryIds.length > 0).length : 0,
+    negativeRejectionAccuracy: results.filter((result) => result.expectedMemoryIds.length === 0).length > 0
+      ? results.filter((result) => result.expectedMemoryIds.length === 0 && result.retrievedMemoryIds.length === 0).length / results.filter((result) => result.expectedMemoryIds.length === 0).length : 0,
+    topKRecall: results.filter((result) => result.expectedMemoryIds.length > 0).length > 0 ? results.reduce((sum, result) => {
+      const expected = new Set(result.expectedMemoryIds);
+      return sum + (expected.size === 0 ? 0 : result.retrievedMemoryIds.filter(id => expected.has(id)).length / expected.size);
+    }, 0) / results.filter((result) => result.expectedMemoryIds.length > 0).length : 0,
+    truePositives: tp, falsePositives: fp, falseNegatives: fn, trueNegatives: tn,
+    failures: results.filter(result => result.failed).length,
+  };
+}
+async function extract(input: RawTextExtractionInput, extractor: RawTextExtractor): Promise<{ sem: LunumSem | null; error?: string }> {
+  try {
+    const value = await extractor(input);
+    if (value === null) return { sem: null, error: 'extractor abstained' };
+    const validation = validateSemanticCandidate(value);
+    if (!validation.ok) return { sem: null, error: `invalid extracted Sem: ${validation.errors.join('; ')}` };
+    const normalization = normalizeSemanticCandidate(value);
+    if (!normalization.sem || !normalization.canonical) {
+      return { sem: null, error: `noncanonical extracted Sem: ${normalization.issues.map((issue) => issue.message).join('; ')}` };
+    }
+    // Normalization proves transport/protocol canonicality only. Retrieval
+    // coverage must count an item as identity-usable only when the stricter
+    // lfp:2.1 gates (including canonical frame and grounding requirements)
+    // succeed as well.
+    try {
+      semanticFingerprint(normalization.sem);
+    } catch (error) {
+      return { sem: null, error: `semantic identity unavailable: ${error instanceof Error ? error.message : String(error)}` };
+    }
+    return { sem: normalization.sem };
+  } catch (error) { return { sem: null, error: error instanceof Error ? error.message : String(error) }; }
+}
+
+export async function runRawTextRetrievalEvaluation(input: {
+  memories: RawTextMemory[]; queries: RawTextQuery[]; extract: RawTextExtractor;
+  threshold?: number; topK?: number; mode?: 'exact' | 'near-semantic'; baselines?: Record<string, RawTextBaseline>;
+}): Promise<RawTextRetrievalReport> {
+  validateRetrievalInput(input);
+  const threshold = input.threshold ?? 0.8;
+  const topK = input.topK ?? 5;
+  const mode = input.mode ?? 'exact';
+  const near = mode === 'near-semantic' ? new NearSemanticFingerprintGenerator(threshold) : null;
+  const extractedMemories: ExtractedMemory[] = [];
+  for (const memory of input.memories) {
+    const result = await extract({ id: memory.id, text: memory.text, language: memory.language, kind: 'memory' }, input.extract);
+    extractedMemories.push({ memory, sem: result.sem, ...(result.error ? { error: result.error } : {}) });
+  }
+  const queryResults: RawTextRetrievalQueryResult[] = [];
+  for (const query of input.queries) {
+    // The extractor receives only the raw source contract. Expected IDs and
+    // semantic-equivalence labels are evaluator-private scoring metadata.
+    const queryExtraction = await extract({ id: query.id, text: query.text, language: query.language, kind: 'query' }, input.extract);
+    if (!queryExtraction.sem) {
+      queryResults.push({ queryId: query.id, queryLanguage: query.language, targetLanguage: query.targetLanguage ?? null, expectedMemoryIds: [...query.expectedMemoryIds], semanticEquivalentMemoryIds: [...(query.semanticEquivalentMemoryIds ?? query.expectedMemoryIds)], routedOutEquivalentMemoryIds: [], retrievedMemoryIds: [], matchedMemoryIds: [], extracted: false, candidateCount: 0, extractionError: queryExtraction.error ?? 'extractor abstained', semanticMatchingFailures: [...query.expectedMemoryIds], rankingFailures: [], precision: query.expectedMemoryIds.length === 0 ? 1 : 0, recall: 0, f1: 0, top1Correct: false });
+      continue;
+    }
+    const candidates: Array<{ id: string; score: number }> = [];
+    const matchingFailures: string[] = [];
+    const routedOutEquivalentMemoryIds: string[] = [];
+    const semanticEquivalentMemoryIds = [...(query.semanticEquivalentMemoryIds ?? query.expectedMemoryIds)];
+    for (const entry of extractedMemories) {
+      if (query.targetLanguage && entry.memory.language !== query.targetLanguage) {
+        if (semanticEquivalentMemoryIds.includes(entry.memory.id)) routedOutEquivalentMemoryIds.push(entry.memory.id);
+        continue;
+      }
+      if (!entry.sem) { if (query.expectedMemoryIds.includes(entry.memory.id)) matchingFailures.push(entry.memory.id); continue; }
+      // Exact identity is intentionally fail-closed for unframed controlled
+      // predicates. Retrieval must report such records as non-matches rather
+      // than turning an identity precondition failure into a process failure.
+      let exact = false;
+      try {
+        exact = semanticFingerprint(queryExtraction.sem) === semanticFingerprint(entry.sem);
+      } catch {
+        exact = false;
+      }
+      const comparison = exact || !near ? null : near.compareSem(queryExtraction.sem, entry.sem);
+      const score = exact ? 1 : (comparison?.similar ? comparison.similarity : -1);
+      if (score >= threshold) candidates.push({ id: entry.memory.id, score });
+      else if (query.expectedMemoryIds.includes(entry.memory.id)) matchingFailures.push(entry.memory.id);
+    }
+    candidates.sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+    const retrievedMemoryIds = candidates.slice(0, topK).map((candidate) => candidate.id);
+    const expected = new Set(query.expectedMemoryIds);
+    const matchedMemoryIds = retrievedMemoryIds.filter((id) => expected.has(id));
+    const fp = retrievedMemoryIds.filter((id) => !expected.has(id)).length;
+    const fn = query.expectedMemoryIds.filter((id) => !retrievedMemoryIds.includes(id)).length;
+    const rankingFailures = query.expectedMemoryIds.filter((id) => !matchingFailures.includes(id) && !retrievedMemoryIds.includes(id));
+    const candidateCount = extractedMemories.filter((entry) => (!query.targetLanguage || entry.memory.language === query.targetLanguage) && entry.sem !== null).length;
+    queryResults.push({ queryId: query.id, queryLanguage: query.language, targetLanguage: query.targetLanguage ?? null, expectedMemoryIds: [...query.expectedMemoryIds], semanticEquivalentMemoryIds, routedOutEquivalentMemoryIds, retrievedMemoryIds, matchedMemoryIds, extracted: true, candidateCount, semanticMatchingFailures: matchingFailures, rankingFailures, ...metrics(matchedMemoryIds.length, fp, fn, Math.max(0, candidateCount - retrievedMemoryIds.length - expected.size + matchedMemoryIds.length)), top1Correct: expected.size > 0 && retrievedMemoryIds[0] !== undefined && expected.has(retrievedMemoryIds[0]) });
+  }
+  let tp = 0; let fp = 0; let fn = 0; let tn = 0;
+  for (const result of queryResults) {
+    const expected = new Set(result.expectedMemoryIds);
+    tp += result.matchedMemoryIds.length;
+    fp += result.retrievedMemoryIds.filter((id) => !expected.has(id)).length;
+    fn += result.expectedMemoryIds.filter((id) => !result.retrievedMemoryIds.includes(id)).length;
+    tn += Math.max(0, result.candidateCount - result.retrievedMemoryIds.length - result.expectedMemoryIds.length + result.matchedMemoryIds.length);
+  }
+  const byLanguagePair: RawTextRetrievalMetrics['byLanguagePair'] = {};
+  const buckets = new Map<string, RawTextRetrievalQueryResult[]>();
+  for (const result of queryResults) { const key = `${result.queryLanguage}-${result.targetLanguage ?? '*'}`; buckets.set(key, [...(buckets.get(key) ?? []), result]); }
+  for (const [pair, results] of buckets) {
+    const pairTp = results.reduce((sum, result) => sum + result.matchedMemoryIds.length, 0);
+    const pairFp = results.reduce((sum, result) => sum + result.retrievedMemoryIds.filter((id) => !result.expectedMemoryIds.includes(id)).length, 0);
+    const pairFn = results.reduce((sum, result) => sum + result.expectedMemoryIds.filter((id) => !result.retrievedMemoryIds.includes(id)).length, 0);
+    const pairTn = results.reduce((sum, result) => {
+      const query = input.queries.find((candidate) => candidate.id === result.queryId);
+      const eligibleExpected = query?.expectedMemoryIds.filter((id) => {
+        const entry = extractedMemories.find((memory) => memory.memory.id === id);
+        return entry?.sem !== null && (!query.targetLanguage || entry?.memory.language === query.targetLanguage);
+      }).length ?? 0;
+      return sum + Math.max(0, result.candidateCount - result.retrievedMemoryIds.length - eligibleExpected + result.matchedMemoryIds.length);
+    }, 0);
+    const positiveResults = results.filter((result) => result.expectedMemoryIds.length > 0);
+    byLanguagePair[pair] = { queries: results.length, ...metrics(pairTp, pairFp, pairFn, pairTn), topKRecall: positiveResults.length > 0 ? positiveResults.reduce((sum, result) => sum + result.recall, 0) / positiveResults.length : 0 };
+  }
+  const baselines: Record<string, RawTextBaselineMetrics> = {};
+  for (const [name, baseline] of Object.entries(input.baselines ?? {})) {
+    const baselineResults: Array<{ retrievedMemoryIds: string[]; expectedMemoryIds: string[]; candidateCount: number; failed: boolean }> = [];
+    for (const query of input.queries) {
+      try {
+        const { expectedMemoryIds: _expectedMemoryIds, semanticEquivalentMemoryIds: _semanticEquivalentMemoryIds, ...rawQuery } = query;
+        const memories = query.targetLanguage ? input.memories.filter((memory) => memory.language === query.targetLanguage) : input.memories;
+        const allowed = new Set(memories.map((memory) => memory.id));
+        const retrieved = await baseline({ query: rawQuery, memories, topK });
+        const unique = [...new Set(retrieved)];
+        const invalid = unique.some((id) => !allowed.has(id));
+        baselineResults.push({ retrievedMemoryIds: invalid ? [] : unique.slice(0, topK), expectedMemoryIds: query.expectedMemoryIds, candidateCount: memories.length, failed: invalid });
+      } catch {
+        const candidateCount = query.targetLanguage ? input.memories.filter((memory) => memory.language === query.targetLanguage).length : input.memories.length;
+        baselineResults.push({ retrievedMemoryIds: [], expectedMemoryIds: query.expectedMemoryIds, candidateCount, failed: true });
+      }
+    }
+    baselines[name] = retrievalMetrics(baselineResults);
+  }
+  const positiveQueryResults = queryResults.filter((result) => result.expectedMemoryIds.length > 0);
+  const queryIdentityAvailable = queryResults.filter((result) => result.extracted).length;
+  const memoryIdentityAvailable = extractedMemories.filter((entry) => entry.sem !== null).length;
+  const conditionalResults = positiveQueryResults.filter((result) => result.extracted && result.expectedMemoryIds.some((id) => extractedMemories.some((entry) => entry.memory.id === id && entry.sem)));
+  const conditionalTop1Accuracy = conditionalResults.length > 0 ? conditionalResults.filter((result) => result.top1Correct).length / conditionalResults.length : 0;
+  const conditionalRecall = conditionalResults.length > 0 ? conditionalResults.reduce((sum, result) => sum + result.recall, 0) / conditionalResults.length : 0;
+  const negativeResults = queryResults.filter((result) => result.expectedMemoryIds.length === 0);
+  const comparableNegativeResults = negativeResults.filter((result) => result.extracted && result.candidateCount > 0);
+  return { version: RAW_TEXT_RETRIEVAL_VERSION, threshold, topK, mode, inputMode: 'raw-text-only', metrics: { queries: queryResults.length, memoryCount: input.memories.length, queryExtractionFailures: queryResults.filter((result) => !result.extracted).length, memoryExtractionFailures: extractedMemories.filter((entry) => !entry.sem).length, queryIdentityAvailable, memoryIdentityAvailable, queryIdentityCoverage: input.queries.length > 0 ? queryIdentityAvailable / input.queries.length : 0, memoryIdentityCoverage: input.memories.length > 0 ? memoryIdentityAvailable / input.memories.length : 0, conditionalQueryCount: conditionalResults.length, conditionalTop1Accuracy, conditionalRecall, semanticMatchingFailures: queryResults.reduce((sum, result) => sum + result.semanticMatchingFailures.length, 0), rankingFailures: queryResults.reduce((sum, result) => sum + result.rankingFailures.length, 0), truePositives: tp, falsePositives: fp, falseNegatives: fn, trueNegatives: tn, ...metrics(tp, fp, fn, tn), top1Accuracy: positiveQueryResults.length > 0 ? positiveQueryResults.filter((result) => result.top1Correct).length / positiveQueryResults.length : 0, positiveTop1Accuracy: positiveQueryResults.length > 0 ? positiveQueryResults.filter((result) => result.top1Correct).length / positiveQueryResults.length : 0, negativeRejectionAccuracy: comparableNegativeResults.length > 0 ? comparableNegativeResults.filter((result) => result.retrievedMemoryIds.length === 0).length / comparableNegativeResults.length : 0, negativeQueryCount: negativeResults.length, negativeComparableQueryCount: comparableNegativeResults.length, topKRecall: positiveQueryResults.length > 0 ? positiveQueryResults.reduce((sum, result) => sum + result.recall, 0) / positiveQueryResults.length : 0, byLanguagePair }, queryResults, baselines };
+}

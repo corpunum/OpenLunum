@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { resolveMaxTokens } from './model.js';
@@ -33,11 +34,47 @@ export async function sha256File(file: string): Promise<string> {
   return createHash('sha256').update(await readFile(file)).digest('hex');
 }
 
+/** Hash source and test inputs only; experiment output must not invalidate resume. */
+export async function sourceStateSha256(root: string): Promise<string> {
+  let files: string[] = [];
+  try {
+    files = execFileSync('git', [
+      'ls-files', '-co', '--exclude-standard',
+      'packages/core/src', 'packages/core/test',
+      'packages/eval/src', 'packages/eval/test'
+    ], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+      .split(/\r?\n/u).filter(Boolean).sort();
+  } catch {
+    return '';
+  }
+  const hash = createHash('sha256');
+  for (const file of files) {
+    hash.update(file);
+    hash.update('\0');
+    hash.update(await readFile(path.join(root, file)));
+    hash.update('\0');
+  }
+  return hash.digest('hex');
+}
+
 export async function loadDataset(file: string): Promise<DatasetItem[]> {
   const lines = (await readFile(file, 'utf8')).split(/\r?\n/u).filter((line) => line.trim());
   return lines.map((line, index) => {
     try { return JSON.parse(line) as DatasetItem; }
     catch (error) { throw new Error(`Invalid JSONL at ${file}:${index + 1}: ${error instanceof Error ? error.message : String(error)}`); }
+  });
+}
+
+/** Read an append-only JSONL ledger. Any malformed line is fatal; partial output is never silently skipped. */
+export async function readJsonlLedger<T>(file: string): Promise<T[]> {
+  const content = await readFile(file, 'utf8').catch(() => '');
+  const lines = content.split(/\r?\n/u).filter((line) => line.trim().length > 0);
+  return lines.map((line, index) => {
+    try {
+      return JSON.parse(line) as T;
+    } catch (error) {
+      throw new Error(`Malformed JSONL ledger at ${file}:${index + 1}; refusing resume: ${error instanceof Error ? error.message : String(error)}`);
+    }
   });
 }
 
@@ -59,5 +96,8 @@ export function validateProfile(value: ModelProfile): void {
   if (value.schema !== 'openlunum-model-profile/0.1') throw new Error('Unsupported model profile schema');
   if (value.provider !== 'openai-compatible') throw new Error('Only openai-compatible profiles are currently supported');
   if (!value.baseUrl || !value.model) throw new Error('baseUrl and model are required');
+  if (/(?:replace-with|placeholder|example-model)/iu.test(value.model)) {
+    throw new Error('model must name a concrete endpoint model; placeholder model IDs cannot produce evidence');
+  }
   resolveMaxTokens(value.maxTokens);
 }

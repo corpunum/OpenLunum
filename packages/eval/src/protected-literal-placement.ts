@@ -21,6 +21,7 @@
  * scored separately via `compareSem`'s feature recall/precision.
  */
 
+import { basicIdentifier } from '@corpunum/lunum';
 import type { LunumClause, LunumSem, LunumTerm } from '@corpunum/lunum';
 
 export interface LiteralPlacement {
@@ -47,6 +48,18 @@ export interface ProtectedLiteralPlacementCheck {
   satisfied: boolean;
 }
 
+export interface ProtectedSemanticAtom {
+  /** Canonical structural path, for example clauses[0].roles.amount.value. */
+  path: string;
+  /** Typed semantic value expected at that path. */
+  value: string | number | boolean | null;
+}
+
+export interface ProtectedSemanticAtomCheck extends ProtectedSemanticAtom {
+  status: 'placed' | 'missing' | 'wrong-value';
+  satisfied: boolean;
+}
+
 function isPrimitive(value: unknown): value is string | number | boolean | null {
   return value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean';
 }
@@ -57,9 +70,24 @@ function canonicalPrimitive(value: string | number | boolean | null): string {
   return String(value);
 }
 
-/** Strip array indices so sibling ordering does not fragment the role path. */
 function normalizePath(path: string): string {
-  return path.replace(/\[\d+\]/g, '');
+  return path;
+}
+
+function normalizeAtomPath(path: string): string {
+  const normalized = normalizePath(path);
+  return normalized
+    .replace(/^clauses/u, 'root')
+    // Keep array indices: clauses[0] and clauses[1] are different semantic
+    // locations, as are conditions[0] and conditions[1]. The lookahead also
+    // handles the indexed form (`.conditions[0]`) as well as a terminal or
+    // dotted property form.
+    .replace(/\.(roles|conditions|consequences)(?=\[|\.|$)/gu, '>$1');
+}
+
+function normalizeAtomValue(path: string, value: string | number | boolean | null): string {
+  const primitive = value === null ? 'null' : typeof value === 'number' ? String(value) : typeof value === 'boolean' ? String(value) : value;
+  return /\.(?:id|ref|unit|type|format)$/u.test(path) ? basicIdentifier(primitive) : primitive;
 }
 
 function walkTerm(term: LunumTerm | undefined, pathPrefix: string, out: LiteralPlacement[]): void {
@@ -75,6 +103,7 @@ function walkTerm(term: LunumTerm | undefined, pathPrefix: string, out: LiteralP
   // LunumTermObject
   if (typeof term.id === 'string') out.push({ path: `${pathPrefix}.id`, value: canonicalPrimitive(term.id) });
   if (typeof term.ref === 'string') out.push({ path: `${pathPrefix}.ref`, value: canonicalPrimitive(term.ref) });
+  if (typeof term.unit === 'string') out.push({ path: `${pathPrefix}.unit`, value: canonicalPrimitive(term.unit).toLocaleLowerCase('und') });
   if ('value' in term) {
     const value = (term as { value?: unknown }).value;
     if (isPrimitive(value)) {
@@ -92,8 +121,8 @@ function walkClause(clause: LunumClause, pathPrefix: string, out: LiteralPlaceme
     walkTerm(clause.roles[key], `${pathPrefix}>roles.${key}`, out);
   }
   if (clause.time !== undefined) walkTerm(clause.time, `${pathPrefix}>time`, out);
-  for (const condition of clause.conditions ?? []) walkClause(condition, `${pathPrefix}>conditions`, out);
-  for (const consequence of clause.consequences ?? []) walkClause(consequence, `${pathPrefix}>consequences`, out);
+  for (const [index, condition] of (clause.conditions ?? []).entries()) walkClause(condition, `${pathPrefix}>conditions[${index}]`, out);
+  for (const [index, consequence] of (clause.consequences ?? []).entries()) walkClause(consequence, `${pathPrefix}>consequences[${index}]`, out);
 }
 
 /**
@@ -103,8 +132,8 @@ function walkClause(clause: LunumClause, pathPrefix: string, out: LiteralPlaceme
 export function collectLiteralPlacements(sem: LunumSem | null | undefined): LiteralPlacement[] {
   const out: LiteralPlacement[] = [];
   if (!sem) return out;
-  for (const clause of sem.clauses ?? []) walkClause(clause, 'root', out);
-  for (const reference of sem.references ?? []) walkTerm(reference, 'references', out);
+  for (const [index, clause] of (sem.clauses ?? []).entries()) walkClause(clause, `root[${index}]`, out);
+  for (const reference of sem.references ?? []) walkTerm(reference as unknown as LunumTerm, 'references', out);
   return out.map((placement) => ({ path: normalizePath(placement.path), value: placement.value }));
 }
 
@@ -154,4 +183,16 @@ export function protectedLiteralPlacementCoverage(checks: readonly ProtectedLite
   if (checks.length === 0) return 1;
   const satisfied = checks.filter((check) => check.satisfied).length;
   return satisfied / checks.length;
+}
+
+/** Verify declared semantic atoms by exact typed path/value, never by substring. */
+export function checkProtectedSemanticAtoms(candidateSem: LunumSem | null | undefined, atoms: readonly ProtectedSemanticAtom[]): ProtectedSemanticAtomCheck[] {
+  const placements = collectLiteralPlacements(candidateSem);
+  return atoms.map((atom) => {
+    const path = normalizeAtomPath(atom.path);
+    const matches = placements.filter((placement) => placement.path === path);
+    const expected = normalizeAtomValue(path, atom.value);
+    const status = matches.some((placement) => normalizeAtomValue(path, placement.value) === expected) ? 'placed' : matches.length ? 'wrong-value' : 'missing';
+    return { ...atom, status, satisfied: status === 'placed' };
+  });
 }

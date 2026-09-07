@@ -20,6 +20,7 @@ import type { LunumSem } from '@corpunum/lunum';
 import { RealizationEngine, type RealizationLanguage } from './realization.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt, realizePrompt } from './prompts.js';
+import { parseStrictJsonObject } from './strict-json.js';
 import { findWorkspaceRoot, writeJson } from './io.js';
 import type { ExperimentManifest, ExperimentItem, ModelProfile } from './types.js';
 
@@ -155,12 +156,13 @@ export function modelProfileReportFilename(modelId: string): string {
 // ── JSON extraction helper ────────────────────────────────────────
 
 function extractJson(text: string): unknown {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/iu)?.[1];
-  const candidate = fenced ?? text;
-  const start = candidate.indexOf('{');
-  const end = candidate.lastIndexOf('}');
-  if (start < 0 || end < start) throw new Error('No JSON object found in model output');
-  return JSON.parse(candidate.slice(start, end + 1));
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/iu);
+  const candidate = fenced?.[1]?.trim() ?? trimmed;
+  if (!candidate.startsWith('{') || !candidate.endsWith('}')) {
+    throw new Error('Model output must be exactly one JSON object (optionally in one JSON code fence)');
+  }
+  return parseStrictJsonObject(candidate);
 }
 
 // ── Scoring helpers ────────────────────────────────────────────────

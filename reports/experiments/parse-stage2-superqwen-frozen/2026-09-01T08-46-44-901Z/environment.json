@@ -1,0 +1,100 @@
+{
+  "node": "v22.22.2",
+  "platform": "linux",
+  "arch": "x64",
+  "modelProfile": {
+    "schema": "openlunum-model-profile/0.1",
+    "id": "superqwen3.8-27b-abliterated-live",
+    "provider": "openai-compatible",
+    "baseUrl": "http://127.0.0.1:54523/v1",
+    "model": "openai/superqwen3.8-27b-abliterated",
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 768,
+    "chatTemplateKwargs": {
+      "enable_thinking": false
+    },
+    "timeoutMs": 300000,
+    "metadata": {
+      "purpose": "Stage 2 diagnostic and frozen extraction evaluation against the already-loaded SuperQwen3.8 27B Abliterated llama.cpp instance.",
+      "endpointDiscovery": "Observed from ss/ps and GET /v1/models on 2026-09-01; do not treat this local port as portable deployment configuration.",
+      "modelFile": {
+        "fileName": "SuperQwen3.8-27b-abliterated-Q4_K_M.gguf",
+        "source": "local llama.cpp process command line",
+        "fileSizeBytes": 16547400704,
+        "modifiedAt": "2026-08-29T12:36:51.534Z"
+      }
+    }
+  },
+  "codeCommit": "3fe7aed6deb3db122602bbfbc3affa042780f203",
+  "modelIdentity": {
+    "requestedModel": "openai/superqwen3.8-27b-abliterated",
+    "advertisedModelIds": [
+      "openai/superqwen3.8-27b-abliterated"
+    ],
+    "verified": true,
+    "endpoint": "http://127.0.0.1:54523/v1",
+    "modelFileIdentity": {
+      "fileName": "SuperQwen3.8-27b-abliterated-Q4_K_M.gguf",
+      "source": "local llama.cpp process command line",
+      "fileSizeBytes": 16547400704,
+      "modifiedAt": "2026-08-29T12:36:51.534Z"
+    },
+    "reportedModelId": "openai/superqwen3.8-27b-abliterated"
+  },
+  "prompt": {
+    "version": "parse-prompt/3",
+    "systemSha256": "57564d3d6b615ca813fad5dba2e429c72f25ea68162a95911672cc6a64fbe44b"
+  },
+  "decoding": {
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 768,
+    "chatTemplateKwargs": {
+      "enable_thinking": false
+    },
+    "structuredOutputMode": "json-schema"
+  },
+  "provenance": {
+    "startedAt": "2026-09-01T08:46:44.881Z",
+    "completedAt": "2026-09-01T08:50:43.670Z",
+    "codeCommit": "3fe7aed6deb3db122602bbfbc3affa042780f203",
+    "baselineCommit": "204dab3f5169c8ebd08e4dc76c56b9ffa635a103",
+    "baselineCommitResolvable": true,
+    "datasetPath": "datasets/dev/stage2-heldout-v2.jsonl",
+    "datasetSha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+    "modelProfileSha256": "632183dcd88eb18f7837c8063519604b0da78a20bb1a00e5dbf5c8f9190944e0",
+    "modelProfileId": "superqwen3.8-27b-abliterated-live",
+    "modelIdentity": {
+      "requestedModel": "openai/superqwen3.8-27b-abliterated",
+      "advertisedModelIds": [
+        "openai/superqwen3.8-27b-abliterated"
+      ],
+      "verified": true,
+      "endpoint": "http://127.0.0.1:54523/v1",
+      "modelFileIdentity": {
+        "fileName": "SuperQwen3.8-27b-abliterated-Q4_K_M.gguf",
+        "source": "local llama.cpp process command line",
+        "fileSizeBytes": 16547400704,
+        "modifiedAt": "2026-08-29T12:36:51.534Z"
+      },
+      "reportedModelId": "openai/superqwen3.8-27b-abliterated"
+    },
+    "effectiveSystemPromptSha256": "57564d3d6b615ca813fad5dba2e429c72f25ea68162a95911672cc6a64fbe44b",
+    "workingTreeClean": true,
+    "promptVersion": "parse-prompt/3",
+    "schemaVersion": "semantic-extraction-result/0.1",
+    "schemaSha256": "cdbc392e1cdc6c9f9bc51920d9c1077637b804d565bb5372d013012d488e48c0",
+    "structuredOutputMode": "json-schema",
+    "decoding": {
+      "temperature": 0,
+      "seed": 42,
+      "maxTokens": 768,
+      "chatTemplateKwargs": {
+        "enable_thinking": false
+      }
+    },
+    "evidenceValid": true,
+    "invalidReasons": []
+  }
+}

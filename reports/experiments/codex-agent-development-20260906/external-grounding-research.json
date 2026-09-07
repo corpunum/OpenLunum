@@ -1,0 +1,46 @@
+{
+  "type": "development-external-grounding-research",
+  "date": "2026-09-06",
+  "protected": false,
+  "resources": {
+    "omwCili": {
+      "decision": "integrate-optional-offline-adapter",
+      "evidence": "OMW/CILI provides interlingual lexical synset identifiers and OMW 2.0 publishes versioned archives with checksums.",
+      "limitations": [
+        "constituent wordnet licenses differ",
+        "polysemy produces multiple senses",
+        "modified compositions are not proven by a head synset",
+        "coverage and language codes vary by resource"
+      ]
+    },
+    "wikidata": {
+      "decision": "integrate-optional-stable-id-boundary",
+      "evidence": "Wikidata supplies stable Q identifiers with multilingual labels, aliases, descriptions, and statements.",
+      "limitations": [
+        "labels and aliases are not unique",
+        "search is candidate generation only",
+        "live data requires a pinned revision or dump for reproducibility"
+      ]
+    },
+    "conceptNet": {
+      "decision": "diagnostic-only",
+      "reason": "language-scoped relatedness and association edges do not establish a universal exact identity"
+    }
+  },
+  "architectures": {
+    "internalOnly": "unresolved for unseen synonymy",
+    "structuredComposition": "converges equivalent head/modifier proposals but does not prove external synonymy",
+    "omwExact": "resolves one exact lemma/POS to one ILI; ambiguous or modified cases fail closed",
+    "stableEntityExact": "resolves one prevalidated stable entity ID; duplicate IDs deduplicate, disagreements remain ambiguous",
+    "cascade": "first exact result is accepted only when later providers do not disagree"
+  },
+  "fixtureMeasurements": {
+    "multilingualEquivalentHeadCases": { "resolved": 3, "total": 3, "sharedId": true },
+    "polysemyCases": { "ambiguous": 1, "total": 1 },
+    "modifiedCompositionCases": { "unresolved": 1, "total": 1 },
+    "stableEntityCases": { "resolved": 1, "total": 1 },
+    "providerDisagreementCases": { "ambiguous": 1, "total": 1 },
+    "falseEquivalences": 0
+  },
+  "interpretation": "The fixture validates deterministic provider policy, not real-corpus coverage. A pinned OMW/CILI snapshot must be supplied by an application before making empirical language-coverage claims."
+}

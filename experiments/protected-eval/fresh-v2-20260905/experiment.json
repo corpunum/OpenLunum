@@ -1,0 +1,30 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "protected-fresh-v2-20260905",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "hypothesis": "A frozen model-independent Lunum protocol extracts unseen multilingual meaning into stable identities and rejects critical semantic collapse.",
+  "baselineCommit": "7427150384fecc90586727953955f5cbf3af99bb",
+  "dataset": {
+    "path": "experiments/protected-eval/fresh-v2-20260905/corpus.jsonl",
+    "sha256": "TO_BE_FILLED_AFTER_PREFLIGHT"
+  },
+  "criticalNegativePairs": {
+    "path": "experiments/protected-eval/fresh-v2-20260905/critical-negative-pairs.json",
+    "count": 10
+  },
+  "modelProfile": "profiles/models/superqwen3.8-27b-abliterated-live.json",
+  "limits": {
+    "maxItems": 77,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 77
+  },
+  "gates": {
+    "minimumFeatureRecall": 0,
+    "minimumExactRate": 0,
+    "requireProtectedLiteralCoverage": false
+  },
+  "outputDirectory": "reports/experiments/protected-fresh-v2-20260905",
+  "evidenceClass": "protected",
+  "implementationCommit": "7427150384fecc90586727953955f5cbf3af99bb"
+}

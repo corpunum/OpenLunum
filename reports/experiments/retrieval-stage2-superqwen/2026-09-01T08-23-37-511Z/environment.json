@@ -1,0 +1,64 @@
+{
+  "inputMode": "raw-text-only",
+  "modelProfile": {
+    "schema": "openlunum-model-profile/0.1",
+    "id": "superqwen3.8-27b-abliterated-live",
+    "provider": "openai-compatible",
+    "baseUrl": "http://127.0.0.1:54523/v1",
+    "model": "openai/superqwen3.8-27b-abliterated",
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 768,
+    "chatTemplateKwargs": {
+      "enable_thinking": false
+    },
+    "timeoutMs": 300000,
+    "metadata": {
+      "purpose": "Stage 2 diagnostic and frozen extraction evaluation against the already-loaded SuperQwen3.8 27B Abliterated llama.cpp instance.",
+      "endpointDiscovery": "Observed from ss/ps and GET /v1/models on 2026-09-01; do not treat this local port as portable deployment configuration.",
+      "modelFile": {
+        "fileName": "SuperQwen3.8-27b-abliterated-Q4_K_M.gguf",
+        "source": "local llama.cpp process command line",
+        "fileSizeBytes": 16547400704,
+        "modifiedAt": "2026-08-29T12:36:51.534Z"
+      }
+    }
+  },
+  "modelIdentity": {
+    "requestedModel": "openai/superqwen3.8-27b-abliterated",
+    "reportedModelId": "openai/superqwen3.8-27b-abliterated",
+    "advertisedModelIds": [
+      "openai/superqwen3.8-27b-abliterated"
+    ],
+    "verified": true,
+    "endpoint": "http://127.0.0.1:54523/v1",
+    "modelFileIdentity": {
+      "fileName": "SuperQwen3.8-27b-abliterated-Q4_K_M.gguf",
+      "source": "local llama.cpp process command line",
+      "fileSizeBytes": 16547400704,
+      "modifiedAt": "2026-08-29T12:36:51.534Z"
+    }
+  },
+  "provenance": {
+    "startedAt": "2026-09-01T08:20:48.322Z",
+    "completedAt": "2026-09-01T08:23:37.513Z",
+    "codeCommit": "a044f0440154ce8b1ff54c48446edafad52275aa",
+    "workingTreeClean": true,
+    "datasetPath": "datasets/dev/stage2-retrieval-v1.jsonl",
+    "datasetSha256": "1235f3b750e0fbee35d7fe86dd3aaa7381235ded8ca230b9adf22294096b800a",
+    "promptVersion": "parse-prompt/3",
+    "effectiveSystemPromptSha256": "57564d3d6b615ca813fad5dba2e429c72f25ea68162a95911672cc6a64fbe44b",
+    "schemaVersion": "semantic-extraction-result/0.1",
+    "schemaSha256": "158ded362d9c2918379eabf249936adcb11b1fba94e35e531f9490811674f742",
+    "structuredOutputMode": "json-schema",
+    "decoding": {
+      "temperature": 0,
+      "seed": 42,
+      "maxTokens": 768,
+      "chatTemplateKwargs": {
+        "enable_thinking": false
+      }
+    },
+    "modelId": "openai/superqwen3.8-27b-abliterated"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "critical-semantic-differences-v1",
+  "path": "datasets/adversarial/critical-semantic-differences-v1.jsonl",
+  "sha256": "2816534685ad8ec498661f5b6f190f791880edf527eb1bc04e6ffee1e92d8c7c",
+  "items": 15,
+  "dimensions": ["protected-literal", "predicate", "temporal", "role-identity", "negation", "modality", "condition-change"],
+  "status": "adversarial",
+  "purpose": "Gold-Sem and raw-text extraction-path false-positive checks for safety-critical semantic mutations."
+}

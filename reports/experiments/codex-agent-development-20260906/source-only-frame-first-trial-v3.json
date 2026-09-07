@@ -1,0 +1,20 @@
+{
+  "type": "development-source-only-frame-first-trial",
+  "version": 3,
+  "status": "transport-diagnostic",
+  "provenance": {
+    "goldProvidedToAgents": false,
+    "pairLabelsProvidedToAgents": false,
+    "localInferenceUsed": false,
+    "contractSource": "generated getExtractionContract()",
+    "agents": ["gpt-5.6-luna/isolated-agent-A", "gpt-5.6-luna/isolated-agent-B"]
+  },
+  "items": 18,
+  "languages": ["en", "el", "es", "fr", "de", "id"],
+  "rawOutput": {
+    "agentA": {"arrayParseable": false, "failure": "invalid JSON syntax in b14 prohibit candidate trailing comma"},
+    "agentB": {"arrayParseable": false, "failure": "invalid JSON syntax in b14 prohibit candidate trailing comma"}
+  },
+  "interpretation": "This trial cannot support semantic metrics because the batch transport was invalid. It demonstrates that batch JSON output can lose all item-level evidence when one candidate is malformed. The follow-up uses JSONL/item isolation; no post-hoc semantic repair is counted as extraction success.",
+  "decision": "Treat as transport evidence only; preserve the generated contract and deterministic validator. Do not infer model semantic accuracy from this run."
+}

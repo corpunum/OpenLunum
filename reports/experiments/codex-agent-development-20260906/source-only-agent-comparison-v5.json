@@ -1,0 +1,27 @@
+{
+  "type": "development-source-only-agent-comparison",
+  "version": 5,
+  "status": "diagnostic",
+  "provenance": {
+    "goldProvidedToAgents": false,
+    "pairLabelsProvidedToAgents": false,
+    "localInferenceUsed": false,
+    "contractSource": "generated extraction contract",
+    "rawResponses": "retained in the session transcript; no hidden-gold artifact was supplied",
+    "custody": "development-only declared source-only trial, not protected evidence"
+  },
+  "items": [
+    { "id": "d1", "language": "en", "text": "Mara archives the private incident report.", "agentOutcomes": { "Godel": "abstain", "independent": "abstain" } },
+    { "id": "d2", "language": "el", "text": "Η Μάρα αρχειοθετεί την ιδιωτική αναφορά περιστατικού.", "agentOutcomes": { "Godel": "abstain", "independent": "abstain" } },
+    { "id": "d3", "language": "en", "text": "The scheduler must retry the export three times.", "agentOutcomes": { "Godel": { "candidateIdentityAvailable": true, "lfp": "lfp:2.1:sha256:b90b67e09f1edfc3bd82888fb35dec67" }, "independent": { "candidateIdentityAvailable": true, "lfp": "lfp:2.1:sha256:389a3a0464ee4d04fb910bd5eb3dc375" } } },
+    { "id": "d4", "language": "es", "text": "El programador debe reintentar la exportación tres veces.", "agentOutcomes": { "Godel": { "candidateIdentityAvailable": true, "lfp": "lfp:2.1:sha256:b90b67e09f1edfc3bd82888fb35dec67" }, "independent": { "candidateIdentityAvailable": true, "lfp": "lfp:2.1:sha256:389a3a0464ee4d04fb910bd5eb3dc375" } } },
+    { "id": "d5", "language": "en", "text": "If storage is below 20 GB, enable the backup service.", "agentOutcomes": { "Godel": { "candidateIdentityAvailable": true, "lfp": "lfp:2.1:sha256:f487cf46dc8e8427f5b84e300cd970ba" }, "independent": { "candidateIdentityAvailable": true, "lfp": "lfp:2.1:sha256:f487cf46dc8e8427f5b84e300cd970ba" } } },
+    { "id": "d6", "language": "fr", "text": "Si le stockage est inférieur à 20 Go, activez le service de sauvegarde.", "agentOutcomes": { "Godel": { "candidateIdentityAvailable": true, "lfp": "lfp:2.1:sha256:f487cf46dc8e8427f5b84e300cd970ba" }, "independent": { "candidateIdentityAvailable": true, "lfp": "lfp:2.1:sha256:f487cf46dc8e8427f5b84e300cd970ba" } } }
+  ],
+  "deterministicAudit": {
+    "allFourSubmittedCandidateChecks": "structural/protocol/frame/grounding/identity valid",
+    "retryDivergence": "candidate A used agent type actor and theme type concept; candidate B used agent type system and theme type task",
+    "conditionalConvergence": "both agents produced the same lfp for d5 and d6",
+    "interpretation": "OpenLunum accepts transport-valid candidates but preserves exact identity differences caused by unverified kind and term-type choices. This is diagnostic evidence of extraction ambiguity, not a gold-exactness claim."
+  }
+}

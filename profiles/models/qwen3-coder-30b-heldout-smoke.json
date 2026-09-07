@@ -1,0 +1,17 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "qwen3-coder-30b-heldout-smoke",
+  "provider": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:8080/v1",
+  "model": "openai/qwen3-coder-30b-a3b",
+  "temperature": 0,
+  "seed": 42,
+  "maxTokens": 384,
+  "noThink": true,
+  "timeoutMs": 300000,
+  "metadata": {
+    "purpose": "Bounded live smoke slice of the held-out raw-text extraction evaluation.",
+    "parentProfile": "profiles/models/qwen3-coder-30b-heldout.json",
+    "outputBudgetRationale": "A smoke run is bounded to 384 output tokens; its results cannot substitute for the full 40-item evaluation."
+  }
+}

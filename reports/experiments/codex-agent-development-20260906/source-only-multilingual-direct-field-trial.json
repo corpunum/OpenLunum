@@ -1,0 +1,20 @@
+{
+  "type": "codex-agent-source-only-multilingual-direct-field-trial",
+  "version": 1,
+  "status": "diagnostic",
+  "protected": false,
+  "localInferenceUsed": false,
+  "goldExposed": false,
+  "agent": "gpt-5.6-luna",
+  "contract": { "mode": "direct-builder-fields", "requiredBuilderShape": "world/kind/predicate/roles object", "unknownFieldsForbidden": true, "sourceTextOnly": true },
+  "items": [
+    { "id": "m1", "language": "en", "sourceText": "Lena prefers a quiet setting.", "agentOutput": { "world": "en", "kind": "preference", "predicate": "prefer", "roles": "experiencer,theme" }, "transportValid": false, "failure": "roles must be an object and world must be a protocol symbol" },
+    { "id": "m2", "language": "el", "sourceText": "Η Λένα προτιμά ένα ήσυχο περιβάλλον.", "agentOutput": { "world": "el", "kind": "preference", "predicate": "prefer", "roles": "experiencer,theme" }, "transportValid": false, "failure": "roles must be an object and world must be a protocol symbol" },
+    { "id": "m3", "language": "es", "sourceText": "Lena prefiere un entorno tranquilo.", "agentOutput": { "world": "es", "kind": "preference", "predicate": "prefer", "roles": "experiencer,theme" }, "transportValid": false, "failure": "roles must be an object and world must be a protocol symbol" },
+    { "id": "m4", "language": "fr", "sourceText": "Lena préfère un environnement calme.", "agentOutput": { "world": "fr", "kind": "preference", "predicate": "prefer", "roles": "experiencer,theme" }, "transportValid": false, "failure": "roles must be an object and world must be a protocol symbol" },
+    { "id": "m5", "language": "de", "sourceText": "Lena bevorzugt eine ruhige Umgebung.", "agentOutput": { "world": "de", "kind": "preference", "predicate": "prefer", "roles": "experiencer,theme" }, "transportValid": false, "failure": "roles must be an object and world must be a protocol symbol" },
+    { "id": "m6", "language": "id", "sourceText": "Lena menyukai lingkungan yang tenang.", "agentOutput": { "world": "id", "kind": "preference", "predicate": "prefer", "roles": "experiencer,theme" }, "transportValid": false, "failure": "roles must be an object and world must be a protocol symbol" }
+  ],
+  "summary": { "rows": 6, "transportValid": 0, "candidateIdentityAvailable": 0, "goldExposed": false, "exactAccuracyClaimed": false },
+  "interpretation": "The agent did not follow the direct builder transport contract. OpenLunum correctly fails closed; no semantic or multilingual accuracy is inferred. Do not broaden the builder to accept this output."
+}

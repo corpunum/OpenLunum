@@ -1,0 +1,180 @@
+{
+  "type": "openlunum-development-agent-corpus",
+  "version": 1,
+  "status": "development-diagnostic",
+  "protected": false,
+  "localInferenceUsed": false,
+  "productionUse": false,
+  "description": "Development-only multilingual framed-predicate corpus. Rows are source-only; hidden gold and independent preflight metadata are retained for local audit and must not be promoted to protected evaluation.",
+  "languages": ["en", "el", "es", "fr", "de", "id"],
+  "supportedFrameRegistry": "packages/core/src/frame-registry.ts",
+  "groups": [
+    {"id":"prefer-tea","rows":[
+      {"id":"p01-en","sourceLanguage":"en","sourceText":"The traveler prefers green tea."},
+      {"id":"p01-el","sourceLanguage":"el","sourceText":"Ο ταξιδιώτης προτιμά πράσινο τσάι."},
+      {"id":"p01-es","sourceLanguage":"es","sourceText":"El viajero prefiere té verde."},
+      {"id":"p01-fr","sourceLanguage":"fr","sourceText":"Le voyageur préfère le thé vert."},
+      {"id":"p01-de","sourceLanguage":"de","sourceText":"Der Reisende bevorzugt grünen Tee."},
+      {"id":"p01-id","sourceLanguage":"id","sourceText":"Pelancong itu lebih menyukai teh hijau."}
+    ]},
+    {"id":"receive-parcel","rows":[
+      {"id":"p02-en","sourceLanguage":"en","sourceText":"The depot receives the ceramic sample from the courier."},
+      {"id":"p02-el","sourceLanguage":"el","sourceText":"Η αποθήκη παραλαμβάνει το κεραμικό δείγμα από τον ταχυμεταφορέα."},
+      {"id":"p02-es","sourceLanguage":"es","sourceText":"El depósito recibe la muestra de cerámica del mensajero."},
+      {"id":"p02-fr","sourceLanguage":"fr","sourceText":"Le dépôt reçoit l'échantillon en céramique du coursier."},
+      {"id":"p02-de","sourceLanguage":"de","sourceText":"Das Depot erhält die Keramikprobe vom Kurier."},
+      {"id":"p02-id","sourceLanguage":"id","sourceText":"Depot menerima sampel keramik dari kurir."}
+    ]},
+    {"id":"send-report","rows":[
+      {"id":"p03-en","sourceLanguage":"en","sourceText":"The analyst sends the report to the editor."},
+      {"id":"p03-el","sourceLanguage":"el","sourceText":"Ο αναλυτής στέλνει την αναφορά στον συντάκτη."},
+      {"id":"p03-es","sourceLanguage":"es","sourceText":"El analista envía el informe al editor."},
+      {"id":"p03-fr","sourceLanguage":"fr","sourceText":"L'analyste envoie le rapport à l'éditeur."},
+      {"id":"p03-de","sourceLanguage":"de","sourceText":"Der Analyst sendet den Bericht an den Redakteur."},
+      {"id":"p03-id","sourceLanguage":"id","sourceText":"Analis mengirim laporan kepada editor."}
+    ]},
+    {"id":"request-review","rows":[
+      {"id":"p04-en","sourceLanguage":"en","sourceText":"The analyst requests a review from the editor."},
+      {"id":"p04-el","sourceLanguage":"el","sourceText":"Ο αναλυτής ζητά αξιολόγηση από τον συντάκτη."},
+      {"id":"p04-es","sourceLanguage":"es","sourceText":"El analista solicita una revisión al editor."},
+      {"id":"p04-fr","sourceLanguage":"fr","sourceText":"L'analyste demande une révision à l'éditeur."},
+      {"id":"p04-de","sourceLanguage":"de","sourceText":"Der Analyst bittet den Redakteur um eine Prüfung."},
+      {"id":"p04-id","sourceLanguage":"id","sourceText":"Analis meminta tinjauan dari editor."}
+    ]},
+    {"id":"keep-draft-private","rows":[
+      {"id":"p05-en","sourceLanguage":"en","sourceText":"The researcher keeps the field draft private."},
+      {"id":"p05-el","sourceLanguage":"el","sourceText":"Η ερευνήτρια κρατά ιδιωτικό το προσχέδιο πεδίου."},
+      {"id":"p05-es","sourceLanguage":"es","sourceText":"La investigadora mantiene privado el borrador de campo."},
+      {"id":"p05-fr","sourceLanguage":"fr","sourceText":"La chercheuse garde privé le brouillon de terrain."},
+      {"id":"p05-de","sourceLanguage":"de","sourceText":"Die Forscherin hält den Feldentwurf privat."},
+      {"id":"p05-id","sourceLanguage":"id","sourceText":"Peneliti menjaga draf lapangan tetap pribadi."}
+    ]},
+    {"id":"delete-cache","rows":[
+      {"id":"p06-en","sourceLanguage":"en","sourceText":"The cleanup worker deletes the expired cache."},
+      {"id":"p06-el","sourceLanguage":"el","sourceText":"Ο εργαζόμενος καθαρισμού διαγράφει την παρωχημένη κρυφή μνήμη."},
+      {"id":"p06-es","sourceLanguage":"es","sourceText":"El proceso de limpieza elimina la caché caducada."},
+      {"id":"p06-fr","sourceLanguage":"fr","sourceText":"Le processus de nettoyage supprime le cache expiré."},
+      {"id":"p06-de","sourceLanguage":"de","sourceText":"Der Bereinigungsdienst löscht den abgelaufenen Cache."},
+      {"id":"p06-id","sourceLanguage":"id","sourceText":"Pekerja pembersihan menghapus cache yang kedaluwarsa."}
+    ]},
+    {"id":"deploy-release","rows":[
+      {"id":"p07-en","sourceLanguage":"en","sourceText":"The release bot deploys the service to staging."},
+      {"id":"p07-el","sourceLanguage":"el","sourceText":"Το bot έκδοσης αναπτύσσει την υπηρεσία στο περιβάλλον δοκιμών."},
+      {"id":"p07-es","sourceLanguage":"es","sourceText":"El bot de lanzamiento despliega el servicio en pruebas."},
+      {"id":"p07-fr","sourceLanguage":"fr","sourceText":"Le bot de publication déploie le service en préproduction."},
+      {"id":"p07-de","sourceLanguage":"de","sourceText":"Der Release-Bot stellt den Dienst in der Staging-Umgebung bereit."},
+      {"id":"p07-id","sourceLanguage":"id","sourceText":"Bot rilis menerapkan layanan ke staging."}
+    ]},
+    {"id":"copy-blueprint","rows":[
+      {"id":"p08-en","sourceLanguage":"en","sourceText":"The build agent copies the blueprint from the archive to the workspace."},
+      {"id":"p08-el","sourceLanguage":"el","sourceText":"Ο πράκτορας κατασκευής αντιγράφει το σχέδιο από το αρχείο στον χώρο εργασίας."},
+      {"id":"p08-es","sourceLanguage":"es","sourceText":"El agente de compilación copia el plano del archivo al espacio de trabajo."},
+      {"id":"p08-fr","sourceLanguage":"fr","sourceText":"L'agent de compilation copie le plan de l'archive vers l'espace de travail."},
+      {"id":"p08-de","sourceLanguage":"de","sourceText":"Der Build-Agent kopiert den Bauplan aus dem Archiv in den Arbeitsbereich."},
+      {"id":"p08-id","sourceLanguage":"id","sourceText":"Agen build menyalin cetak biru dari arsip ke ruang kerja."}
+    ]},
+    {"id":"rotate-credential","rows":[
+      {"id":"p09-en","sourceLanguage":"en","sourceText":"The security service rotates the signing credential."},
+      {"id":"p09-el","sourceLanguage":"el","sourceText":"Η υπηρεσία ασφαλείας αλλάζει τα διαπιστευτήρια υπογραφής."},
+      {"id":"p09-es","sourceLanguage":"es","sourceText":"El servicio de seguridad rota la credencial de firma."},
+      {"id":"p09-fr","sourceLanguage":"fr","sourceText":"Le service de sécurité renouvelle l'identifiant de signature."},
+      {"id":"p09-de","sourceLanguage":"de","sourceText":"Der Sicherheitsdienst erneuert die Signaturberechtigung."},
+      {"id":"p09-id","sourceLanguage":"id","sourceText":"Layanan keamanan merotasi kredensial penandatanganan."}
+    ]},
+    {"id":"launch-deadline","rows":[
+      {"id":"p10-en","sourceLanguage":"en","sourceText":"The atlas launch has a deadline on 2027-03-18."},
+      {"id":"p10-el","sourceLanguage":"el","sourceText":"Η κυκλοφορία του άτλαντα έχει προθεσμία στις 2027-03-18."},
+      {"id":"p10-es","sourceLanguage":"es","sourceText":"El lanzamiento del atlas tiene como fecha límite el 2027-03-18."},
+      {"id":"p10-fr","sourceLanguage":"fr","sourceText":"Le lancement de l'atlas a pour échéance le 2027-03-18."},
+      {"id":"p10-de","sourceLanguage":"de","sourceText":"Der Atlas-Start hat eine Frist am 2027-03-18."},
+      {"id":"p10-id","sourceLanguage":"id","sourceText":"Peluncuran atlas memiliki tenggat pada 2027-03-18."}
+    ]}
+  ],
+  "criticalNegativeRows": [
+    {"id":"n01-a","sourceLanguage":"en","sourceText":"The security service rotates the signing credential."},
+    {"id":"n01-b","sourceLanguage":"en","sourceText":"The security service rotates the encryption credential."},
+    {"id":"n02-a","sourceLanguage":"en","sourceText":"The researcher keeps the field draft private."},
+    {"id":"n02-b","sourceLanguage":"en","sourceText":"The researcher keeps the field draft public."},
+    {"id":"n03-a","sourceLanguage":"en","sourceText":"The analyst requests a review from the editor."},
+    {"id":"n03-b","sourceLanguage":"en","sourceText":"The analyst requests a review from the curator."},
+    {"id":"n04-a","sourceLanguage":"en","sourceText":"The archive check happens before the index rebuild."},
+    {"id":"n04-b","sourceLanguage":"en","sourceText":"The archive check happens after the index rebuild."},
+    {"id":"n05-a","sourceLanguage":"en","sourceText":"The atlas launch has a deadline on 2027-03-18."},
+    {"id":"n05-b","sourceLanguage":"en","sourceText":"The atlas launch has a deadline on 2027-03-19."},
+    {"id":"n06-a","sourceLanguage":"en","sourceText":"The depot receives the ceramic sample from the courier."},
+    {"id":"n06-b","sourceLanguage":"en","sourceText":"The depot receives the glass sample from the courier."}
+  ],
+  "abstentionRows": [
+    {"id":"a01-en","sourceLanguage":"en","sourceText":"Share the draft with the committee.","expectedOutcome":"abstain","reason":"registered-unframed"},
+    {"id":"a01-el","sourceLanguage":"el","sourceText":"Μοιράσου το σχέδιο με την επιτροπή.","expectedOutcome":"abstain","reason":"registered-unframed"},
+    {"id":"a01-es","sourceLanguage":"es","sourceText":"Comparte el borrador con el comité.","expectedOutcome":"abstain","reason":"registered-unframed"},
+    {"id":"a01-fr","sourceLanguage":"fr","sourceText":"Partagez le brouillon avec le comité.","expectedOutcome":"abstain","reason":"registered-unframed"},
+    {"id":"a01-de","sourceLanguage":"de","sourceText":"Teile den Entwurf mit dem Ausschuss.","expectedOutcome":"abstain","reason":"registered-unframed"},
+    {"id":"a01-id","sourceLanguage":"id","sourceText":"Bagikan draf itu kepada komite.","expectedOutcome":"abstain","reason":"registered-unframed"},
+    {"id":"a02-en","sourceLanguage":"en","sourceText":"Charge the account 30 EUR.","expectedOutcome":"abstain","reason":"unsupported-domain"},
+    {"id":"a02-el","sourceLanguage":"el","sourceText":"Χρέωσε τον λογαριασμό 30 EUR.","expectedOutcome":"abstain","reason":"unsupported-domain"},
+    {"id":"a02-es","sourceLanguage":"es","sourceText":"Cobra 30 EUR de la cuenta.","expectedOutcome":"abstain","reason":"unsupported-domain"},
+    {"id":"a02-fr","sourceLanguage":"fr","sourceText":"Débitez le compte de 30 EUR.","expectedOutcome":"abstain","reason":"unsupported-domain"},
+    {"id":"a02-de","sourceLanguage":"de","sourceText":"Belaste das Konto mit 30 EUR.","expectedOutcome":"abstain","reason":"unsupported-domain"},
+    {"id":"a02-id","sourceLanguage":"id","sourceText":"Tagih rekening sebesar 30 EUR.","expectedOutcome":"abstain","reason":"unsupported-domain"}
+  ],
+  "parentAudit": {
+    "goldSemByGroup": {
+      "prefer-tea":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"preference","clauses":[{"predicate":"prefer","roles":{"experiencer":{"type":"actor","id":"traveler"},"theme":{"type":"object","id":"green_tea"}},"negated":false}]},
+      "receive-parcel":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"event","clauses":[{"predicate":"receive","roles":{"recipient":{"type":"entity","id":"depot"},"theme":{"type":"object","id":"ceramic_sample"},"source":{"type":"actor","id":"courier"}},"negated":false}]},
+      "send-report":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"event","clauses":[{"predicate":"send","roles":{"agent":{"type":"actor","id":"analyst"},"object":{"type":"document","id":"report"},"recipient":{"type":"actor","id":"editor"}},"negated":false}]},
+      "request-review":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"request","roles":{"agent":{"type":"actor","id":"analyst"},"theme":{"type":"concept","id":"review"},"recipient":{"type":"actor","id":"editor"}},"negated":false}]},
+      "keep-draft-private":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"keep","roles":{"agent":{"type":"actor","id":"researcher"},"theme":{"type":"document","id":"field_draft"},"visibility":{"type":"state","id":"private"}},"negated":false}]},
+      "delete-cache":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"command","clauses":[{"predicate":"delete","roles":{"agent":{"type":"system","id":"cleanup_worker"},"theme":{"type":"object","id":"expired_cache"}},"negated":false}]},
+      "deploy-release":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"event","clauses":[{"predicate":"deploy","roles":{"agent":{"type":"system","id":"release_bot"},"destination":{"type":"environment","id":"staging"}},"negated":false}]},
+      "copy-blueprint":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"event","clauses":[{"predicate":"copy","roles":{"agent":{"type":"actor","id":"build_agent"},"source":{"type":"resource","id":"blueprint_archive"},"destination":{"type":"location","id":"workspace"}},"negated":false}]},
+      "rotate-credential":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"command","clauses":[{"predicate":"rotate","roles":{"agent":{"type":"system","id":"security_service"},"theme":{"type":"credential","id":"signing_credential"}},"negated":false}]},
+      "launch-deadline":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"project_state","clauses":[{"predicate":"deadline","roles":{"subject":{"type":"project","id":"atlas_launch"},"time":{"type":"date","value":"2027-03-18"}},"negated":false}]}
+    },
+    "goldSemByCriticalNegativeItem": {
+      "n01-a":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"command","clauses":[{"predicate":"rotate","roles":{"agent":{"type":"system","id":"security_service"},"theme":{"type":"credential","id":"signing_credential"}},"negated":false}]},
+      "n01-b":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"command","clauses":[{"predicate":"rotate","roles":{"agent":{"type":"system","id":"security_service"},"theme":{"type":"credential","id":"encryption_credential"}},"negated":false}]},
+      "n02-a":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"keep","roles":{"agent":{"type":"actor","id":"researcher"},"theme":{"type":"document","id":"field_draft"},"visibility":{"type":"state","id":"private"}},"negated":false}]},
+      "n02-b":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"keep","roles":{"agent":{"type":"actor","id":"researcher"},"theme":{"type":"document","id":"field_draft"},"visibility":{"type":"state","id":"public"}},"negated":false}]},
+      "n03-a":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"request","roles":{"agent":{"type":"actor","id":"analyst"},"theme":{"type":"concept","id":"review"},"recipient":{"type":"actor","id":"editor"}},"negated":false}]},
+      "n03-b":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"request","roles":{"agent":{"type":"actor","id":"analyst"},"theme":{"type":"concept","id":"review"},"recipient":{"type":"actor","id":"curator"}},"negated":false}]},
+      "n04-a":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"simple_fact","clauses":[{"predicate":"before","roles":{"subject":{"type":"event","id":"archive_check"},"object":{"type":"event","id":"index_rebuild"}},"negated":false}]},
+      "n04-b":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"simple_fact","clauses":[{"predicate":"after","roles":{"subject":{"type":"event","id":"archive_check"},"object":{"type":"event","id":"index_rebuild"}},"negated":false}]},
+      "n05-a":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"project_state","clauses":[{"predicate":"deadline","roles":{"subject":{"type":"project","id":"atlas_launch"},"time":{"type":"date","value":"2027-03-18"}},"negated":false}]},
+      "n05-b":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"project_state","clauses":[{"predicate":"deadline","roles":{"subject":{"type":"project","id":"atlas_launch"},"time":{"type":"date","value":"2027-03-19"}},"negated":false}]},
+      "n06-a":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"event","clauses":[{"predicate":"receive","roles":{"recipient":{"type":"entity","id":"depot"},"theme":{"type":"object","id":"ceramic_sample"},"source":{"type":"actor","id":"courier"}},"negated":false}]},
+      "n06-b":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"event","clauses":[{"predicate":"receive","roles":{"recipient":{"type":"entity","id":"depot"},"theme":{"type":"object","id":"glass_sample"},"source":{"type":"actor","id":"courier"}},"negated":false}]}
+    }
+  },
+  "criticalNegativePairs": [
+    {"pairId":"n01","leftItemId":"n01-a","rightItemId":"n01-b","criticalDimension":"theme_identity","expectedRelationship":"not_semantically_equivalent"},
+    {"pairId":"n02","leftItemId":"n02-a","rightItemId":"n02-b","criticalDimension":"visibility","expectedRelationship":"not_semantically_equivalent"},
+    {"pairId":"n03","leftItemId":"n03-a","rightItemId":"n03-b","criticalDimension":"recipient_identity","expectedRelationship":"not_semantically_equivalent"},
+    {"pairId":"n04","leftItemId":"n04-a","rightItemId":"n04-b","criticalDimension":"temporal_direction","expectedRelationship":"not_semantically_equivalent"},
+    {"pairId":"n05","leftItemId":"n05-a","rightItemId":"n05-b","criticalDimension":"deadline_value","expectedRelationship":"not_semantically_equivalent"},
+    {"pairId":"n06","leftItemId":"n06-a","rightItemId":"n06-b","criticalDimension":"theme_identity","expectedRelationship":"not_semantically_equivalent"}
+  ],
+  "validationAudit": {
+    "status":"passed",
+    "validator":"independent local corpus checker using OpenLunum core validators and fingerprints",
+    "checkedAgainst":"packages/core/dist/src/{canonicalize,frame-registry,fingerprint}.js",
+    "positiveParseRows":60,
+    "criticalNegativeRows":12,
+    "totalParseRows":72,
+    "abstentionRows":12,
+    "groups":10,
+    "languageCounts":{"en":10,"el":10,"es":10,"fr":10,"de":10,"id":10},
+    "goldSemChecked":22,
+    "goldSemFrameErrors":0,
+    "goldSemSchemaErrors":0,
+    "criticalNegativePairsChecked":6,
+    "criticalNegativePairsGoldIdentityDifferent":6,
+    "currentFramedPredicatesChecked":["prefer","receive","send","request","keep","delete","deploy","copy","rotate","deadline","before","after"],
+    "goldSemHiddenFromRows":true,
+    "protectedDataCreated":false,
+    "localInferenceContacted":false,
+    "localhostContacted":false,
+    "productionCodeChanged":false,
+    "openUnumInspected":false
+  }
+}

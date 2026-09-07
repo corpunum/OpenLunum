@@ -1,0 +1,48 @@
+{
+  "type": "development-source-only-frame-first-trial",
+  "version": 2,
+  "status": "diagnostic",
+  "provenance": {
+    "agentMode": "CODEX_AGENT_DEVELOPMENT",
+    "goldProvidedToAgents": false,
+    "pairLabelsProvidedToAgents": false,
+    "localInferenceUsed": false,
+    "contractSource": "generated getExtractionContract()",
+    "agents": ["gpt-5.6-luna/isolated-agent-A", "gpt-5.6-luna/isolated-agent-B"]
+  },
+  "items": 12,
+  "languages": ["en", "el", "es", "fr", "de", "id"],
+  "submittedCandidatesPerAgent": 10,
+  "abstentionsPerAgent": 2,
+  "deterministicSubmission": {
+    "agentA": {
+      "transportValid": 10,
+      "protocolCanonical": 10,
+      "frameValid": 9,
+      "grounded": 9,
+      "candidateIdentityAvailable": 9,
+      "failureClasses": {"frame_noncanonical": 1}
+    },
+    "agentB": {
+      "transportValid": 10,
+      "protocolCanonical": 10,
+      "frameValid": 9,
+      "grounded": 9,
+      "candidateIdentityAvailable": 9,
+      "failureClasses": {"frame_noncanonical": 1}
+    }
+  },
+  "crossLanguageGroups": {
+    "groupsTested": 3,
+    "agentAConvergentSurfaceIdentities": 3,
+    "agentBConvergentSurfaceIdentities": 1,
+    "groupsConvergingToGold": "not scored; gold was not exposed to extraction agents and this trial is development-only",
+    "divergence": [
+      {"group": "a1/a2", "dimension": "open-concept-and-actor-language-naming", "agentA": "quiet_folder / mira", "agentB": "quiet_folder / Greek lexical IDs"},
+      {"group": "a3/a4", "dimension": "open-concept lexicalization", "agentA": "report", "agentB": "report vs informe"},
+      {"group": "a5/a6", "dimension": "belief open-concept", "agentA": "archive_private", "agentB": "archive_private"}
+    ]
+  },
+  "interpretation": "Source-only frame-first construction makes transport and frame containment measurable, but identity availability is not semantic correctness. The agents independently converged on some proposition structures while open-concept naming remained unstable. No protected claim is made; no production change was made from these outputs.",
+  "nextDecision": "Retain the generated contract and builder. Prioritize a clean development comparison of structured grounding proposals and provider candidate-set evidence, with independently adjudicated labels, before considering training."
+}

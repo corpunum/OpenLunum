@@ -4,8 +4,8 @@
       "command": "node",
       "args": ["./packages/mcp/dist/bin/lunum-mcp.js"],
       "env": {
-        "LUNUM_COMPACTION": "auto",
-        "LUNUM_MULTILINGUAL": "off",
+        "LUNUM_COMPACTION": "off",
+        "LUNUM_MULTILINGUAL": "on",
         "LUNUM_CONTEXT_MODE": "mixed"
       }
     }

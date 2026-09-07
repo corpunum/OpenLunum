@@ -10,6 +10,25 @@ export interface LunumTermObject {
   [key: string]: unknown;
 }
 
+/**
+ * A top-level reference may carry both a grounded semantic referent (`ref` or
+ * `id`) and source evidence (`token`, `surface`, `language`, etc.). The latter
+ * is recoverable evidence, not identity. Explicit surface-evidence references
+ * are never used to assert semantic identity.
+ */
+export interface LunumReference {
+  type?: string;
+  id?: string;
+  value?: unknown;
+  language?: string;
+  ref?: string;
+  referenceKind?: 'semantic' | 'surface-evidence';
+  sourceRef?: string;
+  surface?: string;
+  span?: { start: number; end: number };
+  [key: string]: unknown;
+}
+
 export type LunumTerm = Primitive | LunumTermObject | LunumTerm[];
 
 export interface LunumClause {
@@ -46,7 +65,7 @@ export interface LunumSem {
   world: string;
   kind: string;
   clauses: LunumClause[];
-  references?: LunumTermObject[];
+  references?: LunumReference[];
   provenance?: Record<string, unknown>;
   annotations?: Record<string, unknown>;
 }
@@ -61,6 +80,23 @@ export interface EligibilityDecision {
   category: string;
   risk: Risk;
   confidence: number;
+  reasons: string[];
+}
+
+/**
+ * The trust state of a semantic parse. A candidate is structurally valid but
+ * must not be treated as a durable or automatically served semantic memory.
+ */
+export type SemanticTrustStatus = 'candidate' | 'promoted' | 'abstained';
+
+export interface SemanticTrustDecision {
+  status: SemanticTrustStatus;
+  /** Confidence recomputed from evidence, never accepted from a caller score. */
+  confidence: number;
+  /** True only when the candidate has passed every automatic-promotion gate. */
+  promoted: boolean;
+  /** Candidate must remain natural-only until a reviewer resolves these reasons. */
+  requiresHumanReview: boolean;
   reasons: string[];
 }
 
@@ -80,7 +116,12 @@ export interface LunumRecord {
     ref: string | null;
   };
   sem: LunumSem;
+  /** Legacy compatibility fingerprint (currently lfp:0.1); not lfp:2.1 semantic identity. */
   fingerprint: string;
+  /** Protocol-canonical identity fingerprint (lfp:2.1); absent for unresolved candidates. */
+  semanticFingerprint?: string;
+  /** Source-text identity fingerprint (lsf:*), for deduplication only. */
+  surfaceFingerprint?: string;
   nearSemanticFingerprint?: string;
   renderings: Record<string, LunumRendering>;
   policy: EligibilityDecision;
@@ -90,6 +131,7 @@ export interface LunumRecord {
 export interface LunumSidecar {
   lunumCode: string | null;
   lunumSem: LunumSem | null;
+  /** Compatibility slot; this remains legacy lfp:0.1 for semantic records. */
   lunumFp: string | null;
   lunumMeta: Record<string, unknown> & { eligible: boolean };
 }

@@ -382,7 +382,7 @@ export function buildSemanticGroupIndex(
             ? ` (${comparison.hardMismatchReasons.join('; ')})`
             : '';
           const similarityReason = !comparison.similar
-            ? `structural similarity ${comparison.similarity.toFixed(3)} below threshold ${threshold}${hardReasons}`
+            ? `structural similarity ${comparison.similarity.toFixed(3)} below threshold ${threshold}${hardReasons}${roleIdentityMismatches.length > 0 ? `; strict role-identity cross-validation found a mismatch (${roleIdentityMismatches.join('; ')})` : ''}`
             : `aggregate structural similarity ${comparison.similarity.toFixed(3)} met the threshold, but strict role-identity cross-validation found a mismatch (${roleIdentityMismatches.join('; ')})`;
           reasons.push(`${a.language}/${a.recordId} vs ${b.language}/${b.recordId}: ${similarityReason}`);
         }

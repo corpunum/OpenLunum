@@ -14,14 +14,26 @@ function normalizeMessage(message: ContextMessage): { role: string; natural: str
   };
 }
 
+function canServeSemanticCode(message: ReturnType<typeof normalizeMessage>, original: ContextMessage): boolean {
+  if (!message.code || message.meta.eligible !== true) return false;
+  // A record carrying semantic content must prove promotion.  The legacy
+  // message-only shape has no trust envelope and remains compatible with the
+  // existing caller contract, but cannot be mistaken for a durable record.
+  if (original.record?.meta && original.record.meta.semantic === true) {
+    return original.record.meta.semanticPromoted === true
+      && original.record.policy?.eligible === true;
+  }
+  return true;
+}
+
 export function compileContext(messages: ContextMessage[], options: { mode?: ContextMode; tokenCounter?: TokenCounter } = {}) {
   const mode = options.mode ?? 'mixed';
   const counter = options.tokenCounter ?? ROUGH_TOKEN_COUNTER;
   const counterLabel = options.tokenCounter ? 'exact' : 'estimate/char4';
-  const normalized = messages.map(normalizeMessage);
-  const naturalMessages = normalized.map((message) => ({ role: message.role, content: message.natural }));
-  const lunumMessages = normalized.map((message) => ({ role: message.role, content: message.code ?? message.natural }));
-  const mixedMessages = normalized.map((message) => ({ role: message.role, content: message.code && message.meta.eligible === true ? message.code : message.natural }));
+  const normalized = messages.map((message) => ({ value: normalizeMessage(message), original: message }));
+  const naturalMessages = normalized.map(({ value: message }) => ({ role: message.role, content: message.natural }));
+  const lunumMessages = normalized.map(({ value: message, original }) => ({ role: message.role, content: canServeSemanticCode(message, original) ? message.code! : message.natural }));
+  const mixedMessages = normalized.map(({ value: message, original }) => ({ role: message.role, content: canServeSemanticCode(message, original) ? message.code! : message.natural }));
   const selectedMessages = mode === 'natural' || mode === 'shadow_mixed' ? naturalMessages : mode === 'lunum' ? lunumMessages : mixedMessages;
   const sum = (rows: Array<{ content: string }>) => rows.reduce((total, row) => total + counter(row.content), 0);
   const naturalTokens = sum(naturalMessages);

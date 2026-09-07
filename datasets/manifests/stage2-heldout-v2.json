@@ -1,0 +1,12 @@
+{
+  "schema": "openlunum-dataset-manifest/0.1",
+  "path": "datasets/dev/stage2-heldout-v2.jsonl",
+  "sha256": "8fe0621e5a60cffc3982c68811ac3c4a652b7c523e0eb71e13e8e737c3a9e261",
+  "items": 24,
+  "parseItems": 18,
+  "abstentionItems": 6,
+  "languages": ["en", "el", "es", "id", "fr", "de"],
+  "evaluationClass": "frozen-heldout",
+  "protectedSetStatus": "repo-visible-diagnostic-not-protected",
+  "promptTuningAllowedAfterFreeze": false
+}

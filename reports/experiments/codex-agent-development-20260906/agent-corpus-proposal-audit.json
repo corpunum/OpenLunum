@@ -1,0 +1,18 @@
+{
+  "type": "development-agent-corpus-proposal-audit",
+  "version": 1,
+  "status": "rejected-before-scoring",
+  "protected": false,
+  "creator": "gpt-5.6-luna",
+  "sourceOnlyCreation": true,
+  "rowsProposed": 12,
+  "acceptedRows": 0,
+  "reasons": [
+    { "ids": ["en-01", "el-01"], "issue": "send frame requires agent/object and recipient or destination; imperative sentences leave agent and recipient/destination implicit" },
+    { "ids": ["en-03", "fr-01"], "issue": "publish frame requires an explicit agent; imperative/passive wording does not provide a canonical agent" },
+    { "ids": ["en-05", "el-02"], "issue": "prohibit frame requires an explicit agent; imperative wording leaves it unresolved" },
+    { "ids": ["en-06"], "issue": "confirm and deadline are conflated; the sentence does not establish whether the deadline is the confirmed theme or a time role" },
+    { "ids": ["en-02", "es-01", "en-04", "de-01", "id-01"], "issue": "surface meaning may be usable for a future source-only trial, but no independently audited canonical role/grounding gold was supplied" }
+  ],
+  "decision": "Do not score or reuse this proposal as gold. It remains a diagnostic example of why frame-complete corpus auditing is required before agent extraction measurements."
+}

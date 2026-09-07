@@ -4,27 +4,228 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { execFile } from 'node:child_process';
 import { runParseExperiment } from '../src/parse-experiment.js';
-import { PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES } from '../src/parse-experiment.js';
+import { buildExtractionSchema, extractStructuredJson, PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES, validateEvaluationGold } from '../src/parse-experiment.js';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
-import { sha256File } from '../src/io.js';
+import { sha256File, validateProfile } from '../src/io.js';
 import { parsePrompt } from '../src/prompts.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 
-test('parse experiment defines four languages', () => {
-  assert.deepStrictEqual(PARSE_LANGUAGES, ['en', 'el', 'es', 'id']);
+test('parse experiment defines the supported multilingual evaluation languages', () => {
+  assert.deepStrictEqual(PARSE_LANGUAGES, ['en', 'el', 'es', 'id', 'fr', 'de', 'ja', 'zh', 'pt', 'ar']);
   assert.strictEqual(PARSE_LANGUAGE_LABELS.en, 'English');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.el, 'Greek');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.es, 'Spanish');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.id, 'Indonesian');
 });
 
-test('parse experiment runner records passing results for all four languages', async () => {
+test('gold preflight rejects transport-valid but noncanonical protocol symbols', async () => {
+  const semSchema = JSON.parse(await readFile(path.join(WORKSPACE_ROOT, 'schemas/lunum-sem.schema.json'), 'utf8'));
+  const item = {
+    id: 'noncanonical-kind',
+    sourceLanguage: 'en',
+    sourceText: 'A request.',
+    goldSem: {
+      schema: 'lunum-sem/0.1-draft',
+      world: 'real',
+      kind: 'obligation',
+      clauses: [{ predicate: 'request', roles: { agent: { type: 'actor', id: 'user' }, theme: { type: 'document', id: 'request' } }, negated: false }]
+    }
+  } as any;
+  const report = validateEvaluationGold([item], buildExtractionSchema(semSchema));
+  assert.equal(report.transportValid, 1);
+  assert.equal(report.structuralValid, 1);
+  assert.equal(report.protocolCanonical, 0);
+  assert.equal(report.identityValid, 0);
+  assert.deepEqual(report.invalid[0]?.stages, ['protocol-canonicality', 'semantic-identity']);
+});
+
+test('gold preflight reports frame validity and blocks frame-invalid gold', async () => {
+  const semSchema = JSON.parse(await readFile(path.join(WORKSPACE_ROOT, 'schemas/lunum-sem.schema.json'), 'utf8'));
+  const report = validateEvaluationGold([{
+    id: 'invalid-frame', sourceLanguage: 'en', sourceText: 'A preference.',
+    goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, manner: { type: 'concept', id: 'csv' } } }] }
+  }], buildExtractionSchema(semSchema));
+  assert.equal(report.transportValid, 1);
+  assert.equal(report.structuralValid, 1);
+  assert.equal(report.protocolCanonical, 1);
+  assert.equal(report.frameCanonical, 0);
+  assert.equal(report.identityValid, 0);
+  assert.ok(report.invalid[0]?.stages.includes('frame-canonicality'));
+  assert.ok((report.invalid[0]?.frameIssues?.length ?? 0) > 0);
+});
+
+test('gold preflight rejects incompatible quantity and date term shapes at transport stage', async () => {
+  const semSchema = JSON.parse(await readFile(path.join(WORKSPACE_ROOT, 'schemas/lunum-sem.schema.json'), 'utf8'));
+  const report = validateEvaluationGold([{
+    id: 'invalid-term-shapes', sourceLanguage: 'en', sourceText: 'bad terms',
+    goldSem: {
+      schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact',
+      clauses: [{ predicate: 'below', roles: {
+        subject: { type: 'metric', id: 'battery' },
+        value: { type: 'quantity', value: { value: 20, unit: 'percent' } },
+        time: { type: 'date', value: { year: 2026 } }
+      } }]
+    }
+  } as any], buildExtractionSchema(semSchema));
+  assert.equal(report.transportValid, 0);
+  assert.equal(report.structuralValid, 0);
+  assert.match(JSON.stringify(report.invalid[0]?.transportErrors), /must be number|must be string|must be integer|must be object/u);
+});
+
+test('parse evidence rejects placeholder model IDs before a request is made', () => {
+  assert.throws(() => validateProfile({
+    schema: 'openlunum-model-profile/0.1',
+    id: 'example',
+    provider: 'openai-compatible',
+    baseUrl: 'http://127.0.0.1:8080/v1',
+    model: 'replace-with-server-model-id',
+    temperature: 0,
+    timeoutMs: 1000
+  }), /placeholder model IDs/u);
+});
+
+test('structured parse extraction fails closed on prose wrappers and accepts one JSON fence', () => {
+  assert.deepStrictEqual(extractStructuredJson('```json\n{"ok":true}\n```'), { ok: true });
+  assert.throws(() => extractStructuredJson('Here is the JSON: {"ok":true}'), /exactly one JSON object/u);
+  assert.throws(() => extractStructuredJson('{"ok":true}\nThat is all.'), /exactly one JSON object/u);
+  assert.throws(() => extractStructuredJson('```json\n{"ok":true}\n```\nextra'), /exactly one JSON object/u);
+});
+
+test('parse experiment rejects schema-invalid model candidates instead of counting exact matches', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }],
+    extra: 'not allowed'
+  };
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-invalid' }] }));
+      return;
+    }
+    if (request.url === '/v1/chat/completions') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(sem) } }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-transport-schema-'));
+  try {
+    const dataset = { id: 'invalid-candidate', sourceLanguage: 'en', sourceText: 'test', goldSem: { ...sem, extra: undefined } };
+    delete (dataset.goldSem as any).extra;
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, `${JSON.stringify(dataset)}\n`, 'utf8');
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(profilePath, JSON.stringify({ schema: 'openlunum-model-profile/0.1', id: 'mock', provider: 'openai-compatible', baseUrl: `http://127.0.0.1:${address.port}/v1`, model: 'mock-invalid', temperature: 0, timeoutMs: 5000 }), 'utf8');
+    const manifestPath = path.join(temp, 'experiment.json');
+    await writeFile(manifestPath, JSON.stringify({ schema: 'openlunum-experiment/0.1', id: 'transport-schema-test', area: 'multilingual-parse', task: 'parse', hypothesis: 'schema invalid candidates fail closed', baselineCommit: 'test', dataset: { path: datasetPath, sha256: await sha256File(datasetPath) }, modelProfile: profilePath, limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 }, gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false }, outputDirectory: path.join(temp, 'reports') }), 'utf8');
+    const { report } = await runParseExperiment(manifestPath);
+    assert.equal(report.totalErrors, 1);
+    assert.equal(report.overallExactRate, 0);
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parse experiment enforces maxModelCalls globally and records verified provenance', async () => {
+  let completions = 0;
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
+  };
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    if (request.url === '/v1/chat/completions') {
+      completions += 1;
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify(sem) } }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-parse-budget-'));
+  try {
+    const items = ['en', 'el', 'es', 'id'].map((sourceLanguage) => ({ id: `budget-${sourceLanguage}`, sourceLanguage, sourceText: 'test', goldSem: sem }));
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, `${items.map((item) => JSON.stringify(item)).join('\n')}\n`, 'utf8');
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(profilePath, JSON.stringify({ schema: 'openlunum-model-profile/0.1', id: 'mock', provider: 'openai-compatible', baseUrl: `http://127.0.0.1:${address.port}/v1`, model: 'mock-local', temperature: 0, timeoutMs: 5000 }), 'utf8');
+    const manifestPath = path.join(temp, 'experiment.json');
+    await writeFile(manifestPath, JSON.stringify({ schema: 'openlunum-experiment/0.1', id: 'parse-budget', area: 'multilingual-parse', task: 'parse', hypothesis: 'global budget', baselineCommit: 'HEAD', dataset: { path: datasetPath, sha256: await sha256File(datasetPath) }, modelProfile: profilePath, limits: { maxItems: 4, maxAttemptsPerItem: 1, maxModelCalls: 2 }, gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false }, outputDirectory: path.join(temp, 'reports') }), 'utf8');
+    const { report } = await runParseExperiment(manifestPath);
+    assert.strictEqual(completions, 2);
+    assert.strictEqual(report.totalItems, 2);
+    assert.strictEqual(report.provenance.modelIdentity.verified, true);
+    assert.match(report.provenance.effectiveSystemPromptSha256 ?? '', /^[a-f0-9]{64}$/u);
+    assert.ok(report.provenance.codeCommit);
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parse experiment retains a malformed retry before a succeeding attempt', async () => {
+  let calls = 0;
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }] };
+  const server = createServer((request, response) => {
+    if (request.url === '/v1/models') {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ data: [{ id: 'mock-local' }] }));
+      return;
+    }
+    if (request.url === '/v1/chat/completions') {
+      calls += 1;
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ choices: [{ message: { content: calls === 1 ? 'not json' : JSON.stringify(sem) } }] }));
+      return;
+    }
+    response.writeHead(404).end();
+  });
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const address = server.address();
+  assert.ok(address && typeof address === 'object');
+  const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-parse-attempts-'));
+  try {
+    const datasetPath = path.join(temp, 'dataset.jsonl');
+    await writeFile(datasetPath, `${JSON.stringify({ id: 'retry-en', sourceLanguage: 'en', sourceText: 'test', goldSem: sem })}\n`, 'utf8');
+    const profilePath = path.join(temp, 'profile.json');
+    await writeFile(profilePath, JSON.stringify({ schema: 'openlunum-model-profile/0.1', id: 'mock', provider: 'openai-compatible', baseUrl: `http://127.0.0.1:${address.port}/v1`, model: 'mock-local', temperature: 0, timeoutMs: 5000 }), 'utf8');
+    const manifestPath = path.join(temp, 'experiment.json');
+    await writeFile(manifestPath, JSON.stringify({ schema: 'openlunum-experiment/0.1', id: 'parse-attempts', area: 'multilingual-parse', task: 'parse', hypothesis: 'attempt retention', baselineCommit: 'HEAD', dataset: { path: datasetPath, sha256: await sha256File(datasetPath) }, modelProfile: profilePath, limits: { maxItems: 1, maxAttemptsPerItem: 2, maxModelCalls: 2 }, gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false }, outputDirectory: path.join(temp, 'reports') }), 'utf8');
+    const { outputDirectory } = await runParseExperiment(manifestPath);
+    const [result] = (await readFile(path.join(outputDirectory, 'parse-results-en.jsonl'), 'utf8')).trim().split('\n').map((line) => JSON.parse(line));
+    assert.strictEqual(result.status, 'passed');
+    assert.deepStrictEqual(result.attempts.map((entry: { status: string }) => entry.status), ['error', 'passed']);
+    assert.strictEqual(result.attempts[0].rawOutput, 'not json');
+    assert.match(result.attempts[0].systemPromptSha256, /^[a-f0-9]{64}$/u);
+  } finally {
+    server.close();
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('parse experiment runner records passing results for every language present in the dataset', async () => {
   const sem = {
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
@@ -119,8 +320,8 @@ test('parse experiment runner records passing results for all four languages', a
     assert.strictEqual(report.totalErrors, 0);
 
     // Verify per-language metrics
-    assert.strictEqual(report.languageMetrics.length, 4);
-    for (const langMetrics of report.languageMetrics) {
+    assert.strictEqual(report.languageMetrics.length, 10);
+    for (const langMetrics of report.languageMetrics.filter((metrics) => metrics.totalItems > 0)) {
       assert.ok(langMetrics.totalItems > 0);
       assert.strictEqual(langMetrics.passedItems, langMetrics.totalItems);
       assert.strictEqual(langMetrics.exactRate, 1);
@@ -197,7 +398,7 @@ test('parse experiment handles mixed pass/fail correctly', async () => {
   const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-parse-mixed-'));
   try {
     const items = [
-      { id: 'test-en-1', sourceLanguage: 'en', sourceText: 'Test 1.', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [] } }
+      { id: 'test-en-1', sourceLanguage: 'en', sourceText: 'Test 1.', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }] } }
     ];
 
     const datasetPath = path.join(temp, 'dataset.jsonl');
@@ -254,7 +455,7 @@ test('parse experiment skips languages with no items', async () => {
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
     kind: 'preference',
-    clauses: []
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
   };
 
   const server = createServer((request, response) => {
@@ -343,7 +544,7 @@ test('parse-experiment CLI arg: argv[3] is the manifest, not argv[2]', async () 
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
     kind: 'preference',
-    clauses: []
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
   };
 
   let serverPort = 0;
@@ -472,6 +673,14 @@ test('parsePrompt includes controlled predicate/role vocabulary', () => {
   for (const rt of ['actor', 'concept', 'object']) {
     assert.ok(prompt.system.includes(rt), `system should include role type "${rt}"`);
   }
+});
+
+test('parsePrompt is synchronized with canonical frames and teaches no unframed few-shot predicate', () => {
+  const prompt = parsePrompt({ id: 'prompt', sourceLanguage: 'en', sourceText: 'x', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [] } });
+  assert.match(prompt.system, /Canonical identity frames/u);
+  assert.match(prompt.system, /send\(agent, object/u);
+  assert.match(prompt.system, /recipient\|destination \(mutually exclusive\)/u);
+  assert.doesNotMatch(prompt.system, /Permission:.*share/u);
 });
 
 test('parsePrompt includes schema shape and one-shot example', () => {

@@ -1,0 +1,321 @@
+{
+  "version": "0.1.0",
+  "threshold": 0.8,
+  "topK": 3,
+  "inputMode": "raw-text-only",
+  "metrics": {
+    "queries": 12,
+    "memoryCount": 10,
+    "queryExtractionFailures": 2,
+    "memoryExtractionFailures": 2,
+    "semanticMatchingFailures": 9,
+    "rankingFailures": 0,
+    "truePositives": 1,
+    "falsePositives": 0,
+    "falseNegatives": 9,
+    "trueNegatives": 109,
+    "precision": 1,
+    "recall": 0.1,
+    "f1": 0.18181818181818182,
+    "falsePositiveRate": 0,
+    "top1Accuracy": 0.25,
+    "topKRecall": 0.1,
+    "byLanguagePair": {
+      "el-en": {
+        "queries": 4,
+        "precision": 1,
+        "recall": 0,
+        "f1": 0,
+        "falsePositiveRate": 0,
+        "topKRecall": 0
+      },
+      "en-el": {
+        "queries": 5,
+        "precision": 1,
+        "recall": 0.25,
+        "f1": 0.4,
+        "falsePositiveRate": 0,
+        "topKRecall": 0.25
+      },
+      "es-en": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 0,
+        "f1": 0,
+        "falsePositiveRate": 0,
+        "topKRecall": 0
+      },
+      "en-es": {
+        "queries": 2,
+        "precision": 1,
+        "recall": 0,
+        "f1": 0,
+        "falsePositiveRate": 0,
+        "topKRecall": 0
+      }
+    }
+  },
+  "queryResults": [
+    {
+      "queryId": "q-el-preference-to-en",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-preference"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [
+        "m-en-preference"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-en-preference-to-el",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "m-el-preference"
+      ],
+      "retrievedMemoryIds": [
+        "m-el-preference"
+      ],
+      "matchedMemoryIds": [
+        "m-el-preference"
+      ],
+      "extracted": true,
+      "candidateCount": 1,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-el-production-to-en",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-production"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [
+        "m-en-production"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-en-production-to-el",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "m-el-production"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [
+        "m-el-production"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-el-deadline-to-en",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-deadline"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "m-en-deadline"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-en-deadline-to-el",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "m-el-deadline"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": false,
+      "candidateCount": 0,
+      "extractionError": "extractor abstained",
+      "semanticMatchingFailures": [
+        "m-el-deadline"
+      ],
+      "rankingFailures": [],
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-es-retry-to-en",
+      "queryLanguage": "es",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-retry"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [
+        "m-en-retry"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-en-retry-to-es",
+      "queryLanguage": "en",
+      "targetLanguage": "es",
+      "expectedMemoryIds": [
+        "m-es-retry"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [
+        "m-es-retry"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-el-private-to-en",
+      "queryLanguage": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "m-en-private"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [
+        "m-en-private"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-en-private-to-el",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "m-el-private"
+      ],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [
+        "m-el-private"
+      ],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": false
+    },
+    {
+      "queryId": "q-en-staging-negative",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "q-en-retry-fifty-negative",
+      "queryLanguage": "en",
+      "targetLanguage": "es",
+      "expectedMemoryIds": [],
+      "retrievedMemoryIds": [],
+      "matchedMemoryIds": [],
+      "extracted": true,
+      "candidateCount": 0,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    }
+  ],
+  "baselines": {
+    "lexical": {
+      "precision": 0.06896551724137931,
+      "recall": 0.2,
+      "f1": 0.10256410256410257,
+      "falsePositiveRate": 0.25,
+      "top1Accuracy": 0,
+      "topKRecall": 0.2,
+      "truePositives": 2,
+      "falsePositives": 27,
+      "falseNegatives": 8,
+      "trueNegatives": 81,
+      "failures": 0
+    }
+  }
+}

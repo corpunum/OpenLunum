@@ -1,4 +1,6 @@
 export * from './types.js';
+export * from './semantic-registry.js';
+export * from './frame-registry.js';
 export * from './constants.js';
 export * from './canonicalize.js';
 export * from './fingerprint.js';
@@ -105,9 +107,15 @@ export * from './workflow-audit.js';
 export * from './threshold-calibration.js';
 export * from './release-governance.js';
 export * from './agent-interop.js';
+export * from './agent-native.js';
+export * from './agent-builder.js';
+export * from './semantic-ir.js';
+export * from './grounding.js';
+export * from './grounding-provider.js';
 export * from './multilingual-memory-pilot.js';
 export * from './correction-telemetry.js';
 export * from './privacy-audit-map.js';
+export * from './privacy-derived-lifecycle.js';
 export {
   CONFORMANCE_VECTORS,
   runConformanceCheck,

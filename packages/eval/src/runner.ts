@@ -1,22 +1,29 @@
-import { appendFile, mkdir, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { compareSem, validateSem, renderSem, canonicalizeSem, fingerprintSem } from '@corpunum/lunum';
+import Ajv2020Module from 'ajv/dist/2020.js';
+import { compareSem, validateSem, renderSem, canonicalizeSem, fingerprintSem, semanticFingerprint, normalizeSemanticCandidate } from '@corpunum/lunum';
 import type { LunumSem, LunumRendering } from '@corpunum/lunum';
-import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
+import { findWorkspaceRoot, loadDataset, readJson, readJsonlLedger, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
 import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt, realizePrompt } from './prompts.js';
+import { parseStrictJsonObject } from './strict-json.js';
 import { runRenderExperiment, writeRenderReport } from './render-runner.js';
 import { runContextExperiment, writeContextReport } from './context-runner.js';
+import { buildExtractionSchema, extractStructuredJson } from './parse-experiment.js';
+import { classifyFailure } from './failure-classification.js';
 import type { ExperimentManifest, ItemResult, ModelProfile, ExperimentItem } from './types.js';
 export type { ExperimentItem };
 
-function extractJson(text: string): unknown {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/iu)?.[1];
-  const candidate = fenced ?? text;
-  const start = candidate.indexOf('{');
-  const end = candidate.lastIndexOf('}');
-  if (start < 0 || end < start) throw new Error('No JSON object found in model output');
-  return JSON.parse(candidate.slice(start, end + 1));
+export function extractJson(text: string): unknown {
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/iu);
+  const candidate = fenced?.[1]?.trim() ?? trimmed;
+  if (!candidate.startsWith('{') || !candidate.endsWith('}')) {
+    throw new Error('Model output must be exactly one JSON object (optionally in one JSON code fence)');
+  }
+  return parseStrictJsonObject(candidate);
 }
 
 function literalCoverage(text: string, literals: string[]): number {
@@ -25,12 +32,21 @@ function literalCoverage(text: string, literals: string[]): number {
   return found / literals.length;
 }
 
-async function runModelTask(manifest: ExperimentManifest, root: string, output: string, dataset: ExperimentItem[], profile: ModelProfile): Promise<ItemResult[]> {
+async function runModelTask(manifest: ExperimentManifest, root: string, output: string, dataset: ExperimentItem[], profile: ModelProfile, existing: Map<string, ItemResult>, onResult?: (result: ItemResult) => Promise<void>): Promise<ItemResult[]> {
   const model = new OpenAICompatibleModel(profile);
+  const parseValidator = manifest.task === 'parse'
+    ? new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(
+      buildExtractionSchema(await readJson<Record<string, unknown>>(path.join(root, 'schemas/lunum-sem.schema.json')))
+    )
+    : null;
   const results: ItemResult[] = [];
   let calls = 0;
 
   for (const item of dataset as any) {
+    if (existing.has(item.id)) {
+      results.push(existing.get(item.id)!);
+      continue;
+    }
     if (calls >= manifest.limits.maxModelCalls) break;
     let finalResult: ItemResult | null = null;
 
@@ -38,12 +54,19 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
       const started = performance.now();
       let rawOutput = '';
       try {
+        const parsePromptValue = manifest.task === 'parse' ? parsePrompt(item as any) : null;
         const promptText = manifest.task === 'realize'
           ? realizePrompt(item as any, manifest.targetLanguage ?? (item as any).targetLanguage ?? 'English').user
-          : parsePrompt(item as any).user;
+          : parsePromptValue?.user ?? parsePrompt(item as any).user;
 
         calls += 1;
-        const completion = await model.complete('You are a precise Lunum experiment runner. Reply only with valid JSON.', promptText);
+        const completion = await model.complete(
+          parsePromptValue?.system ?? 'You are a precise Lunum experiment runner. Reply only with valid JSON.',
+          promptText,
+          parseValidator ? {
+            structuredOutput: { mode: 'json_schema', schema: buildExtractionSchema(await readJson<Record<string, unknown>>(path.join(root, 'schemas/lunum-sem.schema.json'))), strict: true, fallback: 'json_object' }
+          } : undefined
+        );
         rawOutput = completion.content;
 
         if (manifest.task === 'parse') {
@@ -51,15 +74,24 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
           if (!item.goldSem) {
             throw new Error('goldSem is required for parse but missing');
           }
-          const parsed = extractJson(rawOutput);
+          const parsed = extractStructuredJson(rawOutput);
+          if (!parseValidator?.(parsed)) throw new Error(`Transport schema validation failed: ${(parseValidator?.errors ?? []).map((error) => error.message ?? 'invalid').join('; ')}`);
           const validation = validateSem(parsed);
           if (!validation.ok) throw new Error(validation.errors.join('; '));
           const parsedSem = parsed as LunumSem;
-          // Use actual goldSem as reference, not the parsed result
+          const candidate = normalizeSemanticCandidate(parsed);
+          const gold = normalizeSemanticCandidate((item as any).goldSem);
           const comparison = compareSem((item as any).goldSem as any, parsedSem);
+          let semanticIdentityExact = false;
+          if (candidate.canonical && gold.canonical && candidate.sem && gold.sem) {
+            try { semanticIdentityExact = semanticFingerprint(gold.sem) === semanticFingerprint(candidate.sem); }
+            catch { semanticIdentityExact = false; }
+          }
+          const canonicalExact = semanticIdentityExact;
           finalResult = {
-            id: item.id, status: comparison.exactFingerprint ? 'passed' : 'failed', rawOutput, completion, parsedSem,
-            exact: comparison.exactFingerprint, featureRecall: comparison.featureRecall,
+            id: item.id, status: canonicalExact ? 'passed' : 'failed', rawOutput, rawRequest: completion.rawRequest, rawResponse: completion.rawResponse, completion, parsedSem,
+            exact: canonicalExact, legacyExact: comparison.exactFingerprint, canonicalExact, semanticIdentityExact, transportSchemaValid: true,
+            candidateNormalization: { status: candidate.status, canonical: candidate.canonical, issues: candidate.issues, protocolVersion: candidate.protocolVersion }, featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision, missingFeatures: comparison.missingFeatures,
             latencyMs: performance.now() - started
           };
@@ -87,11 +119,16 @@ async function runModelTask(manifest: ExperimentManifest, root: string, output: 
         finalResult = {
           id: item.id, status: 'error', rawOutput,
           error: `attempt ${attempt}: ${error instanceof Error ? error.message : String(error)}`,
+          failureClass: classifyFailure(error).failureClass,
           latencyMs: performance.now() - started
         };
       }
     }
-    if (finalResult) results.push(finalResult);
+    if (finalResult) {
+      results.push(finalResult);
+      existing.set(finalResult.id, finalResult);
+      await onResult?.(finalResult);
+    }
   }
   return results;
 }
@@ -210,7 +247,7 @@ async function runDeterministicTask(manifest: ExperimentManifest, root: string, 
   return results;
 }
 
-export async function runExperiment(manifestPath: string): Promise<string> {
+export async function runExperiment(manifestPath: string, options: { resumeDirectory?: string } = {}): Promise<string> {
   const root = await findWorkspaceRoot();
   const manifest = await readJson<ExperimentManifest>(manifestPath);
   validateManifest(manifest);
@@ -248,9 +285,37 @@ export async function runExperiment(manifestPath: string): Promise<string> {
   }
 
   const runId = new Date().toISOString().replace(/[:.]/gu, '-');
-  const output = path.join(outputRoot, runId);
+  const output = options.resumeDirectory
+    ? (path.isAbsolute(options.resumeDirectory) ? options.resumeDirectory : path.join(root, options.resumeDirectory))
+    : path.join(outputRoot, runId);
   await mkdir(output, { recursive: true });
-  await writeJson(path.join(output, 'manifest.snapshot.json'), manifest);
+  const codeCommit = (() => { try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } })();
+  const profileHash = profile && manifest.modelProfile
+    ? await sha256File(path.isAbsolute(manifest.modelProfile) ? manifest.modelProfile : path.join(root, manifest.modelProfile))
+    : null;
+  const modelIdentity = profile
+    ? await new OpenAICompatibleModel(profile).doctor().catch((error) => ({
+        verificationError: error instanceof Error ? error.message : String(error)
+      }))
+    : null;
+  const sourceState = await sourceStateSha256(root);
+  const binding = createHash('sha256').update(JSON.stringify({ manifest, datasetSha256: manifest.dataset?.sha256 ?? null, profileHash, modelIdentity, codeCommit, sourceState })).digest('hex');
+  const snapshotPath = path.join(output, 'manifest.snapshot.json');
+  const checkpointPath = path.join(output, 'checkpoint.json');
+  const resultPath = path.join(output, 'item-results.jsonl');
+  const existing = new Map<string, ItemResult>();
+  if (options.resumeDirectory) {
+    const checkpoint = await readJson<{ binding: string }>(checkpointPath).catch(() => null);
+    if (!checkpoint || checkpoint.binding !== binding) throw new Error('Resume refused: checkpoint provenance does not match manifest, dataset, profile, or code commit');
+    for (const result of await readJsonlLedger<ItemResult>(resultPath)) {
+      if (existing.has(result.id)) throw new Error(`Resume refused: duplicate result for item ${result.id}`);
+      existing.set(result.id, result);
+    }
+  } else {
+    await writeJson(snapshotPath, manifest);
+    await writeFile(resultPath, '', 'utf8');
+    await writeJson(checkpointPath, { schema: 'openlunum-checkpoint/0.1', binding, completedItemIds: [], modelCalls: 0 });
+  }
   await writeJson(path.join(output, 'environment.json'), {
     node: process.version, platform: process.platform, arch: process.arch,
     modelProfile: profile, deterministic: isDeterministic,
@@ -259,14 +324,18 @@ export async function runExperiment(manifestPath: string): Promise<string> {
 
   const results: ItemResult[] = isDeterministic
     ? await runDeterministicTask(manifest, root, output)
-    : profile
-      ? await runModelTask(manifest, root, output, dataset, profile)
+      : profile
+      ? await runModelTask(manifest, root, output, dataset, profile, existing, async (result) => {
+          await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
+          await writeJson(checkpointPath, { schema: 'openlunum-checkpoint/0.1', binding, completedItemIds: [...existing.keys()], modelCalls: [...existing.values()].reduce((sum, item) => sum + (item.attempts?.length ?? 1), 0) });
+        })
       : [];
 
   // Write results
-  const resultPath = path.join(output, 'item-results.jsonl');
-  await writeFile(resultPath, '', 'utf8');
-  for (const result of results) await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
+  if (isDeterministic) {
+    await writeFile(resultPath, '', 'utf8');
+    for (const result of results) await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
+  }
 
   const failures = results.filter((result) => result.status !== 'passed');
   await writeFile(
