@@ -85,3 +85,14 @@ The preprocessing-only dry run in
 run-manifest hashes, checkpoint creation, and resume. Its estimates are not
 training or capability metrics. Current model-class considerations are
 recorded in `docs/TRAINING_MODEL_RESEARCH.md`.
+
+## Standards alignment
+
+The learned compiler remains responsible for natural-language interpretation
+into the Lunum semantic IR. UMR/UCCA/PropBank may provide optional auxiliary
+supervision only through reviewed, explicitly loss-aware mappings. They do not
+replace Lunum frames or exact identity, and licensing is checked per corpus.
+RDF canonicalization, SHACL, and PROV-O inform optional interoperability and
+diagnostic-report exports; MCP/A2A remain transport boundaries. See
+`docs/ECOSYSTEM_ALIGNMENT.md` and the experimental, non-core
+`scripts/research/semantic-crosswalk.mjs`.
