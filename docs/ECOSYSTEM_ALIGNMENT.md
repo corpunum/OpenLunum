@@ -22,7 +22,7 @@ identity by itself.
 | Ecosystem | Solves | Overlap | Reuse / adapter opportunity | Decision |
 | --- | --- | --- | --- | --- |
 | UMR | Document-level multilingual meaning, concepts, roles, negation, modality, time, coreference, discourse relations | High semantic-IR overlap | Optional loss-aware UMR-like import/export and auxiliary supervision; retain Lunum identity/provenance gates | INTEROPERATE; OPTIONAL SUPERVISION |
-| PropBank / Universal PropBank | Predicate frames and shallow semantic roles across languages | Predicate/argument extraction | Auxiliary predicate and argument detection only; A0/A1 are not Lunum roles without roleset-specific mapping | OPTIONAL SUPERVISION |
+| PropBank / Universal PropBank 2.0 | Predicate frames and shallow semantic roles across languages; UP2.0 reports 23 languages with mixed generated/manual annotation | Predicate/argument extraction | Auxiliary detection only; A0/A1 are not Lunum roles without roleset-specific mapping; see [UP2 audit](./UNIVERSAL_PROPBANK_AUDIT.md) | OPTIONAL SUPERVISION |
 | UCCA | Cross-linguistic scenes, participants, states, and structural semantic graphs | Event/participant decomposition | Evaluation and decomposition supervision; do not flatten UCCA graphs into Lunum frames automatically | BENCHMARK AGAINST; OPTIONAL SUPERVISION |
 | SemType / type registries | Reusable typed entities/properties and stable references | Open concepts and grounding | Optional external type references with provider/version provenance | INTEROPERATE |
 | RDF / RDFC-1.0 | Graph data model and canonical dataset serialization/hashing | Deterministic serialization and identity | Borrow explicit algorithm/version/hash-agility discipline; optional RDF/JSON-LD export | ADOPT PRINCIPLE; INTEROPERATE |
@@ -48,9 +48,9 @@ must not be substituted for Lunum frame-specific roles. These resources are
 therefore optional supervision or adapter inputs, not trusted Lunum gold
 without a reviewed lossless mapping.
 
-Universal PropBank 1.0 inherits its Universal Dependency Treebank licenses and
+Universal PropBank inherits its upstream treebank licenses and
 lists CC BY-NC-SA restrictions for several languages. Greek is not listed in
-its UP1 inventory. No PropBank data is bundled or used for training; any future
+its inventory. No PropBank data is bundled or used for training; any future
 use needs per-resource legal review and a license manifest.
 
 RDFC-1.0 is a useful precedent for named canonicalization algorithms,

@@ -80,6 +80,13 @@ multilingual group has six consistent language rows and that each declared
 critical-negative pair preserves its non-concept structure while changing its
 concept identity.
 
+Independent semantic certification is a separate blind workflow. The
+`scripts/research/training-review.mjs` utility creates source/language plus
+candidate packets while withholding group, pair, concept, entity, generator,
+split, and prior-review metadata. Decisions are append-only, hash-bound, and
+never promote training gold by themselves. With no independent reviewer
+ledger for this fixture, its training eligibility remains false.
+
 The preprocessing-only dry run in
 `scripts/research/training-dry-run.mjs` validates batches, objective inputs,
 run-manifest hashes, checkpoint creation, and resume. Its estimates are not
@@ -96,3 +103,7 @@ RDF canonicalization, SHACL, and PROV-O inform optional interoperability and
 diagnostic-report exports; MCP/A2A remain transport boundaries. See
 `docs/ECOSYSTEM_ALIGNMENT.md` and the experimental, non-core
 `scripts/research/semantic-crosswalk.mjs`.
+The current UP2.0 audit and conservative license disposition are recorded in
+`docs/UNIVERSAL_PROPBANK_AUDIT.md` and
+`docs/UNIVERSAL_PROPBANK_LICENSE_MANIFEST.json`; no UP2 data is bundled or
+approved as training gold.
