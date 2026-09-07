@@ -101,6 +101,7 @@ export function createReviewPackets(datasetFile, outputDir) {
 
 export function validateReviewDecision(decision, expectedDatasetSha256, expectedPacketSha256 = null) {
   if (!decision || typeof decision !== 'object' || Array.isArray(decision)) throw new TypeError('review_decision_object_required');
+  assertBlindPacket(decision);
   for (const field of ['itemId', 'reviewerId', 'reviewerType', 'language', 'decision', 'reason', 'timestamp', 'datasetSha256', 'packetSha256']) {
     if (typeof decision[field] !== 'string' || !decision[field]) throw new TypeError(`review_${field}_required`);
   }
@@ -126,6 +127,25 @@ export function validateReviewDecision(decision, expectedDatasetSha256, expected
     datasetSha256: decision.datasetSha256,
     packetSha256: decision.packetSha256
   };
+}
+
+/** Validate a reviewer file against the immutable packet set before ledger ingestion. */
+export function loadValidatedReviewFile(reviewFile, packetFile, { allowSubset = true } = {}) {
+  const packets = loadJsonLines(packetFile).map(verifyReviewPacket);
+  const packetById = new Map(packets.map((packet) => [packet.itemId, packet]));
+  if (packetById.size !== packets.length) throw new TypeError('review_packet_duplicate_item');
+  const reviews = loadJsonLines(reviewFile);
+  const seen = new Set();
+  const validated = reviews.map((review) => {
+    if (seen.has(review.itemId)) throw new TypeError('review_duplicate_item');
+    seen.add(review.itemId);
+    const packet = packetById.get(review.itemId);
+    if (!packet) throw new TypeError('review_unknown_item');
+    if (review.language !== packet.sourceLanguage) throw new TypeError('review_language_mismatch');
+    return validateReviewDecision(review, packet.datasetSha256, packet.packetSha256);
+  });
+  if (!allowSubset && seen.size !== packetById.size) throw new TypeError('review_coverage_incomplete');
+  return { packets, reviews: validated };
 }
 
 export function appendReviewDecision(ledgerFile, decision, expectedDatasetSha256, expectedPacketSha256 = null) {
