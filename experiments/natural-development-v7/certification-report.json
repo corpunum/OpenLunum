@@ -1,0 +1,10 @@
+{
+  "format": "openlunum-natural-development-certification/0.2",
+  "status": "draft-not-certified",
+  "protected": false,
+  "trainingGoldEligible": false,
+  "datasetSha256": "2e657265af82d0de5a7ca525828bcbc2ed97acb607a4c767eb05a8445dcf68c6",
+  "reason": "V7 is a development draft. Independent semantic and Greek-language review is incomplete; extraction evidence is diagnostic only.",
+  "reviewers": [],
+  "limitations": ["No native-speaker certification is claimed.", "Prompt-level extractor isolation only.", "No training or protected-evaluation use."]
+}
