@@ -4,6 +4,13 @@ import type { LunumClause, LunumRecord, LunumSem, LunumTerm } from './types.js';
 
 export type NearSemanticFingerprint = string;
 
+/**
+ * `nfp:3` scopes role features by full clause path and includes actor
+ * authority bindings in the hard signature. Old sketches must be regenerated
+ * from Sem rather than silently compared with the new algorithm.
+ */
+const NEAR_FINGERPRINT_VERSION = '3';
+
 export interface NearSemanticComparisonOptions {
   protectedLiterals?: readonly (string | number | boolean)[];
 }
@@ -30,6 +37,8 @@ interface HardSignature {
   kind: string;
   clauseShapes: string[];
   literals: string[];
+  actorBindings: string[];
+  roleShapes: string[];
 }
 
 interface ParsedFingerprint {
@@ -69,19 +78,22 @@ function addFeature(features: WeightedFeatures, key: string, weight: number): vo
 
 function clauseShape(clause: LunumClause): string {
   return stableValue({
+    // Predicate names and clause control-flow are hard identity. Role names
+    // intentionally remain soft: extraction may add a low-salience manner or
+    // note role without changing the instruction's core action.
+    predicate: clause.predicate,
     negated: clause.negated === true,
     modality: clause.modality ?? null,
+    // Sibling ordering is a soft near-match dimension; canonical exact
+    // identity still preserves array order. Presence, direction, predicate,
+    // negation, and modality remain hard through this shape.
     conditions: (clause.conditions ?? []).map(clauseShape).sort(),
     consequences: (clause.consequences ?? []).map(clauseShape).sort()
   });
 }
 
-// `clauseContext` binds role-filler features to the clause they belong to, so the same
-// role/id pair filling two different clauses (e.g. a role-swap mutation across a root
-// clause and its condition) is not collapsed into an identical feature multiset. The
-// context is the clause's `predicate` (e.g. "delete", "confirmed"); the key format is
-// `role-<kind>:<predicate>:<role>:<...>`. Plain clauses without a predicate (defensive
-// fallback) use the literal string "-" as context so the key shape stays stable.
+// `clauseContext` is a full predicate-addressed clause path. A predicate alone
+// collapses repeated predicates and misses cross-clause role reassignment.
 function collectTermFeatures(features: WeightedFeatures, clauseContext: string, role: string, term: LunumTerm): void {
   if (Array.isArray(term)) {
     addFeature(features, `role-cardinality:${clauseContext}:${role}:${term.length}`, 1);
@@ -99,27 +111,42 @@ function collectTermFeatures(features: WeightedFeatures, clauseContext: string, 
   addFeature(features, `role-value:${clauseContext}:${role}:${stableValue(term)}`, 2);
 }
 
-function collectClauseFeatures(features: WeightedFeatures, clause: LunumClause, relation: string): void {
+function collectClauseFeatures(features: WeightedFeatures, clause: LunumClause, relation: string, clauseContext: string): void {
   addFeature(features, `relation:${relation}`, 1);
   addFeature(features, `predicate:${clause.predicate}`, 4);
-  const clauseContext = typeof clause.predicate === 'string' && clause.predicate.length > 0 ? clause.predicate : '-';
   for (const role of Object.keys(clause.roles ?? {}).sort()) {
     addFeature(features, `role:${role}`, 3);
     collectTermFeatures(features, clauseContext, role, clause.roles[role]!);
   }
   if (clause.time !== undefined) collectTermFeatures(features, clauseContext, 'time', clause.time);
-  for (const condition of clause.conditions ?? []) collectClauseFeatures(features, condition, 'condition');
-  for (const consequence of clause.consequences ?? []) collectClauseFeatures(features, consequence, 'consequence');
+  collectClausesFeatures(features, clause.conditions, 'condition', `${clauseContext}.`);
+  collectClausesFeatures(features, clause.consequences, 'consequence', `${clauseContext}.`);
+}
+
+function collectClausesFeatures(
+  features: WeightedFeatures,
+  clauses: LunumClause[] | undefined,
+  relation: string,
+  pathPrefix: string
+): void {
+  const occurrences = new Map<string, number>();
+  for (const clause of clauses ?? []) {
+    const predicate = typeof clause.predicate === 'string' && clause.predicate.length > 0 ? clause.predicate : '-';
+    const occurrence = occurrences.get(predicate) ?? 0;
+    occurrences.set(predicate, occurrence + 1);
+    collectClauseFeatures(features, clause, relation, `${pathPrefix}${relation}.${predicate}#${occurrence}`);
+  }
 }
 
 function extractFeatures(sem: LunumSem): WeightedFeatures {
   const features: WeightedFeatures = new Map();
-  for (const clause of sem.clauses) collectClauseFeatures(features, clause, 'root');
+  collectClausesFeatures(features, sem.clauses, 'root', '');
   for (const reference of sem.references ?? []) {
-    addFeature(features, `reference-type:${reference.type}`, 2);
-    if (typeof reference.id === 'string') addFeature(features, `reference-id:${reference.id}`, 2);
-    if (typeof reference.ref === 'string') addFeature(features, `reference-ref:${reference.ref}`, 2);
-    if ('value' in reference) addFeature(features, `reference-value:${stableValue(reference.value)}`, 2);
+    if (reference.referenceKind === 'surface-evidence') continue;
+    // Reference type/token/language are source evidence. Only a grounded
+    // referent participates in near-semantic comparison, matching lfp:2.1.
+    const grounded = typeof reference.ref === 'string' ? reference.ref : reference.id;
+    if (typeof grounded === 'string') addFeature(features, `reference-grounded:${grounded}`, 2);
   }
   return features;
 }
@@ -144,6 +171,14 @@ function collectHardTermLiterals(term: LunumTerm, output: string[]): void {
     return;
   }
   if (term !== null && typeof term === 'object') {
+    // Keep ordinary concept/resource ids soft so harmless extraction naming
+    // variance (e.g. `informe` vs `report`) can remain near-semantic.  IDs
+    // that change authority, environment, visibility, or destructive scope
+    // are hard invariants because a confident near-match would be unsafe.
+    const hardIdentityTypes = new Set(['actor', 'access', 'collection', 'environment']);
+    if (typeof term.type === 'string' && typeof term.id === 'string' && hardIdentityTypes.has(term.type)) {
+      output.push(`typed-id:${JSON.stringify(term.type)}:${JSON.stringify(term.id)}`);
+    }
     if (typeof term.ref === 'string') output.push(`ref:${JSON.stringify(term.ref)}`);
     if ('value' in term) collectPrimitiveValues(term.value, output);
     return;
@@ -158,19 +193,77 @@ function collectHardClauseLiterals(clause: LunumClause, output: string[]): void 
   for (const consequence of clause.consequences ?? []) collectHardClauseLiterals(consequence, output);
 }
 
+function hardTermShape(term: LunumTerm): string {
+  if (Array.isArray(term)) return `[${term.map(hardTermShape).join(',')}]`;
+  if (term !== null && typeof term === 'object') {
+    const type = typeof term.type === 'string' ? term.type : '-';
+    const identityTypes = new Set(['actor', 'access', 'collection', 'environment', 'date', 'quantity', 'time', 'url', 'path', 'range']);
+    const id = identityTypes.has(type) && typeof term.id === 'string' ? `:${JSON.stringify(term.id)}` : '';
+    const value = 'value' in term ? `:${stableValue(term.value)}` : '';
+    const ref = typeof term.ref === 'string' ? `:ref=${JSON.stringify(term.ref)}` : '';
+    return `typed:${type}${id}${value}${ref}`;
+  }
+  return primitiveToken(term);
+}
+
+function collectRoleShapes(clauses: LunumClause[] | undefined, relation: string, prefix: string, output: string[]): void {
+  const hardRoles = new Set(['agent', 'experiencer', 'subject', 'actor', 'recipient', 'object', 'theme', 'patient', 'target', 'source', 'destination', 'condition', 'consequence']);
+  const occurrences = new Map<string, number>();
+  for (const clause of clauses ?? []) {
+    const occurrence = occurrences.get(clause.predicate) ?? 0;
+    occurrences.set(clause.predicate, occurrence + 1);
+    const context = `${prefix}${relation}.${clause.predicate}#${occurrence}`;
+    for (const role of Object.keys(clause.roles ?? {}).filter((name) => hardRoles.has(name)).sort()) {
+      output.push(`${context}:${role}:${hardTermShape(clause.roles[role]!)}`);
+    }
+    if (clause.time !== undefined) output.push(`${context}:time:${hardTermShape(clause.time)}`);
+    collectRoleShapes(clause.conditions, 'condition', `${context}.`, output);
+    collectRoleShapes(clause.consequences, 'consequence', `${context}.`, output);
+  }
+}
+
+function collectActorBindings(
+  clauses: LunumClause[] | undefined,
+  relation: string,
+  pathPrefix: string,
+  output: string[]
+): void {
+  const occurrences = new Map<string, number>();
+  for (const clause of clauses ?? []) {
+    const predicate = typeof clause.predicate === 'string' && clause.predicate.length > 0 ? clause.predicate : '-';
+    const occurrence = occurrences.get(predicate) ?? 0;
+    occurrences.set(predicate, occurrence + 1);
+    const clausePath = `${pathPrefix}${relation}.${predicate}#${occurrence}`;
+    for (const role of Object.keys(clause.roles ?? {}).sort()) {
+      const term = clause.roles[role];
+      if (term !== null && typeof term === 'object' && !Array.isArray(term) && term.type === 'actor' && typeof term.id === 'string') {
+        output.push(`${clausePath}:${role}:${JSON.stringify(term.id)}`);
+      }
+    }
+    collectActorBindings(clause.conditions, 'condition', `${clausePath}.`, output);
+    collectActorBindings(clause.consequences, 'consequence', `${clausePath}.`, output);
+  }
+}
+
 function hardSignature(sem: LunumSem): HardSignature {
   const literals: string[] = [];
+  const actorBindings: string[] = [];
+  const roleShapes: string[] = [];
   for (const clause of sem.clauses) collectHardClauseLiterals(clause, literals);
+  collectActorBindings(sem.clauses, 'root', '', actorBindings);
+  collectRoleShapes(sem.clauses, 'root', '', roleShapes);
   for (const reference of sem.references ?? []) {
+    if (reference.referenceKind === 'surface-evidence') continue;
     if (typeof reference.ref === 'string') literals.push(`ref:${JSON.stringify(reference.ref)}`);
-    if ('value' in reference) collectPrimitiveValues(reference.value, literals);
   }
   return {
     schema: sem.schema,
     world: sem.world,
     kind: sem.kind,
     clauseShapes: sem.clauses.map(clauseShape).sort(),
-    literals: literals.sort()
+    literals: literals.sort(),
+    actorBindings: actorBindings.sort(),
+    roleShapes: roleShapes.sort()
   };
 }
 
@@ -186,7 +279,7 @@ function featureTokens(features: WeightedFeatures): string[] {
 }
 
 function parseFingerprint(fingerprint: NearSemanticFingerprint): ParsedFingerprint | null {
-  const match = fingerprint.match(/^nfp:2:sha256:([a-f0-9]{64}):([a-f0-9]{64}):(-|[a-f0-9.]+)$/u);
+  const match = fingerprint.match(new RegExp(`^nfp:${NEAR_FINGERPRINT_VERSION}:sha256:([a-f0-9]{64}):([a-f0-9]{64}):(-|[a-f0-9.]+)$`, 'u'));
   if (!match) return null;
   const checksum = match[1]!;
   const hardDigest = match[2]!;
@@ -208,7 +301,13 @@ function hardMismatchReasons(first: HardSignature, second: HardSignature): strin
     reasons.push('clause structure, negation, or modality differs');
   }
   if (stableValue(first.literals) !== stableValue(second.literals)) {
-    reasons.push('typed literal, reference value, or literal multiplicity differs');
+    reasons.push('protected-literal or typed literal, reference value, or literal multiplicity differs');
+  }
+  if (stableValue(first.actorBindings) !== stableValue(second.actorBindings)) {
+    reasons.push('actor identity or authority binding differs');
+  }
+  if (stableValue(first.roleShapes) !== stableValue(second.roleShapes)) {
+    reasons.push('role binding or typed-term shape differs');
   }
   return reasons;
 }
@@ -247,7 +346,7 @@ export class NearSemanticFingerprintGenerator {
     const tokens = featureTokens(extractFeatures(sem));
     const tokenText = tokens.length > 0 ? tokens.join('.') : '-';
     const checksum = digest(`${hard}:${tokenText}`);
-    return `nfp:2:sha256:${checksum}:${hard}:${tokenText}`;
+    return `nfp:${NEAR_FINGERPRINT_VERSION}:sha256:${checksum}:${hard}:${tokenText}`;
   }
 
   generateFromRecord(record: LunumRecord): NearSemanticFingerprint {

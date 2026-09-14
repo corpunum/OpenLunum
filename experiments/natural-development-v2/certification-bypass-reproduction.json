@@ -1,0 +1,41 @@
+{
+  "format": "openlunum-certifier-bypass-reproduction/0.1",
+  "implementationUnderTest": "scripts/research/certify-training-review.mjs",
+  "reproducedAt": "2026-09-07",
+  "cases": [
+    {
+      "id": "unknown-pair",
+      "fixture": "valid reviewed rows plus DISTINCT for a pair absent from target.criticalNegativePairIds",
+      "defectBeforeRepair": "accepted pair could increase safety coverage",
+      "resultAfterRepair": "rejected: negative_review_unknown_pair"
+    },
+    {
+      "id": "forged-packet-binding",
+      "fixture": "ledger packetSha256 replaced with a different valid-format hash",
+      "defectBeforeRepair": "ledger was not bound to the immutable packet set",
+      "resultAfterRepair": "rejected: review_packet_hash_mismatch"
+    },
+    {
+      "id": "malformed-ir",
+      "fixture": "schema-shaped parse row with target.ir = {}",
+      "defectBeforeRepair": "metadata validation accepted an empty IR",
+      "resultAfterRepair": "excluded and reported by deterministic target validation"
+    },
+    {
+      "id": "eligibility-consistency",
+      "fixture": "valid bound rows and one genuine DISTINCT pair",
+      "defectBeforeRepair": "eligibility could be true while blocking failures remained",
+      "resultAfterRepair": "accepted only when retained output is valid; positive regression test asserts true with empty failureReasons"
+    },
+    {
+      "id": "endpoint-binding",
+      "fixture": "DISTINCT review with swapped, missing, or non-retained endpoint lists",
+      "defectBeforeRepair": "pair identity was represented only by a pair ID",
+      "resultAfterRepair": "rejected: negative_review_endpoints_mismatch or excluded from safe coverage"
+    }
+  ],
+  "limitations": [
+    "The pre-repair behavior is recorded from the isolated certification audit and regression fixture design; historical datasets were not rewritten or replayed through a mutated copy.",
+    "This artifact is diagnostic evidence for the certifier boundary, not semantic correctness evidence for the old synthetic corpus."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "development-real-omw-grounding",
+  "protected": false,
+  "source": { "omw": "omw-data v2.0", "cili": "CILI v1.0", "german": "OdeNet v1.4" },
+  "benchmarkScript": "scripts/research/omw-grounding-benchmark.mjs",
+  "totalComparisons": 150,
+  "categories": {
+    "cross-language-translation": { "total": 100, "pairs": { "en-el": 20, "en-es": 20, "en-fr": 20, "en-de": 20, "en-id": 20 }, "bothResolved": 19, "converged": 19, "ambiguousOrUnresolved": 81 },
+    "same-language-synonym": { "total": 25, "bothResolved": 15, "converged": 15, "ambiguousOrUnresolved": 10 },
+    "hard-negative": { "total": 25, "bothResolved": 15, "correctlySeparated": 15, "ambiguousOrUnresolved": 10, "falseEquivalences": 0 }
+  },
+  "pairConvergence": { "en-el": "1/20", "en-es": "8/20", "en-fr": "5/20", "en-de": "2/20", "en-id": "3/20", "en-en": "15/50" },
+  "imports": {
+    "en": { "records": 186642, "uniqueCili": 106966, "unmappedSynsets": 10693, "malformedLines": 0 },
+    "el": { "records": 23853, "uniqueCili": 17891, "unmappedSynsets": 158, "malformedLines": 0 },
+    "es": { "records": 133347, "uniqueCili": 71988, "unmappedSynsets": 6429, "malformedLines": 1196 },
+    "fr": { "records": 95762, "uniqueCili": 55073, "unmappedSynsets": 4018, "malformedLines": 0 },
+    "id": { "records": 100869, "uniqueCili": 35341, "unmappedSynsets": 2744, "malformedLines": 0 },
+    "de": { "records": 88394, "uniqueCili": 18957, "unmappedSynsets": 16793, "malformedEntries": 2118 }
+  },
+  "interpretation": "Real OMW/CILI provides genuine cross-language evidence but exact lemma/POS lookup is frequently ambiguous. The measured 19/100 comparable translation pairs and zero hard-negative false equivalences support conservative use, not broad synonym coverage. This is development evidence, not protected capability evidence."
+}

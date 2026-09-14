@@ -1,0 +1,50 @@
+{
+  "id": "stage2-heldout-v1",
+  "path": "datasets/dev/stage2-heldout-v1.jsonl",
+  "items": 26,
+  "parseItems": 16,
+  "abstentionItems": 10,
+  "languages": ["en", "el", "es", "id", "fr", "de", "ja", "zh", "pt", "ar"],
+  "semanticGroups": [
+    "preference-list",
+    "fact-number",
+    "permission-negation",
+    "deadline-condition",
+    "uncertain-state",
+    "actor-relation",
+    "project-state",
+    "temporal-order",
+    "numeric-list",
+    "reference-scope",
+    "modality-contrast",
+    "condition-consequence",
+    "reference-list",
+    "permission-scope",
+    "project-deadline",
+    "uncertain-fact",
+    "ambiguous",
+    "unsupported"
+  ],
+  "schema": "lunum-sem/0.1-draft",
+  "status": "development-visible-diagnostic",
+  "protection": {
+    "class": "frozen-heldout-candidate",
+    "contentsVisibleInRepository": true,
+    "validForProtectedClaims": false,
+    "rotationRequiredBeforeFinalQualityClaim": true,
+    "goldSemNotEmbeddedInProductionPrompt": true
+  },
+  "construction": {
+    "source": "independently authored Stage 2 diagnostic set",
+    "promptExampleOverlapPolicy": "semantic groups and lexical payloads are distinct from multilingual-core-v1 and multilingual-extended-v1; audit before use as protected evidence",
+    "requiredOutcomeFields": ["expectedOutcome", "goldSem"],
+    "abstentionEncoding": "expectedOutcome=abstain and goldSem=null; abstention is scored separately from Sem exact match",
+    "coverage": ["preferences", "facts", "project state", "deadlines", "actor relationships", "negation", "conditions", "consequences", "modality", "temporal relations", "numbers", "lists", "references", "scope", "permissions", "uncertainty", "unsupported", "ambiguous"],
+    "languageExpansion": ["ja", "zh", "pt", "ar"]
+  },
+  "hash": {
+    "algorithm": "sha256",
+    "value": "b244325d2b40288354bb91f8fe7714a1bdb0c259a4d4a249f0bf106f89b99b54"
+  },
+  "baselineCommit": "204dab3f5169c8ebd08e4dc76c56b9ffa635a103"
+}

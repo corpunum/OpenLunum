@@ -5,6 +5,7 @@
  * allowing safe testing without affecting production systems.
  */
 
+import { compareSem, fingerprintSem } from '@corpunum/lunum';
 import type { LunumRecord, LunumSem, LunumSidecar } from '@corpunum/lunum';
 
 // ── Shadow Mode Configuration ───────────────────────────────────────
@@ -81,7 +82,10 @@ export class ShadowModeAdapter {
       recordVersion: record.recordVersion,
       source: record.source,
       sem: shadowSem,
-      fingerprint: this.calculateFingerprint(shadowSem),
+      // Shadow records must use the same canonical semantic identity as core.
+      // A private hash format would make shadow comparisons incomparable with
+      // production records and could conceal normalization differences.
+      fingerprint: fingerprintSem(shadowSem),
       renderings: {},
       policy: record.policy,
       meta: { ...record.meta, _shadow: true }
@@ -125,7 +129,7 @@ export class ShadowModeAdapter {
     }
 
     // Compare semantics
-    const semanticsMatch = this.compareSemantics(original.sem, shadow.sem);
+    const semanticsMatch = compareSem(original.sem, shadow.sem).exactCanonical;
     if (!semanticsMatch) {
       differences.push('Semantics mismatch');
     }
@@ -135,57 +139,6 @@ export class ShadowModeAdapter {
       semanticsMatch,
       differences
     };
-  }
-
-  /**
-   * Compare two semantic representations
-   */
-  private compareSemantics(sem1: LunumSem, sem2: LunumSem): boolean {
-    // Compare schema
-    if (sem1.schema !== sem2.schema) return false;
-    
-    // Compare world
-    if (sem1.world !== sem2.world) return false;
-    
-    // Compare kind
-    if (sem1.kind !== sem2.kind) return false;
-    
-    // Compare clauses
-    if (sem1.clauses.length !== sem2.clauses.length) return false;
-    
-    for (let i = 0; i < sem1.clauses.length; i++) {
-      const c1 = sem1.clauses[i];
-      const c2 = sem2.clauses[i];
-      
-      if (!c1 || !c2) return false;
-      if (c1.predicate !== c2.predicate) return false;
-      if (c1.negated !== c2.negated) return false;
-      
-      // Compare roles (simplified)
-      const roles1 = Object.keys(c1.roles ?? {});
-      const roles2 = Object.keys(c2.roles ?? {});
-      if (roles1.length !== roles2.length) return false;
-      
-      for (const role of roles1) {
-        if (c1.roles[role] !== c2.roles[role]) return false;
-      }
-    }
-    
-    return true;
-  }
-
-  /**
-   * Calculate fingerprint for semantic (simplified)
-   */
-  private calculateFingerprint(sem: LunumSem): string {
-    let hash = 0;
-    const text = JSON.stringify(sem);
-    for (let i = 0; i < text.length; i++) {
-      const char = text.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return `lfp:shadow:${Math.abs(hash).toString(16)}`;
   }
 
   /**

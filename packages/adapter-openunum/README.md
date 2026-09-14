@@ -15,25 +15,28 @@ Provides a typed OpenUnum-compatible adapter that preserves OpenUnum's current s
 ## Usage
 
 ```typescript
-import { LunumAdapter } from '@corpunum/lunum-adapter-openunum';
+import {
+  ShadowModeAdapter,
+  deriveLunumSidecar,
+  compileLunumShadowContext
+} from '@corpunum/lunum-adapter-openunum';
 
-const adapter = new LunumAdapter({
-  // adapter configuration
-});
-
-// The adapter returns the expected OpenUnum sidecar shape
-const result = await adapter.process(record);
+const sidecar = deriveLunumSidecar(record);
+const context = compileLunumShadowContext([record], { profile: 'safe' });
+const shadow = new ShadowModeAdapter({ enabled: true, compareWithProduction: true });
+const comparison = shadow.process(record, candidateSem);
 ```
 
 ## Contract
 
-- Contract tests verify the sidecar return shape matches OpenUnum's expectations.
-- Shadow-mode experiments compare adapter output against native OpenUnum processing.
+- Contract tests verify the sidecar return shape expected by the current compatibility contract.
+- Shadow mode compares a candidate against an existing OpenLunum record using core canonical fingerprints and comparison.
 - The adapter is versioned independently; breaking changes follow semantic versioning.
 
 ## Limitations
 
-- The adapter matches the **present** OpenUnum sidecar shape; live adoption still requires product-side work when OpenUnum changes its format.
+- This package does not import or run OpenUnum code and has no live OpenUnum integration.
+- It matches the **present** sidecar contract; adoption still requires product-side work when OpenUnum changes its format.
 - Not all OpenUnum features are covered; unimplemented features fall back to natural text.
 
 ## Status

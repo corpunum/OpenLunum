@@ -1,0 +1,2556 @@
+{
+  "type": "development-omw-cross-language-failure-decomposition",
+  "version": 1,
+  "status": "diagnostic",
+  "inputPath": "reports/experiments/codex-agent-development-20260906/real-omw-grounding.json",
+  "sourceDataset": {
+    "omw": "omw-data v2.0",
+    "cili": "CILI v1.0",
+    "odenet": "OdeNet v1.4"
+  },
+  "total": 100,
+  "categoryCounts": {
+    "SOURCE_AMBIGUOUS": 25,
+    "TARGET_AMBIGUOUS": 15,
+    "BOTH_AMBIGUOUS": 41,
+    "BOTH_RESOLVED_SAME_CILI": 19
+  },
+  "coverage": {
+    "total": 100,
+    "sourceLexemeCovered": 100,
+    "targetLexemeCovered": 100,
+    "bothLexemesCovered": 100,
+    "sharedCandidateSet": 100,
+    "sourceMonosemous": 34,
+    "targetMonosemous": 44,
+    "bothMonosemous": 19,
+    "exactConvergence": 19
+  },
+  "byPair": {
+    "en-el": {
+      "SOURCE_AMBIGUOUS": 12,
+      "TARGET_AMBIGUOUS": 2,
+      "BOTH_AMBIGUOUS": 5,
+      "BOTH_RESOLVED_SAME_CILI": 1
+    },
+    "en-es": {
+      "TARGET_AMBIGUOUS": 4,
+      "BOTH_RESOLVED_SAME_CILI": 8,
+      "BOTH_AMBIGUOUS": 7,
+      "SOURCE_AMBIGUOUS": 1
+    },
+    "en-fr": {
+      "BOTH_RESOLVED_SAME_CILI": 5,
+      "BOTH_AMBIGUOUS": 10,
+      "TARGET_AMBIGUOUS": 4,
+      "SOURCE_AMBIGUOUS": 1
+    },
+    "en-de": {
+      "BOTH_AMBIGUOUS": 7,
+      "BOTH_RESOLVED_SAME_CILI": 2,
+      "SOURCE_AMBIGUOUS": 10,
+      "TARGET_AMBIGUOUS": 1
+    },
+    "en-id": {
+      "TARGET_AMBIGUOUS": 4,
+      "BOTH_RESOLVED_SAME_CILI": 3,
+      "BOTH_AMBIGUOUS": 12,
+      "SOURCE_AMBIGUOUS": 1
+    }
+  },
+  "byPos": {
+    "verb": {
+      "SOURCE_AMBIGUOUS": 12,
+      "BOTH_AMBIGUOUS": 14,
+      "BOTH_RESOLVED_SAME_CILI": 5,
+      "TARGET_AMBIGUOUS": 2
+    },
+    "noun": {
+      "TARGET_AMBIGUOUS": 3,
+      "SOURCE_AMBIGUOUS": 13,
+      "BOTH_AMBIGUOUS": 19,
+      "BOTH_RESOLVED_SAME_CILI": 5
+    },
+    "adjective": {
+      "TARGET_AMBIGUOUS": 8,
+      "BOTH_RESOLVED_SAME_CILI": 5
+    },
+    "adverb": {
+      "BOTH_RESOLVED_SAME_CILI": 4,
+      "BOTH_AMBIGUOUS": 8,
+      "TARGET_AMBIGUOUS": 2
+    }
+  },
+  "byResource": {
+    "omw-data": {
+      "SOURCE_AMBIGUOUS": 15,
+      "TARGET_AMBIGUOUS": 14,
+      "BOTH_AMBIGUOUS": 34,
+      "BOTH_RESOLVED_SAME_CILI": 17
+    },
+    "omw-en+odenet": {
+      "BOTH_AMBIGUOUS": 7,
+      "BOTH_RESOLVED_SAME_CILI": 2,
+      "SOURCE_AMBIGUOUS": 10,
+      "TARGET_AMBIGUOUS": 1
+    }
+  },
+  "cases": [
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "drench",
+      "targetLemma": "μουσκεύω",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22801",
+        "ili:i24200",
+        "ili:i27464",
+        "ili:i35539"
+      ],
+      "targetCandidates": [
+        "ili:i22801"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i22801",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "homicide",
+      "targetLemma": "ανθρωποκτονία",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i36559"
+      ],
+      "targetCandidates": [
+        "ili:i36559",
+        "ili:i36562"
+      ],
+      "selectedSource": "ili:i36559",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "murder",
+      "targetLemma": "φόνος",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i36562"
+      ],
+      "targetCandidates": [
+        "ili:i36554",
+        "ili:i36562"
+      ],
+      "selectedSource": "ili:i36562",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "flood",
+      "targetLemma": "πλημμυρίζω",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i22806",
+        "ili:i23982",
+        "ili:i29352",
+        "ili:i33533"
+      ],
+      "targetCandidates": [
+        "ili:i22806",
+        "ili:i35238"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "moisten",
+      "targetLemma": "υγραίνω",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i22810",
+        "ili:i28589"
+      ],
+      "targetCandidates": [
+        "ili:i22794",
+        "ili:i22810"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "parch",
+      "targetLemma": "ξηραίνομαι",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22812"
+      ],
+      "targetCandidates": [
+        "ili:i22812"
+      ],
+      "selectedSource": "ili:i22812",
+      "selectedTarget": "ili:i22812",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "self-destruction",
+      "targetLemma": "αυτοκαταστροφή",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i36576",
+        "ili:i36577"
+      ],
+      "targetCandidates": [
+        "ili:i36577"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i36577",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "dry",
+      "targetLemma": "ξηραίνω",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22813",
+        "ili:i22818"
+      ],
+      "targetCandidates": [
+        "ili:i22813"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i22813",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "dry",
+      "targetLemma": "στεγνώνω",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22813",
+        "ili:i22818"
+      ],
+      "targetCandidates": [
+        "ili:i22818"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i22818",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "slaughter",
+      "targetLemma": "σφαγή",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i36584",
+        "ili:i36585",
+        "ili:i76024"
+      ],
+      "targetCandidates": [
+        "ili:i36584"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i36584",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "poisoning",
+      "targetLemma": "δηλητηρίαση",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i113253",
+        "ili:i36588"
+      ],
+      "targetCandidates": [
+        "ili:i36588"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i36588",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "strengthen",
+      "targetLemma": "ισχυροποιούμαι",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22279",
+        "ili:i22824",
+        "ili:i22826"
+      ],
+      "targetCandidates": [
+        "ili:i22824"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i22824",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "strengthen",
+      "targetLemma": "ισχυροποιώ",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22279",
+        "ili:i22824",
+        "ili:i22826"
+      ],
+      "targetCandidates": [
+        "ili:i22826"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i22826",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "reinforce",
+      "targetLemma": "ενδυναμώνω",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22834",
+        "ili:i25620"
+      ],
+      "targetCandidates": [
+        "ili:i22834"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i22834",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "weaken",
+      "targetLemma": "αποδυναμώνομαι",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22841",
+        "ili:i22847",
+        "ili:i23180",
+        "ili:i23681",
+        "ili:i34417"
+      ],
+      "targetCandidates": [
+        "ili:i22841"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i22841",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "liquidation",
+      "targetLemma": "εκκαθάριση",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i36583",
+        "ili:i36610",
+        "ili:i41917"
+      ],
+      "targetCandidates": [
+        "ili:i36610"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i36610",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "verb",
+      "sourceLemma": "weaken",
+      "targetLemma": "εξασθενίζω",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i22841",
+        "ili:i22847",
+        "ili:i23180",
+        "ili:i23681",
+        "ili:i34417"
+      ],
+      "targetCandidates": [
+        "ili:i22678",
+        "ili:i22847"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "fade",
+      "targetLemma": "εξαφάνιση",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i36619",
+        "ili:i38401"
+      ],
+      "targetCandidates": [
+        "ili:i35687",
+        "ili:i36619",
+        "ili:i75218"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "abortion",
+      "targetLemma": "έκτρωση",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i36620",
+        "ili:i75154"
+      ],
+      "targetCandidates": [
+        "ili:i36620"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i36620",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-el",
+      "pos": "noun",
+      "sourceLemma": "miscarriage",
+      "targetLemma": "αποβολή",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i36621",
+        "ili:i75154"
+      ],
+      "targetCandidates": [
+        "ili:i36019",
+        "ili:i36621",
+        "ili:i75154"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "adjective",
+      "sourceLemma": "able",
+      "targetLemma": "competente",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i1"
+      ],
+      "targetCandidates": [
+        "ili:i1",
+        "ili:i2868",
+        "ili:i2876",
+        "ili:i4607"
+      ],
+      "selectedSource": "ili:i1",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "noun",
+      "sourceLemma": "entity",
+      "targetLemma": "entidad",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i35545"
+      ],
+      "targetCandidates": [
+        "ili:i35545"
+      ],
+      "selectedSource": "ili:i35545",
+      "selectedTarget": "ili:i35545",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-es",
+      "pos": "verb",
+      "sourceLemma": "breathe",
+      "targetLemma": "respirar",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21778",
+        "ili:i22299",
+        "ili:i22916",
+        "ili:i25583",
+        "ili:i26258",
+        "ili:i26311",
+        "ili:i33361",
+        "ili:i34759",
+        "ili:i35435"
+      ],
+      "targetCandidates": [
+        "ili:i21778",
+        "ili:i25583",
+        "ili:i26311",
+        "ili:i34759"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "adverb",
+      "sourceLemma": "AD",
+      "targetLemma": "dC",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i18158"
+      ],
+      "targetCandidates": [
+        "ili:i18158"
+      ],
+      "selectedSource": "ili:i18158",
+      "selectedTarget": "ili:i18158",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-es",
+      "pos": "adjective",
+      "sourceLemma": "unable",
+      "targetLemma": "incapaz",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i2"
+      ],
+      "targetCandidates": [
+        "ili:i13851",
+        "ili:i1698",
+        "ili:i1701",
+        "ili:i2",
+        "ili:i4589",
+        "ili:i6550"
+      ],
+      "selectedSource": "ili:i2",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "noun",
+      "sourceLemma": "abstraction",
+      "targetLemma": "abstracción",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i35547",
+        "ili:i37471",
+        "ili:i49774",
+        "ili:i66868",
+        "ili:i67263",
+        "ili:i67636"
+      ],
+      "targetCandidates": [
+        "ili:i35547",
+        "ili:i37471",
+        "ili:i49774",
+        "ili:i62042",
+        "ili:i66868",
+        "ili:i67263",
+        "ili:i67636",
+        "ili:i76343"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "adjective",
+      "sourceLemma": "abaxial",
+      "targetLemma": "dorsal",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i3"
+      ],
+      "targetCandidates": [
+        "ili:i3",
+        "ili:i706"
+      ],
+      "selectedSource": "ili:i3",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "noun",
+      "sourceLemma": "thing",
+      "targetLemma": "cosa",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i110218",
+        "ili:i35548",
+        "ili:i35596",
+        "ili:i60191",
+        "ili:i60192",
+        "ili:i61346",
+        "ili:i66720",
+        "ili:i67639",
+        "ili:i68271",
+        "ili:i71836",
+        "ili:i74999",
+        "ili:i76044"
+      ],
+      "targetCandidates": [
+        "ili:i110218",
+        "ili:i113651",
+        "ili:i35548",
+        "ili:i35549",
+        "ili:i35596",
+        "ili:i53030",
+        "ili:i59722",
+        "ili:i60191",
+        "ili:i60192",
+        "ili:i61346",
+        "ili:i66720",
+        "ili:i67639",
+        "ili:i71836",
+        "ili:i74999",
+        "ili:i76044"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "adjective",
+      "sourceLemma": "adaxial",
+      "targetLemma": "ventral",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i4"
+      ],
+      "targetCandidates": [
+        "ili:i16722",
+        "ili:i4",
+        "ili:i707"
+      ],
+      "selectedSource": "ili:i4",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "adverb",
+      "sourceLemma": "barely",
+      "targetLemma": "apenas",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18163",
+        "ili:i18581"
+      ],
+      "targetCandidates": [
+        "ili:i18163",
+        "ili:i18165",
+        "ili:i18177",
+        "ili:i18210",
+        "ili:i18581"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "verb",
+      "sourceLemma": "choke",
+      "targetLemma": "sofocarse",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21781",
+        "ili:i22158",
+        "ili:i22159",
+        "ili:i22160",
+        "ili:i22576",
+        "ili:i23529",
+        "ili:i23686",
+        "ili:i23687",
+        "ili:i29100",
+        "ili:i29110",
+        "ili:i29582",
+        "ili:i29583",
+        "ili:i33854",
+        "ili:i34351"
+      ],
+      "targetCandidates": [
+        "ili:i21781",
+        "ili:i22124",
+        "ili:i23531"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "verb",
+      "sourceLemma": "hyperventilate",
+      "targetLemma": "hiperventilar",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i21782",
+        "ili:i21783"
+      ],
+      "targetCandidates": [
+        "ili:i21782"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i21782",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "adjective",
+      "sourceLemma": "abducent",
+      "targetLemma": "abductor",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i7"
+      ],
+      "targetCandidates": [
+        "ili:i7"
+      ],
+      "selectedSource": "ili:i7",
+      "selectedTarget": "ili:i7",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-es",
+      "pos": "adverb",
+      "sourceLemma": "hardly",
+      "targetLemma": "escasamente",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18163",
+        "ili:i18165"
+      ],
+      "targetCandidates": [
+        "ili:i18165",
+        "ili:i18581",
+        "ili:i20864",
+        "ili:i21292",
+        "ili:i21346"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "adjective",
+      "sourceLemma": "adducent",
+      "targetLemma": "aductor",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i8"
+      ],
+      "targetCandidates": [
+        "ili:i8"
+      ],
+      "selectedSource": "ili:i8",
+      "selectedTarget": "ili:i8",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-es",
+      "pos": "verb",
+      "sourceLemma": "aspirate",
+      "targetLemma": "aspirar",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21784",
+        "ili:i26360",
+        "ili:i29435"
+      ],
+      "targetCandidates": [
+        "ili:i21778",
+        "ili:i21784",
+        "ili:i25233",
+        "ili:i25236",
+        "ili:i25250",
+        "ili:i26132",
+        "ili:i26133",
+        "ili:i26360",
+        "ili:i27379",
+        "ili:i27615",
+        "ili:i27858",
+        "ili:i30784",
+        "ili:i30847",
+        "ili:i30848",
+        "ili:i30849",
+        "ili:i30859",
+        "ili:i30912",
+        "ili:i30976",
+        "ili:i32389"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-es",
+      "pos": "adjective",
+      "sourceLemma": "nascent",
+      "targetLemma": "naciente",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i9"
+      ],
+      "targetCandidates": [
+        "ili:i9"
+      ],
+      "selectedSource": "ili:i9",
+      "selectedTarget": "ili:i9",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-es",
+      "pos": "verb",
+      "sourceLemma": "burp",
+      "targetLemma": "regoldar",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i21785"
+      ],
+      "targetCandidates": [
+        "ili:i21785"
+      ],
+      "selectedSource": "ili:i21785",
+      "selectedTarget": "ili:i21785",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-es",
+      "pos": "adverb",
+      "sourceLemma": "basically",
+      "targetLemma": "fundamentalmente",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i18168"
+      ],
+      "targetCandidates": [
+        "ili:i18168"
+      ],
+      "selectedSource": "ili:i18168",
+      "selectedTarget": "ili:i18168",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-es",
+      "pos": "verb",
+      "sourceLemma": "hiccup",
+      "targetLemma": "hipar",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i21787"
+      ],
+      "targetCandidates": [
+        "ili:i21787"
+      ],
+      "selectedSource": "ili:i21787",
+      "selectedTarget": "ili:i21787",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adjective",
+      "sourceLemma": "able",
+      "targetLemma": "comptable",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i1"
+      ],
+      "targetCandidates": [
+        "ili:i1"
+      ],
+      "selectedSource": "ili:i1",
+      "selectedTarget": "ili:i1",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-fr",
+      "pos": "noun",
+      "sourceLemma": "entity",
+      "targetLemma": "entité",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i35545"
+      ],
+      "targetCandidates": [
+        "ili:i35545"
+      ],
+      "selectedSource": "ili:i35545",
+      "selectedTarget": "ili:i35545",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-fr",
+      "pos": "verb",
+      "sourceLemma": "breathe",
+      "targetLemma": "respirer",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21778",
+        "ili:i22299",
+        "ili:i22916",
+        "ili:i25583",
+        "ili:i26258",
+        "ili:i26311",
+        "ili:i33361",
+        "ili:i34759",
+        "ili:i35435"
+      ],
+      "targetCandidates": [
+        "ili:i21778",
+        "ili:i21793",
+        "ili:i22299",
+        "ili:i22916",
+        "ili:i25583",
+        "ili:i26258",
+        "ili:i33361",
+        "ili:i34759",
+        "ili:i35435",
+        "ili:i35516"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adjective",
+      "sourceLemma": "unable",
+      "targetLemma": "incapable",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i2"
+      ],
+      "targetCandidates": [
+        "ili:i1698",
+        "ili:i1701",
+        "ili:i2"
+      ],
+      "selectedSource": "ili:i2",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "noun",
+      "sourceLemma": "abstraction",
+      "targetLemma": "abstraction",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i35547",
+        "ili:i37471",
+        "ili:i49774",
+        "ili:i66868",
+        "ili:i67263",
+        "ili:i67636"
+      ],
+      "targetCandidates": [
+        "ili:i35547",
+        "ili:i37471",
+        "ili:i49774",
+        "ili:i66868",
+        "ili:i67263",
+        "ili:i67636",
+        "ili:i71146"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adjective",
+      "sourceLemma": "abaxial",
+      "targetLemma": "abaxial",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i3"
+      ],
+      "targetCandidates": [
+        "ili:i3"
+      ],
+      "selectedSource": "ili:i3",
+      "selectedTarget": "ili:i3",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-fr",
+      "pos": "noun",
+      "sourceLemma": "thing",
+      "targetLemma": "chose",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i110218",
+        "ili:i35548",
+        "ili:i35596",
+        "ili:i60191",
+        "ili:i60192",
+        "ili:i61346",
+        "ili:i66720",
+        "ili:i67639",
+        "ili:i68271",
+        "ili:i71836",
+        "ili:i74999",
+        "ili:i76044"
+      ],
+      "targetCandidates": [
+        "ili:i106283",
+        "ili:i109477",
+        "ili:i110218",
+        "ili:i35548",
+        "ili:i35549",
+        "ili:i35596",
+        "ili:i55204",
+        "ili:i55272",
+        "ili:i59736",
+        "ili:i60191",
+        "ili:i61346",
+        "ili:i64145",
+        "ili:i66720",
+        "ili:i67417",
+        "ili:i67639",
+        "ili:i68268",
+        "ili:i68271",
+        "ili:i69641",
+        "ili:i71836",
+        "ili:i72136",
+        "ili:i74999",
+        "ili:i76044",
+        "ili:i93398"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adjective",
+      "sourceLemma": "adaxial",
+      "targetLemma": "ventral",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i4"
+      ],
+      "targetCandidates": [
+        "ili:i4",
+        "ili:i707"
+      ],
+      "selectedSource": "ili:i4",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adverb",
+      "sourceLemma": "barely",
+      "targetLemma": "guère",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18163",
+        "ili:i18581"
+      ],
+      "targetCandidates": [
+        "ili:i18163",
+        "ili:i18165",
+        "ili:i18764"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "noun",
+      "sourceLemma": "object",
+      "targetLemma": "chose",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i35549",
+        "ili:i67417",
+        "ili:i68254",
+        "ili:i68813",
+        "ili:i69641"
+      ],
+      "targetCandidates": [
+        "ili:i106283",
+        "ili:i109477",
+        "ili:i110218",
+        "ili:i35548",
+        "ili:i35549",
+        "ili:i35596",
+        "ili:i55204",
+        "ili:i55272",
+        "ili:i59736",
+        "ili:i60191",
+        "ili:i61346",
+        "ili:i64145",
+        "ili:i66720",
+        "ili:i67417",
+        "ili:i67639",
+        "ili:i68268",
+        "ili:i68271",
+        "ili:i69641",
+        "ili:i71836",
+        "ili:i72136",
+        "ili:i74999",
+        "ili:i76044",
+        "ili:i93398"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adverb",
+      "sourceLemma": "hardly",
+      "targetLemma": "pratiquement",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18163",
+        "ili:i18165"
+      ],
+      "targetCandidates": [
+        "ili:i18165",
+        "ili:i18578",
+        "ili:i18761",
+        "ili:i19267",
+        "ili:i21089"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "verb",
+      "sourceLemma": "burp",
+      "targetLemma": "roter",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21785"
+      ],
+      "targetCandidates": [
+        "ili:i21785",
+        "ili:i23263"
+      ],
+      "selectedSource": "ili:i21785",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adverb",
+      "sourceLemma": "basically",
+      "targetLemma": "sommairement",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18168"
+      ],
+      "targetCandidates": [
+        "ili:i18168",
+        "ili:i21645"
+      ],
+      "selectedSource": "ili:i18168",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "noun",
+      "sourceLemma": "whole",
+      "targetLemma": "totalité",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i35550",
+        "ili:i67718"
+      ],
+      "targetCandidates": [
+        "ili:i113006",
+        "ili:i35550",
+        "ili:i59776",
+        "ili:i62059",
+        "ili:i67718"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "verb",
+      "sourceLemma": "hiccup",
+      "targetLemma": "hoqueter",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i21787"
+      ],
+      "targetCandidates": [
+        "ili:i21787"
+      ],
+      "selectedSource": "ili:i21787",
+      "selectedTarget": "ili:i21787",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adverb",
+      "sourceLemma": "boiling",
+      "targetLemma": "ébullition",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i18170"
+      ],
+      "targetCandidates": [
+        "ili:i18170"
+      ],
+      "selectedSource": "ili:i18170",
+      "selectedTarget": "ili:i18170",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-fr",
+      "pos": "verb",
+      "sourceLemma": "sigh",
+      "targetLemma": "soupir",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21788",
+        "ili:i26511"
+      ],
+      "targetCandidates": [
+        "ili:i21788",
+        "ili:i26511"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adverb",
+      "sourceLemma": "negatively",
+      "targetLemma": "négativement",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18173",
+        "ili:i18174"
+      ],
+      "targetCandidates": [
+        "ili:i18173",
+        "ili:i18174",
+        "ili:i19965"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "verb",
+      "sourceLemma": "exhale",
+      "targetLemma": "expirer",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i21789",
+        "ili:i21791"
+      ],
+      "targetCandidates": [
+        "ili:i21789"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i21789",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-fr",
+      "pos": "adverb",
+      "sourceLemma": "negatively",
+      "targetLemma": "négativement",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18173",
+        "ili:i18174"
+      ],
+      "targetCandidates": [
+        "ili:i18173",
+        "ili:i18174",
+        "ili:i19965"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "fission",
+      "targetLemma": "Fission",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i107577",
+        "ili:i107578"
+      ],
+      "targetCandidates": [
+        "ili:i107401",
+        "ili:i107577"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "resumption",
+      "targetLemma": "Fortführung",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i36672"
+      ],
+      "targetCandidates": [
+        "ili:i36672"
+      ],
+      "selectedSource": "ili:i36672",
+      "selectedTarget": "ili:i36672",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-de",
+      "pos": "verb",
+      "sourceLemma": "leave",
+      "targetLemma": "abfahren",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i22406",
+        "ili:i23534",
+        "ili:i24823",
+        "ili:i24826",
+        "ili:i31785",
+        "ili:i31816",
+        "ili:i32890",
+        "ili:i33211",
+        "ili:i33530",
+        "ili:i33672",
+        "ili:i34851",
+        "ili:i35272",
+        "ili:i35311",
+        "ili:i35315"
+      ],
+      "targetCandidates": [
+        "ili:i24063",
+        "ili:i31785"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "verb",
+      "sourceLemma": "break",
+      "targetLemma": "aufhebeln",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i21916",
+        "ili:i22313",
+        "ili:i22314",
+        "ili:i22481",
+        "ili:i22736",
+        "ili:i22737",
+        "ili:i23009",
+        "ili:i23011",
+        "ili:i23406",
+        "ili:i23409",
+        "ili:i23416",
+        "ili:i23433",
+        "ili:i23547",
+        "ili:i23556",
+        "ili:i23681",
+        "ili:i23899",
+        "ili:i24498",
+        "ili:i24537",
+        "ili:i25391",
+        "ili:i25392",
+        "ili:i25418",
+        "ili:i25580",
+        "ili:i25582",
+        "ili:i26277",
+        "ili:i26285",
+        "ili:i27128",
+        "ili:i27764",
+        "ili:i27765",
+        "ili:i28168",
+        "ili:i28555",
+        "ili:i28556",
+        "ili:i29516",
+        "ili:i29725",
+        "ili:i29806",
+        "ili:i29807",
+        "ili:i30660",
+        "ili:i31192",
+        "ili:i31594",
+        "ili:i31684",
+        "ili:i31695",
+        "ili:i31887",
+        "ili:i31894",
+        "ili:i32114",
+        "ili:i32269",
+        "ili:i33326",
+        "ili:i33743",
+        "ili:i33886",
+        "ili:i34111",
+        "ili:i34381",
+        "ili:i34487",
+        "ili:i34525",
+        "ili:i34543",
+        "ili:i34690",
+        "ili:i34797",
+        "ili:i35008",
+        "ili:i35064",
+        "ili:i35065",
+        "ili:i35407",
+        "ili:i35408"
+      ],
+      "targetCandidates": [
+        "ili:i27764"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i27764",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "verb",
+      "sourceLemma": "wear",
+      "targetLemma": "abnutzen",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i22008",
+        "ili:i22009",
+        "ili:i22024",
+        "ili:i22034",
+        "ili:i22148",
+        "ili:i24063",
+        "ili:i28555",
+        "ili:i35183",
+        "ili:i35369"
+      ],
+      "targetCandidates": [
+        "ili:i24063"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i24063",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "seminar",
+      "targetLemma": "Tutorium",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i40091",
+        "ili:i80897"
+      ],
+      "targetCandidates": [
+        "ili:i40091"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i40091",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "workshop",
+      "targetLemma": "Arbeitstagung",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i40093",
+        "ili:i61263"
+      ],
+      "targetCandidates": [
+        "ili:i40093"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i40093",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "bearing",
+      "targetLemma": "Ausrichtung",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i109403",
+        "ili:i50623",
+        "ili:i51788",
+        "ili:i62792",
+        "ili:i63298",
+        "ili:i82560"
+      ],
+      "targetCandidates": [
+        "ili:i110062",
+        "ili:i36323",
+        "ili:i66738",
+        "ili:i82560"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "path",
+      "targetLemma": "Reiseroute",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i37589",
+        "ili:i57052",
+        "ili:i82265",
+        "ili:i85949"
+      ],
+      "targetCandidates": [
+        "ili:i82265"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i82265",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "racetrack",
+      "targetLemma": "Rennbahn",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i57872"
+      ],
+      "targetCandidates": [
+        "ili:i57872",
+        "ili:i57875"
+      ],
+      "selectedSource": "ili:i57872",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "class",
+      "targetLemma": "Schulklasse",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i40043",
+        "ili:i62305",
+        "ili:i79217",
+        "ili:i79319",
+        "ili:i79788",
+        "ili:i80413",
+        "ili:i80414",
+        "ili:i80422"
+      ],
+      "targetCandidates": [
+        "ili:i80413"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i80413",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "exercise",
+      "targetLemma": "Training",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i38707",
+        "ili:i39268",
+        "ili:i40105",
+        "ili:i40384",
+        "ili:i75887"
+      ],
+      "targetCandidates": [
+        "ili:i38707",
+        "ili:i40091"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "dismissal",
+      "targetLemma": "Demontage",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i36540",
+        "ili:i41627",
+        "ili:i71639",
+        "ili:i74563"
+      ],
+      "targetCandidates": [
+        "ili:i107510",
+        "ili:i71639"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "egress",
+      "targetLemma": "Enthebung",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i35640",
+        "ili:i75156",
+        "ili:i75170"
+      ],
+      "targetCandidates": [
+        "ili:i35640"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i35640",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "ouster",
+      "targetLemma": "Amtsenthebung",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i36502",
+        "ili:i41650",
+        "ili:i91786"
+      ],
+      "targetCandidates": [
+        "ili:i41650"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i41650",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "layoff",
+      "targetLemma": "Rauswurf",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i36617"
+      ],
+      "targetCandidates": [
+        "ili:i36617"
+      ],
+      "selectedSource": "ili:i36617",
+      "selectedTarget": "ili:i36617",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "dissolution",
+      "targetLemma": "Zersplitterung",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i107510",
+        "ili:i107511",
+        "ili:i36535",
+        "ili:i36539",
+        "ili:i39368"
+      ],
+      "targetCandidates": [
+        "ili:i107510"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i107510",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "decomposition",
+      "targetLemma": "Dekomposition",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i107463",
+        "ili:i107464",
+        "ili:i113531",
+        "ili:i68392",
+        "ili:i97733"
+      ],
+      "targetCandidates": [
+        "ili:i113531"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i113531",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "decomposition",
+      "targetLemma": "Segmentierung",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i107463",
+        "ili:i107464",
+        "ili:i113531",
+        "ili:i68392",
+        "ili:i97733"
+      ],
+      "targetCandidates": [
+        "ili:i107417",
+        "ili:i67274",
+        "ili:i68392"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-de",
+      "pos": "noun",
+      "sourceLemma": "dissection",
+      "targetLemma": "Fragmentierung",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i37438",
+        "ili:i38836",
+        "ili:i67274"
+      ],
+      "targetCandidates": [
+        "ili:i67274",
+        "ili:i75645"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "adjective",
+      "sourceLemma": "able",
+      "targetLemma": "mahir",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i1"
+      ],
+      "targetCandidates": [
+        "ili:i1",
+        "ili:i12305",
+        "ili:i15917",
+        "ili:i2868",
+        "ili:i5127"
+      ],
+      "selectedSource": "ili:i1",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "noun",
+      "sourceLemma": "entity",
+      "targetLemma": "entitas",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i35545"
+      ],
+      "targetCandidates": [
+        "ili:i35545"
+      ],
+      "selectedSource": "ili:i35545",
+      "selectedTarget": "ili:i35545",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-id",
+      "pos": "noun",
+      "sourceLemma": "abstraction",
+      "targetLemma": "pengasingan",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i35547",
+        "ili:i37471",
+        "ili:i49774",
+        "ili:i66868",
+        "ili:i67263",
+        "ili:i67636"
+      ],
+      "targetCandidates": [
+        "ili:i107960",
+        "ili:i110172",
+        "ili:i112752",
+        "ili:i112754",
+        "ili:i112756",
+        "ili:i112761",
+        "ili:i112762",
+        "ili:i112823",
+        "ili:i35547",
+        "ili:i37420",
+        "ili:i41677",
+        "ili:i41681",
+        "ili:i41683",
+        "ili:i41684",
+        "ili:i41975",
+        "ili:i61370",
+        "ili:i67032",
+        "ili:i67263",
+        "ili:i67636",
+        "ili:i75220",
+        "ili:i76172"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "adjective",
+      "sourceLemma": "abaxial",
+      "targetLemma": "dorsal",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i3"
+      ],
+      "targetCandidates": [
+        "ili:i3",
+        "ili:i706"
+      ],
+      "selectedSource": "ili:i3",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "noun",
+      "sourceLemma": "thing",
+      "targetLemma": "benda",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i110218",
+        "ili:i35548",
+        "ili:i35596",
+        "ili:i60191",
+        "ili:i60192",
+        "ili:i61346",
+        "ili:i66720",
+        "ili:i67639",
+        "ili:i68271",
+        "ili:i71836",
+        "ili:i74999",
+        "ili:i76044"
+      ],
+      "targetCandidates": [
+        "ili:i110218",
+        "ili:i35548",
+        "ili:i35549",
+        "ili:i35596",
+        "ili:i50106",
+        "ili:i53030",
+        "ili:i55204",
+        "ili:i59722",
+        "ili:i60191",
+        "ili:i60192",
+        "ili:i61346",
+        "ili:i67417",
+        "ili:i67639",
+        "ili:i67950",
+        "ili:i69641",
+        "ili:i71836",
+        "ili:i76044"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "adverb",
+      "sourceLemma": "barely",
+      "targetLemma": "sungguh",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18163",
+        "ili:i18581"
+      ],
+      "targetCandidates": [
+        "ili:i18163",
+        "ili:i18320",
+        "ili:i18357",
+        "ili:i18358",
+        "ili:i18410",
+        "ili:i18413",
+        "ili:i18475",
+        "ili:i18606",
+        "ili:i18690",
+        "ili:i18748",
+        "ili:i19414",
+        "ili:i21287",
+        "ili:i21691"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "noun",
+      "sourceLemma": "object",
+      "targetLemma": "objek",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i35549",
+        "ili:i67417",
+        "ili:i68254",
+        "ili:i68813",
+        "ili:i69641"
+      ],
+      "targetCandidates": [
+        "ili:i35549",
+        "ili:i59722",
+        "ili:i59736",
+        "ili:i69641",
+        "ili:i76044"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "verb",
+      "sourceLemma": "choke",
+      "targetLemma": "tersedak",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21781",
+        "ili:i22158",
+        "ili:i22159",
+        "ili:i22160",
+        "ili:i22576",
+        "ili:i23529",
+        "ili:i23686",
+        "ili:i23687",
+        "ili:i29100",
+        "ili:i29110",
+        "ili:i29582",
+        "ili:i29583",
+        "ili:i33854",
+        "ili:i34351"
+      ],
+      "targetCandidates": [
+        "ili:i21781",
+        "ili:i22158",
+        "ili:i22159",
+        "ili:i22160",
+        "ili:i22576",
+        "ili:i23529",
+        "ili:i23687",
+        "ili:i29100",
+        "ili:i29110",
+        "ili:i29582",
+        "ili:i29583",
+        "ili:i33854"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "verb",
+      "sourceLemma": "hyperventilate",
+      "targetLemma": "terengah-engah",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21782",
+        "ili:i21783"
+      ],
+      "targetCandidates": [
+        "ili:i21782",
+        "ili:i21794",
+        "ili:i21800",
+        "ili:i23035",
+        "ili:i26514",
+        "ili:i26517",
+        "ili:i26914",
+        "ili:i27614",
+        "ili:i27616",
+        "ili:i30787"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "adverb",
+      "sourceLemma": "hardly",
+      "targetLemma": "hanya",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18163",
+        "ili:i18165"
+      ],
+      "targetCandidates": [
+        "ili:i18163",
+        "ili:i18165",
+        "ili:i18177",
+        "ili:i18198",
+        "ili:i18408",
+        "ili:i19364"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "verb",
+      "sourceLemma": "burp",
+      "targetLemma": "bergelegak",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21785"
+      ],
+      "targetCandidates": [
+        "ili:i21785",
+        "ili:i23354",
+        "ili:i24311",
+        "ili:i24314",
+        "ili:i30575",
+        "ili:i32695",
+        "ili:i35193"
+      ],
+      "selectedSource": "ili:i21785",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "noun",
+      "sourceLemma": "whole",
+      "targetLemma": "unit",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i35550",
+        "ili:i67718"
+      ],
+      "targetCandidates": [
+        "ili:i108085",
+        "ili:i109479",
+        "ili:i35550",
+        "ili:i67719",
+        "ili:i69533",
+        "ili:i80188",
+        "ili:i86364"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "verb",
+      "sourceLemma": "hiccup",
+      "targetLemma": "tersedu-sedu",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i21787"
+      ],
+      "targetCandidates": [
+        "ili:i21787"
+      ],
+      "selectedSource": "ili:i21787",
+      "selectedTarget": "ili:i21787",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-id",
+      "pos": "adverb",
+      "sourceLemma": "boiling",
+      "targetLemma": "menindih",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i18170"
+      ],
+      "targetCandidates": [
+        "ili:i18170"
+      ],
+      "selectedSource": "ili:i18170",
+      "selectedTarget": "ili:i18170",
+      "failureCategory": "BOTH_RESOLVED_SAME_CILI",
+      "converged": true
+    },
+    {
+      "pair": "en-id",
+      "pos": "verb",
+      "sourceLemma": "sigh",
+      "targetLemma": "mengeluh",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21788",
+        "ili:i26511"
+      ],
+      "targetCandidates": [
+        "ili:i21788",
+        "ili:i22107",
+        "ili:i25862",
+        "ili:i26151",
+        "ili:i26169",
+        "ili:i26511",
+        "ili:i26799"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "verb",
+      "sourceLemma": "exhale",
+      "targetLemma": "menapaskan",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "resolved_exact",
+      "sourceCandidates": [
+        "ili:i21789",
+        "ili:i21791"
+      ],
+      "targetCandidates": [
+        "ili:i21789"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ili:i21789",
+      "failureCategory": "SOURCE_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "adverb",
+      "sourceLemma": "kindly",
+      "targetLemma": "kiranya",
+      "sourceStatus": "resolved_exact",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i18175"
+      ],
+      "targetCandidates": [
+        "ili:i18175",
+        "ili:i18204",
+        "ili:i18298",
+        "ili:i18304",
+        "ili:i18371"
+      ],
+      "selectedSource": "ili:i18175",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "TARGET_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "noun",
+      "sourceLemma": "organism",
+      "targetLemma": "organisme",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i35553",
+        "ili:i81452"
+      ],
+      "targetCandidates": [
+        "ili:i35553",
+        "ili:i81452"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "verb",
+      "sourceLemma": "hold",
+      "targetLemma": "tahan",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21790",
+        "ili:i24795",
+        "ili:i25134",
+        "ili:i25179",
+        "ili:i25382",
+        "ili:i25696",
+        "ili:i25771",
+        "ili:i26046",
+        "ili:i27252",
+        "ili:i27381",
+        "ili:i27650",
+        "ili:i27706",
+        "ili:i27707",
+        "ili:i28185",
+        "ili:i28355",
+        "ili:i29750",
+        "ili:i30405",
+        "ili:i30602",
+        "ili:i30999",
+        "ili:i32770",
+        "ili:i33150",
+        "ili:i33243",
+        "ili:i33933",
+        "ili:i33978",
+        "ili:i34211",
+        "ili:i34266",
+        "ili:i34885",
+        "ili:i34911",
+        "ili:i35045",
+        "ili:i35066",
+        "ili:i35073",
+        "ili:i35159",
+        "ili:i35160",
+        "ili:i35194",
+        "ili:i35330",
+        "ili:i35406"
+      ],
+      "targetCandidates": [
+        "ili:i21790",
+        "ili:i24018",
+        "ili:i25064",
+        "ili:i25438",
+        "ili:i27177",
+        "ili:i27180",
+        "ili:i27698",
+        "ili:i28183",
+        "ili:i28185",
+        "ili:i33848",
+        "ili:i33989",
+        "ili:i34193",
+        "ili:i34195",
+        "ili:i34621",
+        "ili:i34905",
+        "ili:i35183",
+        "ili:i35341"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    },
+    {
+      "pair": "en-id",
+      "pos": "verb",
+      "sourceLemma": "exhale",
+      "targetLemma": "menunjukkan",
+      "sourceStatus": "ambiguous",
+      "targetStatus": "ambiguous",
+      "sourceCandidates": [
+        "ili:i21789",
+        "ili:i21791"
+      ],
+      "targetCandidates": [
+        "ili:i21791",
+        "ili:i24985",
+        "ili:i25049",
+        "ili:i25053",
+        "ili:i25054",
+        "ili:i25055",
+        "ili:i25134",
+        "ili:i25305",
+        "ili:i25412",
+        "ili:i25432",
+        "ili:i25445",
+        "ili:i25555",
+        "ili:i25755",
+        "ili:i25765",
+        "ili:i25829",
+        "ili:i26217",
+        "ili:i26218",
+        "ili:i26225",
+        "ili:i26226",
+        "ili:i26227",
+        "ili:i26230",
+        "ili:i26233",
+        "ili:i26247",
+        "ili:i26250",
+        "ili:i26251",
+        "ili:i26268",
+        "ili:i26269",
+        "ili:i26270",
+        "ili:i26271",
+        "ili:i26277",
+        "ili:i26279",
+        "ili:i26308",
+        "ili:i26321",
+        "ili:i26362",
+        "ili:i26365",
+        "ili:i26371",
+        "ili:i26524",
+        "ili:i26632",
+        "ili:i26648",
+        "ili:i26656",
+        "ili:i26675",
+        "ili:i26876",
+        "ili:i26889",
+        "ili:i26891",
+        "ili:i27024",
+        "ili:i29643",
+        "ili:i30177",
+        "ili:i30180",
+        "ili:i30187",
+        "ili:i30339",
+        "ili:i30546",
+        "ili:i31340",
+        "ili:i31741",
+        "ili:i32137",
+        "ili:i32438",
+        "ili:i32440",
+        "ili:i32451",
+        "ili:i32454",
+        "ili:i32458",
+        "ili:i32467",
+        "ili:i32470",
+        "ili:i32475",
+        "ili:i32498",
+        "ili:i34777",
+        "ili:i34830",
+        "ili:i35152",
+        "ili:i35284"
+      ],
+      "selectedSource": "ambiguous",
+      "selectedTarget": "ambiguous",
+      "failureCategory": "BOTH_AMBIGUOUS",
+      "converged": false
+    }
+  ],
+  "interpretation": "Provider-status categories describe lookup outcomes, not independent semantic accuracy. Candidate-set overlap is coverage evidence; exact convergence is only safe when the remaining sense is uniquely justified."
+}

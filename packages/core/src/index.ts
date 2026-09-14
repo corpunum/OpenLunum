@@ -1,4 +1,6 @@
 export * from './types.js';
+export * from './semantic-registry.js';
+export * from './frame-registry.js';
 export * from './constants.js';
 export * from './canonicalize.js';
 export * from './fingerprint.js';
@@ -76,6 +78,7 @@ export * from './renderer-conformance.js';
 export * from './compatibility-matrix.js';
 export * from './support-contract.js';
 export * from './fingerprint-contract.js';
+export * from './fingerprint-support-contract.js';
 export {
   classifyContent,
   classifyByCategory,
@@ -95,15 +98,24 @@ export * from './retention-fallback-rollback.js';
 export * from './prohibited-domains.js';
 export * from './observability.js';
 export * from './hard-gates.js';
+export * from './compaction-gates.js';
 export * from './human-review-policy.js';
 export * from './context-mode-selector.js';
+export * from './context-eligibility.js';
 export * from './safety-review-policy.js';
 export * from './workflow-audit.js';
 export * from './threshold-calibration.js';
 export * from './release-governance.js';
 export * from './agent-interop.js';
+export * from './agent-native.js';
+export * from './agent-builder.js';
+export * from './semantic-ir.js';
+export * from './grounding.js';
+export * from './grounding-provider.js';
 export * from './multilingual-memory-pilot.js';
 export * from './correction-telemetry.js';
+export * from './privacy-audit-map.js';
+export * from './privacy-derived-lifecycle.js';
 export {
   CONFORMANCE_VECTORS,
   runConformanceCheck,
@@ -116,3 +128,5 @@ export type {
   CategorySummary,
   ConformanceReport,
 } from './schema-conformance-runner.js';
+export * from './tenant-isolation.js';
+export * from './backup-restore.js';

@@ -1,0 +1,11 @@
+{
+  "type": "development-source-only-frame-first-trial",
+  "version": 1,
+  "status": "diagnostic",
+  "protected": false,
+  "localInferenceUsed": false,
+  "agents": ["Planck", "Lovelace"],
+  "inputBoundary": "Each isolated agent received only 12 raw English sentences and a compact instruction that exact identity is limited to canonical framed predicates; no gold Sem, expected roles, atoms, groups, or scoring metadata were supplied.",
+  "results": { "planck": { "candidates": 0, "abstentions": 12 }, "lovelace": { "candidates": 0, "abstentions": 12 } },
+  "interpretation": "Both agents abstained on the entire set because the supplied contract did not include enough concrete frame/term construction detail. This is not a semantic accuracy result; it exposes an adoption-surface usability gap. The contract must remain authoritative, but a future trial should provide the generated frame-first contract block rather than a summary sentence."
+}

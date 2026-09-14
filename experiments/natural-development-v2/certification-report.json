@@ -1,0 +1,24 @@
+{
+  "format": "openlunum-certified-training-review/0.1",
+  "datasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+  "inputRows": 42,
+  "submittedReviewRows": 56,
+  "reviewedRows": 42,
+  "finalAcceptedRows": 30,
+  "correctionsAppliedRows": 0,
+  "eligibleGroupsBeforeSafety": 5,
+  "outputGroups": 5,
+  "outputRows": 30,
+  "excludedRows": 12,
+  "rowBindingCount": 30,
+  "pairReviews": 3,
+  "safeNegativePairs": 2,
+  "deterministicValidation": {
+    "rowErrors": [],
+    "splitErrors": [],
+    "pass": true
+  },
+  "trainingGoldEligible": true,
+  "failureReasons": [],
+  "generatedAt": "2026-09-07T12:35:16.436Z"
+}

@@ -94,7 +94,7 @@ async function runCase(modelSem: unknown): Promise<{
   }
 }
 
-test('parse experiment reports a non-exact near-semantic identifier match', async () => {
+test('parse experiment fails closed on a changed actor identity', async () => {
   const modelSem = {
     ...goldSem,
     clauses: [{
@@ -108,11 +108,11 @@ test('parse experiment reports a non-exact near-semantic identifier match', asyn
 
   const { report, result } = await runCase(modelSem);
   assert.equal(report.overallExactRate, 0);
-  assert.equal(report.overallNearSemanticRate, 1);
-  assert.equal(report.languageMetrics.find((entry) => entry.language === 'en')?.nearSemanticRate, 1);
+  assert.equal(report.overallNearSemanticRate, 0);
+  assert.equal(report.languageMetrics.find((entry) => entry.language === 'en')?.nearSemanticRate, 0);
   assert.equal(result.exact, false);
-  assert.equal(result.nearSemantic, true);
-  assert.ok((result.nearSemanticScore ?? 0) >= 0.8);
+  assert.equal(result.nearSemantic, false);
+  assert.equal(result.nearSemanticScore, 0);
 });
 
 test('exact matches are not double-counted as near-semantic-only', async () => {

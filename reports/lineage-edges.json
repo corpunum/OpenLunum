@@ -1,0 +1,25 @@
+[
+  {
+    "predecessorLedgerRowId": 30,
+    "successorLedgerRowId": 31,
+    "relation": "superseded-by",
+    "reason": "R5.5 calibration confirmation. The 8 false positives identified in row 30's negative evidence are now eliminated by hard invariants (#370). Owner confirmed threshold at 0.80 with documented rationale.",
+    "timestamp": "2026-07-27T11:28:53.359Z",
+    "retainedPaths": [
+      "reports/experiments/threshold-sweep/2026-07-26T15-56-41-813Z/summary.json",
+      "reports/experiments/threshold-sweep/2026-07-26T15-56-41-813Z/report.md",
+      "reports/experiments/threshold-sweep/2026-07-26T15-56-41-813Z/sweep.jsonl",
+      "reports/experiments/threshold-sweep/2026-07-26T15-56-41-813Z/pairs.jsonl"
+    ]
+  },
+  {
+    "predecessorLedgerRowId": 14,
+    "successorLedgerRowId": 15,
+    "relation": "corrected-by",
+    "reason": "Corrected the false-positive report's stated mechanism: the two surfaced false positives occur because modality was OMITTED by the model, not because the scorer ignored an emitted modality:permissive value. Raw measurements unchanged; only the mechanistic explanation was corrected.",
+    "timestamp": "2026-07-25T00:00:00.000Z",
+    "retainedPaths": [
+      "reports/experiments/false-positive-review-332/evidence/FALSE-POSITIVE-REPORT.md"
+    ]
+  }
+]

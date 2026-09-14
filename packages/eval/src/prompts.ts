@@ -1,5 +1,5 @@
 import type { DatasetItem } from './types.js';
-import { vocabularyBlock } from './predicate-vocabulary.js';
+import { canonicalFramePromptBlock, protocolVocabularyBlock } from '@corpunum/lunum';
 
 export function renderPrompt(item: DatasetItem): { system: string; user: string } {
   return {
@@ -114,12 +114,12 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     world: 'real',
     kind: 'conditional_instruction',
     clauses: [{
-      predicate: 'share',
+      predicate: 'request',
       modality: 'permission',
       roles: {
         agent: { type: 'actor', id: 'assistant' },
         theme: { type: 'concept', id: 'report' },
-        object: { type: 'actor', id: 'team' }
+        recipient: { type: 'actor', id: 'team' }
       },
       negated: false,
       conditions: [{ predicate: 'confirmed', roles: { agent: { type: 'actor', id: 'user' } }, negated: false }]
@@ -130,18 +130,24 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
     system: [
       'Convert the input into Lunum-Sem JSON.',
       'Return one JSON object only; no markdown.',
-      'Use schema lunum-sem/0.1-draft.',
+      'For a representable statement, return a Lunum-Sem object using schema lunum-sem/0.1-draft.',
+      'If the source is too ambiguous, underspecified, or unsupported to represent without inventing facts, fail closed with exactly {"status":"abstain","reason":"brief explanation"}.',
       'Preserve entities, roles, negation, conditions, quantities, dates, time, modality, and uncertainty.',
-      'Use language-neutral controlled identifiers in lower_snake_case.',
-      'Do not invent facts. If ambiguous, record an annotation warning rather than choosing silently.',
+      'Use only language-neutral protocol symbols from the registry below for world, kind, predicate, role, modality, and term type. Do not invent a concise lower_snake_case symbol.',
+      'World MUST be a registered world. Kind MUST be a registered kind. Predicates, roles, modalities, and term types MUST be registered. An x- extension is allowed only when the source cannot be represented otherwise and must remain a candidate, not trusted identity.',
+      'Open entity and instance ids are not protocol vocabulary: preserve grounded names as ids, but never treat an arbitrary id as a registered symbol or assume two different open ids denote the same entity.',
+      'If faithful representation would require an unsupported protocol symbol, abstain instead of inventing or silently translating it to a different meaning.',
+      'Canonical identity rule: emit only a predicate frame listed below. Registered predicates without a frame are candidate-only and MUST be represented as abstain in this extraction profile. Emit no role outside the listed frame; use the listed required/optional roles and exclusivity rules.',
+      'Canonical channel rules: use roles.time for the deadline predicate and never also set clause.time; use conditions/consequences only as clause arrays (never as role names); represent prohibition with negated=true and do not duplicate it with a negative modality. Top-level grounded references are emitted only when they add a proposition-bearing binding not already present in clause roles; source pronouns/tokens belong in evidence, not identity.',
+      'Do not invent facts. Record an annotation warning for a representable uncertainty; use the abstain result when a safe semantic candidate cannot be formed.',
       '',
       'Expected JSON structure:',
       '{',
       '  "schema": "lunum-sem/0.1-draft",',
       '  "world": "real",',
-      '  "kind": "<preference|conditional_instruction|safety_constraint|project_state>",',
+      '  "kind": "<registered protocol kind>",',
       '  "clauses": [{',
-      '    "predicate": "<verb>",',
+      '    "predicate": "<registered protocol predicate>",',
       '    "modality": "<optional; see Modality values below — omit for plain non-modal statements>",',
       '    "roles": { "<role>": { "type": "<actor|concept|object|metric|feature|project|quantity|date>", "id": "<lower_snake_case>" }, ... },',
       '    "negated": <true|false>,',
@@ -149,14 +155,17 @@ export function parsePrompt(item: DatasetItem): { system: string; user: string }
       '  }]',
       '}',
       '',
-      'Synthetic Examples for tested kinds:',
+      'Synthetic grammar examples (examples are not answers for the evaluated item):',
       `Preference: ${examplePreference}`,
       `Conditional Instruction: ${exampleConditional}`,
       `Safety Constraint: ${exampleSafety}`,
       `Project State: ${exampleProjectState}`,
       `Permission: ${examplePermission}`,
       '',
-      vocabularyBlock()
+      'Canonical identity frames (source of truth: Lunum frame registry):',
+      canonicalFramePromptBlock(),
+      '',
+      protocolVocabularyBlock()
     ].join('\n'),
     user: JSON.stringify({ sourceLanguage: item.sourceLanguage, sourceText: item.sourceText })
   };

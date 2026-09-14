@@ -1,6 +1,16 @@
-import type { CompletionUsage, ModelCompletion, ModelProfile, StreamingModelCompletion } from './types.js';
+import type { CompletionUsage, ModelCompletion, ModelCompletionOptions, ModelProfile, StreamingModelCompletion, StructuredOutputCapability } from './types.js';
 
 export const DEFAULT_MAX_TOKENS = 4096;
+
+/**
+ * Return the exact system message sent to the endpoint.  Evidence writers must
+ * hash this value, rather than the pre-transport prompt, because `noThink`
+ * changes the message the model actually receives.
+ */
+export function effectiveSystemPrompt(profile: ModelProfile, system: string): string {
+  if (profile.chatTemplateKwargs?.enable_thinking === false) return system;
+  return profile.noThink ? `/no_think\n${system}` : system;
+}
 
 function readNumber(value: unknown): number | undefined {
   return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
@@ -30,6 +40,86 @@ function normalizeUsage(usage: unknown): CompletionUsage | null {
   };
 }
 
+/**
+ * Provider boundary for constrained output.  This is deliberately a plain
+ * capability description: providers may map it to JSON Schema, JSON mode,
+ * grammar, or no constraint at all without leaking that choice into Lunum.
+ */
+export interface StructuredOutputAdapter {
+  supports?(capability: StructuredOutputCapability): boolean;
+  toRequest(capability: StructuredOutputCapability): Record<string, unknown> | undefined;
+}
+
+export const openAICompatibleStructuredOutputAdapter: StructuredOutputAdapter = {
+  supports: (capability) => capability.mode !== 'prompt',
+  toRequest(capability) {
+    switch (capability.mode) {
+      case 'json_schema':
+        if (!capability.schema) throw new Error('json_schema structured output requires a schema');
+        return {
+          response_format: {
+            type: 'json_schema',
+            json_schema: { name: 'openlunum_output', strict: capability.strict ?? true, schema: capability.schema }
+          }
+        };
+      case 'json_object':
+        return { response_format: { type: 'json_object' } };
+      case 'grammar':
+        if (!capability.grammar) throw new Error('grammar structured output requires grammar text');
+        // OpenAI-compatible servers that expose llama.cpp grammars accept this
+        // provider extension. It remains confined to this adapter.
+        return { grammar: capability.grammar };
+      case 'prompt':
+        return undefined;
+    }
+  }
+};
+
+export class ModelResponseError extends Error {
+  constructor(message: string, readonly rawResponse: unknown, readonly rawRequest?: unknown) { super(message); this.name = 'ModelResponseError'; }
+}
+
+function finalContent(value: unknown): string | undefined {
+  if (typeof value === 'string') return value;
+  if (!Array.isArray(value)) return undefined;
+  const parts = value.flatMap((part) => {
+    if (!part || typeof part !== 'object') return [];
+    const typedPart = part as { type?: unknown; text?: unknown };
+    // Providers may expose reasoning as typed content parts. Only final text
+    // channels are eligible for Sem parsing; never concatenate private
+    // reasoning/thinking into the answer channel.
+    if (typeof typedPart.type === 'string' && /^(?:reasoning|thinking|thought)$/iu.test(typedPart.type)) return [];
+    if (typeof typedPart.type === 'string' && !/^(?:text|output_text)$/iu.test(typedPart.type)) return [];
+    const text = typedPart.text;
+    return typeof text === 'string' ? [text] : [];
+  });
+  return parts.length > 0 ? parts.join('') : undefined;
+}
+
+function redactPrivateReasoning(value: unknown): unknown {
+  if (Array.isArray(value)) return value
+    .filter((entry) => !(entry && typeof entry === 'object' && typeof (entry as { type?: unknown }).type === 'string'
+      && /^(?:reasoning|thinking|thought)$/iu.test((entry as { type: string }).type)))
+    .map(redactPrivateReasoning);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(Object.entries(value)
+    .filter(([key]) => !/^(?:reasoning_content|reasoning|thinking|thought)$/iu.test(key))
+    .map(([key, entry]) => [key, redactPrivateReasoning(entry)]));
+}
+
+export function normalizeModelResponse(payload: unknown): ModelCompletion {
+  if (!payload || typeof payload !== 'object') throw new ModelResponseError('Model response was not a JSON object', payload);
+  const raw = payload as { choices?: unknown; usage?: unknown };
+  const choice = Array.isArray(raw.choices) ? raw.choices[0] : undefined;
+  const message = choice && typeof choice === 'object' ? (choice as { message?: unknown }).message : undefined;
+  const messageObject = message && typeof message === 'object' ? message as Record<string, unknown> : undefined;
+  const content = finalContent(messageObject?.content);
+  if (content === undefined) throw new ModelResponseError('Model response did not contain a final choices[0].message.content channel', redactPrivateReasoning(payload));
+  const finishReason = choice && typeof choice === 'object' && typeof (choice as { finish_reason?: unknown }).finish_reason === 'string'
+    ? (choice as { finish_reason: string }).finish_reason : null;
+  return { content, finishReason, usage: normalizeUsage(raw.usage), rawResponse: redactPrivateReasoning(payload) };
+}
+
 export function resolveMaxTokens(value: number | undefined): number {
   const resolved = value ?? DEFAULT_MAX_TOKENS;
   if (!Number.isSafeInteger(resolved) || resolved < 1) {
@@ -41,7 +131,7 @@ export function resolveMaxTokens(value: number | undefined): number {
 export class OpenAICompatibleModel {
   private readonly maxTokens: number;
 
-  constructor(private readonly profile: ModelProfile) {
+  constructor(private readonly profile: ModelProfile, private readonly structuredOutputAdapter: StructuredOutputAdapter = openAICompatibleStructuredOutputAdapter) {
     this.maxTokens = resolveMaxTokens(profile.maxTokens);
   }
 
@@ -62,8 +152,8 @@ export class OpenAICompatibleModel {
     return response.json();
   }
 
-  async complete(system: string, user: string): Promise<ModelCompletion> {
-    const effectiveSystem = this.profile.noThink ? `/no_think\n${system}` : system;
+  async complete(system: string, user: string, options: ModelCompletionOptions = {}): Promise<ModelCompletion> {
+    const effectiveSystem = effectiveSystemPrompt(this.profile, system);
     const body: Record<string, unknown> = {
       model: this.profile.model,
       temperature: this.profile.temperature,
@@ -71,28 +161,45 @@ export class OpenAICompatibleModel {
       messages: [{ role: 'system', content: effectiveSystem }, { role: 'user', content: user }]
     };
     if (this.profile.seed !== undefined) body.seed = this.profile.seed;
+    if (this.profile.chatTemplateKwargs) body.chat_template_kwargs = this.profile.chatTemplateKwargs;
+    const capability = options.structuredOutput;
+    const supported = capability && this.structuredOutputAdapter.supports ? this.structuredOutputAdapter.supports(capability) : true;
+    const selectedCapability = capability && !supported
+      ? capability.fallback === 'json_object' ? { mode: 'json_object' as const } : { mode: 'prompt' as const }
+      : capability;
+    const structuredRequest = selectedCapability ? this.structuredOutputAdapter.toRequest(selectedCapability) : undefined;
+    if (structuredRequest) Object.assign(body, structuredRequest);
 
     const response = await fetch(this.url('chat/completions'), {
       method: 'POST', headers: this.headers(), signal: AbortSignal.timeout(this.profile.timeoutMs),
       body: JSON.stringify(body)
     });
-    if (!response.ok) throw new Error(`Model call failed: HTTP ${response.status} ${await response.text()}`);
-    const payload = await response.json() as {
-      choices?: Array<{
-        message?: { content?: string; reasoning_content?: string };
-        finish_reason?: string;
-      }>;
-      usage?: unknown;
-    };
-    const choice = payload.choices?.[0];
-    const content = choice?.message?.content;
-    if (typeof content !== 'string') throw new Error('Model response did not contain choices[0].message.content');
-
-    return {
-      content,
-      finishReason: choice && typeof choice.finish_reason === 'string' ? choice.finish_reason : null,
-      usage: normalizeUsage(payload.usage)
-    };
+    if (!response.ok) {
+      const responseText = await response.text();
+      throw new ModelResponseError(`Model call failed: HTTP ${response.status} ${responseText}`, {
+        status: response.status,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: responseText
+      }, body);
+    }
+    const responseText = await response.text();
+    let payload: unknown;
+    try {
+      payload = JSON.parse(responseText);
+    } catch {
+      throw new ModelResponseError('Model response was not valid JSON', {
+        status: response.status,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: responseText
+      }, body);
+    }
+    try {
+      const completion = normalizeModelResponse(payload);
+      return { ...completion, rawRequest: body };
+    } catch (error) {
+      if (error instanceof ModelResponseError) throw new ModelResponseError(error.message, error.rawResponse, body);
+      throw error;
+    }
   }
 
   /**
@@ -106,7 +213,7 @@ export class OpenAICompatibleModel {
    * behavior or request shape changes unless it explicitly switches to this method.
    */
   async completeStreaming(system: string, user: string): Promise<StreamingModelCompletion> {
-    const effectiveSystem = this.profile.noThink ? `/no_think\n${system}` : system;
+    const effectiveSystem = effectiveSystemPrompt(this.profile, system);
     const body: Record<string, unknown> = {
       model: this.profile.model,
       temperature: this.profile.temperature,
@@ -116,6 +223,7 @@ export class OpenAICompatibleModel {
       stream_options: { include_usage: true }
     };
     if (this.profile.seed !== undefined) body.seed = this.profile.seed;
+    if (this.profile.chatTemplateKwargs) body.chat_template_kwargs = this.profile.chatTemplateKwargs;
 
     const startedAt = performance.now();
     const response = await fetch(this.url('chat/completions'), {
@@ -139,7 +247,7 @@ export class OpenAICompatibleModel {
 
     const handleEvent = (data: string): void => {
       if (data === '[DONE]') { state.done = true; return; }
-      let parsed: { choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>; usage?: unknown };
+      let parsed: { choices?: Array<{ delta?: { content?: string; reasoning_content?: string; reasoning?: string }; finish_reason?: string }>; usage?: unknown };
       try {
         parsed = JSON.parse(data) as typeof parsed;
       } catch {
@@ -188,7 +296,7 @@ export class OpenAICompatibleModel {
       ? (totalMs - state.ttftMs) / (effectiveTokenCount - 1)
       : null;
 
-    return {
+    const completion: StreamingModelCompletion = {
       content: state.content,
       finishReason: state.finishReason,
       usage: state.usage,
@@ -197,5 +305,6 @@ export class OpenAICompatibleModel {
       tpotMs,
       tokenCount: effectiveTokenCount
     };
+    return completion;
   }
 }

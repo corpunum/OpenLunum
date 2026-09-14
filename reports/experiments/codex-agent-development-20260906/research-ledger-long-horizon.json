@@ -1,0 +1,588 @@
+{
+  "mission": "long-horizon-openlunum-research-20260906",
+  "startEpoch": 1788697989,
+  "lastUpdated": "2026-09-07T01:34:00+03:00",
+  "currentHead": "a6a3484",
+  "guardrails": ["OpenLunum only", "no local inference", "candidate semantics untrusted", "ambiguous grounding fails closed", "compaction parked"],
+  "cycles": [
+    {
+      "hypothesis": "Real OMW failure rate is primarily missing lexical coverage.",
+      "implementation": "Full 150-case real OMW/CILI report with per-case candidate sets and categories.",
+      "evidence": "100/100 cross-language pairs have both lexical candidate coverage and a shared candidate; 78 have exactly one shared candidate, 22 have multiple; 19 independent lookups are monosemous/convergent.",
+      "decision": "Rejected as primary cause; conservative polysemy resolution is dominant."
+    },
+    {
+      "hypothesis": "A frame-derived typed builder reduces agent transport failures without semantic weakening.",
+      "implementation": "buildCandidateSem in core, lunum_build_candidate MCP, build-candidate CLI, generated frame-first contract.",
+      "evidence": "Two isolated agent trials: first typed trial accepted 7/8 with one abstention; second accepted 5, abstained 2, rejected 2 invalid outputs. Correctly typed candidates remained identity-available only after submitCandidate.",
+      "decision": "Keep as general adoption surface; it does not solve role/kind/open-concept extraction."
+    },
+    {
+      "hypothesis": "Attested morphology can improve recall safely if it remains candidate generation.",
+      "implementation": "createMorphologyAugmentedProvider plus real UniMorph probe for en/el/es/fr/id.",
+      "evidence": "On 2,500 forms conditioned on an attested lemma with unique exact OMW identity: raw exact 33, morphology exact 2,144, ambiguous 16; 125 distinct-identity safety pairs, zero false equivalences. Probe is coverage-conditioned, not independent accuracy.",
+      "decision": "Keep generic adapter as optional evidence provider; do not default-enable without an unbiased benchmark and pinned per-language licensing."
+    },
+    {
+      "hypothesis": "Explicit candidate-set intersection can safely narrow multilingual ambiguity.",
+      "implementation": "intersectGroundingCandidateSets, requiring explicit caller relation and rejecting provider errors.",
+      "evidence": "Real OMW report shows 78/100 cross-language pairs have one shared candidate identity; 22 retain multiple candidates. A relation-conditioned replay confirms 78 singleton intersections, but only 19 were independently monosemous; 59 were narrowed from ambiguity.",
+      "decision": "Keep as explicit evidence operation; require a machine-readable relation, compatible identity namespace, and preserve merged evidence. Never silently infer equivalence for an isolated source."
+    },
+    {
+      "hypothesis": "An unbiased morphology probe can measure real surface-form coverage without overstating accuracy.",
+      "implementation": "Version-2 probe samples surface/POS observations, passes identical POS to raw and augmented providers, records the actual UniMorph file hash, and labels OMW-derived labels as coverage diagnostics.",
+      "evidence": "Across 2,500 observations: morphology singleton identity coverage was EN 13.4%, EL 8.2%, ES 19.4%, FR 11.0%, ID 17.4%; candidate-set recall was 22.8%, 17.4%, 54.4%, 30.0%, 57.0%. The raw baseline remains low because sampled forms are inflected; labels are circular with respect to OMW and do not prove analyzer accuracy.",
+      "decision": "Retain as honest resource coverage evidence, not a precision/safety claim. Independent morphology gold remains a blocker."
+    },
+    {
+      "hypothesis": "Agent-extracted semantic records can demonstrate useful raw retrieval on development data.",
+      "implementation": "Raw-text-only retrieval harness with lexical baseline and identity/conditional/end-to-end denominators; development candidate ledger checked for gold-field leakage.",
+      "evidence": "Harness run reports 10/10 positive retrieval on 10 memories and 12 queries, but the candidate ledger reproduces gold-shaped paired Sem and row IDs expose semantic hints, so this is evaluator plumbing only, not clean extraction evidence.",
+      "decision": "Do not count as empirical extraction qualification; retain diagnostic artifact and require an independently source-only generated candidate ledger for future retrieval evidence."
+    },
+    {
+      "hypothesis": "A source-only agent can use the frame-first contract without gold-derived hints.",
+      "implementation": "Two isolated Codex agents received the same 12 fresh English source sentences and a contract-only abstention rule, then returned builder candidates or abstention.",
+      "evidence": "Both agents abstained on 12/12 items. The trial supplied only a summary of the contract rather than the generated frame/term block, so it diagnoses adoption-surface incompleteness rather than model semantic accuracy.",
+      "decision": "Do not treat abstention as capability evidence. Run a follow-up with the actual generated extraction contract and separately authored, source-only builder inputs."
+    },
+    {
+      "hypothesis": "The actual generated extraction contract makes frame-first candidate construction reliable for source-only agents.",
+      "implementation": "Two isolated Codex agents received the generated contract artifact and 12 fresh source sentences; candidates were checked through buildCandidateSem.",
+      "evidence": "Pasteur returned 8 candidates and 4 abstentions; all 8 builder candidates were accepted. Anscombe selected the same semantic choices but used termType rather than the required type field, so all 8 were rejected. No gold was supplied.",
+      "decision": "Keep the generated contract and typed builder. Add an executable/schema-level construction aid later if transport errors persist; do not interpret agreement or builder acceptance as semantic extraction accuracy."
+    },
+    {
+      "hypothesis": "Independent UD lemma/POS annotations can establish whether UniMorph morphology proposals are accurate, rather than merely replaying UniMorph labels.",
+      "implementation": "Downloaded pinned UD English-EWT, Greek-GDT, Spanish-AnCora, French-GSD, German-GSD, and Indonesian-GSD dev snapshots; compared 100 held-out inflected NOUN/VERB/ADJ observations per language against UniMorph candidates and OMW/CILI lemma identities.",
+      "evidence": "Five languages had 500 observations: 49 had a unique OMW identity for the UD gold lemma; the augmented provider returned 23 singleton identities and all 23 matched those eligible gold identities; candidate sets contained gold in 244/500. No false singleton identity occurred among eligible cases. German OMW identity metrics were unavailable because the pinned German tab was absent.",
+      "decision": "This falsifies the claim that the earlier circular probe established morphology safety, but does not establish broad accuracy: eligibility is only 49/500 and candidate coverage remains low. Keep morphology optional and fail closed; next work is contextual candidate-set disambiguation and larger independently adjudicated coverage."
+    },
+    {
+      "hypothesis": "Provider and resolver provenance gates are sufficient against forged grounding materialization.",
+      "implementation": "Added resolver-namespace checks for canonical IDs, rejected status-inconsistent/duplicate provider candidate intersections, constrained morphology to explicit POS, and contained analyzer exceptions as provider_error.",
+      "evidence": "Adversarial tests cover cross-namespace IDs, missing provenance, unresolved results carrying candidates, repeated provider snapshots, POS override, and throwing analyzers. Core suite: 1,796 pass, 0 fail.",
+      "decision": "Keep fixes. Snapshot hashes remain provider-declared evidence because factories cannot verify source bytes without a source snapshot; provenance must remain explicit and replayable."
+    },
+    {
+      "hypothesis": "Exact grounding materialization can be safely replayed from a resolver result without retaining the original proposal.",
+      "implementation": "Bound GroundingResolution to its canonical grounding fingerprint and require the original proposal list during materialization; reject cross-namespace IDs and missing provenance.",
+      "evidence": "Grounding and provider suites pass after tests for forged same-shape IDs, missing resolver provenance, and mismatched proposal bindings. Near-semantic retrieval is now opt-in; exact mode is default.",
+      "decision": "Keep the stronger replay boundary. This prevents a serialized or caller-constructed resolution from being treated as evidence for a different term/path."
+    },
+    {
+      "hypothesis": "The previous agent retrieval score reflects exact semantic identity retrieval.",
+      "implementation": "Re-ran the same diagnostic harness with the evaluator's explicit exact mode after making near-semantic matching opt-in.",
+      "evidence": "Identity coverage remained 11/12 queries and 10/10 memories, but exact end-to-end and conditional recall fell to 4/10; EN↔EL was 50%, ES↔EN 0%, with zero false positives. The prior 10/10 was near-semantic fallback and the candidate ledger is still gold-shaped.",
+      "decision": "Reject the prior interpretation. Retrieval has useful fail-closed precision on this diagnostic but insufficient recall and no clean extraction evidence. Exact and near-semantic results must remain separate."
+    },
+    {
+      "hypothesis": "The OMW cross-language development result can be explained without conflating lexical coverage, ambiguity, and exact convergence.",
+      "implementation": "Added omw-failure-decomposition.mjs and replayed all 100 recorded cross-language pairs into a machine-readable report grouped by pair, POS, resource, provider status, candidate coverage, and convergence.",
+      "evidence": "All 100 pairs have source and target lexical coverage and a shared candidate. 19 independently converge; 81 are ambiguity-driven (25 source-only, 15 target-only, 41 both). EN-EL is 1/20, with 12 source-only, 2 target-only, and 5 both-ambiguous cases. No pair was unexplained.",
+      "decision": "Keep provider coverage and candidate-set work as the next research path. Do not add language-specific aliases or change identity semantics; contextual sense evidence is the dominant unresolved issue.",
+      "commit": "2c5b90d"
+    },
+    {
+      "hypothesis": "Frame-first agents need explicit metadata for alternative minimum requirements to construct candidates correctly.",
+      "implementation": "Exposed generated frame.atLeastOneOf as immutable builder and MCP result metadata while retaining deterministic validation and mandatory untrusted submission.",
+      "evidence": "Core builder and MCP suites pass; retry reports requiredRoles=[] and atLeastOneOf=[count,theme], while prefer reports null. Full pnpm verify passed before this metadata-only change.",
+      "decision": "Keep the metadata correction. It improves agent adoption without broadening frames or granting semantic identity.",
+      "commit": "5e6ef9d"
+    },
+    {
+      "hypothesis": "A clean source-only frame-first workflow materially reduces semantic extraction uncertainty across languages.",
+      "implementation": "Two isolated Codex agents received 12 fresh source items plus the generated extraction contract, with no gold, pair labels, or expected identities. Their candidates were submitted through the deterministic core.",
+      "evidence": "Each agent produced 10 candidates and 2 abstentions; 10/10 submitted candidates were transport-valid, 9/10 frame-valid and identity-available, with one contained retry frame failure. Agent A converged on 3/3 multilingual groups, Agent B on 1/3; open-concept naming diverged for Greek and Spanish lexicalizations.",
+      "decision": "Keep frame-first as a transport/adoption aid, but do not treat identity availability as semantic accuracy. The remaining bottleneck is grounding and context-sensitive concept identity. Persisted in source-only-frame-first-trial-v2.json.",
+      "commit": "671ed0a"
+    },
+    {
+      "hypothesis": "Stable-ID provider inputs and provider agreement are safe enough to accept arbitrary resolver output.",
+      "implementation": "Added fail-closed handling for direct stable resolver exceptions and malformed/blank external IDs; cascade agreement now compares the effective identifier namespace as well as the ID.",
+      "evidence": "Core suite passes 1,798/1,798. Tests cover blank IDs, resolver failure, and identical bare IDs returned by distinct provider namespaces. Existing versioned materialization and untrusted-candidate gates remain unchanged.",
+      "decision": "Keep the generic boundary hardening. Provider snapshots remain optional evidence and malformed/unavailable providers cannot manufacture exact identity.",
+      "commit": "128fa6f"
+    },
+    {
+      "hypothesis": "An arbitrary GroundingProvider can safely return a resolved result without cascade-level structural validation.",
+      "implementation": "Added deterministic cascade validation of provider status, provenance, candidate IDs/evidence, and diagnostics; malformed arbitrary provider results now become provider_error before resolution or materialization.",
+      "evidence": "Core suite passes 1,799/1,799, including an adversarial provider returning a blank external ID while claiming resolved_exact. No provider-specific semantics were added.",
+      "decision": "Keep the containment boundary. The cascade remains fail-closed for malformed evidence while optional provider availability remains explicit.",
+      "commit": "3bae7e5"
+    },
+    {
+      "hypothesis": "The latest provider containment changes introduce a deterministic regression outside provider tests.",
+      "implementation": "Rebuilt affected packages and ran the complete repository verification gate after stable-ID materialization and cascade result validation changes.",
+      "evidence": "pnpm verify passed with exit 0, including workspace tests and evaluation smoke; git diff --check passed. Core provider suite is 1,799/1,799 and MCP is 57/57.",
+      "decision": "Keep the changes. No new protected or model evaluation is justified yet; continue development-only research and retain all prior corpora as diagnostic.",
+      "commit": "74cc982"
+    },
+    {
+      "hypothesis": "Lexical importer malformed-input accounting is already complete and cannot misstate resource coverage.",
+      "implementation": "Validated line structure before mapping lookup for three-field OMW rows and matching Wordnet Bahasa rows; malformed mapped and unmapped examples now classify consistently as malformed.",
+      "evidence": "Core suite passes 1,801/1,801 after the importer correction. Existing definition-row ignore behavior remains unchanged and intentionally separate from malformed data.",
+      "decision": "Keep the correction. It improves reproducibility of resource scale/coverage diagnostics without changing semantic identity or provider resolution.",
+      "commit": "cbf227e"
+    },
+    {
+      "hypothesis": "The importer/cascade repairs are locally correct but may break the workspace contract outside core unit tests.",
+      "implementation": "Rebuilt packages and reran pnpm verify after provider-result containment and malformed lexical-row classification.",
+      "evidence": "pnpm verify passed with exit 0; git diff --check passed. Evaluation smoke remained 16 items/4 groups with the existing deterministic dataset hash.",
+      "decision": "Keep the fixes. No protected corpus is created; current agent extraction/retrieval evidence remains development diagnostic.",
+      "commit": "72283af"
+    },
+    {
+      "hypothesis": "Importer accounting and provider containment changes alter the real OMW/OdeNet development result.",
+      "implementation": "Re-acquired the pinned OdeNet v1.4 archive, verified SHA-256 d55407c48056ab3bc20d14d4d376de1799541fa0c9e34a82617dbb531c67ba2b, and replayed the existing 150-case OMW/CILI/OdeNet benchmark to a new temporary output.",
+      "evidence": "Replay completed with 34/150 total convergence, 19/100 cross-language convergence, EN-EL 1/20, and zero resource-derived false equivalences. Import counts remained en 186642, el 23853, es 133347 with 1196 malformed lines, fr 95762, id 100869, de 88394 with 2118 malformed XML entries. Replay output SHA-256: c1bd932afafe6188ac7dd80a007e23126896457b4b2015aa2cead32384be1cec.",
+      "decision": "Keep the generic importer/provider fixes. The unchanged result confirms they improve evidence integrity without benchmark-specific tuning; the OMW fixture remains diagnostic, not independent accuracy evidence.",
+      "commit": "development-replay-uncommitted"
+    },
+    {
+      "hypothesis": "An additional open lexical resource will provide a safe universal exact identity layer beyond OMW/CILI.",
+      "implementation": "Audited current DBnary and Wikidata Lexeme documentation, formats, licensing, identifiers, and provenance properties using official/current sources.",
+      "evidence": "DBnary supplies broad multilingual RDF lexical data but no universal independently adjudicated concept identity; Wikidata Lexeme IDs identify lexical records, while Q-item links require contextual verification. Findings are recorded in external-resource-research-20260906.json.",
+      "decision": "Reject a new exact adapter for now. Keep DBnary as possible candidate evidence only and retain pinned Wikidata stable-entity evidence; do not shift the ambiguity problem into an external ontology.",
+      "commit": "edf8c8d913c5d36e725db757b2beadb62bb6594c"
+    },
+    {
+      "hypothesis": "WN-LMF truncation and malformed lexical-entry accounting are already complete.",
+      "implementation": "Count unmatched `<LexicalEntry>` starts as malformed entries in importWnLmf and add a truncated-input regression test.",
+      "evidence": "Core suite passes 1,802/1,802 after rebuild; the truncated fixture reports one malformed entry and no record.",
+      "decision": "Keep the importer integrity fix. It improves resource provenance without affecting accepted semantic identities.",
+      "commit": "ee47519"
+    },
+    {
+      "hypothesis": "Batch JSON output is robust enough for larger source-only agent trials.",
+      "implementation": "Two isolated agents processed 18 fresh multilingual items using a JSON-array response contract, with no gold or pair metadata.",
+      "evidence": "Both batch outputs were invalid JSON because the prohibit candidate contained a trailing comma. No semantic metrics can be assigned; this is a transport-only failure and is persisted in source-only-frame-first-trial-v3.json.",
+      "decision": "Reject batch arrays for evidence collection; use JSONL/item isolation so one malformed candidate cannot erase neighboring results.",
+      "commit": "eb18757"
+    },
+    {
+      "hypothesis": "JSONL item isolation improves source-only frame-first evaluation without relaxing semantic gates.",
+      "implementation": "The same 18 cases were rerun by two fresh isolated agents with one strict JSON object per line; every candidate was submitted through core.",
+      "evidence": "Dirac submitted 16 and abstained 2; Heisenberg submitted 15 and abstained 3. Every submitted candidate passed transport, protocol, frame, and identity-availability gates. Agents disagreed on the Indonesian enable case; no gold exactness claim is made.",
+      "decision": "Retain JSONL for future development/protected item ledgers. The remaining uncertainty is extraction/grounding and abstention calibration, not core validation. Persisted in source-only-frame-first-trial-v4.json. The retained summary does not independently prove source-only custody because raw JSONL and contract/source hashes were not retained.",
+      "commit": "b38d17a99e62822496c33c57aadc83296f1a13ad"
+    },
+    {
+      "hypothesis": "A fresh source-only agent comparison will show whether the remaining failures are transport or semantic naming/kind selection.",
+      "implementation": "Two isolated Codex agents received six fresh source items and only the generated extraction contract; candidates were submitted through the built core and their raw outputs were retained in the session transcript.",
+      "evidence": "Both agents abstained on the unframed archive pair. All four scored submissions passed structural, protocol, frame, grounding, and identity-availability gates. The conditional enable candidates converged to one LFP; retry candidates diverged because one used actor/concept and the other system/task for scheduler/export. The trial is development-only and source-only custody is declared, not independently proven.",
+      "decision": "The typed interface contains transport failures, but cannot resolve unverified open kind and term-type choices. Preserve fail-closed exact identity and prioritize independently adjudicated development labels for semantic extraction and grounding.",
+      "commit": "ec3f8642f27cac0334eef8eaf26dacba3e91001e"
+    },
+    {
+      "hypothesis": "A singleton candidate-set intersection can safely be treated as exact when its relation label is supplied by the caller.",
+      "implementation": "Changed the intersection result state from resolved_exact to candidate_narrowed; provider-owned exact resolution remains the only input to toGroundingResolution and materialization. Updated the real OMW intersection replay and regression tests.",
+      "evidence": "The adversarial audit demonstrated that caller-supplied relation labels and empty candidate evidence could otherwise produce a singleton resolved result and enable lfp:2.1 materialization. Core suite passes 1,802/1,802 after the change; the OMW replay now reports 78 candidate_narrowed rather than 78 resolved_exact, with 19 independent exact cases unchanged.",
+      "decision": "Keep the fail-closed distinction. Candidate-set narrowing is useful evidence but never exact identity without provider-owned resolution; no protocol or frame change is justified.",
+      "commit": "dd6f8c8cb771e13214b6e8168c64cf6952c054c9"
+    },
+    {
+      "hypothesis": "Structural normalization is sufficient to count a retrieval candidate as identity-available.",
+      "implementation": "The raw-text retrieval extraction boundary now calls semanticFingerprint after normalization and rejects candidates that fail lfp:2.1 gates. Tests use framed predicates for positive retrieval and pairwise critical-negative pools to avoid unrelated cross-pair matches.",
+      "evidence": "The previous evaluator could count normalized but unframed candidates as identity-available even though matching later failed closed. After the repair, evaluation suite passes 1,875/1,875 and unframed candidates report identity coverage zero; critical-negative safety is measured only over comparable pairs.",
+      "decision": "Keep the stricter denominator and pairwise safety test. Retrieval coverage must mean usable exact identity, and non-comparable safety cases remain explicitly visible rather than silently treated as safe.",
+      "commit": "47d07fe0a4b999e0ae50cb239d9bee801bae66d4"
+    },
+    {
+      "hypothesis": "The retrieval candidate-ledger boundary is sufficiently strict when it only rejects a few top-level gold field names.",
+      "implementation": "Added validateBlindAgentLedger to the evaluation package. It requires an opaque source manifest, exact row coverage, recursive evaluator-field rejection, strict candidate normalization, and successful lfp:2.1 generation before identity coverage is counted.",
+      "evidence": "Independent audit found the prior harness allowed row/task hints and did not prove exact source coverage or identity-safe candidates. New blind-ledger tests cover valid candidates, missing/duplicate/unknown handles, nested gold leakage, and unframed identity rejection; evaluation suite passes 1,878/1,878.",
+      "decision": "Keep the thin validator as reusable custody infrastructure. It does not score semantics or expose gold and should be used before any future clean retrieval experiment.",
+      "commit": "6b9fb410d841bc9cf248a38ad88d1432042b5ea6"
+    },
+    {
+      "hypothesis": "The historical retrieval harness can produce a current report after stricter identity coverage and blind-ledger validation are enabled.",
+      "implementation": "Wired validateBlindAgentLedger into raw-text-retrieval-agent-experiment.mjs without changing the historical candidate ledger or report.",
+      "evidence": "The harness correctly refused the historical ledger: 13 of 22 supplied candidates are structurally normalized but fail lfp:2.1 identity, including unframed or otherwise non-exact cases. This confirms the new custody/identity gate is active; no rescored report was produced.",
+      "decision": "Keep the rejection. The historical retrieval result remains diagnostic and cannot be replayed as current evidence until a genuinely source-only ledger is generated and independently validated.",
+      "commit": "a837ee37c7f2e2b57b7d3a8f9e67d1547e2f8732"
+    },
+    {
+      "hypothesis": "A larger contract-only source extraction prompt will reliably produce transport-shaped Sem across multiple isolated agents.",
+      "implementation": "Two isolated Codex agents received 24 fresh multilingual sources split into two 12-item batches and were required to return strict JSONL candidateSem objects using the generated contract.",
+      "evidence": "One agent abstained on all 12 items. The other returned 12 non-contract predicate/arguments objects. No candidate passed transport, so semantic metrics are not assigned; no gold or pair labels were exposed. Persisted in source-only-agent-comparison-v6.json.",
+      "decision": "Reject contract-only natural-language prompting as a sufficient adoption mechanism. Preserve the protocol and fail closed; prioritize an actual tool-driven builder workflow before judging semantic capability.",
+      "commit": "16f5c4e706e4fa10f5c21bdc1e7c1a7047316001"
+    },
+    {
+      "hypothesis": "A tool-driven frame-first workflow is more reliable than free-form contract-only JSON generation while preserving OpenLunum authority.",
+      "implementation": "An isolated agent returned only six builderInput objects for fresh multilingual sources. The parent invoked buildCandidateSem and then submitCandidate for every input; no Sem was accepted directly from the agent.",
+      "evidence": "All 6 builder inputs became transport-, protocol-, frame-, grounding-, and identity-valid submissions. EN/EL prefer, EN/ES retry, and EN/FR conditional disable pairs converged to identical LFPs. No gold semantics were exposed, so this is construction/convergence diagnostics only.",
+      "decision": "Retain typed builder plus mandatory submission as the preferred agent-native workflow. It reduces alternate-schema transport failure without granting self-certification; semantic accuracy still requires independently labeled development evaluation.",
+      "commit": "e69e44ebb722e621ebf1087de6fe70e65c19e0cf"
+    },
+    {
+      "hypothesis": "Exported grounding conversion helpers could be used as an alternate trust path to manufacture exact identity from caller-forged provider evidence.",
+      "implementation": "Added private in-process capability branding shared by the provider cascade and grounding materializer. Provider results must be authenticated by the metadata-bound cascade, and resolutions must be minted by an authenticated provider or explicitly validated registry path before materialization. Added forged-result and forged-resolution regressions.",
+      "evidence": "Core suite passes 1,803/1,803; evaluator suite passes 1,878/1,878; MCP suite passes 58/58; workspace pnpm verify completed successfully; direct forged `urn:attacker:fake-id` evidence is rejected before Sem mutation. No unrelated dirty files were staged.",
+      "decision": "Keep the capability boundary. Serialized resolutions cannot be replayed directly; replay must re-authenticate through the provider cascade. This closes a genuine semantic-authority bypass without changing lfp:2.1 or frames.",
+      "commit": "744fbd165708c0e9119992f7df5bb039d88fbdfa"
+    },
+    {
+      "hypothesis": "The UniMorph morphology gain remains valid when evaluated against independent UD lemma/POS annotations rather than OMW-derived identity labels.",
+      "implementation": "Added a development-only audit that samples inflected UD tokens, uses UniMorph only as the analyzer under test, and scores candidate lemma recovery directly against UD lemmas. OMW/CILI is not used in this audit.",
+      "evidence": "600 observations across EN/EL/ES/FR/DE/ID: analyzer coverage 356/600; candidate-set lemma recall 353/600 (58.8%); unique candidate precision 331/333 (99.4%); unique wrong outputs 4; ambiguity containing the UD lemma 21; unresolved 244. Per-language recall: EN 51%, EL 44%, ES 92%, FR 42%, DE 65%, ID 58%. The earlier 23/23 OMW identity result is therefore conservative but not a substitute for lemma accuracy.",
+      "decision": "Keep morphology as candidate generation only. It has high precision when unique but incomplete coverage and measurable ambiguity; do not promote it to unconditional exact identity. Next blocker remains a larger independently labeled source-only extraction benchmark.",
+      "commit": "a2e3b56e3fcbd998c111a1017689f43991cb2e94"
+    },
+    {
+      "hypothesis": "In-process authentication alone is sufficient if an authenticated provider result remains mutable after cascade validation.",
+      "implementation": "Defensively cloned and froze contained provider results, candidate evidence, diagnostics, registry metadata, and minted resolutions before granting private capabilities. Added mutation regressions and changed resolution issue collections to readonly.",
+      "evidence": "Core suite passes 1,805/1,805; the focused grounding security suite passes 34/34; workspace verification after the change completed with all package gates and the 16-item evaluation smoke succeeding. Attempts to mutate a candidate ID or minted canonical ID throw and leave the trusted value unchanged.",
+      "decision": "Keep immutable capability objects. This closes post-validation tampering without altering semantic identity, protocol frames, or provider selection. No protected corpus was created or rescored.",
+      "commit": "e2d45801d2e1c0ee9cb4f0e1c09583915bd3b33d"
+    },
+    {
+      "hypothesis": "German identity-conditioned morphology was unavailable because the audit only attempted an OMW tab, while the pinned OdeNet WN-LMF snapshot can provide the same provider boundary.",
+      "implementation": "Extended the existing independent UD/UniMorph audit to load German through importWnLmf and the pinned OdeNet v1.4 XML snapshot; no parallel importer or protocol change was introduced.",
+      "evidence": "German rerun: 100 UD observations, 24 gold identities available, raw identity 6/100 with 1 correct, morphology-augmented identity 19/100 with 19/19 correct, candidate-set recall 67/100, 48 ambiguous, 33 unresolved, zero false exact among unique gold identities. Output is unimorph-ud-independent-odenet-rerun.json; resource provenance remains the pinned OdeNet manifest.",
+      "decision": "Keep the German resource path and report its coverage honestly. The result confirms morphology is high-precision but incomplete candidate evidence; it does not change the fail-closed exact-identity policy or warrant protected evaluation.",
+      "commit": "6c3ad1c5b56a5c51f3ddd794243c05eda8779c17"
+    },
+    {
+      "hypothesis": "The general morphology research note should continue to claim German identity evidence is unavailable after the OdeNet replay.",
+      "implementation": "Updated the current morphology research artifact to distinguish its circular identity coverage probe from the non-circular UD lemma audit and to record German OdeNet coverage accurately.",
+      "evidence": "The pinned OdeNet replay is persisted separately at unimorph-ud-independent-odenet-rerun.json; the note now no longer contradicts the measured German path.",
+      "decision": "Keep the historical independent summary immutable and use the new rerun for current diagnostics. No production semantic or identity behavior changed.",
+      "commit": "9d2b63c3440bd4e70d564e25cad2bb6d0cb8f36c"
+    },
+    {
+      "hypothesis": "The typed builder's top-level frame validation is sufficient when nested conditions or consequences are supplied by an agent.",
+      "implementation": "Audited the builder and added recursive rejection of registered-but-unframed predicates in nested conditions/consequences, plus a CLI contract declaration for the already-supported grounding proposal flag.",
+      "evidence": "The independent builder audit found nested raw clauses could pass the frame registry's registered-but-unframed path and fail only later during submission. A regression now rejects an enable candidate containing nested share. Core suite remains 1,805/1,805 and CLI suite 189/189.",
+      "decision": "Keep recursive frame gating. Nested exact-identity construction must use canonical frames at every clause depth; no new frames or aliases were added.",
+      "commit": "dcfb2f0a7469e5638554c4ac5e37798b3020207c"
+    },
+    {
+      "hypothesis": "Raw retrieval safety metrics and candidate-pool denominators remain valid when extraction failures or structurally normalized but identity-unsafe memories are present.",
+      "implementation": "Changed semantic retrieval candidateCount to count only memories with successful lfp:2.1 identity; added negativeQueryCount and negativeComparableQueryCount; negative rejection accuracy now excludes query abstentions and empty identity pools. Added regressions.",
+      "evidence": "Evaluator suite passes 1,880/1,880. A negative query that abstains is reported as one negative target but zero comparable negatives and zero rejection accuracy; unframed memories are excluded from the comparable candidate pool. Independent retrieval audit also found the historical ledger gold-shaped, so no historical report was rescored.",
+      "decision": "Keep the stricter retrieval denominators. End-to-end failures remain failures, while conditional safety/retrieval claims require a real extracted identity pool. No protected corpus was created.",
+      "commit": "ce3abe754aa2b74181301f07003f90a86dd7fc63"
+    },
+    {
+      "hypothesis": "Retrieval and blind-ledger inputs are sufficiently validated when semantic metrics are denominator-correct.",
+      "implementation": "Added runtime validation for duplicate/unknown memory and query IDs, expected/equivalent routing references, threshold/topK/mode bounds, and malformed blind source entries. Baseline outputs with any invalid ID now fail closed instead of retaining valid partial IDs.",
+      "evidence": "Evaluator suite passes 1,882/1,882, including regressions for duplicate IDs, unknown gold references, invalid bounds, malformed source entries, and identity-usable candidate pools. No historical retrieval artifact was rescored.",
+      "decision": "Keep strict input and baseline containment. A clean development retrieval run still requires opaque source handles and independently generated candidate rows; this fix only makes invalid evidence fail closed.",
+      "commit": "055cc3d79cb9b2ef4b49895c2ef79d5dfc505bee"
+    },
+    {
+      "hypothesis": "Supplying the exact generated extraction contract, rather than a conceptual summary, materially reduces frame-first agent transport failures without exposing gold.",
+      "implementation": "Two fresh isolated Codex agents received the same eight source texts and the exact generated contract, with instructions to return only builderInput objects or abstention. No gold, semantic groups, or expected identities were supplied.",
+      "evidence": "The earlier conceptual-contract trial produced 0/12 contract-shaped candidates from one agent and all abstentions from another. With the exact contract, both agents returned eight ordered records; each abstained on unsupported/uncertain cases and produced mostly builder-shaped objects. They still diverged on preference role conventions, modality/time term shapes, and open-concept naming. This remains diagnostic because outputs were not independently gold-scored.",
+      "decision": "Retain exact contract delivery and typed builder as the adoption path, but do not interpret contract compliance as semantic accuracy. The next clean development benchmark must preserve item IDs externally while keeping evaluator answers private.",
+      "commit": "d40464601f3c5604f5d6a235a2b2682aacf7f5b9"
+    },
+    {
+      "hypothesis": "Blind retrieval evidence must bind each candidate to its advertised source text before identity or retrieval metrics are trusted.",
+      "implementation": "Added optional provenance sourceHash validation to the blind-agent ledger validator; a supplied hash must equal SHA-256(sourceText).",
+      "evidence": "Mismatched source-bound candidates fail closed before retrieval metrics; evaluator suite passed 1,883/1,883. Historical ledgers were not rescored.",
+      "decision": "Require source-bound provenance for future clean agent retrieval evidence.",
+      "commit": "358de09"
+    },
+    {
+      "hypothesis": "Nested agent-built clauses must satisfy the same canonical frame policy as top-level clauses.",
+      "implementation": "Builder validation now recursively rejects registered-but-unframed nested predicates; the CLI contract declares grounding input.",
+      "evidence": "Nested unframed predicates fail at construction; core and CLI focused suites remain green.",
+      "decision": "Keep recursive frame gating without broadening the registry.",
+      "commit": "dcfb2f0"
+    },
+    {
+      "hypothesis": "Retrieval input integrity must be enforced before semantic quality metrics are computed.",
+      "implementation": "Added duplicate/unknown ID checks, routing-reference validation, bounds/mode checks, malformed source handling, identity-only candidate pools, and fail-closed invalid baseline handling.",
+      "evidence": "Evaluator suite passed 1,882/1,882 after hardening; invalid inputs no longer produce partial or inflated metrics.",
+      "decision": "Keep strict validation and treat historical gold-shaped retrieval artifacts as diagnostic only.",
+      "commit": "055cc3d"
+    },
+    {
+      "hypothesis": "The exact generated contract improves agent transport, but contract compliance alone is not semantic evidence.",
+      "implementation": "Ran two isolated source-only Codex trials using the generated contract and typed builder-shaped outputs without gold or expected semantic data.",
+      "evidence": "Agents produced mostly builder-shaped candidates and abstained on unsupported cases, but diverged on role conventions, modality/time terms, and open-concept names.",
+      "decision": "Retain exact contract and builder; next evidence must use opaque handles and independent development gold.",
+      "commit": "d185cae"
+    },
+    {
+      "hypothesis": "Raw-text retrieval must keep evaluator-private expected IDs out of the extraction callback.",
+      "implementation": "Changed memory/query extraction calls to construct the four-field raw source input explicitly; added a regression that captures extractor inputs and rejects evaluator labels.",
+      "evidence": "The independent custody audit found the prior object spread exposed expectedMemoryIds and semanticEquivalentMemoryIds. Evaluator suite passed 1,884/1,884 after the fix.",
+      "decision": "Keep the raw-text-only extractor boundary; retrieval scoring metadata remains private to the evaluator.",
+      "commit": "6270c4c59143d7280aaa3af712c964af80537dc6"
+    },
+    {
+      "hypothesis": "Concurrent blind submissions and tampered durable records must fail closed without changing legacy direct-submit compatibility.",
+      "implementation": "Added an in-flight submission guard and exact public/private durable-record key validation; direct submit remains supported for compatibility.",
+      "evidence": "An adversarial race regression shows one success and one rejection with exactly one ledger record. Eval suite passed 1,885/1,885; core passed 1,805/1,805; MCP build/tests passed.",
+      "decision": "Keep the in-flight and exact-schema custody gates. The historical protected artifacts remain diagnostic and were not rescored.",
+      "commit": "6270c4c59143d7280aaa3af712c964af80537dc6"
+    },
+    {
+      "hypothesis": "Per-language-pair retrieval false-positive denominators must use identity-usable, routed candidate pools rather than all memories.",
+      "implementation": "Recomputed pair true negatives from each query's routed identity-usable candidate pool and eligible expected records.",
+      "evidence": "The custody audit identified the prior all-memory denominator as inflation-prone. Existing retrieval tests and the full evaluator suite pass after correction.",
+      "decision": "Keep pair metrics aligned with global identity-coverage denominators.",
+      "commit": "6270c4c59143d7280aaa3af712c964af80537dc6"
+    },
+    {
+      "hypothesis": "Comparison callers need an explicit lfp:2.1 result instead of inferring semantic identity from the compatibility exactFingerprint field.",
+      "implementation": "compareSem now preserves legacy exactFingerprint and additionally reports semanticIdentityExact, computed through semanticFingerprint with fail-closed frame/grounding gates; added an evidence-only field regression.",
+      "evidence": "Core suite passed 1,806/1,806. An evidence-only term annotation makes legacy equality false while semanticIdentityExact remains true.",
+      "decision": "Keep both fields during compatibility migration; new semantic evaluation should consume semanticIdentityExact.",
+      "commit": "6d48e7930e9d92d39af1c07876e4a1eaa683071c"
+    },
+    {
+      "hypothesis": "The legacy parse runner must use lfp:2.1 semantic identity for its primary exact result, not compareSem's compatibility fingerprint.",
+      "implementation": "Changed runner parse scoring to compare semanticFingerprint outputs with fail-closed identity gates; legacyExact remains diagnostic and semanticIdentityExact is persisted explicitly.",
+      "evidence": "Evaluator suite passed 1,885/1,885, including existing parse-runner tests. No model or protected corpus was used.",
+      "decision": "Keep legacy exact as compatibility diagnostics only; all new primary semantic exact scoring uses lfp:2.1.",
+      "commit": "e6ec661d0ac7b6bb9295bc8373ff74cfa63d9065"
+    },
+    {
+      "hypothesis": "Future raw-text retrieval evidence must be able to require source-bound provenance rather than accepting candidates with no binding.",
+      "implementation": "Added opt-in requireSourceHash validation to the blind ledger validator and a regression for missing hashes; compatibility mode still permits historical diagnostic ledgers.",
+      "evidence": "Evaluator suite passed 1,886/1,886. Strict mode rejects an unbound candidate before identity coverage is counted.",
+      "decision": "Use strict source-bound mode for the next clean agent retrieval run; do not rescore historical ledgers.",
+      "commit": "8e9e7d53ecb53bc2192e847611066cbc6a11ce10"
+    },
+    {
+      "hypothesis": "The historical diagnostic retrieval harness can be promoted simply by enabling strict source-bound validation.",
+      "implementation": "Enabled strict sourceHash validation in the development retrieval harness and passed through only agent-supplied provenance; the harness never manufactures hashes.",
+      "evidence": "The existing candidate ledger fails closed before report generation: all 22 rows lack sourceHash and several candidates also lack exact identity. No historical report was overwritten.",
+      "decision": "Keep fresh source-only agent generation as a prerequisite for retrieval evidence; fresh provenance-bound candidates are required.",
+      "commit": "45af4be"
+    },
+    {
+      "hypothesis": "Strict source-bound custody is usable for a future clean retrieval ledger, not only as a rejection gate.",
+      "implementation": "Added a positive fixture with a worker-supplied SHA-256 sourceHash, identity-safe candidate, exact opaque-handle coverage, and no evaluator-private fields.",
+      "evidence": "Evaluator suite passed 1,887/1,887; strict mode accepts the complete fixture and reports one identity-available row.",
+      "decision": "Keep strict mode as the required future retrieval path; the historical candidate artifact remains permanently diagnostic.",
+      "commit": "106ce83a2e986b57accb56ff5c27366dca459603"
+    },
+    {
+      "hypothesis": "Giving an isolated extraction agent explicit protocol enumerations will make its fresh builder submissions transport-compatible.",
+      "implementation": "Provided eight new multilingual development sources plus exact world/kind/term-type/frame enumerations and required direct builderInput JSONL output; no gold or expected semantics were supplied.",
+      "evidence": "The agent corrected the invalid world but emitted an alternate terms/frame wrapper rather than direct world/kind/predicate/roles. Seven attempted records failed builder transport; one scheduling case and one unsupported case abstained. Diagnostic only.",
+      "decision": "Do not broaden the builder to accept agent-specific wrapper shapes. Preserve the strict typed construction contract.",
+      "commit": "current-diagnostic"
+    },
+    {
+      "hypothesis": "The typed builder and MCP boundary should reject alternate wrapper fields rather than silently ignoring them.",
+      "implementation": "Added unknown-field rejection to buildCandidateSem, declared additionalProperties=false for the MCP builder schema, and added a schema regression.",
+      "evidence": "Core suite passed 1,806/1,806 and MCP suite passed 59/59. The terms/frame wrapper from the fresh agent trial now fails explicitly as unknown_builder_fields.",
+      "decision": "Keep direct builder fields strict; agent transport must use the generated tool contract or abstain.",
+      "commit": "working-tree"
+    },
+    {
+      "hypothesis": "The HTTP API is already a trustworthy agent-native text-to-Sem and retrieval surface after the core/MCP custody repairs.",
+      "implementation": "Audited the current OpenLunum API implementation without editing it.",
+      "evidence": "The API `/parse` path fabricates a default Sem from text and `/retrieve` returns an empty placeholder result path; neither consumes the untrusted candidate-submission contract or raw-text retrieval evaluator.",
+      "decision": "Reject the API as current empirical extraction/retrieval evidence. Keep core as authority, MCP as primary agent surface, and CLI as deterministic fallback.",
+      "commit": "audit-only"
+    },
+    {
+      "hypothesis": "A tightly constrained direct-field agent contract can achieve reliable transport without changing OpenLunum semantics.",
+      "implementation": "An isolated Codex agent received three fresh English sources and was required to emit only itemId plus direct world/kind/predicate/roles builderInput fields. OpenLunum built and submitted every candidate with source-bound provenance.",
+      "evidence": "3/3 candidates passed transport, protocol canonicality, frame validity, grounding, and lfp:2.1 identity gates. The result is persisted in source-only-direct-builder-trial.json; no gold was supplied.",
+      "decision": "Retain direct-field constraints as a viable transport mode, but do not infer semantic accuracy from identity availability without independent gold.",
+      "commit": "current-diagnostic"
+    },
+    {
+      "hypothesis": "A minimal source-only multilingual direct-field instruction is sufficient for reliable typed-builder transport.",
+      "implementation": "An isolated Codex agent received six English/Greek/Spanish/French/German/Indonesian preference sources and was required to emit direct builder fields only.",
+      "evidence": "All six outputs used roles as a comma-separated string and used language tags as world rather than a protocol world. Transport-valid and identity-available counts were 0/6. No gold or expected identity was exposed.",
+      "decision": "Keep the strict builder and record this as an agent-interface failure. Improve only through explicit generated tool/schema interaction, not permissive parsing or language-specific world aliases.",
+      "commit": "7b56ca3a6d0eb2b1fb82f4d90e7ed05e3aaf2ed7"
+    },
+    {
+      "hypothesis": "The generated typed-builder contract should explicitly distinguish semantic world from source language and describe roles as a typed object.",
+      "implementation": "Added generated fieldSemantics metadata and regression assertions; no protocol, frame, identity, or builder acceptance rule changed.",
+      "evidence": "Core build/typecheck and 1,806 core tests passed. The metadata states that world is a protocol value, never a language tag, and roles is an object of typed terms.",
+      "decision": "Keep the clarification as a general agent-interface improvement; future extraction trials must use the actual generated contract rather than abbreviated prose.",
+      "commit": "116f5fa5bbad8fe26e674be4e1d55cc556d12e6a"
+    },
+    {
+      "hypothesis": "A direct typed-builder contract can carry one shared multilingual preference meaning when the agent receives explicit semantic field rules.",
+      "implementation": "A fresh source-only Codex trial covered EN/EL/ES/FR/DE/ID and required direct fields, world=real, typed actor/concept terms, and one canonical concept identifier; each candidate was replayed through OpenLunum.",
+      "evidence": "6/6 candidates passed transport, protocol, frame, grounding, and lfp:2.1 gates and converged to one fingerprint. The shared concept identifier was part of the extraction instruction, so no independent grounding or gold exactness is claimed.",
+      "decision": "Keep the typed workflow. Treat this as contract/convergence construction evidence only; a future unbiased trial must allow concept naming to be independently generated and score it against hidden gold.",
+      "commit": "fb187960c59b63077ad3aa843eabacb1cafdaf9a"
+    },
+    {
+      "hypothesis": "The typed builder's untrusted role map and generated frame prompt are safe and synchronized under adversarial input.",
+      "implementation": "Rejected non-plain role objects and prototype-key role injection, moved exclusivity into frame metadata, and generated compact allowed-term-type/exclusivity text from the registry.",
+      "evidence": "Core build/typecheck and 1,806 tests passed, including __proto__, inherited-role, generated-type, and registry-exclusivity regressions. No semantic acceptance rule was broadened.",
+      "decision": "Keep the fail-closed builder boundary and registry-derived prompt generation. Continue with MCP propagation verification.",
+      "commit": "1a27ccaedfc380241e711cb9956f34fb789c3af4"
+    },
+    {
+      "hypothesis": "The compact frame prompt should expose generated frame meaning in addition to role/type constraints.",
+      "implementation": "Appended each authoritative frame description to the generated frame prompt block and added a synchronization regression.",
+      "evidence": "Core build/typecheck and 1,806 tests passed; no hand-maintained semantic vocabulary or acceptance behavior was added.",
+      "decision": "Keep descriptions generated from the registry; do not invent role descriptions where the registry has none.",
+      "commit": "2f49a8fb2bd4821c8e9c874039aec2c1dc09827b"
+    },
+    {
+      "hypothesis": "The next useful experiment must factor provider coverage, agent grounding, and protocol control instead of treating all failed convergence as one cause.",
+      "implementation": "Independent read-only review proposed a Grounding-Ladder Factorial Audit on fresh development labels: provider candidate-set recall, blind agent proposal recall conditional on provider coverage, and independently constructed protocol-control acceptance, with mutation safety checks.",
+      "evidence": "Current OMW reports already provide provider-side diagnostics but not independent agent proposal labels or a clean factorial separation. No protected data was created or used.",
+      "decision": "Adopt this as the next highest-leverage development experiment; do not conclude training is necessary until the three stages are measured independently.",
+      "commit": "research-review"
+    },
+    {
+      "hypothesis": "A cheap independent corpus agent can produce frame-complete development sources without parent hints or gold leakage.",
+      "implementation": "Audited a fresh 18-equivalent/6-negative proposal restricted to currently framed predicates.",
+      "evidence": "The proposal contained underspecified imperative/passive frames and a confirm/deadline conflation; 0/12 rows were accepted for scoring. Full rejection rationale is recorded in agent-corpus-proposal-audit.json.",
+      "decision": "Require an independent semantic-contract audit and frame completeness before using generated development data. Do not score this proposal.",
+      "commit": "d9ab0f93cf1aed53733bdad26eee2a2af8f7fa9f"
+    },
+    {
+      "hypothesis": "Once sources are frame-complete and the generated builder contract is followed, multilingual extraction failures will mainly be transport failures.",
+      "implementation": "An isolated Codex agent processed six fresh frame-complete EN/EL/ES/FR/DE/ID sources without supplied concept identifiers; candidates were replayed through the strict builder and submission path.",
+      "evidence": "All 6/6 candidates passed transport, protocol, frame, grounding, and lfp:2.1 availability. The equivalent EN/EL/ID send group produced three distinct open-concept identifiers and three distinct LFPs. No gold was exposed.",
+      "decision": "Reject the transport-only hypothesis for this trial. Preserve strict validation and prioritize language-neutral grounding/provider candidate-set measurement.",
+      "commit": "c1fae73fc8b8e8b0a907a77f082e27514914545a"
+    },
+    {
+      "hypothesis": "Builder and prompt hardening may have changed the established real OMW provider baseline.",
+      "implementation": "Replayed the existing 100-pair real OMW/CILI decomposition to a temporary output without overwriting historical evidence.",
+      "evidence": "Baseline remains 100/100 lexeme coverage, 100/100 shared candidate coverage, 19/100 exact convergence; categories remain SOURCE_AMBIGUOUS 25, TARGET_AMBIGUOUS 15, BOTH_AMBIGUOUS 41, BOTH_RESOLVED_SAME_CILI 19.",
+      "decision": "No provider regression detected. The next gain must come from independent grounding labels, candidate-set/context disambiguation, or extraction architecture—not relaxed identity rules.",
+      "commit": "diagnostic-replay"
+    },
+    {
+      "hypothesis": "Frame-complete source-only candidates may already provide useful exact multilingual retrieval despite open-concept naming divergence.",
+      "implementation": "Ran raw-text retrieval with three agent-extracted memories and one Greek query, using only candidate Sem outputs and exact lfp:2.1 matching.",
+      "evidence": "Identity coverage was 3/3 memories and 1/1 query, but conditional and end-to-end recall were 0 because the Greek query did not share an LFP with the English/Indonesian equivalent memories; two expected semantic matches failed and one non-equivalent memory was retrieved.",
+      "decision": "Do not claim retrieval utility from identity coverage alone. Treat multilingual grounding as the retrieval bottleneck and preserve exact matching fail-closed.",
+      "commit": "f90bd13d647013afd559260f69f2e880c844e5aa"
+    },
+    {
+      "hypothesis": "The accumulated evidence is sufficient to declare training the unavoidable next boundary.",
+      "implementation": "Wrote a formal training-boundary assessment separating tested approaches, current grounding evidence, and the missing provider/agent/protocol factorial controls.",
+      "evidence": "Training remains NOT PROVEN: protocol control is strong, but independent agent grounding labels and provider-coverage-conditioned proposal recall are still missing. No protected data was used.",
+      "decision": "Defer training. Implement the Grounding-Ladder Factorial Audit and obtain independent development labels first.",
+      "commit": "d3487c418d74ad495fe94d6ec5f26223bd2dc1a1"
+    },
+    {
+      "hypothesis": "A reusable audit utility can prevent provider coverage, agent proposal recall, protocol control, and safety from being conflated.",
+      "implementation": "Added grounding-ladder-audit.mjs with strict evaluator-private input validation and a node:test suite covering coverage separation, abstention, protocol control, and false-equivalence detection.",
+      "evidence": "2/2 tests passed; the adversarial fixture correctly detected one false equivalence among comparable different pairs. The utility performs no resolution or identity mutation.",
+      "decision": "Keep the utility for the next fresh development ladder dataset; do not treat its fixture as empirical capability evidence.",
+      "commit": "438a2001925f7cea537371784b16d5fb35cd6cdd"
+    },
+    {
+      "hypothesis": "A fresh agent-generated corpus restricted to supported predicates will be frame-complete after one authoring pass.",
+      "implementation": "A corpus agent proposed 12 new multilingual rows and a separate auditor checked them against the canonical frame registry before any extraction call.",
+      "evidence": "The auditor accepted 9/12 and rejected three send rows containing both mutually exclusive recipient and destination roles. The complete audit is recorded in frame-complete-corpus-audit.json.",
+      "decision": "Reject the proposal before scoring. Preserve the frame contract and require corpus repair plus another independent audit before ladder evaluation.",
+      "commit": "cc35502550dc86e706e425cabf24402e89401584"
+    },
+    {
+      "hypothesis": "Independent ordinary EN↔EL lexical hypotheses will show that Greek failure is primarily missing lexical coverage rather than polysemy.",
+      "implementation": "Queried 12 fresh agent-proposed EN↔EL noun/verb/adjective pairs against the pinned real OMW/CILI snapshots.",
+      "evidence": "11/12 pairs had both lexical sides covered, 8/12 had a shared CILI candidate, but only 1/12 was uniquely resolved; 10/12 were ambiguous and 1/12 unresolved. Full diagnostic is independent-en-el-grounding-probe.json.",
+      "decision": "Reject the missing-coverage-only hypothesis. Candidate-set/context disambiguation is required, with fail-closed behavior for unresolved senses.",
+      "commit": "dbabf991ad9f790346c711c93b8b75d51455a9fd"
+    },
+    {
+      "hypothesis": "Candidate-set intersection must reject recorded or forged provider results even when external IDs share a namespace.",
+      "implementation": "Required authenticated provider-result capabilities for core candidate-set intersection; added authenticated fixture coverage and kept the historical OMW analysis as report-only set arithmetic.",
+      "evidence": "Core grounding-provider suite passed 26/26 and the full core unit suite passed 1,806/1,806. A forged same-namespace pair now returns unresolved, while authenticated provider outputs still narrow explicitly shared candidates. OMW replay remains 78 singleton narrowings, 22 ambiguous, and 19 independently exact.",
+      "decision": "Keep the trust boundary. Candidate-set narrowing remains evidence only and cannot grant exact identity; callers must use authenticated provider outputs.",
+      "commit": "f17f6875119acedeaed51469533ebfd10d1c17a8"
+    },
+    {
+      "hypothesis": "A generated runtime builder schema can reduce agent transport failures without duplicating semantic rules.",
+      "implementation": "Generated a recursive frame-first JSON Schema from the protocol/frame registries and wired MCP to expose it; retained the builder as the semantic authority.",
+      "evidence": "Core agent-native tests passed 9/9, core typecheck passed, and MCP tests passed 59/59 with the generated schema. Every canonical frame has a generated variant with its exact allowed roles; nested clauses recurse through the same generated frame set.",
+      "decision": "Keep the generated schema as transport preflight. It does not claim semantic extraction or identity and must remain synchronized with the registry.",
+      "commit": "78d4f72b349c7ec23d705b5b6deb8fdb86194d6d"
+    },
+    {
+      "hypothesis": "Strict blind evaluator claim binding can prevent stale or unclaimed source substitutions while preserving legacy compatibility.",
+      "implementation": "Added opt-in requireClaimBinding mode requiring next() claim, contract version/hash, and exact source hash; exposed sourceHash in the source-only next item and MCP whitelist.",
+      "evidence": "Evaluator tests passed 1,888/1,888, including submit-before-next and mismatched source-hash rejection. MCP tests passed 59/59. Default compatibility mode remains unchanged for historical callers.",
+      "decision": "Keep strict mode for future protected/source-bound runs; use it to separate transport/provenance failures from semantic extraction failures.",
+      "commit": "26f1799110b35ed5faef58ab22640694ef78afb0"
+    },
+    {
+      "hypothesis": "Strict claim-binding mode must itself be part of the durable run manifest and checkpoint binding.",
+      "implementation": "Persisted requireClaimBinding in the blind manifest and included it in the checkpoint binding so strict runs cannot be reopened permissively.",
+      "evidence": "Evaluator build and unit tests passed 1,888/1,888, including strict-run reopen rejection when the option changes.",
+      "decision": "Keep the mode binding as a resume invariant for future source-bound evaluation.",
+      "commit": "163c15e4ba65568edaaf336c64f8636d5d0bd19c"
+    },
+    {
+      "hypothesis": "The generated builder schema is equivalent to builder acceptance and frame safety under strict validation.",
+      "implementation": "Repaired strict-schema required branches, generated canonical role aliases, constrained frame-specific term types, and encoded frame exclusivity; retained the registry as the only source of role semantics.",
+      "evidence": "Independent adversarial review initially found three schema defects; all were corrected. Core agent-native tests passed 9/9, MCP tests passed 59/59, and core/MCP typechecks passed. No protected data or model output informed the change.",
+      "decision": "Keep the generated schema after adversarial correction. A strict external JSON-Schema validator should be run by the consumer; semantic builder validation remains authoritative.",
+      "commit": "39c033bd4a3770bb742da9b3a6230a6fc8501d42"
+    },
+    {
+      "hypothesis": "Explicit stage receipts will distinguish transport, protocol, frame, and grounding failures in blind evaluation without changing scoring semantics.",
+      "implementation": "Added transportValid, structuralValid, protocolCanonical, frameValid, and grounded fields to durable blind results; bumped the blind ledger schema to 0.2 and added aggregate stage counts with deterministic resume validation.",
+      "evidence": "Eval strict verification passed, including 1,888/1,888 unit tests and the 16-item smoke run. Existing exact identity and abstention scoring remain unchanged; old ledger schemas are rejected rather than reinterpreted.",
+      "decision": "Keep stage receipts for future development/protected diagnostics; they expose the true bottleneck instead of collapsing pipeline failures into semantic mismatch.",
+      "commit": "05583454f219de36c3876fa1404354569ebe003d"
+    },
+    {
+      "hypothesis": "After custody/schema hardening, the training boundary can be declared from the existing development evidence.",
+      "implementation": "Updated the formal training-boundary note with the new authenticated intersection, generated schema, strict claim binding, manifest binding, and stage-receipt controls.",
+      "evidence": "Training remains not proven necessary: real OMW has 100/100 shared lexical coverage but only 19/100 independent convergence; source-only frame-complete candidates can be deterministic-valid yet diverge in open-concept naming; no protected corpus or local inference was used.",
+      "decision": "Do not start training. The next high-value experiment is a fresh independently labeled development grounding ladder; multi-process claim locking remains separate custody hardening.",
+      "commit": "d9ea1a9ae12b531327e6623bb77cc17822ad4f47"
+    },
+    {
+      "hypothesis": "Evaluator stage receipts need direct regression assertions so transport/protocol/grounding metrics cannot silently disappear.",
+      "implementation": "Added assertions for all five stage booleans and aggregate stageCounts on a durable blind result.",
+      "evidence": "Focused evaluator tests passed 11/11 after rebuild; the full evaluator suite had previously passed 1,888/1,888. A fresh corpus-author proposal was rejected before scoring because its negative metadata was not item-pair structured.",
+      "decision": "Keep the regression. Do not score the rejected proposal or treat its source/gold content as protected evidence.",
+      "commit": "ad9323c8ad88094ee82c90d82f4de4f723d3ca77"
+    },
+    {
+      "hypothesis": "A fresh source-only frame-complete development ladder can separate agent transport from semantic naming and grounding failures.",
+      "implementation": "An independent corpus agent authored 24 multilingual parse rows in 8 semantic groups plus 12 negative rows and 6 explicit negative pairs. A separate source-only extraction agent returned candidate Sem without gold metadata; the parent submitted every candidate through the deterministic core.",
+      "evidence": "Gold preflight passed 8/8 groups and 6/6 negative pairs. All 36 candidate submissions passed transport, structural, protocol, frame, grounding, and identity gates with no avoidable failure class. Parse exactness was 3/24 (12.5%); all 6/6 negative pairs were comparable and separated, with zero false equivalences. The 8 multilingual groups converged to one candidate identity per group, but only the sequence-check group matched gold. Evidence is development-only and not protected.",
+      "decision": "Keep the source-only transport separation and treat the remaining deficit as semantic extraction/open-concept canonicalization. Do not tune the contract or claim protected capability from this constructed ladder.",
+      "commit": "d2be10b"
+    },
+    {
+      "hypothesis": "Agent-extracted identities from the fresh development ladder can support a measurable cross-language raw-text retrieval replay.",
+      "implementation": "Added a development-only retrieval harness using the existing raw-text retrieval evaluator. Each row is used as a raw memory and queried against another language row in the same group; the callback receives only the source-bound candidate ledger.",
+      "evidence": "24/24 memory identities and 24/24 query identities were available. Exact semantic retrieval was 24/24 with zero false positives; lexical retrieval on the same raw pool recalled 7/24 (29.17%). The result is intentionally diagnostic: repeated candidate structures from one source-only ledger make this conditional evaluator evidence, not general raw-text extraction or protected capability evidence.",
+      "decision": "Keep the harness and report coverage separately from conditional and end-to-end retrieval. Do not claim retrieval qualification until candidates come from a genuinely blind, independently repeated extraction run.",
+      "commit": "752f285"
+    },
+    {
+      "hypothesis": "A larger opaque-handle source-only extraction run will distinguish genuine multilingual extraction from repeated candidate construction.",
+      "implementation": "An independent corpus agent authored 72 parse rows (60 multilingual positives and 12 critical-negative rows) plus 12 abstention rows across 10 semantic groups. A separate extraction agent received only 84 opaque handles with source text/language and the generated contract. A reproducible scorer validated strict source binding and compared private gold fingerprints.",
+      "evidence": "Blind source validation passed 84/84 rows. The extractor produced 70 Sem candidates and 14 abstentions; all 70 candidates were identity-available and stage-valid. Positive parse exactness was 0/60, abstention accuracy 12/12, candidate self-consistency 10/10 groups, gold convergence 0/10, and critical-negative safety 5/6 comparable with 0 false equivalences. The run is development-only; the source ledger contains no gold metadata.",
+      "decision": "Reject the hypothesis that the small ladder was merely noisy: stable candidate outputs still fail private gold systematically. Keep the typed/strict source boundary. The highest-leverage unresolved problem is canonical semantic choice (kind, term type, open concept), requiring a materially different extraction/grounding approach rather than transport tweaks.",
+      "commit": "2f81916"
+    },
+    {
+      "hypothesis": "Blind source manifests must reject evaluator metadata before a larger source-only run is admissible.",
+      "implementation": "Blind ledger validation now enforces the exact source object key set and recursively scans source entries for forbidden evaluator fields, in addition to candidate-result checks.",
+      "evidence": "The adversarial source-manifest leakage regression passes; the scoped evaluator suite passed 8/8 focused tests. The larger source-only run then passed strict source validation with no forbidden fields.",
+      "decision": "Keep this custody fix for future blind/protected runs; it is independent of semantic scoring and does not grant candidates trust.",
+      "commit": "5801779"
+    },
+    {
+      "hypothesis": "After the large source-only run and prior general approaches, training is the next highest-leverage step rather than an unsupported conclusion.",
+      "implementation": "Reconciled the real OMW/CILI, morphology, composition, candidate-set, frame-first, two-stage, verifier/consensus, typed-builder, retrieval, and large opaque-handle extraction evidence in TRAINING-BOUNDARY-DECISION.md.",
+      "evidence": "The larger run produced 0/60 positive parse exact while passing 84/84 source custody, 70/70 identity availability, 12/12 abstention accuracy, and 10/10 candidate self-consistency. The remaining failure is stable canonical kind/type/open-concept selection, not transport or identity containment.",
+      "decision": "Training is justified as the next research investment, but is not started without explicit compute/data authorization. The OpenLunum protocol remains unchanged and the proposed model must emit structured intermediate semantics while OpenLunum retains authority.",
+      "commit": "pending-training-boundary-commit"
+    }
+  ],
+  "nextHighestLeverage": "Obtain explicit authorization/resources for the training proposal, then build a concept-disjoint multilingual structured-extraction dataset and compare a trained candidate generator against the current source-only baseline through OpenLunum.",
+  "protectedCorpus": "none created in this mission; prior inspected corpora remain diagnostic",
+  "openBlockers": ["unbiased morphology accuracy", "contextual sense disambiguation", "large agent-native text-to-Sem benchmark", "retrieval from agent-extracted Sem", "second independent agent/model comparison"]
+}

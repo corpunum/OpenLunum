@@ -13,13 +13,9 @@ function makeResult(mode: 'natural' | 'lunum' | 'mixed', overrides: Partial<Benc
     mode,
     tokenCount: mode === 'natural' ? 100 : 70,
     tokenCountMethod: 'calibrated',
-    preservedLiterals: true,
-    preservedRoles: true,
-    preservedNegation: true,
-    preservedModality: true,
+    preservation: true,
+    keywordOverlap: 0.8,
     contextSizeBytes: mode === 'natural' ? 400 : 280,
-    outputPreserves: true,
-    outputKeywordOverlap: 0.8,
     taskSuccess: true,
     ...overrides,
   };
@@ -42,7 +38,6 @@ function makeReport(overrides: Partial<BenchmarkReport['summary']> = {}, results
       mixedAvgTokens: 85,
       compressionRatio: 0.7,
       preservationRate: 1.0,
-      outputPreservationRate: 1.0,
       avgKeywordOverlap: 0.8,
       naturalTokensPerSuccess: 100,
       lunumTokensPerSuccess: 70,
@@ -61,7 +56,7 @@ describe('compaction gates', () => {
   });
 
   it('all gates pass for a healthy report', () => {
-    const report = makeReport({ preservationRate: 1.0, compressionRatio: 0.7, outputPreservationRate: 1.0 });
+    const report = makeReport({ preservationRate: 1.0, compressionRatio: 0.7 });
     const result = evaluateCompactionGates(report);
     assert.equal(result.passed, true);
     assert.equal(result.verdicts.length, 4);
@@ -89,7 +84,7 @@ describe('compaction gates', () => {
   });
 
   it('fails when output preservation is below threshold', () => {
-    const report = makeReport({ outputPreservationRate: 0.80 });
+    const report = makeReport({ preservationRate: 0.80 });
     const result = evaluateCompactionGates(report);
     assert.equal(result.passed, false);
     const v = result.verdicts.find(v => v.name === 'output_preservation')!;
@@ -98,11 +93,11 @@ describe('compaction gates', () => {
 
   it('fails when fallback quality loss exceeds threshold', () => {
     const results = [
-      makeResult('natural', { outputPreserves: true }),
-      makeResult('lunum', { outputPreserves: false }),
+      makeResult('natural', { preservation: true }),
+      makeResult('lunum', { preservation: false }),
       makeResult('mixed'),
     ];
-    const report = makeReport({ outputPreservationRate: 0.9 }, results);
+    const report = makeReport({ preservationRate: 0.9 }, results);
     const result = evaluateCompactionGates(report);
     const v = result.verdicts.find(v => v.name === 'fallback_quality_loss')!;
     assert.equal(v.passed, false);
@@ -111,20 +106,20 @@ describe('compaction gates', () => {
 
   it('natural fallback is sound when natural output preservation meets threshold', () => {
     const results = [
-      makeResult('natural', { outputPreserves: true }),
-      makeResult('lunum', { outputPreserves: false }),
+      makeResult('natural', { preservation: true }),
+      makeResult('lunum', { preservation: false }),
     ];
-    const report = makeReport({ outputPreservationRate: 0.9 }, results);
+    const report = makeReport({ preservationRate: 0.9 }, results);
     const result = evaluateCompactionGates(report);
     assert.equal(result.naturalFallbackSound, true);
   });
 
   it('natural fallback is unsound when natural output preservation is below threshold', () => {
     const results = [
-      makeResult('natural', { outputPreserves: false }),
-      makeResult('lunum', { outputPreserves: true }),
+      makeResult('natural', { preservation: false }),
+      makeResult('lunum', { preservation: true }),
     ];
-    const report = makeReport({ outputPreservationRate: 0.5 }, results);
+    const report = makeReport({ preservationRate: 0.5 }, results);
     const result = evaluateCompactionGates(report);
     assert.equal(result.naturalFallbackSound, false);
   });
@@ -136,7 +131,7 @@ describe('compaction gates', () => {
       maxFallbackQualityLoss: 0.50,
       minOutputPreservationRate: 0.50,
     };
-    const report = makeReport({ preservationRate: 0.60, compressionRatio: 0.95, outputPreservationRate: 0.60 });
+    const report = makeReport({ preservationRate: 0.60, compressionRatio: 0.95 });
     const result = evaluateCompactionGates(report, loose);
     assert.equal(result.passed, true);
   });

@@ -2,23 +2,35 @@
  * Parse experiment runner for EN/EL/ES/ID.
  */
 
-import { appendFile, mkdir, writeFile } from 'node:fs/promises';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { compareSem, NearSemanticFingerprintGenerator, validateSem } from '@corpunum/lunum';
+import Ajv2020Module from 'ajv/dist/2020.js';
+import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, semanticFingerprint, stableStringify, validateSemanticCandidate, validateSemFrames } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
-import { findWorkspaceRoot, loadDataset, readJson, sha256File, validateManifest, validateProfile, writeJson } from './io.js';
-import { OpenAICompatibleModel } from './model.js';
+import { findWorkspaceRoot, loadDataset, readJson, readJsonlLedger, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
+import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
 import { parsePrompt } from './prompts.js';
-import { checkProtectedLiteralPlacement, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
-import type { DatasetItem, ExperimentManifest, ItemResult, ModelProfile } from './types.js';
+import { parseStrictJsonObject } from './strict-json.js';
+import { checkProtectedLiteralPlacement, checkProtectedSemanticAtoms, protectedLiteralPlacementCoverage } from './protected-literal-placement.js';
+import { classifyFailure, type EvaluationFailureStage } from './failure-classification.js';
+import type { DatasetItem, ExperimentManifest, ItemResult, ModelCompletion, ModelIdentityEvidence, ModelProfile, ParseAttemptEvidence, ParseRunProvenance } from './types.js';
 
-export type ParseLanguage = 'en' | 'el' | 'es' | 'id';
-export const PARSE_LANGUAGES: ParseLanguage[] = ['en', 'el', 'es', 'id'];
+export type ParseLanguage = 'en' | 'el' | 'es' | 'id' | 'fr' | 'de' | 'ja' | 'zh' | 'pt' | 'ar';
+export const PARSE_PROMPT_VERSION = 'parse-prompt/3';
+export const PARSE_LANGUAGES: ParseLanguage[] = ['en', 'el', 'es', 'id', 'fr', 'de', 'ja', 'zh', 'pt', 'ar'];
 export const PARSE_LANGUAGE_LABELS: Record<ParseLanguage, string> = {
   en: 'English',
   el: 'Greek',
   es: 'Spanish',
-  id: 'Indonesian'
+  id: 'Indonesian',
+  fr: 'French',
+  de: 'German',
+  ja: 'Japanese',
+  zh: 'Chinese',
+  pt: 'Portuguese',
+  ar: 'Arabic'
 };
 
 export interface LanguageMetrics {
@@ -36,6 +48,24 @@ export interface LanguageMetrics {
   fingerprintMatches: number;
   exactFingerprintCount: number;
   nearSemanticFingerprintCount: number;
+  schemaValidityRate: number;
+  canonicalExactRate: number;
+  featureBreakdown: Record<string, FeatureMetric>;
+  abstentionAccuracy: number | null;
+  parseTargets: number;
+  parseExact: number;
+  parseExactRate: number | null;
+  abstentionTargets: number;
+  correctAbstentions: number;
+  unexpectedParses: number;
+}
+
+export interface FeatureMetric {
+  expected: number;
+  matched: number;
+  observed: number;
+  recall: number;
+  precision: number;
 }
 
 export interface ParseExperimentReport {
@@ -47,6 +77,11 @@ export interface ParseExperimentReport {
   totalFailed: number;
   totalErrors: number;
   overallExactRate: number;
+  /** Compatibility alias for the weighted (micro) exact rate. */
+  microExactRate: number;
+  macroExactRate: number;
+  microFeatureRecall: number;
+  macroFeatureRecall: number;
   overallNearSemanticRate: number;
   overallFeatureRecall: number;
   overallFeaturePrecision: number;
@@ -55,6 +90,17 @@ export interface ParseExperimentReport {
   crossLanguageComparison: CrossLanguageComparison;
   languageBreakdown: Record<ParseLanguage, number[]>;
   failureModes: Record<string, number>;
+  featureBreakdown: Record<string, FeatureMetric>;
+  abstentionAccuracy: number | null;
+  parseTargets: number;
+  parseExact: number;
+  parseExactMicroRate: number | null;
+  abstentionTargets: number;
+  correctAbstentions: number;
+  unexpectedParses: number;
+  overallTaskSuccessRate: number;
+  goldValidation: GoldValidationReport;
+  provenance: ParseRunProvenance;
 }
 
 export interface CrossLanguageComparison {
@@ -64,15 +110,143 @@ export interface CrossLanguageComparison {
   fastestLanguage: ParseLanguage | null;
   consistencyScore: number;
   variance: Record<string, number>;
+  rowCount: number;
+  semanticGroupCount: number;
+  multilingualGroupCount: number;
+  goldConvergentGroups: number;
+  modelConvergentGroups: number;
+  modelGoldConvergentGroups: number;
+  brokenMultilingualGroups: number;
 }
 
-function extractJson(text: string): unknown {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/iu)?.[1];
-  const candidate = fenced ?? text;
-  const start = candidate.indexOf('{');
-  const end = candidate.lastIndexOf('}');
-  if (start < 0 || end < start) throw new Error('No JSON object found in model output');
-  return JSON.parse(candidate.slice(start, end + 1));
+export function extractStructuredJson(text: string): unknown {
+  const trimmed = text.trim();
+  const fencedMatch = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/iu);
+  const candidate = fencedMatch?.[1]?.trim() ?? trimmed;
+  if (!candidate.startsWith('{') || !candidate.endsWith('}')) {
+    throw new Error('Model output must be exactly one JSON object (optionally in one JSON code fence)');
+  }
+  return parseStrictJsonObject(candidate);
+}
+
+/** Build the exact schema sent to a provider for parse tasks. */
+export function buildExtractionSchema(semSchema: Record<string, unknown>): Record<string, unknown> {
+  const { $defs: semDefs, $schema: _semSchema, $id: _semId, title: _semTitle, ...semBranch } = semSchema;
+  return {
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    $id: 'https://openlunum.org/schemas/semantic-extraction-result/0.1',
+    title: 'OpenLunum semantic extraction result',
+    oneOf: [semBranch, {
+      type: 'object',
+      additionalProperties: false,
+      required: ['status', 'reason'],
+      properties: {
+        status: { const: 'abstain' },
+        reason: { type: 'string', minLength: 1 }
+      }
+    }],
+    $defs: semDefs
+  };
+}
+
+export interface GoldValidationReport {
+  total: number;
+  transportValid: number;
+  structuralValid: number;
+  protocolCanonical: number;
+  frameCanonical: number;
+  identityValid: number;
+  semanticAtomsValid: number;
+  abstentionCases: number;
+  invalid: Array<{ id: string; stages: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; semanticAtomErrors?: unknown[]; identityError?: string }>;
+}
+
+/**
+ * Validate evaluation gold before constructing a provider or making a model
+ * call. Gold is an assertion about the protocol, not merely an example that
+ * happens to fit the wire schema. Aliases and unresolved symbols are rejected
+ * here rather than silently normalized into a flattering score.
+ */
+export function validateEvaluationGold(items: readonly DatasetItem[], extractionSchema: Record<string, unknown>): GoldValidationReport {
+  const transportValidator = new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(extractionSchema);
+  const report: GoldValidationReport = {
+    total: items.length,
+    transportValid: 0,
+    structuralValid: 0,
+    protocolCanonical: 0,
+    frameCanonical: 0,
+    identityValid: 0,
+    semanticAtomsValid: 0,
+    abstentionCases: 0,
+    invalid: []
+  };
+  for (const item of items) {
+    if (item.goldSem === null || item.expectedOutcome === 'abstain') {
+      report.abstentionCases += 1;
+      continue;
+    }
+    const stages: string[] = [];
+    const transportValid = Boolean(transportValidator(item.goldSem));
+    if (transportValid) report.transportValid += 1; else stages.push('transport-schema');
+    const structural = validateSemanticCandidate(item.goldSem);
+    if (structural.ok) report.structuralValid += 1; else stages.push('semantic-structure');
+    const normalization = structural.ok ? normalizeSemanticCandidate(item.goldSem, { strict: true }) : null;
+    // Gold must already be canonical. A candidate alias can be normalized at
+    // runtime, but gold aliases would make the protected target depend on an
+    // implementation-side rewrite.
+    if (normalization?.canonical && normalization.status === 'canonical') report.protocolCanonical += 1;
+    else if (normalization) stages.push('protocol-canonicality');
+    const frameValidation = normalization?.canonical && normalization.sem ? validateSemFrames(canonicalizeSem(normalization.sem)) : null;
+    if (frameValidation?.valid) report.frameCanonical += 1;
+    else if (frameValidation) stages.push('frame-canonicality');
+    let identityError: string | undefined;
+    if (normalization?.canonical && normalization.status === 'canonical' && normalization.sem && frameValidation?.valid) {
+      try {
+        semanticFingerprint(normalization.sem);
+        report.identityValid += 1;
+      } catch (error) {
+        identityError = error instanceof Error ? error.message : String(error);
+        stages.push('semantic-identity');
+      }
+    } else {
+      stages.push('semantic-identity');
+    }
+    const semanticAtoms = checkProtectedSemanticAtoms(normalization?.sem ?? null, item.protectedSemanticAtoms ?? []);
+    if (semanticAtoms.every((atom) => atom.satisfied)) report.semanticAtomsValid += 1;
+    else stages.push('semantic-atoms');
+    if (stages.length > 0) {
+      report.invalid.push({
+        id: item.id,
+        stages,
+        ...(transportValid ? {} : { transportErrors: transportValidator.errors ?? [] }),
+        ...(structural.ok ? {} : { structuralErrors: structural.errors }),
+        ...(normalization ? { normalizationIssues: normalization.issues } : {}),
+        ...(frameValidation && !frameValidation.valid ? { frameIssues: frameValidation.issues } : {}),
+        ...(semanticAtoms.some((atom) => !atom.satisfied) ? { semanticAtomErrors: semanticAtoms.filter((atom) => !atom.satisfied) } : {}),
+        ...(identityError ? { identityError } : {})
+      });
+    }
+  }
+  const groupFingerprints = new Map<string, Array<{ id: string; fingerprint: string | null }>>();
+  for (const item of items) {
+    if (!item.semanticGroup || item.goldSem === null || item.expectedOutcome === 'abstain') continue;
+    const rows = groupFingerprints.get(item.semanticGroup) ?? [];
+    let fingerprint: string | null = null;
+    try { fingerprint = semanticFingerprint(item.goldSem); } catch { /* existing item-level stages carry the reason */ }
+    rows.push({ id: item.id, fingerprint });
+    groupFingerprints.set(item.semanticGroup, rows);
+  }
+  for (const rows of groupFingerprints.values()) {
+    const expected = rows[0]?.fingerprint;
+    if (rows.length > 1 && (expected === null || rows.some((row) => row.fingerprint !== expected))) {
+      for (const row of rows) {
+        const existing = report.invalid.find((item) => item.id === row.id);
+        if (existing) existing.stages.push('semantic-group-identity');
+        else report.invalid.push({ id: row.id, stages: ['semantic-group-identity'] });
+      }
+    }
+  }
+  return report;
 }
 
 function computeVariance(values: number[]): number {
@@ -81,8 +255,165 @@ function computeVariance(values: number[]): number {
   return values.reduce((sum, value) => sum + (value - mean) ** 2, 0) / values.length;
 }
 
+function sha256Text(value: string): string {
+  return createHash('sha256').update(value).digest('hex');
+}
+
+function isAbstention(value: unknown): value is { status: 'abstain'; reason: string } {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const candidate = value as Record<string, unknown>;
+  return candidate.status === 'abstain'
+    && typeof candidate.reason === 'string'
+    && candidate.reason.trim().length > 0;
+}
+
+function semanticFeatureSets(sem: LunumSem): Record<string, Set<string>> {
+  const canonical = canonicalizeSem(sem);
+  const sets: Record<string, Set<string>> = {
+    predicate: new Set(), role: new Set(), literal: new Set(), negation: new Set(), modality: new Set(),
+    condition: new Set(), consequence: new Set(), reference: new Set()
+  };
+  const walk = (clauses: typeof canonical.clauses, prefix: string): void => {
+    clauses.forEach((clause, index) => {
+      const path = `${prefix}${index}`;
+      sets.predicate!.add(`${path}:${clause.predicate}`);
+      sets.negation!.add(`${path}:${clause.negated === true}`);
+      if (clause.modality !== undefined) sets.modality!.add(`${path}:${String(clause.modality)}`);
+      for (const [role, value] of Object.entries(clause.roles ?? {})) {
+        const encoded = stableStringify(value);
+        sets.role!.add(`${path}:${role}`);
+        sets.literal!.add(`${path}:${role}:${encoded}`);
+      }
+      if (clause.conditions?.length) sets.condition!.add(`${path}:${clause.conditions.length}`);
+      if (clause.consequences?.length) sets.consequence!.add(`${path}:${clause.consequences.length}`);
+      walk(clause.conditions ?? [], `${path}.condition.`);
+      walk(clause.consequences ?? [], `${path}.consequence.`);
+    });
+  };
+  walk(canonical.clauses, '');
+  for (const [index, reference] of (canonical.references ?? []).entries()) sets.reference!.add(`${index}:${stableStringify(reference)}`);
+  return sets;
+}
+
+function firstIdentityDifference(expected: LunumSem, actual: LunumSem): string | undefined {
+  const walk = (left: unknown, right: unknown, path: string): string | undefined => {
+    if (stableStringify(left) === stableStringify(right)) return undefined;
+    if (Array.isArray(left) && Array.isArray(right)) {
+      if (left.length !== right.length) return `${path}: array length ${left.length} != ${right.length}`;
+      for (let index = 0; index < left.length; index += 1) {
+        const difference = walk(left[index], right[index], `${path}[${index}]`);
+        if (difference) return difference;
+      }
+      return `${path}: array contents differ`;
+    }
+    if (left && right && typeof left === 'object' && typeof right === 'object') {
+      const keys = [...new Set([...Object.keys(left), ...Object.keys(right)])].sort();
+      for (const key of keys) {
+        const difference = walk((left as Record<string, unknown>)[key], (right as Record<string, unknown>)[key], `${path}.${key}`);
+        if (difference) return difference;
+      }
+    }
+    return `${path}: ${stableStringify(left)} != ${stableStringify(right)}`;
+  };
+  return walk(canonicalizeSem(expected), canonicalizeSem(actual), 'sem');
+}
+
+function featureMetrics(gold: LunumSem, actual: LunumSem): Record<string, FeatureMetric> {
+  const expected = semanticFeatureSets(gold);
+  const observed = semanticFeatureSets(actual);
+  const names = new Set([...Object.keys(expected), ...Object.keys(observed)]);
+  return Object.fromEntries([...names].map((name) => {
+    const left = expected[name]!;
+    const right = observed[name]!;
+    const matched = [...left].filter((feature) => right.has(feature)).length;
+    return [name, {
+      expected: left.size,
+      matched,
+      observed: right.size,
+      recall: left.size > 0 ? matched / left.size : 1,
+      precision: right.size > 0 ? matched / right.size : 1
+    }];
+  }));
+}
+
+function gitCommit(root: string): string | null {
+  try {
+    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+function gitWorkingTreeClean(root: string): boolean {
+  try {
+    // The operator may have unrelated, intentionally preserved work in the
+    // checkout.  Attest the evaluated source/data scope, not an unrelated
+    // report or integration edit elsewhere in the repository.
+    const scoped = [
+      'packages/core/src', 'packages/core/test', 'packages/eval/src', 'packages/eval/test', 'packages/eval/package.json', 'schemas/model-profile.schema.json',
+      'profiles/models/superqwen3.8-27b-abliterated-live.json',
+      'datasets/dev/stage2-heldout-v1.jsonl', 'datasets/dev/stage2-heldout-v2.jsonl',
+      'datasets/dev/stage2-retrieval-v1.jsonl', 'datasets/adversarial/critical-semantic-differences-v1.jsonl',
+      'datasets/manifests/stage2-heldout-v1.json', 'datasets/manifests/stage2-heldout-v2.json',
+      'datasets/manifests/stage2-retrieval-v1.json', 'datasets/manifests/critical-semantic-differences-v1.json',
+      'experiments/parse-stage2-superqwen-diagnostic/experiment.json',
+      'experiments/parse-stage2-superqwen-frozen/experiment.json'
+    ];
+    const status = execFileSync('git', ['status', '--porcelain', '--untracked-files=all', '--', ...scoped], { cwd: root, encoding: 'utf8' });
+    return status.trim().length === 0;
+  } catch {
+    return false;
+  }
+}
+
+function gitCommitResolvable(root: string, revision: string): boolean {
+  try {
+    execFileSync('git', ['cat-file', '-e', `${revision}^{commit}`], { cwd: root, stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function advertisedModelIds(payload: unknown): string[] {
+  if (!payload || typeof payload !== 'object') return [];
+  const entries = (payload as { data?: unknown }).data;
+  if (!Array.isArray(entries)) return [];
+  return entries.flatMap((entry) => entry && typeof entry === 'object' && typeof (entry as { id?: unknown }).id === 'string'
+    ? [(entry as { id: string }).id]
+    : []);
+}
+
+async function verifyModelIdentity(model: OpenAICompatibleModel, profile: ModelProfile): Promise<ModelIdentityEvidence> {
+  try {
+    const ids = advertisedModelIds(await model.doctor());
+    const metadata = profile.metadata?.modelFile;
+    const modelFileIdentity = metadata && typeof metadata === 'object' && !Array.isArray(metadata)
+      ? metadata as ModelIdentityEvidence['modelFileIdentity']
+      : undefined;
+    const identity: ModelIdentityEvidence = {
+      requestedModel: profile.model,
+      advertisedModelIds: ids,
+      verified: ids.includes(profile.model),
+      endpoint: profile.baseUrl,
+      ...(modelFileIdentity ? { modelFileIdentity } : {})
+    };
+    if (ids.includes(profile.model)) identity.reportedModelId = profile.model;
+    return identity;
+  } catch (error) {
+    return {
+      requestedModel: profile.model,
+      advertisedModelIds: [],
+      verified: false,
+      endpoint: profile.baseUrl,
+      verificationError: error instanceof Error ? error.message : String(error)
+    };
+  }
+}
+
 export async function runParseExperiment(
-  manifestPath: string
+  manifestPath: string,
+  options: { resumeDirectory?: string } = {}
 ): Promise<{ report: ParseExperimentReport; outputDirectory: string }> {
   const root = await findWorkspaceRoot();
   const manifest = await readJson<ExperimentManifest>(manifestPath);
@@ -105,13 +436,71 @@ export async function runParseExperiment(
   const items = ((await loadDataset(datasetPath)) as DatasetItem[]).slice(0, manifest.limits.maxItems);
   const profile = await readJson<ModelProfile>(modelProfilePath);
   validateProfile(profile);
+  const modelProfileSha256 = await sha256File(modelProfilePath);
+  const schemaPath = path.join(root, 'schemas/lunum-sem.schema.json');
+  const semSchema = await readJson<Record<string, unknown>>(schemaPath);
+  const extractionSchema = buildExtractionSchema(semSchema);
+  const schemaVersion = 'semantic-extraction-result/0.1';
+  const schemaSha256 = sha256Text(stableStringify(extractionSchema));
+  const structuredOutput = {
+    mode: 'json_schema' as const,
+    schema: extractionSchema,
+    strict: true,
+    fallback: 'json_object' as const
+  };
+  const transportValidator = new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(extractionSchema);
+  const goldValidation = validateEvaluationGold(items, extractionSchema);
+  if (goldValidation.invalid.length > 0) {
+    throw new Error(`Evaluation gold failed the complete preflight gate: ${JSON.stringify(goldValidation)}`);
+  }
 
-  const runId = new Date().toISOString().replace(/[:.]/gu, '-');
+  let startedAt = new Date().toISOString();
+  const modelIdentity = await verifyModelIdentity(new OpenAICompatibleModel(profile), profile);
+  const codeCommit = gitCommit(root);
+  const baselineCommitResolvable = gitCommitResolvable(root, manifest.baselineCommit);
+  const promptProbe = items[0] ? parsePrompt(items[0]) : null;
+  const effectiveSystemPromptSha256 = promptProbe ? sha256Text(effectiveSystemPrompt(profile, promptProbe.system)) : null;
+
+  let runId = new Date().toISOString().replace(/[:.]/gu, '-');
   const outputRoot = path.isAbsolute(manifest.outputDirectory)
     ? manifest.outputDirectory
     : path.join(root, manifest.outputDirectory);
-  const output = path.join(outputRoot, runId);
+  const output = options.resumeDirectory
+    ? (path.isAbsolute(options.resumeDirectory) ? options.resumeDirectory : path.join(root, options.resumeDirectory))
+    : path.join(outputRoot, runId);
   await mkdir(output, { recursive: true });
+
+  const sourceState = await sourceStateSha256(root);
+  const binding = createHash('sha256').update(stableStringify({
+    manifest,
+    datasetSha256: actualHash,
+    modelProfileSha256,
+    modelIdentity,
+    codeCommit,
+    sourceState,
+    schemaSha256,
+    effectiveSystemPromptSha256
+  })).digest('hex');
+  const checkpointPath = path.join(output, 'checkpoint.json');
+  const existingResults = new Map<string, ItemResult>();
+  if (options.resumeDirectory) {
+    const checkpoint = await readJson<{ binding: string; runId?: string; startedAt?: string }>(checkpointPath).catch(() => null);
+    if (!checkpoint || checkpoint.binding !== binding) {
+      throw new Error('Resume refused: parse checkpoint provenance does not match manifest, dataset, profile, schema, prompt, or source state');
+    }
+    if (checkpoint.runId) runId = checkpoint.runId;
+    if (checkpoint.startedAt) startedAt = checkpoint.startedAt;
+    for (const language of PARSE_LANGUAGES) {
+      const file = path.join(output, `parse-results-${language}.jsonl`);
+      for (const result of await readJsonlLedger<ItemResult>(file)) {
+        if (existingResults.has(result.id)) throw new Error(`Resume refused: duplicate parse result for item ${result.id}`);
+        existingResults.set(result.id, result);
+      }
+    }
+  } else {
+    await writeJson(checkpointPath, { schema: 'openlunum-parse-checkpoint/0.1', binding, runId, startedAt, completedItemIds: [], modelCalls: 0 });
+    for (const language of PARSE_LANGUAGES) await writeFile(path.join(output, `parse-results-${language}.jsonl`), '', 'utf8');
+  }
 
   const byLanguage = new Map<ParseLanguage, DatasetItem[]>(PARSE_LANGUAGES.map((language) => [language, []]));
   for (const item of items) {
@@ -121,72 +510,293 @@ export async function runParseExperiment(
 
   const languageResults = new Map<ParseLanguage, ItemResult[]>();
   const nearSemantic = new NearSemanticFingerprintGenerator(0.8);
+  let calls = [...existingResults.values()].reduce((sum, result) => sum + (result.attempts?.length ?? 1), 0);
 
   for (const [language, languageItems] of byLanguage) {
     if (languageItems.length === 0) continue;
     const model = new OpenAICompatibleModel(profile);
-    const results: ItemResult[] = [];
-    let calls = 0;
-
+    const results: ItemResult[] = languageItems.flatMap((item) => {
+      const result = existingResults.get(item.id);
+      return result ? [result] : [];
+    });
     for (const item of languageItems) {
+      if (existingResults.has(item.id)) continue;
       if (calls >= manifest.limits.maxModelCalls) break;
       let finalResult: ItemResult | null = null;
+      const attempts: ParseAttemptEvidence[] = [];
 
       for (let attempt = 1; attempt <= manifest.limits.maxAttemptsPerItem && calls < manifest.limits.maxModelCalls; attempt += 1) {
         const started = performance.now();
         let rawOutput = '';
+        let rawRequest: unknown;
+        let rawResponse: unknown;
+        let completion: ModelCompletion | undefined;
+        let systemPromptSha256: string | null = null;
+        let userPromptSha256: string | null = null;
+        let stage: EvaluationFailureStage = 'provider';
+        let validationErrors: string[] = [];
         try {
           const prompt = parsePrompt(item);
+          const effectiveSystem = effectiveSystemPrompt(profile, prompt.system);
+          systemPromptSha256 = sha256Text(effectiveSystem);
+          userPromptSha256 = sha256Text(prompt.user);
           calls += 1;
-          const completion = await model.complete(prompt.system, prompt.user);
+          completion = await model.complete(prompt.system, prompt.user, { structuredOutput });
+          stage = 'json';
           rawOutput = completion.content;
-          const parsed = extractJson(rawOutput);
-          const validation = validateSem(parsed);
-          if (!validation.ok) throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
+          rawRequest = completion.rawRequest;
+          rawResponse = completion.rawResponse;
+          const parsed = extractStructuredJson(rawOutput);
+          stage = 'transport';
+          if (!transportValidator(parsed)) {
+            validationErrors = (transportValidator.errors ?? []).map((error) => error.message ?? 'invalid');
+            throw new Error(`Transport schema validation failed: ${(transportValidator.errors ?? []).map((error) => error.message ?? 'invalid').join('; ')}`);
+          }
+          const expectedOutcome = item.expectedOutcome ?? 'parse';
+          if (isAbstention(parsed)) {
+            finalResult = {
+              id: item.id,
+              status: expectedOutcome === 'abstain' || item.goldSem === null ? 'passed' : 'failed',
+              rawOutput,
+              rawRequest,
+              rawResponse,
+              systemPromptSha256,
+              userPromptSha256,
+              abstained: true,
+              providerSuccess: true,
+              jsonParsed: true,
+              structuralValid: true,
+              protocolCanonical: true,
+              frameCanonical: false,
+              candidateIdentityAvailable: false,
+              goldIdentityAvailable: false,
+              identityComparable: false,
+              protectedAtomsValid: true,
+              transportSchemaValid: true,
+              ...(expectedOutcome === 'abstain' || item.goldSem === null ? {} : {
+                featureRecall: 0,
+                featurePrecision: 0,
+                missingFeatures: ['model abstained for a representable item'],
+                failureClass: classifyFailure(null, { expectedOutcome, abstained: true }).failureClass
+              }),
+              completion,
+              latencyMs: performance.now() - started
+            };
+            attempts.push({
+              attempt,
+              status: finalResult.status,
+              rawOutput,
+              rawRequest,
+              rawResponse,
+              systemPromptSha256,
+              userPromptSha256,
+              latencyMs: finalResult.latencyMs
+            });
+            break;
+          }
 
-          const goldSem = item.goldSem as LunumSem;
-          const parsedSem = parsed as LunumSem;
+          const validation = validateSemanticCandidate(parsed);
+          stage = 'structural';
+          if (!validation.ok) {
+            validationErrors = validation.errors;
+            throw new Error(`Validation failed: ${validation.errors.join('; ')}`);
+          }
+          if (expectedOutcome === 'abstain' || item.goldSem === null) {
+            finalResult = {
+              id: item.id,
+              status: 'failed',
+              rawOutput,
+              rawRequest,
+              rawResponse,
+              systemPromptSha256,
+              userPromptSha256,
+              parsedSem: parsed as LunumSem,
+              abstained: false,
+              providerSuccess: true,
+              jsonParsed: true,
+              structuralValid: true,
+              protocolCanonical: false,
+              frameCanonical: false,
+              candidateIdentityAvailable: false,
+              goldIdentityAvailable: false,
+              identityComparable: false,
+              protectedAtomsValid: false,
+              transportSchemaValid: true,
+              featureRecall: 0,
+              featurePrecision: 0,
+              missingFeatures: ['expected abstention but model returned a semantic candidate'],
+              failureClass: classifyFailure(null, { expectedOutcome: 'abstain', abstained: false }).failureClass,
+              completion,
+              latencyMs: performance.now() - started
+            };
+            attempts.push({
+              attempt,
+              status: finalResult.status,
+              rawOutput,
+              rawRequest,
+              rawResponse,
+              systemPromptSha256,
+              userPromptSha256,
+              latencyMs: finalResult.latencyMs
+            });
+            break;
+          }
+
+          const goldSem = item.goldSem;
+          stage = 'protocol';
+          const candidateNormalization = normalizeSemanticCandidate(parsed);
+          const parsedSem = (candidateNormalization.sem ?? parsed) as LunumSem;
+          const goldNormalization = normalizeSemanticCandidate(goldSem);
+          // The legacy comparison remains diagnostic. Canonical exactness is
+          // only asserted when both sides are protocol-canonical.
           const comparison = compareSem(goldSem, parsedSem);
+          const perFeature = featureMetrics(goldSem, parsedSem);
           const nearResult = nearSemantic.compareSem(goldSem, parsedSem, {
             protectedLiterals: item.protectedLiterals ?? []
           });
-          const nearOnly = !comparison.exactFingerprint && nearResult.similar;
+          const frameValidation = validateSemFrames(parsedSem);
+          stage = 'frame';
+          const identityAvailable = (candidateNormalization.canonical && frameValidation.valid && candidateNormalization.sem)
+            ? (() => { try { semanticFingerprint(candidateNormalization.sem!); return true; } catch { return false; } })()
+            : false;
+          const goldIdentityAvailable = (goldNormalization.canonical && goldNormalization.sem)
+            ? (() => { try { semanticFingerprint(goldNormalization.sem!); return true; } catch { return false; } })()
+            : false;
+          const identityComparable = identityAvailable && goldIdentityAvailable;
+          const identityDiff = identityComparable ? firstIdentityDifference(goldNormalization.sem!, candidateNormalization.sem!) : undefined;
+          stage = 'comparison';
+          let semanticIdentityExact = false;
+          try {
+            semanticIdentityExact = identityComparable && semanticFingerprint(goldNormalization.sem!) === semanticFingerprint(candidateNormalization.sem!);
+          } catch {
+            semanticIdentityExact = false;
+          }
+          const canonicalExact = semanticIdentityExact;
+          const nearOnly = !canonicalExact && nearResult.similar;
+          let failureClass = canonicalExact ? undefined
+            : !candidateNormalization.canonical ? 'protocol_noncanonical' as const
+              : !frameValidation.valid ? classifyFailure(null, { frameIssues: frameValidation.issues }).failureClass
+                : classifyFailure(null, { missingFeatures: comparison.missingFeatures, invariants: comparison.hardInvariants, status: 'identity_mismatch', ...(identityComparable ? { stage: 'identity' as const } : {}), ...(identityDiff ? { identityDiff } : {}), ...(comparison.hardInvariants[0]?.detail ? { identityDiff: comparison.hardInvariants[0].detail } : {}) }).failureClass;
 
           // Placement-aware protected literal check (issue #329): verifies each
           // declared protectedLiteral lands in the same structural role it
           // occupies in goldSem, not merely anywhere in the serialised output.
           // Diagnostic only - does not affect status/exact/gates.
           const literalPlacement = checkProtectedLiteralPlacement(goldSem, parsedSem, item.protectedLiterals ?? []);
+          const semanticAtoms = checkProtectedSemanticAtoms(parsedSem, item.protectedSemanticAtoms ?? []);
+          const semanticAtomsValid = semanticAtoms.every((atom) => atom.satisfied);
+          // New semantic atoms are an evaluation gate. Legacy protectedLiterals
+          // remain compatibility diagnostics and are not promoted into the
+          // semantic contract by this runner.
+          const protectedValid = semanticAtomsValid;
+          if (canonicalExact && !semanticAtomsValid) failureClass = 'protected_literal_mismatch';
 
           finalResult = {
             id: item.id,
-            status: comparison.exactFingerprint ? 'passed' : 'failed',
+            status: canonicalExact && protectedValid ? 'passed' : 'failed',
             rawOutput,
+            rawRequest,
+            rawResponse,
+            systemPromptSha256,
+            userPromptSha256,
             parsedSem,
-            exact: comparison.exactFingerprint,
+            exact: canonicalExact && protectedValid,
+            legacyExact: comparison.exactFingerprint,
+            canonicalExact,
+            semanticIdentityExact,
+            transportSchemaValid: true,
             nearSemantic: nearOnly,
             nearSemanticScore: nearResult.similarity,
             featureRecall: comparison.featureRecall,
             featurePrecision: comparison.featurePrecision,
+            featureMetrics: perFeature,
             missingFeatures: comparison.missingFeatures,
+            ...(failureClass ? { failureClass } : {}),
             protectedLiteralPlacement: literalPlacement,
             protectedLiteralPlacementCoverage: protectedLiteralPlacementCoverage(literalPlacement),
+            protectedSemanticAtoms: semanticAtoms,
+            candidateNormalization: {
+              status: candidateNormalization.status,
+              canonical: candidateNormalization.canonical,
+              issues: candidateNormalization.issues,
+              protocolVersion: candidateNormalization.protocolVersion
+            },
+            providerSuccess: true,
+            jsonParsed: true,
+            structuralValid: true,
+            protocolCanonical: candidateNormalization.canonical,
+            frameCanonical: frameValidation.valid,
+            groundedIdentityValid: identityAvailable,
+            candidateIdentityAvailable: identityAvailable,
+            goldIdentityAvailable,
+            identityComparable,
+            ...(identityDiff ? { identityDifference: identityDiff } : {}),
+            protectedAtomsValid: semanticAtomsValid,
             completion,
             latencyMs: performance.now() - started
           };
+          attempts.push({
+            attempt,
+            status: finalResult.status,
+            rawOutput,
+            rawRequest,
+            rawResponse,
+            systemPromptSha256,
+            userPromptSha256,
+            latencyMs: finalResult.latencyMs
+          });
           if (finalResult.status === 'passed') break;
         } catch (error) {
+          const message = `attempt ${attempt}: ${error instanceof Error ? error.message : String(error)}`;
+          const latencyMs = performance.now() - started;
+          if (error instanceof ModelResponseError) {
+            rawResponse = error.rawResponse;
+            rawRequest = error.rawRequest;
+          }
           finalResult = {
             id: item.id,
             status: 'error',
             rawOutput,
-            error: `attempt ${attempt}: ${error instanceof Error ? error.message : String(error)}`,
-            latencyMs: performance.now() - started
+            ...(rawRequest !== undefined ? { rawRequest } : {}),
+            ...(rawResponse !== undefined ? { rawResponse } : {}),
+            ...(completion ? { completion } : {}),
+            ...(systemPromptSha256 ? { systemPromptSha256 } : {}),
+            ...(userPromptSha256 ? { userPromptSha256 } : {}),
+            error: message,
+            providerSuccess: completion !== undefined,
+            jsonParsed: !['provider', 'json'].includes(stage),
+            transportSchemaValid: !['provider', 'json', 'transport'].includes(stage),
+            structuralValid: !['provider', 'json', 'transport', 'structural'].includes(stage),
+            protocolCanonical: !['provider', 'json', 'transport', 'structural', 'protocol'].includes(stage),
+            frameCanonical: !['provider', 'json', 'transport', 'structural', 'protocol', 'frame'].includes(stage),
+            candidateIdentityAvailable: false,
+            goldIdentityAvailable: false,
+            identityComparable: false,
+            protectedAtomsValid: false,
+            failureClass: classifyFailure(error, { rawOutput, stage, validationErrors }).failureClass,
+            latencyMs
           };
+          attempts.push({
+            attempt,
+            status: 'error',
+            rawOutput,
+            ...(rawRequest !== undefined ? { rawRequest } : {}),
+            ...(rawResponse !== undefined ? { rawResponse } : {}),
+            systemPromptSha256,
+            userPromptSha256,
+            error: message,
+            latencyMs
+          });
         }
       }
 
-      if (finalResult) results.push(finalResult);
+      if (finalResult) {
+        const persisted = { ...finalResult, attempts };
+        results.push(persisted);
+        existingResults.set(persisted.id, persisted);
+        await appendFile(path.join(output, `parse-results-${language}.jsonl`), `${JSON.stringify(persisted)}\n`, 'utf8');
+        await writeJson(checkpointPath, { schema: 'openlunum-parse-checkpoint/0.1', binding, runId, startedAt, completedItemIds: [...existingResults.keys()], modelCalls: calls });
+      }
     }
 
     languageResults.set(language, results);
@@ -194,12 +804,12 @@ export async function runParseExperiment(
 
   const languageMetrics: LanguageMetrics[] = [];
   const languageBreakdown: Record<ParseLanguage, number[]> = {
-    en: [0, 0, 0, 0],
-    el: [0, 0, 0, 0],
-    es: [0, 0, 0, 0],
-    id: [0, 0, 0, 0]
+    en: [0, 0, 0, 0], el: [0, 0, 0, 0], es: [0, 0, 0, 0], id: [0, 0, 0, 0],
+    fr: [0, 0, 0, 0], de: [0, 0, 0, 0], ja: [0, 0, 0, 0], zh: [0, 0, 0, 0],
+    pt: [0, 0, 0, 0], ar: [0, 0, 0, 0]
   };
   const failureModes: Record<string, number> = {};
+  const aggregateFeatures: Record<string, { expected: number; matched: number; observed: number }> = {};
   let totalItems = 0;
   let totalPassed = 0;
   let totalFailed = 0;
@@ -209,6 +819,11 @@ export async function runParseExperiment(
   let totalFeatureRecall = 0;
   let totalFeaturePrecision = 0;
   let totalLatencyMs = 0;
+  let abstentionExpected = 0;
+  let abstentionCorrect = 0;
+  let parseTargetCount = 0;
+  let parseExactCount = 0;
+  let unexpectedParseCount = 0;
 
   for (const language of PARSE_LANGUAGES) {
     const results = languageResults.get(language) ?? [];
@@ -216,13 +831,51 @@ export async function runParseExperiment(
     const passed = results.filter((result) => result.status === 'passed').length;
     const failed = results.filter((result) => result.status === 'failed').length;
     const errors = results.filter((result) => result.status === 'error').length;
-    const exactCount = results.filter((result) => result.exact === true).length;
+    const languageItems = byLanguage.get(language) ?? [];
+    const parseTargets = languageItems.filter((item) => item.expectedOutcome !== 'abstain' && item.goldSem !== null).length;
+    const exactCount = results.filter((result, index) => result.exact === true && languageItems[index]?.expectedOutcome !== 'abstain' && languageItems[index]?.goldSem !== null).length;
     const nearCount = results.filter((result) => result.nearSemantic === true).length;
-    const exactRate = total > 0 ? exactCount / total : 0;
+    const exactRate = parseTargets > 0 ? exactCount / parseTargets : 0;
     const nearSemanticRate = total > 0 ? nearCount / total : 0;
     const featureRecall = total > 0 ? results.reduce((sum, result) => sum + (result.featureRecall ?? 0), 0) / total : 0;
     const featurePrecision = total > 0 ? results.reduce((sum, result) => sum + (result.featurePrecision ?? 0), 0) / total : 0;
     const meanLatencyMs = total > 0 ? results.reduce((sum, result) => sum + result.latencyMs, 0) / total : 0;
+    const languageFeatures: Record<string, { expected: number; matched: number; observed: number }> = {};
+    const expectedAbstentions = languageItems.filter((item) => item.expectedOutcome === 'abstain' || item.goldSem === null).length;
+    const correctAbstentions = results.filter((result, index) => {
+      const item = languageItems[index];
+      return (item?.expectedOutcome === 'abstain' || item?.goldSem === null) && result.abstained === true;
+    }).length;
+    const unexpectedParses = results.filter((result, index) => {
+      const item = languageItems[index];
+      return (item?.expectedOutcome === 'abstain' || item?.goldSem === null) && result.abstained !== true;
+    }).length;
+    parseTargetCount += parseTargets;
+    parseExactCount += exactCount;
+    unexpectedParseCount += unexpectedParses;
+    abstentionExpected += expectedAbstentions;
+    abstentionCorrect += correctAbstentions;
+    for (const result of results) {
+      for (const [name, values] of Object.entries(result.featureMetrics ?? {})) {
+        const aggregate = aggregateFeatures[name] ?? { expected: 0, matched: 0, observed: 0 };
+        aggregate.expected += values.expected;
+        aggregate.matched += values.matched;
+        aggregate.observed += values.observed;
+        aggregateFeatures[name] = aggregate;
+        const local = languageFeatures[name] ?? { expected: 0, matched: 0, observed: 0 };
+        local.expected += values.expected;
+        local.matched += values.matched;
+        local.observed += values.observed;
+        languageFeatures[name] = local;
+      }
+    }
+    const breakdown = Object.fromEntries(Object.entries(languageFeatures).map(([name, values]) => [name, {
+      expected: values.expected,
+      matched: values.matched,
+      observed: values.observed,
+      recall: values.expected > 0 ? values.matched / values.expected : 1,
+      precision: values.observed > 0 ? values.matched / values.observed : 1,
+    }]));
 
     languageMetrics.push({
       language,
@@ -239,6 +892,16 @@ export async function runParseExperiment(
       fingerprintMatches: exactCount,
       exactFingerprintCount: exactCount,
       nearSemanticFingerprintCount: nearCount
+      ,schemaValidityRate: total > 0 ? results.filter((result) => result.transportSchemaValid === true).length / total : 0
+      ,canonicalExactRate: exactRate
+      ,featureBreakdown: breakdown
+      ,abstentionAccuracy: expectedAbstentions > 0 ? correctAbstentions / expectedAbstentions : null
+      ,parseTargets
+      ,parseExact: exactCount
+      ,parseExactRate: parseTargets > 0 ? exactCount / parseTargets : null
+      ,abstentionTargets: expectedAbstentions
+      ,correctAbstentions
+      ,unexpectedParses
     });
 
     languageBreakdown[language] = [passed, failed, errors, total];
@@ -253,13 +916,8 @@ export async function runParseExperiment(
     totalLatencyMs += meanLatencyMs;
 
     for (const result of results) {
-      if (result.status === 'failed') {
-        for (const feature of result.missingFeatures ?? []) {
-          failureModes[feature] = (failureModes[feature] ?? 0) + 1;
-        }
-      }
-      if (result.status === 'error') {
-        const mode = `error: ${result.error?.slice(0, 50) ?? 'unknown'}`;
+      if (result.status === 'failed' || result.status === 'error') {
+        const mode = result.failureClass ?? (result.status === 'error' ? 'unknown_failure' : 'identity_mismatch');
         failureModes[mode] = (failureModes[mode] ?? 0) + 1;
       }
     }
@@ -298,15 +956,97 @@ export async function runParseExperiment(
       }
     : { exactRateVariance: 0, recallVariance: 0, latencyVariance: 0 };
 
+  const allResults = [...languageResults.values()].flat();
+  const groupRows = new Map<string, Array<{ item: DatasetItem; result: ItemResult | undefined }>>();
+  for (const item of items) {
+    if (!item.semanticGroup) continue;
+    const result = allResults.find((candidate) => candidate.id === item.id);
+    const rows = groupRows.get(item.semanticGroup) ?? [];
+    rows.push({ item, result });
+    groupRows.set(item.semanticGroup, rows);
+  }
+  let goldConvergentGroups = 0;
+  let modelConvergentGroups = 0;
+  let modelGoldConvergentGroups = 0;
+  let brokenMultilingualGroups = 0;
+  for (const rows of groupRows.values()) {
+    const languages = new Set(rows.map((row) => row.item.sourceLanguage));
+    if (languages.size < 2) continue;
+    const goldFingerprints = rows.map((row) => { try { return semanticFingerprint(row.item.goldSem); } catch { return null; } });
+    const goldConverges = goldFingerprints.every((fp) => fp !== null && fp === goldFingerprints[0]);
+    if (goldConverges) goldConvergentGroups += 1;
+    const successful = rows.filter((row) => row.result?.parsedSem && row.result.candidateIdentityAvailable === true);
+    const modelFingerprints = successful.map((row) => { try { return semanticFingerprint(row.result!.parsedSem); } catch { return null; } });
+    const modelConverges = successful.length === rows.length && modelFingerprints.every((fp) => fp !== null && fp === modelFingerprints[0]);
+    if (modelConverges) modelConvergentGroups += 1;
+    const modelGoldConverges = modelConverges && goldConverges && modelFingerprints[0] === goldFingerprints[0];
+    if (modelGoldConverges) modelGoldConvergentGroups += 1;
+    if (!modelGoldConverges) brokenMultilingualGroups += 1;
+  }
   const crossLanguageComparison: CrossLanguageComparison = {
     languagesIncluded,
     bestExactLanguage,
     bestRecallLanguage,
     fastestLanguage,
     consistencyScore,
-    variance
+    variance,
+    rowCount: items.length,
+    semanticGroupCount: groupRows.size,
+    multilingualGroupCount: [...groupRows.values()].filter((rows) => new Set(rows.map((row) => row.item.sourceLanguage)).size > 1).length,
+    goldConvergentGroups,
+    modelConvergentGroups,
+    modelGoldConvergentGroups,
+    brokenMultilingualGroups
   };
+  const featureBreakdown = Object.fromEntries(Object.entries(aggregateFeatures).map(([name, values]) => [name, {
+    expected: values.expected,
+    matched: values.matched,
+    observed: values.observed,
+    recall: values.expected > 0 ? values.matched / values.expected : 1,
+    precision: values.observed > 0 ? values.matched / values.observed : 1,
+  }]));
   const languageCount = languagesIncluded.length;
+  const invalidReasons: string[] = [];
+  const workingTreeClean = gitWorkingTreeClean(root);
+  if (!codeCommit) invalidReasons.push('current git commit could not be resolved');
+  if (!workingTreeClean) invalidReasons.push('working tree was dirty during the run; commit does not identify executed source');
+  if (!baselineCommitResolvable) invalidReasons.push(`baselineCommit is not a resolvable commit: ${manifest.baselineCommit}`);
+  if (!modelIdentity.verified) invalidReasons.push('endpoint did not verify the requested model through GET /models');
+  if (!effectiveSystemPromptSha256) invalidReasons.push('no effective system prompt was captured');
+  const provenance: ParseRunProvenance = {
+    startedAt,
+    completedAt: new Date().toISOString(),
+    codeCommit,
+    baselineCommit: manifest.baselineCommit,
+    baselineCommitResolvable,
+    datasetPath: manifest.dataset.path,
+    datasetSha256: actualHash,
+    modelProfileSha256: await sha256File(modelProfilePath),
+    modelProfileId: profile.id,
+    modelIdentity,
+    effectiveSystemPromptSha256,
+    workingTreeClean,
+    promptVersion: PARSE_PROMPT_VERSION,
+    schemaVersion,
+    schemaSha256,
+    structuredOutputMode: 'json-schema',
+    decoding: {
+      temperature: profile.temperature,
+      ...(profile.seed !== undefined ? { seed: profile.seed } : {}),
+      maxTokens: profile.maxTokens,
+      chatTemplateKwargs: profile.chatTemplateKwargs ?? null
+    },
+    evidenceValid: invalidReasons.length === 0,
+    invalidReasons
+  };
+  const aggregateFeatureTotals = Object.values(aggregateFeatures).reduce((totals, value) => ({
+    expected: totals.expected + value.expected,
+    matched: totals.matched + value.matched
+  }), { expected: 0, matched: 0 });
+  const microExactRate = parseTargetCount > 0 ? parseExactCount / parseTargetCount : 0;
+  const macroExactRate = languageCount > 0 ? totalExactRate / languageCount : 0;
+  const microFeatureRecall = totalItems > 0 ? (aggregateFeatureTotals.expected > 0 ? aggregateFeatureTotals.matched / aggregateFeatureTotals.expected : 1) : 0;
+  const macroFeatureRecall = languageCount > 0 ? totalFeatureRecall / languageCount : 0;
   const report: ParseExperimentReport = {
     experimentId: manifest.id,
     runId,
@@ -315,7 +1055,11 @@ export async function runParseExperiment(
     totalPassed,
     totalFailed,
     totalErrors,
-    overallExactRate: languageCount > 0 ? totalExactRate / languageCount : 0,
+    overallExactRate: microExactRate,
+    microExactRate,
+    macroExactRate,
+    microFeatureRecall,
+    macroFeatureRecall,
     overallNearSemanticRate: languageCount > 0 ? totalNearSemanticRate / languageCount : 0,
     overallFeatureRecall: languageCount > 0 ? totalFeatureRecall / languageCount : 0,
     overallFeaturePrecision: languageCount > 0 ? totalFeaturePrecision / languageCount : 0,
@@ -323,14 +1067,22 @@ export async function runParseExperiment(
     languageMetrics,
     crossLanguageComparison,
     languageBreakdown,
-    failureModes
+    failureModes,
+    featureBreakdown,
+    abstentionAccuracy: abstentionExpected > 0 ? abstentionCorrect / abstentionExpected : null,
+    parseTargets: parseTargetCount,
+    parseExact: parseExactCount,
+    parseExactMicroRate: microExactRate,
+    abstentionTargets: abstentionExpected,
+    correctAbstentions: abstentionCorrect,
+    unexpectedParses: unexpectedParseCount,
+    overallTaskSuccessRate: totalItems > 0 ? (parseExactCount + abstentionCorrect) / totalItems : 0,
+    goldValidation,
+    provenance
   };
 
-  for (const [language, results] of languageResults) {
-    const resultPath = path.join(output, `parse-results-${language}.jsonl`);
-    await writeFile(resultPath, '', 'utf8');
-    for (const result of results) await appendFile(resultPath, `${JSON.stringify(result)}\n`, 'utf8');
-  }
+  // Per-item records are appended during execution. This preserves evidence
+  // if the process exits before aggregate reports can be written.
   await writeJson(path.join(output, 'parse-summary.json'), report);
 
   for (const metrics of languageMetrics) {
@@ -340,7 +1092,8 @@ export async function runParseExperiment(
 - Passed: ${metrics.passedItems}
 - Failed: ${metrics.failedItems}
 - Errors: ${metrics.errorItems}
-- Exact Rate: ${metrics.exactRate.toFixed(4)}
+- Parse Exact: ${metrics.parseExact}/${metrics.parseTargets} (${metrics.parseExactRate === null ? 'n/a' : metrics.parseExactRate.toFixed(4)})
+- Abstentions: ${metrics.correctAbstentions}/${metrics.abstentionTargets} correct; unexpected parses: ${metrics.unexpectedParses}
 - Near-Semantic-Only Rate: ${metrics.nearSemanticRate.toFixed(4)}
 - Feature Recall: ${metrics.featureRecall.toFixed(4)}
 - Feature Precision: ${metrics.featurePrecision.toFixed(4)}
@@ -388,7 +1141,17 @@ ${Object.entries(failureModes).map(([mode, count]) => `- ${mode}: ${count}`).joi
     platform: process.platform,
     arch: process.arch,
     modelProfile: profile,
-    startedAt: new Date().toISOString()
+    codeCommit,
+    modelIdentity,
+    prompt: {
+      version: PARSE_PROMPT_VERSION,
+      systemSha256: effectiveSystemPromptSha256,
+    },
+    decoding: {
+      ...provenance.decoding,
+      structuredOutputMode: provenance.structuredOutputMode
+    },
+    provenance
   });
 
   return { report, outputDirectory: output };
@@ -399,7 +1162,8 @@ export async function runParseExperimentCli(): Promise<string> {
   if (!manifestArg) throw new Error('Usage: node cli.js parse-experiment <manifest-path>');
   const root = await findWorkspaceRoot();
   const resolved = path.isAbsolute(manifestArg) ? manifestArg : path.join(root, manifestArg);
-  const { outputDirectory } = await runParseExperiment(resolved);
+  const resume = process.argv.includes('--resume') ? process.argv[process.argv.indexOf('--resume') + 1] : undefined;
+  const { outputDirectory } = await runParseExperiment(resolved, resume ? { resumeDirectory: resume } : {});
   console.log(outputDirectory);
   return outputDirectory;
 }

@@ -1,0 +1,27 @@
+{
+  "type": "openlunum-training-boundary-proposal",
+  "status": "not_started",
+  "reason": "Real OMW/CILI is safe but sparse/ambiguous for open concepts, structured composition remains evidence-only, stable-entity grounding covers a different class, and repeated source-only agents made generic Sem transport errors. Additional prompt-only changes are unlikely to solve both canonical protocol emission and multilingual open-concept grounding.",
+  "task": "language-neutral semantic decomposition and constrained Lunum Sem emission, with unresolved concepts represented as explicit grounding proposals and abstention when provider evidence is insufficient",
+  "input": "raw text plus source-language hint plus generated extraction contract",
+  "output": "transport-valid candidate Sem, zero or more structured grounding proposals, or explicit abstention; no model-generated external ID is trusted",
+  "modelRole": "proposal generator only; OpenLunum remains the validator, canonicalizer, identity authority, and safety gate",
+  "dataDesign": {
+    "languages": ["en", "el", "es", "fr", "de", "id"],
+    "independentGroups": "at least 5000, balanced across supported frames and open-concept categories",
+    "examples": ["positive equivalent translations", "role/direction mutations", "negation/modality/time/quantity negatives", "polysemy with abstention", "structured head/modifier decomposition", "named entities with pinned stable IDs", "unresolved and unsupported cases"],
+    "sources": "licensed multilingual text plus independently authored semantic annotations; external WordNet/Wikidata IDs are evidence labels, not protocol definitions",
+    "splits": "disjoint by semantic group, lexical family, named entity, and source template; a final protected split created only after implementation freeze"
+  },
+  "objectives": [
+    "schema/frame constrained decoding or sequence loss",
+    "exact semantic identity agreement for equivalent groups",
+    "contrastive separation of critical-negative pairs",
+    "calibrated abstention for unresolved/ambiguous grounding",
+    "grounding proposal decomposition accuracy"
+  ],
+  "evaluation": ["transport/schema validity", "frame validity", "grounding coverage and correctness", "exact lfp:2.1", "multilingual group convergence", "critical-negative false equivalence with comparable denominator", "end-to-end raw retrieval", "second-agent/provider transfer"],
+  "expectedBenefit": "Improved contract adherence and canonical open-concept decomposition; external-provider coverage alone cannot establish this benefit.",
+  "risks": ["model-specific naming leakage", "over-grounding ambiguous concepts", "training annotations becoming a hidden ontology", "identity/version drift from provider upgrades", "false confidence from schema validity"],
+  "gate": "Do not train until a concrete dataset/licensing budget and compute allocation are explicitly authorized; first implement a small offline pilot and compare against the frozen agent-native baseline."
+}

@@ -1,0 +1,124 @@
+{
+  "experimentId": "live-parse-2026-08-08-qwen36-35b",
+  "runId": "2026-08-08T08-47-00-975Z",
+  "task": "parse",
+  "totalItems": 16,
+  "totalPassed": 15,
+  "totalFailed": 1,
+  "totalErrors": 0,
+  "overallExactRate": 0.9375,
+  "overallNearSemanticRate": 0,
+  "overallFeatureRecall": 1,
+  "overallFeaturePrecision": 0.99375,
+  "overallMeanLatencyMs": 26691.7702213125,
+  "languageMetrics": [
+    {
+      "language": "en",
+      "languageLabel": "English",
+      "totalItems": 4,
+      "passedItems": 4,
+      "failedItems": 0,
+      "errorItems": 0,
+      "exactRate": 1,
+      "nearSemanticRate": 0,
+      "featureRecall": 1,
+      "featurePrecision": 1,
+      "meanLatencyMs": 22677.1766595,
+      "fingerprintMatches": 4,
+      "exactFingerprintCount": 4,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "el",
+      "languageLabel": "Greek",
+      "totalItems": 4,
+      "passedItems": 4,
+      "failedItems": 0,
+      "errorItems": 0,
+      "exactRate": 1,
+      "nearSemanticRate": 0,
+      "featureRecall": 1,
+      "featurePrecision": 1,
+      "meanLatencyMs": 33330.1439425,
+      "fingerprintMatches": 4,
+      "exactFingerprintCount": 4,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "es",
+      "languageLabel": "Spanish",
+      "totalItems": 4,
+      "passedItems": 4,
+      "failedItems": 0,
+      "errorItems": 0,
+      "exactRate": 1,
+      "nearSemanticRate": 0,
+      "featureRecall": 1,
+      "featurePrecision": 1,
+      "meanLatencyMs": 21628.326061000007,
+      "fingerprintMatches": 4,
+      "exactFingerprintCount": 4,
+      "nearSemanticFingerprintCount": 0
+    },
+    {
+      "language": "id",
+      "languageLabel": "Indonesian",
+      "totalItems": 4,
+      "passedItems": 3,
+      "failedItems": 1,
+      "errorItems": 0,
+      "exactRate": 0.75,
+      "nearSemanticRate": 0,
+      "featureRecall": 1,
+      "featurePrecision": 0.975,
+      "meanLatencyMs": 29131.434222249998,
+      "fingerprintMatches": 3,
+      "exactFingerprintCount": 3,
+      "nearSemanticFingerprintCount": 0
+    }
+  ],
+  "crossLanguageComparison": {
+    "languagesIncluded": [
+      "en",
+      "el",
+      "es",
+      "id"
+    ],
+    "bestExactLanguage": "en",
+    "bestRecallLanguage": "en",
+    "fastestLanguage": "es",
+    "consistencyScore": 0.75,
+    "variance": {
+      "exactRateVariance": 0.01171875,
+      "recallVariance": 0,
+      "latencyVariance": 22943848.582693044
+    }
+  },
+  "languageBreakdown": {
+    "en": [
+      4,
+      0,
+      0,
+      4
+    ],
+    "el": [
+      4,
+      0,
+      0,
+      4
+    ],
+    "es": [
+      4,
+      0,
+      0,
+      4
+    ],
+    "id": [
+      3,
+      1,
+      0,
+      4
+    ]
+  },
+  "failureModes": {}
+}

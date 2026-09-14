@@ -63,7 +63,7 @@ export function evaluateCompactionGates(
     direction: 'gte',
   });
 
-  const outputPreservation = report.summary.outputPreservationRate;
+  const outputPreservation = report.summary.preservationRate;
   verdicts.push({
     name: 'output_preservation',
     passed: outputPreservation >= config.minOutputPreservationRate,
@@ -75,10 +75,10 @@ export function evaluateCompactionGates(
   const naturalResults = report.results.filter(r => r.mode === 'natural');
   const lunumResults = report.results.filter(r => r.mode === 'lunum');
   const naturalOutputRate = naturalResults.length > 0
-    ? naturalResults.filter(r => r.outputPreserves).length / naturalResults.length
+    ? naturalResults.filter(r => r.preservation).length / naturalResults.length
     : 1;
   const lunumOutputRate = lunumResults.length > 0
-    ? lunumResults.filter(r => r.outputPreserves).length / lunumResults.length
+    ? lunumResults.filter(r => r.preservation).length / lunumResults.length
     : 1;
   const qualityLoss = Math.max(0, naturalOutputRate - lunumOutputRate);
 

@@ -1,0 +1,10 @@
+agent/qwen/eval/context-size-bytes 6775d776552fe24e59e51d3f904bfbe5f1075c51
+main 9b5d5d46076622639f8c0bfa4ef333b7bce4ef0c
+work/pi/482-context-eligibility d37167b75a9bf00e103e58431b9ea75c86956a78
+work/pi/484-health-probes eba65c7fa8746a8abc6f3656fe06a6b6a444cd10
+work/pi/488-tenant-isolation cb9951d82603d978f00e3721d6559b32c43c7dcb
+work/pi/490-evidence-lineage 910b5c21368fdd2bd51024018f0a6e4239bc1921
+work/pi/492-package-lifecycle f7bbc77d5217b073b8e392af9b81eced886f0485
+work/pi/493-privacy-audit-map 9ae7e3e7b4278fae5dbdea93e22a9f7b550f15d6
+work/pi/496-preservation-metrics 0965671846baa584ed927a5872d360ee636fe0ed
+work/pi/573-fingerprint-contract-freeze 4e3a6365f36fb6a4fec21bc779986fc73c33f8b2

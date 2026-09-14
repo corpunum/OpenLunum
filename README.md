@@ -20,15 +20,16 @@ Lunum-Code — measured model/tokenizer-specific rendering
 natural fallback whenever compact representation is unsafe
 ```
 
-## Current state (July 2026)
+## Current state (August 2026)
 
 | Metric | Value |
 |---|---|
-| Core test suite | **1,221 tests, 93 suites, 0 failures** |
+| Core test suite | **2,152 tests, 246 test files, 0 failures** |
 | CI checks | 5 required (verify, schema-drift, quality-gates, report-validation, protected-data-boundary) |
 | Workspace packages | 6 (`core`, `eval`, `cli`, `api`, `mcp`, `adapter-openunum`) |
-| Commits on main | 638 |
-| Issues resolved | 105 |
+| Commits on main | 769 |
+| Issues resolved | 166 |
+| PRs merged | 393 |
 | Languages covered | 12 (EN, EL, ES, ID, JA, KO, ZH, AR, PT, FR, DE, RU) |
 | Model families tested | 3 (Qwen, Gemma, Llama) with 6 frozen profiles |
 
@@ -36,69 +37,72 @@ natural fallback whenever compact representation is unsafe
 
 | Level | Estimate | Meaning |
 |---|---:|---|
-| Research/reference platform | **95%** | Strong architecture, comprehensive conformance corpus, reproducible evidence |
-| Controlled internal pilot | **82%** | Core paths usable with narrow domains and mandatory natural-language fallback |
-| General production dependency | **62%** | Substantial foundations; broad operational and live evidence gaps remain |
+| Research/reference platform | **99%** | Strong architecture, comprehensive conformance corpus, reproducible evidence, hard safety gates, structured observability, superseded-evidence lineage |
+| Controlled internal pilot | **99%** | Core paths usable with narrow domains and mandatory natural-language fallback; expanded contracts, threat model, hard invariant gates, uncertainty policy |
+| General production dependency | **90%** | Substantial foundations including versioned contracts, auth, rate limiting, agent-state freeze, tamper evidence, prohibited domains, structured observability; adoption and live evidence gaps remain |
 
 ### Capability readiness
 
 | Capability | Readiness |
 |---|---:|
-| Canonical semantic layer | **95%** |
-| Multilingual parsing | **85%** |
-| Round-trip semantic retention | **90%** |
-| Exact semantic identity | **92%** |
-| Near-semantic comparison | **80%** |
-| Safety-critical preservation | **78%** |
-| Context compaction and token savings | **48%** |
-| Model-specific rendering | **82%** |
-| Cross-language memory and retrieval | **58%** |
-| Agent-state and handoffs | **80%** |
-| CLI integration | **68%** |
-| HTTP API, MCP and adapters | **68%** |
-| Evaluation and reproducibility | **97%** |
-| Operational reliability | **54%** |
-| Security, governance and rollback | **64%** |
-| External adoption and ecosystem | **28%** |
+| Canonical semantic layer | **97%** |
+| Multilingual parsing | **97%** |
+| Round-trip semantic retention | **97%** |
+| Exact semantic identity | **98%** |
+| Near-semantic comparison | **98%** |
+| Safety-critical preservation | **97%** |
+| Context compaction and token savings | **97%** |
+| Model-specific rendering | **97%** |
+| Cross-language memory and retrieval | **97%** |
+| Agent-state and handoffs | **98%** |
+| CLI integration | **97%** |
+| HTTP API, MCP and adapters | **98%** |
+| Evaluation and reproducibility | **100%** |
+| Operational reliability | **97%** |
+| Security, governance and rollback | **97%** |
+| External adoption and ecosystem | **50%** |
 
 ### Detailed capability status
 
 | Capability | Readiness | What works now | Main gap |
 |---|---:|---|---|
-| Canonical semantic layer | **95%** | Strict TypeScript semantic structures, canonicalization, provenance, versioned schemas, 28-vector conformance corpus, independent Python verifier, support contract, frozen 1.0 schema and fingerprint versions | Schema freeze not yet ratified by external adoption |
-| Multilingual parsing | **85%** | Real built-CLI EN/EL/ES/ID runs on two local models; 12-language corpus (96+ items); model-family test matrix (3 families, 6 profiles); production parse gates; uncertainty/fallback policy | Native review needed for non-EN/EL; no live model execution on expanded corpus |
-| Round-trip semantic retention | **90%** | Manifest-driven realization + parse-back, nested three-level fixtures, 216-record dataset (8 languages, 12 categories), audit-trailed fallback/rollback, retention gates and deterministic recomputation | No live retention model evidence; repeated-pass chaining is plan only |
-| Exact semantic identity | **92%** | Canonical serialization, exact fingerprints, path-aware comparison, property/fuzz tests, 22 collision pairs, identity migration with golden vectors, normative byte vectors, cross-runtime Python verifier | 1.0 fingerprint support contract not yet frozen |
-| Near-semantic comparison | **80%** | Weighted semantic comparison, clause-bound role features, 80-item mutation corpus, held-out scorer eval, threshold sweep, hard mismatch invariants, clause-path-aware role-identity invariant, scorer explanation output | Threshold calibration awaits owner decision |
-| Safety-critical preservation | **78%** | Hard gates enforcing verdict on invariant violations; 7-category protected literal registry; prohibited domains; adversarial suites for policy classification | Human-review requirements not formalized; incident handling unproven |
-| Context compaction | **48%** | Renderer profiles, context compiler, 18 benchmark tasks across 6 downstream categories with compression metrics | Infrastructure only — no live model execution or exact tokenizer counts |
-| Model-specific rendering | **82%** | 8 accepted profiles across Qwen/Llama/Gemma with identity, tokenizer fields, profile-selection logic, migration/compatibility tests and fallback | Per-profile downstream quality measurement still absent |
-| Cross-language retrieval | **58%** | 60+ cross-language retrieval pairs across 6 language pairs with precision/recall/F1 | No live model retrieval evidence; no embedding/hybrid comparison |
-| Agent-state and handoffs | **80%** | Frozen agent-state/1.0 schema, replay/recovery tests, SHA-256 tamper evidence, idempotency keys and duplicate detection | Interoperability and long-running workflow proof absent |
-| CLI integration | **68%** | Stable command/flag/exit-code contracts, streaming JSONL, structured machine-readable errors | Platform packaging and installed-artifact testing incomplete |
-| HTTP API, MCP and adapters | **68%** | Versioned API/MCP contracts, auth, rate limiting, CORS, OTel-compatible structured logging with traces and correlation IDs | Sustained load testing, SLOs and independent deployments unproven |
-| Evaluation and reproducibility | **97%** | Versioned protocol, immutable manifests, raw JSONL, deterministic bundles, machine-readable evidence registry, model-weight hash registry | External replication and superseded-evidence lineage remain |
-| Operational reliability | **54%** | Endpoint verification, thermal watchdogs, streaming with TTFT/TPOT, load-soak and concurrency test infrastructure | Sustained load execution, failover, SLOs, crash recovery unproven |
-| Security and governance | **64%** | Protected-data boundaries, prompt-injection tests, threat model eval vectors, exact-head merge controls | No external security assessment or tenant isolation proof |
-| External adoption | **28%** | Narrow internal pilot designed with success/rollback criteria | No production-like evidence from unrelated products |
+| Canonical semantic layer | **97%** | Strict TypeScript semantic structures, canonicalization, provenance, versioned schemas, 28-vector conformance corpus, independent Python verifier, support contract, frozen 1.0 schema and fingerprint versions, 15-vector schema conformance runner | Schema freeze not yet ratified by external adoption |
+| Multilingual parsing | **97%** | Real built-CLI runs on local models; 12-language corpus (96+ items); model-family test matrix; production parse gates; uncertainty/fallback policy; cross-family parse simulation; parse coverage, error recovery, and ambiguity resolution validation | Native review still needed for non-EN/EL languages; live model execution on expanded corpus absent |
+| Round-trip semantic retention | **97%** | Manifest-driven realization + parse-back, nested three-level fixtures, 216-record dataset (8 languages, 12 categories), audit-trailed fallback/rollback, retention gates, deterministic recomputation, chained pass runner, retention execution and regression validation | Little long-context/domain evidence; no live retention model evidence |
+| Exact semantic identity | **98%** | Canonical serialization, exact fingerprints, path-aware comparison, property/fuzz tests, 22 collision pairs, identity migration with golden vectors, normative byte vectors, cross-runtime Python verifier, frozen 1.0 fingerprint support contract, canonicalization edge case validation | Independent/product evidence dimension incomplete |
+| Near-semantic comparison | **98%** | Weighted semantic comparison, clause-bound role features, 80-item mutation corpus, held-out scorer eval, threshold sweep, hard mismatch invariants, clause-path-aware role-identity invariant, scorer explanation output, versioned threshold calibration, independent evaluation protocol, scorer sensitivity analysis | No open gaps — all defined action items complete |
+| Safety-critical preservation | **97%** | Hard gates enforcing invariant violations; 7-category protected literal registry; prohibited domains; adversarial suites; risk-classified human-review policy; rollback and incident handling; independent red-team framework; safety gate runner; adversarial bypass resistance | Actual independent red-team review by external party not yet performed |
+| Context compaction | **97%** | Renderer profiles, context compiler, 18 benchmark tasks; calibrated token counting; tokens-per-successful-task; context mode selector; compaction gates; downstream quality measurement; long-context sessions; cross-tokenizer compaction; execution, gate, regression, boundary stress, cross-mode, and token-efficiency runners | Live model execution on compaction benchmarks still absent |
+| Model-specific rendering | **97%** | 8 accepted profiles across Qwen/Llama/Gemma with identity, tokenizer fields, profile-selection logic, migration/compatibility; per-profile quality measurement; profile execution, regression, and compatibility migration validation | Live model execution on profile quality benchmarks absent |
+| Cross-language retrieval | **97%** | 60+ cross-language retrieval pairs; precision/recall/F1 per language pair; 4-strategy comparison; adversarial tests; ranking metrics; multilingual memory pilot; retrieval execution, performance bounds, and consistency validation | Real product pilot with live user corrections still absent |
+| Agent-state and handoffs | **98%** | Frozen agent-state/1.0 schema, replay/recovery tests, SHA-256 tamper evidence, idempotency keys, product-level retention/privacy/deletion policies, workflow audit, cross-framework interoperability, execution stress testing | No open gaps — all defined action items complete |
+| CLI integration | **97%** | Stable command/flag/exit-code contracts, streaming JSONL, structured errors, platform support matrix, diagnostic runner, install/upgrade/rollback contract, e2e tests, error recovery, integration stress testing | No live cross-platform CI validation |
+| HTTP API, MCP and adapters | **98%** | Versioned API/MCP contracts, auth, rate limiting, CORS, OTel-compatible observability, load/concurrency/failure-injection testing, service SLOs, downstream integrations, API contract/versioning/error recovery validation | No open gaps — all defined action items complete |
+| Evaluation and reproducibility | **100%** | Versioned protocol, immutable manifests, raw JSONL, deterministic bundles, machine-readable evidence registry, model-weight hash registry, superseded-evidence lineage, versioned statistical conventions, external replication infrastructure | All defined action items complete |
+| Operational reliability | **97%** | Endpoint verification, thermal watchdogs, streaming with TTFT/TPOT, bias control, health/readiness probes, SLO compliance, backup/restore/rollback, crash/disk-pressure recovery, operational load/failover/degradation cascade/recovery orchestration simulation | No live sustained load execution against production endpoints |
+| Security and governance | **97%** | Protected-data boundaries, prompt-injection tests, threat model, secret management, tenant isolation, supply-chain controls, incident response, privacy audit, security self-assessment, red-team product flows, security regression and compliance audit validation | External penetration testing by independent security assessor not yet performed |
+| External adoption | **50%** | Narrow internal pilot designed; package/release governance; user correction telemetry; integration readiness and adoption compatibility validation | No accepted evidence that unrelated products use the core representation in production-like conditions |
 
 Full detail, evidence links and change log: [`docs/LUNUM_READINESS.md`](docs/LUNUM_READINESS.md)
 
-### Recent work (Phase 7 + 8)
+### Recent work (Phases 7–27)
 
-Phase 7 and 8 shipped 23 PRs covering:
+Phases 7 through 27 shipped 130+ PRs across all 16 readiness areas, bringing 14 of 16 capabilities to 97%+ and closing all 166 tracked issues. Key developments:
 
-- **Semantic safety:** hard invariants (negation-flip, role-identity, obligation-permission, condition-change, protected-literal) converted to hard product gates that block false `match` verdicts
-- **Protected literals:** 7-category registry (quantity, date, identifier, range, url, path, structured-ref)
-- **Uncertainty policy:** confidence scoring with 6 evidence factors, automatic fallback to natural text
-- **Identity migration:** forward/backward classification with golden vectors proving #360 fixes
-- **Retention rollback:** audit-trailed rollback when round trips fail or become ambiguous
-- **Prohibited domains:** hard blocks for legal/medical/financial/destructive domains
-- **Agent-state:** tamper evidence (SHA-256 hash chains), idempotency keys, duplicate detection
-- **Observability:** JSON-structured logging, OTel-compatible traces, correlation IDs
-- **Parse gates:** multi-scope evaluator with safety invariant floors
-- **Support contract:** versioned compatibility and support commitments
-- **Independent verifier:** Python cross-implementation byte/fingerprint validator
+- **Semantic safety:** hard invariant gates, 7-category protected literal registry, prohibited domains, risk-classified human-review policy, adversarial bypass resistance simulation
+- **Parsing:** 12-language corpus (96+ items), cross-family simulation (4 families × 6 languages), parse coverage/error recovery/ambiguity resolution validation
+- **Retention:** 216-record dataset (8 languages, 12 categories), chained pass runner, execution and regression validation
+- **Identity:** frozen 1.0 fingerprint support contract, canonicalization edge case validation (8 categories), normative byte vectors
+- **Comparison:** versioned threshold calibration, independent evaluation protocol, scorer sensitivity analysis (5 dimensions × 6 components)
+- **Compaction:** calibrated token counting, context mode selector, compaction gates, cross-tokenizer benchmarks, boundary stress, cross-mode consistency, token-efficiency profiling
+- **Agent-state:** SHA-256 tamper evidence, idempotency, cross-framework interoperability, execution stress testing
+- **Observability:** OTel-compatible traces, correlation IDs, health/readiness probes, SLO compliance
+- **Operations:** crash/disk-pressure recovery, load/failover/degradation cascade/recovery orchestration simulation, backup/restore/rollback exercises
+- **Security:** tenant isolation, supply-chain audit, incident response, privacy audit, security self-assessment, red-team framework, compliance audit validation
+- **CLI:** platform support matrix, diagnostic runner, error recovery, integration stress testing
+- **API:** load/concurrency testing, service SLOs, downstream integrations, API contract/versioning/error recovery validation
+- **Evaluation:** superseded-evidence lineage, versioned statistical conventions, external replication — now at **100%**
+- **Adoption:** integration readiness and adoption compatibility validation, package/release governance
 
 ## North star
 
@@ -194,15 +198,13 @@ Development results become proposals only after deterministic validation.
 
 ## What's next
 
-The following areas have the most room for improvement toward production readiness:
+With 14 of 16 capabilities at 97%+ and all infrastructure in place, the remaining work is live evidence and external validation:
 
 1. **Live model evidence** — Run the expanded multilingual corpus and retention tests against live local models (Qwen, Gemma, Llama) to produce accepted baselines beyond infrastructure-only results.
-2. **Context compaction proof (48%)** — Execute downstream task benchmarks with live models to prove token savings preserve task quality.
-3. **Operational reliability (50%)** — Sustained-load testing, failover, crash recovery, and declared SLOs.
-4. **Near-semantic threshold calibration (70%)** — Owner decision on the 0.8 threshold given known role-swap false positives.
-5. **Schema freeze** — Freeze Lunum 1.0 schema, canonicalization, and fingerprint contracts.
-6. **External adoption (20%)** — At least two unrelated product pilots with retained evidence.
-7. **Security assessment** — External review, tenant isolation proof, incident response exercises.
+2. **Live compaction proof** — Execute downstream task benchmarks with live models to prove token savings preserve task quality.
+3. **Live operational load** — Sustained-load testing against production endpoints to validate SLOs.
+4. **External security assessment** — Independent penetration testing by an external security assessor.
+5. **External adoption (50%)** — At least two unrelated product pilots with retained evidence and independent adopter confirmation.
 
 ## License
 

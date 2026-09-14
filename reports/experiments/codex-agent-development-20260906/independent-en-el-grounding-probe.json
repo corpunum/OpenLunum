@@ -1,0 +1,25 @@
+{
+  "type": "independent-agent-en-el-grounding-probe",
+  "version": 1,
+  "status": "development-diagnostic",
+  "protected": false,
+  "agent": "gpt-5.6-luna",
+  "labels": "agent-proposed lexical equivalence hypotheses; not gold",
+  "resource": { "omw": "omw-data/v2.0", "cili": "CILI/v1.0", "offlineReplay": true },
+  "summary": { "total": 12, "bothLexemesCovered": 11, "bothUnambiguous": 1, "sharedCandidateSets": 8, "uniqueSameCili": 1, "ambiguousEither": 10, "unresolvedEither": 1 },
+  "cases": [
+    { "id": "h01", "en": "house", "el": "σπίτι", "pos": "noun", "sourceStatus": "ambiguous", "targetStatus": "ambiguous", "shared": [] },
+    { "id": "h02", "en": "water", "el": "νερό", "pos": "noun", "sourceStatus": "ambiguous", "targetStatus": "ambiguous", "shared": ["ili:i115069"] },
+    { "id": "h03", "en": "friend", "el": "φίλος", "pos": "noun", "sourceStatus": "ambiguous", "targetStatus": "ambiguous", "shared": ["ili:i90098"] },
+    { "id": "h04", "en": "eat", "el": "τρώω", "pos": "verb", "sourceStatus": "ambiguous", "targetStatus": "ambiguous", "shared": ["ili:i27450", "ili:i27459"] },
+    { "id": "h05", "en": "sleep", "el": "κοιμάμαι", "pos": "verb", "sourceStatus": "ambiguous", "targetStatus": "resolved_exact", "shared": [] },
+    { "id": "h06", "en": "open", "el": "ανοίγω", "pos": "verb", "sourceStatus": "ambiguous", "targetStatus": "ambiguous", "shared": ["ili:i28422", "ili:i28426", "ili:i33864"] },
+    { "id": "h07", "en": "small", "el": "μικρός", "pos": "adjective", "sourceStatus": "resolved_exact", "targetStatus": "resolved_exact", "shared": ["ili:i7579"] },
+    { "id": "h08", "en": "happy", "el": "χαρούμενος", "pos": "adjective", "sourceStatus": "resolved_exact", "targetStatus": "unresolved", "shared": [] },
+    { "id": "h09", "en": "bank", "el": "τράπεζα", "pos": "noun", "sourceStatus": "ambiguous", "targetStatus": "ambiguous", "shared": ["ili:i50441", "ili:i81364"] },
+    { "id": "h10", "en": "light", "el": "φως", "pos": "noun", "sourceStatus": "ambiguous", "targetStatus": "ambiguous", "shared": ["ili:i110420", "ili:i55679", "ili:i97892"] },
+    { "id": "h11", "en": "home", "el": "σπίτι", "pos": "noun", "sourceStatus": "ambiguous", "targetStatus": "ambiguous", "shared": ["ili:i81964"] },
+    { "id": "h12", "en": "kind", "el": "καλός", "pos": "adjective", "sourceStatus": "resolved_exact", "targetStatus": "ambiguous", "shared": [] }
+  ],
+  "interpretation": "Real OMW/CILI lookup on independently proposed hypotheses shows useful shared candidate evidence but very low unique resolution. Do not turn shared candidates into exact identity without context or independent sense evidence."
+}

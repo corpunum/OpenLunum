@@ -5,7 +5,7 @@
 **Specification line:** Lunum-I — Lunum Interlingua  
 **Workspace version:** 0.2.0  
 **Maturity:** pre-1.0 research-to-reference implementation  
-**Status date:** 2026-07-20
+**Status date:** 2026-08-08
 
 This file is a periodically reconciled summary. GitHub issues are the canonical backlog and acceptance state. Support and maturity claims require exact evidence references; implementation presence alone is not acceptance evidence.
 
@@ -26,18 +26,27 @@ The repository owns language semantics, schemas, canonicalization, fingerprints,
 The repository currently includes:
 
 - strict TypeScript semantic types, canonicalization, serialization, and provenance;
-- frozen Lunum-Sem 0.2 schema assets and migration tooling;
-- exact and near-semantic fingerprint implementations;
-- safe, short, and tight renderer profiles with conformance and golden-output tests;
-- tokenizer and model-profile measurement tooling;
-- multilingual parse and realization experiment harnesses;
+- frozen Lunum-Sem 1.0 schema and fingerprint contracts with migration tooling;
+- exact and near-semantic fingerprint implementations with canonicalization edge case validation;
+- safe, short, and tight renderer profiles with conformance, golden-output, regression, and compatibility migration tests;
+- tokenizer and model-profile measurement tooling with calibrated per-family token counting;
+- multilingual parse and realization experiment harnesses with 12-language corpus (96+ items);
 - controlled predicate/role vocabulary and schema-bearing parse prompts;
-- configurable model token budgets and near-semantic parse scoring;
-- CLI, HTTP API, MCP, and OpenUnum adapter paths;
+- production parse gates, uncertainty/fallback policy, cross-family simulation, parse coverage/error recovery/ambiguity resolution;
+- CLI, HTTP API, MCP, and OpenUnum adapter paths with stable contracts, error recovery, and stress testing;
 - reproducible experiment manifests, dataset/profile hashing, raw-result retention, and report validation;
-- safety, prompt-injection, rollback, compatibility, and downstream-quality tests;
-- fail-closed exact-head merge policy and protected-data boundary checks;
-- assignment-driven local worker documentation and one-shot dispatcher tooling.
+- machine-readable evidence registry with superseded-evidence lineage and versioned statistical conventions;
+- safety hard gates, adversarial bypass resistance, prohibited domains, human-review policy, red-team framework;
+- context compaction gates, cross-tokenizer benchmarks, boundary stress, cross-mode consistency, token-efficiency profiling;
+- agent-state freeze, tamper evidence, idempotency, cross-framework interoperability, execution stress testing;
+- OTel-compatible structured observability, health/readiness probes, SLO compliance verification;
+- crash/disk-pressure recovery, operational load/failover/degradation cascade/recovery orchestration simulation;
+- tenant isolation, supply-chain audit, incident response, privacy audit, security self-assessment;
+- integration readiness and adoption compatibility validation;
+- backup/restore/rollback exercises with SHA-256 integrity verification;
+- fail-closed exact-head merge policy, protected-data boundary checks, and one-shot worker dispatcher.
+
+2,152 tests across 246 test files, 769 commits, 166 issues resolved, 393 PRs merged. 14 of 16 readiness capabilities at 97%+.
 
 This list describes implemented foundations. It does not by itself declare universal correctness, language support, production readiness, or accepted model performance.
 
@@ -74,62 +83,50 @@ Issue #188 remains the control-proof issue until live branch-protection configur
 
 ## Evidence status
 
-The parse experiment path was repaired after discovering that historical live-model evidence was generated through a broken path. Repairs now present on `main` include:
+The machine-readable evidence registry (`reports/evidence-registry.json`) tracks 24+ historical entries verified against committed sources. Evidence integrity is enforced by automated consistency checks between the tracker ledger and registry.
 
-- correct CLI manifest argument handling;
-- delivery of the full parse system prompt;
-- embedded schema shape and canonical example;
-- controlled predicate/role vocabulary;
-- profile-overridable model token budgets;
-- fail-closed exact and near-semantic outcome scoring.
+Key evidence milestones completed:
 
-Historical parse and retention reports produced before these repairs are not accepted baselines.
+- Issue #253 baseline: honest EN/EL/ES/ID parse and retention experiments on two named local models;
+- Threshold calibration: versioned decision chain with independent evaluation protocol;
+- Superseded-evidence lineage: correction chains with history-rewrite validation;
+- Versioned statistical conventions with independent recomputation verification;
+- External replication infrastructure with environment compatibility and tolerance validation;
+- Model-weight hash registry for 5 named models.
 
-### Immediate evidence milestone
-
-Issue #253 is the current bounded milestone:
-
-- run honest EN/EL/ES/ID parse and retention experiments;
-- use at least two named local model environments where required by the issue;
-- preserve raw item results, failures, timeouts, and exclusions;
-- report exact and near-semantic-only outcomes separately;
-- record dataset, profile, environment, and candidate hashes;
-- establish accepted replacement baselines before threshold calibration.
-
-Thresholds must be calibrated from accepted evidence, not retrofitted to historical broken-path results.
+Evaluation and reproducibility is at **100%** — all defined action items complete. Historical parse and retention reports produced before the parse-prompt repair are not accepted baselines.
 
 ## Release-gate view
 
 | Gate | Current view |
 |---|---|
-| Stable semantic schema and canonical serialization | Substantially implemented; changes remain Tier 3 |
-| Migration rules across schema versions | Implemented and tested for current 0.1/0.2 paths |
-| Multilingual semantic-retention evidence | Not accepted until issue #253 produces reviewed replacement baselines |
-| Tokenizer-aware renderer profiles | Implemented with golden and preservation tests; broader model evidence remains ongoing |
-| Safety and mixed-context quality gates | Implemented as prototype/reference test infrastructure; product proof remains limited |
-| Three adoption paths | CLI, HTTP API, MCP, and OpenUnum adapter exist; independent product adoption evidence remains limited |
-| Threat model, rollback, compatibility | Implemented and documented; continue adversarial review |
-| Property and conformance tests in CI | Implemented; live branch-protection enforcement still tracked by issue #188 |
+| Stable semantic schema and canonical serialization | Frozen 1.0 schema and fingerprint contracts with 15-vector conformance runner (97%) |
+| Migration rules across schema versions | Implemented and tested for 0.1/0.2/1.0 paths with identity migration and golden vectors |
+| Multilingual semantic-retention evidence | 216-record dataset across 8 languages, retention execution and regression validation (97%); live model baselines still needed |
+| Tokenizer-aware renderer profiles | 8 profiles across 3 families with execution, regression, and compatibility migration validation (97%) |
+| Safety and mixed-context quality gates | Hard invariant gates, adversarial bypass resistance, safety gate runner, human-review policy (97%); external red-team pending |
+| Four adoption paths | CLI, HTTP API, MCP, and OpenUnum adapter with stress testing and error recovery; independent product adoption evidence limited (50%) |
+| Threat model, rollback, compatibility | Security self-assessment, incident response, compliance audit validation (97%); external pentest pending |
+| Property and conformance tests in CI | Implemented with schema conformance runner |
+| Operational reliability | Health probes, SLO compliance, backup/restore, crash recovery, load/failover/cascade simulation (97%); live load pending |
 
 ## Known organizational gaps
 
-- A machine-readable accepted-evidence registry is not yet canonical.
-- GitHub milestones and issue labels need to fully encode the proposed roadmap and work states.
-- The local system service/timer configuration must be migrated from persistent campaign invocation to assignment-driven one-shot dispatch.
-- Old closed-unmerged branches require local inspection for unique commits before deletion.
-- Live branch-protection configuration requires independent verification before incident #188 can close.
+- Live model execution on expanded corpora (parse, retention, compaction, profile quality) not yet performed.
+- External security review or penetration testing by independent assessor not yet completed.
+- No accepted evidence that unrelated products use the core representation in production-like conditions.
+- Native-speaker review still needed for non-EN/EL translations in the expanded corpus.
 
 ## Honest boundary
 
-OpenLunum has a coherent architecture, a strict reference core, migration and adoption tooling, guarded experiment infrastructure, and an improving body of evidence.
+OpenLunum has a coherent architecture, a strict reference core, frozen contracts, comprehensive validation infrastructure, and an extensive body of evidence across 16 readiness areas.
 
 It does not yet provide:
 
 - a production-approved general language-agnostic parser;
 - universal semantic equivalence across arbitrary domains and languages;
-- universal token compression across models;
+- live model evidence for compaction, retention, or profile quality claims;
 - production proof across unrelated products;
-- accepted replacement multilingual baselines from the repaired live-model path;
-- a completed 1.0 support and compatibility guarantee.
+- externally validated security posture.
 
 Natural fallback remains required whenever parsing, rendering, provenance, or safety evidence is insufficient.

@@ -1,15 +1,47 @@
-# Codex CLI adoption profile
+# Codex integration — Lunum MCP server
 
-**Status:** Design, based on official `AGENTS.md` and MCP support.
+**Status:** Working — native MCP via `codex mcp add`.
 
-Preferred options:
+Codex has built-in MCP support. The Lunum MCP server connects directly over stdio.
 
-- Put repository adoption instructions in `AGENTS.md`, pointing Codex to the OpenLunum integration contract.
-- Add the Lunum MCP server for explicit encode/validate/compile tools.
-- For a product being modified by Codex, add `@corpunum/lunum` as a normal dependency and keep a product-owned adapter.
+## Setup
 
-`AGENTS.md` guides implementation; it is not itself a runtime memory integration. MCP tools can provide operations, but the host product must still decide when Lunum enters persistent memory or model context.
+```bash
+codex mcp add lunum \
+  --env LUNUM_COMPACTION=auto \
+  --env LUNUM_MULTILINGUAL=off \
+  --env LUNUM_CONTEXT_MODE=mixed \
+  -- node /home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js
+```
 
-Official references:
-- https://learn.chatgpt.com/docs/agent-configuration/agents-md
-- https://learn.chatgpt.com/docs/extend/mcp?surface=cli
+Verify:
+
+```bash
+codex mcp list   # should show lunum as enabled
+```
+
+## Remove
+
+```bash
+codex mcp remove lunum
+```
+
+## Tools
+
+All 7 Lunum tools become available in Codex sessions:
+
+| Tool | Description |
+|---|---|
+| `lunum_derive` | Text → sidecar (code + sem + fingerprint + meta) |
+| `lunum_compile_context` | Compile messages into compacted context with token counts |
+| `lunum_fingerprint` | Deterministic `lfp:VERSION:sha256:DIGEST` identity |
+| `lunum_validate` | Validate Sem against frozen schema |
+| `lunum_render` | Render Sem to compact code string |
+| `lunum_compare` | Feature recall/precision between two Sems |
+| `lunum_classify` | Eligibility decision for compact representation |
+
+## Testing
+
+```bash
+codex "Use lunum_derive to compact this text: The quick brown fox jumps over the lazy dog"
+```

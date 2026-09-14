@@ -1,0 +1,980 @@
+{
+  "experimentId": "parse-stage2-superqwen-diagnostic",
+  "runId": "2026-09-01T07-57-33-676Z",
+  "task": "parse",
+  "totalItems": 26,
+  "totalPassed": 0,
+  "totalFailed": 16,
+  "totalErrors": 10,
+  "overallExactRate": 0,
+  "overallNearSemanticRate": 0,
+  "overallFeatureRecall": 0.2469706437353496,
+  "overallFeaturePrecision": 0.23235099091492956,
+  "overallMeanLatencyMs": 14238.328081033333,
+  "languageMetrics": [
+    {
+      "language": "en",
+      "languageLabel": "English",
+      "totalItems": 3,
+      "passedItems": 0,
+      "failedItems": 2,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.3666666666666667,
+      "featurePrecision": 0.325,
+      "meanLatencyMs": 14445.355986333334,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.6666666666666666,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 4,
+          "matched": 2,
+          "recall": 0.5,
+          "precision": 1.3333333333333333
+        },
+        "role": {
+          "expected": 10,
+          "matched": 4,
+          "recall": 0.4,
+          "precision": 1
+        },
+        "literal": {
+          "expected": 10,
+          "matched": 2,
+          "recall": 0.2,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 4,
+          "matched": 4,
+          "recall": 1,
+          "precision": 1.3333333333333333
+        },
+        "modality": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "condition": {
+          "expected": 1,
+          "matched": 1,
+          "recall": 1,
+          "precision": 1
+        },
+        "consequence": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "el",
+      "languageLabel": "Greek",
+      "totalItems": 3,
+      "passedItems": 0,
+      "failedItems": 2,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.24621212121212122,
+      "featurePrecision": 0.16934046345811052,
+      "meanLatencyMs": 12783.539067333337,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.6666666666666666,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 3,
+          "matched": 1,
+          "recall": 0.3333333333333333,
+          "precision": 2
+        },
+        "role": {
+          "expected": 8,
+          "matched": 3,
+          "recall": 0.375,
+          "precision": 1.40625
+        },
+        "literal": {
+          "expected": 8,
+          "matched": 1,
+          "recall": 0.125,
+          "precision": 1.25
+        },
+        "negation": {
+          "expected": 3,
+          "matched": 3,
+          "recall": 1,
+          "precision": 2
+        },
+        "modality": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "condition": {
+          "expected": 1,
+          "matched": 1,
+          "recall": 1,
+          "precision": 2
+        },
+        "consequence": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "es",
+      "languageLabel": "Spanish",
+      "totalItems": 3,
+      "passedItems": 0,
+      "failedItems": 2,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.3156565656565657,
+      "featurePrecision": 0.29130434782608694,
+      "meanLatencyMs": 16781.378495333327,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.6666666666666666,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 4,
+          "matched": 3,
+          "recall": 0.75,
+          "precision": 1.25
+        },
+        "role": {
+          "expected": 9,
+          "matched": 4,
+          "recall": 0.4444444444444444,
+          "precision": 1
+        },
+        "literal": {
+          "expected": 9,
+          "matched": 1,
+          "recall": 0.1111111111111111,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 4,
+          "matched": 4,
+          "recall": 1,
+          "precision": 1.4285714285714286
+        },
+        "modality": {
+          "expected": 2,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        },
+        "condition": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "consequence": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "id",
+      "languageLabel": "Indonesian",
+      "totalItems": 3,
+      "passedItems": 0,
+      "failedItems": 2,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.2619047619047619,
+      "featurePrecision": 0.27705627705627706,
+      "meanLatencyMs": 12442.22522933332,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.6666666666666666,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 5,
+          "matched": 3,
+          "recall": 0.6,
+          "precision": 1
+        },
+        "role": {
+          "expected": 10,
+          "matched": 7,
+          "recall": 0.7,
+          "precision": 1
+        },
+        "literal": {
+          "expected": 10,
+          "matched": 1,
+          "recall": 0.1,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 5,
+          "matched": 4,
+          "recall": 0.8,
+          "precision": 1
+        },
+        "modality": {
+          "expected": 2,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        },
+        "condition": {
+          "expected": 2,
+          "matched": 2,
+          "recall": 1,
+          "precision": 1
+        },
+        "consequence": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "reference": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "fr",
+      "languageLabel": "French",
+      "totalItems": 3,
+      "passedItems": 0,
+      "failedItems": 2,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.26495726495726496,
+      "featurePrecision": 0.24848484848484845,
+      "meanLatencyMs": 12087.567993666677,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.6666666666666666,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 3,
+          "matched": 1,
+          "recall": 0.3333333333333333,
+          "precision": 1
+        },
+        "role": {
+          "expected": 6,
+          "matched": 4,
+          "recall": 0.6666666666666666,
+          "precision": 1.1428571428571428
+        },
+        "literal": {
+          "expected": 6,
+          "matched": 1,
+          "recall": 0.16666666666666666,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 3,
+          "matched": 3,
+          "recall": 1,
+          "precision": 1.2
+        },
+        "modality": {
+          "expected": 3,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        },
+        "condition": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "consequence": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "de",
+      "languageLabel": "German",
+      "totalItems": 3,
+      "passedItems": 0,
+      "failedItems": 2,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.25359477124183005,
+      "featurePrecision": 0.24814814814814815,
+      "meanLatencyMs": 14137.291744333323,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.6666666666666666,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 7,
+          "matched": 3,
+          "recall": 0.42857142857142855,
+          "precision": 1
+        },
+        "role": {
+          "expected": 13,
+          "matched": 6,
+          "recall": 0.46153846153846156,
+          "precision": 1.0666666666666667
+        },
+        "literal": {
+          "expected": 13,
+          "matched": 2,
+          "recall": 0.15384615384615385,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 7,
+          "matched": 5,
+          "recall": 0.7142857142857143,
+          "precision": 1
+        },
+        "modality": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "condition": {
+          "expected": 2,
+          "matched": 2,
+          "recall": 1,
+          "precision": 1.3333333333333333
+        },
+        "consequence": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "ja",
+      "languageLabel": "Japanese",
+      "totalItems": 2,
+      "passedItems": 0,
+      "failedItems": 1,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.125,
+      "featurePrecision": 0.04,
+      "meanLatencyMs": 18401.126671000005,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.5,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 1,
+          "matched": 1,
+          "recall": 1,
+          "precision": 6
+        },
+        "role": {
+          "expected": 3,
+          "matched": 1,
+          "recall": 0.3333333333333333,
+          "precision": 3.666666666666667
+        },
+        "literal": {
+          "expected": 3,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 1,
+          "matched": 1,
+          "recall": 1,
+          "precision": 6
+        },
+        "modality": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        },
+        "condition": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "consequence": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "zh",
+      "languageLabel": "Chinese",
+      "totalItems": 2,
+      "passedItems": 0,
+      "failedItems": 1,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.3333333333333333,
+      "featurePrecision": 0.4,
+      "meanLatencyMs": 11821.044006500015,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.5,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 2,
+          "matched": 2,
+          "recall": 1,
+          "precision": 1
+        },
+        "role": {
+          "expected": 4,
+          "matched": 4,
+          "recall": 1,
+          "precision": 1
+        },
+        "literal": {
+          "expected": 4,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 2,
+          "matched": 2,
+          "recall": 1,
+          "precision": 1
+        },
+        "modality": {
+          "expected": 2,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        },
+        "condition": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "consequence": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "pt",
+      "languageLabel": "Portuguese",
+      "totalItems": 2,
+      "passedItems": 0,
+      "failedItems": 1,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.03571428571428571,
+      "featurePrecision": 0.038461538461538464,
+      "meanLatencyMs": 13300.867900000012,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.5,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 3,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "role": {
+          "expected": 5,
+          "matched": 2,
+          "recall": 0.4,
+          "precision": 1
+        },
+        "literal": {
+          "expected": 5,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 3,
+          "matched": 1,
+          "recall": 0.3333333333333333,
+          "precision": 1
+        },
+        "modality": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        },
+        "condition": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "consequence": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 0
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    },
+    {
+      "language": "ar",
+      "languageLabel": "Arabic",
+      "totalItems": 2,
+      "passedItems": 0,
+      "failedItems": 1,
+      "errorItems": 1,
+      "exactRate": 0,
+      "nearSemanticRate": 0,
+      "featureRecall": 0.26666666666666666,
+      "featurePrecision": 0.2857142857142857,
+      "meanLatencyMs": 16182.883716499986,
+      "fingerprintMatches": 0,
+      "exactFingerprintCount": 0,
+      "nearSemanticFingerprintCount": 0,
+      "schemaValidityRate": 0.5,
+      "canonicalExactRate": 0,
+      "featureBreakdown": {
+        "predicate": {
+          "expected": 3,
+          "matched": 2,
+          "recall": 0.6666666666666666,
+          "precision": 1
+        },
+        "role": {
+          "expected": 6,
+          "matched": 3,
+          "recall": 0.5,
+          "precision": 0.8333333333333334
+        },
+        "literal": {
+          "expected": 6,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "negation": {
+          "expected": 3,
+          "matched": 2,
+          "recall": 0.6666666666666666,
+          "precision": 1
+        },
+        "modality": {
+          "expected": 1,
+          "matched": 0,
+          "recall": 0,
+          "precision": 1
+        },
+        "condition": {
+          "expected": 1,
+          "matched": 1,
+          "recall": 1,
+          "precision": 1
+        },
+        "consequence": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        },
+        "reference": {
+          "expected": 0,
+          "matched": 0,
+          "recall": 1,
+          "precision": 1
+        }
+      },
+      "abstentionAccuracy": null
+    }
+  ],
+  "crossLanguageComparison": {
+    "languagesIncluded": [
+      "en",
+      "el",
+      "es",
+      "id",
+      "fr",
+      "de",
+      "ja",
+      "zh",
+      "pt",
+      "ar"
+    ],
+    "bestExactLanguage": "en",
+    "bestRecallLanguage": "en",
+    "fastestLanguage": "zh",
+    "consistencyScore": 1,
+    "variance": {
+      "exactRateVariance": 0,
+      "recallVariance": 0.008698842883730892,
+      "latencyVariance": 4432062.239432365
+    }
+  },
+  "languageBreakdown": {
+    "en": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "el": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "es": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "id": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "fr": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "de": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "ja": [
+      0,
+      1,
+      1,
+      2
+    ],
+    "zh": [
+      0,
+      1,
+      1,
+      2
+    ],
+    "pt": [
+      0,
+      1,
+      1,
+      2
+    ],
+    "ar": [
+      0,
+      1,
+      1,
+      2
+    ]
+  },
+  "failureModes": {
+    "predicate:1:group": 1,
+    "role:0:language:en": 1,
+    "role:0:theme:bullet_points": 1,
+    "role:1:agent:assistant": 1,
+    "role:1:criterion:topic": 1,
+    "role:1:object:weekly_digest": 1,
+    "predicate:0.condition.0:differ": 1,
+    "role:0.condition.0:reference:approved_manifest": 1,
+    "role:0:environment:staging": 1,
+    "world:engineering": 3,
+    "error: attempt 1: Invalid Lunum-Sem: sem must be an objec": 10,
+    "kind:fact": 1,
+    "predicate:0:record": 1,
+    "role:0:object:active_units": 1,
+    "role:0:time:2026-10-14": 1,
+    "role:0:value:37": 1,
+    "kind:temporal_constraint": 1,
+    "modality:0:must": 5,
+    "predicate:0.condition.0:verify": 1,
+    "role:0.condition.0:agent:auditor": 1,
+    "role:0.condition.0:object:files": 1,
+    "role:0:agent:auditor": 1,
+    "world:security": 3,
+    "kind:permission": 1,
+    "modality:0:may": 2,
+    "modality:1:may": 4,
+    "role:0:agent:provider": 1,
+    "world:access": 1,
+    "kind:inventory_fact": 1,
+    "predicate:1:unlabeled": 1,
+    "role:0:nameditems:alpha|beta|gamma": 1,
+    "role:0:quantity:12": 1,
+    "role:0:subject:batch": 1,
+    "role:1:quantity:9": 1,
+    "role:1:subject:remaining": 1,
+    "predicate:0.condition.0:finish": 1,
+    "role:0.condition.0:agent:backup": 1,
+    "role:0.condition.0:time:friday": 1,
+    "role:0:object:third": 1,
+    "role:0:time:2026-11-06": 1,
+    "kind:access_constraint": 1,
+    "negated:1.condition.0:true": 1,
+    "predicate:1.condition.0:close": 1,
+    "role:0:agent:assistant": 1,
+    "role:0:object:this": 1,
+    "role:1.condition.0:object:d-418": 1,
+    "role:1:agent:delta": 1,
+    "role:1:object:this": 1,
+    "world:privacy": 1,
+    "kind:deployment_state": 1,
+    "modality:0:possible": 2,
+    "predicate:0:complete": 2,
+    "role:0:subject:north_region": 1,
+    "kind:workflow_policy": 1,
+    "predicate:1:defer": 1,
+    "role:0:object:schema": 1,
+    "role:1:object:notification": 1,
+    "role:1:time:tomorrow": 1,
+    "kind:procedure": 2,
+    "modality:1:must": 1,
+    "predicate:1.condition.0:approve": 1,
+    "role:0:object:encrypted_log": 1,
+    "role:0:recipient:auditor": 1,
+    "role:1.condition.0:object:release": 1,
+    "role:1:object:encrypted_log": 1,
+    "negated:0.consequence.0:false": 2,
+    "negated:0.consequence.1:false": 1,
+    "predicate:0.consequence.0:clear": 1,
+    "predicate:0.consequence.1:warn": 1,
+    "predicate:0:monitor": 1,
+    "role:0.condition.0:subject:storage": 1,
+    "role:0.condition.0:value:18": 1,
+    "role:0.consequence.0:agent:service": 1,
+    "role:0.consequence.0:object:cache": 1,
+    "role:0.consequence.1:agent:service": 1,
+    "role:0.consequence.1:recipient:on_call": 1,
+    "world:operations": 1,
+    "role:0:agent:owner": 1,
+    "role:0:objects:design_spec|test_log|approval_form": 1,
+    "role:0:time:friday": 1,
+    "kind:access_policy": 1,
+    "kind:conditional_plan": 1,
+    "negated:0.condition.0:false": 1,
+    "predicate:0.condition.0:fail": 1,
+    "predicate:0.consequence.0:notify": 1,
+    "role:0.condition.0:subject:aurora_migration": 1,
+    "role:0.consequence.0:agent:carlos": 1,
+    "role:0.consequence.0:recipient:on_call": 1,
+    "role:0:subject:aurora_migration": 1,
+    "role:0:time:2026-12-19": 1,
+    "kind:uncertain_fact": 1,
+    "negated:1.condition.0:false": 1,
+    "predicate:1:confirm": 1,
+    "role:0:value:24": 1,
+    "role:1:agent:auditor": 1,
+    "role:1:object:attempts": 1
+  },
+  "featureBreakdown": {
+    "predicate": {
+      "expected": 35,
+      "matched": 18,
+      "recall": 0.5142857142857142,
+      "precision": 1.1563169164882228
+    },
+    "role": {
+      "expected": 74,
+      "matched": 38,
+      "recall": 0.5135135135135135,
+      "precision": 1.0517266684838444
+    },
+    "literal": {
+      "expected": 74,
+      "matched": 8,
+      "recall": 0.10810810810810811,
+      "precision": 1.0256410256410258
+    },
+    "negation": {
+      "expected": 35,
+      "matched": 29,
+      "recall": 0.8285714285714286,
+      "precision": 1.2100139082058414
+    },
+    "modality": {
+      "expected": 14,
+      "matched": 0,
+      "recall": 0,
+      "precision": 0
+    },
+    "condition": {
+      "expected": 8,
+      "matched": 7,
+      "recall": 0.875,
+      "precision": 1.1666666666666667
+    },
+    "consequence": {
+      "expected": 2,
+      "matched": 0,
+      "recall": 0,
+      "precision": 0
+    },
+    "reference": {
+      "expected": 1,
+      "matched": 0,
+      "recall": 0,
+      "precision": 0
+    }
+  },
+  "abstentionAccuracy": null,
+  "provenance": {
+    "startedAt": "2026-09-01T07:57:33.654Z",
+    "completedAt": "2026-09-01T08:03:41.124Z",
+    "codeCommit": "204dab3f5169c8ebd08e4dc76c56b9ffa635a103",
+    "baselineCommit": "204dab3f5169c8ebd08e4dc76c56b9ffa635a103",
+    "baselineCommitResolvable": true,
+    "datasetPath": "datasets/dev/stage2-heldout-v1.jsonl",
+    "datasetSha256": "b244325d2b40288354bb91f8fe7714a1bdb0c259a4d4a249f0bf106f89b99b54",
+    "modelProfileSha256": "632183dcd88eb18f7837c8063519604b0da78a20bb1a00e5dbf5c8f9190944e0",
+    "modelProfileId": "superqwen3.8-27b-abliterated-live",
+    "modelIdentity": {
+      "requestedModel": "openai/superqwen3.8-27b-abliterated",
+      "advertisedModelIds": [
+        "openai/superqwen3.8-27b-abliterated"
+      ],
+      "verified": true,
+      "endpoint": "http://127.0.0.1:54523/v1",
+      "modelFileIdentity": {
+        "fileName": "SuperQwen3.8-27b-abliterated-Q4_K_M.gguf",
+        "source": "local llama.cpp process command line",
+        "fileSizeBytes": 16547400704,
+        "modifiedAt": "2026-08-29T12:36:51.534Z"
+      }
+    },
+    "effectiveSystemPromptSha256": "3465225f01eb865bba8a88dc459eb3854f81d383284ee3396d7f682bf7a459da",
+    "promptVersion": "parse-prompt/2",
+    "schemaVersion": "lunum-sem/0.1-draft",
+    "schemaSha256": "80642eb4c5c1c52aa0022d8b16c82fe4304bab2e61009280df3f853d9d0b8d2b",
+    "structuredOutputMode": "json-schema",
+    "decoding": {
+      "temperature": 0,
+      "seed": 42,
+      "maxTokens": 768,
+      "chatTemplateKwargs": {
+        "enable_thinking": false
+      }
+    },
+    "evidenceValid": true,
+    "invalidReasons": []
+  }
+}

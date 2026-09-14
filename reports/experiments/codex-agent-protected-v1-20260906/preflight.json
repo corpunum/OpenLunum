@@ -1,0 +1,15 @@
+{
+  "implementationSha": "e40a7be36fb1cef9626cc674fcfa3f410aa6d92d",
+  "corpusPath": "reports/experiments/codex-agent-protected-v1-20260906/items.jsonl",
+  "corpusSha256": "7b8d92c1319bfc62d1ec1f5f33cec1278ab8eb9414bf1897adacf866f6328e03",
+  "totalRows": 16,
+  "parseRows": 12,
+  "abstentionRows": 4,
+  "semanticGroups": 12,
+  "multilingualGroups": 4,
+  "goldGroupsConverging": "8/8",
+  "criticalNegativePairs": 6,
+  "goldCriticalNegativeSeparated": "6/6",
+  "preflight": "PASS",
+  "modelCalls": 0
+}

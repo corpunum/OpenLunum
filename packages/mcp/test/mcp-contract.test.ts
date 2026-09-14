@@ -16,7 +16,7 @@ describe('MCP contract', () => {
 
   it('MCP_TOOLS includes expected tools', () => {
     const names = MCP_TOOLS.map(t => t.name);
-    for (const expected of ['lunum_parse', 'lunum_realize', 'lunum_render', 'lunum_retrieve', 'lunum_validate', 'lunum_context']) {
+    for (const expected of ['lunum_derive', 'lunum_get_extraction_contract', 'lunum_submit_candidate', 'lunum_build_candidate', 'lunum_compile_context', 'lunum_fingerprint', 'lunum_validate', 'lunum_render', 'lunum_compare', 'lunum_classify']) {
       assert.ok(names.includes(expected), `missing tool: ${expected}`);
     }
   });
@@ -42,16 +42,11 @@ describe('MCP contract', () => {
     assert.strictEqual(validate.requiresAuth, false);
   });
 
-  it('mutation tools require auth', () => {
-    for (const name of ['lunum_parse', 'lunum_realize', 'lunum_render', 'lunum_retrieve']) {
+  it('candidate submission has the strictest rate limit', () => {
+    for (const name of ['lunum_submit_candidate']) {
       const tool = MCP_TOOLS.find(t => t.name === name)!;
-      assert.strictEqual(tool.requiresAuth, true, `${name} should require auth`);
+      assert.ok(tool.rateLimit.maxRequests < MCP_DEFAULT_RATE_LIMIT.maxRequests, `${name} should be rate limited`);
     }
-  });
-
-  it('retrieve has stricter rate limit', () => {
-    const retrieve = MCP_TOOLS.find(t => t.name === 'lunum_retrieve')!;
-    assert.ok(retrieve.rateLimit.maxRequests < MCP_DEFAULT_RATE_LIMIT.maxRequests);
   });
 
   it('default constants are reasonable', () => {

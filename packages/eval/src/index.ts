@@ -12,12 +12,27 @@ export type {
   ModelProfile,
   CompletionUsage,
   ModelCompletion,
+  ModelCompletionOptions,
+  StructuredOutputCapability,
   StreamingModelCompletion,
   ExperimentManifest,
   DatasetItem,
   ItemResult,
   ExperimentItem,
 } from './types.js';
+
+// Tokenizer counting
+export {
+  countTokensCharBased,
+  countTokensExact,
+  getTokenizerFamily,
+  compareTokenCounts,
+  countChars,
+} from './tokenizer-counter.js';
+export type {
+  TokenCountResult,
+  TokenCountComparison,
+} from './tokenizer-counter.js';
 
 // I/O utilities
 export {
@@ -66,8 +81,16 @@ export type {
 // Runner
 export { runExperiment } from './runner.js';
 
+// Failure classification taxonomy (R14.x)
+export { classifyFailure } from './failure-classification.js';
+export type { FailureClass, ClassifiedFailure } from './failure-classification.js';
+
+// Blind agent-native evaluation. Gold is evaluator-private at runtime.
+export { BlindAgentEvaluationSession } from './agent-evaluator.js';
+export type { BlindEvalNextItem, BlindEvalSubmission, BlindEvalResult, BlindEvalLanguageSummary, BlindEvalSummary, BlindCriticalNegativePair, BlindEvaluationOptions } from './agent-evaluator.js';
 // Model
-export { OpenAICompatibleModel } from './model.js';
+export { ModelResponseError, OpenAICompatibleModel, normalizeModelResponse, openAICompatibleStructuredOutputAdapter } from './model.js';
+export type { StructuredOutputAdapter } from './model.js';
 
 // Smoke testing
 export { runSmoke } from './smoke.js';
@@ -156,6 +179,24 @@ export type {
   CrossLingualIndex,
 } from './cross-lingual-retrieval.js';
 
+// Raw-text retrieval: the extraction and retrieval stages are both exercised.
+export { runRawTextRetrievalEvaluation } from './raw-text-retrieval.js';
+export { validateBlindAgentLedger } from './blind-agent-ledger.js';
+export type { BlindSourceItem, BlindCandidateRow, BlindLedgerValidation } from './blind-agent-ledger.js';
+export type {
+  RawTextMemory,
+  RawTextQuery,
+  RawTextExtractionInput,
+  RawTextExtractor,
+  RawTextBaseline,
+  RawTextRetrievalQueryResult,
+  RawTextRetrievalMetrics,
+  RawTextBaselineMetrics,
+  RawTextRetrievalReport,
+} from './raw-text-retrieval.js';
+export { runStage2LiveRetrieval } from './stage2-live-retrieval.js';
+export { runStage2ThresholdCalibration } from './stage2-threshold-calibration.js';
+
 // Model family eval
 export {
   validateModelFamilyResult,
@@ -194,12 +235,15 @@ export {
 export {
   collectLiteralPlacements,
   checkProtectedLiteralPlacement,
+  checkProtectedSemanticAtoms,
   protectedLiteralPlacementCoverage,
 } from './protected-literal-placement.js';
 export type {
   LiteralPlacement,
   ProtectedLiteralPlacementStatus,
   ProtectedLiteralPlacementCheck,
+  ProtectedSemanticAtom,
+  ProtectedSemanticAtomCheck,
 } from './protected-literal-placement.js';
 
 // Round-trip consistency

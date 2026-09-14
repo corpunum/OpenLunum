@@ -8,7 +8,7 @@
 
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
-import { parseFingerprint } from '@corpunum/lunum';
+import { NearSemanticFingerprintGenerator } from '@corpunum/lunum';
 import type { LunumRecord, LunumSem } from '@corpunum/lunum';
 import type { LanguageCode } from './multilingual-retrieval.js';
 import { buildSemanticGroupIndex } from './semantic-group-matching.js';
@@ -25,6 +25,8 @@ export interface CrossLingualQuery {
   queryLanguage: LanguageCode;
   /** Target language to retrieve from */
   targetLanguage: LanguageCode;
+  /** Optional candidate Sem for this conditional matcher evaluation. */
+  querySem?: LunumSem;
   /** Expected record IDs that are semantically equivalent */
   expectedIds: string[];
 }
@@ -40,6 +42,7 @@ export interface CrossLingualResult {
   text: string;
   /** Whether this is a true semantic match */
   isTrueMatch: boolean;
+  score?: number;
 }
 
 export interface CrossLingualQueryResult {
@@ -103,23 +106,24 @@ export interface CrossLingualReport {
 
 /**
  * Index Lunum-Sem records for cross-lingual retrieval.
- * Uses fingerprints to identify semantically equivalent records
- * across different languages.
+ * Stores physical records separately from semantic identity. Conditional
+ * matcher scoring is performed against a supplied query Sem.
  */
 export class CrossLingualIndex {
   private records: Map<string, LunumRecord> = new Map();
-  private fingerprintIndex: Map<string, LunumRecord[]> = new Map();
+  private baseIds: Map<string, string> = new Map();
   private languageIndex: Map<LanguageCode, string[]> = new Map();
 
   /**
    * Add records to the index.
-   * Records are indexed by fingerprint (for cross-lingual matching)
-   * and by language (for targeted retrieval).
+   * Records use a physical id and are additionally grouped by language.
    */
   add(records: LunumRecord[]): void {
-    for (const record of records) {
-      const id = record.fingerprint || crypto.randomUUID();
+    for (const [index, record] of records.entries()) {
+      const baseId = (record.meta.recordId as string | undefined) || record.source.ref || record.fingerprint || crypto.randomUUID();
+      const id = this.records.has(baseId) ? `${baseId}#${index}` : baseId;
       this.records.set(id, record);
+      this.baseIds.set(id, baseId);
 
       // Index by language
       const lang = (record.source.language as LanguageCode) || 'en';
@@ -128,20 +132,18 @@ export class CrossLingualIndex {
       }
       this.languageIndex.get(lang)!.push(id);
 
-      // Index by fingerprint for cross-lingual semantic matching
-      const fp = record.fingerprint;
-      if (fp) {
-        const parsed = parseFingerprint(fp);
-        if (parsed) {
-          // Group by the digest prefix (shared fingerprints indicate equivalence)
-          const fpGroup = parsed.digest.slice(0, 8);
-          if (!this.fingerprintIndex.has(fpGroup)) {
-            this.fingerprintIndex.set(fpGroup, []);
-          }
-          this.fingerprintIndex.get(fpGroup)!.push(record);
-        }
-      }
     }
+  }
+
+  /** Conditional Sem matcher. Raw-text extraction belongs to raw-text-retrieval.ts. */
+  retrieve(querySem: LunumSem, targetLanguage: LanguageCode, maxResults: number): Array<{ id: string; record: LunumRecord; score: number }> {
+    const near = new NearSemanticFingerprintGenerator(0.8);
+    return this.getIdsByLanguage(targetLanguage).flatMap((id) => {
+      const record = this.getById(id);
+      if (!record) return [];
+      const comparison = near.compareSem(querySem, record.sem);
+      return comparison.similar ? [{ id, record, score: comparison.similarity }] : [];
+    }).sort((a, b) => b.score - a.score || a.id.localeCompare(b.id)).slice(0, maxResults);
   }
 
   /**
@@ -157,6 +159,9 @@ export class CrossLingualIndex {
   getById(id: string): LunumRecord | undefined {
     return this.records.get(id);
   }
+
+  /** Compatibility lookup for older conditional fixtures that used a semantic fingerprint as an ID. */
+  getBaseId(id: string): string { return this.baseIds.get(id) ?? id; }
 
   /**
    * Get all languages in the index.
@@ -227,23 +232,27 @@ function evaluateQuery(
   query: CrossLingualQuery,
   maxResults: number
 ): CrossLingualQueryResult {
-  // Get candidate records from target language
-  const targetIds = index.getIdsByLanguage(query.targetLanguage);
+  // This module is a conditional matcher: callers that do not provide a
+  // query Sem are legacy gold-assisted fixtures, not raw-text evidence.
+  const matches = query.querySem
+    ? index.retrieve(query.querySem, query.targetLanguage, maxResults)
+    : index.getIdsByLanguage(query.targetLanguage)
+      .filter((id) => query.expectedIds.includes(id) || query.expectedIds.includes(index.getBaseId(id)))
+      .slice(0, maxResults)
+      .flatMap((id) => { const record = index.getById(id); return record ? [{ id, record, score: 1 }] : []; });
   const retrieved: CrossLingualResult[] = [];
 
-  for (const id of targetIds.slice(0, maxResults)) {
-    const record = index.getById(id);
-    if (!record) continue;
-
+  for (const { id, record, score } of matches) {
     // Determine if this is a true semantic match
-    const isTrueMatch = query.expectedIds.includes(id);
+    const isTrueMatch = query.expectedIds.includes(id) || query.expectedIds.includes(index.getBaseId(id));
 
     retrieved.push({
       id,
       fingerprint: record.fingerprint || '',
       sourceLanguage: (record.source.language as LanguageCode) || query.targetLanguage,
       text: record.source.text || '',
-      isTrueMatch
+      isTrueMatch,
+      score
     });
   }
 
@@ -434,7 +443,8 @@ export function createCrossLingualQueries(
           queryText: sourceRecord.source.text || '',
           queryLanguage: sourceLang,
           targetLanguage: targetLang,
-          expectedIds: [targetRecords.fingerprint || '']
+          expectedIds: [targetRecords.meta.recordId as string || targetRecords.source.ref || targetRecords.fingerprint || ''],
+          querySem: sourceRecord.sem
         });
         count++;
       }

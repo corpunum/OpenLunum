@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlunum.dev/schemas/lunum-training-run/1.0",
+  "title": "OpenLunum semantic compiler training run",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "codeSha", "datasetSha256", "splitSha256", "seed", "model", "localInferenceUsed", "embeddingUsed"],
+  "properties": {
+    "format": { "const": "lunum-training-run/0.1" },
+    "codeSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "datasetSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "splitSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "seed": { "type": "integer", "minimum": 0 },
+    "model": { "type": "object", "additionalProperties": false, "required": ["class", "baseRevision", "tokenizerRevision"], "properties": { "class": { "type": "string" }, "baseRevision": { "type": "string" }, "tokenizerRevision": { "type": "string" } } },
+    "config": { "type": "object", "additionalProperties": true },
+    "localInferenceUsed": { "const": false },
+    "embeddingUsed": { "const": false },
+    "externalCompute": { "type": "object", "additionalProperties": true },
+    "checkpointSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

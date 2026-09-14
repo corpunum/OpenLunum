@@ -1,0 +1,24 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "multilingual-parse-heldout-v1-live-smoke",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "hypothesis": "The real endpoint produces parse outputs on a bounded cross-language slice of the held-out corpus; this is an operational smoke result, not a full quality claim.",
+  "baselineCommit": "f4b7e90",
+  "dataset": {
+    "path": "datasets/dev/multilingual-extended-v1.jsonl",
+    "sha256": "bfe2edada088738f0f0a1ad191dfe3940a30c58471cec64afac5f74371b32b31"
+  },
+  "modelProfile": "profiles/models/qwen3-coder-30b-heldout-smoke.json",
+  "limits": {
+    "maxItems": 10,
+    "maxAttemptsPerItem": 1,
+    "maxModelCalls": 10
+  },
+  "gates": {
+    "minimumFeatureRecall": 0.95,
+    "minimumExactRate": 0.75,
+    "requireProtectedLiteralCoverage": true
+  },
+  "outputDirectory": "reports/experiments/multilingual-parse-heldout-v1-live-smoke"
+}

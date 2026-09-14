@@ -2,9 +2,9 @@
 
 > **Status:** accepted living baseline — Phase 1 evidence reconciled under [issue #366](https://github.com/corpunum/OpenLunum/issues/366)
 >
-> **Last reconciled:** 2026-08-02
+> **Last reconciled:** 2026-08-08
 >
-> **Repository baseline:** `b8b5cee` (Phase 8 completion)
+> **Repository baseline:** `3cbc886` (Phase 27 completion + readiness issue sprint)
 >
 > **Current product maturity:** pre-1.0 research-to-reference implementation
 >

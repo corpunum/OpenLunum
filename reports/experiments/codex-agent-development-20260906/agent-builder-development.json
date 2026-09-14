@@ -1,0 +1,31 @@
+{
+  "type": "development-agent-frame-first-builder",
+  "version": 1,
+  "status": "diagnostic",
+  "provenance": {
+    "extractor": "isolated Codex subagents",
+    "label": "CODEX_AGENT_DEVELOPMENT",
+    "modelIdentity": "gpt-5.6-luna",
+    "localInference": false,
+    "protected": false
+  },
+  "casesPerAgent": 8,
+  "architectures": {
+    "freeFormSemTrial": {
+      "agents": 2,
+      "structuralOrTransportFailures": 10,
+      "identityAvailable": 5,
+      "notes": "First agent omitted the required typed LunumTerm shape; second agent still produced two structural/semantic failures."
+    },
+    "frameFirstBuilderTrial": {
+      "agents": 2,
+      "builderAccepted": 12,
+      "explicitAbstentions": 3,
+      "builderRejected": 2,
+      "identityAvailableAfterSubmit": 12,
+      "notes": "The builder removed transport-envelope failures for correctly typed candidates, while rejecting invalid world, term, and frame choices. Identity availability is not exact correctness."
+    }
+  },
+  "decision": "KEEP_BUILDER_AS_ADOPTION_SURFACE",
+  "interpretation": "The typed builder materially improves transport reliability for agents that follow the generated contract, but it does not solve semantic role/kind/frame selection or open-concept grounding. It is a general interface improvement, not evidence of model-independent extraction qualification."
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "openlunum-dataset-manifest/0.1",
+  "path": "datasets/dev/stage2-retrieval-v1.jsonl",
+  "sha256": "1235f3b750e0fbee35d7fe86dd3aaa7381235ded8ca230b9adf22294096b800a",
+  "items": 22,
+  "memoryItems": 10,
+  "queryItems": 12,
+  "crossLanguagePairs": ["el-en", "en-el", "es-en", "en-es"],
+  "evaluationClass": "frozen-heldout-candidate",
+  "protectedSetStatus": "repo-visible-diagnostic-not-protected",
+  "goldSemSuppliedToMechanism": false,
+  "embeddingBaseline": "not-run"
+}
