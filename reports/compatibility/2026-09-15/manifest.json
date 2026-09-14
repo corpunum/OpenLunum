@@ -1,0 +1,113 @@
+{
+  "schema": "openlunum-client-compatibility/0.1",
+  "date": "2026-09-15",
+  "codeCommit": "39ecfeab13c12f54f25e5a6e974b0449137167a4",
+  "serverCommand": "node /home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js",
+  "serverArtifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+  "testedCandidateCommit": "72040dd8b9aa2b8faa32c6306d745e61a8c189f2",
+  "testedCandidateRef": "compatibility-2026-09-15-candidate",
+  "serverArtifactEquivalence": "The recorded command used the canonical checkout path; the same source-built artifact hash was independently matched in the clean publication worktree.",
+  "contract": {
+    "version": "lunum-agent/0.3",
+    "protocolRegistryHash": "116e90d37bbb2b769e6d6727b02a5518d28742fa7c34f1c07cbdaa91eeeca289"
+  },
+  "prompts": "prompts.json",
+  "promptsSha256": "31d448062981983f3d452320a57243ac1dcb85c3c59f01116849856470117531",
+  "verification": "verification.json",
+  "buildReceipt": "build-receipt.json",
+  "fixture": {
+    "sourceText": "Maria prefers quiet mode.",
+    "sourceLanguage": "en",
+    "world": "real",
+    "kind": "preference",
+    "predicate": "prefer",
+    "roles": {
+      "experiencer": {"type": "actor", "id": "maria"},
+      "theme": {"type": "concept", "id": "quiet_mode"}
+    }
+  },
+  "runs": {
+    "codex": {
+      "clientVersion": "codex-cli 0.154.0",
+      "requestedModel": "gpt-5.6-luna",
+      "reportedModel": "gpt-5.6-luna",
+      "provider": "openai",
+      "authRoute": "ChatGPT subscription login",
+      "status": "MCP_PASS",
+      "toolCalls": 6,
+      "successfulFixtureSubmission": true,
+      "explicitAbstention": true,
+      "mutationHardMismatch": true,
+      "malformedRejected": true,
+      "promotable": false,
+      "trustPromoted": false,
+      "usage": {"inputTokens": 208025, "outputTokens": 1114, "reasoningOutputTokens": 240},
+      "costUsd": null,
+      "evidence": "codex-events.jsonl"
+    },
+    "claude": {
+      "clientVersion": "Claude Code 2.1.270",
+      "requestedModel": "claude-sonnet-4-6",
+      "reportedModel": "claude-sonnet-4-6",
+      "provider": "firstParty",
+      "authRoute": "Claude.ai Pro",
+      "status": "MCP_PASS",
+      "toolCalls": 5,
+      "successfulFixtureSubmission": true,
+      "explicitAbstention": true,
+      "mutationHardMismatch": true,
+      "malformedRejected": false,
+      "promotable": false,
+      "trustPromoted": false,
+      "usage": {"inputTokens": 9, "outputTokens": 2135, "thinkingTokens": 344},
+      "costUsdReportedByClient": 0.2598142,
+      "evidence": "claude-events.jsonl"
+    },
+    "agy": {
+      "clientVersion": "AGY 1.2.2",
+      "requestedModel": "claude-sonnet-4-6",
+      "reportedModel": "claude-sonnet-4-6",
+      "provider": "not exposed",
+      "authRoute": "not exposed",
+      "status": "NOT_RUN",
+      "discovery": "PASS",
+      "toolExecution": "NOT_RUN",
+      "reason": "call_mcp_tool reached the named Lunum tool but AGY denied its MCP permission prompt in headless mode",
+      "costUsd": null,
+      "evidence": "agy-events.jsonl"
+    },
+    "gemini": {
+      "clientVersion": "Gemini CLI 0.45.1",
+      "requestedModel": null,
+      "reportedModel": null,
+      "provider": "Google",
+      "authRoute": "Code Assist for individuals; unsupported client tier",
+      "status": "NOT_RUN",
+      "discovery": "PASS",
+      "toolExecution": "NOT_RUN",
+      "reason": "authentication setup reported UNSUPPORTED_CLIENT before any model call",
+      "costUsd": null,
+      "evidence": "gemini-events.jsonl"
+    }
+  },
+  "sanityCheck": {
+    "status": "PASS",
+    "path": "lunum_derive with caller-supplied Sem",
+    "automaticExtraction": false,
+    "tokenSavingsClaim": false,
+    "taskQualityClaim": false,
+    "evidence": "supplied-sem-sanity.json"
+  },
+  "isolation": {
+    "codex": "temporary directory; prompt-level tool restriction",
+    "claude": "strict inline MCP config; prompt-level tool restriction",
+    "agy": "temporary registration; prompt-level restriction, permission gate prevented call",
+    "gemini": "disposable project configuration; no model call"
+  },
+  "limitations": [
+    "This is project-authored interoperability evidence, not outside adoption evidence.",
+    "Supplied-Sem fixture calls do not test natural-language extraction.",
+    "No quota balance was exposed by the tested status/help surfaces.",
+    "Only the named client versions and model/configuration combinations were tested."
+  ]
+}

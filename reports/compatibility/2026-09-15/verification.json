@@ -1,0 +1,26 @@
+{
+  "schema": "openlunum-client-compatibility-verification/0.1",
+  "testedSourceCommit": "39ecfeab13c12f54f25e5a6e974b0449137167a4",
+  "testedCandidateRef": "compatibility-2026-09-15-candidate",
+  "commands": {
+    "pnpm test:license": {"exit": 0, "tests": "5 passed"},
+    "pnpm --filter @corpunum/lunum-mcp test": {"exit": 0, "tests": "60 passed"},
+    "node --test packages/mcp/test/stdio-compatibility.test.mjs": {"exit": 0, "tests": "1 passed"},
+    "node --test scripts/pi-dispatch-once.test.mjs": {"exit": 0, "tests": "14 passed"},
+    "git diff --check": {"exit": 0},
+    "pnpm verify": {
+      "exit": 1,
+      "reason": "repository-wide parallel verification hit the documented global dispatcher lock",
+      "failures": 4,
+      "failedTests": [
+        "creates and checks out the assigned branch before invoking pi",
+        "fails closed when a local branch already exists",
+        "fails closed on unauthorized local branch mutation",
+        "fails closed when worker exits nonzero and refs stay unchanged"
+      ],
+      "observedError": "BLOCKED: another worker dispatch is active",
+      "serialFocusedRerun": "node --test scripts/pi-dispatch-once.test.mjs passed 14/14"
+    }
+  },
+  "interpretation": "The full gate was attempted and remains a baseline/environment failure; the compatibility change does not bypass or weaken the lock."
+}

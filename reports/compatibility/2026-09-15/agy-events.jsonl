@@ -1,0 +1,2 @@
+{"event":"init","clientVersion":"1.2.2","model":"claude-sonnet-4-6","mcpToolCache":["lunum_get_extraction_contract","lunum_build_candidate","lunum_submit_candidate","lunum_compare"]}
+{"event":"call_mcp_tool","server":"compat","tool":"lunum_get_extraction_contract","status":"error","error":"permission check failed for mcp compat/lunum_get_extraction_contract: user denied permission"}

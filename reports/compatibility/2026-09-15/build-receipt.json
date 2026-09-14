@@ -1,0 +1,21 @@
+{
+  "schema": "openlunum-client-compatibility-build/0.1",
+  "buildCommands": [
+    "pnpm --filter @corpunum/lunum build",
+    "pnpm --filter @corpunum/lunum-mcp build"
+  ],
+  "implementationSourceCommit": "39ecfeab13c12f54f25e5a6e974b0449137167a4",
+  "implementationSourceTrees": {
+    "packages/mcp/src": "8fd36d2cb3ef9b0e7f30964a27f4a3b4d5eca0e1",
+    "packages/core/src": "a674992bc524fe8f7f5847f91647c25449d020c9"
+  },
+  "artifact": {
+    "relativePath": "packages/mcp/dist/bin/lunum-mcp.js",
+    "sha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758"
+  },
+  "independentBuildObservations": [
+    {"checkout": "canonical /home/corpunum/OpenLunum", "artifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758"},
+    {"checkout": "clean publication worktree", "artifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758"}
+  ],
+  "note": "The compatibility client runs used the canonical checkout artifact; the clean publication checkout was rebuilt and matched its bytes. The candidate ref binds the published evidence checkout."
+}

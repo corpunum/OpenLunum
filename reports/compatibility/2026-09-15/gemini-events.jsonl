@@ -1,0 +1,3 @@
+{"event":"mcp_add","scope":"project","server":"compat","transport":"stdio","status":"configured"}
+{"event":"mcp_list","server":"compat","status":"Connected","trust":"GEMINI_CLI_TRUST_WORKSPACE=true"}
+{"event":"auth","clientVersion":"0.45.1","status":"blocked","reason":"UNSUPPORTED_CLIENT: Gemini Code Assist for individuals is no longer supported"}
