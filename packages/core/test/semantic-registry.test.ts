@@ -89,3 +89,14 @@ test('negative deontic modality maps once and rejects duplicate negation', () =>
   candidate.clauses[0]!.negated = true;
   assert.equal(normalizeSemanticCandidate(candidate).status, 'rejected');
 });
+
+test('allow and prohibit preserve compositional polarity', () => {
+  const forms = ['prohibit', 'allow'].flatMap((predicate) => [false, true].map((negated) => {
+    const candidate = structuredClone(base);
+    candidate.clauses[0]!.predicate = predicate;
+    candidate.clauses[0]!.negated = negated;
+    return candidate;
+  }));
+  const fingerprints = forms.map((candidate) => semanticFingerprint(candidate));
+  assert.equal(new Set(fingerprints).size, 4);
+});

@@ -77,9 +77,12 @@ classification all pass. A registered predicate without a frame is not
 identity-safe.
 Canonical channels are exclusive: `deadline` uses framed `roles.time` and
 must not also use `clause.time`; nested meaning uses `conditions` and
-`consequences`, never role lookalikes; and prohibition uses `negated=true`,
-not a duplicate negative modality. Ambiguous duplicate channels are rejected
-for exact identity.
+`consequences`, never role lookalikes. Negation is compositional for lexical
+predicates: `prohibit` with `negated=false` means `PROHIBIT(X)`, while
+`prohibit` with `negated=true` means `NOT PROHIBIT(X)`; likewise `allow` with
+`negated=true` means `NOT ALLOW(X)`. `NOT PROHIBIT(X)` must not be inferred to
+mean `ALLOW(X)`. A negative deontic modality must not be duplicated with
+`negated=true`. Ambiguous duplicate channels are rejected for exact identity.
 Surface evidence such as a pronoun token, source language, or provider-added
 reference type remains in the Sem/source artifact but is excluded from exact
 semantic identity. An ungrounded reference cannot establish exact identity.
