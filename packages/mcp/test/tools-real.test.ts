@@ -27,6 +27,13 @@ test('lunumTools has the real agent-native tools', () => {
   assert.ok(names.includes('lunum_build_candidate'));
 });
 
+test('every MCP tool advertises an object-root input schema', () => {
+  for (const tool of lunumTools) {
+    assert.equal(tool.inputSchema.type, 'object', `${tool.name} must declare MCP object input`);
+    assert.ok(tool.inputSchema.properties && typeof tool.inputSchema.properties === 'object', `${tool.name} must expose properties`);
+  }
+});
+
 test('lunum_build_candidate returns a candidate without certifying it', async () => {
   const data = JSON.parse(getText(await find('lunum_build_candidate').handler({
     world: 'real', kind: 'preference', predicate: 'prefer',

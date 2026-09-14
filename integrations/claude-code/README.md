@@ -1,10 +1,10 @@
 # Claude Code integration — Lunum MCP server
 
-**Status:** Working — MCP server with stdio transport, 7 real tools, tested.
+**Status:** Versioned compatibility evidence — Claude Code 2.1.270 with stdio transport; supplied-Sem path tested.
 
 ## Setup
 
-The repo ships a `.mcp.json` at the project root. When you start Claude Code inside the OpenLunum directory, it auto-discovers the MCP server and registers all 7 `lunum_*` tools.
+The repo ships a `.mcp.json` at the project root. When you start Claude Code inside the OpenLunum directory, it can discover the MCP server and register the current ten `lunum_*` tools after the build.
 
 ```json
 {
@@ -54,11 +54,11 @@ Each tool also accepts per-call overrides via its arguments.
 
 ### `lunum_derive`
 
-Derive a Lunum sidecar from input text. This is the main entry point — give it text, get back a semantic representation, fingerprint, compact code, and policy classification.
+Derive a Lunum sidecar from input text and optional caller-supplied Sem. Without a supplied Sem, the result is explicitly surface-only and is not semantic extraction.
 
-Without a pre-parsed Sem, it uses **surface telegraph** (heuristic stopword removal, no LLM needed, instant). Typical savings: ~22% character reduction (range 12–50% depending on content density).
+Without a pre-parsed Sem, it uses **surface telegraph** (a heuristic, not semantic extraction). No savings claim is made here; counts and quality require a named tokenizer and measured downstream task evidence.
 
-**When to use:** Whenever you want to create a Lunum representation of text — for compaction, fingerprinting, or downstream comparison.
+**When to use:** To inspect a surface sidecar or to process a Sem that was produced and validated elsewhere.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|

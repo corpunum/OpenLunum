@@ -1,6 +1,6 @@
 # Codex integration — Lunum MCP server
 
-**Status:** Working — native MCP via `codex mcp add`.
+**Status:** Versioned compatibility evidence — Codex CLI 0.154.0 native MCP; supplied-Sem tool path passed.
 
 Codex has built-in MCP support. The Lunum MCP server connects directly over stdio.
 
@@ -28,17 +28,23 @@ codex mcp remove lunum
 
 ## Tools
 
-All 7 Lunum tools become available in Codex sessions:
+The current server exposes 10 tools; the tested conformance path uses:
 
 | Tool | Description |
 |---|---|
-| `lunum_derive` | Text → sidecar (code + sem + fingerprint + meta) |
+| `lunum_derive` | Sidecar from text and optional supplied Sem; no-sem mode is surface-only |
+| `lunum_get_extraction_contract` | Return the generated extraction contract |
+| `lunum_submit_candidate` | Contain an untrusted candidate |
+| `lunum_build_candidate` | Build an untrusted frame candidate |
 | `lunum_compile_context` | Compile messages into compacted context with token counts |
 | `lunum_fingerprint` | Deterministic `lfp:VERSION:sha256:DIGEST` identity |
 | `lunum_validate` | Validate Sem against frozen schema |
 | `lunum_render` | Render Sem to compact code string |
 | `lunum_compare` | Feature recall/precision between two Sems |
 | `lunum_classify` | Eligibility decision for compact representation |
+
+For the exact tested client/version, permissions, limitations, and evidence,
+see [`docs/CLIENT_COMPATIBILITY.md`](../../docs/CLIENT_COMPATIBILITY.md).
 
 ## Testing
 

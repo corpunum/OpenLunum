@@ -11,11 +11,11 @@ Status labels:
 | Product | Preferred path | Status | Notes |
 |---|---|---|---|
 | OpenUnum | package dependency + product adapter | Verified-current-state / Reference plan | Detailed gap analysis against current private repo |
-| Claude Code | MCP server over stdio via `.mcp.json` | **Working** | 7 real tools wired to core functions; auto-discovered by Claude Code |
+| Claude Code | MCP server over stdio via `.mcp.json` | **Versioned evidence** | Claude Code 2.1.270: ten tools discovered and exercised with supplied Sem; see `docs/CLIENT_COMPATIBILITY.md` |
 | Codex CLI | Native MCP via `codex mcp add` | **Working** | Direct stdio MCP, no bridge needed |
 | OpenClaw | Native MCP via `openclaw mcp add` | **Working** | Direct stdio MCP, tools available to all agents |
-| OpenCode | Native MCP via `opencode mcp add` | **Working** | Direct stdio MCP, config or interactive add |
-| Pi / Agy | Native `defineTool` extension | **Working** | Direct core import, no MCP roundtrip; 7 tools |
+| OpenCode | Native MCP via `opencode mcp add` | **Working** | Direct stdio MCP, interactive TUI add only (no config file key) |
+| Pi / Agy | Native `defineTool` extension | **Working** | Pi native extension is separate; AGY 1.2.2 MCP discovery passed but headless tool execution is permission-blocked |
 | Gemini CLI | extension/hooks/MCP | Design | Product surface is evolving; pin tested versions |
 | Generic Node agent | direct `@corpunum/lunum` dependency | Reference | Most complete reusable example after OpenUnum |
 

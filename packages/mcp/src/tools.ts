@@ -181,6 +181,11 @@ export const buildCandidateTool: LunumToolDefinition = {
   description: 'Build an untrusted transport-shaped candidate from agent-selected canonical frame slots. The result must still be submitted for deterministic validation and grounding.',
   inputSchema: {
     ...getCandidateBuilderSchema() as LunumToolDefinition['inputSchema'],
+    // MCP clients require the top-level tool schema to declare an object
+    // input. The frame builder's registry-derived schema is a JSON Schema
+    // `oneOf` and remains authoritative for the variant details.
+    type: 'object',
+    properties: {},
   },
   handler: async (input): Promise<McpToolResponse> => {
     try {
