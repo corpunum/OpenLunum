@@ -1,0 +1,43 @@
+{
+  "format": "openlunum-natural-development-iteration/0.1",
+  "version": "v8-iteration2",
+  "status": "completed-bounded-diagnostic-pass",
+  "priorIteration": "iteration1-manifest.json",
+  "datasetSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "taskContractSha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+  "sourceOnlyRequestSha256": "5e884ba6b9c8971fd9015aaec75abe316eb97fd0f86181bd1c36e7d8ab45d73f",
+  "sourceOnlyContractSha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e",
+  "publicTaskProfileSha256": "cc84741c101bcde0f7ad9be4026de8bb79848bc007ecbeb98d69793ade6cd7b7",
+  "rawCandidateLedgerSha256": "dd60b0a864d419267c711d38090939d0c78fdc8d52869039e37d2814b4a97fea",
+  "candidateLedgerSha256": "dd60b0a864d419267c711d38090939d0c78fdc8d52869039e37d2814b4a97fea",
+  "transformationManifest": "transformation-manifest-iteration2.json",
+  "transformationManifestSha256": "155a78c640ac90c318e75c88a6aba5c0543d2baf3b0492db7d91a0a6d638d712",
+  "results": "results-iteration2.json",
+  "resultsSha256": "4bb94919b8669699686081ccae154c783eddd70536cc894e816fb0be14884116",
+  "scorerSource": "../../../../scripts/research/score-natural-source-only-extraction.mjs",
+  "scorerSourceSha256": "a69a663cb581cd885ada63ae10eb316a5f8baa984c872ed852ab59804f812ced",
+  "rows": 24,
+  "parseTargets": 18,
+  "abstentionTargets": 6,
+  "parseSubmissions": 17,
+  "explicitAbstentions": 7,
+  "missing": 0,
+  "malformed": 0,
+  "sourceRelative": { "match": 17, "mismatch": 0, "unresolved": 0 },
+  "exactIdentity": { "legitimatelyComparable": 14, "exact": 14, "notComparable": 4 },
+  "falseAbstentions": 1,
+  "correctAbstentions": 6,
+  "nested": { "expected": 12, "candidate": 12, "matched": 12 },
+  "multilingual": { "completeParseGroups": 5, "completeAbstentionGroups": 2, "candidateConverging": 5, "sendGroupComplete": false },
+  "criticalContrasts": { "familiesDefined": 2, "familiesWithBothOutputs": 2, "meaningDistinctionPreserved": 2 },
+  "byLanguage": {
+    "en": { "attempts": 12, "submissions": 11, "sourceRelativeMatch": 11, "identityComparable": 9, "exact": 9 },
+    "el": { "attempts": 6, "submissions": 6, "sourceRelativeMatch": 6, "identityComparable": 5, "exact": 5 }
+  },
+  "failureClassifications": [
+    { "sourceRowId": "v8-g3-en-b", "class": "PREDICATE", "finding": "Fresh extractor abstained on an answerable send/document sentence; no post-hoc repair applied." }
+  ],
+  "isolation": "prompt-level only; extractor was restricted to the source-only request, source-only contract, and public task profile and did not claim technical sandbox isolation",
+  "trainingGoldEligible": false,
+  "protected": false
+}
