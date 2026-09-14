@@ -77,7 +77,7 @@ function sourceTermComparison(expected, actual, path) {
   }
   if (expected === undefined || actual === undefined) return expected === actual ? { status: 'match', path } : { status: 'mismatch', path, reason: 'presence' };
   if (expected === null || actual === null || typeof expected !== 'object' || typeof actual !== 'object') return Object.is(expected, actual) ? { status: 'match', path } : { status: 'mismatch', path, reason: 'literal' };
-  if (expected.type !== actual.type) return { status: 'unresolved', path, reason: 'term_type_convention' };
+  if (expected.type !== actual.type) return { status: 'mismatch', path, reason: 'term_type', contractUnresolved: true };
   for (const field of ['unit', 'min', 'max', 'format']) {
     if (!Object.is(expected[field], actual[field])) return { status: 'mismatch', path: `${path}.${field}`, reason: field };
   }
@@ -107,7 +107,7 @@ function sourceClauseComparison(expected, actual, path = 'clauses[0]') {
 }
 
 export function compareSourceRelativeSemantics(expected, actual) {
-  const topLevel = ['world', 'kind'].map((field) => ({ field, status: Object.is(expected?.[field], actual?.[field]) ? 'match' : field === 'kind' ? 'unresolved' : 'mismatch', path: field, reason: field === 'kind' ? 'kind_convention' : undefined }));
+  const topLevel = ['world', 'kind'].map((field) => ({ field, status: Object.is(expected?.[field], actual?.[field]) ? 'match' : 'mismatch', path: field, reason: field === 'kind' ? 'kind_convention' : undefined, contractUnresolved: field === 'kind' && !Object.is(expected?.[field], actual?.[field]) }));
   const left = expected?.clauses ?? [];
   const right = actual?.clauses ?? [];
   const clauses = [];
@@ -115,9 +115,11 @@ export function compareSourceRelativeSemantics(expected, actual) {
   const children = [...topLevel, ...clauses];
   const statuses = children.flatMap((child) => [child, ...(child.children ?? [])]);
   const matched = statuses.filter((item) => item.status === 'match').length;
-  const mismatched = statuses.filter((item) => item.status === 'mismatch').length;
+  const allMismatched = statuses.filter((item) => item.status === 'mismatch').length;
+  const mismatched = statuses.filter((item) => item.status === 'mismatch' && item.contractUnresolved !== true).length;
   const unresolved = statuses.filter((item) => item.status === 'unresolved').length;
-  return { status: mismatched > 0 ? 'mismatch' : unresolved > 0 ? 'unresolved' : 'match', matched, mismatched, unresolved, details: children };
+  const contractUnresolved = statuses.filter((item) => item.contractUnresolved === true).length;
+  return { status: mismatched > 0 ? 'mismatch' : unresolved > 0 ? 'unresolved' : 'match', matched, mismatched, allMismatched, unresolved, contractUnresolved, details: children };
 }
 
 function clauseIdentityModesCompatible(left, right) {
@@ -165,7 +167,9 @@ function summarizeCriticalContrasts(subset, sourceRow, results) {
   for (const result of results) {
     const group = sourceRow.get(result.sourceRowId)?.source.semanticGroup;
     if (!group || !result.submission?.sem) continue;
-    if (!byGroup.has(group)) byGroup.set(group, result.submission.sem);
+    const members = byGroup.get(group) ?? [];
+    members.push(result.submission.sem);
+    byGroup.set(group, members);
   }
   const groupsByPair = new Map();
   for (const row of subset) {
@@ -177,10 +181,13 @@ function summarizeCriticalContrasts(subset, sourceRow, results) {
   }
   const pairResults = [...groupsByPair].map(([pairId, groups]) => {
     const [left, right] = [...groups].sort();
-    const leftSem = byGroup.get(left);
-    const rightSem = byGroup.get(right);
-    const available = Boolean(leftSem && rightSem);
-    return { pairId, groups: [...groups].sort(), available: available && groups.size === 2, distinct: available && groups.size === 2 ? !compareSem(leftSem, rightSem).exactCanonical : null };
+    const leftSems = byGroup.get(left) ?? [];
+    const rightSems = byGroup.get(right) ?? [];
+    const available = leftSems.length > 0 && rightSems.length > 0 && groups.size === 2;
+    const leftConverges = leftSems.length > 0 && new Set(leftSems.map((sem) => JSON.stringify(sem))).size === 1;
+    const rightConverges = rightSems.length > 0 && new Set(rightSems.map((sem) => JSON.stringify(sem))).size === 1;
+    const distinct = available ? leftSems.every((leftSem) => rightSems.every((rightSem) => !compareSem(leftSem, rightSem).exactCanonical)) : null;
+    return { pairId, groups: [...groups].sort(), available, leftConverges, rightConverges, distinct };
   });
   return {
     familiesDefined: pairResults.length,
@@ -325,6 +332,7 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
     sourceRelativeMatch: parse.filter((row) => row.sourceRelative?.status === 'match').length,
     sourceRelativeMismatch: parse.filter((row) => row.sourceRelative?.status === 'mismatch').length,
     sourceRelativeUnresolved: parse.filter((row) => row.sourceRelative?.status === 'unresolved').length,
+    sourceRelativeContractUnresolved: parse.reduce((sum, row) => sum + (row.sourceRelative?.contractUnresolved ?? 0), 0),
       identityComparable: parse.filter((row) => row.identityComparable).length,
       exactNotComparable: parse.filter((row) => row.exact === null).length,
       falseAbstentions: parse.filter((row) => row.candidateStatus === 'abstain').length,

@@ -140,3 +140,12 @@ test('source-relative comparison distinguishes polarity, role swaps, and audienc
   assert.equal(compareSourceRelativeSemantics(base, swapped).status, 'mismatch');
   assert.equal(compareSourceRelativeSemantics(base, omitted).status, 'mismatch');
 });
+
+test('source-relative comparison reports a term-type disagreement as a mismatch with contract provenance', () => {
+  const left = { world: 'real', kind: 'event', clauses: [{ predicate: 'publish', roles: { theme: { type: 'document', value: 'report' } } }] };
+  const right = structuredClone(left);
+  right.clauses[0].roles.theme.type = 'concept';
+  const result = compareSourceRelativeSemantics(left, right);
+  assert.equal(result.status, 'mismatch');
+  assert.ok(result.contractUnresolved > 0);
+});
