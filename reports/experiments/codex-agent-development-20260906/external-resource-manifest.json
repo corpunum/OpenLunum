@@ -1,0 +1,43 @@
+{
+  "type": "openlunum-external-resource-manifest",
+  "created": "2026-09-06",
+  "bundled": false,
+  "resources": {
+    "omw": {
+      "name": "Open Multilingual Wordnet data",
+      "version": "2.0",
+      "url": "https://github.com/omwn/omw-data/releases/tag/v2.0",
+      "archive": "omw-2.0.tar.xz",
+      "archiveSha256": "c369a2ad773a31e182ac4cc753132fa7c31ad423586d6783bacce08090cb8d7d",
+      "sourceCommit": "f75be19ec590da12a7a5665e361690b5badb7a25",
+      "languages": {
+        "en": { "path": "wns/eng/wn-data-eng.tab", "sha256": "d1409d88addcdb890b1606dd280b558cca4258b1f33bd580d54ed949daad1ede", "license": "Princeton WordNet license; verify before redistribution" },
+        "el": { "path": "wns/ell/wn-data-ell.tab", "sha256": "4ca93ef34e44224ece4a0edd6c63a10013c352a76f736574ac748099f315a818", "license": "Apache-2.0" },
+        "es": { "path": "wns/mcr/wn-data-spa.tab", "sha256": "0ec37ce94ee2acc63ad6b120e1051f9841d172778cc24adc0023fb8dccf0a7cd", "license": "CC BY 3.0" },
+        "fr": { "path": "wns/fra/wn-data-fra.tab", "sha256": "6effab15723bbb482f2922d42eb1db37c8586984ce7735ebfe0a096000b69f86", "license": "CeCILL-C" },
+        "id": { "path": "wns/msa/wn-data-ind.tab", "sha256": "aa4fffad11f83199a7a0ffe062aad65eb72216b47f3b2944b86cb806b4c1175a", "license": "MIT" }
+      }
+    },
+    "cili": {
+      "name": "Collaborative Interlingual Index",
+      "version": "1.0",
+      "url": "https://github.com/globalwordnet/cili/releases/tag/v1.0",
+      "archive": "cili.tsv.xz",
+      "archiveSha256": "e9e07aab61026956ddedda86a5d46429b49219984ca49fa1ab67cbff9a32218a",
+      "mapPath": "ili-map-pwn30.tab",
+      "mapSha256": "13b6741395a8bdf20e5a19686ffa49167653696d4f523db17a79dce3211a6627",
+      "license": "CC BY 4.0"
+    },
+    "odenet": {
+      "name": "OdeNet",
+      "version": "1.4",
+      "url": "https://github.com/hdaSprachtechnologie/odenet/releases/tag/v1.4",
+      "archive": "odenet-1.4.tar.xz",
+      "archiveSha256": "d55407c48056ab3bc20d14d4d376de1799541fa0c9e34a82617dbb531c67ba2b",
+      "xmlPath": "deWordNet.xml",
+      "xmlSha256": "f0924734b829389f312171b831d1c5278e544a87e9df860763c16593e2c93b17",
+      "license": "CC BY-SA 4.0"
+    }
+  },
+  "reproducibility": "Download the pinned URLs, verify archive hashes, extract, verify component hashes, then run scripts/research/omw-grounding-benchmark.mjs. No third-party data is committed."
+}

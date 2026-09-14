@@ -1,0 +1,17 @@
+{
+  "id": "training-pilot-20260908",
+  "area": "parse",
+  "task": "parse",
+  "status": "preparation-only",
+  "protected": false,
+  "localInferenceUsed": false,
+  "embeddingUsed": false,
+  "baseline": "b049c4af4e8e7c7f1e1e2f8664b9de4c5de0f80a",
+  "dataset": "experiments/training-pilot-20260908-v2/dataset.jsonl",
+  "datasetGenerator": "scripts/research/generate-training-pilot.mjs",
+  "hypothesis": "A replaceable multilingual semantic-IR compiler can learn frame/role and open-concept decomposition while OpenLunum remains the deterministic identity authority.",
+  "modelBoundary": "semantic-IR/frame-slot compiler proposal only; no trusted LFP output",
+  "gates": ["schema-valid", "provenance-complete", "concept-disjoint", "abstention-present", "critical-negative-present", "OpenLunum-validation-required"],
+  "training": { "status": "not-run", "reason": "No authorized non-local training capability is available; no local inference or training is permitted by mission scope." },
+  "nextAuthorizedInput": ["base model/checkpoint and license", "tokenizer revision", "external compute/toolchain", "approved budget and data-retention policy"]
+}

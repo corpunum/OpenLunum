@@ -116,7 +116,7 @@ export interface LunumRecord {
     ref: string | null;
   };
   sem: LunumSem;
-  /** Exact semantic fingerprint (lfp:*). Surface and near-semantic fingerprints are separate concepts. */
+  /** Legacy compatibility fingerprint (currently lfp:0.1); not lfp:2.1 semantic identity. */
   fingerprint: string;
   /** Protocol-canonical identity fingerprint (lfp:2.1); absent for unresolved candidates. */
   semanticFingerprint?: string;
@@ -131,7 +131,7 @@ export interface LunumRecord {
 export interface LunumSidecar {
   lunumCode: string | null;
   lunumSem: LunumSem | null;
-  /** Compatibility slot; lunumMeta.fingerprintKind disambiguates surface vs exact semantic. */
+  /** Compatibility slot; this remains legacy lfp:0.1 for semantic records. */
   lunumFp: string | null;
   lunumMeta: Record<string, unknown> & { eligible: boolean };
 }

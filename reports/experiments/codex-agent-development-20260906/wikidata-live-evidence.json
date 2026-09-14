@@ -1,0 +1,14 @@
+{
+  "type": "development-wikidata-stable-id-evidence",
+  "protected": false,
+  "retrievedAt": "2026-09-06",
+  "endpoint": "https://www.wikidata.org/w/api.php",
+  "request": "action=wbgetentities ids=Q42|Q64|Q30 props=info|labels|aliases|descriptions languages=en|el|es|fr|de|id",
+  "responseSha256": "f23341bbbd87a45f9333abedb6411659cd67e4aa6927b69f4fe88a48a16b043f",
+  "entities": {
+    "Q42": { "lastrevid": 2540244017, "modified": "2026-09-04T20:49:27Z" },
+    "Q64": { "lastrevid": 2539733841, "modified": "2026-09-03T15:12:43Z" },
+    "Q30": { "lastrevid": 2540636412, "modified": "2026-09-05T20:04:04Z" }
+  },
+  "decision": "Stable QIDs are suitable as provider evidence for prevalidated named-entity assertions. The current OpenLunum stable-ID adapter intentionally does not search labels, infer identity, or make live API responses part of lfp:2.1 without a pinned snapshot. Live response is diagnostic evidence only."
+}

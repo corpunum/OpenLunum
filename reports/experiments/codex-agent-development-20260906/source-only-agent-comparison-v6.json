@@ -1,0 +1,19 @@
+{
+  "type": "development-source-only-agent-comparison",
+  "version": 6,
+  "status": "diagnostic",
+  "provenance": {
+    "goldProvidedToAgents": false,
+    "pairLabelsProvidedToAgents": false,
+    "localInferenceUsed": false,
+    "contractSource": "generated extraction contract",
+    "custody": "declared development trial; raw JSONL responses retained in session transcript"
+  },
+  "items": 24,
+  "agentResults": {
+    "Chandrasekhar": { "items": 12, "abstentions": 12, "transportCandidates": 0 },
+    "Beauvoir": { "items": 12, "abstentions": 0, "transportCandidates": 0, "invalidShape": 12, "shape": "predicate/arguments rather than transport Sem" }
+  },
+  "semanticMetrics": "not scored; no candidate passed transport and no gold was exposed",
+  "interpretation": "This trial shows that a contract-only natural-language instruction is insufficient for reliable agent adoption: one agent conservatively abstained and one emitted a different semantic format. OpenLunum remains correct to reject both rather than accept an agent-defined schema. The next general interface experiment is tool-driven frame selection and builder invocation, not a protocol relaxation."
+}

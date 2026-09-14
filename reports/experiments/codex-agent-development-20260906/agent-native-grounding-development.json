@@ -1,0 +1,25 @@
+{
+  "type": "codex-agent-development",
+  "protected": false,
+  "date": "2026-09-06",
+  "contractHash": "3ee8c9c3219f05effb41e66b1a71dcfa59ae60f40764041943dd8741cb41b2ef",
+  "sourceOnlyExtraction": {
+    "cases": 8,
+    "languages": ["en", "el", "es", "fr", "de", "id"],
+    "firstAgent": { "transportOrStructuralInvalid": 6, "explicitAbstention": 1, "handlerRejectedNullBeforeFix": 1 },
+    "secondAgent": { "transportOrStructuralInvalid": 5, "explicitAbstention": 1 },
+    "observation": "Both isolated agents made generic protocol-shape errors despite receiving a contract summary. This is extraction-agent contract adherence weakness; no core relaxation was made."
+  },
+  "deterministicSubmissionChecks": {
+    "validCandidates": 4,
+    "transportValid": 4,
+    "protocolCanonical": 4,
+    "frameValid": 4,
+    "grounded": 4,
+    "identityAvailable": 4,
+    "promotable": 0,
+    "crossLanguagePreference": "EN and EL candidates converged to lfp:2.1:sha256:5dd9da40ca83eb6c4e70487dc1d2216f",
+    "safety": "MCP returned candidate trust only and retained human-review requirements; no self-promotion occurred."
+  },
+  "decision": "The provider and MCP contract are deterministic and conservative. The next material text-to-Sem gain requires better isolated-agent adherence or a general extraction architecture; semantic protocol changes are not justified by these development outputs."
+}

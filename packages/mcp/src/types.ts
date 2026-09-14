@@ -37,6 +37,7 @@ export interface LunumToolDefinition {
     type: 'object';
     properties: Record<string, unknown>;
     required?: string[];
+    additionalProperties?: boolean;
   };
   /** Handler function */
   handler: (input: Record<string, unknown>) => Promise<McpToolResponse>;

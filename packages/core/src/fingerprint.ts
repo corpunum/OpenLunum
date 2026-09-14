@@ -1,7 +1,8 @@
 import crypto from 'node:crypto';
 import { FP_VERSION } from './constants.js';
-import { canonicalizeSem, stableStringify } from './canonicalize.js';
-import { normalizeSemanticCandidate } from './semantic-registry.js';
+import { canonicalizeSem, stableStringify, validateSem } from './canonicalize.js';
+import { basicIdentifier, normalizeSemanticCandidate } from './semantic-registry.js';
+import { validateSemFrames } from './frame-registry.js';
 import type { LunumClause, LunumSem } from './types.js';
 
 /**
@@ -18,18 +19,48 @@ import type { LunumClause, LunumSem } from './types.js';
  */
 export const SEMANTIC_IDENTITY_FINGERPRINT_VERSION = '2.1' as const;
 
-function identityClause(clause: LunumClause): LunumClause {
-  const { annotations: _annotations, conditions, consequences, ...rest } = clause;
+const IDENTITY_TERM_FIELDS = new Set(['type', 'id', 'ref', 'value', 'unit', 'min', 'max', 'format']);
+const EVIDENCE_TERM_FIELDS = new Set(['language', 'token', 'surface', 'span', 'sourceSpan', 'provenance', 'provider', 'metadata']);
+const IDENTITY_CLAUSE_FIELDS = new Set(['predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences', 'annotations']);
+
+function identityTerm(term: unknown, path: string): unknown {
+  if (term === null || typeof term !== 'object') return term;
+  if (Array.isArray(term)) return term.map((item, index) => identityTerm(item, `${path}[${index}]`));
+  const object = term as Record<string, unknown>;
+  const unknown = Object.keys(object).filter((key) => !IDENTITY_TERM_FIELDS.has(key) && !EVIDENCE_TERM_FIELDS.has(key));
+  if (unknown.length) throw new TypeError(`Cannot compute semantic identity: unclassified term field(s) at ${path}: ${unknown.join(', ')}`);
+  const out: Record<string, unknown> = {};
+  for (const key of ['type', 'id', 'ref', 'unit', 'min', 'max', 'format', 'value']) {
+    if (key in object && object[key] !== undefined) {
+      out[key] = key === 'value'
+        ? identityTerm(object[key], `${path}.${key}`)
+        : ['type', 'id', 'ref', 'unit', 'format'].includes(key) && typeof object[key] === 'string'
+          ? basicIdentifier(object[key])
+          : object[key];
+    }
+  }
+  return out;
+}
+
+function identityClause(clause: LunumClause, path: string): Record<string, unknown> {
+  const unknown = Object.keys(clause).filter((key) => !IDENTITY_CLAUSE_FIELDS.has(key));
+  if (unknown.length) throw new TypeError(`Cannot compute semantic identity: unclassified clause field(s) at ${path}: ${unknown.join(', ')}`);
+  const roles: Record<string, unknown> = {};
+  for (const role of Object.keys(clause.roles ?? {}).sort()) roles[role] = identityTerm(clause.roles[role], `${path}.roles.${role}`);
   return {
-    ...rest,
-    ...(conditions?.length ? { conditions: conditions.map(identityClause) } : {}),
-    ...(consequences?.length ? { consequences: consequences.map(identityClause) } : {})
+    predicate: clause.predicate,
+    roles: roles as LunumClause['roles'],
+    negated: clause.negated === true,
+    ...(clause.modality != null ? { modality: clause.modality } : {}),
+    ...(clause.time !== undefined ? { time: identityTerm(clause.time, `${path}.time`) } : {}),
+    ...(clause.conditions?.length ? { conditions: clause.conditions.map((item, index) => identityClause(item, `${path}.conditions[${index}]`)) } : {}),
+    ...(clause.consequences?.length ? { consequences: clause.consequences.map((item, index) => identityClause(item, `${path}.consequences[${index}]`)) } : {})
   };
 }
 
 /** Return only proposition-bearing Sem fields; provenance and annotations are metadata. */
 export function semanticIdentityProjection(sem: LunumSem): Record<string, unknown> {
-  const semanticReferences = (sem.references ?? []).flatMap((reference) => {
+  const semanticReferences = [...new Set((sem.references ?? []).flatMap((reference) => {
     if (reference.referenceKind === 'surface-evidence') return [];
     // `ref` is the grounded, language-neutral referent. `token`, `surface`,
     // `language`, and reference type describe source evidence and must not
@@ -38,14 +69,14 @@ export function semanticIdentityProjection(sem: LunumSem): Record<string, unknow
     const ref = typeof reference.ref === 'string' ? reference.ref.trim() : '';
     const id = typeof reference.id === 'string' ? reference.id.trim() : '';
     const grounded = ref || id;
-    return grounded ? [{ ref: grounded.normalize('NFKC').replace(/\s+/gu, '_').toLocaleLowerCase('und') }] : [];
-  });
+    return grounded ? [grounded.normalize('NFKC').replace(/\s+/gu, '_').toLocaleLowerCase('und')] : [];
+  }))].sort().map((ref) => ({ ref }));
   return {
     protocol: 'lunum-protocol/0.1',
     schema: sem.schema,
     world: sem.world,
     kind: sem.kind,
-    clauses: sem.clauses.map(identityClause),
+    clauses: sem.clauses.map((clause, index) => identityClause(clause, `clauses[${index}]`)),
     ...(semanticReferences.length ? { references: semanticReferences } : {})
   };
 }
@@ -55,11 +86,16 @@ export function semanticIdentityProjection(sem: LunumSem): Record<string, unknow
  * controlled symbols are rejected rather than becoming durable identity.
  */
 export function semanticFingerprint(sem: unknown, options: { length?: number } = {}): string {
-  const normalization = normalizeSemanticCandidate(sem);
+  const structural = validateSem(sem);
+  if (!structural.ok) throw new TypeError(`Cannot compute semantic identity for structurally invalid Sem: ${structural.errors.join('; ')}`);
+  const normalization = normalizeSemanticCandidate(sem, { strict: true });
   if (!normalization.sem || !normalization.canonical) {
     throw new TypeError('Cannot compute semantic identity for a non-canonical protocol candidate');
   }
-  const projection = semanticIdentityProjection(canonicalizeSem(normalization.sem));
+  const canonical = canonicalizeSem(normalization.sem);
+  const frames = validateSemFrames(canonical);
+  if (!frames.valid) throw new TypeError(`Cannot compute semantic identity for frame-invalid Sem: ${frames.issues.map((issue) => issue.message).join('; ')}`);
+  const projection = semanticIdentityProjection(canonical);
   const digest = crypto.createHash('sha256').update(stableStringify(projection)).digest('hex');
   return `lfp:${SEMANTIC_IDENTITY_FINGERPRINT_VERSION}:sha256:${digest.slice(0, boundedLength(options.length ?? 32))}`;
 }

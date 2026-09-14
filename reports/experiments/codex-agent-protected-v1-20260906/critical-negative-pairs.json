@@ -1,0 +1,8 @@
+[
+  {"pairId":"n01","leftItemId":"p01","rightItemId":"p07","criticalDimension":"predicate","expectedRelationship":"not_equivalent"},
+  {"pairId":"n02","leftItemId":"p03","rightItemId":"p09","criticalDimension":"action","expectedRelationship":"not_equivalent"},
+  {"pairId":"n03","leftItemId":"p05","rightItemId":"p12","criticalDimension":"predicate","expectedRelationship":"not_equivalent"},
+  {"pairId":"n04","leftItemId":"p10","rightItemId":"p11","criticalDimension":"temporal_relation","expectedRelationship":"not_equivalent"},
+  {"pairId":"n05","leftItemId":"p07","rightItemId":"p09","criticalDimension":"predicate","expectedRelationship":"not_equivalent"},
+  {"pairId":"n06","leftItemId":"p01","rightItemId":"p09","criticalDimension":"predicate","expectedRelationship":"not_equivalent"}
+]

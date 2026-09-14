@@ -1,0 +1,72 @@
+[
+  {
+    "pairId": "negative-negation",
+    "leftItemId": "negation-open",
+    "rightItemId": "negation-closed",
+    "criticalDimension": "negation",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-modality",
+    "leftItemId": "modality-must",
+    "rightItemId": "modality-may",
+    "criticalDimension": "modality",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-direction",
+    "leftItemId": "direction-before",
+    "rightItemId": "direction-after",
+    "criticalDimension": "temporal-direction",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-quantity",
+    "leftItemId": "quantity-five",
+    "rightItemId": "quantity-fifty",
+    "criticalDimension": "quantity",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-unit",
+    "leftItemId": "unit-percent",
+    "rightItemId": "unit-celsius",
+    "criticalDimension": "unit",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-environment",
+    "leftItemId": "environment-production",
+    "rightItemId": "environment-staging",
+    "criticalDimension": "environment",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-visibility",
+    "leftItemId": "visibility-public",
+    "rightItemId": "visibility-private",
+    "criticalDimension": "visibility",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-role",
+    "leftItemId": "role-agent",
+    "rightItemId": "role-recipient",
+    "criticalDimension": "agent-recipient",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-source-destination",
+    "leftItemId": "source-destination",
+    "rightItemId": "destination-source",
+    "criticalDimension": "source-destination",
+    "expectedRelationship": "not_semantically_equivalent"
+  },
+  {
+    "pairId": "negative-date",
+    "leftItemId": "date-february",
+    "rightItemId": "date-march",
+    "criticalDimension": "date",
+    "expectedRelationship": "not_semantically_equivalent"
+  }
+]

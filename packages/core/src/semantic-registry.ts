@@ -101,7 +101,7 @@ export interface NormalizeSemanticOptions {
 
 function isExtensionSymbol(value: string): boolean { return value.startsWith('x-'); }
 
-function basicIdentifier(value: string): string {
+export function basicIdentifier(value: string): string {
   return value.normalize('NFKC').trim().replace(/\s+/gu, '_').toLocaleLowerCase('und');
 }
 

@@ -1,0 +1,20 @@
+{
+  "format": "openlunum-natural-review-evidence/0.1",
+  "datasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+  "packetCount": 42,
+  "reviewerFiles": [
+    "reviewer-a.jsonl",
+    "reviewer-b.jsonl"
+  ],
+  "ledgerRows": 56,
+  "negativeReviewCount": 3,
+  "status": "ready-for-certifier",
+  "normalization": [
+    "Reviewer B used ABSTAIN to mean that the proposed abstention was correct; the ledger stores the protocol decision ACCEPT for that review."
+  ],
+  "reviewerLimitations": [
+    "Agent reviewers are independent Codex contexts, not human certification.",
+    "Reviewer B covered the seven Greek packets available in its restricted review pass.",
+    "Contrast reviewer supplied source-level representative pair judgments; endpoint lists bind all language realizations."
+  ]
+}

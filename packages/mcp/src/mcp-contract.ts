@@ -5,7 +5,7 @@
  * for Lunum MCP server tools.
  */
 
-export const MCP_CONTRACT_VERSION = '1.0.0' as const;
+export const MCP_CONTRACT_VERSION = '1.1.0' as const;
 
 export interface McpToolSpec {
   name: string;
@@ -29,12 +29,16 @@ export const MCP_MAX_INPUT_BYTES = 524_288 as const; // 512 KB
 export const MCP_DEFAULT_TIMEOUT_MS = 30_000 as const;
 
 export const MCP_TOOLS: readonly McpToolSpec[] = [
-  { name: 'lunum_parse', version: '1.0.0', description: 'Parse text into Lunum semantic representation', requiresAuth: true, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
-  { name: 'lunum_realize', version: '1.0.0', description: 'Realize Lunum Sem into natural language', requiresAuth: true, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
-  { name: 'lunum_render', version: '1.0.0', description: 'Render Lunum Sem with a profile', requiresAuth: true, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
-  { name: 'lunum_retrieve', version: '1.0.0', description: 'Retrieve records by semantic similarity', requiresAuth: true, rateLimit: MCP_STRICT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_derive', version: '1.0.0', description: 'Build a sidecar from source text and optional candidate Sem; no-sem mode is surface-only.', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_get_extraction_contract', version: '1.0.0', description: 'Return the generated machine-readable agent extraction contract.', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_submit_candidate', version: '1.0.0', description: 'Validate and contain an untrusted agent semantic candidate.', requiresAuth: false, rateLimit: MCP_STRICT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_build_candidate', version: '1.0.0', description: 'Build an untrusted candidate from selected canonical frame slots.', requiresAuth: false, rateLimit: MCP_STRICT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_compile_context', version: '1.0.0', description: 'Compile messages into a selected context representation.', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_fingerprint', version: '1.0.0', description: 'Generate the compatibility legacy fingerprint.', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
   { name: 'lunum_validate', version: '1.0.0', description: 'Validate a Lunum Sem against the schema', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: 5_000 },
-  { name: 'lunum_context', version: '1.0.0', description: 'Manage conversation context', requiresAuth: true, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_render', version: '1.0.0', description: 'Render Lunum Sem with a profile', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_compare', version: '1.0.0', description: 'Compare two semantic candidates diagnostically.', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_classify', version: '1.0.0', description: 'Classify content for policy eligibility.', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
 ] as const;
 
 export function getMcpContractManifest(): { version: string; tools: readonly McpToolSpec[] } {

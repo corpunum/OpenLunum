@@ -1,0 +1,481 @@
+{
+  "evidenceClass": "CODEX_AGENT_EMPIRICAL",
+  "corpusPath": "reports/experiments/codex-agent-protected-v1-20260906/items.jsonl",
+  "corpusSha256": "7b8d92c1319bfc62d1ec1f5f33cec1278ab8eb9414bf1897adacf866f6328e03",
+  "implementationSha": "e40a7be36fb1cef9626cc674fcfa3f410aa6d92d",
+  "extractor": "McClintock",
+  "summary": {
+    "runId": "codex-protected-v1",
+    "totalItems": 16,
+    "completedItems": 16,
+    "parseTargets": 12,
+    "parseExact": 0,
+    "parseExactMicro": 0,
+    "abstentionTargets": 4,
+    "correctAbstentions": 4,
+    "unexpectedParses": 0,
+    "abstentionAccuracy": 1,
+    "candidateIdentityAvailable": 0,
+    "identityComparable": 0,
+    "identityExact": 0,
+    "comparableButNonExact": 0,
+    "failureClasses": {
+      "transport_or_structural_invalid": 12
+    },
+    "byLanguage": [
+      {
+        "language": "de",
+        "parseTargets": 1,
+        "exact": 0,
+        "exactRate": 0,
+        "candidateIdentityAvailable": 0
+      },
+      {
+        "language": "el",
+        "parseTargets": 3,
+        "exact": 0,
+        "exactRate": 0,
+        "candidateIdentityAvailable": 0
+      },
+      {
+        "language": "en",
+        "parseTargets": 3,
+        "exact": 0,
+        "exactRate": 0,
+        "candidateIdentityAvailable": 0
+      },
+      {
+        "language": "es",
+        "parseTargets": 1,
+        "exact": 0,
+        "exactRate": 0,
+        "candidateIdentityAvailable": 0
+      },
+      {
+        "language": "fr",
+        "parseTargets": 2,
+        "exact": 0,
+        "exactRate": 0,
+        "candidateIdentityAvailable": 0
+      },
+      {
+        "language": "id",
+        "parseTargets": 2,
+        "exact": 0,
+        "exactRate": 0,
+        "candidateIdentityAvailable": 0
+      }
+    ],
+    "goldGroups": 12,
+    "goldGroupsConverging": 8,
+    "modelGroupsAttempted": 12,
+    "modelGroupsConverging": 0
+  },
+  "rows": [
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p01",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "976cfd6a7f8edc9316118fa629fdaff36935f3f4df9a70cba71513f903f1c07c",
+        "timestamp": "2026-09-06T10:04:12.970Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.971Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p02",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "4a3df07f9748e3834b5b0e87f80d7a05873b4686e342a0448fa195cd8a0f10e9",
+        "timestamp": "2026-09-06T10:04:12.972Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.972Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p03",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "e2af32f6f1b1ae4a28a6cda6b2b3be80fb9a9e0c9eb56ed7b443dae1888c0749",
+        "timestamp": "2026-09-06T10:04:12.973Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.973Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p04",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "0c38407dca4e05568bf6e40ae5415775e8a15020be386115aa5ad0cffadbb147",
+        "timestamp": "2026-09-06T10:04:12.973Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.974Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p05",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "322d70b9b6a6996dda1b8fabc2de836b9b623d70667ba7144a620f5b425417cf",
+        "timestamp": "2026-09-06T10:04:12.974Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.975Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p06",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "52345d4580ae67d3cb2543444a2d6a4e6fdb84a1b5a4ea25c72a51bd6457693e",
+        "timestamp": "2026-09-06T10:04:12.975Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.975Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p07",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "040d761e84206fb7d818717454d3c2d3c1ebad9d8abe8c735c576de52f004f6f",
+        "timestamp": "2026-09-06T10:04:12.976Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.976Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p08",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "a88260c12c4cfa1d39d62d2b541917a9e879ab6f5272140f7a9e153de157ee27",
+        "timestamp": "2026-09-06T10:04:12.976Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.977Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p09",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "b7b737196c76a0ce6c290a82fd94358a71cd7d006bffda1e161b3e2758fb9bd7",
+        "timestamp": "2026-09-06T10:04:12.977Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.977Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p10",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "b3b883e2efb96cff2f10128ece5a413f165fbc6d0b4ecec22e7732b01f6df5a8",
+        "timestamp": "2026-09-06T10:04:12.978Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.978Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p11",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "13e65c7a7450ace4964c4c35f233da44151f0c0f079a7f00376c82cc11f718f3",
+        "timestamp": "2026-09-06T10:04:12.978Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.979Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "p12",
+      "status": "failed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "clauses must be a non-empty array"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "06fe1dd21a31851fb21ad3876010c6d8eb2490770bb01184daeb5edc88fe7b13",
+        "timestamp": "2026-09-06T10:04:12.979Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.979Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "a01",
+      "status": "passed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": null,
+      "diagnostics": [
+        "sem must be an object"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "ca3e9a0c63c663f049f84ee1495e09b8df7fc10c990f1767d7f4fffa6e1d47f3",
+        "timestamp": "2026-09-06T10:04:12.979Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.979Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "a02",
+      "status": "passed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": null,
+      "diagnostics": [
+        "sem must be an object"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "7e1ce4174b686a0a9a4e261cf8a9cb4e07828091633d24023f6494aad23be2d4",
+        "timestamp": "2026-09-06T10:04:12.980Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.980Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "a03",
+      "status": "passed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": null,
+      "diagnostics": [
+        "sem must be an object"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "ab8cd8bbf7f8230ea3dc6ddb2858c4b4424809c9ab4efe8dd7b06d0bc6c0106b",
+        "timestamp": "2026-09-06T10:04:12.980Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.980Z"
+    },
+    {
+      "runId": "codex-protected-v1",
+      "itemId": "a04",
+      "status": "passed",
+      "candidateIdentityAvailable": false,
+      "identityComparable": false,
+      "semanticIdentityExact": false,
+      "abstained": true,
+      "failureClass": null,
+      "diagnostics": [
+        "sem must be an object"
+      ],
+      "provenance": {
+        "extractorType": "codex_agent",
+        "extractorId": "McClintock",
+        "evaluationId": "codex-protected-v1",
+        "contractVersion": "lunum-agent/0.1",
+        "contractHash": "ce9989f759ebc3d38f5a880a382579421df0fdeb2761ce343666b14a1e9e56a9",
+        "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+        "frameRegistryHash": "f099a45a39d93fd9687f6798ebf38249ae547a2dde1b88a1974a06d7b04dec5e",
+        "sourceHash": "fc79cca9471b6b5383792b88c943213e40368920b6a60719389360e36ffa2b24",
+        "timestamp": "2026-09-06T10:04:12.980Z"
+      },
+      "submittedAt": "2026-09-06T10:04:12.980Z"
+    }
+  ],
+  "ledgerPath": "reports/experiments/codex-agent-protected-v1-20260906/run/agent-results.jsonl",
+  "privateLedgerPath": "reports/experiments/codex-agent-protected-v1-20260906/run.private/agent-results.jsonl",
+  "checkpointPath": "reports/experiments/codex-agent-protected-v1-20260906/run/agent-checkpoint.json",
+  "goldNeverSentToExtractor": true,
+  "productionChangedAfterFirstProtectedCall": false
+}

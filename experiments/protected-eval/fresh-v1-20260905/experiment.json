@@ -1,0 +1,16 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "protected-fresh-v1-20260905",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "hypothesis": "A frozen canonical Lunum protocol can extract unseen multilingual meaning into stable semantic identity and expose cross-language convergence.",
+  "baselineCommit": "a89ec0267b143591384034e7e617ae3e23d9e4d1",
+  "dataset": {
+    "path": "experiments/protected-eval/fresh-v1-20260905/corpus.jsonl",
+    "sha256": "0114a7761e725dccd18f26bc134ffd85d69eb1c5cec7d48e23f5b3855bb0a820"
+  },
+  "modelProfile": "profiles/models/superqwen3.8-27b-abliterated-live.json",
+  "limits": { "maxItems": 56, "maxAttemptsPerItem": 1, "maxModelCalls": 56 },
+  "gates": { "minimumFeatureRecall": 0, "minimumExactRate": 0, "requireProtectedLiteralCoverage": false },
+  "outputDirectory": "reports/experiments/protected-fresh-v1-20260905"
+}

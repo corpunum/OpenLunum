@@ -1,0 +1,20 @@
+{
+  "type": "codex-agent-source-only-multilingual-direct-field-trial",
+  "version": 2,
+  "status": "diagnostic",
+  "protected": false,
+  "localInferenceUsed": false,
+  "goldExposed": false,
+  "agent": "gpt-5.6-luna",
+  "contract": { "mode": "direct-builder-fields", "sourceTextOnly": true, "world": "real", "kind": "preference", "roles": "typed object with actor and concept terms" },
+  "items": [
+    { "id": "m1", "language": "en", "sourceText": "Lena prefers a quiet setting.", "builderInput": { "world": "real", "kind": "preference", "predicate": "prefer", "roles": { "experiencer": { "type": "actor", "id": "Lena" }, "theme": { "type": "concept", "id": "quiet setting" } } } },
+    { "id": "m2", "language": "el", "sourceText": "Η Λένα προτιμά ένα ήσυχο περιβάλλον.", "builderInput": { "world": "real", "kind": "preference", "predicate": "prefer", "roles": { "experiencer": { "type": "actor", "id": "Lena" }, "theme": { "type": "concept", "id": "quiet setting" } } } },
+    { "id": "m3", "language": "es", "sourceText": "Lena prefiere un entorno tranquilo.", "builderInput": { "world": "real", "kind": "preference", "predicate": "prefer", "roles": { "experiencer": { "type": "actor", "id": "Lena" }, "theme": { "type": "concept", "id": "quiet setting" } } } },
+    { "id": "m4", "language": "fr", "sourceText": "Lena préfère un environnement calme.", "builderInput": { "world": "real", "kind": "preference", "predicate": "prefer", "roles": { "experiencer": { "type": "actor", "id": "Lena" }, "theme": { "type": "concept", "id": "quiet setting" } } } },
+    { "id": "m5", "language": "de", "sourceText": "Lena bevorzugt eine ruhige Umgebung.", "builderInput": { "world": "real", "kind": "preference", "predicate": "prefer", "roles": { "experiencer": { "type": "actor", "id": "Lena" }, "theme": { "type": "concept", "id": "quiet setting" } } } },
+    { "id": "m6", "language": "id", "sourceText": "Lena menyukai lingkungan yang tenang.", "builderInput": { "world": "real", "kind": "preference", "predicate": "prefer", "roles": { "experiencer": { "type": "actor", "id": "Lena" }, "theme": { "type": "concept", "id": "quiet setting" } } } }
+  ],
+  "deterministicReplay": { "transportValid": 6, "protocolCanonical": 6, "frameValid": 6, "grounded": 6, "candidateIdentityAvailable": 6, "uniqueSemanticFingerprints": 1, "semanticFingerprint": "lfp:2.1:sha256:a8a12e11614a1a9121cc6301a57e92d6" },
+  "interpretation": "The agent followed the typed transport and was instructed to use a shared canonical concept id. This proves deterministic acceptance/convergence under the supplied contract, not independent grounding accuracy or gold exactness. It is development diagnostic evidence only."
+}

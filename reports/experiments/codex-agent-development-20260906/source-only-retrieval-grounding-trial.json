@@ -1,0 +1,13 @@
+{
+  "type": "codex-agent-source-only-retrieval-grounding-trial",
+  "version": 1,
+  "status": "diagnostic",
+  "protected": false,
+  "localInferenceUsed": false,
+  "goldSemExposed": false,
+  "agent": "gpt-5.6-luna",
+  "pipeline": "raw text -> agent candidate -> OpenLunum identity -> exact retrieval",
+  "dataset": { "memories": 3, "queries": 1, "queryLanguage": "el", "expectedMemoryRelationship": "Greek query is equivalent to English and Indonesian memory propositions" },
+  "metrics": { "queryIdentityCoverage": 1, "memoryIdentityCoverage": 1, "conditionalRecall": 0, "endToEndRecall": 0, "precision": 0, "falseEquivalences": 0, "semanticMatchingFailures": 2 },
+  "interpretation": "Every candidate was identity-safe, but equivalent multilingual open-concept labels did not converge, so exact retrieval returned no expected memory. This is diagnostic grounding evidence, not protected capability evidence."
+}

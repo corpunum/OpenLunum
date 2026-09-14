@@ -1,0 +1,17 @@
+{
+  "format": "openlunum-natural-review-evidence/0.1",
+  "datasetSha256": "28a99f454b688abb87d9c8f8362faa79f5b99ac174337185d378273e3f950f48",
+  "packetCount": 42,
+  "reviewerFiles": [
+    "reviewer-a.jsonl",
+    "reviewer-b.jsonl"
+  ],
+  "ledgerRows": 49,
+  "negativeReviewCount": 3,
+  "status": "ready-for-certifier",
+  "reviewerLimitations": [
+    "Agent reviewers are independent Codex contexts, not human certification.",
+    "Reviewer B covered the seven Greek packets available in its restricted review pass.",
+    "Contrast reviewer supplied source-level representative pair judgments; endpoint lists bind all language realizations."
+  ]
+}
