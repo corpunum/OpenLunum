@@ -2,15 +2,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = (path) => readFileSync(join(root, path), 'utf8');
+const requiredPackages = ['core', 'eval', 'cli', 'api', 'mcp', 'adapter-openunum'];
+// Tests also create evidence directories under packages/. Only directories
+// containing package.json are workspace packages; required manifests below
+// must still exist, so a deleted package cannot silently escape validation.
 const packages = readdirSync(join(root, 'packages'), { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
-  .map((entry) => `packages/${entry.name}`);
+  .map((entry) => `packages/${entry.name}`)
+  .filter((path) => existsSync(join(root, path, 'package.json')));
 const metadata = (path) => JSON.parse(read(`${path}/package.json`));
 
 test('the Apache-2.0 license text is complete and unmodified', () => {
@@ -22,7 +27,9 @@ test('the Apache-2.0 license text is complete and unmodified', () => {
 
 test('root and workspace metadata use the approved SPDX identifier', () => {
   assert.equal(JSON.parse(read('package.json')).license, 'Apache-2.0');
-  assert.ok(packages.length > 0);
+  for (const name of requiredPackages) {
+    assert.ok(packages.includes(`packages/${name}`), `${name}: required package manifest missing`);
+  }
   for (const path of packages) assert.equal(metadata(path).license, 'Apache-2.0', path);
 });
 
