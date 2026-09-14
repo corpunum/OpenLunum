@@ -59,6 +59,31 @@ function termMode(term) {
   return 'structured';
 }
 
+function normalizedSourceText(value) {
+  return String(value).normalize('NFKC').toLocaleLowerCase().replace(/\s+/gu, ' ').trim();
+}
+
+function literalValues(sem) {
+  const values = [];
+  const visit = (value) => {
+    if (Array.isArray(value)) return value.forEach(visit);
+    if (!value || typeof value !== 'object') return;
+    if (Object.prototype.hasOwnProperty.call(value, 'value')) values.push(value.value);
+    if (value.roles) Object.values(value.roles).forEach(visit);
+    if (value.time !== undefined) visit(value.time);
+    if (value.conditions) value.conditions.forEach(visit);
+    if (value.consequences) value.consequences.forEach(visit);
+  };
+  (sem?.clauses ?? []).forEach(visit);
+  return values;
+}
+
+/** Literal identity is comparable only when every literal is visibly anchored in the supplied source. */
+export function sourceAnchoredLiteralIdentity(sem, sourceText) {
+  const source = normalizedSourceText(sourceText);
+  return literalValues(sem).every((value) => normalizedSourceText(value) !== '' && source.includes(normalizedSourceText(value)));
+}
+
 function sourceScalar(term) {
   if (Array.isArray(term)) return term.map(sourceScalar);
   if (term === null || term === undefined) return term;
@@ -260,6 +285,8 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
       submission?.candidateIdentityAvailable
       && goldSubmission?.candidateIdentityAvailable
       && identityRepresentationsComparable(submission.sem, goldSubmission.sem)
+      && sourceAnchoredLiteralIdentity(submission.sem, request.sourceText)
+      && sourceAnchoredLiteralIdentity(goldSubmission.sem, request.sourceText)
     );
     const exact = identityComparable
       ? Boolean(submission.semanticFingerprint && goldSubmission.semanticFingerprint && submission.semanticFingerprint === goldSubmission.semanticFingerprint)
@@ -310,7 +337,7 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
       contract: `${root}/extraction/source-only-contract.json`,
       extractor: 'fresh isolated agent; packet restricted to source-only request and frozen contract',
       goldIsolation: 'extractor was instructed not to read certified subset, reviews, manifests, or generator files; scorer accesses gold privately',
-      exactIdentityRule: 'exact identity is scored only when candidate and target have available identities and corresponding role terms use compatible reference/literal identity modes'
+      exactIdentityRule: 'exact identity is scored only when candidate and target have available identities, corresponding role terms use compatible reference/literal identity modes, and every literal identity value is source-anchored or represented by an allowed reference'
     },
     corpus: {
       rows: results.length,

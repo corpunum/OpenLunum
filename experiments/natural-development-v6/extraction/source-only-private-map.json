@@ -1,0 +1,44 @@
+{
+  "extract-001-301d29e50137": {
+    "sourceRowId": "v6-send-en"
+  },
+  "extract-002-731701af18b9": {
+    "sourceRowId": "v6-send-el"
+  },
+  "extract-003-94835cfa49af": {
+    "sourceRowId": "v6-allow-en"
+  },
+  "extract-004-972dd9765a6b": {
+    "sourceRowId": "v6-allow-el"
+  },
+  "extract-005-4136fd5716e9": {
+    "sourceRowId": "v6-prohibit-en"
+  },
+  "extract-006-a59ced7a2809": {
+    "sourceRowId": "v6-prohibit-el"
+  },
+  "extract-007-08f85ddd35e5": {
+    "sourceRowId": "v6-retry-en"
+  },
+  "extract-008-e991fcec1cea": {
+    "sourceRowId": "v6-retry-el"
+  },
+  "extract-009-472a6d540b28": {
+    "sourceRowId": "v6-publish-a4-en"
+  },
+  "extract-010-c7a2057b32b9": {
+    "sourceRowId": "v6-publish-a4-el"
+  },
+  "extract-011-de074b8484d0": {
+    "sourceRowId": "v6-publish-a5-en"
+  },
+  "extract-012-c6e01e489e6a": {
+    "sourceRowId": "v6-publish-a5-el"
+  },
+  "extract-013-0c9ba2bce3b0": {
+    "sourceRowId": "v6-abstain-en"
+  },
+  "extract-014-7fd0c88bb252": {
+    "sourceRowId": "v6-abstain-el"
+  }
+}

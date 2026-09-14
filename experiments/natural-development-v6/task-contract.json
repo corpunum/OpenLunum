@@ -1,0 +1,24 @@
+{
+  "format": "openlunum-source-only-task/0.1",
+  "status": "draft-awaiting-independent-review",
+  "purpose": "Small development-only source-relative extraction task following scorer hardening.",
+  "inputVisibility": ["opaque handle", "source text", "source language", "this task contract", "core extraction contract"],
+  "forbiddenInput": ["gold targets", "semantic group labels", "critical-pair labels", "review decisions", "private source-to-gold mappings", "other candidate outputs"],
+  "parsePolicy": "Return one canonical candidate for answerable rows; explicitly abstain when the source is outside the task profile or semantically unresolved.",
+  "kindPolicy": "Every parse row is an event-level declarative proposition; use kind=event. This is a task-level extraction profile, not a general language rule.",
+  "termTypePolicy": {
+    "agent": "actor or system according to the named source participant; named people are actor and named services are system",
+    "recipient": "actor for named people",
+    "object": "document for report/file/upload identifiers when used as transmitted artifacts",
+    "theme": "access for an access target; document for a report; task for an upload operation",
+    "audience": "audience for explicit audience identifiers",
+    "destination": "location for explicit node identifiers",
+    "count": "quantity with unit=times",
+    "time": "date for an ISO calendar date"
+  },
+  "identityPolicy": "Exact identity is comparable only for source-visible stable names, identifiers, literal quantities, dates, and explicitly task-typed roles. No private handle may be inferred.",
+  "polarityPolicy": "negated=false for lexical allow/prohibit; negated=true means NOT that lexical predicate. Do not infer NOT PROHIBIT from ALLOW or vice versa.",
+  "criticalContrastPolicy": "The extractor is not told which rows form contrasts; contrast definitions remain scorer-private.",
+  "abstentionPolicy": ["unsupported predicate/domain", "missing required frame arguments", "unresolved semantic scope"],
+  "independence": "Targets are reviewed after authoring; extraction must be performed by a fresh agent that did not author or review targets. Prompt-level isolation only unless a stronger sandbox is recorded."
+}
