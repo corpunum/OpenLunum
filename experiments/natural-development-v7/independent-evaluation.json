@@ -1,0 +1,33 @@
+{
+  "format": "openlunum-independent-evaluation/0.1",
+  "candidateSha": "995a5fc3a3b01f425a711e2d87574ec551f74105",
+  "evaluator": "Laplace",
+  "verdict": "rejected-for-issue-closure",
+  "verified": [
+    "Manifest hashes and 24 request/source/private-map bindings match.",
+    "Scorer reproduction is byte-identical to extraction/results-v1.json.",
+    "Focused scorer tests pass 14/14.",
+    "The development dataset is protected=false and trainingGoldEligible=false."
+  ],
+  "metrics": {
+    "parseTargets": 18,
+    "sourceRelativeMatch": 8,
+    "sourceRelativeMismatch": 9,
+    "sourceRelativeUnresolved": 1,
+    "exactComparable": 0,
+    "nestedExpected": 12,
+    "nestedMatched": 0,
+    "nestedMismatched": 18,
+    "abstentionsCorrect": 5,
+    "abstentionTargets": 6,
+    "completeParseGroups": 3,
+    "convergingGroups": 2,
+    "criticalContrastFamiliesPreserved": 2
+  },
+  "limitations": [
+    "The raw ledger omits sourceSha256/status; the derived ledger adds them and normalizes extractorType without a persisted transformation manifest.",
+    "The candidate is diagnostically useful but does not establish multilingual semantic extraction or justify training.",
+    "No native-speaker certification is claimed."
+  ],
+  "issue685Close": false
+}
