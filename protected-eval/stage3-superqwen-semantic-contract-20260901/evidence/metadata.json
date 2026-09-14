@@ -1,0 +1,112 @@
+{
+  "status": "COMPLETE_WITH_EVIDENCE_LIMITATION",
+  "firstUntouchedRun": true,
+  "noTuningAfterFailures": true,
+  "noRetries": true,
+  "fullCorpusRan": true,
+  "fullCorpusRequestedItems": 54,
+  "startedAt": "2026-09-01T10:31:29.099Z",
+  "completedAt": "2026-09-01T10:45:23.928Z",
+  "requestedCandidateSha": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
+  "requestedCandidateShaResolvable": true,
+  "implementationSha": "6149deed6b518020bc804b5db8f68f36ba00f4cf",
+  "implementationShaResolvable": true,
+  "endpoint": "http://127.0.0.1:54523/v1",
+  "getModelsPath": "http://127.0.0.1:54523/v1/models",
+  "requestedModelId": "openai/superqwen3.8-27b-abliterated",
+  "reportedModelIds": [
+    "openai/superqwen3.8-27b-abliterated",
+    "openai/superqwen3.8-27b-abliterated"
+  ],
+  "modelVerified": true,
+  "profilePath": "profiles/models/superqwen3.8-27b-abliterated-live.json",
+  "profileSha256": "632183dcd88eb18f7837c8063519604b0da78a20bb1a00e5dbf5c8f9190944e0",
+  "profileId": "superqwen3.8-27b-abliterated-live",
+  "decoding": {
+    "temperature": 0,
+    "seed": 42,
+    "maxTokens": 256,
+    "chatTemplateKwargs": {
+      "enable_thinking": false
+    }
+  },
+  "promptVersion": "parse-prompt/3",
+  "effectiveSystemPromptSha256": "02d25f7d8c8441ef183460780d6494a66651308baca6009a9daaf8042d3e9266",
+  "schemaPath": "schemas/lunum-sem.schema.json",
+  "schemaSha256": "930c6adc7c1c48d83e732c3c4e30de91d105ef20f6c1d9bbd9adf329b8ef5a83",
+  "transportSchemaSha256": "c0a9ab5f283c7bb0ea10f1638986ea92b56f8de2ba4d669c0111763411ac84aa",
+  "structuredOutputMode": "json-schema",
+  "parseEvidenceDirectory": "protected-eval/stage3-superqwen-semantic-contract-20260901/evidence/parse-full/2026-09-01T10-31-29-151Z",
+  "retrievalEvidenceDirectory": "protected-eval/stage3-superqwen-semantic-contract-20260901/evidence/retrieval/2026-09-01T10-40-12-455Z",
+  "retrieval": {
+    "inputMode": "raw-text-only",
+    "directions": [
+      "el->en",
+      "en->el"
+    ],
+    "threshold": 0.8,
+    "topK": 3,
+    "lexicalBaseline": "same candidate pools",
+    "embeddingBaseline": "NOT RUN"
+  },
+  "liveModelProcessPolicy": "Existing loaded endpoint only; no download, restart, replacement, or /free call.",
+  "candidatePoolPolicy": "Raw text only for model extractor and lexical baseline.",
+  "sourceWorkingTree": "isolated evaluator clone; candidate implementation tree unchanged",
+  "evidenceLimitations": [
+    "All 32 retrieval raw outputs are preserved, but 18 invalid retrieval records have null rawRequest and rawResponse because the pre-run evaluator catch path overwrote captured transport fields; no retrieval retry was performed.",
+    "Embedding baseline was NOT RUN because no already-available embedding endpoint was present without changing the loaded model."
+  ],
+  "modelDiscovery": {
+    "models": [
+      {
+        "name": "openai/superqwen3.8-27b-abliterated",
+        "model": "openai/superqwen3.8-27b-abliterated",
+        "modified_at": "",
+        "size": "",
+        "digest": "",
+        "type": "model",
+        "description": "",
+        "tags": [
+          ""
+        ],
+        "capabilities": [
+          "completion"
+        ],
+        "parameters": "",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "",
+          "families": [
+            ""
+          ],
+          "parameter_size": "",
+          "quantization_level": ""
+        }
+      }
+    ],
+    "object": "list",
+    "data": [
+      {
+        "id": "openai/superqwen3.8-27b-abliterated",
+        "aliases": [
+          "openai/superqwen3.8-27b-abliterated"
+        ],
+        "tags": [],
+        "object": "model",
+        "created": 1788258689,
+        "owned_by": "llamacpp",
+        "meta": {
+          "vocab_type": 2,
+          "n_vocab": 248320,
+          "n_ctx": 65536,
+          "n_ctx_train": 262144,
+          "n_embd": 5120,
+          "n_params": 26895998464,
+          "size": 16536406016,
+          "ftype": "Q4_K - Medium"
+        }
+      }
+    ]
+  }
+}

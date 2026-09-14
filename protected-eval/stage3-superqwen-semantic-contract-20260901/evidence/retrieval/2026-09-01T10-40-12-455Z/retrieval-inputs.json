@@ -1,0 +1,240 @@
+{
+  "inputMode": "raw-text-only",
+  "directionPairs": [
+    "el->en",
+    "en->el"
+  ],
+  "memories": [
+    {
+      "id": "pref-en",
+      "text": "I prefer dark mode for notifications.",
+      "language": "en"
+    },
+    {
+      "id": "pref-el",
+      "text": "Προτιμώ τη σκοτεινή λειτουργία για τις ειδοποιήσεις.",
+      "language": "el"
+    },
+    {
+      "id": "neg-delete-en",
+      "text": "Do not delete the audit archive.",
+      "language": "en"
+    },
+    {
+      "id": "neg-delete-el",
+      "text": "Μην διαγράψεις το αρχείο ελέγχου.",
+      "language": "el"
+    },
+    {
+      "id": "mod-approve-en",
+      "text": "Elena must approve the invoice before release.",
+      "language": "en"
+    },
+    {
+      "id": "mod-approve-el",
+      "text": "Η Ελένη πρέπει να εγκρίνει το τιμολόγιο πριν από την κυκλοφορία.",
+      "language": "el"
+    },
+    {
+      "id": "cond-power-en",
+      "text": "If the battery falls below 15 percent, enable low power mode.",
+      "language": "en"
+    },
+    {
+      "id": "cond-power-el",
+      "text": "Αν η μπαταρία πέσει κάτω από 15 τοις εκατό, ενεργοποίησε τη λειτουργία χαμηλής κατανάλωσης.",
+      "language": "el"
+    },
+    {
+      "id": "ref-contract-en",
+      "text": "Maria told Daniel that she will send him the signed contract.",
+      "language": "en"
+    },
+    {
+      "id": "ref-contract-el",
+      "text": "Η Μαρία είπε στον Ντάνιελ ότι θα του στείλει το υπογεγραμμένο συμβόλαιο.",
+      "language": "el"
+    },
+    {
+      "id": "list-review-en",
+      "text": "The review is due on 2026-10-14; invite Ana, Ben, and Chloe; the budget is 1250 EUR.",
+      "language": "en"
+    },
+    {
+      "id": "list-review-el",
+      "text": "Η ανασκόπηση πρέπει να ολοκληρωθεί στις 2026-10-14· κάλεσε την Άνα, τον Μπεν και τη Χλόη· ο προϋπολογισμός είναι 1250 EUR.",
+      "language": "el"
+    },
+    {
+      "id": "transfer-ab-en",
+      "text": "Alice transfers 250 EUR to Bob.",
+      "language": "en"
+    },
+    {
+      "id": "transfer-ab-el",
+      "text": "Η Αλίκη μεταφέρει 250 EUR στον Μπομπ.",
+      "language": "el"
+    },
+    {
+      "id": "transfer-ba-en",
+      "text": "Bob transfers 250 EUR to Alice.",
+      "language": "en"
+    },
+    {
+      "id": "transfer-ba-el",
+      "text": "Ο Μπομπ μεταφέρει 250 EUR στην Αλίκη.",
+      "language": "el"
+    }
+  ],
+  "queries": [
+    {
+      "id": "query-pref-en",
+      "text": "I prefer dark mode for notifications.",
+      "language": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "pref-el"
+      ]
+    },
+    {
+      "id": "query-pref-el",
+      "text": "Προτιμώ τη σκοτεινή λειτουργία για τις ειδοποιήσεις.",
+      "language": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "pref-en"
+      ]
+    },
+    {
+      "id": "query-neg-delete-en",
+      "text": "Do not delete the audit archive.",
+      "language": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "neg-delete-el"
+      ]
+    },
+    {
+      "id": "query-neg-delete-el",
+      "text": "Μην διαγράψεις το αρχείο ελέγχου.",
+      "language": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "neg-delete-en"
+      ]
+    },
+    {
+      "id": "query-mod-approve-en",
+      "text": "Elena must approve the invoice before release.",
+      "language": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "mod-approve-el"
+      ]
+    },
+    {
+      "id": "query-mod-approve-el",
+      "text": "Η Ελένη πρέπει να εγκρίνει το τιμολόγιο πριν από την κυκλοφορία.",
+      "language": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "mod-approve-en"
+      ]
+    },
+    {
+      "id": "query-cond-power-en",
+      "text": "If the battery falls below 15 percent, enable low power mode.",
+      "language": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "cond-power-el"
+      ]
+    },
+    {
+      "id": "query-cond-power-el",
+      "text": "Αν η μπαταρία πέσει κάτω από 15 τοις εκατό, ενεργοποίησε τη λειτουργία χαμηλής κατανάλωσης.",
+      "language": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "cond-power-en"
+      ]
+    },
+    {
+      "id": "query-ref-contract-en",
+      "text": "Maria told Daniel that she will send him the signed contract.",
+      "language": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "ref-contract-el"
+      ]
+    },
+    {
+      "id": "query-ref-contract-el",
+      "text": "Η Μαρία είπε στον Ντάνιελ ότι θα του στείλει το υπογεγραμμένο συμβόλαιο.",
+      "language": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "ref-contract-en"
+      ]
+    },
+    {
+      "id": "query-list-review-en",
+      "text": "The review is due on 2026-10-14; invite Ana, Ben, and Chloe; the budget is 1250 EUR.",
+      "language": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "list-review-el"
+      ]
+    },
+    {
+      "id": "query-list-review-el",
+      "text": "Η ανασκόπηση πρέπει να ολοκληρωθεί στις 2026-10-14· κάλεσε την Άνα, τον Μπεν και τη Χλόη· ο προϋπολογισμός είναι 1250 EUR.",
+      "language": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "list-review-en"
+      ]
+    },
+    {
+      "id": "query-transfer-ab-en",
+      "text": "Alice transfers 250 EUR to Bob.",
+      "language": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "transfer-ab-el"
+      ]
+    },
+    {
+      "id": "query-transfer-ab-el",
+      "text": "Η Αλίκη μεταφέρει 250 EUR στον Μπομπ.",
+      "language": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "transfer-ab-en"
+      ]
+    },
+    {
+      "id": "query-transfer-ba-en",
+      "text": "Bob transfers 250 EUR to Alice.",
+      "language": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "transfer-ba-el"
+      ]
+    },
+    {
+      "id": "query-transfer-ba-el",
+      "text": "Ο Μπομπ μεταφέρει 250 EUR στην Αλίκη.",
+      "language": "el",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "transfer-ba-en"
+      ]
+    }
+  ],
+  "candidatePoolRule": "Identical raw memory pools are used for semantic and lexical retrieval; gold IDs are scoring labels only.",
+  "embeddingBaseline": {
+    "status": "NOT RUN",
+    "reason": "No embedding endpoint was already available without changing the loaded model."
+  }
+}
