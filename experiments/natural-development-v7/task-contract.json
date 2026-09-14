@@ -20,15 +20,24 @@
     "date": "date",
     "credential": "credential"
   },
+  "conditionalRepresentationPolicy": {
+    "root": "Use the predicate for the primary action stated by the main clause; do not use require because it is not a framed predicate in the current registry.",
+    "coordination": "For a condition governing two actions, keep the first action as the root clause and encode the second action in consequences.",
+    "rootAgent": "Every conditional root and consequence must include the named source agent with its canonical agent role; do not omit a repeated subject.",
+    "nestedModality": "Repeat the explicitly stated parent modality on each coordinated action; do not invent modality propagation."
+  },
   "rolePolicy": {
-    "send": "agent sends object to recipient; recipient is not destination",
+    "send": "agent sends object to recipient; recipient is not destination; a source-visible file, report, or notice uses object type document",
     "publish": "agent publishes theme to explicit audience",
     "retry": "agent retries theme with count and time when stated",
-    "conditional": "condition scopes the main clause; consequences are separate nested clauses and repeat the parent's modality explicitly"
+    "conditional": "condition scopes the main clause; consequences are separate nested clauses and repeat the parent's modality explicitly",
+    "below": "Use subject for the measured metric and value for the numeric threshold",
+    "enable": "Use theme for the feature being enabled"
   },
+  "termEncodingPolicy": "Use id for source-visible named identifiers and value only for literal quantities/dates or genuinely ungrounded literals. Do not replace canonical role names with object/threshold/value aliases.",
   "modalityPolicy": "obligation and permission are distinct identity-bearing modalities; lexical negation is represented by negated=true on the lexical predicate and is not rewritten into its antonym.",
   "quantityPolicy": "Preserve finite numeric value and explicit unit; exactly seven times is not interchangeable with an omitted count or another unit.",
-  "timePolicy": "Preserve explicit ISO calendar dates as date terms.",
+  "timePolicy": "Preserve explicit ISO calendar dates as clause-level time terms, not entries in roles.",
   "identityPolicy": "Compare exact identity only for source-visible stable names, identifiers, literal quantities, dates, and task-typed roles. Never infer private handles.",
   "abstentionPolicy": {"canonicalReasons":["unsupported","ambiguous","unresolved"],"mapping":{"unsupported domain":"unsupported","missing required frame argument":"unsupported","unresolved modality or nested scope":"unresolved"}},
   "criticalContrastPolicy": "Contrast definitions are scorer-private and require complete candidate outputs for every prescribed endpoint.",

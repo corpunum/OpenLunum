@@ -3,7 +3,7 @@
   "status": "draft-not-certified",
   "protected": false,
   "trainingGoldEligible": false,
-  "datasetSha256": "2e657265af82d0de5a7ca525828bcbc2ed97acb607a4c767eb05a8445dcf68c6",
+  "datasetSha256": "5ea6642be06f2f18d72fbadf0baa43d448c8e3e1fbbef769a4f0c7d1ad298501",
   "reason": "V7 is a development draft. Independent semantic and Greek-language review is incomplete; extraction evidence is diagnostic only.",
   "reviewers": [],
   "limitations": ["No native-speaker certification is claimed.", "Prompt-level extractor isolation only.", "No training or protected-evaluation use."]
