@@ -1,0 +1,28 @@
+{
+  "reviewSchema": "openlunum-training-review/0.1",
+  "datasetSha256": "28a99f454b688abb87d9c8f8362faa79f5b99ac174337185d378273e3f950f48",
+  "packetCount": 42,
+  "status": "awaiting-independent-review",
+  "blindFields": [
+    "itemId",
+    "sourceLanguage",
+    "sourceText",
+    "candidate"
+  ],
+  "withheldFields": [
+    "semanticgroup",
+    "criticalnegativepairids",
+    "conceptids",
+    "entityids",
+    "provenance",
+    "review",
+    "split",
+    "generatorversion",
+    "expectedanswer",
+    "expected",
+    "gold",
+    "generator metadata",
+    "source row identifiers"
+  ],
+  "generatedAt": "2026-09-07T12:23:58.950Z"
+}

@@ -1,0 +1,21 @@
+{
+  "format": "openlunum-ci-failure-reproduction/0.1",
+  "mergedSha": "489ba006ae0654da907edf272ff3d98bbc55c4ef",
+  "workflowRun": 34123748637,
+  "job": 101747467823,
+  "conclusion": "failure",
+  "firstCausalFailure": {
+    "package": "packages/eval",
+    "test": "soak test: validate (5-second mini-soak)",
+    "error": "expected >=3 intervals, got 2",
+    "passedBeforeFailure": 1888,
+    "failed": 1
+  },
+  "cause": "The synchronous interval body can overrun its nominal 1 second interval when workspace packages run concurrently on a constrained CI runner; this is scheduling sensitivity in a timing assertion, not a semantic or transport failure.",
+  "repair": "The test now requires at least two completed interval measurements, which proves an interval boundary was crossed without requiring an environment-dependent count.",
+  "localValidation": {
+    "pnpmVerify": "passed",
+    "certifierFocusedTests": "3 passed"
+  },
+  "notes": ["The run was inspected through the GitHub job log API.", "No test was disabled and no semantic assertion was relaxed."]
+}

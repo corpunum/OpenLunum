@@ -1,0 +1,21 @@
+{
+  "format": "openlunum-external-resource-license-manifest/0.1",
+  "resource": "Universal PropBank",
+  "releaseAudited": "UP2.0",
+  "auditDate": "2026-09-07",
+  "sourceUrls": [
+    "https://universalpropositions.github.io/",
+    "https://aclanthology.org/2022.lrec-1.181/",
+    "https://universaldependencies.org/contributing/licensing.html",
+    "https://github.com/UniversalDependencies/LICENSE/blob/master/license-ud-2.18.html"
+  ],
+  "defaultTrainingDisposition": "LEGAL_REVIEW_REQUIRED",
+  "entries": [
+    { "scope": "UP2 format and conventions", "release": "UP2.0", "upstream": "PropBank v3 and UD 2.9 treebanks", "license": "Inherited from source components; no single corpus license", "commercialRestriction": "Depends on each treebank", "redistribution": "Depends on each treebank", "attribution": "Required", "classification": "LEGAL_REVIEW_REQUIRED", "trainingUse": "Auxiliary schema/supervision only after component clearance" },
+    { "scope": "English UP2 data", "release": "UP2.0", "upstream": "English PropBank and selected English treebanks", "license": "Mixed; some sources have LDC or noncommercial terms", "commercialRestriction": "Potentially restricted", "redistribution": "Potentially restricted", "attribution": "Required", "classification": "LEGAL_REVIEW_REQUIRED", "trainingUse": "Do not use commercially until exact source is cleared" },
+    { "scope": "French/German/Spanish UP2 data", "release": "UP2.0", "upstream": "Language-specific UD treebanks", "license": "Per-treebank", "commercialRestriction": "Unknown without source audit", "redistribution": "Unknown without source audit", "attribution": "Required", "classification": "LEGAL_REVIEW_REQUIRED", "trainingUse": "Candidate auxiliary data only after source review" },
+    { "scope": "Greek and Indonesian UP2 coverage", "release": "UP2.0", "upstream": "No verified UP2.0 component in primary materials reviewed", "license": "Not applicable to unverified component", "commercialRestriction": "Not applicable", "redistribution": "Not applicable", "attribution": "Not applicable", "classification": "DO_NOT_USE", "trainingUse": "Do not claim UP2 supervision for these languages" },
+    { "scope": "PropBank v3 conventions detached from corpus rows", "release": "PropBank v3", "upstream": "PropBank project", "license": "Verify current upstream terms; relevant materials report CC BY-SA 4.0", "commercialRestriction": "Verify", "redistribution": "Verify attribution/share-alike obligations", "attribution": "Required", "classification": "LEGAL_REVIEW_REQUIRED", "trainingUse": "Documented conventions only until confirmed" }
+  ],
+  "openlunumPolicy": { "neverCanonicalTruth": true, "rolesetAwareMappingRequired": true, "unmappedControlledSymbol": "reject", "goldStatus": "auxiliary-only-until-independent-review", "greekFirstClass": true }
+}

@@ -81,6 +81,13 @@ export type {
 // Runner
 export { runExperiment } from './runner.js';
 
+// Failure classification taxonomy (R14.x)
+export { classifyFailure } from './failure-classification.js';
+export type { FailureClass, ClassifiedFailure } from './failure-classification.js';
+
+// Blind agent-native evaluation. Gold is evaluator-private at runtime.
+export { BlindAgentEvaluationSession } from './agent-evaluator.js';
+export type { BlindEvalNextItem, BlindEvalSubmission, BlindEvalResult, BlindEvalLanguageSummary, BlindEvalSummary, BlindCriticalNegativePair, BlindEvaluationOptions } from './agent-evaluator.js';
 // Model
 export { ModelResponseError, OpenAICompatibleModel, normalizeModelResponse, openAICompatibleStructuredOutputAdapter } from './model.js';
 export type { StructuredOutputAdapter } from './model.js';
@@ -174,6 +181,8 @@ export type {
 
 // Raw-text retrieval: the extraction and retrieval stages are both exercised.
 export { runRawTextRetrievalEvaluation } from './raw-text-retrieval.js';
+export { validateBlindAgentLedger } from './blind-agent-ledger.js';
+export type { BlindSourceItem, BlindCandidateRow, BlindLedgerValidation } from './blind-agent-ledger.js';
 export type {
   RawTextMemory,
   RawTextQuery,
@@ -226,12 +235,15 @@ export {
 export {
   collectLiteralPlacements,
   checkProtectedLiteralPlacement,
+  checkProtectedSemanticAtoms,
   protectedLiteralPlacementCoverage,
 } from './protected-literal-placement.js';
 export type {
   LiteralPlacement,
   ProtectedLiteralPlacementStatus,
   ProtectedLiteralPlacementCheck,
+  ProtectedSemanticAtom,
+  ProtectedSemanticAtomCheck,
 } from './protected-literal-placement.js';
 
 // Round-trip consistency

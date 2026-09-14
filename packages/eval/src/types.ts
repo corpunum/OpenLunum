@@ -1,5 +1,7 @@
 import type { LunumSem } from '@corpunum/lunum';
 import type { SemanticNormalizationResult } from '@corpunum/lunum';
+import type { FailureClass } from './failure-classification.js';
+import type { ProtectedSemanticAtom } from './protected-literal-placement.js';
 
 export type WorkArea = 'semantic-contract' | 'multilingual-parse' | 'realization' | 'rendering' | 'context' | 'retrieval' | 'integration' | 'infrastructure';
 export type ExperimentTask = 'parse' | 'realize' | 'render' | 'context' | 'retrieval' | 'integration' | 'conformance' | 'infrastructure';
@@ -144,6 +146,7 @@ export interface DatasetItem {
   goldSem: LunumSem;
   expectedOutcome?: 'parse' | 'abstain';
   protectedLiterals?: string[];
+  protectedSemanticAtoms?: ProtectedSemanticAtom[];
   tags?: string[];
 }
 
@@ -164,7 +167,21 @@ export interface ItemResult {
   parsedSem?: LunumSem;
   /** Protocol normalization outcome; structural validity alone is not canonical identity. */
   candidateNormalization?: Pick<SemanticNormalizationResult, 'status' | 'canonical' | 'issues' | 'protocolVersion'>;
+  /** Explicit stage state used for deterministic diagnostics and aggregation. */
+  providerSuccess?: boolean;
+  jsonParsed?: boolean;
+  structuralValid?: boolean;
+  protocolCanonical?: boolean;
+  frameCanonical?: boolean;
+  groundedIdentityValid?: boolean;
+  candidateIdentityAvailable?: boolean;
+  goldIdentityAvailable?: boolean;
+  identityComparable?: boolean;
+  identityDifference?: string;
+  protectedAtomsValid?: boolean;
   canonicalExact?: boolean;
+  /** Primary exact semantic identity comparison using lfp:2.1. */
+  semanticIdentityExact?: boolean;
   /** Validated against the exact JSON Schema sent to the provider. */
   transportSchemaValid?: boolean;
   /** Legacy formatting-only fingerprint comparison, retained for migration diagnostics. */
@@ -189,9 +206,11 @@ export interface ItemResult {
   }>;
   /** Fraction of protectedLiteralPlacement checks with status 'placed'; 1 when there are none. */
   protectedLiteralPlacementCoverage?: number;
+  protectedSemanticAtoms?: Array<ProtectedSemanticAtom & { status: 'placed' | 'missing' | 'wrong-value'; satisfied: boolean }>;
   missingFeatures?: string[];
   result?: Record<string, unknown>;
   error?: string | undefined;
+  failureClass?: FailureClass;
   latencyMs: number;
   queryId?: string;
   candidateIds?: string[];
@@ -224,6 +243,7 @@ export interface ParseAttemptEvidence {
   systemPromptSha256: string | null;
   userPromptSha256: string | null;
   error?: string;
+  failureClass?: FailureClass;
   latencyMs: number;
 }
 
@@ -231,6 +251,7 @@ export interface ExperimentItem {
   id: string;
   goldSem?: Record<string, unknown>;
   protectedLiterals?: string[];
+  protectedSemanticAtoms?: ProtectedSemanticAtom[];
   targetLanguage?: string;
   sourceText?: string;
   sourceLanguage?: string;

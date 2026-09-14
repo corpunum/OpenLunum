@@ -1,0 +1,20 @@
+{
+  "type": "development-unimorph-independent-ud-benchmark",
+  "version": 1,
+  "status": "diagnostic",
+  "protected": false,
+  "samplePerLanguage": 100,
+  "goldSource": "Universal Dependencies dev treebank lemma and UPOS",
+  "analyzerUnderTest": "UniMorph surface/POS candidate analyzer",
+  "identityMapping": "OMW/CILI gold lemma lookup",
+  "languages": {
+    "en": { "treebank": "English-EWT", "total": 100, "goldIdentityAvailable": 8, "candidateIdentityAvailable": 5, "candidateCorrect": 5, "candidateSetContainsGold": 50, "falseExactWhenGoldUnique": 0, "ambiguity": 45, "unresolved": 50, "udSnapshotHash": "39239e0a60db3ae68f4b7036189f11b6692741d10ff8240dd91f74f2760d90f8" },
+    "el": { "treebank": "Greek-GDT", "total": 100, "goldIdentityAvailable": 21, "candidateIdentityAvailable": 7, "candidateCorrect": 7, "candidateSetContainsGold": 36, "falseExactWhenGoldUnique": 0, "ambiguity": 29, "unresolved": 64, "udSnapshotHash": "53de54735051eecef04aa8c0f5f0fbf2466e0e0d4fd9dfd3d313560c394ddf41" },
+    "es": { "treebank": "Spanish-AnCora", "total": 100, "goldIdentityAvailable": 4, "candidateIdentityAvailable": 4, "candidateCorrect": 4, "candidateSetContainsGold": 88, "falseExactWhenGoldUnique": 0, "ambiguity": 84, "unresolved": 12, "udSnapshotHash": "1a132068062edf2654fb45b41cd4c59ba7e5c18e7c5f642ed5a9cc351fd9f0fe" },
+    "fr": { "treebank": "French-GSD", "total": 100, "goldIdentityAvailable": 6, "candidateIdentityAvailable": 1, "candidateCorrect": 1, "candidateSetContainsGold": 41, "falseExactWhenGoldUnique": 0, "ambiguity": 40, "unresolved": 59, "udSnapshotHash": "9221e5084cc6a1b1540671cfbd2fc0456efc223b2fe8dd2146c2bad921be02d4" },
+    "de": { "treebank": "German-GSD", "total": 100, "status": "resource_unavailable", "reason": "OdeNet/OMW German tab snapshot was not present; no identity claim made.", "udSnapshotHash": "01e8e674973592747ffe9a8c77fcf9d2f5936a8484e731ad4f76254318a8952c" },
+    "id": { "treebank": "Indonesian-GSD", "total": 100, "goldIdentityAvailable": 10, "candidateIdentityAvailable": 6, "candidateCorrect": 6, "candidateSetContainsGold": 29, "falseExactWhenGoldUnique": 0, "ambiguity": 24, "unresolved": 70, "udSnapshotHash": "56d4ab12267317d33511326da9fcd5b7eff641435c3b6365401937a33ce05e4b" }
+  },
+  "aggregateAvailableLanguages": { "observations": 500, "goldIdentityAvailable": 49, "candidateIdentityAvailable": 23, "candidateCorrect": 23, "candidateSetContainsGold": 244, "falseExactWhenGoldUnique": 0 },
+  "interpretation": "Independent UD annotations show no false singleton identity among the 49 OMW-eligible gold observations, but identity eligibility and candidate coverage are low. This supports conservative candidate evidence only; it does not justify default morphology promotion or protected evaluation. German was measured for annotation inventory but excluded from identity metrics because the pinned German OMW tab was unavailable."
+}

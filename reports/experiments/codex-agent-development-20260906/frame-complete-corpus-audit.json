@@ -1,0 +1,16 @@
+{
+  "type": "development-frame-complete-corpus-audit",
+  "version": 1,
+  "status": "diagnostic-rejected-before-scoring",
+  "protected": false,
+  "creator": "gpt-5.6-luna",
+  "auditor": "gpt-5.6-luna",
+  "rowsProposed": 12,
+  "acceptedByFrameAudit": 9,
+  "rejected": [
+    { "id": "corpus-en-001", "reason": "send contains both recipient Tomas and destination Rotterdam office; canonical frame requires recipient xor destination" },
+    { "id": "corpus-el-001", "reason": "send contains both recipient Stelios and destination library; canonical frame requires recipient xor destination" },
+    { "id": "corpus-es-001", "reason": "send contains both recipient Mateo and destination Seville studio; canonical frame requires recipient xor destination" }
+  ],
+  "decision": "Do not score or use this proposal as a benchmark. Correct the source corpus or split recipient and destination into separate cases while preserving the frozen protocol. No model call or gold identity was involved."
+}

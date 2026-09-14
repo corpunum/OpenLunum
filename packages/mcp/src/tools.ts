@@ -8,9 +8,20 @@ import {
   renderSem,
   compareSem,
   classifyByCategory,
+  getExtractionContract,
+  submitCandidate,
+  submitCandidateWithGrounding,
+  buildCandidateSem,
+  getCandidateBuilderSchema,
 } from '@corpunum/lunum';
-import type { ContextMode, LunumSem } from '@corpunum/lunum';
+import type { ContextMode, GroundingProposal, LunumSem, CandidateBuilderInput } from '@corpunum/lunum';
 import { resolveConfig } from './config.js';
+
+/** Structural boundary for an evaluator-owned blind session. MCP never sees gold. */
+export interface BlindEvaluationSurface {
+  next(): unknown;
+  submit(input: { runId: string; itemId: string; candidateSem: unknown; provenance: unknown }): Promise<unknown>;
+}
 
 function ok(data: unknown): McpToolResponse {
   return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
@@ -22,7 +33,7 @@ function err(message: string): McpToolResponse {
 
 export const deriveTool: LunumToolDefinition = {
   name: 'lunum_derive',
-  description: 'Derive a Lunum sidecar (semantic representation + fingerprint + compact code) from input text. If no pre-parsed Sem is provided, uses surface telegraph (heuristic, no LLM needed, ~22% char savings).',
+  description: 'Build a sidecar from source text and an already-produced candidate Sem. Without sem this is explicitly a surface-only telegraph, never semantic extraction or semantic identity.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -95,7 +106,7 @@ export const compileContextTool: LunumToolDefinition = {
 
 export const fingerprintTool: LunumToolDefinition = {
   name: 'lunum_fingerprint',
-  description: 'Generate a deterministic semantic fingerprint (lfp:VERSION:sha256:DIGEST) for a Lunum-Sem object. Identical meaning always produces the same fingerprint.',
+  description: 'Generate the compatibility legacy fingerprint (lfp:0.1) for a Sem. Use lunum_submit_candidate for contained lfp:2.1 identity.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -110,12 +121,126 @@ export const fingerprintTool: LunumToolDefinition = {
       if (!sem || typeof sem !== 'object') return err('sem is required and must be an object');
       const length = typeof input.length === 'number' ? input.length : undefined;
       const fp = fingerprintSem(sem, length !== undefined ? { length } : {});
-      return ok({ success: true, fingerprint: fp });
+      return ok({
+        success: true,
+        fingerprint: fp,
+        identityScope: 'legacy-compatibility',
+        semanticIdentity: false,
+      });
     } catch (error) {
       return err((error as Error).message);
     }
   },
 };
+
+export const extractionContractTool: LunumToolDefinition = {
+  name: 'lunum_get_extraction_contract',
+  description: 'Return the machine-readable agent extraction contract generated from the core protocol and canonical frame registries.',
+  inputSchema: { type: 'object', properties: {} },
+  handler: async (): Promise<McpToolResponse> => ok({ success: true, contract: getExtractionContract() }),
+};
+
+export const submitCandidateTool: LunumToolDefinition = {
+  name: 'lunum_submit_candidate',
+  description: 'Submit untrusted agent-proposed semantics for deterministic validation, canonical frame checks, grounding, lfp:2.1 identity, and trust containment. Caller confidence cannot promote a candidate.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      sourceText: { type: 'string', description: 'Original source evidence; retained in the result.' },
+      sourceLanguage: { type: 'string', description: 'Source language tag when known.' },
+      candidateSem: { anyOf: [{ type: 'object' }, { type: 'null' }], description: 'Untrusted agent-proposed Lunum-Sem candidate, or null for an explicit abstention.' },
+      provenance: { type: 'object', description: 'Extractor provenance; unavailable fields must be omitted.' },
+      grounding: { type: 'array', description: 'Optional structured grounding proposal. Agent proposals remain pending and cannot grant lfp:2.1 identity.' },
+    },
+    required: ['sourceText', 'candidateSem', 'provenance'],
+  },
+  handler: async (input): Promise<McpToolResponse> => {
+    try {
+      if (typeof input.sourceText !== 'string') return err('sourceText is required and must be a string');
+      if (input.candidateSem !== null && (!input.candidateSem || typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem))) return err('candidateSem must be an object or null for explicit abstention');
+      if (!input.provenance || typeof input.provenance !== 'object' || Array.isArray(input.provenance)) return err('provenance is required and must be an object');
+      if (input.grounding !== undefined && !Array.isArray(input.grounding)) return err('grounding must be an array when supplied');
+      const submissionInput = {
+        sourceText: input.sourceText,
+        sourceLanguage: typeof input.sourceLanguage === 'string' ? input.sourceLanguage : null,
+        candidateSem: input.candidateSem,
+        provenance: input.provenance as never,
+      };
+      const submission = input.grounding === undefined
+        ? submitCandidate(submissionInput)
+        : submitCandidateWithGrounding({ ...submissionInput, grounding: input.grounding as GroundingProposal[] });
+      return ok({ success: true, submission });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
+
+export const buildCandidateTool: LunumToolDefinition = {
+  name: 'lunum_build_candidate',
+  description: 'Build an untrusted transport-shaped candidate from agent-selected canonical frame slots. The result must still be submitted for deterministic validation and grounding.',
+  inputSchema: {
+    ...getCandidateBuilderSchema() as LunumToolDefinition['inputSchema'],
+  },
+  handler: async (input): Promise<McpToolResponse> => {
+    try {
+      const result = buildCandidateSem(input as unknown as CandidateBuilderInput);
+      return ok({ success: true, candidate: result.sem, frame: result.frame, allowedRoles: result.allowedRoles, requiredRoles: result.requiredRoles, atLeastOneOf: result.atLeastOneOf });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
+
+/** Build optional blind-evaluation tools around an evaluator-private session. */
+export function createBlindEvaluationTools(session: BlindEvaluationSurface): LunumToolDefinition[] {
+  function sourceOnlyNext(): unknown {
+    const item = session.next();
+    if (item === null) return null;
+    if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error('blind evaluator returned an invalid source item');
+    const value = item as Record<string, unknown>;
+    const allowed = ['runId', 'itemId', 'sourceLanguage', 'sourceText', 'contractVersion', 'contractHash', 'sourceHash'] as const;
+    const sanitized: Record<string, unknown> = {};
+    for (const key of allowed) if (value[key] !== undefined) sanitized[key] = value[key];
+    if (typeof sanitized.runId !== 'string' || typeof sanitized.itemId !== 'string' || typeof sanitized.sourceLanguage !== 'string' || typeof sanitized.sourceText !== 'string') throw new Error('blind evaluator returned an incomplete source item');
+    return sanitized;
+  }
+  return [
+    {
+      name: 'lunum_eval_next',
+      description: 'Return the next blind evaluation source item and extraction-contract binding. Gold and scoring metadata are never exposed.',
+      inputSchema: { type: 'object', properties: {} },
+        handler: async (): Promise<McpToolResponse> => {
+          try { return ok({ success: true, item: sourceOnlyNext() }); } catch (error) { return err((error as Error).message); }
+        },
+    },
+    {
+      name: 'lunum_eval_submit',
+      description: 'Submit an untrusted candidate to a privately configured blind evaluator for deterministic scoring.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          runId: { type: 'string' }, itemId: { type: 'string' }, candidateSem: { anyOf: [{ type: 'object' }, { type: 'null' }], description: 'Candidate Sem object, or null for explicit abstention.' }, provenance: { type: 'object' },
+        },
+        required: ['runId', 'itemId', 'candidateSem', 'provenance'],
+      },
+      handler: async (input): Promise<McpToolResponse> => {
+        if (typeof input.runId !== 'string' || typeof input.itemId !== 'string') return err('runId and itemId are required');
+        if (input.candidateSem !== null && (typeof input.candidateSem !== 'object' || Array.isArray(input.candidateSem))) return err('candidateSem must be an object or null for explicit abstention');
+        if (!input.provenance || typeof input.provenance !== 'object' || Array.isArray(input.provenance)) return err('provenance is required and must be an object');
+        try {
+          await session.submit({ runId: input.runId, itemId: input.itemId, candidateSem: input.candidateSem, provenance: input.provenance });
+          return ok({ success: true, receipt: { runId: input.runId, itemId: input.itemId, accepted: true } });
+        } catch {
+            // The evaluator owns gold and may include private diagnostics in an
+            // internal exception. Never reflect that text through the agent
+            // surface; otherwise a failed submission becomes an oracle.
+            return err('blind evaluation submission rejected');
+          }
+      },
+    },
+  ];
+}
 
 export const validateTool: LunumToolDefinition = {
   name: 'lunum_validate',
@@ -217,6 +342,9 @@ export const classifyTool: LunumToolDefinition = {
 
 export const lunumTools: LunumToolDefinition[] = [
   deriveTool,
+  extractionContractTool,
+  submitCandidateTool,
+  buildCandidateTool,
   compileContextTool,
   fingerprintTool,
   validateTool,

@@ -1,0 +1,854 @@
+{
+  "type": "openlunum-development-agent-retrieval",
+  "version": "2026-09-06",
+  "status": "diagnostic-development-only",
+  "protected": false,
+  "localInferenceUsed": false,
+  "sourceCorpus": {
+    "path": "experiments/development-grounding-ladder-20260906/corpus.json",
+    "sha256": "bef99fa5f7fe6d084fb500f75dc4db54c8b930473a2e320b1e1741c2773c4f25"
+  },
+  "candidateLedger": {
+    "path": "experiments/development-grounding-ladder-20260906/candidate-ledger.json",
+    "sha256": "ef0301025d0dad46628f0890ba4337a983e1af982f1bac221c577fa72ef2442f",
+    "sourceOnly": true
+  },
+  "dataset": {
+    "memoryCount": 24,
+    "queryCount": 24,
+    "targetRouting": "each query targets the next language row in its semantic group"
+  },
+  "evaluator": {
+    "mode": "exact",
+    "threshold": 0.8,
+    "topK": 1,
+    "inputMode": "raw-text-only"
+  },
+  "metrics": {
+    "queries": 24,
+    "memoryCount": 24,
+    "queryExtractionFailures": 0,
+    "memoryExtractionFailures": 0,
+    "queryIdentityAvailable": 24,
+    "memoryIdentityAvailable": 24,
+    "queryIdentityCoverage": 1,
+    "memoryIdentityCoverage": 1,
+    "conditionalQueryCount": 24,
+    "conditionalTop1Accuracy": 1,
+    "conditionalRecall": 1,
+    "semanticMatchingFailures": 0,
+    "rankingFailures": 0,
+    "truePositives": 24,
+    "falsePositives": 0,
+    "falseNegatives": 0,
+    "trueNegatives": 92,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1,
+    "falsePositiveRate": 0,
+    "top1Accuracy": 1,
+    "positiveTop1Accuracy": 1,
+    "negativeRejectionAccuracy": 0,
+    "negativeQueryCount": 0,
+    "negativeComparableQueryCount": 0,
+    "topKRecall": 1,
+    "byLanguagePair": {
+      "en-el": {
+        "queries": 4,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "el-fr": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "fr-en": {
+        "queries": 2,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "en-es": {
+        "queries": 2,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "es-de": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "de-en": {
+        "queries": 2,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "el-id": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "id-en": {
+        "queries": 3,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "es-fr": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "en-de": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "de-id": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "el-es": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "es-en": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "en-fr": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "fr-id": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      },
+      "el-de": {
+        "queries": 1,
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "falsePositiveRate": 0,
+        "topKRecall": 1
+      }
+    }
+  },
+  "baselines": {
+    "lexical": {
+      "precision": 1,
+      "recall": 0.2916666666666667,
+      "f1": 0.45161290322580644,
+      "falsePositiveRate": 0,
+      "top1Accuracy": 0.2916666666666667,
+      "positiveTop1Accuracy": 0.2916666666666667,
+      "negativeRejectionAccuracy": 0,
+      "topKRecall": 0.2916666666666667,
+      "truePositives": 7,
+      "falsePositives": 0,
+      "falseNegatives": 17,
+      "trueNegatives": 92,
+      "failures": 0
+    }
+  },
+  "queryResults": [
+    {
+      "queryId": "gl-01-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "gl-01-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-01-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-01-el"
+      ],
+      "matchedMemoryIds": [
+        "gl-01-el"
+      ],
+      "extracted": true,
+      "candidateCount": 4,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-01-el",
+      "queryLanguage": "el",
+      "targetLanguage": "fr",
+      "expectedMemoryIds": [
+        "gl-01-fr"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-01-fr"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-01-fr"
+      ],
+      "matchedMemoryIds": [
+        "gl-01-fr"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-01-fr",
+      "queryLanguage": "fr",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "gl-01-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-01-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-01-en"
+      ],
+      "matchedMemoryIds": [
+        "gl-01-en"
+      ],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-02-en",
+      "queryLanguage": "en",
+      "targetLanguage": "es",
+      "expectedMemoryIds": [
+        "gl-02-es"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-02-es"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-02-es"
+      ],
+      "matchedMemoryIds": [
+        "gl-02-es"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-02-es",
+      "queryLanguage": "es",
+      "targetLanguage": "de",
+      "expectedMemoryIds": [
+        "gl-02-de"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-02-de"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-02-de"
+      ],
+      "matchedMemoryIds": [
+        "gl-02-de"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-02-de",
+      "queryLanguage": "de",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "gl-02-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-02-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-02-en"
+      ],
+      "matchedMemoryIds": [
+        "gl-02-en"
+      ],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-03-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "gl-03-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-03-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-03-el"
+      ],
+      "matchedMemoryIds": [
+        "gl-03-el"
+      ],
+      "extracted": true,
+      "candidateCount": 4,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-03-el",
+      "queryLanguage": "el",
+      "targetLanguage": "id",
+      "expectedMemoryIds": [
+        "gl-03-id"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-03-id"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-03-id"
+      ],
+      "matchedMemoryIds": [
+        "gl-03-id"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-03-id",
+      "queryLanguage": "id",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "gl-03-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-03-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-03-en"
+      ],
+      "matchedMemoryIds": [
+        "gl-03-en"
+      ],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-04-en",
+      "queryLanguage": "en",
+      "targetLanguage": "es",
+      "expectedMemoryIds": [
+        "gl-04-es"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-04-es"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-04-es"
+      ],
+      "matchedMemoryIds": [
+        "gl-04-es"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-04-es",
+      "queryLanguage": "es",
+      "targetLanguage": "fr",
+      "expectedMemoryIds": [
+        "gl-04-fr"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-04-fr"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-04-fr"
+      ],
+      "matchedMemoryIds": [
+        "gl-04-fr"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-04-fr",
+      "queryLanguage": "fr",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "gl-04-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-04-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-04-en"
+      ],
+      "matchedMemoryIds": [
+        "gl-04-en"
+      ],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-05-en",
+      "queryLanguage": "en",
+      "targetLanguage": "de",
+      "expectedMemoryIds": [
+        "gl-05-de"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-05-de"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-05-de"
+      ],
+      "matchedMemoryIds": [
+        "gl-05-de"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-05-de",
+      "queryLanguage": "de",
+      "targetLanguage": "id",
+      "expectedMemoryIds": [
+        "gl-05-id"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-05-id"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-05-id"
+      ],
+      "matchedMemoryIds": [
+        "gl-05-id"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-05-id",
+      "queryLanguage": "id",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "gl-05-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-05-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-05-en"
+      ],
+      "matchedMemoryIds": [
+        "gl-05-en"
+      ],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-06-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "gl-06-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-06-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-06-el"
+      ],
+      "matchedMemoryIds": [
+        "gl-06-el"
+      ],
+      "extracted": true,
+      "candidateCount": 4,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-06-el",
+      "queryLanguage": "el",
+      "targetLanguage": "es",
+      "expectedMemoryIds": [
+        "gl-06-es"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-06-es"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-06-es"
+      ],
+      "matchedMemoryIds": [
+        "gl-06-es"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-06-es",
+      "queryLanguage": "es",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "gl-06-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-06-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-06-en"
+      ],
+      "matchedMemoryIds": [
+        "gl-06-en"
+      ],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-07-en",
+      "queryLanguage": "en",
+      "targetLanguage": "fr",
+      "expectedMemoryIds": [
+        "gl-07-fr"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-07-fr"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-07-fr"
+      ],
+      "matchedMemoryIds": [
+        "gl-07-fr"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-07-fr",
+      "queryLanguage": "fr",
+      "targetLanguage": "id",
+      "expectedMemoryIds": [
+        "gl-07-id"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-07-id"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-07-id"
+      ],
+      "matchedMemoryIds": [
+        "gl-07-id"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-07-id",
+      "queryLanguage": "id",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "gl-07-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-07-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-07-en"
+      ],
+      "matchedMemoryIds": [
+        "gl-07-en"
+      ],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-08-en",
+      "queryLanguage": "en",
+      "targetLanguage": "el",
+      "expectedMemoryIds": [
+        "gl-08-el"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-08-el"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-08-el"
+      ],
+      "matchedMemoryIds": [
+        "gl-08-el"
+      ],
+      "extracted": true,
+      "candidateCount": 4,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-08-el",
+      "queryLanguage": "el",
+      "targetLanguage": "de",
+      "expectedMemoryIds": [
+        "gl-08-de"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-08-de"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-08-de"
+      ],
+      "matchedMemoryIds": [
+        "gl-08-de"
+      ],
+      "extracted": true,
+      "candidateCount": 3,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    },
+    {
+      "queryId": "gl-08-de",
+      "queryLanguage": "de",
+      "targetLanguage": "en",
+      "expectedMemoryIds": [
+        "gl-08-en"
+      ],
+      "semanticEquivalentMemoryIds": [
+        "gl-08-en"
+      ],
+      "routedOutEquivalentMemoryIds": [],
+      "retrievedMemoryIds": [
+        "gl-08-en"
+      ],
+      "matchedMemoryIds": [
+        "gl-08-en"
+      ],
+      "extracted": true,
+      "candidateCount": 8,
+      "semanticMatchingFailures": [],
+      "rankingFailures": [],
+      "precision": 1,
+      "recall": 1,
+      "f1": 1,
+      "falsePositiveRate": 0,
+      "top1Correct": true
+    }
+  ],
+  "interpretation": "Development replay only. Repeated candidate identities from one source-only ledger do not establish generalization; no gold Sem entered extraction."
+}

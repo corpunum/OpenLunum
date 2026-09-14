@@ -4,7 +4,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { execFile } from 'node:child_process';
 import { runParseExperiment } from '../src/parse-experiment.js';
-import { extractStructuredJson, PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES } from '../src/parse-experiment.js';
+import { buildExtractionSchema, extractStructuredJson, PARSE_LANGUAGE_LABELS, PARSE_LANGUAGES, validateEvaluationGold } from '../src/parse-experiment.js';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import { createServer } from 'node:http';
@@ -22,6 +22,60 @@ test('parse experiment defines the supported multilingual evaluation languages',
   assert.strictEqual(PARSE_LANGUAGE_LABELS.el, 'Greek');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.es, 'Spanish');
   assert.strictEqual(PARSE_LANGUAGE_LABELS.id, 'Indonesian');
+});
+
+test('gold preflight rejects transport-valid but noncanonical protocol symbols', async () => {
+  const semSchema = JSON.parse(await readFile(path.join(WORKSPACE_ROOT, 'schemas/lunum-sem.schema.json'), 'utf8'));
+  const item = {
+    id: 'noncanonical-kind',
+    sourceLanguage: 'en',
+    sourceText: 'A request.',
+    goldSem: {
+      schema: 'lunum-sem/0.1-draft',
+      world: 'real',
+      kind: 'obligation',
+      clauses: [{ predicate: 'request', roles: { agent: { type: 'actor', id: 'user' }, theme: { type: 'document', id: 'request' } }, negated: false }]
+    }
+  } as any;
+  const report = validateEvaluationGold([item], buildExtractionSchema(semSchema));
+  assert.equal(report.transportValid, 1);
+  assert.equal(report.structuralValid, 1);
+  assert.equal(report.protocolCanonical, 0);
+  assert.equal(report.identityValid, 0);
+  assert.deepEqual(report.invalid[0]?.stages, ['protocol-canonicality', 'semantic-identity']);
+});
+
+test('gold preflight reports frame validity and blocks frame-invalid gold', async () => {
+  const semSchema = JSON.parse(await readFile(path.join(WORKSPACE_ROOT, 'schemas/lunum-sem.schema.json'), 'utf8'));
+  const report = validateEvaluationGold([{
+    id: 'invalid-frame', sourceLanguage: 'en', sourceText: 'A preference.',
+    goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, manner: { type: 'concept', id: 'csv' } } }] }
+  }], buildExtractionSchema(semSchema));
+  assert.equal(report.transportValid, 1);
+  assert.equal(report.structuralValid, 1);
+  assert.equal(report.protocolCanonical, 1);
+  assert.equal(report.frameCanonical, 0);
+  assert.equal(report.identityValid, 0);
+  assert.ok(report.invalid[0]?.stages.includes('frame-canonicality'));
+  assert.ok((report.invalid[0]?.frameIssues?.length ?? 0) > 0);
+});
+
+test('gold preflight rejects incompatible quantity and date term shapes at transport stage', async () => {
+  const semSchema = JSON.parse(await readFile(path.join(WORKSPACE_ROOT, 'schemas/lunum-sem.schema.json'), 'utf8'));
+  const report = validateEvaluationGold([{
+    id: 'invalid-term-shapes', sourceLanguage: 'en', sourceText: 'bad terms',
+    goldSem: {
+      schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact',
+      clauses: [{ predicate: 'below', roles: {
+        subject: { type: 'metric', id: 'battery' },
+        value: { type: 'quantity', value: { value: 20, unit: 'percent' } },
+        time: { type: 'date', value: { year: 2026 } }
+      } }]
+    }
+  } as any], buildExtractionSchema(semSchema));
+  assert.equal(report.transportValid, 0);
+  assert.equal(report.structuralValid, 0);
+  assert.match(JSON.stringify(report.invalid[0]?.transportErrors), /must be number|must be string|must be integer|must be object/u);
 });
 
 test('parse evidence rejects placeholder model IDs before a request is made', () => {
@@ -46,7 +100,7 @@ test('structured parse extraction fails closed on prose wrappers and accepts one
 test('parse experiment rejects schema-invalid model candidates instead of counting exact matches', async () => {
   const sem = {
     schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
-    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } }, negated: false }],
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }],
     extra: 'not allowed'
   };
   const server = createServer((request, response) => {
@@ -89,7 +143,7 @@ test('parse experiment enforces maxModelCalls globally and records verified prov
   let completions = 0;
   const sem = {
     schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
-    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } }, negated: false }]
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
   };
   const server = createServer((request, response) => {
     if (request.url === '/v1/models') {
@@ -132,7 +186,7 @@ test('parse experiment enforces maxModelCalls globally and records verified prov
 
 test('parse experiment retains a malformed retry before a succeeding attempt', async () => {
   let calls = 0;
-  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' } }, negated: false }] };
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }] };
   const server = createServer((request, response) => {
     if (request.url === '/v1/models') {
       response.writeHead(200, { 'content-type': 'application/json' });
@@ -344,7 +398,7 @@ test('parse experiment handles mixed pass/fail correctly', async () => {
   const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-parse-mixed-'));
   try {
     const items = [
-      { id: 'test-en-1', sourceLanguage: 'en', sourceText: 'Test 1.', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: {}, negated: false }] } }
+      { id: 'test-en-1', sourceLanguage: 'en', sourceText: 'Test 1.', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }] } }
     ];
 
     const datasetPath = path.join(temp, 'dataset.jsonl');
@@ -401,7 +455,7 @@ test('parse experiment skips languages with no items', async () => {
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
     kind: 'preference',
-    clauses: [{ predicate: 'prefer', roles: {}, negated: false }]
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
   };
 
   const server = createServer((request, response) => {
@@ -490,7 +544,7 @@ test('parse-experiment CLI arg: argv[3] is the manifest, not argv[2]', async () 
     schema: 'lunum-sem/0.1-draft',
     world: 'real',
     kind: 'preference',
-    clauses: [{ predicate: 'prefer', roles: {}, negated: false }]
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
   };
 
   let serverPort = 0;
@@ -619,6 +673,14 @@ test('parsePrompt includes controlled predicate/role vocabulary', () => {
   for (const rt of ['actor', 'concept', 'object']) {
     assert.ok(prompt.system.includes(rt), `system should include role type "${rt}"`);
   }
+});
+
+test('parsePrompt is synchronized with canonical frames and teaches no unframed few-shot predicate', () => {
+  const prompt = parsePrompt({ id: 'prompt', sourceLanguage: 'en', sourceText: 'x', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact', clauses: [] } });
+  assert.match(prompt.system, /Canonical identity frames/u);
+  assert.match(prompt.system, /send\(agent, object/u);
+  assert.match(prompt.system, /recipient\|destination \(mutually exclusive\)/u);
+  assert.doesNotMatch(prompt.system, /Permission:.*share/u);
 });
 
 test('parsePrompt includes schema shape and one-shot example', () => {

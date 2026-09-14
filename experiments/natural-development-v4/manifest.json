@@ -1,0 +1,36 @@
+{
+  "format": "openlunum-natural-development/0.2",
+  "status": "awaiting-fresh-independent-review",
+  "datasetSha256": "e2c462f059aeaa765c14a5843f1aac50981e8395d732194d2b2c629b6a02854b",
+  "derivedFrom": {
+    "datasetSha256": "19b0f1d108c822a2fd36badff829ce7e5988b8eaca1fc1166179b54f4cd852b6",
+    "path": "experiments/natural-development-v2/dataset.jsonl"
+  },
+  "rows": 42,
+  "semanticGroups": 7,
+  "languages": [
+    "de",
+    "el",
+    "en",
+    "es",
+    "fr",
+    "id"
+  ],
+  "sourceKind": "agent-authored-development",
+  "humanAuthorshipEstablished": false,
+  "reviewPolicy": "all V3 packets require fresh source-level review; V2 approvals do not transfer across dataset or packet hashes",
+  "correctedRows": [
+    "natural-publish-audit-en",
+    "natural-publish-audit-el",
+    "natural-publish-audit-es",
+    "natural-publish-audit-fr",
+    "natural-publish-audit-de",
+    "natural-publish-audit-id",
+    "natural-withhold-audit-en",
+    "natural-withhold-audit-el",
+    "natural-withhold-audit-es",
+    "natural-withhold-audit-fr",
+    "natural-withhold-audit-de",
+    "natural-withhold-audit-id"
+  ]
+}

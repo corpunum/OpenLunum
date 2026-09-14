@@ -1,5 +1,5 @@
 import { canonicalizeSem, stableStringify } from './canonicalize.js';
-import { fingerprintSem } from './fingerprint.js';
+import { fingerprintSem, semanticFingerprint } from './fingerprint.js';
 import { checkHardInvariants, type InvariantFiring } from './semantic-invariants.js';
 import type { ComparisonExplanation, LunumClause, LunumSem, LunumTerm } from './types.js';
 
@@ -25,7 +25,10 @@ function flatten(clauses: LunumClause[], prefix = ''): string[] {
 }
 
 export interface SemanticComparison {
+  /** Legacy lfp:0.1 compatibility equality; retained for existing consumers. */
   exactFingerprint: boolean;
+  /** lfp:2.1 equality after canonical-frame and grounding gates. */
+  semanticIdentityExact?: boolean;
   exactCanonical: boolean;
   featureRecall: number;
   featurePrecision: number;
@@ -114,8 +117,15 @@ export function compareSem(expected: LunumSem, actual: LunumSem, options?: { exp
   const featureRecall = expectedFeatures.size ? intersection / expectedFeatures.size : 1;
   const featurePrecision = actualFeatures.size ? intersection / actualFeatures.size : 1;
 
+  let semanticIdentityExact = false;
+  try {
+    semanticIdentityExact = semanticFingerprint(left) === semanticFingerprint(right);
+  } catch {
+    semanticIdentityExact = false;
+  }
   const result: SemanticComparison = {
     exactFingerprint: fingerprintSem(left) === fingerprintSem(right),
+    semanticIdentityExact,
     exactCanonical: stableStringify(left) === stableStringify(right),
     featureRecall,
     featurePrecision,

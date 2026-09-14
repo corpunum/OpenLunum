@@ -1,0 +1,794 @@
+{
+  "type": "development-unimorph-ud-lemma-audit",
+  "version": 1,
+  "protected": false,
+  "sampleSize": 100,
+  "languages": {
+    "en": {
+      "treebank": "English-EWT",
+      "udFile": "en_ewt-ud-dev.conllu",
+      "unimorphRepo": "eng",
+      "udSnapshotHash": "39239e0a60db3ae68f4b7036189f11b6692741d10ff8240dd91f74f2760d90f8",
+      "unimorphSnapshotHash": "20a191cefdc7cad6fa74b00f49d6f658684f17b14541aae372e5a3d5a8c15c67",
+      "counts": {
+        "total": 100,
+        "analyzerCandidates": 52,
+        "candidateContainsUdLemma": 51,
+        "uniqueCorrect": 50,
+        "uniqueWrong": 1,
+        "ambiguousIncludesGold": 1,
+        "unresolved": 48
+      },
+      "rates": {
+        "analyzerCoverage": 0.52,
+        "candidateRecall": 0.51,
+        "uniquePrecision": 0.9803921568627451
+      },
+      "failureSample": [
+        {
+          "surface": "Get",
+          "udLemma": "get",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Get",
+          "udLemma": "get",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Vice",
+          "udLemma": "vice",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "installations",
+          "udLemma": "installation",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "respected",
+          "udLemma": "respect",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "HUGE",
+          "udLemma": "huge",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "Outlook.jpg",
+          "udLemma": "outlook.jpg",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "condemned",
+          "udLemma": "condemn",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "condemned",
+          "udLemma": "condemn",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Weed",
+          "udLemma": "weed",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Rooms",
+          "udLemma": "room",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Rooms",
+          "udLemma": "room",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Rooms",
+          "udLemma": "room",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "abducted",
+          "udLemma": "abduct",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "seems",
+          "udLemma": "seem",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "seems",
+          "udLemma": "seem",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "seems",
+          "udLemma": "seem",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "seems",
+          "udLemma": "seem",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "seems",
+          "udLemma": "seem",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "seems",
+          "udLemma": "seem",
+          "partOfSpeech": "verb",
+          "candidates": []
+        }
+      ]
+    },
+    "el": {
+      "treebank": "Greek-GDT",
+      "udFile": "el_gdt-ud-dev.conllu",
+      "unimorphRepo": "ell",
+      "udSnapshotHash": "53de54735051eecef04aa8c0f5f0fbf2466e0e0d4fd9dfd3d313560c394ddf41",
+      "unimorphSnapshotHash": "68f71b889fa29d31d975ebbc29f9f0f1b3a2dd6cca4f40a21b2c06f443811941",
+      "counts": {
+        "total": 100,
+        "analyzerCandidates": 44,
+        "candidateContainsUdLemma": 44,
+        "uniqueCorrect": 36,
+        "uniqueWrong": 0,
+        "ambiguousIncludesGold": 8,
+        "unresolved": 56
+      },
+      "rates": {
+        "analyzerCoverage": 0.44,
+        "candidateRecall": 0.44,
+        "uniquePrecision": 1
+      },
+      "failureSample": [
+        {
+          "surface": "στρατηγό",
+          "udLemma": "στρατηγός",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "φιλόδοξη",
+          "udLemma": "φιλόδοξος",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "φιλόδοξη",
+          "udLemma": "φιλόδοξος",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "αναφέρεται",
+          "udLemma": "αναφέρω",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "εδραιωθούν",
+          "udLemma": "εδραιώνω",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "πρόποδές",
+          "udLemma": "πρόποδες",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "σχολής",
+          "udLemma": "σχολή",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Ευχαριστώ",
+          "udLemma": "ευχαριστώ",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "βορειοαμερικανούς",
+          "udLemma": "βορειοαμερικανός",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "θορύβου",
+          "udLemma": "θόρυβος",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "προκαλούνται",
+          "udLemma": "προκαλώ",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "ορισμένα",
+          "udLemma": "ορισμένος",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "ορισμένα",
+          "udLemma": "ορισμένος",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "ορισμένα",
+          "udLemma": "ορισμένος",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "ενημερώνουν",
+          "udLemma": "ενημερώνω",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Συνέλευσης",
+          "udLemma": "συνέλευση",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Τύπου",
+          "udLemma": "τύπος",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "επιτέλεσαν",
+          "udLemma": "επιτελώ",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "εξετάσουμε",
+          "udLemma": "εξετάζω",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "παράγων",
+          "udLemma": "παράγοντας",
+          "partOfSpeech": "noun",
+          "candidates": []
+        }
+      ]
+    },
+    "es": {
+      "treebank": "Spanish-AnCora",
+      "udFile": "es_ancora-ud-dev.conllu",
+      "unimorphRepo": "spa",
+      "udSnapshotHash": "1a132068062edf2654fb45b41cd4c59ba7e5c18e7c5f642ed5a9cc351fd9f0fe",
+      "unimorphSnapshotHash": "7a165d4b44eb078d23964f3eee3813f5140c5df0ffab0143c806c562e67f8771",
+      "counts": {
+        "total": 100,
+        "analyzerCandidates": 92,
+        "candidateContainsUdLemma": 92,
+        "uniqueCorrect": 92,
+        "uniqueWrong": 0,
+        "ambiguousIncludesGold": 0,
+        "unresolved": 8
+      },
+      "rates": {
+        "analyzerCoverage": 0.92,
+        "candidateRecall": 0.92,
+        "uniquePrecision": 1
+      },
+      "failureSample": [
+        {
+          "surface": "contemplamos",
+          "udLemma": "contemplar",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Pese",
+          "udLemma": "pese",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Pese",
+          "udLemma": "pese",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Pese",
+          "udLemma": "pese",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Pese",
+          "udLemma": "pese",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "tengan",
+          "udLemma": "tener",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "tengan",
+          "udLemma": "tener",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "tengan",
+          "udLemma": "tener",
+          "partOfSpeech": "verb",
+          "candidates": []
+        }
+      ]
+    },
+    "fr": {
+      "treebank": "French-GSD",
+      "udFile": "fr_gsd-ud-dev.conllu",
+      "unimorphRepo": "fra",
+      "udSnapshotHash": "9221e5084cc6a1b1540671cfbd2fc0456efc223b2fe8dd2146c2bad921be02d4",
+      "unimorphSnapshotHash": "4760fc36435a9ffba9b4de6f0787d8eca5b15022e6b141e3b242b129f0d88dcb",
+      "counts": {
+        "total": 100,
+        "analyzerCandidates": 44,
+        "candidateContainsUdLemma": 42,
+        "uniqueCorrect": 32,
+        "uniqueWrong": 2,
+        "ambiguousIncludesGold": 10,
+        "unresolved": 56
+      },
+      "rates": {
+        "analyzerCoverage": 0.44,
+        "candidateRecall": 0.42,
+        "uniquePrecision": 0.9411764705882353
+      },
+      "failureSample": [
+        {
+          "surface": "acceptés",
+          "udLemma": "accepter",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "installations",
+          "udLemma": "installation",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "territoriale",
+          "udLemma": "territorial",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "moutons",
+          "udLemma": "mouton",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "chouans",
+          "udLemma": "chouan",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "nerfs",
+          "udLemma": "nerf",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Chef",
+          "udLemma": "chef",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Institut",
+          "udLemma": "institut",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Institut",
+          "udLemma": "institut",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "traités",
+          "udLemma": "traité",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "serveuses",
+          "udLemma": "serveuse",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Mer",
+          "udLemma": "mer",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "chlorés",
+          "udLemma": "chloré",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "Travail",
+          "udLemma": "travail",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "adressée",
+          "udLemma": "adresser",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "changements",
+          "udLemma": "changement",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "recueillies",
+          "udLemma": "recueillir",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "massives",
+          "udLemma": "massif",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "portèrent",
+          "udLemma": "porter",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Cohésion",
+          "udLemma": "cohésion",
+          "partOfSpeech": "noun",
+          "candidates": []
+        }
+      ]
+    },
+    "de": {
+      "treebank": "German-GSD",
+      "udFile": "de_gsd-ud-dev.conllu",
+      "unimorphRepo": "deu",
+      "udSnapshotHash": "01e8e674973592747ffe9a8c77fcf9d2f5936a8484e731ad4f76254318a8952c",
+      "unimorphSnapshotHash": "8bc98487e3caf86188e2c072ebf2dc734f2ca35afef016bb399eb5a43e69d7c0",
+      "counts": {
+        "total": 100,
+        "analyzerCandidates": 65,
+        "candidateContainsUdLemma": 65,
+        "uniqueCorrect": 63,
+        "uniqueWrong": 0,
+        "ambiguousIncludesGold": 2,
+        "unresolved": 35
+      },
+      "rates": {
+        "analyzerCoverage": 0.65,
+        "candidateRecall": 0.65,
+        "uniquePrecision": 1
+      },
+      "failureSample": [
+        {
+          "surface": "verbrannte",
+          "udLemma": "verbrannt",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "kursierte",
+          "udLemma": "kursieren",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Angeklagten",
+          "udLemma": "angeklagter",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "französische",
+          "udLemma": "französisch",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "angegebenen",
+          "udLemma": "angegeben",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "Tarifstrukturen",
+          "udLemma": "tarifstruktur",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "gespickt",
+          "udLemma": "spicken",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "sprichwörtlichen",
+          "udLemma": "sprichwörtlich",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "Panzerfahrers",
+          "udLemma": "panzerfahrer",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Kindergartenplätzen",
+          "udLemma": "kindergartenplatz",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Pachtverträgen",
+          "udLemma": "pachtvertrag",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "dreiminütige",
+          "udLemma": "dreiminütig",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "militärische",
+          "udLemma": "militärisch",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "weiteren",
+          "udLemma": "weit",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "Häusermauern",
+          "udLemma": "häusermauer",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "viel",
+          "udLemma": "fallen",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Mordplänen",
+          "udLemma": "mordplan",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "regionale",
+          "udLemma": "regional",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        },
+        {
+          "surface": "Meinungsunterschiede",
+          "udLemma": "meinungsunterschied",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Negativ",
+          "udLemma": "negativ",
+          "partOfSpeech": "adjective",
+          "candidates": []
+        }
+      ]
+    },
+    "id": {
+      "treebank": "Indonesian-GSD",
+      "udFile": "id_gsd-ud-dev.conllu",
+      "unimorphRepo": "ind",
+      "udSnapshotHash": "56d4ab12267317d33511326da9fcd5b7eff641435c3b6365401937a33ce05e4b",
+      "unimorphSnapshotHash": "77c709f98b581a80051d0e18aa899e0d84d70436223054efa09831d71cdc2ac6",
+      "counts": {
+        "total": 100,
+        "analyzerCandidates": 59,
+        "candidateContainsUdLemma": 58,
+        "uniqueCorrect": 58,
+        "uniqueWrong": 1,
+        "ambiguousIncludesGold": 0,
+        "unresolved": 41
+      },
+      "rates": {
+        "analyzerCoverage": 0.59,
+        "candidateRecall": 0.58,
+        "uniquePrecision": 0.9830508474576272
+      },
+      "failureSample": [
+        {
+          "surface": "hamba-",
+          "udLemma": "hamba",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "dibeli",
+          "udLemma": "beli",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "penyusun",
+          "udLemma": "susun",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Tulis",
+          "udLemma": "tulis",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "Upacara",
+          "udLemma": "upacara",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Kapal",
+          "udLemma": "kapal",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Total",
+          "udLemma": "total",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "Asal",
+          "udLemma": "asal",
+          "partOfSpeech": "noun",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        },
+        {
+          "surface": "digunakan",
+          "udLemma": "guna",
+          "partOfSpeech": "verb",
+          "candidates": []
+        }
+      ]
+    }
+  }
+}

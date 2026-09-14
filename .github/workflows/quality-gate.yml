@@ -4,16 +4,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
-    paths:
-      - 'packages/cli/src/**'
-      - 'packages/cli/test/**'
-      - 'packages/core/src/**'
-      - 'packages/core/test/**'
-      - 'packages/eval/src/**'
-      - 'scripts/run-quality-gates-ci.mjs'
-      - 'scripts/run-quality-gates-ci.test.mjs'
-      - '.github/workflows/quality-gate.yml'
-  workflow_dispatch:
 
 permissions:
   contents: read

@@ -1,0 +1,2311 @@
+{
+  "format": "openlunum-training-audit/0.1",
+  "datasetPath": "/home/corpunum/OpenLunum/experiments/training-pilot-20260908-v2/dataset.jsonl",
+  "datasetSha256": "f4b5c352450f06da397ad89b21496a23f5138bf1087a5c4e4187d12f71f5b53b",
+  "datasetKind": "development-harness-fixture",
+  "certification": {
+    "deterministicContractValid": true,
+    "independentSemanticReview": "not-established",
+    "trainingGoldEligible": false
+  },
+  "summary": {
+    "version": "lunum-training/0.1",
+    "rows": 720,
+    "independentSemanticGroups": 120,
+    "languages": {
+      "de": 120,
+      "el": 120,
+      "en": 120,
+      "es": 120,
+      "fr": 120,
+      "id": 120
+    },
+    "splits": {
+      "dev": 144,
+      "holdout": 144,
+      "train": 432
+    },
+    "outcomes": {
+      "abstain": 72,
+      "parse": 648
+    },
+    "templateFamilies": {
+      "pilot-delete-005": 6,
+      "pilot-delete-011": 6,
+      "pilot-delete-017": 6,
+      "pilot-delete-023": 6,
+      "pilot-delete-029": 6,
+      "pilot-delete-035": 6,
+      "pilot-delete-041": 6,
+      "pilot-delete-047": 6,
+      "pilot-delete-053": 6,
+      "pilot-delete-059": 6,
+      "pilot-delete-065": 6,
+      "pilot-delete-071": 6,
+      "pilot-delete-077": 6,
+      "pilot-delete-083": 6,
+      "pilot-delete-089": 6,
+      "pilot-delete-095": 6,
+      "pilot-delete-101": 6,
+      "pilot-delete-107": 6,
+      "pilot-delete-113": 6,
+      "pilot-delete-119": 6,
+      "pilot-enable-004": 6,
+      "pilot-enable-010": 6,
+      "pilot-enable-016": 6,
+      "pilot-enable-022": 6,
+      "pilot-enable-028": 6,
+      "pilot-enable-034": 6,
+      "pilot-enable-040": 6,
+      "pilot-enable-046": 6,
+      "pilot-enable-052": 6,
+      "pilot-enable-058": 6,
+      "pilot-enable-064": 6,
+      "pilot-enable-070": 6,
+      "pilot-enable-076": 6,
+      "pilot-enable-082": 6,
+      "pilot-enable-088": 6,
+      "pilot-enable-094": 6,
+      "pilot-enable-100": 6,
+      "pilot-enable-106": 6,
+      "pilot-enable-112": 6,
+      "pilot-enable-118": 6,
+      "pilot-prefer-000": 6,
+      "pilot-prefer-006": 6,
+      "pilot-prefer-012": 6,
+      "pilot-prefer-018": 6,
+      "pilot-prefer-024": 6,
+      "pilot-prefer-030": 6,
+      "pilot-prefer-036": 6,
+      "pilot-prefer-042": 6,
+      "pilot-prefer-048": 6,
+      "pilot-prefer-054": 6,
+      "pilot-prefer-060": 6,
+      "pilot-prefer-066": 6,
+      "pilot-prefer-072": 6,
+      "pilot-prefer-078": 6,
+      "pilot-prefer-084": 6,
+      "pilot-prefer-090": 6,
+      "pilot-prefer-096": 6,
+      "pilot-prefer-102": 6,
+      "pilot-prefer-108": 6,
+      "pilot-prefer-114": 6,
+      "pilot-publish-003": 6,
+      "pilot-publish-009": 6,
+      "pilot-publish-015": 6,
+      "pilot-publish-021": 6,
+      "pilot-publish-027": 6,
+      "pilot-publish-033": 6,
+      "pilot-publish-039": 6,
+      "pilot-publish-045": 6,
+      "pilot-publish-051": 6,
+      "pilot-publish-057": 6,
+      "pilot-publish-063": 6,
+      "pilot-publish-069": 6,
+      "pilot-publish-075": 6,
+      "pilot-publish-081": 6,
+      "pilot-publish-087": 6,
+      "pilot-publish-093": 6,
+      "pilot-publish-099": 6,
+      "pilot-publish-105": 6,
+      "pilot-publish-111": 6,
+      "pilot-publish-117": 6,
+      "pilot-receive-002": 6,
+      "pilot-receive-008": 6,
+      "pilot-receive-014": 6,
+      "pilot-receive-020": 6,
+      "pilot-receive-026": 6,
+      "pilot-receive-032": 6,
+      "pilot-receive-038": 6,
+      "pilot-receive-044": 6,
+      "pilot-receive-050": 6,
+      "pilot-receive-056": 6,
+      "pilot-receive-062": 6,
+      "pilot-receive-068": 6,
+      "pilot-receive-074": 6,
+      "pilot-receive-080": 6,
+      "pilot-receive-086": 6,
+      "pilot-receive-092": 6,
+      "pilot-receive-098": 6,
+      "pilot-receive-104": 6,
+      "pilot-receive-110": 6,
+      "pilot-receive-116": 6,
+      "pilot-send-001": 6,
+      "pilot-send-007": 6,
+      "pilot-send-013": 6,
+      "pilot-send-019": 6,
+      "pilot-send-025": 6,
+      "pilot-send-031": 6,
+      "pilot-send-037": 6,
+      "pilot-send-043": 6,
+      "pilot-send-049": 6,
+      "pilot-send-055": 6,
+      "pilot-send-061": 6,
+      "pilot-send-067": 6,
+      "pilot-send-073": 6,
+      "pilot-send-079": 6,
+      "pilot-send-085": 6,
+      "pilot-send-091": 6,
+      "pilot-send-097": 6,
+      "pilot-send-103": 6,
+      "pilot-send-109": 6,
+      "pilot-send-115": 6
+    },
+    "accepted": 720,
+    "pendingReview": 0,
+    "hardNegativeRows": 72,
+    "datasetSha256": "f4b5c352450f06da397ad89b21496a23f5138bf1087a5c4e4187d12f71f5b53b"
+  },
+  "manifestProtected": false,
+  "rowValidation": {
+    "invalidRows": [],
+    "splitErrors": []
+  },
+  "independentReview": {
+    "rowsWithNonGeneratorReviewer": 0,
+    "deterministicAcceptedRows": 720,
+    "pendingIndependentReviewRows": 720,
+    "note": "deterministic template validation is not independent semantic review"
+  },
+  "multilingualGroups": {
+    "total": 120,
+    "valid": 120,
+    "findings": [
+      {
+        "semanticGroup": "pilot-group-000",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-001",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-002",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-003",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-004",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-005",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-006",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-007",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-008",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-009",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-010",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-011",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-012",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-013",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-014",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-015",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-016",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-017",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-018",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-019",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-020",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-021",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-022",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-023",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-024",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-025",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-026",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-027",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-028",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-029",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-030",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-031",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-032",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-033",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-034",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-035",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-036",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-037",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-038",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-039",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-040",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-041",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-042",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-043",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-044",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-045",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-046",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-047",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-048",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-049",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-050",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-051",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-052",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-053",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-054",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-055",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-056",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-057",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-058",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-059",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-060",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-061",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-062",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-063",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-064",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-065",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-066",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-067",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-068",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-069",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-070",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-071",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-072",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-073",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-074",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-075",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-076",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-077",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-078",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-079",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-080",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-081",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-082",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-083",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-084",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-085",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-086",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-087",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-088",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-089",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-090",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-091",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-092",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-093",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-094",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-095",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-096",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-097",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-098",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-099",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-100",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-101",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-102",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-103",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-104",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-105",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-106",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-107",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "parse"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-108",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-109",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-110",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-111",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-112",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-113",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-114",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-115",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-116",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-117",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-118",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      },
+      {
+        "semanticGroup": "pilot-group-119",
+        "rows": 6,
+        "languages": [
+          "de",
+          "el",
+          "en",
+          "es",
+          "fr",
+          "id"
+        ],
+        "outcomes": [
+          "abstain"
+        ],
+        "canonicalIrShapeCount": 1,
+        "valid": true
+      }
+    ]
+  },
+  "criticalNegativePairs": {
+    "total": 6,
+    "valid": 6,
+    "findings": [
+      {
+        "pairId": "pilot-negative-1",
+        "groups": [
+          "pilot-group-000",
+          "pilot-group-006"
+        ],
+        "rows": 12,
+        "conceptIds": [
+          "concept-000",
+          "concept-006"
+        ],
+        "sharedNonConceptShapeCount": 1,
+        "valid": true
+      },
+      {
+        "pairId": "pilot-negative-2",
+        "groups": [
+          "pilot-group-001",
+          "pilot-group-007"
+        ],
+        "rows": 12,
+        "conceptIds": [
+          "concept-001",
+          "concept-007"
+        ],
+        "sharedNonConceptShapeCount": 1,
+        "valid": true
+      },
+      {
+        "pairId": "pilot-negative-3",
+        "groups": [
+          "pilot-group-002",
+          "pilot-group-008"
+        ],
+        "rows": 12,
+        "conceptIds": [
+          "concept-002",
+          "concept-008"
+        ],
+        "sharedNonConceptShapeCount": 1,
+        "valid": true
+      },
+      {
+        "pairId": "pilot-negative-4",
+        "groups": [
+          "pilot-group-003",
+          "pilot-group-009"
+        ],
+        "rows": 12,
+        "conceptIds": [
+          "concept-003",
+          "concept-009"
+        ],
+        "sharedNonConceptShapeCount": 1,
+        "valid": true
+      },
+      {
+        "pairId": "pilot-negative-5",
+        "groups": [
+          "pilot-group-004",
+          "pilot-group-010"
+        ],
+        "rows": 12,
+        "conceptIds": [
+          "concept-004",
+          "concept-010"
+        ],
+        "sharedNonConceptShapeCount": 1,
+        "valid": true
+      },
+      {
+        "pairId": "pilot-negative-6",
+        "groups": [
+          "pilot-group-005",
+          "pilot-group-011"
+        ],
+        "rows": 12,
+        "conceptIds": [
+          "concept-005",
+          "concept-011"
+        ],
+        "sharedNonConceptShapeCount": 1,
+        "valid": true
+      }
+    ]
+  },
+  "sourceIntegrity": {
+    "generatorMarker": true,
+    "templateDerived": true
+  },
+  "generatedAt": "2026-09-07T06:27:47.856Z"
+}

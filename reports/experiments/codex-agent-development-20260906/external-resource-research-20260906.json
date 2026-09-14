@@ -1,0 +1,31 @@
+{
+  "type": "external-grounding-resource-audit",
+  "status": "diagnostic-research",
+  "date": "2026-09-06",
+  "resources": [
+    {
+      "name": "DBnary",
+      "source": "https://doi.org/10.5281/zenodo.10156856",
+      "format": "RDF/OntoLex",
+      "license": "CC BY-SA 3.0 for extracted lexical data; verify constituent Wiktionary terms per release",
+      "potential": "broad multilingual lexical forms and translation relations",
+      "identityAssessment": "does not provide a universal, independently adjudicated cross-language concept identity; lexical-sense links are evidence only",
+      "decision": "do not integrate as an exact identity provider; candidate-evidence adapter could be reconsidered with a pinned subset and license manifest"
+    },
+    {
+      "name": "Wikidata Lexemes",
+      "source": "https://www.wikidata.org/wiki/Wikidata:Lexicographical_data/Documentation/en",
+      "format": "WikibaseLexeme JSON/RDF/API",
+      "license": "Wikidata structured data is CC0; item/lexeme completeness and source provenance vary",
+      "potential": "stable lexical entity IDs, multilingual forms, lexical categories, and links to Q-items",
+      "identityAssessment": "lexeme IDs identify lexical records, not necessarily a shared language-independent sense; Q-item links require independently verified context",
+      "decision": "retain stable-entity provider for pinned named-entity evidence; do not promote label or lexeme matching to generic exact concept identity"
+    }
+  ],
+  "webEvidence": [
+    "https://www.wikidata.org/wiki/Wikidata:Lexicographical_data/Documentation/en",
+    "https://doi.org/10.5281/zenodo.10156856",
+    "https://journals.sagepub.com/doi/10.3233/SW-140147"
+  ],
+  "conclusion": "Neither audited resource currently falsifies the OMW/context bottleneck. External data may supply candidate evidence, but exact identity still requires a pinned, provider-owned or independently adjudicated stable grounding assertion."
+}
