@@ -1,0 +1,23 @@
+{
+  "format": "openlunum-natural-development-freeze/0.2",
+  "version": "v8-iteration2",
+  "status": "frozen-awaiting-bounded-second-pass",
+  "priorIteration": "extraction/iteration1-manifest.json",
+  "priorIterationResultsSha256": "fc1f94204cdb80cbde3f680751153c6cd5779fa4040fd7ee7f5c290dfa5030a5",
+  "dataset": "../certified-subset.jsonl",
+  "datasetSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "sourceOnlyRequest": "source-only-request.jsonl",
+  "sourceOnlyRequestSha256": "5e884ba6b9c8971fd9015aaec75abe316eb97fd0f86181bd1c36e7d8ab45d73f",
+  "sourceOnlyContract": "source-only-contract.json",
+  "sourceOnlyContractSha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e",
+  "canonicalContractHash": "2a3b11aa2fe7585e6fc7cfc6f571c63e9ec0443ed8832eced60b51200b38c8c3",
+  "publicTaskProfile": "public-task-profile-iteration2.json",
+  "publicTaskProfileSha256": "cc84741c101bcde0f7ad9be4026de8bb79848bc007ecbeb98d69793ade6cd7b7",
+  "humanGreekReview": "../review/human-greek-language-review.json",
+  "humanGreekReviewScope": "exact wording only; self-attested native Greek; no Sem certification",
+  "englishReview": { "status": "unavailable", "humanNativeCertification": false },
+  "targetSem": { "frozenUnchanged": true, "independentlyValidated": true },
+  "attemptPolicy": { "firstPassOnly": true, "secondPassBounded": true, "retries": 0, "deterministicRepair": false, "postHocSemanticNormalization": false },
+  "extractorVisibility": ["opaque handle", "source text", "source language", "source-only-contract.json", "public-task-profile-iteration2.json"],
+  "extractorForbidden": ["gold target", "certified subset", "semantic group", "critical contrast", "review files", "private map", "V7/V8 candidates", "generator files"]
+}

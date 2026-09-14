@@ -1,0 +1,27 @@
+{
+  "format": "openlunum-natural-development-iteration/0.1",
+  "version": "v8-iteration1",
+  "status": "completed-diagnostic-first-pass",
+  "datasetSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "sourceOnlyRequestSha256": "5e884ba6b9c8971fd9015aaec75abe316eb97fd0f86181bd1c36e7d8ab45d73f",
+  "sourceOnlyContractSha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e",
+  "rawCandidateLedgerSha256": "886af45c65feea483cbf4bb4311d68a31c124b050a3af00080d9191260388532",
+  "candidateLedgerSha256": "886af45c65feea483cbf4bb4311d68a31c124b050a3af00080d9191260388532",
+  "resultsSha256": "fc1f94204cdb80cbde3f680751153c6cd5779fa4040fd7ee7f5c290dfa5030a5",
+  "rows": 24,
+  "parseTargets": 18,
+  "abstentionTargets": 6,
+  "parseAttempts": 18,
+  "explicitAbstentions": 6,
+  "sourceRelative": { "match": 0, "mismatch": 9, "unresolved": 9 },
+  "exactIdentity": { "comparable": 9, "exact": 0 },
+  "nested": { "expected": 12, "candidate": 12, "matched": 6 },
+  "criticalContrasts": { "familiesDefined": 2, "familiesComplete": 2, "distinctionsPreserved": 2 },
+  "abstentionsCorrect": 6,
+  "rootCauses": [
+    { "class": "CONTRACT", "finding": "Public source-only contract omitted task-profile kind mapping and contradicted the event target policy." },
+    { "class": "CONTRACT", "finding": "Public source-only contract did not explicitly encode coordinated conditional composition or lexical quantity-unit preservation." },
+    { "class": "PREDICATE", "finding": "Extractor flattened coordinated conditional actions and duplicated conditions instead of using the required nested consequence representation." }
+  ],
+  "repairPolicy": "No post-hoc repair or semantic normalization was applied. One bounded second pass is permitted only with the separately frozen public task profile."
+}
