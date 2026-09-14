@@ -1,5 +1,18 @@
 # Roadmap
 
+## Current evidence checkpoint — 2026-09-14
+
+Issue #680 is the active semantic-evaluation blocker. Source-only scorer
+hardening is merged, including explicit abstention handling, recursive
+source-relative diagnostics, contract-unresolved accounting, and guarded
+exact-identity comparability. The historical V5 extraction remains diagnostic
+only: its exact-identity denominator is zero and it is not training evidence.
+
+The next required step is a small, frozen, answerable successor development
+task followed by fresh source-only extraction and independent evaluation. Do
+not begin training or broad corpus expansion until that evidence separates
+learned semantic error from contract, target, and grounding error.
+
 ## Milestone 0 — repository foundation (completed in 0.2)
 
 - Preserve complete research handover and provenance.
