@@ -49,12 +49,41 @@ test('validateSemFrames traverses nested conditions and consequences', () => {
       conditions: [{
         predicate: 'below',
         roles: { subject: { type: 'metric', id: 'battery_level' }, value: { type: 'quantity', value: 20, unit: 'percent' } }
+      }],
+      consequences: [{
+        predicate: 'send',
+        modality: 'obligation',
+        roles: {
+          agent: { type: 'system', id: 'system' },
+          object: { type: 'document', id: 'notification' },
+          recipient: { type: 'actor', id: 'operator' }
+        }
       }]
     }]
   };
   const result = validateSemFrames(sem);
   assert.equal(result.valid, true);
   assert.equal(result.issues.length, 0);
+});
+
+test('valid coordinated conditional uses framed root and consequence predicates', () => {
+  const result = validateSemFrames({
+    schema: 'lunum-sem/0.1-draft',
+    world: 'real',
+    kind: 'conditional_instruction',
+    clauses: [{
+      predicate: 'enable',
+      modality: 'permission',
+      roles: { agent: { type: 'system', id: 'system' }, theme: { type: 'feature', id: 'cooling' } },
+      conditions: [{ predicate: 'below', roles: { subject: { type: 'metric', id: 'temperature' }, value: { type: 'quantity', value: 15, unit: 'celsius' } } }],
+      consequences: [{ predicate: 'send', modality: 'permission', roles: {
+        agent: { type: 'system', id: 'system' }, object: { type: 'document', id: 'notice' }, recipient: { type: 'actor', id: 'operator' }
+      } }]
+    }]
+  });
+  assert.equal(result.valid, true);
+  assert.equal(result.issues.length, 0);
+  assert.equal(validateClauseFrame({ predicate: 'require', roles: { agent: { type: 'system', id: 'system' } } }).some((issue) => issue.code === 'unframed_predicate'), true);
 });
 
 test('validateClauseFrame rejects disallowed term types for typed roles', () => {
