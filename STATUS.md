@@ -34,6 +34,6 @@ OpenUnum is a separate product. The in-tree compatibility adapter is not indepen
 
 ## Licensing and contributions
 
-Public repository; **all rights reserved, not open source**. [LICENSE.md](LICENSE.md) explains the remaining licensing decision. [CONTRIBUTING.md](CONTRIBUTING.md) separates human feedback from managed-agent coordination.
+Original OpenLunum code is now **Apache-2.0**, following the owner's explicit authorization on 2026-09-14. [LICENSE](LICENSE) contains the terms; [LICENSE.md](LICENSE.md) explains scope and unchanged third-party terms. Package publication flags and all capability limitations above are unchanged. [CONTRIBUTING.md](CONTRIBUTING.md) separates human feedback from managed-agent coordination.
 
 No readiness/completion percentages are maintained. Historical scorecards are [archived and superseded](research/archive/readiness-before-public-review-20260914.md), not erased or accepted as current evidence.

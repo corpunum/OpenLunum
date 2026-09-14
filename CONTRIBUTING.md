@@ -1,6 +1,10 @@
 # Contributing and reporting problems
 
-OpenLunum is a public, pre-1.0 research repository. Its current terms are **all rights reserved**, not an open-source license. See [LICENSE.md](LICENSE.md). Discuss permission and contribution terms with the maintainer before substantial code contributions or downstream reuse; this page does not grant a license or assign anybody's copyright.
+OpenLunum is a public, pre-1.0 research repository whose original code is licensed under **Apache-2.0**. See [LICENSE](LICENSE) and [LICENSE.md](LICENSE.md) for the terms and third-party scope. No separate permission is required for uses the license permits.
+
+## Contribution terms
+
+Contributions intentionally submitted for inclusion are governed by section 5 of Apache-2.0 unless explicitly stated otherwise or covered by a separate agreement. This is a license grant, not a copyright assignment. Submit only material you have the right to contribute; identify third-party sources, licenses and attribution. Do not assume public datasets or model weights share the code license. Flag unclear rights before inclusion.
 
 ## Questions, bug reports and small suggestions
 
