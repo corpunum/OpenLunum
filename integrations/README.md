@@ -12,10 +12,11 @@ Status labels:
 |---|---|---|---|
 | OpenUnum | package dependency + product adapter | Verified-current-state / Reference plan | Detailed gap analysis against current private repo |
 | Claude Code | MCP server over stdio via `.mcp.json` | **Versioned evidence** | Claude Code 2.1.270: ten tools discovered and exercised with supplied Sem; see `docs/CLIENT_COMPATIBILITY.md` |
-| Codex CLI | Native MCP via `codex mcp add` | **Working** | Direct stdio MCP, no bridge needed |
+| Codex CLI | Native MCP via `codex mcp add` | **Versioned evidence** | Codex CLI 0.154.0 direct stdio MCP; supplied-Sem execution passed |
 | OpenClaw | Native MCP via `openclaw mcp add` | **Working** | Direct stdio MCP, tools available to all agents |
 | OpenCode | Native MCP via `opencode mcp add` | **Working** | Direct stdio MCP, interactive TUI add only (no config file key) |
-| Pi / Agy | Native `defineTool` extension | **Working** | Pi native extension is separate; AGY 1.2.2 MCP discovery passed but headless tool execution is permission-blocked |
+| Pi | Native `defineTool` extension | **Working** | Separate direct-core extension path |
+| AGY | Native MCP | **Discovery evidence** | AGY 1.2.2 discovered Lunum schemas; headless MCP execution was permission-blocked |
 | Gemini CLI | extension/hooks/MCP | Design | Product surface is evolving; pin tested versions |
 | Generic Node agent | direct `@corpunum/lunum` dependency | Reference | Most complete reusable example after OpenUnum |
 

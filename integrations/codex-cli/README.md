@@ -49,5 +49,11 @@ see [`docs/CLIENT_COMPATIBILITY.md`](../../docs/CLIENT_COMPATIBILITY.md).
 ## Testing
 
 ```bash
-codex "Use lunum_derive to compact this text: The quick brown fox jumps over the lazy dog"
+pnpm --filter @corpunum/lunum build
+pnpm --filter @corpunum/lunum-mcp build
+node --test packages/mcp/test/stdio-compatibility.test.mjs
 ```
+
+The exact live Codex CLI 0.154.0 invocation and its MCP event evidence are in
+[`docs/CLIENT_COMPATIBILITY.md`](../../docs/CLIENT_COMPATIBILITY.md). A
+supplied-Sem conformance call is not a natural-language extraction test.

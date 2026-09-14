@@ -1,0 +1,12 @@
+{
+  "sourceText": "Maria prefers quiet mode.",
+  "suppliedSem": true,
+  "success": true,
+  "semantic": true,
+  "renderer": "generic-en-pivot/0.1",
+  "fingerprint": "lfp:0.1:sha256:ac441713f7fbf7c0d02e75058a150c67",
+  "code": "R prefer maria quiet_mode",
+  "automaticExtraction": false,
+  "tokenSavingsClaim": false,
+  "taskQualityClaim": false
+}
