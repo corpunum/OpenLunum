@@ -1,13 +1,13 @@
 /**
  * Consistency check for issue #358 (readiness R13.2).
  *
- * docs/LUNUM_READINESS.md's "Evidence and evaluation ledger" table is the
- * human-readable tracker; reports/evidence-registry.json is the
+ * research/archive/readiness-before-public-review-20260914.md's "Evidence and evaluation ledger" table is the
+ * superseded historical tracker; reports/evidence-registry.json is the
  * machine-readable registry built from it. This test parses both and fails
- * if either has a row/entry the other does not, so the two can never
- * silently drift apart.
+ * if either has a row/entry the other does not, so archived evidence is not lost when the public status summary changes.
+ * These assertions check archival consistency, not the old readiness claims.
  *
- * This test is read-only with respect to docs/LUNUM_READINESS.md -- it never
+ * This test is read-only with respect to research/archive/readiness-before-public-review-20260914.md -- it never
  * writes to the tracker, only parses its committed content.
  */
 
@@ -17,7 +17,7 @@ import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { findWorkspaceRoot } from '../src/io.js';
 
-const LEDGER_RELATIVE_PATH = 'docs/LUNUM_READINESS.md';
+const LEDGER_RELATIVE_PATH = 'research/archive/readiness-before-public-review-20260914.md';
 const REGISTRY_RELATIVE_PATH = 'reports/evidence-registry.json';
 
 interface RegistryEntry {
@@ -35,12 +35,12 @@ interface Registry {
 
 /**
  * Extract the rows of the "Evidence and evaluation ledger" markdown table
- * from docs/LUNUM_READINESS.md. Returns the raw first-column cell text for
+ * from research/archive/readiness-before-public-review-20260914.md. Returns the raw first-column cell text for
  * every data row (skipping the header and separator rows).
  */
 function parseLedgerRows(markdown: string): string[] {
   const headingIndex = markdown.indexOf('## Evidence and evaluation ledger');
-  assert.notEqual(headingIndex, -1, 'Could not find the "Evidence and evaluation ledger" heading in docs/LUNUM_READINESS.md');
+  assert.notEqual(headingIndex, -1, 'Could not find the "Evidence and evaluation ledger" heading in research/archive/readiness-before-public-review-20260914.md');
 
   // The next '## ' heading marks the end of this section.
   const afterHeading = markdown.slice(headingIndex + '## Evidence and evaluation ledger'.length);
@@ -68,7 +68,7 @@ function parseLedgerRows(markdown: string): string[] {
   });
 }
 
-test('evidence registry: every ledger row has exactly one registry entry, and vice versa', async () => {
+test('evidence registry: every archived ledger row has exactly one registry entry, and vice versa', async () => {
   const workspaceRoot = await findWorkspaceRoot();
 
   const ledgerMarkdown = await readFile(path.join(workspaceRoot, LEDGER_RELATIVE_PATH), 'utf-8');
@@ -104,7 +104,7 @@ test('evidence registry: every ledger row has exactly one registry entry, and vi
     assert.ok(
       ledgerTextsRemaining.has(entry.ledgerText),
       `Registry entry ledgerRowId=${entry.ledgerRowId} ledgerText "${entry.ledgerText}" does not match any row in ` +
-        `docs/LUNUM_READINESS.md's evidence ledger. Either the tracker row text changed (registry must be updated to ` +
+        `research/archive/readiness-before-public-review-20260914.md's evidence ledger. Either the tracker row text changed (registry must be updated to ` +
         `match) or this entry does not correspond to a real ledger row.`
     );
     assert.ok(

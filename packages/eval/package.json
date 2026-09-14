@@ -25,5 +25,6 @@
   },
   "devDependencies": {
     "ajv": "8.20.0"
-  }
+  },
+  "license": "UNLICENSED"
 }

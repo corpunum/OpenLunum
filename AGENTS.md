@@ -1,5 +1,7 @@
 # Instructions for coding and research agents
 
+These instructions govern maintainer-run automation, not visitors reading the project or reporting bugs. Humans start with `START_HERE.md` and `CONTRIBUTING.md`; they do not need a worker assignment to ask questions. An explicit maintainer/user assignment remains authoritative for a scoped assisted change.
+
 Read `START_HERE.md` and `docs/REPOSITORY_OPERATING_MODEL.md` before making changes. A local orchestrator must also read `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md`. Then read the area-specific documents and the assigned GitHub issue.
 
 `CAMPAIGN.md` and `WORK_QUEUE.md` are archive pointers, not active work sources.

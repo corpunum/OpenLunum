@@ -1,6 +1,8 @@
 # Repository operating model
 
-OpenLunum is a pre-1.0 research-and-engineering repository. The project benefits from local model workers, but it does not benefit from continuously running agents that manufacture branches, reports, or pull requests without a bounded assignment.
+This is the maintainer automation runbook, not a prerequisite for public feedback or the no-model example. Human contributors use `CONTRIBUTING.md`. Its assignment/dispatcher controls still apply to managed workers.
+
+OpenLunum is a pre-1.0 research-and-engineering repository. The project can benefit from bounded research workers, but it does not benefit from continuously running agents that manufacture branches, reports, or pull requests without a bounded assignment.
 
 This is the canonical repository-wide operating model. Local orchestrators begin with `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md`.
 
@@ -311,17 +313,6 @@ Issue #255 is the current cleanup ledger. The pre-issue-driven campaign and mark
 
 ## Current direction
 
-Process current work in this order unless the vision owner changes it:
+Use live GitHub issues and accepted evidence, not historical campaign phase numbers. As of 2026-09-14, #685 owns the narrow source-only baseline; the public-facing correction in #696 does not change its review criteria. After a blocked task reports unchanged missing external input, do not repeatedly invoke workers merely to reconfirm the same boundary. Select a genuinely independent ready task or wait.
 
-1. #680 — harden source-only extraction scoring before training. The scorer
-   hardening is merged, but the issue remains open until polarity and kind/type
-   semantics are explicit, a fair successor task is frozen, and fresh
-   source-only evidence is independently evaluated.
-2. After #680, select exactly one ready issue from the accepted evidence and
-   current GitHub backlog. Do not resume retired campaign priorities by
-   default.
-
-Threshold calibration and training must follow accepted fair-baseline
-evidence; they must not be manufactured from historical runs produced by a
-broken experiment path. Historical issue references above are retained in
-their archival records, not as current direction.
+`STATUS.md` and `docs/LUNUM_READINESS.md` contain a bounded evidence summary, not readiness percentages. Implementation and conformance are separate from empirical capability and adoption.

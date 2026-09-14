@@ -23,5 +23,6 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm build && node --test dist/test/*.test.js",
     "test:unit": "node --test dist/test/*.test.js"
-  }
+  },
+  "license": "UNLICENSED"
 }
