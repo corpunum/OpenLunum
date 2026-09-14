@@ -48,7 +48,7 @@ test('multilingual convergence requires complete usable outputs', () => {
 test('request and ledger evidence is bound to handle, source hash and contract hash', () => {
   const sourceText = 'A source sentence.';
   const request = { handle: 'h1', sourceText, sourceSha256: sha256(sourceText), contractHash: 'contract-a' };
-  const entry = { handle: 'h1', sourceSha256: request.sourceSha256, contractHash: 'contract-a', status: 'abstain', candidateSem: null };
+  const entry = { handle: 'h1', sourceSha256: request.sourceSha256, contractHash: 'contract-a', status: 'abstain', candidateSem: null, extractorType: 'agent' };
   assert.doesNotThrow(() => validateRequestLedgerBindings([request], [entry]));
 
   assert.throws(
@@ -67,6 +67,15 @@ test('request and ledger evidence is bound to handle, source hash and contract h
     () => validateRequestLedgerBindings([request, request], [entry]),
     /duplicate_or_missing_request_handle:h1/
   );
+});
+
+test('request ledger validation rejects undeclared provenance fields', () => {
+  const request = { handle: 'h1', sourceText: 'A source sentence.', sourceSha256: sha256('A source sentence.'), contractHash: 'contract-a' };
+  const base = { handle: 'h1', sourceSha256: request.sourceSha256, contractHash: 'contract-a', status: 'abstain', candidateSem: null, extractorType: 'agent' };
+  assert.throws(() => validateRequestLedgerBindings([request], [{ ...base, status: 'unknown' }]), /ledger_status_invalid:h1/);
+  assert.throws(() => validateRequestLedgerBindings([request], [{ ...base, extractorType: 'fresh-agent' }]), /ledger_extractor_type_invalid:h1/);
+  const { candidateSem, ...missingCandidate } = base;
+  assert.throws(() => validateRequestLedgerBindings([request], [missingCandidate]), /ledger_candidate_missing:h1/);
 });
 
 test('ledger contract requires auditable transport provenance fields', () => {

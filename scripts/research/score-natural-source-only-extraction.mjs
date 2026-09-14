@@ -30,6 +30,9 @@ export function validateRequestLedgerBindings(requests, ledger) {
     if (!request) throw new Error(`ledger_unknown_handle:${entry.handle}`);
     if (entry.sourceSha256 !== request.sourceSha256) throw new Error(`ledger_source_hash_mismatch:${entry.handle}`);
     if (entry.contractHash !== request.contractHash) throw new Error(`ledger_contract_hash_mismatch:${entry.handle}`);
+    if (!['parse', 'abstain'].includes(entry.status)) throw new Error(`ledger_status_invalid:${entry.handle}`);
+    if (!Object.hasOwn(entry, 'candidateSem')) throw new Error(`ledger_candidate_missing:${entry.handle}`);
+    if (!['agent', 'codex_agent', 'human', 'other'].includes(entry.extractorType)) throw new Error(`ledger_extractor_type_invalid:${entry.handle}`);
     ledgerByHandle.set(entry.handle, entry);
   }
 
@@ -427,6 +430,7 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
     },
     artifacts: {
       sourceOnlyRequestSha256: artifactHash('extraction/source-only-request.jsonl'),
+      sourceOnlyContractSha256: artifactHash('extraction/source-only-contract.json'),
       sourceOnlyPrivateMapSha256: artifactHash('extraction/source-only-private-map.json'),
       candidateLedgerSha256: artifactHash(ledgerFile),
       certificationReportSha256: artifactHash('certification-report.json')
