@@ -1,66 +1,28 @@
-# Contributing
+# Contributing and reporting problems
 
-OpenLunum is currently a private, evidence-driven, pre-1.0 project. GitHub issues are the canonical backlog. Begin work only from an explicit ready issue or maintainer-approved mechanical correction.
+OpenLunum is a public, pre-1.0 research repository. Its current terms are **all rights reserved**, not an open-source license. See [LICENSE.md](LICENSE.md). Discuss permission and contribution terms with the maintainer before substantial code contributions or downstream reuse; this page does not grant a license or assign anybody's copyright.
 
-Read `START_HERE.md` and `docs/REPOSITORY_OPERATING_MODEL.md` before contributing.
+## Questions, bug reports and small suggestions
 
-## Branches and scope
+Open a GitHub issue. Include the command/input, expected behavior, observed output, Node version and commit when relevant. A minimal example is more useful than a readiness score. Do not include secrets or personal source data.
 
-- Use `work/<worker>/<issue-number>-<short-name>`.
-- One issue per branch.
-- One active implementation pull request per worker.
-- Do not push directly to `main`.
-- Do not reuse a merged or rejected branch.
-- Delete task branches after merge or explicit rejection.
-- Do not create campaign, status, sync, completion, or idle branches.
+No `WORKER_ASSIGNMENT.md`, agent dispatcher, prescribed eight-document reading order, or maintainer assignment is needed to read the project or report a problem.
 
-## Change tiers
+## An agreed code or documentation change
 
-### Tier 1 — mechanical
+1. Keep one focused change and link the relevant discussion. A typo or broken link does not need a research campaign.
+2. Read the affected module and its tests; follow [START_HERE.md](START_HERE.md) for setup.
+3. Run relevant tests and `git diff --check`. Before a merge candidate, run `pnpm verify` and report any failure honestly.
+4. Explain what changed, what was tested and what remains unproven. Maintainers handle required CI and protected-main merging.
 
-Non-semantic documentation, spelling, test organization, and low-risk tooling cleanup.
+Use a short-lived PR branch (or the agreed fork workflow), not a persistent agent/campaign branch. Delete the branch after merge. Never bypass protection or force-push over a reviewed SHA.
 
-### Tier 2 — normal implementation
+## Semantic and evidence-sensitive changes
 
-CLI, API, MCP, adapters, reporting, and internal implementation changes. These require local verification, review, and successful hosted exact-head checks.
+Schema, fingerprint/canonicalization, parser scoring, protected data and safety changes need an independently reviewed candidate and appropriate compatibility tests. Preserve source evidence, version meaning-changing contracts, and keep implementation changes separate from protected evaluation data.
 
-### Tier 3 — semantic or evidence-sensitive
+A faster renderer is not a compression success unless a named tokenizer and downstream task evaluation support it. A schema-valid candidate is not automatically a correct interpretation. An agent review is not a human/native-speaker review.
 
-Schema, canonicalization, fingerprints, parser scoring, protected data, safety policy, renderer meaning preservation, and support or maturity claims. These require independent evaluation and orchestrator approval bound to the candidate head SHA.
+## Maintainer-run automation
 
-## Ready for review
-
-A change is ready for review when it includes:
-
-- a linked issue and stated change tier;
-- a clearly stated semantic, experimental, or integration goal;
-- explicit non-goals;
-- tests or reproducible evaluation steps;
-- the baseline commit and candidate head SHA;
-- dataset and profile hashes where applicable;
-- no unsupported performance, support, maturity, reference, or production claims;
-- migration notes for schema/fingerprint changes;
-- a named tokenizer/model environment for renderer or model results;
-- updated product/version metadata for integration changes;
-- all failures, exclusions, timeouts, and limitations;
-- exact reproduction commands;
-- a successful `pnpm verify` result unless the issue explicitly targets a baseline failure.
-
-## Protected boundaries
-
-Do not edit implementation under `packages/`, `schemas/`, or `registry/` in the same pull request as protected evaluation data. Do not modify benchmarks or gold data to make a candidate pass.
-
-A model cannot be the only judge of its own output. Tier 3 evaluation should use a separate evaluator model or configuration where practical.
-
-## Commits and merging
-
-Use conventional commit subjects where practical, for example:
-
-```text
-feat(core): preserve conditional modality
-fix(eval): separate near-only outcomes
-chore(ci): avoid duplicate task-branch runs
-docs(ops): clarify worker assignment boundaries
-```
-
-Accepted pull requests are squash merged. Do not force-push after an evaluator has recorded a commit SHA; add a new commit so review and evidence remain auditable.
+Only managed agents and orchestration processes need the full [operating model](docs/REPOSITORY_OPERATING_MODEL.md) and [AGENTS.md](AGENTS.md). Assignment files, worker budgets and dispatcher locks govern that automation; they are not a barrier to public feedback. Core review and CI requirements still apply to everyone proposing changes.

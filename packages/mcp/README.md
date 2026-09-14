@@ -1,68 +1,32 @@
 # @corpunum/lunum-mcp
 
-MCP (Model Context Protocol) server for Lunum semantic content integration.
+Experimental Model Context Protocol surface for OpenLunum. The cognitive agent interprets source text; MCP exposes the contract and candidate-validation tools. It does not supply a pretrained universal parser.
 
-## Purpose
+## Agent path
 
-This package provides a reference implementation of an MCP server that enables AI agents to interact with Lunum semantic content through standardized tools. It is **not** a production-grade integration; it demonstrates the pattern for products that prefer MCP as an adoption path.
-
-## Features
-
-- **Error contracts:** Proper error handling and contract validation.
-- **Input validation:** Schema validation for all tool inputs.
-- **Conformance test suite:** Comprehensive tests for MCP protocol compliance.
-
-## Tools
-
-| Tool | Description |
-|---|---|
-| `lunum_parse` | Parse natural language text into Lunum-Semantic representation |
-| `lunum_realize` | Realize Lunum-Semantic representation to natural language |
-| `lunum_fingerprint` | Generate or verify fingerprint for Lunum-Semantic content |
-| `lunum_retrieve` | Retrieve Lunum records by fingerprint or query |
-| `lunum_validate` | Validate Lunum-Semantic content against schema |
-
-## Architecture
-
-```
-MCP client (agent)
-    ↓
-LunumMcpServer (this package)
-    ↓
-LunumContextManager (in-memory store)
-    ↓
-@corpunum/lunum (core, via workspace dependency)
+```text
+lunum_get_extraction_contract
+  -> agent proposes frame/roles
+  -> lunum_build_candidate
+  -> lunum_submit_candidate
+  -> validation/identity diagnostics; candidate remains untrusted
 ```
 
-## Usage
+Current tools are defined in [src/tools.ts](src/tools.ts), with metadata in [src/mcp-contract.ts](src/mcp-contract.ts). They include the contract/builder/submission tools above, `lunum_derive`, `lunum_compile_context`, `lunum_fingerprint`, `lunum_validate`, `lunum_render`, `lunum_compare`, and `lunum_classify`. Blind-evaluation tools are exposed only through their configured evaluator path.
 
-```typescript
-import { createLunumMcpServer } from '@corpunum/lunum-mcp';
+`lunum_derive` without supplied Sem is a **surface** path. `lunum_fingerprint` is the legacy compatibility operation; do not mistake it for current strict candidate semantic identity. Validation does not establish that a candidate matches its source.
 
-const server = createLunumMcpServer({
-  serverInfo: { name: 'my-lunum-server', version: '0.2.0' },
-  maxContextItems: 1000,
-  enableValidation: true
-});
+The former README list of `lunum_parse`, `lunum_realize` and `lunum_retrieve` was not an accurate inventory of the active tools. Use the executable definitions, not historical feature lists.
 
-await server.start();
+## Inspect and build
 
-// The server exposes standard MCP tools
-// Tools can be called via the MCP protocol
+From the repository root:
+
+```bash
+pnpm build
+pnpm --filter @corpunum/lunum-mcp test:unit
 ```
 
-## Limitations
+Inspect [bin/lunum-mcp.ts](bin/lunum-mcp.ts) and the client configuration before starting the server. Do not infer client compatibility, storage durability, extraction quality or production security from passing interface tests.
 
-- Tool handlers use placeholder implementations; production use requires wiring to the real `@corpunum/lunum` core functions.
-- Context storage is in-memory; persistent backends require a custom adapter.
-- Only tested against the MCP reference server interface; compatibility with specific MCP clients may vary.
-
-## Status
-
-**Prototype.** Reference implementation exists and builds. Production validation against live MCP clients is pending.
-
-## New in v0.2.0
-
-- **Error contracts:** Proper error handling and contract validation.
-- **Input validation:** Schema validation for all tool inputs.
-- **Conformance test suite:** Comprehensive tests for MCP protocol compliance.
+The [repository license](../../LICENSE.md) applies. The [no-model core demo](../../examples/structured-record-demo.mjs) does not require an MCP client or OpenUnum.

@@ -23,7 +23,7 @@ Before taking action, read:
 9. `docs/EVALUATION_PROTOCOL.md`
 10. the selected GitHub issue and its discussion
 
-`docs/LUNUM_READINESS.md` is the living support, maturity and evidence tracker. Read it before proposing or accepting production, language, model, tokenizer, compaction, safety or adoption claims. Any score change is Tier 3 and requires linked accepted evidence plus independent validation.
+`docs/LUNUM_READINESS.md` is the living support, maturity and evidence tracker. Read it before proposing or accepting production, language, model, tokenizer, compaction, safety or adoption claims. Any stronger capability claim is Tier 3 and requires linked accepted evidence plus independent validation. Do not maintain completion percentages.
 
 `CAMPAIGN.md` and `WORK_QUEUE.md` are archive pointers. They are not schedulers or current state.
 
@@ -108,7 +108,7 @@ Each worker ends with exactly one result:
 Recommended layout:
 
 ```text
-/home/corpunum/OpenLunum                    # primary checkout; automation may reset it
+/home/corpunum/OpenLunum                    # user-owned primary checkout; preserve uncommitted work
 /home/corpunum/openlunum-workers/review     # orchestrator/reviewer worktree
 /home/corpunum/openlunum-workers/core       # core/schema/render lane
 /home/corpunum/openlunum-workers/eval       # evaluation/data/evidence lane
@@ -121,13 +121,15 @@ Perform orchestrator edits in the review worktree or a dedicated issue worktree,
 
 ## First boot and every check-in
 
-Synchronize the review worktree:
+Synchronize only an idle review worktree. Inspect the status first; stop if it contains unrelated changes or another agent owns it. Do not discard work to synchronize:
 
 ```bash
 cd /home/corpunum/openlunum-workers/review
 git fetch --prune origin
-git checkout main
-git reset --hard origin/main
+git status --short
+# Continue only when the worktree is clean and not owned by another active task.
+git switch main
+git merge --ff-only origin/main
 ```
 
 Inspect canonical state:
@@ -174,7 +176,7 @@ Run this logic in order:
 11. Use hosted Actions once at the acceptance boundary.
 12. Merge or reject, update the issue/evidence state, and delete the branch.
 13. Reconcile `STATUS.md` only when accepted capabilities or honest limitations changed.
-14. Reconcile `docs/LUNUM_READINESS.md` only when linked accepted evidence changes a readiness score, action status or support boundary.
+14. Reconcile `docs/LUNUM_READINESS.md` only when linked accepted evidence changes an action status or support boundary.
 
 Idle is correct whenever no issue passes this sequence.
 
@@ -334,7 +336,7 @@ After squash merge or rejection:
 3. delete the remote task branch;
 4. prune local branches/worktrees;
 5. update `STATUS.md` only if accepted capability state changed;
-6. update `docs/LUNUM_READINESS.md` only when the accepted evidence changes a score, action, support boundary or evidence ledger;
+6. update `docs/LUNUM_READINESS.md` only when the accepted evidence changes an action, support boundary or evidence ledger;
 7. verify the remote branch count remains within budget.
 
 ## Current ordered priorities

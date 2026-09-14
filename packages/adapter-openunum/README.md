@@ -1,4 +1,4 @@
-# @corpunum/lunum-adapter-openunum
+# @corpunum/lunum-openunum
 
 OpenUnum compatibility package.
 
@@ -10,22 +10,11 @@ Provides a typed OpenUnum-compatible adapter that preserves OpenUnum's current s
 
 - **OpenUnum** owns its databases, retrieval systems, context budgets, safety controls, and user experience.
 - **OpenLunum** owns the language, schemas, canonicalization, fingerprints, renderers, policies, evaluations, and conformance contracts.
-- OpenUnum adopts Lunum through this adapter; OpenLunum never imports OpenUnum runtime code.
+- This package is an intended compatibility path, not proof that OpenUnum has deployed it. OpenLunum never imports OpenUnum runtime code.
 
-## Usage
+## Inspect the contract
 
-```typescript
-import {
-  ShadowModeAdapter,
-  deriveLunumSidecar,
-  compileLunumShadowContext
-} from '@corpunum/lunum-adapter-openunum';
-
-const sidecar = deriveLunumSidecar(record);
-const context = compileLunumShadowContext([record], { profile: 'safe' });
-const shadow = new ShadowModeAdapter({ enabled: true, compareWithProduction: true });
-const comparison = shadow.process(record, candidateSem);
-```
+The workspace package name is `@corpunum/lunum-openunum`. Read [src/index.ts](src/index.ts) and the tests for the supported typed surface. This package does not run OpenUnum and is not required for the [product-neutral core demo](../../examples/structured-record-demo.mjs).
 
 ## Contract
 

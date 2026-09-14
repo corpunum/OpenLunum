@@ -1,87 +1,29 @@
 # @corpunum/lunum-eval
 
-Local-model experiment runner and report generator.
+Experiment runners, conformance tests, source-only agent evaluation and report tooling for OpenLunum. Some runners call configured OpenAI-compatible model endpoints; deterministic tests and the [core demo](../../examples/structured-record-demo.mjs) do not require a model. The [repository license](../../LICENSE.md) applies.
 
-## Purpose
+## Start with the evidence boundary
 
-Provides bounded local OpenAI-compatible parse/realization experiments with dataset hashes, raw failures, and generated reports. Supports the worker/evaluator/orchestrator operating model.
+A runner or passing fixture is not a model result. Supplied-gold semantic pairs measure comparison given that annotation, not end-to-end extraction. A token estimate or byte count is not a named-tokenizer measurement. A visible/tuned development corpus is not protected evaluation evidence.
 
-## Features
+Read [current evidence and limitations](../../docs/LUNUM_READINESS.md) before using a historical report. This package does not promise supported languages, model families, safety accuracy or token savings from the presence of profiles and tests. Earlier README claims such as a historical 0/16 -> 14/16 validity improvement are not a current qualification result.
 
-- **Realization Runner:** Experiment runner with protected-literal scoring for multilingual realization (EN/EL/ES/ID).
-- **Token Atlas:** Cross-model, cross-profile token measurement framework for natural vs renderer profile comparison.
-- **Retention regression gate:** Baseline store with provenance (dataset/model/schema), regression detection, stale-baseline checks, and CI integration. Prevents multilingual retention quality from degrading over time.
-- **Retention baseline store:** Per-language retention metrics save/load, snapshot-to-baseline conversion, and regression detection. Detects when any language drops below baseline, below minimum threshold (0.5), or overall drops >5pp. 289 lines of implementation, 274 lines of tests.
-- **Per-language metrics:** Detailed reports with pass rates, protected-literal coverage, and semantic scores.
-- **Schema-aware parsePrompt:** `parsePrompt` embeds the Lunum-Sem JSON schema shape and a canonical one-shot example in the system message. Live test showed parse validity improved 0/16 → 14/16 with the example present. Makes the prompt self-documenting and gives models a concrete template to follow.
+## Checkout commands
 
-## Scripts
+From the repository root:
 
 ```bash
-# Check agent status
-pnpm agent:status
-
-# Run model doctor (diagnose OpenAI-compatible endpoint)
-pnpm model:doctor
-
-# Create an experiment
-pnpm experiment:create
-
-# Run an experiment
-pnpm experiment:run
-
-# Generate reports
-pnpm report:generate
-
-# Run smoke tests
+pnpm build
 pnpm eval:smoke
-
-# Run retention experiment
-pnpm eval:retention
+pnpm --filter @corpunum/lunum-eval test:unit
 ```
 
-## Realization experiment
+`eval:smoke` exercises the smoke harness; it is not a live multilingual or task-quality benchmark. Build/tests may write generated reports; do not stage them as new empirical evidence.
 
-```bash
-pnpm eval:run --manifest experiments/realization-en-el-es-id/CLAIM.md
-```
+Maintainer experiment commands are declared in [package.json](package.json) and the [root package](../../package.json). `experiment:create`, `experiment:run`, `report:generate`, `model:doctor` and `eval:retention` need their respective inputs/configuration. `agent:status` is for managed automation, not a visitor prerequisite.
 
-## Token atlas
+## Reproducibility
 
-```bash
-pnpm eval:run --manifest experiments/token-atlas/CLAIM.md
-```
+For an actual model/agent experiment, declare the hypothesis, source-only input boundary, dataset hash, exact implementation, contract/profile, model/tokenizer identity when applicable, generation settings, attempt budget and baseline. Preserve raw failures, errors, timeouts, exclusions and denominators. State which isolation/review guarantees were actually achieved.
 
-## Architecture
-
-```
-experiments/<id>/CLAIM.md     experiment declaration
-experiments/<id>/manifest.json hypothesis, budgets, gates
-eval/                         fixtures, gates, metrics, historical ledger
-reports/                      generated per-item results and summaries
-```
-
-## Experiment protocol
-
-1. Create `experiments/<id>/CLAIM.md` with worker, area, branch, start date, and intended dataset.
-2. Record baseline commit, dataset hash, model profile, budgets, hard gates, and reproduction command.
-3. Run the unchanged baseline before modifying code, prompts, schemas, renderers, or policy.
-4. Keep raw outputs, per-item scores, failed examples, exclusions, and environment metadata.
-5. Run `pnpm verify` before committing.
-
-## Limitations
-
-- Local models are experiment workers, not final semantic or safety authorities.
-- Reports are generated from the experiment harness; they do not replace independent judgment.
-- Bootstrap fixtures are visible development data and do not prove language support.
-
-## Status
-
-**Prototype.** Experiment runner works with configured endpoints. Independent semantic judging and cross-model validation are pending.
-
-## New in v0.2.0
-
-- **Realization runner:** Multilingual realization experiments (EN/EL/ES/ID) with protected-literal scoring.
-- **Token atlas:** Cross-model token measurement framework with aggregate statistics and per-model analysis.
-- **Retention regression gate:** Baseline store with provenance, regression detection (10pp warning / 20pp critical), stale-baseline checks (>365 days), and nightly CI integration. 11 tests.
-- **Retention baseline store:** Per-language retention metrics save/load, snapshot-to-baseline conversion, and regression detection. 289 lines of implementation, 274 lines of tests. (PR #180)
+See the [experiment protocol](../../docs/EXPERIMENT_PROTOCOL.md) and [evaluation protocol](../../docs/EVALUATION_PROTOCOL.md). Historical artifacts remain evidence of what was run, not blanket approval to reuse their scores as current capability claims.

@@ -1,65 +1,26 @@
 # @corpunum/lunum-api
 
-## HTTP API Reference Server for Lunum
+**Experimental HTTP reference scaffold, not a production semantic service.**
 
-An HTTP API reference server that exposes Lunum semantic content operations as REST endpoints.
+The server and protocol tests exist, but several operations in [src/server.ts](src/server.ts) are placeholders:
 
-### What it provides
+| Route | Current implementation boundary |
+|---|---|
+| `/parse` | Calls `buildDefaultSem`, not a configured general natural-language model parser. |
+| `/realize` | Constructs a `Realized:` diagnostic string, not demonstrated multilingual realization. |
+| `/render` | Returns a `rendered/<profile>/<kind>` placeholder, not the core renderer's semantic output. |
+| `/retrieve` | Returns an empty results array, not a persistent semantic search engine. |
+| `/context` | Delegates to shadow-context compilation. |
 
-- **Parse** — Convert natural-language text into structured Lunum-Sem records
-- **Realize** — Convert Lunum-Sem records into readable realization text
-- **Render** — Convert Lunum-Sem records into compact Lunum-Code
-- **Retrieve** — Search Lunum records by fingerprint or near-fingerprint
-- **Health** — Server health and capabilities check
-- **Routes** — List all available endpoints and their schemas
+Routes may have a configured prefix; the [server](src/server.ts) is authoritative. Auth/rate-limit/schema tests do not turn placeholder handlers into capability evidence.
 
-### OpenAPI spec
+For the working supplied-Sem library path, use the [core example](../../examples/structured-record-demo.mjs). For agent construction/submission, inspect [MCP](../mcp/README.md).
 
-The server ships with a bundled OpenAPI 3.1.0 specification (`openapi.json`) that documents all endpoints, request/response schemas, and error contracts.
-
-### Adoption path
-
-This package implements the **third adoption path** for OpenLunum:
-
-1. **MCP reference server** (`packages/mcp`) — Tool-based integration via Model Context Protocol
-2. **CLI pipeline** (`packages/cli`) — Standalone command-line adoption
-3. **HTTP API reference server** (`packages/api`) — REST API with OpenAPI spec
-
-### Usage
+From the repository root, the maintainer test/build paths are:
 
 ```bash
-# Build
 pnpm build
-
-# Run in development mode
-pnpm dev
-
-# Run in production mode
-pnpm start
-
-# Run tests
-pnpm test:unit
+pnpm --filter @corpunum/lunum-api test:unit
 ```
 
-### API server options
-
-The server accepts configuration for:
-
-- `port` — HTTP listen port (default: 3000)
-- `host` — Bind address (default: `0.0.0.0`)
-- `logLevel` — Logging verbosity
-
-### Error contracts
-
-All endpoints return structured error responses with:
-
-- `error.type` — Machine-readable error category
-- `error.message` — Human-readable description
-- `error.requestId` — Unique request correlation ID
-
-### Integration notes
-
-- Depends on `@corpunum/lunum` (core library) via workspace dependency
-- Requires Node.js ≥ 22.0.0
-- No external service dependencies; fully self-contained
-- Can be deployed as a standalone service or embedded in larger products
+Do not deploy this scaffold as a general parser or retrieval service based on its route names or OpenAPI descriptions. The [repository license](../../LICENSE.md) and [current limitations](../../docs/LUNUM_READINESS.md) apply.

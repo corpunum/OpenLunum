@@ -1,136 +1,39 @@
 # Project status
 
-**Repository:** OpenLunum  
-**Technology:** Lunum  
-**Specification line:** Lunum-I — Lunum Interlingua  
-**Workspace version:** 0.2.0  
-**Maturity:** pre-1.0 research-to-reference implementation  
-**Status date:** 2026-09-14
+**As of 2026-09-14.** Experimental research/reference implementation; not a qualified general production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track active work.
 
-This file is a periodically reconciled summary. GitHub issues are the canonical backlog and acceptance state. Support and maturity claims require exact evidence references; implementation presence alone is not acceptance evidence.
+## What exists
 
-## Architecture
+Six workspace packages provide semantic types, candidate validation, canonicalization, versioned fingerprints, comparison/rendering, CLI/MCP surfaces, an HTTP scaffold and a typed product adapter. Some paths are legacy or experimental. Use the [package boundaries and runnable example](README.md), not historical completion scores, to find the entry point.
 
-OpenLunum separates canonical meaning from model-facing representation:
+The runtime candidate schema is `lunum-sem/0.1-draft`; the current strict semantic fingerprint path emits `lfp:2.1`. Other schema/fingerprint contracts and migration fixtures coexist. A file named `1.0` or a frozen internal contract does not establish external ratification, universal compatibility or production support.
 
-```text
-source evidence -> Lunum-Sem -> exact/near-semantic identity
-                              -> measured renderer profile
-                              -> safe natural-language fallback
-```
+## What the current evidence says
 
-The repository owns language semantics, schemas, canonicalization, fingerprints, renderers, policies, evaluations, and conformance contracts. Products own persistence, retrieval, context budgets, safety controls, and user experience.
+The [V8 iteration-2 report](experiments/natural-development-v8/extraction/results-iteration2.json) records a 24-row English/Greek development task: 18 parse targets, 17 parse submissions, one false abstention, and six correct expected abstentions. It reports 14 exact matches among 14 legitimately comparable outputs, not 24/24 task success. Five of six parse groups are complete. See the [freeze/iteration manifest](experiments/natural-development-v8/extraction/iteration2-manifest.json), [review scope](experiments/natural-development-v8/README.md), and [issue #685](https://github.com/corpunum/OpenLunum/issues/685) for limitations and acceptance state.
 
-## Implemented foundations
+This is a narrow development result after iterative work, not protected generalization, broad multilingual support, or a training result. Human Greek review covers specific strings; it is not human validation of every target or English sentence.
 
-The repository currently includes:
+## What is not established
 
-- strict TypeScript semantic types, canonicalization, serialization, and provenance;
-- frozen Lunum-Sem 1.0 schema and fingerprint contracts with migration tooling;
-- exact and near-semantic fingerprint implementations with canonicalization edge case validation;
-- safe, short, and tight renderer profiles with conformance, golden-output, regression, and compatibility migration tests;
-- tokenizer and model-profile measurement tooling with calibrated per-family token counting;
-- multilingual parse and realization experiment harnesses with 12-language corpus (96+ items);
-- controlled predicate/role vocabulary and schema-bearing parse prompts;
-- production parse gates, uncertainty/fallback policy, cross-family simulation, parse coverage/error recovery/ambiguity resolution;
-- CLI, HTTP API, MCP, and OpenUnum adapter paths with stable contracts, error recovery, and stress testing;
-- reproducible experiment manifests, dataset/profile hashing, raw-result retention, and report validation;
-- machine-readable evidence registry with superseded-evidence lineage and versioned statistical conventions;
-- safety hard gates, adversarial bypass resistance, prohibited domains, human-review policy, red-team framework;
-- context compaction gates, cross-tokenizer benchmarks, boundary stress, cross-mode consistency, token-efficiency profiling;
-- agent-state freeze, tamper evidence, idempotency, cross-framework interoperability, execution stress testing;
-- OTel-compatible structured observability, health/readiness probes, SLO compliance verification;
-- crash/disk-pressure recovery, operational load/failover/degradation cascade/recovery orchestration simulation;
-- tenant isolation, supply-chain audit, incident response, privacy audit, security self-assessment;
-- integration readiness and adoption compatibility validation;
-- backup/restore/rollback exercises with SHA-256 integrity verification;
-- fail-closed exact-head merge policy, protected-data boundary checks, and one-shot worker dispatcher.
+- Reliable general raw-text-to-Sem conversion across languages and domains.
+- A validated general near-semantic threshold under extraction errors.
+- Model/tokenizer-specific compaction that preserves downstream task quality in a qualified live benchmark.
+- Production-scale security, operations, source-retention/deletion integration or unrelated-product adoption.
+- A trained semantic compiler that improves an untouched evaluation set.
 
-The counts and readiness percentages in older status snapshots are historical
-inventory, not current acceptance evidence. Current acceptance is determined
-by the relevant GitHub issue, merged main, and versioned evidence artifacts.
+The repository contains relevant code, tests, historical runs and simulations. Their existence does not close these gaps. [Evidence and limitations](docs/LUNUM_READINESS.md) distinguishes those categories.
 
-This list describes implemented foundations. It does not by itself declare universal correctness, language support, production readiness, or accepted model performance.
+## Current work and boundaries
 
-## Repository operating state
+#685 remains the source-only evaluation track. Its specific review and false-abstention limitations must be resolved or explicitly retained; this public-docs correction does not change its acceptance criteria or declare it complete. Do not keep launching audits when the required external input has not changed.
 
-The repository uses the operating model in `docs/REPOSITORY_OPERATING_MODEL.md`:
+A useful subsequent public milestone is one standalone consumer with a frozen natural-text baseline, actual extraction where claimed, named tokenizer/model, task-quality results, costs, failures and fallback coverage. The supplied-Sem demo is an onboarding aid, not that milestone.
 
-- `main` is the only persistent shared development line;
-- workers use persistent local worktrees and disposable `work/<worker>/<issue>-<name>` branches;
-- GitHub issues are the backlog and assignment source of truth;
-- the default repository-wide limit is three active implementation pull requests;
-- workers run once for one explicit assignment and exit;
-- semantic and evidence-sensitive changes require independent evaluation;
-- accepted pull requests are squash merged and branches are deleted;
-- campaign, status, sync, completion, and idle branches are prohibited.
+OpenUnum is a separate product. The in-tree compatibility adapter is not independent adoption evidence and is not needed to use the core.
 
-The legacy persistent campaign loop is not the desired execution model. Local orchestration should use `scripts/pi-dispatch-once.sh` with a validated local assignment file.
+## Licensing and contributions
 
-## CI and merge controls
+Public repository; **all rights reserved, not open source**. [LICENSE.md](LICENSE.md) explains the remaining licensing decision. [CONTRIBUTING.md](CONTRIBUTING.md) separates human feedback from managed-agent coordination.
 
-The merge policy requires successful current-head checks:
-
-- `verify`;
-- `schema-drift`;
-- `report-validation`;
-- `protected-data-boundary`;
-- `quality-gates` when core/eval source paths require it.
-
-The policy also blocks drafts, non-mergeable heads, blocking labels, current-head `NEEDS_WORK`, missing head-bound approval evidence, stale checks, failed checks, checks from unexpected producers, and workflow jobs with no recorded steps. Merges are bound to the expected head SHA.
-
-PR workflows avoid duplicate task-branch `push` runs and defer full PR checks while a candidate remains draft. Marking a pull request ready triggers the acceptance checks.
-
-Issue #188 remains the control-proof issue until live branch-protection configuration and enforcement are independently verified. Do not close it solely because repository policy code exists.
-
-## Evidence status
-
-The machine-readable evidence registry (`reports/evidence-registry.json`) tracks 24+ historical entries verified against committed sources. Evidence integrity is enforced by automated consistency checks between the tracker ledger and registry.
-
-Key evidence milestones completed:
-
-- Issue #253 baseline: honest EN/EL/ES/ID parse and retention experiments on two named local models;
-- Threshold calibration: versioned decision chain with independent evaluation protocol;
-- Superseded-evidence lineage: correction chains with history-rewrite validation;
-- Versioned statistical conventions with independent recomputation verification;
-- External replication infrastructure with environment compatibility and tolerance validation;
-- Model-weight hash registry for 5 named models.
-
-Historical parse and retention reports produced before the parse-prompt repair
-are not accepted baselines. Evaluation and reproducibility claims remain
-bounded by the current issue acceptance records and evidence registry.
-
-## Release-gate view
-
-| Gate | Current view |
-|---|---|
-| Stable semantic schema and canonical serialization | Frozen 1.0 schema and fingerprint contracts with 15-vector conformance runner; acceptance remains evidence-bound |
-| Migration rules across schema versions | Implemented and tested for 0.1/0.2/1.0 paths with identity migration and golden vectors |
-| Multilingual semantic-retention evidence | Historical datasets and regression infrastructure exist; live model baselines still needed |
-| Tokenizer-aware renderer profiles | Profiles and validation infrastructure exist; current capability claims require matching evidence |
-| Safety and mixed-context quality gates | Hard invariant gates and review infrastructure exist; external red-team remains pending |
-| Four adoption paths | CLI, HTTP API, MCP, and adapter paths with stress testing and error recovery; independent product adoption evidence remains limited |
-| Threat model, rollback, compatibility | Internal validation exists; external pentest remains pending |
-| Property and conformance tests in CI | Implemented with schema conformance runner |
-| Operational reliability | Simulation and recovery infrastructure exists; live load remains pending |
-
-## Known organizational gaps
-
-- Live model execution on expanded corpora (parse, retention, compaction, profile quality) not yet performed.
-- External security review or penetration testing by independent assessor not yet completed.
-- No accepted evidence that unrelated products use the core representation in production-like conditions.
-- Native-speaker review still needed for non-EN/EL translations in the expanded corpus.
-
-## Honest boundary
-
-OpenLunum has a coherent architecture, a strict reference core, frozen contracts, comprehensive validation infrastructure, and an extensive body of evidence across 16 readiness areas.
-
-It does not yet provide:
-
-- a production-approved general language-agnostic parser;
-- universal semantic equivalence across arbitrary domains and languages;
-- live model evidence for compaction, retention, or profile quality claims;
-- production proof across unrelated products;
-- externally validated security posture.
-
-Natural fallback remains required whenever parsing, rendering, provenance, or safety evidence is insufficient.
+No readiness/completion percentages are maintained. Historical scorecards are [archived and superseded](research/archive/readiness-before-public-review-20260914.md), not erased or accepted as current evidence.

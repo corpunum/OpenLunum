@@ -1,3 +1,5 @@
+> **Historical implementation inventory, not current capability evidence.** See [STATUS.md](STATUS.md) and [evidence/limitations](docs/LUNUM_READINESS.md). Counts, support claims and percentages below are not current readiness estimates.
+
 # Issue #11: Dedicated Retrieval and Integration Experiment Runners
 
 ## Overview

@@ -2,7 +2,7 @@
   "name": "openlunum-workspace",
   "version": "0.2.0",
   "private": true,
-  "description": "OpenLunum: language-neutral semantics, model-aware rendering, local-model evaluation, and product adoption contracts.",
+  "description": "Experimental semantic IR, versioned fingerprints, rendering, and evaluation tooling.",
   "type": "module",
   "packageManager": "pnpm@10.13.1",
   "engines": {
@@ -12,7 +12,7 @@
     "clean": "pnpm -r clean",
     "build": "pnpm -r --sort build",
     "typecheck": "pnpm build && pnpm -r --sort typecheck",
-    "test": "pnpm build && pnpm -r --sort test:unit && pnpm test:merge-policy && pnpm test:quality-gate-runner && pnpm test:worker-dispatch && pnpm test:nightly-window && pnpm test:verify-audit-endpoints && pnpm test:source-only-scoring",
+    "test": "pnpm build && pnpm -r --sort test:unit && pnpm test:merge-policy && pnpm test:quality-gate-runner && pnpm test:worker-dispatch && pnpm test:nightly-window && pnpm test:verify-audit-endpoints && pnpm test:source-only-scoring && node --test examples/structured-record-demo.test.mjs",
     "test:merge-policy": "node --test scripts/pi-merge-policy.test.mjs",
     "test:quality-gate-runner": "node --test scripts/run-quality-gates-ci.test.mjs",
     "test:worker-dispatch": "node --test scripts/pi-dispatch-once.test.mjs",
@@ -28,10 +28,13 @@
     "model:doctor": "pnpm --filter @corpunum/lunum-eval model:doctor",
     "experiment:create": "pnpm --filter @corpunum/lunum-eval experiment:create",
     "experiment:run": "pnpm --filter @corpunum/lunum-eval experiment:run",
-    "report:generate": "pnpm --filter @corpunum/lunum-eval report:generate"
+    "report:generate": "pnpm --filter @corpunum/lunum-eval report:generate",
+    "demo:core": "pnpm --filter @corpunum/lunum build && node examples/structured-record-demo.mjs",
+    "test:public-demo": "pnpm --filter @corpunum/lunum build && node --test examples/structured-record-demo.test.mjs"
   },
   "devDependencies": {
     "@types/node": "26.1.1",
     "typescript": "7.0.2"
-  }
+  },
+  "license": "UNLICENSED"
 }

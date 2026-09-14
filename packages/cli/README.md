@@ -1,24 +1,36 @@
 # @corpunum/lunum-cli
 
-Command-line interface for Lunum semantic operations.
+Experimental command-line interface for Lunum operations. The [repository license](../../LICENSE.md) applies; these are checkout instructions, not a published-package or production-support claim.
 
 ## Purpose
 
 Provides inspect, encode, compile, and migrate operations via CLI for products and developers that prefer external preprocessing and evaluation.
+
+## Start without a model
+
+From the repository root:
+
+```bash
+pnpm build
+node packages/cli/dist/src/cli.js agent-contract
+node packages/cli/dist/src/cli.js inspect --text "I prefer concise answers."
+```
+
+`agent-contract` prints the generated extraction contract. `inspect` without Sem takes the surface path; it does not infer a language-neutral proposition. For the strict candidate/identity path, use the [supplied-Sem example](../../examples/structured-record-demo.mjs) and inspect `build-candidate` / `submit-candidate` in [src/cli.ts](src/cli.ts).
 
 ## Commands
 
 ### Inspect
 
 ```bash
-# Inspect a text string for Lunum semantics
+# Inspect a surface-only sidecar (not automatic semantic extraction)
 node packages/cli/dist/src/cli.js inspect --text "The user prefers concise answers."
 ```
 
 ### Encode
 
 ```bash
-# Encode text into Lunum-Sem JSON
+# Validate/render supplied Sem; this uses the legacy compatibility fingerprint
 node packages/cli/dist/src/cli.js encode --sem examples/preference.sem.json
 ```
 
@@ -90,7 +102,7 @@ Exit codes:
 
 ```bash
 # Build the CLI
-pnpm --filter @corpunum/lunum-cli build
+pnpm build
 
 # Run an operation
 node packages/cli/dist/src/cli.js <command> [options]
@@ -101,7 +113,7 @@ node packages/cli/dist/src/cli.js <command> [options]
 It's easy to conflate these three surfaces — they wrap the same underlying logic but serve different audiences:
 
 1. **Library API** (`packages/core`, `@corpunum/lunum`): `runQualityGates(records, config)` and `generateCIReport(report)`, exported from `packages/core/src/quality-gate-ci.ts`. This is the actual implementation — all scoring/thresholding policy lives here. Use it when you're integrating quality gates into your own Node.js program.
-2. **This CLI command** (`packages/cli`, this file): `lunum quality-gate`, published as part of `@corpunum/lunum-cli`. A local, user-facing entry point for developers who want a pre-push/pre-commit feedback loop without writing code — it calls the library API above and does nothing else. Not used by CI.
+2. **This CLI command** (`packages/cli`, this file): `lunum quality-gate`, implemented in `@corpunum/lunum-cli`. A local, user-facing entry point for developers who want a pre-push/pre-commit feedback loop without writing code — it calls the library API above and does nothing else. Not used by CI.
 3. **The hosted CI workflow** (`scripts/run-quality-gates-ci.mjs`, wired up by `.github/workflows/quality-gate.yml`): the repo-internal runner that evaluates the protected fixture dataset (`datasets/protected/`) on every relevant PR and posts a GitHub Step Summary. It is *not* published in `@corpunum/lunum-cli` or `@corpunum/lunum` and cannot be invoked by downstream consumers of either package — it only exists to gate this repository's own CI.
 
 ## Limitations
