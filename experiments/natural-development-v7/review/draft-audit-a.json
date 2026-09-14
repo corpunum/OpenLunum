@@ -1,0 +1,12 @@
+{
+  "reviewer": "independent-contract-auditor",
+  "status": "corrected-draft-not-accepted",
+  "scope": "v7 certified-subset.jsonl and task-contract.json",
+  "findings": [
+    "Initial draft used unframed notify, generic system identity, an ambiguous recipient/destination sentence, an overloaded publication sentence, and noncanonical abstention reasons.",
+    "These findings were corrected before extraction: nested send is framed, system IDs are source-visible, role/publication wording is explicit, and abstention reasons are canonical.",
+    "The corrected draft still requires review of exact target/source semantics and does not constitute human certification."
+  ],
+  "nativeSpeakerReview": false,
+  "verdict": "draft-only"
+}

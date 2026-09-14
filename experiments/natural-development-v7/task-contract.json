@@ -1,0 +1,37 @@
+{
+  "format": "openlunum-source-only-task/0.2",
+  "version": "v7",
+  "status": "frozen-development-contract",
+  "purpose": "Small concept-disjoint source-relative extraction task with English and Greek coverage.",
+  "inputVisibility": ["opaque handle", "source text", "source language", "this task contract", "core extraction contract"],
+  "forbiddenInput": ["gold targets", "semantic group labels", "critical-pair labels", "review decisions", "private source-to-gold mappings", "other candidate outputs"],
+  "parsePolicy": "Return one canonical candidate for answerable rows; explicitly abstain when required arguments or semantic scope are unresolved.",
+  "kindPolicy": {"conditional": "conditional_instruction", "other": "event"},
+  "termTypePolicy": {
+    "person": "actor",
+    "system": "system",
+    "document": "document",
+    "task": "task",
+    "feature": "feature",
+    "metric": "metric",
+    "location": "location",
+    "audience": "audience",
+    "quantity": "quantity",
+    "date": "date",
+    "credential": "credential"
+  },
+  "rolePolicy": {
+    "send": "agent sends object to recipient; recipient is not destination",
+    "publish": "agent publishes theme to explicit audience",
+    "retry": "agent retries theme with count and time when stated",
+    "conditional": "condition scopes the main clause; consequences are separate nested clauses and repeat the parent's modality explicitly"
+  },
+  "modalityPolicy": "obligation and permission are distinct identity-bearing modalities; lexical negation is represented by negated=true on the lexical predicate and is not rewritten into its antonym.",
+  "quantityPolicy": "Preserve finite numeric value and explicit unit; exactly seven times is not interchangeable with an omitted count or another unit.",
+  "timePolicy": "Preserve explicit ISO calendar dates as date terms.",
+  "identityPolicy": "Compare exact identity only for source-visible stable names, identifiers, literal quantities, dates, and task-typed roles. Never infer private handles.",
+  "abstentionPolicy": {"canonicalReasons":["unsupported","ambiguous","unresolved"],"mapping":{"unsupported domain":"unsupported","missing required frame argument":"unsupported","unresolved modality or nested scope":"unresolved"}},
+  "criticalContrastPolicy": "Contrast definitions are scorer-private and require complete candidate outputs for every prescribed endpoint.",
+  "independence": "Targets are reviewed after authoring; extraction is fresh and source-only. Isolation is prompt-level unless separately evidenced.",
+  "maxNestedDepth": 1
+}

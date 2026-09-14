@@ -1,0 +1,74 @@
+{
+  "extract-001-7a1c6e69e4c1": {
+    "sourceRowId": "v7-g1-en-a"
+  },
+  "extract-002-7d7f7588792a": {
+    "sourceRowId": "v7-g1-en-b"
+  },
+  "extract-003-059e9f48a2be": {
+    "sourceRowId": "v7-g1-el"
+  },
+  "extract-004-5df75639249b": {
+    "sourceRowId": "v7-g2-en-a"
+  },
+  "extract-005-21ae01946cec": {
+    "sourceRowId": "v7-g2-en-b"
+  },
+  "extract-006-feb019cb3933": {
+    "sourceRowId": "v7-g2-el"
+  },
+  "extract-007-9d79eb6f6699": {
+    "sourceRowId": "v7-g3-en-a"
+  },
+  "extract-008-a6205b0d75df": {
+    "sourceRowId": "v7-g3-en-b"
+  },
+  "extract-009-bc868960d0be": {
+    "sourceRowId": "v7-g3-el"
+  },
+  "extract-010-6aa5d6640529": {
+    "sourceRowId": "v7-g4-en-a"
+  },
+  "extract-011-706b4955988a": {
+    "sourceRowId": "v7-g4-en-b"
+  },
+  "extract-012-f6a2c789c64d": {
+    "sourceRowId": "v7-g4-el"
+  },
+  "extract-013-167653368210": {
+    "sourceRowId": "v7-g5-en-a"
+  },
+  "extract-014-df2ec495c1da": {
+    "sourceRowId": "v7-g5-en-b"
+  },
+  "extract-015-b86f831f7c45": {
+    "sourceRowId": "v7-g5-el"
+  },
+  "extract-016-dfdfa4676b06": {
+    "sourceRowId": "v7-g6-en-a"
+  },
+  "extract-017-ca7c7124503c": {
+    "sourceRowId": "v7-g6-en-b"
+  },
+  "extract-018-562b3d64198d": {
+    "sourceRowId": "v7-g6-el"
+  },
+  "extract-019-3822f06e5873": {
+    "sourceRowId": "v7-abstain-missing-en"
+  },
+  "extract-020-e76afe72704e": {
+    "sourceRowId": "v7-abstain-missing-el"
+  },
+  "extract-021-1f1ff6159ff4": {
+    "sourceRowId": "v7-abstain-missing-el-2"
+  },
+  "extract-022-c9986577edfa": {
+    "sourceRowId": "v7-abstain-unsupported-en"
+  },
+  "extract-023-1b5dd234dc68": {
+    "sourceRowId": "v7-abstain-unsupported-el"
+  },
+  "extract-024-75bf8d1fee77": {
+    "sourceRowId": "v7-abstain-unsupported-en-2"
+  }
+}

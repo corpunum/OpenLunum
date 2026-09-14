@@ -1,0 +1,12 @@
+{
+  "reviewer": "independent-greek-crosslingual-auditor",
+  "status": "corrected-draft-not-accepted",
+  "scope": "v7 Greek rows, cross-lingual alignment, and task contract",
+  "findings": [
+    "Initial Greek draft used avoidable code-switching and ambiguous or unsupported target choices; wording was revised to explicit source-visible identifiers and framed send semantics.",
+    "The current Greek rows are understandable draft evidence only; no native-speaker certification is claimed.",
+    "Cross-lingual convergence and naturalness remain unproven until a fixed corrected corpus receives independent review."
+  ],
+  "nativeSpeakerReview": false,
+  "verdict": "draft-only"
+}

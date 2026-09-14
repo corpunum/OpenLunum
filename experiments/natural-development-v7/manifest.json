@@ -1,0 +1,21 @@
+{
+  "format": "openlunum-natural-development-manifest/0.1",
+  "status": "draft-awaiting-independent-review",
+  "dataset": "certified-subset.jsonl",
+  "datasetSha256": "2e657265af82d0de5a7ca525828bcbc2ed97acb607a4c767eb05a8445dcf68c6",
+  "taskContractSha256": "9e490be0570724f7fa297e8b8416e6551eafae47f74d18a9c04f6a6e4e606876",
+  "requestSha256": "7d9089236cde7c2a7ede1407ef9f8ca44c31b39232fd1457859a5b0d5abfbb1e",
+  "sourceOnlyContractSha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e",
+  "privateMapSha256": "2f13f74b5f0d1c54701a696c72abd2f11f3366e594c5da8498990bec57481c5c",
+  "rawCandidateLedgerSha256": "19e5cb99635dfc002efad6f9054fe4a646a0bf962775d9fbee87d52f22a8deac",
+  "candidateLedgerSha256": "7eb0821d68d0fdaf03901bd458e65dc6b5daeb405dfe583a26e39bfc2e0dd31e",
+  "resultsSha256": "5b21dd40821077b49e995fbb97c9806575e0829704fda0983ab1da21b18e5b3e",
+  "independentEvaluation": "independent-evaluation.json",
+  "rawToDerivedTransformation": "derived ledger adds request-bound sourceSha256/status and canonical extractorType=agent; candidateSem payloads were preserved, but no separate transformation hash is claimed",
+  "rows": 24,
+  "parseRows": 18,
+  "abstentionRows": 6,
+  "languages": ["en", "el"],
+  "protected": false,
+  "trainingGoldEligible": false
+}
