@@ -1,0 +1,7 @@
+{
+  "format": "openlunum-natural-development-review/0.1",
+  "status": "accepted-for-diagnostic-extraction",
+  "reviewers": ["target-review-a.json", "target-review-b.json"],
+  "datasetSha256": "2a623b70bdc89113ada97a69dfc536e6f49fc18170119fe4e9e1c10abfa6990a",
+  "reviewLimitations": ["Agent review is not independent native-speaker certification.", "Extraction isolation is prompt-level, not an OS sandbox."]
+}

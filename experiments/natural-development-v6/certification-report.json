@@ -3,7 +3,7 @@
   "status": "development-only",
   "protected": false,
   "trainingGoldEligible": false,
-  "datasetSha256": "fb4cb9904c7ed39ddd53c4018ac56e6c8ef80d6ce3d64b05dc211263ced0cfee",
+  "datasetSha256": "2a623b70bdc89113ada97a69dfc536e6f49fc18170119fe4e9e1c10abfa6990a",
   "reason": "Small successor task is frozen for diagnostic extraction only; it is not human-certified or protected evaluation evidence.",
   "reviewers": ["01a09f5a-1d92-7b21-a8d7-54814a6deaaa", "01a09f61-cfb2-7b53-8f99-6bf73bc072e7"]
 }
