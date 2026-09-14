@@ -15,6 +15,13 @@ The stdio command is:
 
     node /home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js
 
+The recorded client runs used that canonical checkout path. For replay, replace
+the path with the absolute path of the checkout just built. The report binds
+the source implementation and candidate commits and records the SHA-256 of the
+built server; the clean publication checkout independently produced the same
+artifact hash. Verification is recorded in
+reports/compatibility/2026-09-15/verification.json.
+
 The current server exposes ten tools:
 
     lunum_derive
@@ -95,6 +102,11 @@ and a temporary directory; no user configuration was changed.
 Known limitation: Codex 0.154.0 has no project-scoped add flag in the tested
 help output, so codex mcp add writes global configuration. This evidence is
 limited to this version, route, model, and supplied-Sem fixture.
+
+The repository-wide `pnpm verify` was attempted for this candidate but four
+dispatcher tests collided on the repository's global lock. The same dispatcher
+test passed 14/14 when run serially; this is recorded as a baseline limitation,
+not treated as a green full gate.
 
 ## Claude Code
 
@@ -188,4 +200,3 @@ Official command references consulted:
 - https://github.com/openai/codex/blob/main/codex-rs/docs/config.md
 - https://geminicli.com/docs/tools/mcp-server/
 - https://docs.anthropic.com/en/docs/claude-code/cli-usage
-
