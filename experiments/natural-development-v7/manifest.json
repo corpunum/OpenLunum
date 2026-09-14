@@ -10,6 +10,7 @@
   "rawCandidateLedgerSha256": "19e5cb99635dfc002efad6f9054fe4a646a0bf962775d9fbee87d52f22a8deac",
   "candidateLedgerSha256": "7eb0821d68d0fdaf03901bd458e65dc6b5daeb405dfe583a26e39bfc2e0dd31e",
   "resultsSha256": "5b21dd40821077b49e995fbb97c9806575e0829704fda0983ab1da21b18e5b3e",
+  "resultsV2Sha256": "9770cceefb8a999fb8849269255ad1a844d5307d47173dc6e70f66ec26eb4711",
   "independentEvaluation": "independent-evaluation.json",
   "rawToDerivedTransformation": "derived ledger adds request-bound sourceSha256/status and canonical extractorType=agent; candidateSem payloads were preserved, but no separate transformation hash is claimed",
   "rows": 24,
