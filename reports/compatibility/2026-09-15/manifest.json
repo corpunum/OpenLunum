@@ -1,13 +1,15 @@
 {
   "schema": "openlunum-client-compatibility/0.1",
   "date": "2026-09-15",
-  "codeCommit": "7155968707f079be42dbe066a3294e9f30c49701",
+  "codeCommit": "39ecfeab13c12f54f25e5a6e974b0449137167a4",
   "serverCommand": "node /home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js",
   "serverArtifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
   "contract": {
     "version": "lunum-agent/0.3",
     "protocolRegistryHash": "116e90d37bbb2b769e6d6727b02a5518d28742fa7c34f1c07cbdaa91eeeca289"
   },
+  "prompts": "prompts.json",
+  "promptsSha256": "31d448062981983f3d452320a57243ac1dcb85c3c59f01116849856470117531",
   "fixture": {
     "sourceText": "Maria prefers quiet mode.",
     "sourceLanguage": "en",
