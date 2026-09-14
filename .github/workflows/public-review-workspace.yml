@@ -1,0 +1,24 @@
+name: Public review workspace
+
+on:
+  push:
+    branches: [review/public-usability-and-license-20260914]
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Archive tracked public source only
+        run: git archive --format=tar.gz --output=source.tar.gz HEAD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: public-review-source
+          path: source.tar.gz
+          retention-days: 1
