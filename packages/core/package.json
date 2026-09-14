@@ -12,7 +12,9 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ],
   "engines": {
     "node": ">=22"
@@ -24,5 +26,5 @@
     "test": "pnpm build && node --test dist/test/*.test.js",
     "test:unit": "node --test dist/test/*.test.js"
   },
-  "license": "UNLICENSED"
+  "license": "Apache-2.0"
 }

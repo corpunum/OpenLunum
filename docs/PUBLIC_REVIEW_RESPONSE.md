@@ -4,7 +4,7 @@ Owner-requested corrective review, 2026-09-14, based on main `a2b5e93002b3d7ca8b
 
 | Review point | Assessment | Action / remaining work |
 |---|---|---|
-| All-rights-reserved licensing conflicts with an open-source impression | Supported by the actual license. Public visibility is not an open-source grant. | Clarified README/LICENSE and package metadata; fixed broken license link. A real relicense still needs the copyright holder's choice and rights review. |
+| All-rights-reserved licensing conflicts with an open-source impression | Supported by the license at the time of the review. Public visibility is not an open-source grant. | Initially clarified README/LICENSE and package metadata. The owner subsequently explicitly authorized Apache-2.0; see the dated follow-up below and LICENSE.md. |
 | Readiness percentages overstate evidence | Supported: README advertised near-completion while acknowledging missing live and external evidence. | Removed current percentage/activity scorecards; preserved the old tracker as superseded history. Added scoped implementation/evidence/limitations. |
 | Tests/PRs greatly outnumber outside adoption | Activity is not adoption. Star/fork counts are also not a technical-quality metric. The repository does not establish unrelated-product adoption. | Removed activity-as-readiness marketing. No invented users, external pilots or production proof. |
 | “Interlingua” overstates the shipped artifact | The current implementation is a constrained semantic IR with rendering/fingerprint machinery, not an established linguistic standard. | Lead with the concrete artifact; retain the long-term vision and historical terminology without representing it as achieved. |
@@ -13,9 +13,15 @@ Owner-requested corrective review, 2026-09-14, based on main `a2b5e93002b3d7ca8b
 | Need an end-to-end token/task demo | Agreed; not accomplished by documentation or the new supplied-Sem example. | The new example honestly demonstrates only the core path. A future consumer experiment needs named model/tokenizer, natural-text baseline, actual extraction, task quality, costs and failures. |
 | Delete half the process | A useful direction, not a safe literal deletion request. | Shortened public entry docs; kept historical evidence and internal concurrency/protected-data safeguards. No extra governance framework was added. |
 
-## License decision still required
+## License decision at the original correction
 
-No open-source license was selected by this correction. MIT, Apache-2.0 and copyleft licenses grant materially different rights and obligations; substituting one is not a wording cleanup. Do not infer owner approval of a patent or commercial-use grant from this document. Third-party code/data and contributions require their own review.
+No open-source license was selected by the initial public-description correction. MIT, Apache-2.0 and copyleft licenses grant materially different rights and obligations; substituting one was not treated as a wording cleanup.
+
+## Owner-authorized follow-up — 2026-09-14
+
+The owner subsequently explicitly authorized releasing code they own or control under Apache-2.0, including commercial reuse and its patent grant, while preserving third-party terms. [Issue #698](https://github.com/corpunum/OpenLunum/issues/698) records that scope. The complete license is now in [LICENSE](../LICENSE), with [NOTICE](../NOTICE), consistent workspace metadata, package-local copies and [licensing guidance](../LICENSE.md). Existing package versions/private flags, external dataset/model licenses and historical evidence remain unchanged.
+
+This resolves the missing rights grant for the covered original code; it does not establish adoption, semantic accuracy, token savings, or production readiness.
 
 ## Validation scope
 

@@ -2,8 +2,7 @@
 
 **Experimental TypeScript toolkit for structured semantic records, versioned fingerprints, and model-facing rendering.**
 
-**License status: public repository, all rights reserved; not currently open source.**
-See [LICENSE.md](LICENSE.md) before reuse, redistribution, or product integration.
+**License: Apache-2.0 for OpenLunum's original code.** Commercial reuse is permitted under [LICENSE](LICENSE); [LICENSE.md](LICENSE.md) explains the scope and unchanged third-party terms.
 
 OpenLunum develops **Lunum**, a proposed intermediate representation (IR) for agent and language-model context. It separates a structured interpretation of source material from the text rendered for a model. The long-term aim is to preserve meaning across languages and reduce context cost without losing task quality. Those end-to-end benefits are research goals, not established production capabilities.
 
@@ -34,7 +33,7 @@ We do not publish readiness percentages. Test, commit, PR and fixture counts mea
 
 ## See the core without a model
 
-Technical walkthrough, subject to the license above. Requires Node.js 22+ and pnpm 10.13.1. No GPU, API key, model server, OpenUnum checkout, or worker assignment is needed.
+Technical walkthrough. Requires Node.js 22+ and pnpm 10.13.1. No GPU, API key, model server, OpenUnum checkout, or worker assignment is needed.
 
 ```bash
 git clone https://github.com/corpunum/OpenLunum.git

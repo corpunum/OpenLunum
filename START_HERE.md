@@ -1,6 +1,6 @@
 # Start here
 
-OpenLunum is an experimental semantic-IR toolkit. It is publicly inspectable but **not currently open source**; read [LICENSE.md](LICENSE.md) before reuse.
+OpenLunum is an experimental semantic-IR toolkit. Its original code is open source under **Apache-2.0**; see [LICENSE](LICENSE) and [license scope / third-party terms](LICENSE.md).
 
 ## I want to understand or try it
 
@@ -16,11 +16,11 @@ pnpm demo:core
 
 The demo supplies its own Sem. It demonstrates validation, representation identity, rendering and source fallback, not automatic language understanding or compression benefit.
 
-No local model, GPU, API key, OpenUnum installation, `agent:status`, or worker assignment is required for this walkthrough. These instructions do not grant additional license rights.
+No local model, GPU, API key, OpenUnum installation, `agent:status`, or worker assignment is required for this walkthrough. Third-party data and models retain their separate terms.
 
 ## I found a problem or want to contribute
 
-Open an issue with what you tried, expected and observed. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the small checklist. You do not need to read the agent operating manuals or obtain an assignment to ask a question or report a defect. Resolve licensing/permission before substantial reuse or code contribution.
+Open an issue with what you tried, expected and observed. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the small checklist. You do not need to read the agent operating manuals or obtain an assignment to ask a question or report a defect. Contributions should identify any third-party material and its license.
 
 ## I need the technical details
 

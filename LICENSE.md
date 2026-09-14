@@ -1,15 +1,19 @@
-# License status — all rights reserved
+# License — Apache-2.0
 
-Copyright © 2026 Corpunum. All rights reserved.
+Copyright 2026 Corpunum.
 
-This repository is public for inspection. It is **not currently released under an open-source license**. No patent, redistribution, sublicensing, or commercial-use rights are granted merely by the presence of source files in this repository.
+OpenLunum's original code and accompanying first-party documentation and examples that Corpunum owns or is authorized to license are licensed under the **Apache License, Version 2.0**. The complete, unmodified terms are in [LICENSE](LICENSE); project attribution is in [NOTICE](NOTICE).
 
-The name **OpenLunum** is a project name; it does not grant rights. README examples, contribution instructions and package metadata do not supply a separate license. Obtain explicit permission before uses for which rights have not been granted.
+You may use, modify and redistribute that work, including in commercial products, subject to the license. Its copyright and patent grants, redistribution conditions, trademark limits, warranty disclaimer and liability terms are defined by the license itself. This page does not add restrictions to Apache-2.0.
 
-This notice does not override rights provided by applicable law, GitHub's terms for public repositories, separately granted permissions, or the separate licenses of third-party material. See [GitHub's explanation of public repositories and licensing](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository).
+## Third-party material and data
 
-## Pending license decision
+This grant does **not** relicense third-party code, dependencies, external datasets, model weights, quoted/source material, or contributions whose rights Corpunum does not control. Existing file-level notices, upstream licenses and attribution remain applicable. Public availability, a dependency entry or an evaluation manifest is not permission to redistribute or train on its contents.
 
-The copyright holder has not yet selected a public open-source license for this code. A future change requires an explicit rights-holder decision and review of contribution ownership and third-party notices. Such a decision must update this file, package metadata and public descriptions together.
+Consult the relevant resource's license and provenance before using external data or models. In particular, preserve the existing [Universal PropBank license manifest](docs/UNIVERSAL_PROPBANK_LICENSE_MANIFEST.json) and resource-specific notices. Unclear or missing rights remain unresolved; this code-license change does not settle them. No new third-party material or model weights are included by this change.
 
-This clarification changes no license grant. Public visibility is not an open-source release.
+## License transition
+
+On 2026-09-14 the project owner explicitly authorized the Apache-2.0 release, including commercial reuse and its patent grant, for code they own or control. [Issue #698](https://github.com/corpunum/OpenLunum/issues/698) records the assignment and scope. This replaces the prior all-rights-reserved notice for the covered work in this revision. Historical files and reports are retained as history, not current licensing guidance.
+
+Workspace metadata uses the SPDX identifier `Apache-2.0`. Existing package `private` flags and versions are unchanged: an open-source license is not an npm publication, production-readiness guarantee, or empirical capability claim.

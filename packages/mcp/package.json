@@ -26,5 +26,5 @@
     "@corpunum/lunum": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.12.0"
   },
-  "license": "UNLICENSED"
+  "license": "Apache-2.0"
 }
