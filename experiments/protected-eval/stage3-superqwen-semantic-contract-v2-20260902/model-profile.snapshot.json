@@ -1,0 +1,22 @@
+{
+  "schema": "openlunum-model-profile/0.1",
+  "id": "superqwen3.8-27b-abliterated-live",
+  "provider": "openai-compatible",
+  "baseUrl": "http://127.0.0.1:58995/v1",
+  "model": "openai/superqwen3.8-27b-abliterated",
+  "temperature": 0,
+  "seed": 42,
+  "maxTokens": 768,
+  "chatTemplateKwargs": { "enable_thinking": false },
+  "timeoutMs": 300000,
+  "metadata": {
+    "purpose": "Protected Stage 3 fresh semantic-contract parse evaluation snapshot.",
+    "endpointDiscovery": "Copied from candidate parent head c69b9477876f53bcde4790624c1553b2ff4a43d3; independently verified with ss and GET /v1/models on 2026-09-02.",
+    "modelFile": {
+      "fileName": "SuperQwen3.8-27b-abliterated-Q4_K_M.gguf",
+      "source": "live llama.cpp process command line in the candidate parent environment",
+      "fileSizeBytes": 16547400704,
+      "modifiedAt": "2026-08-29T12:36:51.534Z"
+    }
+  }
+}

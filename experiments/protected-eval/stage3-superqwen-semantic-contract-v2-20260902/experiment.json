@@ -1,0 +1,18 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "stage3-superqwen-semantic-contract-v2-20260902",
+  "area": "semantic-contract",
+  "task": "parse",
+  "hypothesis": "A frozen, fresh six-language corpus with canonical protocol gold, explicit abstentions, and role/negation contrast pairs will measure cross-language semantic extraction without allowing invalid gold or post-output tuning to inflate the result.",
+  "baselineCommit": "c69b9477876f53bcde4790624c1553b2ff4a43d3",
+  "dataset": {
+    "path": "experiments/protected-eval/stage3-superqwen-semantic-contract-v2-20260902/corpus.jsonl",
+    "sha256": "46e1fed448fadeed19672c484fb5fef1fc358a554a2f40f0cac0480a99238c47"
+  },
+  "modelProfile": "experiments/protected-eval/stage3-superqwen-semantic-contract-v2-20260902/model-profile.snapshot.json",
+  "limits": { "maxItems": 66, "maxAttemptsPerItem": 1, "maxModelCalls": 66 },
+  "gates": { "minimumFeatureRecall": 0.95, "minimumExactRate": 0.75, "requireProtectedLiteralCoverage": true },
+  "outputDirectory": "reports/experiments/stage3-superqwen-semantic-contract-v2-20260902",
+  "evidenceClass": "protected",
+  "implementationCommit": "c69b9477876f53bcde4790624c1553b2ff4a43d3"
+}
