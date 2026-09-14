@@ -301,9 +301,10 @@ export function summarizeCriticalContrasts(subset, sourceRow, results) {
   };
 }
 
-export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-development-v5') {
+export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-development-v5', options = {}) {
+  const ledgerFile = options.ledgerFile ?? 'extraction/candidate-ledger.jsonl';
   const subset = loadJsonLines(`${root}/certified-subset.jsonl`);
-  const ledger = loadJsonLines(`${root}/extraction/candidate-ledger.jsonl`);
+  const ledger = loadJsonLines(`${root}/${ledgerFile}`);
   const requests = loadJsonLines(`${root}/extraction/source-only-request.jsonl`);
   const privateMap = JSON.parse(fs.readFileSync(`${root}/extraction/source-only-private-map.json`, 'utf8'));
   const { ledgerByHandle } = validateRequestLedgerBindings(requests, ledger);
@@ -417,6 +418,7 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
       oneFirstPassPerItem: true,
       deterministicRepair: false,
       sourceOnlyRequest: `${root}/extraction/source-only-request.jsonl`,
+      sourceOnlyLedger: `${root}/${ledgerFile}`,
       contract: `${root}/extraction/source-only-contract.json`,
       extractor: 'fresh isolated agent; packet restricted to source-only request and frozen contract',
       goldIsolation: 'extractor was instructed not to read certified subset, reviews, manifests, or generator files; scorer accesses gold privately',
@@ -426,7 +428,7 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
     artifacts: {
       sourceOnlyRequestSha256: artifactHash('extraction/source-only-request.jsonl'),
       sourceOnlyPrivateMapSha256: artifactHash('extraction/source-only-private-map.json'),
-      candidateLedgerSha256: artifactHash('extraction/candidate-ledger.jsonl'),
+      candidateLedgerSha256: artifactHash(ledgerFile),
       certificationReportSha256: artifactHash('certification-report.json')
     },
     corpus: {
@@ -527,8 +529,8 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
   };
 }
 
-export function writeNaturalSourceOnlyExtractionReport(root, outputFile) {
-  const report = scoreNaturalSourceOnlyExtraction(root);
+export function writeNaturalSourceOnlyExtractionReport(root, outputFile, options = {}) {
+  const report = scoreNaturalSourceOnlyExtraction(root, options);
   fs.writeFileSync(outputFile, `${JSON.stringify(report, null, 2)}\n`, { flag: 'wx' });
   return report;
 }
@@ -536,7 +538,8 @@ export function writeNaturalSourceOnlyExtractionReport(root, outputFile) {
 function main() {
   const root = process.argv[2] ?? 'experiments/natural-development-v5';
   const outputFile = process.argv[3] ?? `${root}/extraction/results-revised-v2.json`;
-  const report = writeNaturalSourceOnlyExtractionReport(root, outputFile);
+  const ledgerFile = process.argv[4] ?? 'extraction/candidate-ledger.jsonl';
+  const report = writeNaturalSourceOnlyExtractionReport(root, outputFile, { ledgerFile });
   console.log(JSON.stringify({ rows: report.corpus.rows, parse: report.parse, abstention: report.abstention, stages: report.stages, multilingual: report.multilingual }, null, 2));
 }
 
