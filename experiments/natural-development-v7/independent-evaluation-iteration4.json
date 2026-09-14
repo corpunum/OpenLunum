@@ -1,0 +1,36 @@
+{
+  "format": "openlunum-independent-evaluation/0.1",
+  "candidateSha": "0cf6adccb6709f63184130e4d300d583f5c6a23d",
+  "evaluator": "Volta",
+  "verdict": "accepted-as-diagnostic-rejected-for-issue-closure",
+  "verified": [
+    "24/24 request and source bindings validate.",
+    "Iteration4 report reproduces byte-for-byte with its versioned ledger.",
+    "Focused scorer tests pass 15/15.",
+    "The evidence remains development-only, unprotected, and not training eligible."
+  ],
+  "metrics": {
+    "rows": 24,
+    "parseTargets": 18,
+    "abstentionTargets": 6,
+    "sourceRelativeMatch": 17,
+    "sourceRelativeMismatch": 0,
+    "sourceRelativeUnresolved": 1,
+    "identityComparable": 15,
+    "exact": 14,
+    "nestedExpected": 12,
+    "nestedMatched": 12,
+    "abstentionsCorrect": 6,
+    "completeParseGroups": 6,
+    "convergingParseGroups": 5,
+    "criticalContrastFamiliesPreserved": 2
+  },
+  "limitations": [
+    "No native-speaker English or Greek review is available; no native-language claim is made.",
+    "Three parse rows are intentionally not exact-comparable because permitted source evidence does not establish comparable identity.",
+    "One source-relative row remains unresolved on term type.",
+    "Raw and candidate ledgers are byte-identical here, but no independently evidenced raw-to-derived transformation exists.",
+    "This is diagnostic development evidence, not protected evaluation or training gold."
+  ],
+  "issue685Close": false
+}
