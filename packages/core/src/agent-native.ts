@@ -25,8 +25,8 @@ import { resolveGroundingCascade, toGroundingResolution } from './grounding-prov
 import type { LunumSem, SemanticTrustDecision } from './types.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.2' as const;
-export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.2' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.3' as const;
+export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.3' as const;
 
 // SHA-256 of schemas/lunum-sem.schema.json at this protocol version. Keep
 // this explicit so an agent can bind its candidate to the actual wire schema,
@@ -57,7 +57,7 @@ const CANONICAL_RULES = Object.freeze([
   'Use the canonical frame roles exactly; unexpected roles fail exact identity.',
   'deadline encodes time in roles.time, not clause.time.',
   'conditions and consequences are clause arrays, not role lookalikes.',
-  'prohibition uses negated=true, not a duplicate negative modality.',
+  'negated is compositional: lexical prohibit/allow use negated=false; negated=true means NOT that predicate; never infer not prohibited == allowed.',
 ]);
 const EXTRACTION_SEM_TEMPLATE = `{"schema":"${SEM_SCHEMA}","world":"real","kind":"simple_fact","clauses":[{"predicate":"<registered-predicate>","roles":{},"negated":false}]}`;
 
