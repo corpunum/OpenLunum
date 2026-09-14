@@ -21,6 +21,9 @@ the source implementation and candidate commits and records the SHA-256 of the
 built server; the clean publication checkout independently produced the same
 artifact hash. Verification is recorded in
 reports/compatibility/2026-09-15/verification.json.
+The published evidence is bound to the immutable ref
+`compatibility-2026-09-15-candidate`, which resolves to the exact evidence
+checkout after publication.
 
 The current server exposes ten tools:
 

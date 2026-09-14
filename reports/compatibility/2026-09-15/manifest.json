@@ -5,6 +5,7 @@
   "serverCommand": "node /home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js",
   "serverArtifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
   "testedCandidateCommit": "72040dd8b9aa2b8faa32c6306d745e61a8c189f2",
+  "testedCandidateRef": "compatibility-2026-09-15-candidate",
   "serverArtifactEquivalence": "The recorded command used the canonical checkout path; the same source-built artifact hash was independently matched in the clean publication worktree.",
   "contract": {
     "version": "lunum-agent/0.3",
@@ -13,6 +14,7 @@
   "prompts": "prompts.json",
   "promptsSha256": "31d448062981983f3d452320a57243ac1dcb85c3c59f01116849856470117531",
   "verification": "verification.json",
+  "buildReceipt": "build-receipt.json",
   "fixture": {
     "sourceText": "Maria prefers quiet mode.",
     "sourceLanguage": "en",

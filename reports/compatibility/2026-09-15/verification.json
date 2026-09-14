@@ -1,6 +1,7 @@
 {
   "schema": "openlunum-client-compatibility-verification/0.1",
   "testedSourceCommit": "39ecfeab13c12f54f25e5a6e974b0449137167a4",
+  "testedCandidateRef": "compatibility-2026-09-15-candidate",
   "commands": {
     "pnpm test:license": {"exit": 0, "tests": "5 passed"},
     "pnpm --filter @corpunum/lunum-mcp test": {"exit": 0, "tests": "60 passed"},
