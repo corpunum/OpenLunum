@@ -93,6 +93,7 @@ function sourceClauseComparison(expected, actual, path = 'clauses[0]') {
   if (!expected || !actual) return { status: 'mismatch', path, reason: 'clause_presence' };
   const fields = ['predicate', 'negated', 'modality'];
   const fieldResults = fields.map((field) => ({ field, status: Object.is(expected[field] ?? (field === 'negated' ? false : null), actual[field] ?? (field === 'negated' ? false : null)) ? 'match' : 'mismatch', path: `${path}.${field}` }));
+  fieldResults.push({ field: 'time', ...sourceTermComparison(expected.time, actual.time, `${path}.time`) });
   const roleNames = new Set([...Object.keys(expected.roles ?? {}), ...Object.keys(actual.roles ?? {})]);
   const roles = [...roleNames].sort().map((role) => ({ role, ...sourceTermComparison(expected.roles?.[role], actual.roles?.[role], `${path}.roles.${role}`) }));
   const nested = [];
