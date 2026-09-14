@@ -1,0 +1,4491 @@
+{
+  "format": "openlunum-natural-source-only-extraction/0.2",
+  "status": "diagnostic-development-only",
+  "protected": false,
+  "localInferenceUsed": false,
+  "procedure": {
+    "oneFirstPassPerItem": true,
+    "deterministicRepair": false,
+    "sourceOnlyRequest": "experiments/natural-development-v8/extraction/source-only-request.jsonl",
+    "sourceOnlyLedger": "experiments/natural-development-v8/extraction/candidate-ledger-iteration2.jsonl",
+    "contract": "experiments/natural-development-v8/extraction/source-only-contract.json",
+    "extractor": "fresh isolated agent; packet restricted to source-only request and frozen contract",
+    "goldIsolation": "extractor was instructed not to read certified subset, reviews, manifests, or generator files; scorer accesses gold privately",
+    "ledgerRequiredFields": [
+      "handle",
+      "status",
+      "candidateSem",
+      "sourceSha256",
+      "contractHash",
+      "extractorType"
+    ],
+    "exactIdentityRule": "exact identity is scored only when candidate and target have available identities, corresponding role terms use compatible reference/literal identity modes, and every literal identity value is source-anchored or represented by an allowed reference"
+  },
+  "artifacts": {
+    "sourceOnlyRequestSha256": "5e884ba6b9c8971fd9015aaec75abe316eb97fd0f86181bd1c36e7d8ab45d73f",
+    "sourceOnlyContractSha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e",
+    "sourceOnlyPrivateMapSha256": "416fce1fefa5385c746d97d76cf5763d8d8042bf00fa57136c6b47f3e896b64e",
+    "candidateLedgerSha256": "dd60b0a864d419267c711d38090939d0c78fdc8d52869039e37d2814b4a97fea",
+    "certificationReportSha256": "c939fa64eb1f8df537ea78441d2d2ab7f18ff5e1c5640a3a1db5f68e33f4d4d2"
+  },
+  "corpus": {
+    "rows": 24,
+    "parseTargets": 18,
+    "abstentionTargets": 6,
+    "languages": [
+      "el",
+      "en"
+    ],
+    "datasetSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0"
+  },
+  "stages": {
+    "parseSubmissions": 17,
+    "explicitAbstentions": 7,
+    "missing": 0,
+    "malformed": 0,
+    "transportValid": 17,
+    "structuralValid": 17,
+    "protocolCanonical": 17,
+    "frameValid": 17,
+    "grounded": 17,
+    "identityAvailable": 17
+  },
+  "parse": {
+    "attempts": 18,
+    "exact": 14,
+    "sourceRelativeMatch": 17,
+    "sourceRelativeMismatch": 0,
+    "sourceRelativeUnresolved": 0,
+    "sourceRelativeContractUnresolved": 0,
+    "identityComparable": 14,
+    "exactNotComparable": 4,
+    "falseAbstentions": 1,
+    "missing": 0,
+    "malformed": 0,
+    "semanticHardMismatches": 0,
+    "structural": {
+      "world": 17,
+      "kind": 17,
+      "predicate": 17,
+      "negated": 17,
+      "roleNames": 17,
+      "roleTypes": 17,
+      "modality": 17,
+      "nested": 6
+    },
+    "recursiveStructural": {
+      "clauseCountComparable": 17,
+      "clauseCountMatch": 17,
+      "nestedClauseCountComparable": 17,
+      "nestedClauseCountMatch": 17,
+      "nestedExpected": 12,
+      "nestedCandidate": 12,
+      "nestedMatched": 12,
+      "nestedMismatched": 0,
+      "nestedUnresolved": 0
+    },
+    "byLanguage": {
+      "el": {
+        "attempts": 6,
+        "submitted": 6,
+        "exact": 5,
+        "identityComparable": 5,
+        "hardMismatches": 0
+      },
+      "en": {
+        "attempts": 12,
+        "submitted": 11,
+        "exact": 9,
+        "identityComparable": 9,
+        "hardMismatches": 0
+      }
+    }
+  },
+  "abstention": {
+    "targets": 6,
+    "correct": 6,
+    "unexpectedParses": 0,
+    "missing": 0,
+    "malformed": 0
+  },
+  "multilingual": {
+    "groups": 8,
+    "completeParseGroups": 5,
+    "completeAbstentionGroups": 2,
+    "candidateConverging": 5,
+    "groupResults": [
+      {
+        "group": "conditional-obligation",
+        "rows": 3,
+        "outputsAvailable": 3,
+        "completeParseOutputs": true,
+        "allExplicitAbstentions": false,
+        "candidateConverges": true,
+        "exact": true
+      },
+      {
+        "group": "conditional-permission",
+        "rows": 3,
+        "outputsAvailable": 3,
+        "completeParseOutputs": true,
+        "allExplicitAbstentions": false,
+        "candidateConverges": true,
+        "exact": true
+      },
+      {
+        "group": "send-courier",
+        "rows": 3,
+        "outputsAvailable": 2,
+        "completeParseOutputs": false,
+        "allExplicitAbstentions": false,
+        "candidateConverges": false,
+        "exact": false
+      },
+      {
+        "group": "publish-audience-61",
+        "rows": 3,
+        "outputsAvailable": 3,
+        "completeParseOutputs": true,
+        "allExplicitAbstentions": false,
+        "candidateConverges": true,
+        "exact": true
+      },
+      {
+        "group": "publish-audience-62",
+        "rows": 3,
+        "outputsAvailable": 3,
+        "completeParseOutputs": true,
+        "allExplicitAbstentions": false,
+        "candidateConverges": true,
+        "exact": true
+      },
+      {
+        "group": "retry-seven",
+        "rows": 3,
+        "outputsAvailable": 3,
+        "completeParseOutputs": true,
+        "allExplicitAbstentions": false,
+        "candidateConverges": true,
+        "exact": false
+      },
+      {
+        "group": "abstain-missing-argument",
+        "rows": 3,
+        "outputsAvailable": 0,
+        "completeParseOutputs": false,
+        "allExplicitAbstentions": true,
+        "candidateConverges": false,
+        "exact": false
+      },
+      {
+        "group": "abstain-unsupported-domain",
+        "rows": 3,
+        "outputsAvailable": 0,
+        "completeParseOutputs": false,
+        "allExplicitAbstentions": true,
+        "candidateConverges": false,
+        "exact": false
+      }
+    ]
+  },
+  "criticalContrasts": {
+    "familiesDefined": 2,
+    "familiesWithBothOutputs": 2,
+    "familiesWithCompleteOutputs": 2,
+    "meaningDistinctionPreserved": 2,
+    "falseEquivalence": 0,
+    "pairResults": [
+      {
+        "pairId": "obligation-vs-permission",
+        "groups": [
+          "conditional-obligation",
+          "conditional-permission"
+        ],
+        "available": true,
+        "leftComplete": true,
+        "rightComplete": true,
+        "leftConverges": true,
+        "rightConverges": true,
+        "distinct": true
+      },
+      {
+        "pairId": "audience-61-vs-62",
+        "groups": [
+          "publish-audience-61",
+          "publish-audience-62"
+        ],
+        "available": true,
+        "leftComplete": true,
+        "rightComplete": true,
+        "leftConverges": true,
+        "rightConverges": true,
+        "distinct": true
+      }
+    ],
+    "note": "Contrast labels remain scorer-private; a family is counted only when every prescribed parse endpoint has a candidate output, and distinction uses candidate semantics rather than candidate absence."
+  },
+  "denominators": {
+    "rows": 24,
+    "parseTargets": 18,
+    "abstentionTargets": 6,
+    "sourceRelative": 17,
+    "exactComparable": 14,
+    "groups": 8,
+    "completeParseGroups": 5,
+    "criticalContrastFamilies": 2,
+    "criticalContrastFamiliesComplete": 2
+  },
+  "sourceRelativeDimensions": {
+    "modality": {
+      "observations": 29,
+      "match": 29,
+      "mismatch": 0,
+      "unresolved": 0,
+      "contractUnresolved": 0
+    },
+    "negated": {
+      "observations": 29,
+      "match": 29,
+      "mismatch": 0,
+      "unresolved": 0,
+      "contractUnresolved": 0
+    },
+    "predicate": {
+      "observations": 29,
+      "match": 29,
+      "mismatch": 0,
+      "unresolved": 0,
+      "contractUnresolved": 0
+    },
+    "roles": {
+      "observations": 75,
+      "match": 75,
+      "mismatch": 0,
+      "unresolved": 0,
+      "contractUnresolved": 0
+    },
+    "time": {
+      "observations": 29,
+      "match": 29,
+      "mismatch": 0,
+      "unresolved": 0,
+      "contractUnresolved": 0
+    }
+  },
+  "items": [
+    {
+      "handle": "extract-3bc0f282a7138537",
+      "sourceRowId": "v8-g1-en-a",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "When battery B-11 falls below 20 percent, System S-11 must enable feature F-11 and send notice N-11 to operator O-11.",
+          "language": "en",
+          "sha256": "ce35b2358d1d8db78eedfff7083a9f6e4bb973cc6d0042f1b3a66825ca628ab0"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "ce35b2358d1d8db78eedfff7083a9f6e4bb973cc6d0042f1b3a66825ca628ab0"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:50b5e4bda68d659660a0d580bea59629",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:conditional_instruction",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "conditional_instruction",
+          "clauses": [
+            {
+              "predicate": "enable",
+              "roles": {
+                "agent": {
+                  "type": "system",
+                  "id": "S-11"
+                },
+                "theme": {
+                  "type": "feature",
+                  "id": "F-11"
+                }
+              },
+              "negated": false,
+              "modality": "obligation",
+              "conditions": [
+                {
+                  "predicate": "below",
+                  "roles": {
+                    "subject": {
+                      "type": "metric",
+                      "id": "B-11"
+                    },
+                    "value": {
+                      "type": "quantity",
+                      "value": 20,
+                      "unit": "percent"
+                    }
+                  },
+                  "negated": false
+                }
+              ],
+              "consequences": [
+                {
+                  "predicate": "send",
+                  "roles": {
+                    "agent": {
+                      "type": "system",
+                      "id": "S-11"
+                    },
+                    "object": {
+                      "type": "document",
+                      "id": "N-11"
+                    },
+                    "recipient": {
+                      "type": "actor",
+                      "id": "O-11"
+                    }
+                  },
+                  "negated": false,
+                  "modality": "obligation"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 3,
+          "candidateClauses": 3,
+          "expectedNestedClauses": 2,
+          "candidateNestedClauses": 2,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:conditional_instruction",
+              "modality:0.consequence.0:obligation",
+              "modality:0:obligation",
+              "negated:0.condition.0:false",
+              "negated:0.consequence.0:false",
+              "negated:0:false",
+              "predicate:0.condition.0:below",
+              "predicate:0.consequence.0:send",
+              "predicate:0:enable",
+              "role:0.condition.0:subject:b-11",
+              "role:0.condition.0:value:20",
+              "role:0.consequence.0:agent:s-11",
+              "role:0.consequence.0:object:n-11",
+              "role:0.consequence.0:recipient:o-11",
+              "role:0:agent:s-11",
+              "role:0:theme:f-11",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "17 of 17 expected features matched",
+            "featurePrecisionReason": "17 of 17 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (17/17 expected features matched)",
+            "Feature precision: 100.0% (17/17 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 24,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].conditions[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].time"
+                  },
+                  {
+                    "role": "subject",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.subject"
+                  },
+                  {
+                    "role": "value",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.value"
+                  }
+                ]
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].consequences[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].time"
+                  },
+                  {
+                    "role": "agent",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.agent"
+                  },
+                  {
+                    "role": "object",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.object"
+                  },
+                  {
+                    "role": "recipient",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.recipient"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "ce35b2358d1d8db78eedfff7083a9f6e4bb973cc6d0042f1b3a66825ca628ab0"
+    },
+    {
+      "handle": "extract-1bfbb57c852d4b0d",
+      "sourceRowId": "v8-g1-en-b",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Whenever B-11 drops under 20%, System S-11 is required to turn on F-11 and send notice N-11 to O-11.",
+          "language": "en",
+          "sha256": "8e8d7b940cc8777f69d4b284a25d77729a4e9f75ddfbbc5404a38454e3d16aff"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "8e8d7b940cc8777f69d4b284a25d77729a4e9f75ddfbbc5404a38454e3d16aff"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:50b5e4bda68d659660a0d580bea59629",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:conditional_instruction",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "conditional_instruction",
+          "clauses": [
+            {
+              "predicate": "enable",
+              "roles": {
+                "agent": {
+                  "type": "system",
+                  "id": "S-11"
+                },
+                "theme": {
+                  "type": "feature",
+                  "id": "F-11"
+                }
+              },
+              "negated": false,
+              "modality": "obligation",
+              "conditions": [
+                {
+                  "predicate": "below",
+                  "roles": {
+                    "subject": {
+                      "type": "metric",
+                      "id": "B-11"
+                    },
+                    "value": {
+                      "type": "quantity",
+                      "value": 20,
+                      "unit": "percent"
+                    }
+                  },
+                  "negated": false
+                }
+              ],
+              "consequences": [
+                {
+                  "predicate": "send",
+                  "roles": {
+                    "agent": {
+                      "type": "system",
+                      "id": "S-11"
+                    },
+                    "object": {
+                      "type": "document",
+                      "id": "N-11"
+                    },
+                    "recipient": {
+                      "type": "actor",
+                      "id": "O-11"
+                    }
+                  },
+                  "negated": false,
+                  "modality": "obligation"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 3,
+          "candidateClauses": 3,
+          "expectedNestedClauses": 2,
+          "candidateNestedClauses": 2,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:conditional_instruction",
+              "modality:0.consequence.0:obligation",
+              "modality:0:obligation",
+              "negated:0.condition.0:false",
+              "negated:0.consequence.0:false",
+              "negated:0:false",
+              "predicate:0.condition.0:below",
+              "predicate:0.consequence.0:send",
+              "predicate:0:enable",
+              "role:0.condition.0:subject:b-11",
+              "role:0.condition.0:value:20",
+              "role:0.consequence.0:agent:s-11",
+              "role:0.consequence.0:object:n-11",
+              "role:0.consequence.0:recipient:o-11",
+              "role:0:agent:s-11",
+              "role:0:theme:f-11",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "17 of 17 expected features matched",
+            "featurePrecisionReason": "17 of 17 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (17/17 expected features matched)",
+            "Feature precision: 100.0% (17/17 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 24,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].conditions[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].time"
+                  },
+                  {
+                    "role": "subject",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.subject"
+                  },
+                  {
+                    "role": "value",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.value"
+                  }
+                ]
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].consequences[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].time"
+                  },
+                  {
+                    "role": "agent",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.agent"
+                  },
+                  {
+                    "role": "object",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.object"
+                  },
+                  {
+                    "role": "recipient",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.recipient"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "8e8d7b940cc8777f69d4b284a25d77729a4e9f75ddfbbc5404a38454e3d16aff"
+    },
+    {
+      "handle": "extract-71e6744c943f46f6",
+      "sourceRowId": "v8-g1-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Όταν η μπαταρία B-11 πέσει κάτω από 20%, το σύστημα S-11 πρέπει να ενεργοποιήσει τη λειτουργία F-11 και να στείλει την ειδοποίηση N-11 στον χειριστή O-11.",
+          "language": "el",
+          "sha256": "5607198c43cd89cec38a083713c22a431374b6734da2d6a6288fdb6ac9c5adc6"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "5607198c43cd89cec38a083713c22a431374b6734da2d6a6288fdb6ac9c5adc6"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:50b5e4bda68d659660a0d580bea59629",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:conditional_instruction",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "conditional_instruction",
+          "clauses": [
+            {
+              "predicate": "enable",
+              "roles": {
+                "agent": {
+                  "type": "system",
+                  "id": "S-11"
+                },
+                "theme": {
+                  "type": "feature",
+                  "id": "F-11"
+                }
+              },
+              "negated": false,
+              "modality": "obligation",
+              "conditions": [
+                {
+                  "predicate": "below",
+                  "roles": {
+                    "subject": {
+                      "type": "metric",
+                      "id": "B-11"
+                    },
+                    "value": {
+                      "type": "quantity",
+                      "value": 20,
+                      "unit": "percent"
+                    }
+                  },
+                  "negated": false
+                }
+              ],
+              "consequences": [
+                {
+                  "predicate": "send",
+                  "roles": {
+                    "agent": {
+                      "type": "system",
+                      "id": "S-11"
+                    },
+                    "object": {
+                      "type": "document",
+                      "id": "N-11"
+                    },
+                    "recipient": {
+                      "type": "actor",
+                      "id": "O-11"
+                    }
+                  },
+                  "negated": false,
+                  "modality": "obligation"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 3,
+          "candidateClauses": 3,
+          "expectedNestedClauses": 2,
+          "candidateNestedClauses": 2,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:conditional_instruction",
+              "modality:0.consequence.0:obligation",
+              "modality:0:obligation",
+              "negated:0.condition.0:false",
+              "negated:0.consequence.0:false",
+              "negated:0:false",
+              "predicate:0.condition.0:below",
+              "predicate:0.consequence.0:send",
+              "predicate:0:enable",
+              "role:0.condition.0:subject:b-11",
+              "role:0.condition.0:value:20",
+              "role:0.consequence.0:agent:s-11",
+              "role:0.consequence.0:object:n-11",
+              "role:0.consequence.0:recipient:o-11",
+              "role:0:agent:s-11",
+              "role:0:theme:f-11",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "17 of 17 expected features matched",
+            "featurePrecisionReason": "17 of 17 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (17/17 expected features matched)",
+            "Feature precision: 100.0% (17/17 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 24,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].conditions[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].time"
+                  },
+                  {
+                    "role": "subject",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.subject"
+                  },
+                  {
+                    "role": "value",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.value"
+                  }
+                ]
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].consequences[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].time"
+                  },
+                  {
+                    "role": "agent",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.agent"
+                  },
+                  {
+                    "role": "object",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.object"
+                  },
+                  {
+                    "role": "recipient",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.recipient"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "5607198c43cd89cec38a083713c22a431374b6734da2d6a6288fdb6ac9c5adc6"
+    },
+    {
+      "handle": "extract-2e9eaccedb5848f6",
+      "sourceRowId": "v8-g2-en-a",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "If battery B-22 is below 15 percent, System S-22 may activate feature F-22 and send notice N-22 to operator O-22.",
+          "language": "en",
+          "sha256": "73c216b840fa9f82c118716ef7fb586a75861941bc233fdf7a1c23498704de9f"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "73c216b840fa9f82c118716ef7fb586a75861941bc233fdf7a1c23498704de9f"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:adfce693fbbe047e0cd3ff4a4ca6a260",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:conditional_instruction",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "conditional_instruction",
+          "clauses": [
+            {
+              "predicate": "enable",
+              "roles": {
+                "agent": {
+                  "type": "system",
+                  "id": "S-22"
+                },
+                "theme": {
+                  "type": "feature",
+                  "id": "F-22"
+                }
+              },
+              "negated": false,
+              "modality": "permission",
+              "conditions": [
+                {
+                  "predicate": "below",
+                  "roles": {
+                    "subject": {
+                      "type": "metric",
+                      "id": "B-22"
+                    },
+                    "value": {
+                      "type": "quantity",
+                      "value": 15,
+                      "unit": "percent"
+                    }
+                  },
+                  "negated": false
+                }
+              ],
+              "consequences": [
+                {
+                  "predicate": "send",
+                  "roles": {
+                    "agent": {
+                      "type": "system",
+                      "id": "S-22"
+                    },
+                    "object": {
+                      "type": "document",
+                      "id": "N-22"
+                    },
+                    "recipient": {
+                      "type": "actor",
+                      "id": "O-22"
+                    }
+                  },
+                  "negated": false,
+                  "modality": "permission"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 3,
+          "candidateClauses": 3,
+          "expectedNestedClauses": 2,
+          "candidateNestedClauses": 2,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:conditional_instruction",
+              "modality:0.consequence.0:permission",
+              "modality:0:permission",
+              "negated:0.condition.0:false",
+              "negated:0.consequence.0:false",
+              "negated:0:false",
+              "predicate:0.condition.0:below",
+              "predicate:0.consequence.0:send",
+              "predicate:0:enable",
+              "role:0.condition.0:subject:b-22",
+              "role:0.condition.0:value:15",
+              "role:0.consequence.0:agent:s-22",
+              "role:0.consequence.0:object:n-22",
+              "role:0.consequence.0:recipient:o-22",
+              "role:0:agent:s-22",
+              "role:0:theme:f-22",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "17 of 17 expected features matched",
+            "featurePrecisionReason": "17 of 17 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (17/17 expected features matched)",
+            "Feature precision: 100.0% (17/17 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 24,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].conditions[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].time"
+                  },
+                  {
+                    "role": "subject",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.subject"
+                  },
+                  {
+                    "role": "value",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.value"
+                  }
+                ]
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].consequences[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].time"
+                  },
+                  {
+                    "role": "agent",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.agent"
+                  },
+                  {
+                    "role": "object",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.object"
+                  },
+                  {
+                    "role": "recipient",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.recipient"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "73c216b840fa9f82c118716ef7fb586a75861941bc233fdf7a1c23498704de9f"
+    },
+    {
+      "handle": "extract-7782441467d33962",
+      "sourceRowId": "v8-g2-en-b",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Once B-22 falls under 15%, System S-22 is permitted to activate F-22 and send notice N-22 to O-22.",
+          "language": "en",
+          "sha256": "e96b74dddb5e7b0ddac07e064600e9d1c8c14bde43b5304292a37c8a438ed4dc"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "e96b74dddb5e7b0ddac07e064600e9d1c8c14bde43b5304292a37c8a438ed4dc"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:adfce693fbbe047e0cd3ff4a4ca6a260",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:conditional_instruction",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "conditional_instruction",
+          "clauses": [
+            {
+              "predicate": "enable",
+              "roles": {
+                "agent": {
+                  "type": "system",
+                  "id": "S-22"
+                },
+                "theme": {
+                  "type": "feature",
+                  "id": "F-22"
+                }
+              },
+              "negated": false,
+              "modality": "permission",
+              "conditions": [
+                {
+                  "predicate": "below",
+                  "roles": {
+                    "subject": {
+                      "type": "metric",
+                      "id": "B-22"
+                    },
+                    "value": {
+                      "type": "quantity",
+                      "value": 15,
+                      "unit": "percent"
+                    }
+                  },
+                  "negated": false
+                }
+              ],
+              "consequences": [
+                {
+                  "predicate": "send",
+                  "roles": {
+                    "agent": {
+                      "type": "system",
+                      "id": "S-22"
+                    },
+                    "object": {
+                      "type": "document",
+                      "id": "N-22"
+                    },
+                    "recipient": {
+                      "type": "actor",
+                      "id": "O-22"
+                    }
+                  },
+                  "negated": false,
+                  "modality": "permission"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 3,
+          "candidateClauses": 3,
+          "expectedNestedClauses": 2,
+          "candidateNestedClauses": 2,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:conditional_instruction",
+              "modality:0.consequence.0:permission",
+              "modality:0:permission",
+              "negated:0.condition.0:false",
+              "negated:0.consequence.0:false",
+              "negated:0:false",
+              "predicate:0.condition.0:below",
+              "predicate:0.consequence.0:send",
+              "predicate:0:enable",
+              "role:0.condition.0:subject:b-22",
+              "role:0.condition.0:value:15",
+              "role:0.consequence.0:agent:s-22",
+              "role:0.consequence.0:object:n-22",
+              "role:0.consequence.0:recipient:o-22",
+              "role:0:agent:s-22",
+              "role:0:theme:f-22",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "17 of 17 expected features matched",
+            "featurePrecisionReason": "17 of 17 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (17/17 expected features matched)",
+            "Feature precision: 100.0% (17/17 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 24,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].conditions[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].time"
+                  },
+                  {
+                    "role": "subject",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.subject"
+                  },
+                  {
+                    "role": "value",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.value"
+                  }
+                ]
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].consequences[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].time"
+                  },
+                  {
+                    "role": "agent",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.agent"
+                  },
+                  {
+                    "role": "object",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.object"
+                  },
+                  {
+                    "role": "recipient",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.recipient"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "e96b74dddb5e7b0ddac07e064600e9d1c8c14bde43b5304292a37c8a438ed4dc"
+    },
+    {
+      "handle": "extract-4bbf91a514491153",
+      "sourceRowId": "v8-g2-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Αν η μπαταρία B-22 είναι κάτω από 15%, επιτρέπεται στο σύστημα S-22 να ενεργοποιήσει τη λειτουργία F-22 και να στείλει την ειδοποίηση N-22 στον χειριστή O-22.",
+          "language": "el",
+          "sha256": "52dd109634a12de01454915dc78d598ba9d9571acfef70b9f4cebd39bd87967d"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "52dd109634a12de01454915dc78d598ba9d9571acfef70b9f4cebd39bd87967d"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:adfce693fbbe047e0cd3ff4a4ca6a260",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:conditional_instruction",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "conditional_instruction",
+          "clauses": [
+            {
+              "predicate": "enable",
+              "roles": {
+                "agent": {
+                  "type": "system",
+                  "id": "S-22"
+                },
+                "theme": {
+                  "type": "feature",
+                  "id": "F-22"
+                }
+              },
+              "negated": false,
+              "modality": "permission",
+              "conditions": [
+                {
+                  "predicate": "below",
+                  "roles": {
+                    "subject": {
+                      "type": "metric",
+                      "id": "B-22"
+                    },
+                    "value": {
+                      "type": "quantity",
+                      "value": 15,
+                      "unit": "percent"
+                    }
+                  },
+                  "negated": false
+                }
+              ],
+              "consequences": [
+                {
+                  "predicate": "send",
+                  "roles": {
+                    "agent": {
+                      "type": "system",
+                      "id": "S-22"
+                    },
+                    "object": {
+                      "type": "document",
+                      "id": "N-22"
+                    },
+                    "recipient": {
+                      "type": "actor",
+                      "id": "O-22"
+                    }
+                  },
+                  "negated": false,
+                  "modality": "permission"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 3,
+          "candidateClauses": 3,
+          "expectedNestedClauses": 2,
+          "candidateNestedClauses": 2,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:conditional_instruction",
+              "modality:0.consequence.0:permission",
+              "modality:0:permission",
+              "negated:0.condition.0:false",
+              "negated:0.consequence.0:false",
+              "negated:0:false",
+              "predicate:0.condition.0:below",
+              "predicate:0.consequence.0:send",
+              "predicate:0:enable",
+              "role:0.condition.0:subject:b-22",
+              "role:0.condition.0:value:15",
+              "role:0.consequence.0:agent:s-22",
+              "role:0.consequence.0:object:n-22",
+              "role:0.consequence.0:recipient:o-22",
+              "role:0:agent:s-22",
+              "role:0:theme:f-22",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "17 of 17 expected features matched",
+            "featurePrecisionReason": "17 of 17 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (17/17 expected features matched)",
+            "Feature precision: 100.0% (17/17 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 24,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].conditions[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].time"
+                  },
+                  {
+                    "role": "subject",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.subject"
+                  },
+                  {
+                    "role": "value",
+                    "status": "match",
+                    "path": "clauses[0].conditions[0].roles.value"
+                  }
+                ]
+              },
+              {
+                "status": "match",
+                "contractUnresolved": 0,
+                "path": "clauses[0].consequences[0]",
+                "children": [
+                  {
+                    "field": "predicate",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].predicate"
+                  },
+                  {
+                    "field": "negated",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].negated"
+                  },
+                  {
+                    "field": "modality",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].modality"
+                  },
+                  {
+                    "field": "time",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].time"
+                  },
+                  {
+                    "role": "agent",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.agent"
+                  },
+                  {
+                    "role": "object",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.object"
+                  },
+                  {
+                    "role": "recipient",
+                    "status": "match",
+                    "path": "clauses[0].consequences[0].roles.recipient"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "52dd109634a12de01454915dc78d598ba9d9571acfef70b9f4cebd39bd87967d"
+    },
+    {
+      "handle": "extract-23afd2f411450e29",
+      "sourceRowId": "v8-g3-en-a",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ari sends document P-41 to courier C-41.",
+          "language": "en",
+          "sha256": "8cbfa0710b16cd44c9a22951913947286c5fb2e830418dfdec73fe92cedd9fb2"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "8cbfa0710b16cd44c9a22951913947286c5fb2e830418dfdec73fe92cedd9fb2"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:49fcf4a9c0906d4d96bf7bb2df5d25b7",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "send",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "Ari"
+                },
+                "object": {
+                  "type": "document",
+                  "id": "P-41"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "id": "C-41"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:send",
+              "role:0:agent:ari",
+              "role:0:object:p-41",
+              "role:0:recipient:c-41",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "object",
+                "status": "match",
+                "path": "clauses[0].roles.object"
+              },
+              {
+                "role": "recipient",
+                "status": "match",
+                "path": "clauses[0].roles.recipient"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "8cbfa0710b16cd44c9a22951913947286c5fb2e830418dfdec73fe92cedd9fb2"
+    },
+    {
+      "handle": "extract-27eb17b107d442b7",
+      "sourceRowId": "v8-g3-en-b",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "semanticComparison": null,
+      "sourceRelative": null,
+      "candidateIdentityAvailable": false,
+      "goldIdentityAvailable": true,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": false,
+      "sourceSha256": "07f77ca7160c9ded4616b3ceb6221b05b208b367b6cd4919747cf4d7b68ebdac"
+    },
+    {
+      "handle": "extract-e09d7507201de1a4",
+      "sourceRowId": "v8-g3-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο Ari στέλνει το έγγραφο P-41 στον ταχυμεταφορέα C-41.",
+          "language": "el",
+          "sha256": "bee63208d4cca162cbedcc71856892a3eeb3bf0ed8d5e3da69aafea9cf4dd333"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "bee63208d4cca162cbedcc71856892a3eeb3bf0ed8d5e3da69aafea9cf4dd333"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:49fcf4a9c0906d4d96bf7bb2df5d25b7",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "send",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "Ari"
+                },
+                "object": {
+                  "type": "document",
+                  "id": "P-41"
+                },
+                "recipient": {
+                  "type": "actor",
+                  "id": "C-41"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:send",
+              "role:0:agent:ari",
+              "role:0:object:p-41",
+              "role:0:recipient:c-41",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "object",
+                "status": "match",
+                "path": "clauses[0].roles.object"
+              },
+              {
+                "role": "recipient",
+                "status": "match",
+                "path": "clauses[0].roles.recipient"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "bee63208d4cca162cbedcc71856892a3eeb3bf0ed8d5e3da69aafea9cf4dd333"
+    },
+    {
+      "handle": "extract-805f1a8b354bba88",
+      "sourceRowId": "v8-g4-en-a",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Editor E-61 publishes report R-61 for audience A-61.",
+          "language": "en",
+          "sha256": "071fedbd687eab34ff3af38876dd13908a7d40a07afc2edf8a1d02102ee82721"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "071fedbd687eab34ff3af38876dd13908a7d40a07afc2edf8a1d02102ee82721"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:9dd652e745728fb4c9b7f5f37eddb38c",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "E-61"
+                },
+                "theme": {
+                  "type": "document",
+                  "id": "R-61"
+                },
+                "audience": {
+                  "type": "audience",
+                  "id": "A-61"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:publish",
+              "role:0:agent:e-61",
+              "role:0:audience:a-61",
+              "role:0:theme:r-61",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "audience",
+                "status": "match",
+                "path": "clauses[0].roles.audience"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "071fedbd687eab34ff3af38876dd13908a7d40a07afc2edf8a1d02102ee82721"
+    },
+    {
+      "handle": "extract-fd779e604f28e7d6",
+      "sourceRowId": "v8-g4-en-b",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Report R-61 is made available by editor E-61 to audience A-61.",
+          "language": "en",
+          "sha256": "a597db06adccf7bc1c0b20f4b056da7b4ac976f1a5ffccf60391b2496fc01a4f"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "a597db06adccf7bc1c0b20f4b056da7b4ac976f1a5ffccf60391b2496fc01a4f"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:9dd652e745728fb4c9b7f5f37eddb38c",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "E-61"
+                },
+                "theme": {
+                  "type": "document",
+                  "id": "R-61"
+                },
+                "audience": {
+                  "type": "audience",
+                  "id": "A-61"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:publish",
+              "role:0:agent:e-61",
+              "role:0:audience:a-61",
+              "role:0:theme:r-61",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "audience",
+                "status": "match",
+                "path": "clauses[0].roles.audience"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "a597db06adccf7bc1c0b20f4b056da7b4ac976f1a5ffccf60391b2496fc01a4f"
+    },
+    {
+      "handle": "extract-e3dc9bf5d5d1766a",
+      "sourceRowId": "v8-g4-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο συντάκτης E-61 δημοσιεύει την αναφορά R-61 στο κοινό A-61.",
+          "language": "el",
+          "sha256": "19a6b7965ff34b6fab7b626a9199338d07d0bdee11376202b2e49d594c785da1"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "19a6b7965ff34b6fab7b626a9199338d07d0bdee11376202b2e49d594c785da1"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:9dd652e745728fb4c9b7f5f37eddb38c",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "E-61"
+                },
+                "theme": {
+                  "type": "document",
+                  "id": "R-61"
+                },
+                "audience": {
+                  "type": "audience",
+                  "id": "A-61"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:publish",
+              "role:0:agent:e-61",
+              "role:0:audience:a-61",
+              "role:0:theme:r-61",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "audience",
+                "status": "match",
+                "path": "clauses[0].roles.audience"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "19a6b7965ff34b6fab7b626a9199338d07d0bdee11376202b2e49d594c785da1"
+    },
+    {
+      "handle": "extract-9706fb873303992e",
+      "sourceRowId": "v8-g5-en-a",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Editor E-62 publishes report R-62 for audience A-62.",
+          "language": "en",
+          "sha256": "8eb3a117c069a89ff53f826750ea5225a066e9c7aa03fb2146c687f05c7b8709"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "8eb3a117c069a89ff53f826750ea5225a066e9c7aa03fb2146c687f05c7b8709"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4f5045f3f38c6b119849d459cac24948",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "E-62"
+                },
+                "theme": {
+                  "type": "document",
+                  "id": "R-62"
+                },
+                "audience": {
+                  "type": "audience",
+                  "id": "A-62"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:publish",
+              "role:0:agent:e-62",
+              "role:0:audience:a-62",
+              "role:0:theme:r-62",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "audience",
+                "status": "match",
+                "path": "clauses[0].roles.audience"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "8eb3a117c069a89ff53f826750ea5225a066e9c7aa03fb2146c687f05c7b8709"
+    },
+    {
+      "handle": "extract-cb41a74dc4ee6cae",
+      "sourceRowId": "v8-g5-en-b",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Editor E-62 makes report R-62 available specifically to audience A-62.",
+          "language": "en",
+          "sha256": "465bca4731112e0ed4e97af199b5295a25c0b5cd0057b20e2bd7c4e3485b3725"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "465bca4731112e0ed4e97af199b5295a25c0b5cd0057b20e2bd7c4e3485b3725"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4f5045f3f38c6b119849d459cac24948",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "E-62"
+                },
+                "theme": {
+                  "type": "document",
+                  "id": "R-62"
+                },
+                "audience": {
+                  "type": "audience",
+                  "id": "A-62"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:publish",
+              "role:0:agent:e-62",
+              "role:0:audience:a-62",
+              "role:0:theme:r-62",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "audience",
+                "status": "match",
+                "path": "clauses[0].roles.audience"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "465bca4731112e0ed4e97af199b5295a25c0b5cd0057b20e2bd7c4e3485b3725"
+    },
+    {
+      "handle": "extract-fb43208c92196df4",
+      "sourceRowId": "v8-g5-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Ο συντάκτης E-62 δημοσιεύει την αναφορά R-62 για το κοινό A-62.",
+          "language": "el",
+          "sha256": "23cc147a61a62d068cef45e8cc195e9e49995ef5df77a81a5004ac9ccf6532c8"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "23cc147a61a62d068cef45e8cc195e9e49995ef5df77a81a5004ac9ccf6532c8"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:4f5045f3f38c6b119849d459cac24948",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "publish",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "E-62"
+                },
+                "theme": {
+                  "type": "document",
+                  "id": "R-62"
+                },
+                "audience": {
+                  "type": "audience",
+                  "id": "A-62"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:publish",
+              "role:0:agent:e-62",
+              "role:0:audience:a-62",
+              "role:0:theme:r-62",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "audience",
+                "status": "match",
+                "path": "clauses[0].roles.audience"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": true,
+      "exact": true,
+      "abstentionCorrect": false,
+      "sourceSha256": "23cc147a61a62d068cef45e8cc195e9e49995ef5df77a81a5004ac9ccf6532c8"
+    },
+    {
+      "handle": "extract-73e4c0124cdc365a",
+      "sourceRowId": "v8-g6-en-a",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "On 2027-01-14, Rhea retries task U-31 exactly seven times.",
+          "language": "en",
+          "sha256": "43ee60a6aedea95e216dbbaee2e527dae40dd119acfce0a3e094f5b648a82afd"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "43ee60a6aedea95e216dbbaee2e527dae40dd119acfce0a3e094f5b648a82afd"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:c635306bcde0dd43317bf278a4f84661",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "Rhea"
+                },
+                "theme": {
+                  "type": "task",
+                  "id": "U-31"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 7,
+                  "unit": "times"
+                }
+              },
+              "negated": false,
+              "time": {
+                "type": "date",
+                "value": "2027-01-14"
+              }
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:retry",
+              "role:0:agent:rhea",
+              "role:0:count:7",
+              "role:0:theme:u-31",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "count",
+                "status": "match",
+                "path": "clauses[0].roles.count"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": false,
+      "sourceSha256": "43ee60a6aedea95e216dbbaee2e527dae40dd119acfce0a3e094f5b648a82afd"
+    },
+    {
+      "handle": "extract-92f7b31f7b16a9f3",
+      "sourceRowId": "v8-g6-en-b",
+      "language": "en",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Rhea makes seven further attempts on U-31 on 14 January 2027.",
+          "language": "en",
+          "sha256": "e5499ebb231c3fe7a753cea729b3b671c821c1d1d87fff61c5b6a5feb36fff49"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "e5499ebb231c3fe7a753cea729b3b671c821c1d1d87fff61c5b6a5feb36fff49"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:c635306bcde0dd43317bf278a4f84661",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "Rhea"
+                },
+                "theme": {
+                  "type": "task",
+                  "id": "U-31"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 7,
+                  "unit": "times"
+                }
+              },
+              "negated": false,
+              "time": {
+                "type": "date",
+                "value": "2027-01-14"
+              }
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:retry",
+              "role:0:agent:rhea",
+              "role:0:count:7",
+              "role:0:theme:u-31",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "count",
+                "status": "match",
+                "path": "clauses[0].roles.count"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": false,
+      "sourceSha256": "e5499ebb231c3fe7a753cea729b3b671c821c1d1d87fff61c5b6a5feb36fff49"
+    },
+    {
+      "handle": "extract-729b6938ba7cb010",
+      "sourceRowId": "v8-g6-el",
+      "language": "el",
+      "targetOutcome": "parse",
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Στις 14 Ιανουαρίου 2027, η Rhea προσπαθεί ξανά να εκτελέσει την εργασία U-31 ακριβώς επτά φορές.",
+          "language": "el",
+          "sha256": "51b6fd4175efedd61c225fc0fe0f5198509b0a806354659113eee2e5b1c51e71"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "fresh-source-only-v8-iteration2",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00.000Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "51b6fd4175efedd61c225fc0fe0f5198509b0a806354659113eee2e5b1c51e71"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": true,
+        "grounded": true,
+        "candidateIdentityAvailable": true,
+        "semanticFingerprint": "lfp:2.1:sha256:c635306bcde0dd43317bf278a4f84661",
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": null,
+        "diagnostics": [],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "retry",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "Rhea"
+                },
+                "theme": {
+                  "type": "task",
+                  "id": "U-31"
+                },
+                "count": {
+                  "type": "quantity",
+                  "value": 7,
+                  "unit": "times"
+                }
+              },
+              "negated": false,
+              "time": {
+                "type": "date",
+                "value": "2027-01-14"
+              }
+            }
+          ]
+        }
+      },
+      "structural": {
+        "world": true,
+        "kind": true,
+        "predicate": true,
+        "negated": true,
+        "roleNames": true,
+        "roleTypes": true,
+        "recursive": {
+          "expectedClauses": 1,
+          "candidateClauses": 1,
+          "expectedNestedClauses": 0,
+          "candidateNestedClauses": 0,
+          "clauseCountMatch": true,
+          "nestedClauseCountMatch": true
+        }
+      },
+      "semanticComparison": {
+        "exactFingerprint": true,
+        "semanticIdentityExact": true,
+        "exactCanonical": true,
+        "featureRecall": 1,
+        "featurePrecision": 1,
+        "missingFeatures": [],
+        "extraFeatures": [],
+        "hardMismatch": false,
+        "hardInvariants": [],
+        "explanation": {
+          "features": {
+            "matched": [
+              "kind:event",
+              "negated:0:false",
+              "predicate:0:retry",
+              "role:0:agent:rhea",
+              "role:0:count:7",
+              "role:0:theme:u-31",
+              "world:real"
+            ],
+            "missing": [],
+            "extra": []
+          },
+          "invariants": [],
+          "scores": {
+            "featureRecall": 1,
+            "featurePrecision": 1,
+            "featureRecallReason": "7 of 7 expected features matched",
+            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+          },
+          "reasoning": [
+            "Feature recall: 100.0% (7/7 expected features matched)",
+            "Feature precision: 100.0% (7/7 actual features are expected)"
+          ],
+          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+        }
+      },
+      "sourceRelative": {
+        "status": "match",
+        "matched": 10,
+        "mismatched": 0,
+        "allMismatched": 0,
+        "unresolved": 0,
+        "contractUnresolved": 0,
+        "details": [
+          {
+            "field": "world",
+            "status": "match",
+            "path": "world",
+            "contractUnresolved": false
+          },
+          {
+            "field": "kind",
+            "status": "match",
+            "path": "kind",
+            "reason": "kind_convention",
+            "contractUnresolved": false
+          },
+          {
+            "status": "match",
+            "contractUnresolved": 0,
+            "path": "clauses[0]",
+            "children": [
+              {
+                "field": "predicate",
+                "status": "match",
+                "path": "clauses[0].predicate"
+              },
+              {
+                "field": "negated",
+                "status": "match",
+                "path": "clauses[0].negated"
+              },
+              {
+                "field": "modality",
+                "status": "match",
+                "path": "clauses[0].modality"
+              },
+              {
+                "field": "time",
+                "status": "match",
+                "path": "clauses[0].time"
+              },
+              {
+                "role": "agent",
+                "status": "match",
+                "path": "clauses[0].roles.agent"
+              },
+              {
+                "role": "count",
+                "status": "match",
+                "path": "clauses[0].roles.count"
+              },
+              {
+                "role": "theme",
+                "status": "match",
+                "path": "clauses[0].roles.theme"
+              }
+            ]
+          }
+        ]
+      },
+      "candidateIdentityAvailable": true,
+      "goldIdentityAvailable": true,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": false,
+      "sourceSha256": "51b6fd4175efedd61c225fc0fe0f5198509b0a806354659113eee2e5b1c51e71"
+    },
+    {
+      "handle": "extract-7989bd7d14fe9243",
+      "sourceRowId": "v8-abstain-missing-en",
+      "language": "en",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "semanticComparison": null,
+      "sourceRelative": null,
+      "candidateIdentityAvailable": false,
+      "goldIdentityAvailable": false,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": true,
+      "sourceSha256": "f1482f664ec06f0835d44a67302ba10f2ce47a9fb71a391b3305a740d5537943"
+    },
+    {
+      "handle": "extract-4e55cbb613724493",
+      "sourceRowId": "v8-abstain-missing-el",
+      "language": "el",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "semanticComparison": null,
+      "sourceRelative": null,
+      "candidateIdentityAvailable": false,
+      "goldIdentityAvailable": false,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": true,
+      "sourceSha256": "398b6bf1132f913903434cebf2725c60322773f3d249191eeb02bb19d351b822"
+    },
+    {
+      "handle": "extract-d00fd0174bcc56f0",
+      "sourceRowId": "v8-abstain-missing-el-2",
+      "language": "el",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "semanticComparison": null,
+      "sourceRelative": null,
+      "candidateIdentityAvailable": false,
+      "goldIdentityAvailable": false,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": true,
+      "sourceSha256": "a7d3acfe1665ced8746f122f93ed8523547d0ed2c711ffe1dfb387a182fe433d"
+    },
+    {
+      "handle": "extract-c327f57328c6a79f",
+      "sourceRowId": "v8-abstain-unsupported-en",
+      "language": "en",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "semanticComparison": null,
+      "sourceRelative": null,
+      "candidateIdentityAvailable": false,
+      "goldIdentityAvailable": false,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": true,
+      "sourceSha256": "8b2ff245781a102afb790bcc0a6dcf65b802d6660e7fae61e89686063dffd01b"
+    },
+    {
+      "handle": "extract-03c9ccbe5ee0cf19",
+      "sourceRowId": "v8-abstain-unsupported-el",
+      "language": "el",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "semanticComparison": null,
+      "sourceRelative": null,
+      "candidateIdentityAvailable": false,
+      "goldIdentityAvailable": false,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": true,
+      "sourceSha256": "d21fda126f4f8ea644d13c740db90cc060d5cef824a04d3fa65baa4d06e77b0b"
+    },
+    {
+      "handle": "extract-de4699460f752d18",
+      "sourceRowId": "v8-abstain-unsupported-en-2",
+      "language": "en",
+      "targetOutcome": "abstain",
+      "candidateStatus": "abstain",
+      "submission": null,
+      "structural": null,
+      "semanticComparison": null,
+      "sourceRelative": null,
+      "candidateIdentityAvailable": false,
+      "goldIdentityAvailable": false,
+      "identityComparable": false,
+      "exact": null,
+      "abstentionCorrect": true,
+      "sourceSha256": "38c550634faf61ad0c30e247302fb322215971d67e3324aa573605231d00e379"
+    }
+  ]
+}

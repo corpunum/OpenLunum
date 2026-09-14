@@ -1,0 +1,12 @@
+{
+  "format": "openlunum-ledger-transformation/0.1",
+  "status": "verified-identity-copy",
+  "input": "raw-candidate-ledger-iteration2.jsonl",
+  "inputSha256": "dd60b0a864d419267c711d38090939d0c78fdc8d52869039e37d2814b4a97fea",
+  "output": "candidate-ledger-iteration2.jsonl",
+  "outputSha256": "dd60b0a864d419267c711d38090939d0c78fdc8d52869039e37d2814b4a97fea",
+  "rowCount": 24,
+  "transformation": "byte-identical identity copy; no semantic normalization, repair, or field substitution",
+  "command": "cp raw-candidate-ledger-iteration2.jsonl candidate-ledger-iteration2.jsonl",
+  "semanticTransformation": false
+}
