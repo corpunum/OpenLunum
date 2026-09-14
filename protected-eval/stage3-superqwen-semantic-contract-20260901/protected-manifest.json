@@ -1,0 +1,17 @@
+{
+  "schema": "openlunum-protected-eval/0.1",
+  "id": "stage3-superqwen-semantic-contract-20260901",
+  "datasetId": "openlunum-stage3-protected-semantic-contract-luna-20260901",
+  "version": "v1.0.0",
+  "dataset": {
+    "path": "protected-eval/stage3-superqwen-semantic-contract-20260901/corpus.jsonl",
+    "sha256": "bc392d724815419ed79b9db50103c7c62ebdc03c1b839fb5c9d672322dcaf3b8",
+    "license": "Evaluator-authored protected text; no external corpus or development/heldout expected outputs used."
+  },
+  "instructions": "Run once against the already-loaded named Luna model. Do not tune, retry, replace the model, or use existing development or heldout expected outputs. Preserve raw requests, responses, provenance, and first-run metrics.",
+  "coverage": {
+    "tasks": ["parse", "retrieval"],
+    "languages": ["en", "el", "es", "id", "fr", "de"],
+    "categories": ["equivalent-cross-language-pairs", "negation", "modality", "conditions", "references", "roles", "numbers", "dates", "lists", "ambiguity", "abstention", "critical-negatives"]
+  }
+}
