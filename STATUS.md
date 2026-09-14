@@ -5,7 +5,7 @@
 **Specification line:** Lunum-I — Lunum Interlingua  
 **Workspace version:** 0.2.0  
 **Maturity:** pre-1.0 research-to-reference implementation  
-**Status date:** 2026-08-08
+**Status date:** 2026-09-14
 
 This file is a periodically reconciled summary. GitHub issues are the canonical backlog and acceptance state. Support and maturity claims require exact evidence references; implementation presence alone is not acceptance evidence.
 
@@ -46,7 +46,9 @@ The repository currently includes:
 - backup/restore/rollback exercises with SHA-256 integrity verification;
 - fail-closed exact-head merge policy, protected-data boundary checks, and one-shot worker dispatcher.
 
-2,152 tests across 246 test files, 769 commits, 166 issues resolved, 393 PRs merged. 14 of 16 readiness capabilities at 97%+.
+The counts and readiness percentages in older status snapshots are historical
+inventory, not current acceptance evidence. Current acceptance is determined
+by the relevant GitHub issue, merged main, and versioned evidence artifacts.
 
 This list describes implemented foundations. It does not by itself declare universal correctness, language support, production readiness, or accepted model performance.
 
@@ -94,21 +96,23 @@ Key evidence milestones completed:
 - External replication infrastructure with environment compatibility and tolerance validation;
 - Model-weight hash registry for 5 named models.
 
-Evaluation and reproducibility is at **100%** — all defined action items complete. Historical parse and retention reports produced before the parse-prompt repair are not accepted baselines.
+Historical parse and retention reports produced before the parse-prompt repair
+are not accepted baselines. Evaluation and reproducibility claims remain
+bounded by the current issue acceptance records and evidence registry.
 
 ## Release-gate view
 
 | Gate | Current view |
 |---|---|
-| Stable semantic schema and canonical serialization | Frozen 1.0 schema and fingerprint contracts with 15-vector conformance runner (97%) |
+| Stable semantic schema and canonical serialization | Frozen 1.0 schema and fingerprint contracts with 15-vector conformance runner; acceptance remains evidence-bound |
 | Migration rules across schema versions | Implemented and tested for 0.1/0.2/1.0 paths with identity migration and golden vectors |
-| Multilingual semantic-retention evidence | 216-record dataset across 8 languages, retention execution and regression validation (97%); live model baselines still needed |
-| Tokenizer-aware renderer profiles | 8 profiles across 3 families with execution, regression, and compatibility migration validation (97%) |
-| Safety and mixed-context quality gates | Hard invariant gates, adversarial bypass resistance, safety gate runner, human-review policy (97%); external red-team pending |
-| Four adoption paths | CLI, HTTP API, MCP, and OpenUnum adapter with stress testing and error recovery; independent product adoption evidence limited (50%) |
-| Threat model, rollback, compatibility | Security self-assessment, incident response, compliance audit validation (97%); external pentest pending |
+| Multilingual semantic-retention evidence | Historical datasets and regression infrastructure exist; live model baselines still needed |
+| Tokenizer-aware renderer profiles | Profiles and validation infrastructure exist; current capability claims require matching evidence |
+| Safety and mixed-context quality gates | Hard invariant gates and review infrastructure exist; external red-team remains pending |
+| Four adoption paths | CLI, HTTP API, MCP, and adapter paths with stress testing and error recovery; independent product adoption evidence remains limited |
+| Threat model, rollback, compatibility | Internal validation exists; external pentest remains pending |
 | Property and conformance tests in CI | Implemented with schema conformance runner |
-| Operational reliability | Health probes, SLO compliance, backup/restore, crash recovery, load/failover/cascade simulation (97%); live load pending |
+| Operational reliability | Simulation and recovery infrastructure exists; live load remains pending |
 
 ## Known organizational gaps
 

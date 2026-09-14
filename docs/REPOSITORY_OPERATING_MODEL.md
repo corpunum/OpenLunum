@@ -313,9 +313,15 @@ Issue #255 is the current cleanup ledger. The pre-issue-driven campaign and mark
 
 Process current work in this order unless the vision owner changes it:
 
-1. #255 — historical branch cleanup.
-2. #253 — honest EN/EL/ES/ID parse and retention baselines after confirming two named local model endpoints.
-3. #188 — live branch-protection and merge-control proof.
-4. #256 and #257 — accept or reject preserved distinct proposals and rebuild accepted ideas from current `main`.
+1. #680 — harden source-only extraction scoring before training. The scorer
+   hardening is merged, but the issue remains open until polarity and kind/type
+   semantics are explicit, a fair successor task is frozen, and fresh
+   source-only evidence is independently evaluated.
+2. After #680, select exactly one ready issue from the accepted evidence and
+   current GitHub backlog. Do not resume retired campaign priorities by
+   default.
 
-Threshold calibration must follow accepted baseline evidence; it must not be manufactured from historical runs produced by the broken experiment path.
+Threshold calibration and training must follow accepted fair-baseline
+evidence; they must not be manufactured from historical runs produced by a
+broken experiment path. Historical issue references above are retained in
+their archival records, not as current direction.
