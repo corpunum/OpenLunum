@@ -406,6 +406,7 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
   const missing = results.filter((row) => row.candidateStatus === 'missing').length;
   const malformed = results.filter((row) => row.candidateStatus === 'malformed').length;
   const certification = JSON.parse(fs.readFileSync(`${root}/certification-report.json`, 'utf8'));
+  const artifactHash = (relativePath) => sha256(fs.readFileSync(`${root}/${relativePath}`));
 
   return {
     format: 'openlunum-natural-source-only-extraction/0.2',
@@ -419,7 +420,14 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
       contract: `${root}/extraction/source-only-contract.json`,
       extractor: 'fresh isolated agent; packet restricted to source-only request and frozen contract',
       goldIsolation: 'extractor was instructed not to read certified subset, reviews, manifests, or generator files; scorer accesses gold privately',
+      ledgerRequiredFields: ['handle', 'status', 'candidateSem', 'sourceSha256', 'contractHash', 'extractorType'],
       exactIdentityRule: 'exact identity is scored only when candidate and target have available identities, corresponding role terms use compatible reference/literal identity modes, and every literal identity value is source-anchored or represented by an allowed reference'
+    },
+    artifacts: {
+      sourceOnlyRequestSha256: artifactHash('extraction/source-only-request.jsonl'),
+      sourceOnlyPrivateMapSha256: artifactHash('extraction/source-only-private-map.json'),
+      candidateLedgerSha256: artifactHash('extraction/candidate-ledger.jsonl'),
+      certificationReportSha256: artifactHash('certification-report.json')
     },
     corpus: {
       rows: results.length,

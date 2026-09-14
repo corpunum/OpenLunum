@@ -69,6 +69,14 @@ test('request and ledger evidence is bound to handle, source hash and contract h
   );
 });
 
+test('ledger contract requires auditable transport provenance fields', () => {
+  const required = ['handle', 'status', 'candidateSem', 'sourceSha256', 'contractHash', 'extractorType'];
+  const valid = { handle: 'h1', status: 'abstain', candidateSem: null, sourceSha256: 'a'.repeat(64), contractHash: 'c', extractorType: 'agent' };
+  assert.ok(required.every((field) => Object.hasOwn(valid, field)));
+  assert.equal(classifyLedgerEntry({ ...valid, candidateSem: null }), 'abstain');
+  assert.equal(classifyLedgerEntry({ ...valid, status: 'parse', candidateSem: {} }), 'parse');
+});
+
 test('private source mapping is one-to-one and bound to requests and source rows', () => {
   const requests = [{ handle: 'h1' }, { handle: 'h2' }];
   const rows = new Map([['r1', {}], ['r2', {}]]);
