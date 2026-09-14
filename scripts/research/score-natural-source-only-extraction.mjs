@@ -63,6 +63,20 @@ function normalizedSourceText(value) {
   return String(value).normalize('NFKC').toLocaleLowerCase().replace(/\s+/gu, ' ').trim();
 }
 
+function sourceContainsToken(source, value) {
+  const needle = normalizedSourceText(value);
+  if (!needle) return false;
+  let offset = source.indexOf(needle);
+  while (offset !== -1) {
+    const before = offset === 0 ? '' : source[offset - 1];
+    const after = source[offset + needle.length] ?? '';
+    const isWord = (character) => /[\p{L}\p{N}]/u.test(character);
+    if (!(isWord(before) && isWord(needle[0])) && !(isWord(after) && isWord(needle.at(-1)))) return true;
+    offset = source.indexOf(needle, offset + 1);
+  }
+  return false;
+}
+
 function literalValues(sem) {
   const values = [];
   const visit = (value) => {
@@ -81,7 +95,58 @@ function literalValues(sem) {
 /** Literal identity is comparable only when every literal is visibly anchored in the supplied source. */
 export function sourceAnchoredLiteralIdentity(sem, sourceText) {
   const source = normalizedSourceText(sourceText);
-  return literalValues(sem).every((value) => normalizedSourceText(value) !== '' && source.includes(normalizedSourceText(value)));
+  return literalValues(sem).every((value) => sourceContainsToken(source, value));
+}
+
+function clauseCounts(sem) {
+  let total = 0;
+  let nested = 0;
+  const visit = (clauses, isNested = false) => {
+    for (const clause of clauses ?? []) {
+      total += 1;
+      if (isNested) nested += 1;
+      visit(clause.conditions, true);
+      visit(clause.consequences, true);
+    }
+  };
+  visit(sem?.clauses);
+  return { total, nested };
+}
+
+function nestedComparisonNodes(sourceRelative) {
+  const nodes = [];
+  const visit = (entries) => {
+    for (const entry of entries ?? []) {
+      if (/\.(?:conditions|consequences)\[\d+\]$/u.test(entry.path ?? '')) nodes.push(entry);
+      visit(entry.children);
+    }
+  };
+  visit(sourceRelative?.details);
+  return nodes;
+}
+
+function sourceRelativeDimensionStats(rows) {
+  const dimensions = new Map();
+  const add = (name, node) => {
+    const stat = dimensions.get(name) ?? { observations: 0, match: 0, mismatch: 0, unresolved: 0, contractUnresolved: 0 };
+    stat.observations += 1;
+    if (node.status === 'match') stat.match += 1;
+    if (node.status === 'mismatch') stat.mismatch += 1;
+    if (node.status === 'unresolved') stat.unresolved += 1;
+    if (node.contractUnresolved) stat.contractUnresolved += typeof node.contractUnresolved === 'number' ? node.contractUnresolved : 1;
+    dimensions.set(name, stat);
+  };
+  const visit = (entries) => {
+    for (const entry of entries ?? []) {
+      for (const child of entry.children ?? []) {
+        if (child.field) add(child.field, child);
+        else if (child.role) add('roles', child);
+      }
+      visit(entry.children);
+    }
+  };
+  for (const row of rows) visit(row.sourceRelative?.details);
+  return Object.fromEntries([...dimensions.entries()].sort(([left], [right]) => left.localeCompare(right)));
 }
 
 function sourceScalar(term) {
@@ -188,11 +253,12 @@ export function summarizeGroup(group, members) {
     completeParseOutputs,
     allExplicitAbstentions,
     candidateConverges: completeParseOutputs && new Set(fingerprints).size === 1,
-    exact: members.length > 0 && members.every((row) => row.exact === true || row.abstentionCorrect === true)
+    exact: completeParseOutputs && members.every((row) => row.exact === true)
   };
 }
 
-function summarizeCriticalContrasts(subset, sourceRow, results) {
+export function summarizeCriticalContrasts(subset, sourceRow, results) {
+  const resultBySourceRow = new Map(results.map((result) => [result.sourceRowId, result]));
   const byGroup = new Map();
   for (const result of results) {
     const group = sourceRow.get(result.sourceRowId)?.source.semanticGroup;
@@ -213,15 +279,22 @@ function summarizeCriticalContrasts(subset, sourceRow, results) {
     const [left, right] = [...groups].sort();
     const leftSems = byGroup.get(left) ?? [];
     const rightSems = byGroup.get(right) ?? [];
-    const available = leftSems.length > 0 && rightSems.length > 0 && groups.size === 2;
-    const leftConverges = leftSems.length > 0 && new Set(leftSems.map((sem) => JSON.stringify(sem))).size === 1;
-    const rightConverges = rightSems.length > 0 && new Set(rightSems.map((sem) => JSON.stringify(sem))).size === 1;
+    const completeGroup = (group) => {
+      const expected = subset.filter((row) => row.source.semanticGroup === group);
+      return expected.length > 0 && expected.every((row) => row.target?.outcome === 'parse' && resultBySourceRow.get(row.id)?.submission?.sem);
+    };
+    const leftComplete = completeGroup(left);
+    const rightComplete = completeGroup(right);
+    const available = leftComplete && rightComplete && groups.size === 2;
+    const leftConverges = leftComplete && new Set(leftSems.map((sem) => JSON.stringify(sem))).size === 1;
+    const rightConverges = rightComplete && new Set(rightSems.map((sem) => JSON.stringify(sem))).size === 1;
     const distinct = available ? leftSems.every((leftSem) => rightSems.every((rightSem) => !compareSem(leftSem, rightSem).exactCanonical)) : null;
-    return { pairId, groups: [...groups].sort(), available, leftConverges, rightConverges, distinct };
+    return { pairId, groups: [...groups].sort(), available, leftComplete, rightComplete, leftConverges, rightConverges, distinct };
   });
   return {
     familiesDefined: pairResults.length,
     familiesWithBothOutputs: pairResults.filter((pair) => pair.available).length,
+    familiesWithCompleteOutputs: pairResults.filter((pair) => pair.available).length,
     meaningDistinctionPreserved: pairResults.filter((pair) => pair.distinct === true).length,
     falseEquivalence: pairResults.filter((pair) => pair.distinct === false).length,
     pairResults
@@ -255,7 +328,8 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
         provenance: {
           extractorType: entry.extractorType ?? 'codex_agent',
           extractorId: entry.extractorId ?? 'fresh-source-only',
-          contractHash: request.contractHash
+          contractHash: request.contractHash,
+          timestamp: entry.timestamp ?? '1970-01-01T00:00:00.000Z'
         }
       });
     }
@@ -266,7 +340,7 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
       gold = buildCandidateFromSemanticIR(ir).sem;
     }
     const goldSubmission = gold
-      ? submitCandidate({ sourceText: request.sourceText, sourceLanguage: request.sourceLanguage, candidateSem: gold, provenance: { extractorType: 'other' } })
+      ? submitCandidate({ sourceText: request.sourceText, sourceLanguage: request.sourceLanguage, candidateSem: gold, provenance: { extractorType: 'other', timestamp: '1970-01-01T00:00:00.000Z' } })
       : null;
 
     const candidateClause = submission?.sem?.clauses?.[0];
@@ -277,7 +351,15 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
       predicate: candidateClause.predicate === goldClause.predicate,
       negated: Boolean(candidateClause.negated) === Boolean(goldClause.negated),
       roleNames: JSON.stringify(Object.keys(candidateClause.roles).sort()) === JSON.stringify(Object.keys(goldClause.roles).sort()),
-      roleTypes: Object.keys(goldClause.roles).every((key) => candidateClause.roles[key]?.type === goldClause.roles[key]?.type)
+      roleTypes: Object.keys(goldClause.roles).every((key) => candidateClause.roles[key]?.type === goldClause.roles[key]?.type),
+      recursive: {
+        expectedClauses: clauseCounts(goldSubmission.sem).total,
+        candidateClauses: clauseCounts(submission.sem).total,
+        expectedNestedClauses: clauseCounts(goldSubmission.sem).nested,
+        candidateNestedClauses: clauseCounts(submission.sem).nested,
+        clauseCountMatch: clauseCounts(goldSubmission.sem).total === clauseCounts(submission.sem).total,
+        nestedClauseCountMatch: clauseCounts(goldSubmission.sem).nested === clauseCounts(submission.sem).nested
+      }
     } : null;
     const semanticComparison = submission?.sem && goldSubmission?.sem ? compareSem(goldSubmission.sem, submission.sem, { explain: true }) : null;
     const sourceRelative = submission?.sem && goldSubmission?.sem ? compareSourceRelativeSemantics(goldSubmission.sem, submission.sem) : null;
@@ -379,7 +461,18 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
         roleNames: parse.filter((row) => row.structural?.roleNames).length,
         roleTypes: parse.filter((row) => row.structural?.roleTypes).length,
         modality: parse.filter((row) => row.sourceRelative?.details?.some((detail) => detail.children?.some((child) => child.field === 'modality' && child.status === 'match'))).length,
-        nested: parse.filter((row) => row.sourceRelative?.details?.some((detail) => detail.path.includes('.conditions[') || detail.path.includes('.consequences['))).length
+        nested: parse.filter((row) => nestedComparisonNodes(row.sourceRelative).length > 0).length
+      },
+      recursiveStructural: {
+        clauseCountComparable: parse.filter((row) => row.structural?.recursive).length,
+        clauseCountMatch: parse.filter((row) => row.structural?.recursive?.clauseCountMatch).length,
+        nestedClauseCountComparable: parse.filter((row) => row.structural?.recursive).length,
+        nestedClauseCountMatch: parse.filter((row) => row.structural?.recursive?.nestedClauseCountMatch).length,
+        nestedExpected: parse.reduce((sum, row) => sum + (row.structural?.recursive?.expectedNestedClauses ?? 0), 0),
+        nestedCandidate: parse.reduce((sum, row) => sum + (row.structural?.recursive?.candidateNestedClauses ?? 0), 0),
+        nestedMatched: parse.reduce((sum, row) => sum + nestedComparisonNodes(row.sourceRelative).filter((node) => node.status === 'match').length, 0),
+        nestedMismatched: parse.reduce((sum, row) => sum + nestedComparisonNodes(row.sourceRelative).filter((node) => node.status === 'mismatch').length, 0),
+        nestedUnresolved: parse.reduce((sum, row) => sum + nestedComparisonNodes(row.sourceRelative).filter((node) => node.status === 'unresolved').length, 0)
       },
       byLanguage: Object.fromEntries([...new Set(parse.map((row) => row.language))].sort().map((language) => {
         const rows = parse.filter((row) => row.language === language);
@@ -408,8 +501,20 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
     },
     criticalContrasts: {
       ...criticalContrasts,
-      note: 'Contrast labels remain scorer-private; a family is counted only when both candidate outputs are present, and distinction uses candidate semantics rather than candidate absence.'
+      note: 'Contrast labels remain scorer-private; a family is counted only when every prescribed parse endpoint has a candidate output, and distinction uses candidate semantics rather than candidate absence.'
     },
+    denominators: {
+      rows: results.length,
+      parseTargets: parse.length,
+      abstentionTargets: abstain.length,
+      sourceRelative: parse.filter((row) => row.sourceRelative).length,
+      exactComparable: parse.filter((row) => row.identityComparable).length,
+      groups: groups.length,
+      completeParseGroups: groups.filter((group) => group.completeParseOutputs).length,
+      criticalContrastFamilies: criticalContrasts.familiesDefined,
+      criticalContrastFamiliesComplete: criticalContrasts.familiesWithCompleteOutputs
+    },
+    sourceRelativeDimensions: sourceRelativeDimensionStats(parse),
     items: results
   };
 }

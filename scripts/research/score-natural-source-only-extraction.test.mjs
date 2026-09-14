@@ -6,6 +6,7 @@ import {
   compareSourceRelativeSemantics,
   sourceAnchoredLiteralIdentity,
   identityRepresentationsComparable,
+  summarizeCriticalContrasts,
   summarizeGroup,
   validatePrivateSourceMap,
   validateRequestLedgerBindings
@@ -96,6 +97,32 @@ test('literal exact identity requires source-visible anchoring', () => {
   const sem = { clauses: [{ predicate: 'send', roles: { object: { type: 'document', value: 'F-17' } } }] };
   assert.equal(sourceAnchoredLiteralIdentity(sem, 'Rhea sends file F-17.'), true);
   assert.equal(sourceAnchoredLiteralIdentity(sem, 'Rhea sends file F-18.'), false);
+  const shortId = structuredClone(sem);
+  shortId.clauses[0].roles.object.value = 'F-1';
+  assert.equal(sourceAnchoredLiteralIdentity(shortId, 'Rhea sends file F-17.'), false);
+});
+
+test('abstention-only groups are not exact parse groups', () => {
+  assert.equal(summarizeGroup('abstain', [
+    { submission: null, exact: null, abstentionCorrect: true },
+    { submission: null, exact: null, abstentionCorrect: true }
+  ]).exact, false);
+});
+
+test('critical contrasts require every prescribed endpoint output', () => {
+  const subset = [
+    { id: 'left-1', source: { semanticGroup: 'left' }, target: { outcome: 'parse', criticalNegativePairIds: ['pair'] } },
+    { id: 'left-2', source: { semanticGroup: 'left' }, target: { outcome: 'parse', criticalNegativePairIds: ['pair'] } },
+    { id: 'right-1', source: { semanticGroup: 'right' }, target: { outcome: 'parse', criticalNegativePairIds: ['pair'] } },
+  ];
+  const sourceRow = new Map(subset.map((row) => [row.id, row]));
+  const sem = { world: 'real', kind: 'event', clauses: [{ predicate: 'send', roles: {} }] };
+  const partial = summarizeCriticalContrasts(subset, sourceRow, [
+    { sourceRowId: 'left-1', submission: { sem } },
+    { sourceRowId: 'right-1', submission: { sem: { ...sem, clauses: [{ predicate: 'receive', roles: {} }] } } }
+  ]);
+  assert.equal(partial.pairResults[0].available, false);
+  assert.equal(partial.familiesWithCompleteOutputs, 0);
 });
 
 test('identity comparability checks nested clauses rather than only the first clause', () => {
