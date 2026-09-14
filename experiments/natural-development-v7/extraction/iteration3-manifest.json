@@ -1,0 +1,11 @@
+{
+  "format": "openlunum-natural-source-only-iteration/0.1",
+  "iteration": 3,
+  "status": "historical-superseded-diagnostic",
+  "datasetSha256": "2e657265af82d0de5a7ca525828bcbc2ed97acb607a4c767eb05a8445dcf68c6",
+  "requestSha256": "7d9089236cde7c2a7ede1407ef9f8ca44c31b39232fd1457859a5b0d5abfbb1e",
+  "candidateLedgerSha256": "49e1248e4c8827fb8a2c42a94dc42ede87daadc1ec416803d3c56aa02acff9b4",
+  "resultsSha256": "97dbe2323432564e077c0de0cf3d49dc3914aba3049012d733655fc466ce5c6a",
+  "supersededBy": "iteration4",
+  "reason": "Preserved before the later unsupported-domain source correction changed the frozen request packet. Do not compare directly with iteration4 metrics."
+}

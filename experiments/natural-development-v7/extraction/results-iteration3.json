@@ -7,7 +7,7 @@
     "oneFirstPassPerItem": true,
     "deterministicRepair": false,
     "sourceOnlyRequest": "experiments/natural-development-v7/extraction/source-only-request.jsonl",
-    "sourceOnlyLedger": "experiments/natural-development-v7/extraction/candidate-ledger-iteration4.jsonl",
+    "sourceOnlyLedger": "experiments/natural-development-v7/extraction/candidate-ledger-iteration3.jsonl",
     "contract": "experiments/natural-development-v7/extraction/source-only-contract.json",
     "extractor": "fresh isolated agent; packet restricted to source-only request and frozen contract",
     "goldIsolation": "extractor was instructed not to read certified subset, reviews, manifests, or generator files; scorer accesses gold privately",
@@ -22,10 +22,10 @@
     "exactIdentityRule": "exact identity is scored only when candidate and target have available identities, corresponding role terms use compatible reference/literal identity modes, and every literal identity value is source-anchored or represented by an allowed reference"
   },
   "artifacts": {
-    "sourceOnlyRequestSha256": "464347ce9da8f2f33af4936ca8e2dca93b2ad8e3ffbc7f2ecb835af3b4c174e8",
+    "sourceOnlyRequestSha256": "7d9089236cde7c2a7ede1407ef9f8ca44c31b39232fd1457859a5b0d5abfbb1e",
     "sourceOnlyPrivateMapSha256": "2f13f74b5f0d1c54701a696c72abd2f11f3366e594c5da8498990bec57481c5c",
-    "candidateLedgerSha256": "cb4e589d6d9856b542ccd07a70f7002a67f3c8a4eae7c59a6167390d0c137182",
-    "certificationReportSha256": "67bec1258def60c5b2e245b7451839578f0ccbc26abc2761159b3f045613cf52"
+    "candidateLedgerSha256": "49e1248e4c8827fb8a2c42a94dc42ede87daadc1ec416803d3c56aa02acff9b4",
+    "certificationReportSha256": "ee3d6789797d84de0971a82ba4f256182eb565d4391cc81d4543dc18f2f6c02e"
   },
   "corpus": {
     "rows": 24,
@@ -35,25 +35,25 @@
       "el",
       "en"
     ],
-    "datasetSha256": "5ea6642be06f2f18d72fbadf0baa43d448c8e3e1fbbef769a4f0c7d1ad298501"
+    "datasetSha256": "2e657265af82d0de5a7ca525828bcbc2ed97acb607a4c767eb05a8445dcf68c6"
   },
   "stages": {
-    "parseSubmissions": 18,
-    "explicitAbstentions": 6,
+    "parseSubmissions": 19,
+    "explicitAbstentions": 5,
     "missing": 0,
     "malformed": 0,
-    "transportValid": 18,
-    "structuralValid": 18,
-    "protocolCanonical": 18,
-    "frameValid": 18,
-    "grounded": 18,
-    "identityAvailable": 18
+    "transportValid": 19,
+    "structuralValid": 19,
+    "protocolCanonical": 19,
+    "frameValid": 15,
+    "grounded": 19,
+    "identityAvailable": 15
   },
   "parse": {
     "attempts": 18,
     "exact": 14,
-    "sourceRelativeMatch": 17,
-    "sourceRelativeMismatch": 0,
+    "sourceRelativeMatch": 14,
+    "sourceRelativeMismatch": 3,
     "sourceRelativeUnresolved": 1,
     "sourceRelativeContractUnresolved": 1,
     "identityComparable": 15,
@@ -67,7 +67,7 @@
       "kind": 18,
       "predicate": 18,
       "negated": 18,
-      "roleNames": 18,
+      "roleNames": 15,
       "roleTypes": 17,
       "modality": 18,
       "nested": 6
@@ -102,16 +102,16 @@
   },
   "abstention": {
     "targets": 6,
-    "correct": 6,
-    "unexpectedParses": 0,
+    "correct": 5,
+    "unexpectedParses": 1,
     "missing": 0,
     "malformed": 0
   },
   "multilingual": {
     "groups": 8,
-    "completeParseGroups": 6,
-    "completeAbstentionGroups": 2,
-    "candidateConverging": 5,
+    "completeParseGroups": 5,
+    "completeAbstentionGroups": 1,
+    "candidateConverging": 4,
     "groupResults": [
       {
         "group": "conditional-obligation",
@@ -161,10 +161,10 @@
       {
         "group": "retry-seven",
         "rows": 3,
-        "outputsAvailable": 3,
-        "completeParseOutputs": true,
+        "outputsAvailable": 0,
+        "completeParseOutputs": false,
         "allExplicitAbstentions": false,
-        "candidateConverges": true,
+        "candidateConverges": false,
         "exact": false
       },
       {
@@ -181,7 +181,7 @@
         "rows": 3,
         "outputsAvailable": 0,
         "completeParseOutputs": false,
-        "allExplicitAbstentions": true,
+        "allExplicitAbstentions": false,
         "candidateConverges": false,
         "exact": false
       }
@@ -230,7 +230,7 @@
     "sourceRelative": 18,
     "exactComparable": 15,
     "groups": 8,
-    "completeParseGroups": 6,
+    "completeParseGroups": 5,
     "criticalContrastFamilies": 2,
     "criticalContrastFamiliesComplete": 2
   },
@@ -257,16 +257,16 @@
       "contractUnresolved": 0
     },
     "roles": {
-      "observations": 78,
+      "observations": 81,
       "match": 77,
-      "mismatch": 1,
+      "mismatch": 4,
       "unresolved": 0,
       "contractUnresolved": 1
     },
     "time": {
       "observations": 30,
-      "match": 30,
-      "mismatch": 0,
+      "match": 27,
+      "mismatch": 3,
       "unresolved": 0,
       "contractUnresolved": 0
     }
@@ -286,7 +286,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -325,6 +325,7 @@
           "clauses": [
             {
               "predicate": "enable",
+              "modality": "obligation",
               "roles": {
                 "agent": {
                   "type": "system",
@@ -335,8 +336,6 @@
                   "id": "F-11"
                 }
               },
-              "negated": false,
-              "modality": "obligation",
               "conditions": [
                 {
                   "predicate": "below",
@@ -357,6 +356,7 @@
               "consequences": [
                 {
                   "predicate": "send",
+                  "modality": "obligation",
                   "roles": {
                     "agent": {
                       "type": "system",
@@ -371,10 +371,10 @@
                       "id": "O-11"
                     }
                   },
-                  "negated": false,
-                  "modality": "obligation"
+                  "negated": false
                 }
-              ]
+              ],
+              "negated": false
             }
           ]
         }
@@ -603,7 +603,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -642,6 +642,7 @@
           "clauses": [
             {
               "predicate": "enable",
+              "modality": "obligation",
               "roles": {
                 "agent": {
                   "type": "system",
@@ -652,8 +653,6 @@
                   "id": "F-11"
                 }
               },
-              "negated": false,
-              "modality": "obligation",
               "conditions": [
                 {
                   "predicate": "below",
@@ -674,6 +673,7 @@
               "consequences": [
                 {
                   "predicate": "send",
+                  "modality": "obligation",
                   "roles": {
                     "agent": {
                       "type": "system",
@@ -688,10 +688,10 @@
                       "id": "O-11"
                     }
                   },
-                  "negated": false,
-                  "modality": "obligation"
+                  "negated": false
                 }
-              ]
+              ],
+              "negated": false
             }
           ]
         }
@@ -920,7 +920,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -959,6 +959,7 @@
           "clauses": [
             {
               "predicate": "enable",
+              "modality": "obligation",
               "roles": {
                 "agent": {
                   "type": "system",
@@ -969,8 +970,6 @@
                   "id": "F-11"
                 }
               },
-              "negated": false,
-              "modality": "obligation",
               "conditions": [
                 {
                   "predicate": "below",
@@ -991,6 +990,7 @@
               "consequences": [
                 {
                   "predicate": "send",
+                  "modality": "obligation",
                   "roles": {
                     "agent": {
                       "type": "system",
@@ -1005,10 +1005,10 @@
                       "id": "O-11"
                     }
                   },
-                  "negated": false,
-                  "modality": "obligation"
+                  "negated": false
                 }
-              ]
+              ],
+              "negated": false
             }
           ]
         }
@@ -1237,7 +1237,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -1276,6 +1276,7 @@
           "clauses": [
             {
               "predicate": "enable",
+              "modality": "permission",
               "roles": {
                 "agent": {
                   "type": "system",
@@ -1286,8 +1287,6 @@
                   "id": "F-22"
                 }
               },
-              "negated": false,
-              "modality": "permission",
               "conditions": [
                 {
                   "predicate": "below",
@@ -1308,6 +1307,7 @@
               "consequences": [
                 {
                   "predicate": "send",
+                  "modality": "permission",
                   "roles": {
                     "agent": {
                       "type": "system",
@@ -1322,10 +1322,10 @@
                       "id": "O-22"
                     }
                   },
-                  "negated": false,
-                  "modality": "permission"
+                  "negated": false
                 }
-              ]
+              ],
+              "negated": false
             }
           ]
         }
@@ -1554,7 +1554,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -1593,6 +1593,7 @@
           "clauses": [
             {
               "predicate": "enable",
+              "modality": "permission",
               "roles": {
                 "agent": {
                   "type": "system",
@@ -1603,8 +1604,6 @@
                   "id": "F-22"
                 }
               },
-              "negated": false,
-              "modality": "permission",
               "conditions": [
                 {
                   "predicate": "below",
@@ -1625,6 +1624,7 @@
               "consequences": [
                 {
                   "predicate": "send",
+                  "modality": "permission",
                   "roles": {
                     "agent": {
                       "type": "system",
@@ -1639,10 +1639,10 @@
                       "id": "O-22"
                     }
                   },
-                  "negated": false,
-                  "modality": "permission"
+                  "negated": false
                 }
-              ]
+              ],
+              "negated": false
             }
           ]
         }
@@ -1871,7 +1871,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -1910,6 +1910,7 @@
           "clauses": [
             {
               "predicate": "enable",
+              "modality": "permission",
               "roles": {
                 "agent": {
                   "type": "system",
@@ -1920,8 +1921,6 @@
                   "id": "F-22"
                 }
               },
-              "negated": false,
-              "modality": "permission",
               "conditions": [
                 {
                   "predicate": "below",
@@ -1942,6 +1941,7 @@
               "consequences": [
                 {
                   "predicate": "send",
+                  "modality": "permission",
                   "roles": {
                     "agent": {
                       "type": "system",
@@ -1956,10 +1956,10 @@
                       "id": "O-22"
                     }
                   },
-                  "negated": false,
-                  "modality": "permission"
+                  "negated": false
                 }
-              ]
+              ],
+              "negated": false
             }
           ]
         }
@@ -2188,7 +2188,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -2388,7 +2388,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -2586,7 +2586,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -2784,7 +2784,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -2982,7 +2982,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -3180,7 +3180,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -3378,7 +3378,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -3576,7 +3576,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -3774,7 +3774,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -3972,7 +3972,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -3983,10 +3983,10 @@
         "transportValid": true,
         "structuralValid": true,
         "protocolCanonical": true,
-        "frameValid": true,
+        "frameValid": false,
         "grounded": true,
-        "candidateIdentityAvailable": true,
-        "semanticFingerprint": "lfp:2.1:sha256:c635306bcde0dd43317bf278a4f84661",
+        "candidateIdentityAvailable": false,
+        "semanticFingerprint": null,
         "promotable": false,
         "trust": {
           "status": "candidate",
@@ -4002,8 +4002,10 @@
             "missing_independent_verification"
           ]
         },
-        "failureClass": null,
-        "diagnostics": [],
+        "failureClass": "frame_noncanonical",
+        "diagnostics": [
+          "Role 'time' is not allowed by the canonical 'retry' frame"
+        ],
         "sem": {
           "schema": "lunum-sem/0.1-draft",
           "world": "real",
@@ -4016,21 +4018,21 @@
                   "type": "actor",
                   "id": "Rhea"
                 },
+                "theme": {
+                  "type": "task",
+                  "id": "U-31"
+                },
                 "count": {
                   "type": "quantity",
                   "value": 7,
                   "unit": "times"
                 },
-                "theme": {
-                  "type": "task",
-                  "id": "U-31"
+                "time": {
+                  "type": "date",
+                  "value": "2027-01-14"
                 }
               },
-              "negated": false,
-              "time": {
-                "type": "date",
-                "value": "2027-01-14"
-              }
+              "negated": false
             }
           ]
         }
@@ -4040,7 +4042,7 @@
         "kind": true,
         "predicate": true,
         "negated": true,
-        "roleNames": true,
+        "roleNames": false,
         "roleTypes": true,
         "recursive": {
           "expectedClauses": 1,
@@ -4052,13 +4054,15 @@
         }
       },
       "semanticComparison": {
-        "exactFingerprint": true,
-        "semanticIdentityExact": true,
-        "exactCanonical": true,
+        "exactFingerprint": false,
+        "semanticIdentityExact": false,
+        "exactCanonical": false,
         "featureRecall": 1,
-        "featurePrecision": 1,
+        "featurePrecision": 0.875,
         "missingFeatures": [],
-        "extraFeatures": [],
+        "extraFeatures": [
+          "role:0:time:2027-01-14"
+        ],
         "hardMismatch": false,
         "hardInvariants": [],
         "explanation": {
@@ -4073,27 +4077,30 @@
               "world:real"
             ],
             "missing": [],
-            "extra": []
+            "extra": [
+              "role:0:time:2027-01-14"
+            ]
           },
           "invariants": [],
           "scores": {
             "featureRecall": 1,
-            "featurePrecision": 1,
+            "featurePrecision": 0.875,
             "featureRecallReason": "7 of 7 expected features matched",
-            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+            "featurePrecisionReason": "7 of 8 actual features are in expected set"
           },
           "reasoning": [
             "Feature recall: 100.0% (7/7 expected features matched)",
-            "Feature precision: 100.0% (7/7 actual features are expected)"
+            "Feature precision: 87.5% (7/8 actual features are expected)",
+            "1 extra features in actual"
           ],
-          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+          "summary": "All expected features present but with extra features"
         }
       },
       "sourceRelative": {
-        "status": "match",
-        "matched": 10,
-        "mismatched": 0,
-        "allMismatched": 0,
+        "status": "mismatch",
+        "matched": 8,
+        "mismatched": 3,
+        "allMismatched": 3,
         "unresolved": 0,
         "contractUnresolved": 0,
         "details": [
@@ -4111,7 +4118,7 @@
             "contractUnresolved": false
           },
           {
-            "status": "match",
+            "status": "mismatch",
             "contractUnresolved": 0,
             "path": "clauses[0]",
             "children": [
@@ -4132,8 +4139,9 @@
               },
               {
                 "field": "time",
-                "status": "match",
-                "path": "clauses[0].time"
+                "status": "mismatch",
+                "path": "clauses[0].time",
+                "reason": "presence"
               },
               {
                 "role": "agent",
@@ -4149,12 +4157,18 @@
                 "role": "theme",
                 "status": "match",
                 "path": "clauses[0].roles.theme"
+              },
+              {
+                "role": "time",
+                "status": "mismatch",
+                "path": "clauses[0].roles.time",
+                "reason": "presence"
               }
             ]
           }
         ]
       },
-      "candidateIdentityAvailable": true,
+      "candidateIdentityAvailable": false,
       "goldIdentityAvailable": true,
       "identityComparable": false,
       "exact": null,
@@ -4175,7 +4189,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -4186,10 +4200,10 @@
         "transportValid": true,
         "structuralValid": true,
         "protocolCanonical": true,
-        "frameValid": true,
+        "frameValid": false,
         "grounded": true,
-        "candidateIdentityAvailable": true,
-        "semanticFingerprint": "lfp:2.1:sha256:c635306bcde0dd43317bf278a4f84661",
+        "candidateIdentityAvailable": false,
+        "semanticFingerprint": null,
         "promotable": false,
         "trust": {
           "status": "candidate",
@@ -4205,8 +4219,10 @@
             "missing_independent_verification"
           ]
         },
-        "failureClass": null,
-        "diagnostics": [],
+        "failureClass": "frame_noncanonical",
+        "diagnostics": [
+          "Role 'time' is not allowed by the canonical 'retry' frame"
+        ],
         "sem": {
           "schema": "lunum-sem/0.1-draft",
           "world": "real",
@@ -4219,21 +4235,21 @@
                   "type": "actor",
                   "id": "Rhea"
                 },
+                "theme": {
+                  "type": "task",
+                  "id": "U-31"
+                },
                 "count": {
                   "type": "quantity",
                   "value": 7,
                   "unit": "times"
                 },
-                "theme": {
-                  "type": "task",
-                  "id": "U-31"
+                "time": {
+                  "type": "date",
+                  "value": "2027-01-14"
                 }
               },
-              "negated": false,
-              "time": {
-                "type": "date",
-                "value": "2027-01-14"
-              }
+              "negated": false
             }
           ]
         }
@@ -4243,7 +4259,7 @@
         "kind": true,
         "predicate": true,
         "negated": true,
-        "roleNames": true,
+        "roleNames": false,
         "roleTypes": true,
         "recursive": {
           "expectedClauses": 1,
@@ -4255,13 +4271,15 @@
         }
       },
       "semanticComparison": {
-        "exactFingerprint": true,
-        "semanticIdentityExact": true,
-        "exactCanonical": true,
+        "exactFingerprint": false,
+        "semanticIdentityExact": false,
+        "exactCanonical": false,
         "featureRecall": 1,
-        "featurePrecision": 1,
+        "featurePrecision": 0.875,
         "missingFeatures": [],
-        "extraFeatures": [],
+        "extraFeatures": [
+          "role:0:time:2027-01-14"
+        ],
         "hardMismatch": false,
         "hardInvariants": [],
         "explanation": {
@@ -4276,27 +4294,30 @@
               "world:real"
             ],
             "missing": [],
-            "extra": []
+            "extra": [
+              "role:0:time:2027-01-14"
+            ]
           },
           "invariants": [],
           "scores": {
             "featureRecall": 1,
-            "featurePrecision": 1,
+            "featurePrecision": 0.875,
             "featureRecallReason": "7 of 7 expected features matched",
-            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+            "featurePrecisionReason": "7 of 8 actual features are in expected set"
           },
           "reasoning": [
             "Feature recall: 100.0% (7/7 expected features matched)",
-            "Feature precision: 100.0% (7/7 actual features are expected)"
+            "Feature precision: 87.5% (7/8 actual features are expected)",
+            "1 extra features in actual"
           ],
-          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+          "summary": "All expected features present but with extra features"
         }
       },
       "sourceRelative": {
-        "status": "match",
-        "matched": 10,
-        "mismatched": 0,
-        "allMismatched": 0,
+        "status": "mismatch",
+        "matched": 8,
+        "mismatched": 3,
+        "allMismatched": 3,
         "unresolved": 0,
         "contractUnresolved": 0,
         "details": [
@@ -4314,7 +4335,7 @@
             "contractUnresolved": false
           },
           {
-            "status": "match",
+            "status": "mismatch",
             "contractUnresolved": 0,
             "path": "clauses[0]",
             "children": [
@@ -4335,8 +4356,9 @@
               },
               {
                 "field": "time",
-                "status": "match",
-                "path": "clauses[0].time"
+                "status": "mismatch",
+                "path": "clauses[0].time",
+                "reason": "presence"
               },
               {
                 "role": "agent",
@@ -4352,12 +4374,18 @@
                 "role": "theme",
                 "status": "match",
                 "path": "clauses[0].roles.theme"
+              },
+              {
+                "role": "time",
+                "status": "mismatch",
+                "path": "clauses[0].roles.time",
+                "reason": "presence"
               }
             ]
           }
         ]
       },
-      "candidateIdentityAvailable": true,
+      "candidateIdentityAvailable": false,
       "goldIdentityAvailable": true,
       "identityComparable": false,
       "exact": null,
@@ -4378,7 +4406,7 @@
         },
         "provenance": {
           "extractorType": "agent",
-          "extractorId": "codex-openlunum-v7-iteration4-final",
+          "extractorId": "codex-source-only-v7-iteration3",
           "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
           "timestamp": "2026-09-14T00:00:00Z",
           "contractVersion": "lunum-agent/0.3",
@@ -4389,10 +4417,10 @@
         "transportValid": true,
         "structuralValid": true,
         "protocolCanonical": true,
-        "frameValid": true,
+        "frameValid": false,
         "grounded": true,
-        "candidateIdentityAvailable": true,
-        "semanticFingerprint": "lfp:2.1:sha256:c635306bcde0dd43317bf278a4f84661",
+        "candidateIdentityAvailable": false,
+        "semanticFingerprint": null,
         "promotable": false,
         "trust": {
           "status": "candidate",
@@ -4408,8 +4436,10 @@
             "missing_independent_verification"
           ]
         },
-        "failureClass": null,
-        "diagnostics": [],
+        "failureClass": "frame_noncanonical",
+        "diagnostics": [
+          "Role 'time' is not allowed by the canonical 'retry' frame"
+        ],
         "sem": {
           "schema": "lunum-sem/0.1-draft",
           "world": "real",
@@ -4422,21 +4452,21 @@
                   "type": "actor",
                   "id": "Rhea"
                 },
+                "theme": {
+                  "type": "task",
+                  "id": "U-31"
+                },
                 "count": {
                   "type": "quantity",
                   "value": 7,
                   "unit": "times"
                 },
-                "theme": {
-                  "type": "task",
-                  "id": "U-31"
+                "time": {
+                  "type": "date",
+                  "value": "2027-01-14"
                 }
               },
-              "negated": false,
-              "time": {
-                "type": "date",
-                "value": "2027-01-14"
-              }
+              "negated": false
             }
           ]
         }
@@ -4446,7 +4476,7 @@
         "kind": true,
         "predicate": true,
         "negated": true,
-        "roleNames": true,
+        "roleNames": false,
         "roleTypes": true,
         "recursive": {
           "expectedClauses": 1,
@@ -4458,13 +4488,15 @@
         }
       },
       "semanticComparison": {
-        "exactFingerprint": true,
-        "semanticIdentityExact": true,
-        "exactCanonical": true,
+        "exactFingerprint": false,
+        "semanticIdentityExact": false,
+        "exactCanonical": false,
         "featureRecall": 1,
-        "featurePrecision": 1,
+        "featurePrecision": 0.875,
         "missingFeatures": [],
-        "extraFeatures": [],
+        "extraFeatures": [
+          "role:0:time:2027-01-14"
+        ],
         "hardMismatch": false,
         "hardInvariants": [],
         "explanation": {
@@ -4479,27 +4511,30 @@
               "world:real"
             ],
             "missing": [],
-            "extra": []
+            "extra": [
+              "role:0:time:2027-01-14"
+            ]
           },
           "invariants": [],
           "scores": {
             "featureRecall": 1,
-            "featurePrecision": 1,
+            "featurePrecision": 0.875,
             "featureRecallReason": "7 of 7 expected features matched",
-            "featurePrecisionReason": "7 of 7 actual features are in expected set"
+            "featurePrecisionReason": "7 of 8 actual features are in expected set"
           },
           "reasoning": [
             "Feature recall: 100.0% (7/7 expected features matched)",
-            "Feature precision: 100.0% (7/7 actual features are expected)"
+            "Feature precision: 87.5% (7/8 actual features are expected)",
+            "1 extra features in actual"
           ],
-          "summary": "Perfect match: all expected features present, no extra features, no invariant violations"
+          "summary": "All expected features present but with extra features"
         }
       },
       "sourceRelative": {
-        "status": "match",
-        "matched": 10,
-        "mismatched": 0,
-        "allMismatched": 0,
+        "status": "mismatch",
+        "matched": 8,
+        "mismatched": 3,
+        "allMismatched": 3,
         "unresolved": 0,
         "contractUnresolved": 0,
         "details": [
@@ -4517,7 +4552,7 @@
             "contractUnresolved": false
           },
           {
-            "status": "match",
+            "status": "mismatch",
             "contractUnresolved": 0,
             "path": "clauses[0]",
             "children": [
@@ -4538,8 +4573,9 @@
               },
               {
                 "field": "time",
-                "status": "match",
-                "path": "clauses[0].time"
+                "status": "mismatch",
+                "path": "clauses[0].time",
+                "reason": "presence"
               },
               {
                 "role": "agent",
@@ -4555,12 +4591,18 @@
                 "role": "theme",
                 "status": "match",
                 "path": "clauses[0].roles.theme"
+              },
+              {
+                "role": "time",
+                "status": "mismatch",
+                "path": "clauses[0].roles.time",
+                "reason": "presence"
               }
             ]
           }
         ]
       },
-      "candidateIdentityAvailable": true,
+      "candidateIdentityAvailable": false,
       "goldIdentityAvailable": true,
       "identityComparable": false,
       "exact": null,
@@ -4623,8 +4665,76 @@
       "sourceRowId": "v7-abstain-unsupported-en",
       "language": "en",
       "targetOutcome": "abstain",
-      "candidateStatus": "abstain",
-      "submission": null,
+      "candidateStatus": "parse",
+      "submission": {
+        "source": {
+          "text": "Dana performs operation Q-81 for 30 EUR.",
+          "language": "en",
+          "sha256": "49b1340b5528cbb1be4c0178236f22ed922d22376ca7918df75f5b49bbf13089"
+        },
+        "provenance": {
+          "extractorType": "agent",
+          "extractorId": "codex-source-only-v7-iteration3",
+          "contractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+          "timestamp": "2026-09-14T00:00:00Z",
+          "contractVersion": "lunum-agent/0.3",
+          "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+          "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+          "sourceHash": "49b1340b5528cbb1be4c0178236f22ed922d22376ca7918df75f5b49bbf13089"
+        },
+        "transportValid": true,
+        "structuralValid": true,
+        "protocolCanonical": true,
+        "frameValid": false,
+        "grounded": true,
+        "candidateIdentityAvailable": false,
+        "semanticFingerprint": null,
+        "promotable": false,
+        "trust": {
+          "status": "candidate",
+          "confidence": 0,
+          "promoted": false,
+          "requiresHumanReview": true,
+          "reasons": [
+            "evidence_confidence_below_0.90",
+            "insufficient_confidence_evidence",
+            "missing_classification_evidence",
+            "risk_unknown",
+            "category_not_auto_promotable:event",
+            "missing_independent_verification"
+          ]
+        },
+        "failureClass": "frame_noncanonical",
+        "diagnostics": [
+          "Registered predicate 'run' has no canonical semantic frame"
+        ],
+        "sem": {
+          "schema": "lunum-sem/0.1-draft",
+          "world": "real",
+          "kind": "event",
+          "clauses": [
+            {
+              "predicate": "run",
+              "roles": {
+                "agent": {
+                  "type": "actor",
+                  "id": "Dana"
+                },
+                "theme": {
+                  "type": "process",
+                  "id": "Q-81"
+                },
+                "amount": {
+                  "type": "quantity",
+                  "value": 30,
+                  "unit": "EUR"
+                }
+              },
+              "negated": false
+            }
+          ]
+        }
+      },
       "structural": null,
       "semanticComparison": null,
       "sourceRelative": null,
@@ -4632,8 +4742,8 @@
       "goldIdentityAvailable": false,
       "identityComparable": false,
       "exact": null,
-      "abstentionCorrect": true,
-      "sourceSha256": "8b2ff245781a102afb790bcc0a6dcf65b802d6660e7fae61e89686063dffd01b"
+      "abstentionCorrect": false,
+      "sourceSha256": "49b1340b5528cbb1be4c0178236f22ed922d22376ca7918df75f5b49bbf13089"
     },
     {
       "handle": "extract-023-1b5dd234dc68",
