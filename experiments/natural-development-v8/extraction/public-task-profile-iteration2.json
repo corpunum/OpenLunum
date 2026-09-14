@@ -1,0 +1,53 @@
+{
+  "format": "openlunum-public-task-profile/0.1",
+  "version": "v8-iteration2",
+  "visibility": "extractor-public",
+  "purpose": "Explicit task-profile projection of the frozen public extraction rules; contains no gold targets, groups, contrasts, reviews, or private mappings.",
+  "kindPolicy": {
+    "conditional": "conditional_instruction",
+    "ordinaryDeclarativeAction": "event"
+  },
+  "conditionalRepresentation": {
+    "root": "first primary action in the main clause",
+    "consequences": "remaining coordinated actions as nested consequences of the root",
+    "conditionAttachment": "condition attaches to the root conditional clause",
+    "repeatNamedAgent": true,
+    "repeatExplicitModality": true,
+    "maximumNestedDepth": 1
+  },
+  "rolePolicy": {
+    "send": { "required": ["agent", "object"], "optional": ["recipient", "destination"], "recipientAndDestinationMutuallyExclusive": true },
+    "publish": { "required": ["agent", "theme"], "optional": ["audience"] },
+    "retry": { "required": ["agent"], "optional": ["theme", "count"], "countType": "quantity" },
+    "below": { "required": ["subject", "value"], "thresholdRoleName": "value" },
+    "enable": { "required": ["theme"], "optional": ["agent"] }
+  },
+  "termTypePolicy": {
+    "system": "system",
+    "person": "actor",
+    "document": "document",
+    "file": "document",
+    "report": "document",
+    "notice": "document",
+    "parcel": "object",
+    "audience": "audience",
+    "task": "task",
+    "metric": "metric",
+    "feature": "feature",
+    "quantity": "quantity",
+    "date": "date"
+  },
+  "encodingPolicy": {
+    "namedSourceIdentifiers": "id",
+    "literalQuantitiesAndDates": "value",
+    "explicitQuantityUnit": "preserve exactly; for seven times use {type: quantity, value: 7, unit: times}",
+    "explicitDate": "clause-level time term"
+  },
+  "modalityPolicy": "obligation and permission are distinct; preserve explicit modality on root and coordinated consequences; lexical negation uses negated=true",
+  "abstentionPolicy": {
+    "explicit": "status abstain with candidateSem null",
+    "reasons": ["unsupported", "ambiguous", "unresolved"],
+    "missingRequiredFrameArgument": "unsupported",
+    "unsupportedDomain": "unsupported"
+  }
+}

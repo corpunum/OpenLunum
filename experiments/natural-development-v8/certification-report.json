@@ -1,0 +1,29 @@
+{
+  "format": "openlunum-natural-development-certification/0.1",
+  "status": "diagnostic-development-only",
+  "protected": false,
+  "trainingGoldEligible": false,
+  "datasetSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "targetValidationSha256": "f1cdced76db26cf1af5a13f87664ed28c77668309d9087129427dd578b4182b8",
+  "rows": 24,
+  "parseTargets": 18,
+  "abstentionTargets": 6,
+  "humanReview": {
+    "greek": "wording-only-self-attested-native-review-bound-separately",
+    "english": "unavailable",
+    "targetSem": "independently-validated-but-not-human-certified"
+  },
+  "extraction": {
+    "status": "fresh-first-pass-recorded",
+    "localInferenceUsed": false,
+    "deterministicRepair": false,
+    "attemptsPerItem": 1
+  },
+  "limitations": [
+    "prompt-level isolation only",
+    "no English human/native review",
+    "no protected evaluation",
+    "no training eligibility",
+    "raw-to-derived ledger is an identity copy with separate hash evidence"
+  ]
+}
