@@ -158,3 +158,12 @@ test('source-relative contract provenance propagates through nested clauses', ()
   assert.equal(result.status, 'unresolved');
   assert.ok(result.contractUnresolved > 0);
 });
+
+test('source-relative comparison detects clause-level time changes', () => {
+  const left = { world: 'real', kind: 'event', clauses: [{ predicate: 'deadline', roles: {}, time: { type: 'date', value: '2026-09-14' } }] };
+  const right = structuredClone(left);
+  right.clauses[0].time.value = '2026-09-15';
+  const result = compareSourceRelativeSemantics(left, right);
+  assert.equal(result.status, 'mismatch');
+  assert.ok(result.details.find((detail) => detail.path === 'clauses[0]').children.some((child) => child.field === 'time' && child.status === 'mismatch'));
+});
