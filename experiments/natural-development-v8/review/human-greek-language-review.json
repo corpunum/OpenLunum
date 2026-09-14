@@ -1,0 +1,75 @@
+{
+  "format": "openlunum-human-greek-language-review/0.1",
+  "source": "GitHub issue #685 newest human review comment",
+  "commentUrl": "https://github.com/corpunum/OpenLunum/issues/685#issuecomment-5665946739",
+  "reviewedAt": "2026-09-14T14:54:40Z",
+  "reviewer": {
+    "type": "human",
+    "handle": "corpunum",
+    "nativeLanguage": "el",
+    "selfAttested": true
+  },
+  "scope": "language-review-only",
+  "limitations": [
+    "does not certify target Sem",
+    "does not review English",
+    "does not certify protected or training readiness"
+  ],
+  "wordingChangesRequireFreshReview": true,
+  "decisions": [
+    {
+      "sourceId": "v8-g1-el",
+      "text": "Όταν η μπαταρία B-11 πέσει κάτω από 20%, το σύστημα S-11 πρέπει να ενεργοποιήσει τη λειτουργία F-11 και να στείλει την ειδοποίηση N-11 στον χειριστή O-11.",
+      "sha256": "5607198c43cd89cec38a083713c22a431374b6734da2d6a6288fdb6ac9c5adc6",
+      "decision": "accepted-exactly"
+    },
+    {
+      "sourceId": "v8-g2-el",
+      "text": "Αν η μπαταρία B-22 είναι κάτω από 15%, επιτρέπεται στο σύστημα S-22 να ενεργοποιήσει τη λειτουργία F-22 και να στείλει την ειδοποίηση N-22 στον χειριστή O-22.",
+      "sha256": "52dd109634a12de01454915dc78d598ba9d9571acfef70b9f4cebd39bd87967d",
+      "decision": "accepted-exactly"
+    },
+    {
+      "sourceId": "v8-g3-el",
+      "text": "Ο Ari στέλνει το έγγραφο P-41 στον ταχυμεταφορέα C-41.",
+      "sha256": "bee63208d4cca162cbedcc71856892a3eeb3bf0ed8d5e3da69aafea9cf4dd333",
+      "decision": "accepted-exactly"
+    },
+    {
+      "sourceId": "v8-g4-el",
+      "text": "Ο συντάκτης E-61 δημοσιεύει την αναφορά R-61 στο κοινό A-61.",
+      "sha256": "19a6b7965ff34b6fab7b626a9199338d07d0bdee11376202b2e49d594c785da1",
+      "decision": "accepted-exactly"
+    },
+    {
+      "sourceId": "v8-g5-el",
+      "text": "Ο συντάκτης E-62 δημοσιεύει την αναφορά R-62 για το κοινό A-62.",
+      "sha256": "23cc147a61a62d068cef45e8cc195e9e49995ef5df77a81a5004ac9ccf6532c8",
+      "decision": "accepted-exactly"
+    },
+    {
+      "sourceId": "v8-g6-el",
+      "text": "Στις 14 Ιανουαρίου 2027, η Rhea προσπαθεί ξανά να εκτελέσει την εργασία U-31 ακριβώς επτά φορές.",
+      "sha256": "51b6fd4175efedd61c225fc0fe0f5198509b0a806354659113eee2e5b1c51e71",
+      "decision": "accepted-exactly"
+    },
+    {
+      "sourceId": "v8-abstain-missing-el",
+      "text": "Η Dana επιτρέπει στη Mira να έχει πρόσβαση.",
+      "sha256": "398b6bf1132f913903434cebf2725c60322773f3d249191eeb02bb19d351b822",
+      "decision": "accepted-exactly"
+    },
+    {
+      "sourceId": "v8-abstain-missing-el-2",
+      "text": "Η Dana επιτρέπει στη Mira να αποκτήσει πρόσβαση.",
+      "sha256": "a7d3acfe1665ced8746f122f93ed8523547d0ed2c711ffe1dfb387a182fe433d",
+      "decision": "accepted-exactly"
+    },
+    {
+      "sourceId": "v8-abstain-unsupported-el",
+      "text": "Η Dana μεταφέρει 30 EUR από τον λογαριασμό Q-82.",
+      "sha256": "d21fda126f4f8ea644d13c740db90cc060d5cef824a04d3fa65baa4d06e77b0b",
+      "decision": "accepted-exactly"
+    }
+  ]
+}

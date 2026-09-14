@@ -1,0 +1,35 @@
+{
+  "format": "openlunum-natural-development-target-validation/0.1",
+  "status": "accepted-for-development-freeze",
+  "evaluator": {
+    "type": "independent-read-only-luna-subagent",
+    "nickname": "Pasteur",
+    "agentId": "01a0a070-d42e-7471-a593-a72392a67ad2"
+  },
+  "scope": "V8 target Sem and deterministic frame/protocol validity only",
+  "datasetSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "taskContractSha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+  "rows": 24,
+  "parseTargets": 18,
+  "abstentionTargets": 6,
+  "parseTargetsDeterministicallyValid": 18,
+  "abstentionsContractValid": 6,
+  "greekReviewBindingsValid": 9,
+  "checks": [
+    "buildCandidateFromSemanticIR",
+    "strict protocol normalization",
+    "canonical frame validation",
+    "conditional root enable and nested send",
+    "repeated agent and modality",
+    "send object/document and recipient",
+    "publish audience distinction",
+    "retry quantity and clause-level date",
+    "unsupported abstention semantics"
+  ],
+  "limitations": [
+    "does not certify English native quality",
+    "does not expand human Greek review beyond wording",
+    "does not certify protected evaluation or training eligibility"
+  ],
+  "v7Untouched": true
+}

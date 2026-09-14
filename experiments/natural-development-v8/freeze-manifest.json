@@ -1,0 +1,60 @@
+{
+  "format": "openlunum-natural-development-freeze/0.1",
+  "version": "v8",
+  "status": "frozen-awaiting-extraction",
+  "protected": false,
+  "trainingGoldEligible": false,
+  "englishReview": {
+    "status": "unavailable",
+    "humanNativeCertification": false
+  },
+  "greekReview": {
+    "status": "wording-only",
+    "file": "review/human-greek-language-review.json",
+    "reviewerSelfAttestedNative": true
+  },
+  "dataset": "certified-subset.jsonl",
+  "datasetSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "taskContract": "task-contract.json",
+  "taskContractSha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+  "sourceOnlyContract": "extraction/source-only-contract.json",
+  "sourceOnlyContractSha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e",
+  "canonicalContractHash": "2a3b11aa2fe7585e6fc7cfc6f571c63e9ec0443ed8832eced60b51200b38c8c3",
+  "sourceOnlyRequest": "extraction/source-only-request.jsonl",
+  "sourceOnlyRequestSha256": "5e884ba6b9c8971fd9015aaec75abe316eb97fd0f86181bd1c36e7d8ab45d73f",
+  "privateMap": "extraction/source-only-private-map.json",
+  "privateMapSha256": "416fce1fefa5385c746d97d76cf5763d8d8042bf00fa57136c6b47f3e896b64e",
+  "humanGreekReviewSha256": "367432993e72903622ae8c8ba6d2be0fe3449803001f16211ee6a99f4d8b352c",
+  "targetValidation": "target-validation.json",
+  "targetValidationSha256": "f1cdced76db26cf1af5a13f87664ed28c77668309d9087129427dd578b4182b8",
+  "rows": 24,
+  "languages": [
+    "el",
+    "en"
+  ],
+  "parseRows": 18,
+  "abstentionRows": 6,
+  "attemptPolicy": {
+    "firstPassOnly": true,
+    "retries": 0,
+    "deterministicRepair": false,
+    "postHocSemanticNormalization": false
+  },
+  "extractorVisibility": [
+    "opaque handle",
+    "source text",
+    "source language",
+    "frozen public extraction contract"
+  ],
+  "extractorForbidden": [
+    "gold target",
+    "semantic group",
+    "critical contrast",
+    "review files",
+    "private map",
+    "V7/V8 candidates",
+    "generator files"
+  ],
+  "targetSemValidation": "required-before-extraction-and-independent-review",
+  "identityPolicy": "Compare exact identity only for source-visible stable names, identifiers, literal quantities, dates, and task-typed roles. Never infer private handles."
+}
