@@ -1,0 +1,9 @@
+{
+  "reviewerAgentId": "01a09f61-cfb2-7b53-8f99-6bf73bc072e7",
+  "reviewType": "adversarial-freeze-review",
+  "status": "accepted",
+  "scope": "all 14 rows, source-only packet, source anchors, structural/core validity, critical pair coverage",
+  "findings": "All 12 parse targets pass transport, structural, protocol, frame, grounding, identity and source-anchor checks; both critical pairs have complete bilingual coverage; no extractor-visible leakage found.",
+  "datasetSha256": "2a623b70bdc89113ada97a69dfc536e6f49fc18170119fe4e9e1c10abfa6990a",
+  "humanNativeCertification": false
+}

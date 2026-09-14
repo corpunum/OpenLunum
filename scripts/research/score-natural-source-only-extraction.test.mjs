@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import {
   classifyLedgerEntry,
   compareSourceRelativeSemantics,
+  sourceAnchoredLiteralIdentity,
   identityRepresentationsComparable,
   summarizeGroup,
   validatePrivateSourceMap,
@@ -89,6 +90,12 @@ test('identity comparability supports matching literal modes and rejects referen
     clauses: [{ predicate: 'retry', roles: { count: { type: 'quantity', value: 5 }, theme: { type: 'task', id: 'upload-task' } } }]
   };
   assert.equal(identityRepresentationsComparable(literalA, reference), false);
+});
+
+test('literal exact identity requires source-visible anchoring', () => {
+  const sem = { clauses: [{ predicate: 'send', roles: { object: { type: 'document', value: 'F-17' } } }] };
+  assert.equal(sourceAnchoredLiteralIdentity(sem, 'Rhea sends file F-17.'), true);
+  assert.equal(sourceAnchoredLiteralIdentity(sem, 'Rhea sends file F-18.'), false);
 });
 
 test('identity comparability checks nested clauses rather than only the first clause', () => {

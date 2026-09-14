@@ -1,0 +1,9 @@
+{
+  "reviewerAgentId": "01a09f5a-1d92-7b21-a8d7-54814a6deaaa",
+  "reviewType": "independent-source-level-target-review",
+  "status": "accepted",
+  "scope": "all 14 rows, English/Greek wording, frame validity, kind/type policy, polarity, quantity/time, audience, abstention, packet leakage",
+  "findings": "All 12 parse targets and 2 abstentions accepted after corrections; S-1 is source-visible in all publish rows; retry uses numeric 3; public packet excludes private metadata and contrast definitions.",
+  "datasetSha256": "2a623b70bdc89113ada97a69dfc536e6f49fc18170119fe4e9e1c10abfa6990a",
+  "humanNativeCertification": false
+}
