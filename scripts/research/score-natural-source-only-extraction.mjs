@@ -103,7 +103,10 @@ function sourceClauseComparison(expected, actual, path = 'clauses[0]') {
     for (let index = 0; index < count; index += 1) nested.push(sourceClauseComparison(left[index], right[index], `${path}.${field}[${index}]`));
   }
   const children = [...fieldResults, ...roles, ...nested];
-  return { status: children.every((child) => child.status === 'match') ? 'match' : children.some((child) => child.status === 'mismatch') ? 'mismatch' : 'unresolved', path, children };
+  const contractUnresolved = children.reduce((sum, child) => sum + (typeof child.contractUnresolved === 'number' ? child.contractUnresolved : child.contractUnresolved === true ? 1 : 0), 0);
+  const concreteMismatch = children.some((child) => child.status === 'mismatch' && child.contractUnresolved !== true);
+  const unresolved = children.some((child) => child.status === 'unresolved');
+  return { status: concreteMismatch ? 'mismatch' : contractUnresolved > 0 || unresolved ? 'unresolved' : 'match', contractUnresolved, path, children };
 }
 
 export function compareSourceRelativeSemantics(expected, actual) {
@@ -113,13 +116,14 @@ export function compareSourceRelativeSemantics(expected, actual) {
   const clauses = [];
   for (let index = 0; index < Math.max(left.length, right.length); index += 1) clauses.push(sourceClauseComparison(left[index], right[index], `clauses[${index}]`));
   const children = [...topLevel, ...clauses];
-  const statuses = children.flatMap((child) => [child, ...(child.children ?? [])]);
+  const flatten = (nodes) => nodes.flatMap((node) => [node, ...flatten(node.children ?? [])]);
+  const statuses = flatten(children);
   const matched = statuses.filter((item) => item.status === 'match').length;
   const allMismatched = statuses.filter((item) => item.status === 'mismatch').length;
   const mismatched = statuses.filter((item) => item.status === 'mismatch' && item.contractUnresolved !== true).length;
   const unresolved = statuses.filter((item) => item.status === 'unresolved').length;
   const contractUnresolved = statuses.filter((item) => item.contractUnresolved === true).length;
-  return { status: mismatched > 0 ? 'mismatch' : unresolved > 0 ? 'unresolved' : 'match', matched, mismatched, allMismatched, unresolved, contractUnresolved, details: children };
+  return { status: mismatched > 0 ? 'mismatch' : contractUnresolved > 0 || unresolved > 0 ? 'unresolved' : 'match', matched, mismatched, allMismatched, unresolved, contractUnresolved, details: children };
 }
 
 function clauseIdentityModesCompatible(left, right) {

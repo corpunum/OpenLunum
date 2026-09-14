@@ -146,6 +146,15 @@ test('source-relative comparison reports a term-type disagreement as a mismatch 
   const right = structuredClone(left);
   right.clauses[0].roles.theme.type = 'concept';
   const result = compareSourceRelativeSemantics(left, right);
-  assert.equal(result.status, 'mismatch');
+  assert.equal(result.status, 'unresolved');
+  assert.ok(result.contractUnresolved > 0);
+});
+
+test('source-relative contract provenance propagates through nested clauses', () => {
+  const left = { world: 'real', kind: 'event', clauses: [{ predicate: 'require', roles: {}, conditions: [{ predicate: 'publish', roles: { theme: { type: 'document', value: 'report' } } }] }] };
+  const right = structuredClone(left);
+  right.clauses[0].conditions[0].roles.theme.type = 'concept';
+  const result = compareSourceRelativeSemantics(left, right);
+  assert.equal(result.status, 'unresolved');
   assert.ok(result.contractUnresolved > 0);
 });
