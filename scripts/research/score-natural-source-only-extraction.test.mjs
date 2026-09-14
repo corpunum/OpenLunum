@@ -9,6 +9,7 @@ import {
   summarizeCriticalContrasts,
   summarizeGroup,
   validatePrivateSourceMap,
+  validateRequestContractBinding,
   validateRequestLedgerBindings
 } from './score-natural-source-only-extraction.mjs';
 
@@ -67,6 +68,16 @@ test('request and ledger evidence is bound to handle, source hash and contract h
     () => validateRequestLedgerBindings([request, request], [entry]),
     /duplicate_or_missing_request_handle:h1/
   );
+});
+
+test('request contract hashes are bound to the persisted contract artifact', () => {
+  const contract = { contractVersion: 'test/0.1', rules: ['canonical'] };
+  const raw = JSON.stringify(contract, null, 2);
+  const hash = sha256(JSON.stringify(contract));
+  const requests = [{ handle: 'h1', contractHash: hash }];
+  assert.equal(validateRequestContractBinding(requests, raw), hash);
+  assert.throws(() => validateRequestContractBinding([{ ...requests[0], contractHash: '0'.repeat(64) }], raw), /request_contract_hash_mismatch:h1/);
+  assert.throws(() => validateRequestContractBinding(requests, '{'), /source_only_contract_invalid_json/);
 });
 
 test('request ledger validation rejects undeclared provenance fields', () => {

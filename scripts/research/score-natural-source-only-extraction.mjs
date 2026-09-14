@@ -39,6 +39,20 @@ export function validateRequestLedgerBindings(requests, ledger) {
   return { requestByHandle, ledgerByHandle };
 }
 
+export function validateRequestContractBinding(requests, contractRaw) {
+  let contract;
+  try {
+    contract = JSON.parse(contractRaw);
+  } catch {
+    throw new Error('source_only_contract_invalid_json');
+  }
+  const contractHash = sha256(JSON.stringify(contract));
+  for (const request of requests) {
+    if (request.contractHash !== contractHash) throw new Error(`request_contract_hash_mismatch:${request.handle}`);
+  }
+  return contractHash;
+}
+
 export function validatePrivateSourceMap(privateMap, requests, sourceRows) {
   if (!privateMap || typeof privateMap !== 'object' || Array.isArray(privateMap)) throw new Error('private_map_not_object');
   const requestHandles = new Set(requests.map((request) => request.handle));
@@ -310,6 +324,8 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
   const ledger = loadJsonLines(`${root}/${ledgerFile}`);
   const requests = loadJsonLines(`${root}/extraction/source-only-request.jsonl`);
   const privateMap = JSON.parse(fs.readFileSync(`${root}/extraction/source-only-private-map.json`, 'utf8'));
+  const sourceOnlyContractRaw = fs.readFileSync(`${root}/extraction/source-only-contract.json`, 'utf8');
+  validateRequestContractBinding(requests, sourceOnlyContractRaw);
   const { ledgerByHandle } = validateRequestLedgerBindings(requests, ledger);
   const sourceRow = new Map(subset.map((row) => [row.id, row]));
   if (sourceRow.size !== subset.length) throw new Error('duplicate_source_row_id');
