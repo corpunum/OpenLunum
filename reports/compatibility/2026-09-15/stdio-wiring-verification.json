@@ -1,0 +1,27 @@
+{
+  "schema": "openlunum-client-compatibility-stdio-verification/0.1",
+  "testedSourceCommit": "b80bc9b4a27f15c2a6ad2d562606494c73d2a9a4",
+  "command": "pnpm --filter @corpunum/lunum-mcp test:unit",
+  "buildPrerequisites": [
+    "pnpm --filter @corpunum/lunum build",
+    "pnpm --filter @corpunum/lunum-mcp build"
+  ],
+  "result": {
+    "compiledMcpTests": "60 passed",
+    "stdioTests": "2 passed",
+    "stdioTestsRunExactlyOnce": true,
+    "unexpectedExitRejectsPending": true,
+    "cleanupBounded": true,
+    "stderrSeparatedFromProtocol": true
+  },
+  "dispatcher": {
+    "productionLock": "/tmp/openlunum-pi-dispatch-once.lock",
+    "testLockNamespace": "per-temporary-fixture path via OPENLUNUM_PI_DISPATCH_LOCK_PATH",
+    "serialTestResult": "14 passed",
+    "collisionPolicy": "production default remains global and nonblocking; tests retain same-fixture collision behavior"
+  },
+  "limitations": [
+    "This verifies deterministic MCP transport and test wiring, not semantic extraction.",
+    "The full repository gate must still be checked on the publication candidate."
+  ]
+}

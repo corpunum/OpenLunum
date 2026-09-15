@@ -9,8 +9,8 @@ import path from 'node:path';
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const serverPath = path.join(repositoryRoot, 'packages/mcp/dist/bin/lunum-mcp.js');
 
-function startServer() {
-  const child = spawn(process.execPath, [serverPath], {
+function startServer(executable = process.execPath, args = [serverPath]) {
+  const child = spawn(executable, args, {
     cwd: repositoryRoot,
     stdio: ['pipe', 'pipe', 'pipe'],
     env: { ...process.env, LUNUM_COMPACTION: 'off', LUNUM_MULTILINGUAL: 'off', LUNUM_CONTEXT_MODE: 'natural' },
@@ -18,26 +18,50 @@ function startServer() {
   const lines = createInterface({ input: child.stdout });
   const pending = new Map();
   const stderr = [];
+  let exited = false;
+  child.stdin.on('error', () => {});
   child.stderr.on('data', (chunk) => stderr.push(String(chunk)));
+  child.on('exit', (code, signal) => {
+    exited = true;
+    const error = new Error(`stdio MCP server exited unexpectedly (code=${code}, signal=${signal})`);
+    for (const { reject, timer } of pending.values()) {
+      clearTimeout(timer);
+      reject(error);
+    }
+    pending.clear();
+  });
   lines.on('line', (line) => {
     let message;
     try { message = JSON.parse(line); } catch { return; }
-    if (message.id !== undefined) pending.get(message.id)?.(message);
+    if (message.id !== undefined) pending.get(message.id)?.resolve(message);
   });
   const request = (id, method, params = {}) => new Promise((resolve, reject) => {
+    if (exited) {
+      reject(new Error(`stdio MCP server already exited before ${method}`));
+      return;
+    }
     const timer = setTimeout(() => {
       pending.delete(id);
       reject(new Error(`stdio MCP response timeout for ${method}`));
     }, 5_000);
-    pending.set(id, (message) => {
+    pending.set(id, { reject, timer, resolve: (message) => {
       clearTimeout(timer);
       pending.delete(id);
       resolve(message);
+    }});
+    child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id, method, params })}\n`, (error) => {
+      if (error) {
+        const entry = pending.get(id);
+        if (entry) {
+          clearTimeout(entry.timer);
+          pending.delete(id);
+          reject(error);
+        }
+      }
     });
-    child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id, method, params })}\n`);
   });
   const notify = (method, params = {}) => child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', method, params })}\n`);
-  return { child, request, notify, stderr };
+  return { child, request, notify, stderr, get exited() { return exited; } };
 }
 
 function textResult(message) {
@@ -136,9 +160,16 @@ test('real stdio MCP handshake, discovery, fixture calls, and fail-closed checks
     assert.equal(malformed.result?.isError, true);
     assert.match(textResult(malformed).error, /candidateSem must be an object/u);
   } finally {
-    server.child.stdin.end();
-    server.child.kill('SIGTERM');
+    if (!server.child.stdin.destroyed) server.child.stdin.end();
+    await Promise.race([once(server.child, 'exit'), new Promise((resolve) => setTimeout(resolve, 1_000))]);
+    if (!server.exited && !server.child.killed) server.child.kill('SIGTERM');
     await Promise.race([once(server.child, 'exit'), new Promise((resolve) => setTimeout(resolve, 1_000))]);
   }
   assert.equal(server.stderr.join(''), '', 'stdio server must keep protocol stdout/stderr clean');
+});
+
+test('unexpected child exit rejects pending requests without hanging', async () => {
+  const server = startServer('/bin/sh', ['-c', 'sleep 0.05; exit 1']);
+  await assert.rejects(server.request(1, 'tools/list'), /exited unexpectedly/u);
+  assert.equal(server.exited, true);
 });

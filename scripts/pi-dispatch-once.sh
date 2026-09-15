@@ -5,7 +5,8 @@ WORKDIR="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
 ASSIGNMENT_FILE="${OPENLUNUM_ASSIGNMENT_FILE:-$WORKDIR/reports/orchestrator/WORKER_ASSIGNMENT.md}"
 PI_TIMEOUT_SECONDS="${PI_TIMEOUT_SECONDS:-14400}"
 
-exec 9>"/tmp/openlunum-pi-dispatch-once.lock"
+DISPATCH_LOCK_PATH="${OPENLUNUM_PI_DISPATCH_LOCK_PATH:-/tmp/openlunum-pi-dispatch-once.lock}"
+exec 9>"$DISPATCH_LOCK_PATH"
 if ! flock -n 9; then
   echo "BLOCKED: another worker dispatch is active" >&2
   exit 2
