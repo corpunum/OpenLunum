@@ -1,0 +1,22 @@
+{
+  "format": "openlunum-public-extraction-package/0.1",
+  "status": "frozen-for-next-source-only-run",
+  "artifacts": {
+    "taskContract": { "path": "../task-contract.json", "sha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd" },
+    "coreContract": { "path": "source-only-contract.json", "sha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e" },
+    "scorer": { "path": "../../../scripts/research/score-natural-source-only-extraction.mjs", "sha256": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec" }
+  },
+  "input": ["opaque handle", "source text", "source language", "task contract", "core extraction contract"],
+  "forbidden": ["gold targets", "reviews", "semantic groups", "contrast labels", "private map", "prior candidates"],
+  "conventions": {
+    "kind": { "conditional": "conditional_instruction", "other": "event" },
+    "termTypes": { "person": "actor", "system": "system", "document": "document", "parcel": "object or abstain unless source evidence establishes another type", "quantity": "quantity", "date": "date" },
+    "conditional": ["root is the primary action", "additional coordinated actions are consequences", "repeat the named agent", "repeat explicitly stated modality on coordinated actions"],
+    "roles": ["send(agent, object, recipient); recipient is not destination", "publish uses audience", "retry preserves count and date when stated", "below uses subject and value", "enable uses theme"],
+    "modality": "obligation and permission are distinct; lexical negation uses negated and is never rewritten as an antonym",
+    "quantityAndTime": "preserve finite numeric value, explicit unit, and ISO date at clause time",
+    "identity": "exact identity only for source-visible stable names, identifiers, literals, dates, and task-typed roles; never infer private handles",
+    "abstention": "explicitly abstain only for unsupported, ambiguous, or unresolved meaning; retain source and provenance"
+  },
+  "delivery": { "requiredBeforeExtraction": true, "receiptMustIncludeArtifactHashes": true, "historicalV3Delivery": "unverified" }
+}

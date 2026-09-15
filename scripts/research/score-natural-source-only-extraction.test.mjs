@@ -171,6 +171,17 @@ test('identity comparability checks nested clauses rather than only the first cl
   assert.equal(identityRepresentationsComparable(left, right), false);
 });
 
+test('semantic mistakes remain scorable when representation shape is comparable', () => {
+  const base = { world: 'real', kind: 'event', clauses: [{ predicate: 'allow', negated: false, modality: 'obligation', roles: { agent: { type: 'actor', id: 'a' }, theme: { type: 'object', id: 'x' } } }] };
+  for (const mutate of [
+    (sem) => ({ ...sem, clauses: [{ ...sem.clauses[0], predicate: 'prohibit' }] }),
+    (sem) => ({ ...sem, clauses: [{ ...sem.clauses[0], negated: true }] }),
+    (sem) => ({ ...sem, clauses: [{ ...sem.clauses[0], modality: 'permission' }] }),
+    (sem) => ({ ...sem, clauses: [{ ...sem.clauses[0], roles: { ...sem.clauses[0].roles, theme: { type: 'object', id: 'y' } } }] })
+  ]) assert.equal(identityRepresentationsComparable(mutate(base), base), true);
+  assert.equal(identityRepresentationsComparable({ ...base, kind: 'instruction' }, base), false);
+});
+
 test('source-relative comparison reports nested meaning fields independently of identity mode', () => {
   const expected = {
     world: 'real', kind: 'event', clauses: [{ predicate: 'require', negated: false, modality: 'obligation',
