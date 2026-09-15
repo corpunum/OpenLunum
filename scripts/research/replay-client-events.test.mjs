@@ -1,0 +1,69 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import { replaySession } from './replay-client-events.mjs';
+
+test('public instruction package exposes frozen scoring conventions without gold', () => {
+  const packagePath = 'experiments/natural-development-v8/extraction/public-instruction-package-v1.json';
+  const value = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+  const hash = (file) => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+  assert.equal(hash('experiments/natural-development-v8/task-contract.json'), value.artifacts.taskContract.sha256);
+  assert.equal(hash('experiments/natural-development-v8/extraction/source-only-contract.json'), value.artifacts.coreContract.sha256);
+  assert.equal(hash('scripts/research/score-natural-source-only-extraction.mjs'), value.artifacts.scorer.sha256);
+  assert.deepEqual(value.input, ['opaque handle', 'source text', 'source language', 'task contract', 'core extraction contract']);
+  assert.ok(value.conventions.modality.includes('distinct'));
+  assert.ok(value.conventions.termTypes.parcel.includes('object'));
+  assert.equal(Object.hasOwn(value, 'gold'), false);
+});
+
+const request = { handle: 'x', sourceText: 'Dana allows Mira.', sourceSha256: 'placeholder' };
+const result = (sem) => ({ content: [{ type: 'text', text: JSON.stringify({ success: true, submission: { source: { text: 'Dana allows Mira.' }, sem } }) }] });
+const codex = (submitArgs, submitResult, buildResult = null) => [
+  { type: 'item.started', item: { id: 'b', type: 'mcp_tool_call', tool: 'lunum_build_candidate', status: 'in_progress' } },
+  { type: 'item.completed', item: { id: 'b', type: 'mcp_tool_call', tool: 'lunum_build_candidate', status: buildResult ? 'failed' : 'completed', result: { content: [{ type: 'text', text: JSON.stringify(buildResult ?? { success: true }) }] } } },
+  { type: 'item.started', item: { id: 's', type: 'mcp_tool_call', tool: 'lunum_submit_candidate', arguments: submitArgs, status: 'in_progress' } },
+  { type: 'item.completed', item: { id: 's', type: 'mcp_tool_call', tool: 'lunum_submit_candidate', arguments: submitArgs, result: submitResult, status: 'completed' } }
+];
+
+test('deduplicates started/completed and preserves rejected non-null submission', () => {
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'event', clauses: [] };
+  const row = replaySession(codex({ sourceText: request.sourceText, candidateSem: sem }, result(null)), request, { status: 'abstain' });
+  assert.deepEqual(row.eventIds, ['b', 's']);
+  assert.equal(row.agentAction, 'non-null-submission');
+  assert.equal(row.validation, 'rejected');
+  assert.equal(row.oldClassification, 'abstain');
+});
+
+test('keeps explicit null distinct and records builder fallback', () => {
+  const row = replaySession(codex({ sourceText: request.sourceText, candidateSem: null }, result(null), { success: false, error: 'builder_failed' }), request);
+  assert.equal(row.agentAction, 'explicit-null');
+  assert.equal(row.execution, 'completed-after-builder-failure');
+  assert.equal(row.fallback, 'after-builder-failure');
+  assert.equal(row.validation, 'not-reached');
+});
+
+test('retains actual submitted source hash mismatch', () => {
+  const row = replaySession(codex({ sourceText: `${request.sourceText}!`, candidateSem: {} }, result({})), request);
+  assert.equal(row.sourceBinding.matched, false);
+  assert.notEqual(row.submittedSource.sha256, row.requestedSource.sha256);
+  assert.ok(row.diagnostics.includes('submitted_source_hash_mismatch'));
+});
+
+test('missing submission is not abstention', () => {
+  const row = replaySession([], request);
+  assert.equal(row.agentAction, 'no-submission');
+  assert.equal(row.execution, 'missing');
+  assert.equal(row.validation, 'not-reached');
+});
+
+test('Claude native tool_use and tool_result join by tool id', () => {
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'event', clauses: [] };
+  const events = [
+    { message: { role: 'assistant', content: [{ type: 'tool_use', id: 'toolu-1', name: 'mcp__lunum__lunum_submit_candidate', input: { sourceText: request.sourceText, candidateSem: sem } }] } },
+    { message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: 'toolu-1', content: [{ type: 'text', text: JSON.stringify({ submission: { source: { text: request.sourceText }, sem } }) }] }] } }
+  ];
+  const row = replaySession(events, request);
+  assert.equal(row.submissionEventId, 'toolu-1');
+  assert.equal(row.validation, 'accepted');
+});

@@ -241,7 +241,8 @@ function clauseIdentityModesCompatible(left, right) {
   if (JSON.stringify(leftRoles) !== JSON.stringify(rightRoles)) return false;
   for (const role of leftRoles) if (termMode(left.roles[role]) !== termMode(right.roles[role])) return false;
   if (termMode(left.time) !== termMode(right.time)) return false;
-  if ((left.modality ?? null) !== (right.modality ?? null) || Boolean(left.negated) !== Boolean(right.negated) || left.predicate !== right.predicate) return false;
+  // A semantic disagreement is an incorrect answer, not an incomparable
+  // representation. Comparability concerns representation/grounding shape.
   const leftConditions = left.conditions ?? [];
   const rightConditions = right.conditions ?? [];
   const leftConsequences = left.consequences ?? [];
@@ -253,6 +254,7 @@ function clauseIdentityModesCompatible(left, right) {
 
 export function identityRepresentationsComparable(candidateSem, goldSem) {
   if (!candidateSem || !goldSem) return false;
+  if (candidateSem.world !== goldSem.world || candidateSem.kind !== goldSem.kind) return false;
   const left = candidateSem.clauses ?? [];
   const right = goldSem.clauses ?? [];
   if (left.length !== right.length) return false;
@@ -274,7 +276,9 @@ export function summarizeGroup(group, members) {
   };
 }
 
-export function summarizeCriticalContrasts(subset, sourceRow, results) {
+export function summarizeCriticalContrasts(subset, sourceRow, results, options = {}) {
+  const selectedIds = options.selectedIds ?? new Set(subset.map((row) => row.id));
+  const selectedSubset = subset.filter((row) => selectedIds.has(row.id));
   const resultBySourceRow = new Map(results.map((result) => [result.sourceRowId, result]));
   const byGroup = new Map();
   for (const result of results) {
@@ -285,7 +289,7 @@ export function summarizeCriticalContrasts(subset, sourceRow, results) {
     byGroup.set(group, members);
   }
   const groupsByPair = new Map();
-  for (const row of subset) {
+  for (const row of selectedSubset) {
     for (const other of row.target?.criticalNegativePairIds ?? []) {
       const groups = groupsByPair.get(other) ?? new Set();
       groups.add(row.source.semanticGroup);
@@ -297,7 +301,7 @@ export function summarizeCriticalContrasts(subset, sourceRow, results) {
     const leftSems = byGroup.get(left) ?? [];
     const rightSems = byGroup.get(right) ?? [];
     const completeGroup = (group) => {
-      const expected = subset.filter((row) => row.source.semanticGroup === group);
+      const expected = selectedSubset.filter((row) => row.source.semanticGroup === group);
       return expected.length > 0 && expected.every((row) => row.target?.outcome === 'parse' && resultBySourceRow.get(row.id)?.submission?.sem);
     };
     const leftComplete = completeGroup(left);
@@ -305,7 +309,9 @@ export function summarizeCriticalContrasts(subset, sourceRow, results) {
     const available = leftComplete && rightComplete && groups.size === 2;
     const leftConverges = leftComplete && new Set(leftSems.map((sem) => JSON.stringify(sem))).size === 1;
     const rightConverges = rightComplete && new Set(rightSems.map((sem) => JSON.stringify(sem))).size === 1;
-    const distinct = available ? leftSems.every((leftSem) => rightSems.every((rightSem) => !compareSem(leftSem, rightSem).exactCanonical)) : null;
+    const distinct = available ? leftSems.every((leftSem) => rightSems.every((rightSem) => {
+      try { return !compareSem(leftSem, rightSem).exactCanonical; } catch { return false; }
+    })) : null;
     return { pairId, groups: [...groups].sort(), available, leftComplete, rightComplete, leftConverges, rightConverges, distinct };
   });
   return {
@@ -418,10 +424,10 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
   const abstain = results.filter((row) => row.targetOutcome === 'abstain');
   const valid = (field) => results.filter((row) => row.submission?.[field] === true).length;
   const groupById = new Map();
-  for (const row of subset) if (!groupById.has(row.source.semanticGroup)) groupById.set(row.source.semanticGroup, []);
+  // Scope groups and contrasts to the fixed request population.
   for (const result of results) groupById.get(sourceRow.get(result.sourceRowId).source.semanticGroup)?.push(result);
   const groups = [...groupById].map(([group, members]) => summarizeGroup(group, members));
-  const criticalContrasts = summarizeCriticalContrasts(subset, sourceRow, results);
+  const criticalContrasts = summarizeCriticalContrasts(subset, sourceRow, results, { selectedIds: new Set(results.map((result) => result.sourceRowId)) });
   const explicitAbstentions = results.filter((row) => row.candidateStatus === 'abstain').length;
   const missing = results.filter((row) => row.candidateStatus === 'missing').length;
   const malformed = results.filter((row) => row.candidateStatus === 'malformed').length;

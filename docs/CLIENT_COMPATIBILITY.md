@@ -245,3 +245,22 @@ Official command references consulted:
 - https://github.com/openai/codex/blob/main/codex-rs/docs/config.md
 - https://geminicli.com/docs/tools/mcp-server/
 - https://docs.anthropic.com/en/docs/claude-code/cli-usage
+
+## Offline native-event replay
+
+The committed native-event transformer is `scripts/research/replay-client-events.mjs`.
+Reproduce the v3 audit without cloud access with:
+
+    node scripts/research/replay-client-events.mjs
+
+It reads the retained Codex and Claude JSONL streams and writes the new,
+versioned `reports/diagnostic/2026-09-15/replay-v1/replay-ledger.json`.
+Native event IDs are joined once; started/completed pairs, rejected
+non-null submissions, explicit null submissions, builder fallbacks, accepted
+Sem, and expected-versus-submitted source hashes remain separate. Historical
+ledgers are not modified.
+
+The v3 task-convention delivery was not proven by the historical streams. The
+next extraction must deliver and hash
+`experiments/natural-development-v8/extraction/public-instruction-package-v1.json`,
+which is tested for core/task/scorer hash integrity and contains no gold.
