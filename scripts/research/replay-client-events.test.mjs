@@ -15,6 +15,15 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.ok(value.conventions.modality.includes('distinct'));
   assert.ok(value.conventions.termTypes.parcel.includes('object'));
   assert.equal(Object.hasOwn(value, 'gold'), false);
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v2.json', 'utf8'));
+  assert.equal(next.status, 'frozen-for-next-source-only-run');
+  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.3');
+  assert.equal(next.freeze.coreContractHash, 'e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782');
+  assert.equal(hash('packages/core/dist/src/agent-native.js'), next.freeze.coreArtifactSha256);
+  assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
+  assert.equal(hash('packages/mcp/dist/src/tools.js'), next.freeze.toolImplementationSha256);
+  assert.equal(Object.hasOwn(next, 'gold'), false);
 });
 
 const request = { handle: 'x', sourceText: 'Dana allows Mira.', sourceSha256: 'placeholder' };

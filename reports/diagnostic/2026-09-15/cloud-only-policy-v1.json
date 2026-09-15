@@ -1,0 +1,31 @@
+{
+  "schema": "openlunum-cloud-only-policy-audit/0.1",
+  "baseSha": "4bbf63107b0d39bed1d1f335b5cb8c3cb01dcf19",
+  "scope": "OpenLunum-owned launch paths only",
+  "observed": {
+    "confirmedReachableLocalRoute": "scripts/pi-dispatch-once.sh hardcoded local-llama before this change",
+    "openLunumCallers": [
+      "scripts/pi-loop.sh",
+      "scripts/pi-loop-ally.sh",
+      "scripts/pi-docs-loop.sh"
+    ],
+    "quiesced": "The three confirmed OpenLunum-owned loop processes were sent TERM and exited; no inference was invoked by this mission.",
+    "sharedLocalServices": "Observed but not stopped, restarted, inspected for use, or modified; ownership belongs outside this mission."
+  },
+  "enforcement": {
+    "dispatcher": "Requires OPENLUNUM_PI_PROVIDER and OPENLUNUM_PI_MODEL or the assignment model; permits only openai-codex or anthropic and rejects local/endpoint-like model names before branch mutation.",
+    "tier2": "Requires the same explicit cloud provider and rejects local/endpoint-like model names before sandbox setup.",
+    "fallback": "No default or local fallback is permitted."
+  },
+  "tests": [
+    "pnpm test:worker-dispatch",
+    "pnpm test:tier2-policy",
+    "pnpm test:license"
+  ],
+  "modelExecution": "NOT_RUN",
+  "authenticationAndBilling": "No cloud call was attempted; entitlement and billing were not inferred.",
+  "limitations": [
+    "This audit does not establish that unrelated projects make zero local calls.",
+    "Historical local-run evidence is preserved and is not new cloud evidence."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "format": "openlunum-public-extraction-package/0.2",
+  "status": "frozen-for-next-source-only-run",
+  "freeze": {
+    "sourceSha": "24d60a12c6b7dde7af04bf0bdcefb4b067d49f8d",
+    "builtWith": "pnpm --filter @corpunum/lunum build && pnpm --filter @corpunum/lunum-mcp build",
+    "mcpEntrypoint": "packages/mcp/dist/bin/lunum-mcp.js",
+    "coreArtifactSha256": "bc27691c740393538a22492e7a4ee7bb95a437b835388fa13bcc2ca926ab9f05",
+    "mcpArtifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+    "toolImplementationSha256": "9f9b094d5c598959eea0e0f6a565e26fd12abccf75ed78b8a2da76e87c79e1c8",
+    "coreContractVersion": "lunum-agent/0.3",
+    "coreContractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+    "instructionVersion": "agent-extraction-instructions/0.3",
+    "instructionHash": "71445c37703c5021dee13f5f1f337a6b86ef16f7028bf5c9221aecf3ddd3cc4b",
+    "taskContractPath": "../task-contract.json",
+    "taskContractSha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+    "scorerPath": "../../../scripts/research/score-natural-source-only-extraction.mjs",
+    "scorerSha256": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec"
+  },
+  "input": ["opaque handle", "source text", "source language", "task contract", "core extraction contract"],
+  "forbidden": ["gold targets", "reviews", "semantic groups", "contrast labels", "private map", "prior candidates"],
+  "conventions": {
+    "kind": "Use the task-declared kind only when source evidence supports it; parcel/document/object distinctions are typed semantic choices, not aliases.",
+    "conditional": ["root is the primary action", "additional coordinated actions are consequences", "repeat the named agent", "repeat explicitly stated modality on coordinated actions"],
+    "roles": ["send(agent, object, recipient); recipient is not destination", "publish uses audience", "retry preserves count and date when stated", "below uses subject and value", "enable uses theme"],
+    "modality": "Obligation and permission are distinct; lexical negation uses negated and is never rewritten as an antonym.",
+    "quantityAndTime": "Preserve finite numeric value, explicit unit, and ISO date at clause time.",
+    "identity": "Exact identity only for source-visible stable names, identifiers, literals, dates, and task-typed roles; never infer private handles.",
+    "abstention": "Explicitly abstain only for unsupported, ambiguous, or unresolved meaning; retain source and provenance."
+  },
+  "delivery": {
+    "requiredBeforeExtraction": true,
+    "receiptMustIncludeArtifactHashes": true,
+    "preflight": "Call lunum_get_extraction_contract through the built stdio MCP server and require the returned contractVersion, contractHash, instructionHash, schemaHash, and frameRegistryHash to match freeze.",
+    "historicalDelivery": "unverified"
+  }
+}
