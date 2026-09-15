@@ -57,6 +57,14 @@ test('missing submission is not abstention', () => {
   assert.equal(row.validation, 'not-reached');
 });
 
+test('started submission without a terminal result is missing execution', () => {
+  const row = replaySession([{ type: 'item.started', item: { id: 's', type: 'mcp_tool_call', tool: 'lunum_submit_candidate', arguments: { sourceText: request.sourceText, candidateSem: {} }, status: 'in_progress' } }], request);
+  assert.equal(row.agentAction, 'non-null-submission');
+  assert.equal(row.execution, 'missing');
+  assert.equal(row.validation, 'not-reached');
+  assert.ok(row.diagnostics.includes('submission_result_missing_or_unparseable'));
+});
+
 test('reports malformed, duplicate, conflicting, and multiple native events', () => {
   const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'event', clauses: [] };
   const args = { sourceText: request.sourceText, candidateSem: sem };
@@ -87,4 +95,12 @@ test('Claude native tool_use and tool_result join by tool id', () => {
   const row = replaySession(events, request);
   assert.equal(row.submissionEventId, 'toolu-1');
   assert.equal(row.validation, 'accepted');
+});
+
+test('conflicting Claude results are retained as a conflict, not silently accepted', () => {
+  const use = { type: 'tool_use', id: 'toolu-conflict', name: 'mcp__lunum__lunum_submit_candidate', input: { sourceText: request.sourceText, candidateSem: {} } };
+  const event = (text) => ({ message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: use.id, content: [{ type: 'text', text }] }] } });
+  const row = replaySession([{ message: { role: 'assistant', content: [use] } }, event('{"submission":{"source":{"text":"Dana allows Mira."},"sem":{}}}'), event('{"submission":{"source":{"text":"Dana allows Mira."},"sem":null}}')], request);
+  assert.ok(row.diagnostics.includes('conflicting_duplicate_events'));
+  assert.ok(row.duplicateOrConflictingEvents.includes('toolu-conflict'));
 });

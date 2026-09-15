@@ -153,6 +153,17 @@ test('critical contrasts require every prescribed endpoint output', () => {
   assert.equal(partial.familiesWithCompleteOutputs, 0);
 });
 
+test('selected request scope excludes unselected groups and contrasts', () => {
+  const subset = [
+    { id: 'selected', source: { semanticGroup: 'selected' }, target: { outcome: 'parse', criticalNegativePairIds: ['selected-pair'] } },
+    { id: 'unselected', source: { semanticGroup: 'unselected' }, target: { outcome: 'parse', criticalNegativePairIds: ['unselected-pair'] } }
+  ];
+  const sourceRow = new Map(subset.map((row) => [row.id, row]));
+  const result = summarizeCriticalContrasts(subset, sourceRow, [{ sourceRowId: 'selected', submission: null }], { selectedIds: new Set(['selected']) });
+  assert.equal(result.familiesDefined, 1);
+  assert.deepEqual(result.pairResults[0].groups, ['selected']);
+});
+
 test('identity comparability checks nested clauses rather than only the first clause', () => {
   const left = {
     clauses: [{
