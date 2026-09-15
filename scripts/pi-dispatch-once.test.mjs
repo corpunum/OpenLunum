@@ -146,6 +146,8 @@ function dispatch(workdir, env = {}) {
     env: {
       ...process.env,
       ...env,
+      OPENLUNUM_PI_DISPATCH_LOCK_PATH:
+        env.OPENLUNUM_PI_DISPATCH_LOCK_PATH ?? path.join(tmpdir(), `openlunum-pi-dispatch-${path.basename(workdir)}.lock`),
       OPENLUNUM_ASSIGNMENT_FILE:
         env.OPENLUNUM_ASSIGNMENT_FILE ??
         path.join(workdir, 'reports/orchestrator/WORKER_ASSIGNMENT.md'),

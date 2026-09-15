@@ -199,6 +199,10 @@ These are development interoperability evidence, not protected semantic
 evaluation data. V8 and issue #685 remain diagnostic; compatibility PASS does
 not certify multilingual meaning.
 
+The stdio test is also part of the normal `@corpunum/lunum-mcp` `test:unit`
+script. Its current wiring and cleanup verification are recorded in
+reports/compatibility/2026-09-15/stdio-wiring-verification.json.
+
 Official command references consulted:
 - https://github.com/openai/codex/blob/main/codex-rs/docs/config.md
 - https://geminicli.com/docs/tools/mcp-server/
