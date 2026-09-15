@@ -135,7 +135,10 @@ OpenLunum responses. The strict inline config and no-session-persistence
 prevented changes to the existing global settings.
 
 Known limitations: Claude may defer MCP schemas through ToolSearch and may
-reorder independent calls. The run proves this named version and model only.
+reorder independent calls. The preserved native Claude stream contains no
+malformed `lunum_submit_candidate` tool-use event, so the older manifest's
+`malformedRejected=false` is `NOT_TESTED`, not a server acceptance or a
+proven client failure. The run proves this named version and model only.
 
 ## AGY
 
@@ -148,7 +151,7 @@ The temporary registration commands were:
 
 The tested model command was:
 
-    agy --model claude-sonnet-4-6 --mode plan \
+    agy --model <authorized-model-id> --mode plan \
       --output-format stream-json --print-timeout 4m \
       --print='<fixture conformance prompt>'
 
@@ -156,8 +159,15 @@ AGY initialization and cached per-tool schemas established discovery. The
 actual call_mcp_tool reached the Lunum tool name but was denied by AGY's
 interactive MCP permission gate in headless mode. Tool execution is therefore
 NOT_RUN, not MCP_PASS. The dangerous permission-bypass flag was not used.
-An effort=low variant was rejected before a model turn because this model does
-not support that setting. The temporary named registration was removed.
+An effort=low variant was rejected before a model turn because the selected
+model did not support that setting. The temporary named registration was
+removed. A fresh audit of AGY 1.2.2 found no safe project-scoped permission
+configuration for the registered server: `agy models` requires sign-in, and
+headless MCP calls are soft-denied when not explicitly permitted. The
+supported broad bypass was deliberately not used. Consequently this report
+does not claim an AGY model execution or a Gemini model identity; an
+authenticated entitlement plus narrow `mcp(<server>/<tool>)` allow rules must
+be established before rerunning.
 
 ## Gemini CLI
 
@@ -202,6 +212,31 @@ not certify multilingual meaning.
 The stdio test is also part of the normal `@corpunum/lunum-mcp` `test:unit`
 script. Its current wiring and cleanup verification are recorded in
 reports/compatibility/2026-09-15/stdio-wiring-verification.json.
+
+## Diagnostic source-only comparison (2026-09-15)
+
+The bounded comparison is recorded separately under
+`reports/diagnostic/2026-09-15/`. It is explicitly
+`DIAGNOSTIC DEVELOPMENT COMPARISON — NOT #685 QUALIFICATION` and does not
+provide the missing human/native English review.
+
+The initial captured streams are retained but excluded because V8 froze
+`lunum-agent/0.2` while the tested server returned `lunum-agent/0.3`.
+`client-run-v2/freeze-manifest.json` freezes the exact returned contract hash
+(`e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782`) before
+the corrected rerun. The same eight source-only items, V8 target subset,
+client settings, one-attempt policy, and prompt-level isolation were used for
+Codex and Claude; no repair pass was run. Native event streams, tool-call
+evidence, ledgers, usage summaries, and mechanically generated scorer results
+are retained in that directory.
+
+The corrected run had no missing or malformed ledger entries. Codex returned
+four parse candidates and four explicit abstentions (one of two abstention
+targets correct); Claude returned eight parse candidates (zero of two
+abstentions correct). Source-relative matches were zero for both clients;
+exact identity was not comparable for Codex and was comparable for one Claude
+item, with zero exact matches. These are small development diagnostics, not a
+client or model ranking.
 
 Official command references consulted:
 - https://github.com/openai/codex/blob/main/codex-rs/docs/config.md

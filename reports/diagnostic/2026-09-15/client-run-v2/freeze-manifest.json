@@ -1,0 +1,318 @@
+{
+  "schema": "openlunum-diagnostic-comparison-freeze/0.2",
+  "status": "frozen-before-extraction",
+  "label": "DIAGNOSTIC DEVELOPMENT COMPARISON — NOT #685 QUALIFICATION",
+  "codeCommit": "b37f03c6fb23d26be8f217dd619a67b8432f0f2d",
+  "sourceOnlyInput": "source-only-input.jsonl",
+  "sourceOnlyInputSha256": "7fb400fe2a5d0da4ebbfd0555d3f06e947f81696dcab5b5d39f487e7201a0ff8",
+  "publicTaskContract": "experiments/natural-development-v8/task-contract.json",
+  "publicTaskContractSha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+  "coreExtractionContract": "client-run-v2/source-only-contract.json",
+  "targetSource": "experiments/natural-development-v8/certified-subset.jsonl",
+  "targetSourceSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "selectedRows": [
+    "v8-g1-en-a",
+    "v8-g1-en-b",
+    "v8-g1-el",
+    "v8-g2-en-a",
+    "v8-g2-en-b",
+    "v8-g2-el",
+    "v8-abstain-missing-en",
+    "v8-abstain-missing-el"
+  ],
+  "coverage": {
+    "items": 8,
+    "languages": [
+      "en",
+      "el"
+    ],
+    "completeContrasts": [
+      "obligation-vs-permission"
+    ],
+    "abstentions": 2
+  },
+  "forbiddenToExtractors": [
+    "targets",
+    "reviews",
+    "semantic groups",
+    "contrast labels",
+    "private identifiers",
+    "prior candidates"
+  ],
+  "attemptPolicy": {
+    "firstPassPerItem": true,
+    "repairPass": false,
+    "maxTurnsPerItem": 1
+  },
+  "clientScope": {
+    "codex": "one fresh invocation per item",
+    "claude": "one fresh invocation per item",
+    "agy": "not run unless safe permission route becomes available",
+    "gemini": "not run unless supported authenticated route becomes available"
+  },
+  "reviewScope": "Existing V8 Greek wording review is scoped to approved wording only; target Sem and English semantics remain independently reviewed/ unresolved as recorded by V8.",
+  "isolation": "Disposable per-item working directories and prompt-level withholding; no OS-level claim.",
+  "scoring": "Existing source-relative scorer; exact identity only when legitimately comparable; missing, malformed, and explicit abstention remain separate.",
+  "coreExtractionContractSha256": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+  "supersedes": "client-run invalidated for contract drift: V8 source-only contract 0.2 vs live build 0.3",
+  "freezeNote": "Corrected freeze binds the exact contract returned by the fixed MCP build; source subset and targets are unchanged.",
+  "frozenInputs": [
+    "source-only-input.jsonl",
+    "source-only-contract.json",
+    "source-only-private-map.json",
+    "run-request-template.json",
+    "codex/claude commands and prompts"
+  ],
+  "freezeHashNote": "Canonical key ordering makes the persisted contract hash equal the MCP stable contract hash; semantics are unchanged.",
+  "runStatus": "first-pass-complete",
+  "runArtifacts": {
+    "codexRaw": [
+      {
+        "file": "diag-01.jsonl",
+        "sha256": "5ebf184e29312647af89561309589dc17ea62e2d6789177e7209e6efee7db85f",
+        "bytes": 37441
+      },
+      {
+        "file": "diag-01.status.json",
+        "sha256": "4fa8d7534ec8f596268e6ae68ae55ea5c22c814801db5e4cc33dfef4cd880e31",
+        "bytes": 41
+      },
+      {
+        "file": "diag-01.stderr",
+        "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+        "bytes": 39
+      },
+      {
+        "file": "diag-02.jsonl",
+        "sha256": "e457b60dc8dd78b89213dfc74c5449aa14ae07f132712adf899b0a48da83c7d0",
+        "bytes": 41971
+      },
+      {
+        "file": "diag-02.status.json",
+        "sha256": "e2b9936a4035da4c66f555ff5b73acca55e118413ce83e4c325cf48397636e28",
+        "bytes": 41
+      },
+      {
+        "file": "diag-02.stderr",
+        "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+        "bytes": 39
+      },
+      {
+        "file": "diag-03.jsonl",
+        "sha256": "1115bc5ee4f2c4f3b7b885f05a352d5346f303000c8924c3fc23838f57982df3",
+        "bytes": 41301
+      },
+      {
+        "file": "diag-03.status.json",
+        "sha256": "1387545ad9d551653424adc9556ba10bc9a36df72793dfd9caba47cfda6e9d3f",
+        "bytes": 41
+      },
+      {
+        "file": "diag-03.stderr",
+        "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+        "bytes": 39
+      },
+      {
+        "file": "diag-04.jsonl",
+        "sha256": "b67ce7d318d4bcf6da438927d39f7c3148af840e0c95c6c423cf670d6a6cef73",
+        "bytes": 42778
+      },
+      {
+        "file": "diag-04.status.json",
+        "sha256": "1ab0c0b1e4514a09073fc42f43adcc582efaada676c06be07131ebdd599efb8d",
+        "bytes": 41
+      },
+      {
+        "file": "diag-04.stderr",
+        "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+        "bytes": 39
+      },
+      {
+        "file": "diag-05.jsonl",
+        "sha256": "c58b5425cac5367f454182dcbc66ba0df32d7b71bed334924794198ac15a8c06",
+        "bytes": 36317
+      },
+      {
+        "file": "diag-05.status.json",
+        "sha256": "c2861d2d0419e63c409d2e07c502a7d93a7a7b72765c9c458acbbcb9597bb28f",
+        "bytes": 41
+      },
+      {
+        "file": "diag-05.stderr",
+        "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+        "bytes": 39
+      },
+      {
+        "file": "diag-06.jsonl",
+        "sha256": "a0f33f9367a9494c4d65ed835c97e48fa7b8441fd25ba6f00da9f79830db935b",
+        "bytes": 40036
+      },
+      {
+        "file": "diag-06.status.json",
+        "sha256": "493bce387a5ee83a2a1ac56edf86976dc881cbff8b15e9ac5a061799f96b31ee",
+        "bytes": 41
+      },
+      {
+        "file": "diag-06.stderr",
+        "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+        "bytes": 39
+      },
+      {
+        "file": "diag-07.jsonl",
+        "sha256": "a79e47ca4d9b1bc3552fa6bdaf14cc15696aae8a7e957b4f26c6877ec6d7664a",
+        "bytes": 34869
+      },
+      {
+        "file": "diag-07.status.json",
+        "sha256": "422a7c43d487cead0499ac55d9deca6f9526407aa48f540362c22f3da6fe1e27",
+        "bytes": 41
+      },
+      {
+        "file": "diag-07.stderr",
+        "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+        "bytes": 39
+      },
+      {
+        "file": "diag-08.jsonl",
+        "sha256": "3a01ee48e0dfc702a8a22d66ee44cb92fe6b4019f57e0e80bdbd28897cd4ad1e",
+        "bytes": 38263
+      },
+      {
+        "file": "diag-08.status.json",
+        "sha256": "048789d2b793c15fb8b68ccc52006420d49ee980c3c9e3b55aef3edd6cfa6650",
+        "bytes": 41
+      },
+      {
+        "file": "diag-08.stderr",
+        "sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+        "bytes": 39
+      }
+    ],
+    "claudeRaw": [
+      {
+        "file": "diag-01.jsonl",
+        "sha256": "3a7a226ce3f28a8f525377a6510ecca5dd28cde0faf910527529a1676c6f7cdf",
+        "bytes": 111273
+      },
+      {
+        "file": "diag-01.status.json",
+        "sha256": "4fa8d7534ec8f596268e6ae68ae55ea5c22c814801db5e4cc33dfef4cd880e31",
+        "bytes": 41
+      },
+      {
+        "file": "diag-01.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "file": "diag-02.jsonl",
+        "sha256": "352537b35f52db271ed2d6ba41e0b68fdc8a3323a1ad84502c4d322817c51849",
+        "bytes": 117218
+      },
+      {
+        "file": "diag-02.status.json",
+        "sha256": "e2b9936a4035da4c66f555ff5b73acca55e118413ce83e4c325cf48397636e28",
+        "bytes": 41
+      },
+      {
+        "file": "diag-02.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "file": "diag-03.jsonl",
+        "sha256": "f1ddfc1d945b59640e94f64ec29f52d7dfd92a862e5b0b486e357b206d1ad935",
+        "bytes": 100172
+      },
+      {
+        "file": "diag-03.status.json",
+        "sha256": "1387545ad9d551653424adc9556ba10bc9a36df72793dfd9caba47cfda6e9d3f",
+        "bytes": 41
+      },
+      {
+        "file": "diag-03.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "file": "diag-04.jsonl",
+        "sha256": "34587bf3ec57fb9259d6c0393768ebe67ed3d42602319ed424be013ef6c8b516",
+        "bytes": 108937
+      },
+      {
+        "file": "diag-04.status.json",
+        "sha256": "1ab0c0b1e4514a09073fc42f43adcc582efaada676c06be07131ebdd599efb8d",
+        "bytes": 41
+      },
+      {
+        "file": "diag-04.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "file": "diag-05.jsonl",
+        "sha256": "f58a463856bfca3f872692dedcf9fa268604bee2f540e61fda39f9c95d3adfc2",
+        "bytes": 110668
+      },
+      {
+        "file": "diag-05.status.json",
+        "sha256": "c2861d2d0419e63c409d2e07c502a7d93a7a7b72765c9c458acbbcb9597bb28f",
+        "bytes": 41
+      },
+      {
+        "file": "diag-05.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "file": "diag-06.jsonl",
+        "sha256": "f7dd964af1ea978f91085e893336195a3bd9c298920345e89df7a1af892e308e",
+        "bytes": 131081
+      },
+      {
+        "file": "diag-06.status.json",
+        "sha256": "493bce387a5ee83a2a1ac56edf86976dc881cbff8b15e9ac5a061799f96b31ee",
+        "bytes": 41
+      },
+      {
+        "file": "diag-06.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "file": "diag-07.jsonl",
+        "sha256": "8029bea9a7172267fecd228be56e3fec77022c8c10c27a22f191c9a459dbd962",
+        "bytes": 88232
+      },
+      {
+        "file": "diag-07.status.json",
+        "sha256": "422a7c43d487cead0499ac55d9deca6f9526407aa48f540362c22f3da6fe1e27",
+        "bytes": 41
+      },
+      {
+        "file": "diag-07.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "file": "diag-08.jsonl",
+        "sha256": "6a31dd94d7ad04a461b2eb4db79237cdb9c37a7092c625a23ceae11ffc1ea893",
+        "bytes": 91327
+      },
+      {
+        "file": "diag-08.status.json",
+        "sha256": "048789d2b793c15fb8b68ccc52006420d49ee980c3c9e3b55aef3edd6cfa6650",
+        "bytes": 41
+      },
+      {
+        "file": "diag-08.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    ],
+    "codexResultsSha256": "930f1135b7c180f31d6d4b894dbd8f7ac808c8e4b297d03c970750e4e382ac36",
+    "claudeResultsSha256": "cd253fc4994e20c0f68c1f4910eeb99c2f79b06552a8d306318ae24f67e1662c"
+  },
+  "freezeManifestSha256": "8d91329470b9541b02228ced20f80a96698bf697d4034d639be93e00a6772fb6",
+  "coreExtractionContractFileSha256": "dc7c012c0f45cbf3fed91b9a928467a76486591f04bb794eec0c37c6054973cb"
+}

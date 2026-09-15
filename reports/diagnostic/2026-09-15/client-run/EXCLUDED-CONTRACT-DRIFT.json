@@ -1,0 +1,10 @@
+{
+  "schema": "openlunum-diagnostic-client-run/0.1",
+  "status": "excluded",
+  "reason": "contract-drift",
+  "sourceRun": "reports/diagnostic/2026-09-15/client-run",
+  "v8Contract": "lunum-agent/0.2",
+  "liveContract": "lunum-agent/0.3",
+  "detail": "The initial streams were captured before the corrected freeze and therefore are retained for compatibility evidence only, not semantic scoring.",
+  "rawArtifactsRetained": true
+}
