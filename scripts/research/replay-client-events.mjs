@@ -60,7 +60,7 @@ export function replaySession(events, request, oldEntry = null) {
   const builds = relevant.filter((call) => call.tool === 'lunum_build_candidate');
   const submissions = relevant.filter((call) => call.tool === 'lunum_submit_candidate');
   const submission = submissions.at(-1) ?? null;
-  const input = submission?.completed?.arguments ?? submission?.use?.input ?? {};
+  const input = submission?.completed?.arguments ?? submission?.use?.input ?? submission?.started?.arguments ?? {};
   const candidate = Object.hasOwn(input, 'candidateSem') ? input.candidateSem : undefined;
   const explicitNull = candidate === null;
   const nonNull = candidate !== null && candidate !== undefined;
@@ -76,6 +76,19 @@ export function replaySession(events, request, oldEntry = null) {
     ? (returnedSubmission?.sem ? 'accepted' : (returnedSubmission ? 'rejected' : 'not-reached'))
     : 'not-reached';
   const action = nonNull ? 'non-null-submission' : explicitNull ? 'explicit-null' : 'no-submission';
+  const attempts = submissions.map((call) => {
+    const attemptInput = call.completed?.arguments ?? call.use?.input ?? call.started?.arguments ?? {};
+    const attemptCandidate = Object.hasOwn(attemptInput, 'candidateSem') ? attemptInput.candidateSem : undefined;
+    const attemptResult = jsonFromToolContent(call.completed?.result?.content ?? call.result?.content);
+    return {
+      eventId: call.id,
+      agentAction: attemptCandidate !== null && attemptCandidate !== undefined ? 'non-null-submission' : attemptCandidate === null ? 'explicit-null' : 'no-submission',
+      proposedCandidateSem: attemptCandidate !== null && attemptCandidate !== undefined ? attemptCandidate : null,
+      response: attemptResult,
+      validation: attemptCandidate !== null && attemptCandidate !== undefined ? (attemptResult?.submission?.sem ? 'accepted' : attemptResult?.submission ? 'rejected' : 'not-reached') : 'not-reached',
+      sourceText: attemptInput.sourceText ?? attemptResult?.submission?.source?.text ?? null
+    };
+  });
   return {
     handle: request?.handle ?? null,
     provider,
@@ -85,6 +98,7 @@ export function replaySession(events, request, oldEntry = null) {
     duplicateOrConflictingEvents: calls.filter((call) => call.conflict || call.duplicateCompleted || call.duplicateResults).map((call) => call.id),
     submissionEventIds: submissions.map((call) => call.id),
     multipleSubmissionAttempts: submissions.length > 1,
+    submissionAttempts: attempts,
     requestedSource: { text: request?.sourceText ?? null, sha256: expectedHash },
     submittedSource: { text: actualSource, sha256: actualHash },
     sourceBinding: { expectedSha256: expectedHash, actualSha256: actualHash, matched: expectedHash !== null && actualHash === expectedHash },
@@ -126,6 +140,10 @@ function readJsonLines(file) {
   return parsed.events;
 }
 
+function readJsonLinesWithDiagnostics(file) {
+  return parseJsonLines(fs.readFileSync(file, 'utf8'), file);
+}
+
 export function replayV3(rawRoot, evidenceRoot, outputRoot) {
   const requests = readJsonLines(path.join(evidenceRoot, 'source-only-request.jsonl'));
   const requestByHandle = new Map(requests.map((request) => [request.handle, request]));
@@ -137,7 +155,11 @@ export function replayV3(rawRoot, evidenceRoot, outputRoot) {
       const handle = file.slice(0, -'.jsonl'.length);
       const request = requestByHandle.get(handle);
       if (!request) throw new Error(`unknown_session_handle:${provider}:${handle}`);
-      rows.push(replaySession(readJsonLines(path.join(rawRoot, provider, file)), request, old.get(handle)));
+      const parsed = readJsonLinesWithDiagnostics(path.join(rawRoot, provider, file));
+      const row = replaySession(parsed.events, request, old.get(handle));
+      row.streamDiagnostics = parsed.diagnostics;
+      if (parsed.diagnostics.length) row.diagnostics.push('stream_parse_error');
+      rows.push(row);
     }
   }
   const reconciliation = rows.map((row) => ({
@@ -172,6 +194,6 @@ export function replayV3(rawRoot, evidenceRoot, outputRoot) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const rawRoot = process.argv[2] ?? 'reports/diagnostic/2026-09-15/raw-v3';
   const evidenceRoot = process.argv[3] ?? 'reports/diagnostic/2026-09-15/client-run-v3';
-  const outputRoot = process.argv[4] ?? 'reports/diagnostic/2026-09-15/replay-v2';
+  const outputRoot = process.argv[4] ?? 'reports/diagnostic/2026-09-15/replay-v3';
   console.log(JSON.stringify(replayV3(rawRoot, evidenceRoot, outputRoot), null, 2));
 }
