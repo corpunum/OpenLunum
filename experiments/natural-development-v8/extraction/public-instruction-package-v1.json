@@ -4,7 +4,7 @@
   "artifacts": {
     "taskContract": { "path": "../task-contract.json", "sha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd" },
     "coreContract": { "path": "source-only-contract.json", "sha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e" },
-    "scorer": { "path": "../../../scripts/research/score-natural-source-only-extraction.mjs", "sha256": "b1292fa35b52a089750502a6a7e82231057348cb156e9bea8747a4db3553ed10" }
+    "scorer": { "path": "../../../scripts/research/score-natural-source-only-extraction.mjs", "sha256": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec" }
   },
   "input": ["opaque handle", "source text", "source language", "task contract", "core extraction contract"],
   "forbidden": ["gold targets", "reviews", "semantic groups", "contrast labels", "private map", "prior candidates"],

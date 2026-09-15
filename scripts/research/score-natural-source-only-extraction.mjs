@@ -425,7 +425,12 @@ export function scoreNaturalSourceOnlyExtraction(root = 'experiments/natural-dev
   const valid = (field) => results.filter((row) => row.submission?.[field] === true).length;
   const groupById = new Map();
   // Scope groups and contrasts to the fixed request population.
-  for (const result of results) groupById.get(sourceRow.get(result.sourceRowId).source.semanticGroup)?.push(result);
+  for (const result of results) {
+    const group = sourceRow.get(result.sourceRowId).source.semanticGroup;
+    const members = groupById.get(group) ?? [];
+    members.push(result);
+    groupById.set(group, members);
+  }
   const groups = [...groupById].map(([group, members]) => summarizeGroup(group, members));
   const criticalContrasts = summarizeCriticalContrasts(subset, sourceRow, results, { selectedIds: new Set(results.map((result) => result.sourceRowId)) });
   const explicitAbstentions = results.filter((row) => row.candidateStatus === 'abstain').length;

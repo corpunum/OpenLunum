@@ -20,6 +20,7 @@ function codexCalls(events) {
     const call = calls.get(item.id) ?? { id: item.id, tool: item.tool, events: [] };
     call.events.push({ type: event.type, status: item.status ?? null });
     if (['completed', 'failed', 'cancelled'].includes(item.status)) {
+      if (call.completed) call.duplicateCompleted = (call.duplicateCompleted ?? 0) + 1;
       if (call.completed && JSON.stringify(call.completed) !== JSON.stringify(item)) call.conflict = true;
       call.completed = item;
     } else if (!call.started) call.started = item;
@@ -41,6 +42,8 @@ function claudeCalls(events) {
         calls.set(block.id, call);
       } else if (block?.type === 'tool_result' && block.tool_use_id) {
         const call = calls.get(block.tool_use_id) ?? { id: block.tool_use_id, events: [] };
+        if (call.result && JSON.stringify(call.result) !== JSON.stringify(block)) call.conflict = true;
+        call.duplicateResults = (call.duplicateResults ?? 0) + (call.result ? 1 : 0);
         call.result = block;
         call.events.push({ type: 'tool_result', isError: Boolean(block.is_error) });
         calls.set(block.tool_use_id, call);
@@ -79,7 +82,9 @@ export function replaySession(events, request, oldEntry = null) {
     eventIds: calls.map((call) => call.id),
     submissionEventId: submission?.id ?? null,
     builderEventIds: builds.map((call) => call.id),
-    duplicateOrConflictingEvents: calls.filter((call) => call.conflict).map((call) => call.id),
+    duplicateOrConflictingEvents: calls.filter((call) => call.conflict || call.duplicateCompleted || call.duplicateResults).map((call) => call.id),
+    submissionEventIds: submissions.map((call) => call.id),
+    multipleSubmissionAttempts: submissions.length > 1,
     requestedSource: { text: request?.sourceText ?? null, sha256: expectedHash },
     submittedSource: { text: actualSource, sha256: actualHash },
     sourceBinding: { expectedSha256: expectedHash, actualSha256: actualHash, matched: expectedHash !== null && actualHash === expectedHash },
@@ -92,19 +97,33 @@ export function replaySession(events, request, oldEntry = null) {
     execution: builderFailure && explicitNull ? 'completed-after-builder-failure' : execution,
     validation,
     fallback: builderFailure && explicitNull ? 'after-builder-failure' : null,
+    semanticScore: 'not-scored',
+    rawCandidateAnalysis: { proposed: nonNull ? candidate : null, action },
+    validatedOutputAnalysis: { acceptedSem: returnedSubmission?.sem ?? null, validation },
     diagnostics: [
       ...(submission && !result ? ['submission_result_missing_or_unparseable'] : []),
       ...(expectedHash !== null && actualHash !== null && expectedHash !== actualHash ? ['submitted_source_hash_mismatch'] : []),
-      ...(calls.some((call) => call.conflict) ? ['conflicting_duplicate_events'] : [])
+      ...(calls.some((call) => call.conflict) ? ['conflicting_duplicate_events'] : []),
+      ...(calls.some((call) => call.duplicateCompleted || call.duplicateResults) ? ['duplicate_terminal_events'] : []),
+      ...(submissions.length > 1 ? ['multiple_submission_attempts'] : [])
     ],
     oldClassification: oldEntry?.status ?? null
   };
 }
 
+export function parseJsonLines(text, label = 'events') {
+  const events = [];
+  const diagnostics = [];
+  for (const [index, line] of text.split('\n').filter((value) => value.trim()).entries()) {
+    try { events.push(JSON.parse(line)); } catch { diagnostics.push(`invalid_jsonl:${label}:${index + 1}`); }
+  }
+  return { events, diagnostics };
+}
+
 function readJsonLines(file) {
-  return fs.readFileSync(file, 'utf8').split('\n').filter(Boolean).map((line, index) => {
-    try { return JSON.parse(line); } catch { throw new Error(`invalid_jsonl:${file}:${index + 1}`); }
-  });
+  const parsed = parseJsonLines(fs.readFileSync(file, 'utf8'), file);
+  if (parsed.diagnostics.length) throw new Error(parsed.diagnostics[0]);
+  return parsed.events;
 }
 
 export function replayV3(rawRoot, evidenceRoot, outputRoot) {
@@ -121,6 +140,14 @@ export function replayV3(rawRoot, evidenceRoot, outputRoot) {
       rows.push(replaySession(readJsonLines(path.join(rawRoot, provider, file)), request, old.get(handle)));
     }
   }
+  const reconciliation = rows.map((row) => ({
+    provider: row.provider,
+    handle: row.handle,
+    oldClassification: row.oldClassification,
+    correctedClassification: row.agentAction === 'non-null-submission' ? row.validation : row.agentAction === 'explicit-null' ? 'explicit-abstention' : 'missing',
+    changed: row.oldClassification !== null && row.oldClassification !== (row.agentAction === 'non-null-submission' ? (row.validation === 'accepted' ? 'parse' : 'rejected') : row.agentAction === 'explicit-null' ? 'abstain' : 'missing'),
+    reasons: row.diagnostics
+  }));
   const summary = {
     sessions: rows.length,
     byProvider: Object.fromEntries(['codex', 'claude'].map((provider) => {
@@ -138,13 +165,13 @@ export function replayV3(rawRoot, evidenceRoot, outputRoot) {
     }))
   };
   fs.mkdirSync(outputRoot, { recursive: true });
-  fs.writeFileSync(path.join(outputRoot, 'replay-ledger.json'), JSON.stringify({ schema: 'openlunum-client-event-replay/0.1', inputs: { rawRoot, evidenceRoot }, summary, rows }, null, 2) + '\n', { flag: 'wx' });
+  fs.writeFileSync(path.join(outputRoot, 'replay-ledger.json'), JSON.stringify({ schema: 'openlunum-client-event-replay/0.1', inputs: { rawRoot, evidenceRoot }, summary, reconciliation, rows }, null, 2) + '\n', { flag: 'wx' });
   return { summary, rows };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const rawRoot = process.argv[2] ?? 'reports/diagnostic/2026-09-15/raw-v3';
   const evidenceRoot = process.argv[3] ?? 'reports/diagnostic/2026-09-15/client-run-v3';
-  const outputRoot = process.argv[4] ?? 'reports/diagnostic/2026-09-15/replay-v1';
+  const outputRoot = process.argv[4] ?? 'reports/diagnostic/2026-09-15/replay-v2';
   console.log(JSON.stringify(replayV3(rawRoot, evidenceRoot, outputRoot), null, 2));
 }

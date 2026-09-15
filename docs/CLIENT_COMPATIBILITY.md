@@ -254,7 +254,7 @@ Reproduce the v3 audit without cloud access with:
     node scripts/research/replay-client-events.mjs
 
 It reads the retained Codex and Claude JSONL streams and writes the new,
-versioned `reports/diagnostic/2026-09-15/replay-v1/replay-ledger.json`.
+versioned `reports/diagnostic/2026-09-15/replay-v2/replay-ledger.json`.
 Native event IDs are joined once; started/completed pairs, rejected
 non-null submissions, explicit null submissions, builder fallbacks, accepted
 Sem, and expected-versus-submitted source hashes remain separate. Historical

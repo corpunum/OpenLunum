@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
-import { replaySession } from './replay-client-events.mjs';
+import { parseJsonLines, replaySession } from './replay-client-events.mjs';
 
 test('public instruction package exposes frozen scoring conventions without gold', () => {
   const packagePath = 'experiments/natural-development-v8/extraction/public-instruction-package-v1.json';
@@ -55,6 +55,27 @@ test('missing submission is not abstention', () => {
   assert.equal(row.agentAction, 'no-submission');
   assert.equal(row.execution, 'missing');
   assert.equal(row.validation, 'not-reached');
+});
+
+test('reports malformed, duplicate, conflicting, and multiple native events', () => {
+  const sem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'event', clauses: [] };
+  const args = { sourceText: request.sourceText, candidateSem: sem };
+  const events = codex(args, result(sem));
+  events.push({ type: 'item.completed', item: { id: 's', type: 'mcp_tool_call', tool: 'lunum_submit_candidate', arguments: args, result: result(null), status: 'completed' } });
+  events.push({ type: 'item.completed', item: { id: 's2', type: 'mcp_tool_call', tool: 'lunum_submit_candidate', arguments: { ...args, candidateSem: null }, result: result(null), status: 'completed' } });
+  const row = replaySession(events, request);
+  assert.equal(row.multipleSubmissionAttempts, true);
+  assert.ok(row.diagnostics.includes('multiple_submission_attempts'));
+  assert.ok(row.diagnostics.includes('conflicting_duplicate_events'));
+  const parsed = parseJsonLines('{"ok":true}\nnot-json\n', 'synthetic');
+  assert.equal(parsed.events.length, 1);
+  assert.deepEqual(parsed.diagnostics, ['invalid_jsonl:synthetic:2']);
+});
+
+test('a truncated stream is reported before replay rather than invented', () => {
+  const parsed = parseJsonLines('{"type":"item.started","item":{"id":"s"}}\n{"type":', 'truncated');
+  assert.equal(parsed.events.length, 1);
+  assert.equal(parsed.diagnostics.length, 1);
 });
 
 test('Claude native tool_use and tool_result join by tool id', () => {
