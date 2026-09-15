@@ -1,0 +1,66 @@
+[
+  {
+    "handle": "diag-01",
+    "client": "codex",
+    "exit": 0,
+    "usage": null,
+    "costUsd": null,
+    "model": "gpt-5.6-luna"
+  },
+  {
+    "handle": "diag-02",
+    "client": "codex",
+    "exit": 0,
+    "usage": null,
+    "costUsd": null,
+    "model": "gpt-5.6-luna"
+  },
+  {
+    "handle": "diag-03",
+    "client": "codex",
+    "exit": 0,
+    "usage": null,
+    "costUsd": null,
+    "model": "gpt-5.6-luna"
+  },
+  {
+    "handle": "diag-04",
+    "client": "codex",
+    "exit": 0,
+    "usage": null,
+    "costUsd": null,
+    "model": "gpt-5.6-luna"
+  },
+  {
+    "handle": "diag-05",
+    "client": "codex",
+    "exit": 0,
+    "usage": null,
+    "costUsd": null,
+    "model": "gpt-5.6-luna"
+  },
+  {
+    "handle": "diag-06",
+    "client": "codex",
+    "exit": 0,
+    "usage": null,
+    "costUsd": null,
+    "model": "gpt-5.6-luna"
+  },
+  {
+    "handle": "diag-07",
+    "client": "codex",
+    "exit": 0,
+    "usage": null,
+    "costUsd": null,
+    "model": "gpt-5.6-luna"
+  },
+  {
+    "handle": "diag-08",
+    "client": "codex",
+    "exit": 0,
+    "usage": null,
+    "costUsd": null,
+    "model": "gpt-5.6-luna"
+  }
+]

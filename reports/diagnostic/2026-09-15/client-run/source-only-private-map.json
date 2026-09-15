@@ -1,0 +1,26 @@
+{
+  "diag-01": {
+    "sourceRowId": "v8-g1-en-a"
+  },
+  "diag-02": {
+    "sourceRowId": "v8-g1-en-b"
+  },
+  "diag-03": {
+    "sourceRowId": "v8-g1-el"
+  },
+  "diag-04": {
+    "sourceRowId": "v8-g2-en-a"
+  },
+  "diag-05": {
+    "sourceRowId": "v8-g2-en-b"
+  },
+  "diag-06": {
+    "sourceRowId": "v8-g2-el"
+  },
+  "diag-07": {
+    "sourceRowId": "v8-abstain-missing-en"
+  },
+  "diag-08": {
+    "sourceRowId": "v8-abstain-missing-el"
+  }
+}

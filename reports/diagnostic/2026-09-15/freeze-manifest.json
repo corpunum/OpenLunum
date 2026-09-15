@@ -1,0 +1,21 @@
+{
+  "schema":"openlunum-diagnostic-comparison-freeze/0.1",
+  "status":"frozen-before-extraction",
+  "label":"DIAGNOSTIC DEVELOPMENT COMPARISON — NOT #685 QUALIFICATION",
+  "codeCommit":"b37f03c6fb23d26be8f217dd619a67b8432f0f2d",
+  "sourceOnlyInput":"source-only-input.jsonl",
+  "sourceOnlyInputSha256":"7fb400fe2a5d0da4ebbfd0555d3f06e947f81696dcab5b5d39f487e7201a0ff8",
+  "publicTaskContract":"experiments/natural-development-v8/task-contract.json",
+  "publicTaskContractSha256":"84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+  "coreExtractionContract":"experiments/natural-development-v8/extraction/source-only-contract.json",
+  "targetSource":"experiments/natural-development-v8/certified-subset.jsonl",
+  "targetSourceSha256":"b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "selectedRows":["v8-g1-en-a","v8-g1-en-b","v8-g1-el","v8-g2-en-a","v8-g2-en-b","v8-g2-el","v8-abstain-missing-en","v8-abstain-missing-el"],
+  "coverage":{"items":8,"languages":["en","el"],"completeContrasts":["obligation-vs-permission"],"abstentions":2},
+  "forbiddenToExtractors":["targets","reviews","semantic groups","contrast labels","private identifiers","prior candidates"],
+  "attemptPolicy":{"firstPassPerItem":true,"repairPass":false,"maxTurnsPerItem":1},
+  "clientScope":{"codex":"one fresh invocation per item","claude":"one fresh invocation per item","agy":"not run unless safe permission route becomes available","gemini":"not run unless supported authenticated route becomes available"},
+  "reviewScope":"Existing V8 Greek wording review is scoped to approved wording only; target Sem and English semantics remain independently reviewed/ unresolved as recorded by V8.",
+  "isolation":"Disposable per-item working directories and prompt-level withholding; no OS-level claim.",
+  "scoring":"Existing source-relative scorer; exact identity only when legitimately comparable; missing, malformed, and explicit abstention remain separate."
+}

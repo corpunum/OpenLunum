@@ -1,0 +1,56 @@
+{
+  "schema": "openlunum-diagnostic-client-run/0.1",
+  "status": "first-pass-complete",
+  "label": "DIAGNOSTIC DEVELOPMENT COMPARISON — NOT #685 QUALIFICATION",
+  "freezeManifestSha256": "e9421e283eba6a5a07f83166065c0e03dc3958a9a6048b0ced9f41271fd06939",
+  "sourceOnlyInputSha256": "7fb400fe2a5d0da4ebbfd0555d3f06e947f81696dcab5b5d39f487e7201a0ff8",
+  "liveContractSha256": "66442516a42f693c04db2b86c503b23e3c45d675e29a82c1896333d5c5b918a2",
+  "requestSha256": "ca2da781eeee99208837d2a4c5ca64545fa3bb224eb0efcc605d249b311772d4",
+  "targetSourceSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "clients": {
+    "codex": {
+      "status": "completed",
+      "modelRequested": "gpt-5.6-luna",
+      "modelObserved": "gpt-5.6-luna",
+      "version": "0.154.0",
+      "providerRoute": "OpenAI ChatGPT subscription",
+      "attempts": 8,
+      "repairs": 0
+    },
+    "claude": {
+      "status": "completed",
+      "modelRequested": "claude-sonnet-4-6",
+      "modelObserved": "claude-sonnet-4-6",
+      "version": "2.1.270",
+      "providerRoute": "first-party Claude.ai subscription",
+      "attempts": 8,
+      "repairs": 0
+    },
+    "agy": {
+      "status": "blocked-before-model",
+      "requestedModel": null,
+      "observedModel": null,
+      "reason": "safe project-scoped permission route and authenticated Gemini entitlement not established; no model call made"
+    },
+    "geminiCli": {
+      "status": "blocked-before-model",
+      "requestedModel": null,
+      "observedModel": null,
+      "reason": "installed route reports unsupported OAuth personal authentication; no model call made"
+    }
+  },
+  "isolation": "fresh per-item disposable directories; prompt-level source-only restriction; no OS-level isolation claim; client startup instructions/tools remain observable in native streams",
+  "forbiddenInputs": [
+    "targets",
+    "reviews",
+    "semantic groups",
+    "contrast labels",
+    "private identifiers",
+    "prior candidates"
+  ],
+  "attemptPolicy": {
+    "firstPassPerItem": true,
+    "maxTurnsPerItem": 1,
+    "repairPass": false
+  }
+}

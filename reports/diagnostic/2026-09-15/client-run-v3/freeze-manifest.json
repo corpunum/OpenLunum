@@ -1,0 +1,85 @@
+{
+  "schema": "openlunum-diagnostic-comparison-freeze/0.3",
+  "status": "frozen-before-extraction",
+  "label": "DIAGNOSTIC DEVELOPMENT COMPARISON — NOT #685 QUALIFICATION",
+  "codeCommit": "b37f03c6fb23d26be8f217dd619a67b8432f0f2d",
+  "sourceOnlyInput": "source-only-input.jsonl",
+  "sourceOnlyInputSha256": "7fb400fe2a5d0da4ebbfd0555d3f06e947f81696dcab5b5d39f487e7201a0ff8",
+  "publicTaskContract": "experiments/natural-development-v8/task-contract.json",
+  "publicTaskContractSha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+  "coreExtractionContract": "source-only-contract.json",
+  "coreExtractionContractSha256": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+  "coreExtractionContractFileSha256": "dc7c012c0f45cbf3fed91b9a928467a76486591f04bb794eec0c37c6054973cb",
+  "targetSource": "experiments/natural-development-v8/certified-subset.jsonl",
+  "targetSourceSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0",
+  "privateMapSha256": "8bbc1ed617884da7cc865491fc7b0245f3f2ad0f16c8958048e47b0401af8fb5",
+  "selectedRows": [
+    "v8-g1-en-a",
+    "v8-g1-en-b",
+    "v8-g1-el",
+    "v8-g2-en-a",
+    "v8-g2-en-b",
+    "v8-g2-el",
+    "v8-abstain-missing-en",
+    "v8-abstain-missing-el"
+  ],
+  "coverage": {
+    "items": 8,
+    "languages": [
+      "en",
+      "el"
+    ],
+    "completeContrasts": [
+      "obligation-vs-permission"
+    ],
+    "abstentions": 2
+  },
+  "forbiddenToExtractors": [
+    "targets",
+    "reviews",
+    "semantic groups",
+    "contrast labels",
+    "private identifiers",
+    "prior candidates"
+  ],
+  "attemptPolicy": {
+    "firstPassPerItem": true,
+    "repairPass": false,
+    "maxTurnsPerItem": 1
+  },
+  "clientScope": {
+    "codex": "one fresh invocation per item",
+    "claude": "one fresh invocation per item",
+    "agy": "blocked before model unless safe permission route becomes available",
+    "gemini": "blocked before model unless supported authenticated route becomes available"
+  },
+  "reviewScope": "English human/native review unavailable; Greek review is exact wording-only and does not certify target Sem.",
+  "isolation": "Disposable per-item working directories and prompt-level withholding; no OS-level isolation claim.",
+  "scoring": "Existing source-relative scorer; exact identity only when legitimately comparable; missing, malformed, and explicit abstention remain separate.",
+  "freezeEvidence": "This manifest and its bound inputs are committed before the v3 extraction. Raw streams and result hashes will be added only in the post-extraction evidence commit.",
+  "postExtractionEvidence": {
+    "codexRawSha256": {
+      "diag-01.jsonl": "78d09f42b71a5282d34af924738522c0c54c55860ed65733a330f2d303902c3f",
+      "diag-02.jsonl": "82b1c69c70ce27a44d345628e346c0f2b590a74d68f99bc2b7f42cad0479bfc8",
+      "diag-03.jsonl": "9a962a89baa80b43331cd4b83cbef436a3ab5291543f6cab009ae85843e311e9",
+      "diag-04.jsonl": "57ce1005b5194c2557c37330caf8160046522012b27f9293988fc897f6ed29ba",
+      "diag-05.jsonl": "469bb7955fdf97f3bbb7cdbc8a5c6210ed75e2ceae5fa67e0f0b92fc12c4caaa",
+      "diag-06.jsonl": "d7efc330753cb853b256c7a3c0404b642ce93234e7995eb64ee68d81b31a9e8c",
+      "diag-07.jsonl": "2af1729eda48ccf3cb8c5ff5d4fcb2ebfb09df51dca9399aff44dbce55450e74",
+      "diag-08.jsonl": "c4d06186f74c5329b4a1b48f4f68b07b646c63d9ceaa48f2f620a3e7534b5f5f"
+    },
+    "claudeRawSha256": {
+      "diag-01.jsonl": "9fdf79d7e142c02ea2d2ccd0bf757cba7134bec5c4d8e6887209a57f315c3782",
+      "diag-02.jsonl": "51ead87c982c9791689ec086aff272a5749f2b775bfc20df078655ee0296e8a2",
+      "diag-03.jsonl": "54c52eb4828fd9c24940d1c73bdfb31669ba5c48eafef0201589631c86e8edc1",
+      "diag-04.jsonl": "761d773b108c74abe88fce424c3c46b814fe6e5449e1a07f3fb1c497684b63b4",
+      "diag-05.jsonl": "f640b7bccd8744d46afed7a78de3d1d12ffa03148164ff521f2eea7a971dc811",
+      "diag-06.jsonl": "7fb17b2cd05c6307e64df5c15642a4e9b1a94d38d080b08467155cf76daff49c",
+      "diag-07.jsonl": "2be791ace5faf0c54652a4507ff5b2db47cc5a3d342cb00aabd4eb445448d6ef",
+      "diag-08.jsonl": "26916891fc236f9a95ee9c1578f60a08c612e2ea5efd3c2d03d0bae32b9e7c11"
+    },
+    "codexResultsSha256": "5f3d1cc720a78b181c0c6cea12e7afd68ec3059bc636e74e07e9b0b95c66494c",
+    "claudeResultsSha256": "f95b8a0422ff18055e41c781a8727b16664753dcf6c648fa42ef78f5e6e5ecd2",
+    "addedAfterFreezeCommit": "731a110"
+  }
+}
