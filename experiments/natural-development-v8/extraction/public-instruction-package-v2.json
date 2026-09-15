@@ -10,6 +10,8 @@
     "toolImplementationSha256": "9f9b094d5c598959eea0e0f6a565e26fd12abccf75ed78b8a2da76e87c79e1c8",
     "coreContractVersion": "lunum-agent/0.3",
     "coreContractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+    "coreContractHashAlgorithm": "sha256(stableStringify(contract)) using @corpunum/lunum canonicalization",
+    "coreContractJsonSerializationSha256": "66442516a42f693c04db2b86c503b23e3c45d675e29a82c1896333d5c5b918a2",
     "instructionVersion": "agent-extraction-instructions/0.3",
     "instructionHash": "71445c37703c5021dee13f5f1f337a6b86ef16f7028bf5c9221aecf3ddd3cc4b",
     "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
@@ -34,7 +36,7 @@
   "delivery": {
     "requiredBeforeExtraction": true,
     "receiptMustIncludeArtifactHashes": true,
-    "preflight": "Call lunum_get_extraction_contract through the built stdio MCP server and require the returned contractVersion, instructionHash, schemaHash, and frameRegistryHash to match freeze; compute the canonical contract hash from the returned contract object and require it to match freeze.coreContractHash.",
+    "preflight": "Call lunum_get_extraction_contract through the built stdio MCP server and require the returned contractVersion, instructionHash, schemaHash, and frameRegistryHash to match freeze; compute sha256(stableStringify(contract)) with @corpunum/lunum canonicalization and require it to match freeze.coreContractHash. JSON.stringify bytes are a separate serialization hash.",
     "historicalDelivery": "unverified"
   }
 }
