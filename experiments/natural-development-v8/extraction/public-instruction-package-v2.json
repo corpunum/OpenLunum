@@ -31,7 +31,7 @@
   "delivery": {
     "requiredBeforeExtraction": true,
     "receiptMustIncludeArtifactHashes": true,
-    "preflight": "Call lunum_get_extraction_contract through the built stdio MCP server and require the returned contractVersion, contractHash, instructionHash, schemaHash, and frameRegistryHash to match freeze.",
+    "preflight": "Call lunum_get_extraction_contract through the built stdio MCP server and require the returned contractVersion, instructionHash, schemaHash, and frameRegistryHash to match freeze; compute the canonical contract hash from the returned contract object and require it to match freeze.coreContractHash.",
     "historicalDelivery": "unverified"
   }
 }
