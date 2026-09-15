@@ -42,6 +42,7 @@ function claudeCalls(events) {
         calls.set(block.id, call);
       } else if (block?.type === 'tool_result' && block.tool_use_id) {
         const call = calls.get(block.tool_use_id) ?? { id: block.tool_use_id, events: [] };
+        call.resultEvents = [...(call.resultEvents ?? []), block];
         if (call.result && JSON.stringify(call.result) !== JSON.stringify(block)) call.conflict = true;
         call.duplicateResults = (call.duplicateResults ?? 0) + (call.result ? 1 : 0);
         call.result = block;
@@ -99,6 +100,7 @@ export function replaySession(events, request, oldEntry = null) {
     submissionEventIds: submissions.map((call) => call.id),
     multipleSubmissionAttempts: submissions.length > 1,
     submissionAttempts: attempts,
+    conflictingResultEvents: submissions.flatMap((call) => call.resultEvents ?? []),
     requestedSource: { text: request?.sourceText ?? null, sha256: expectedHash },
     submittedSource: { text: actualSource, sha256: actualHash },
     sourceBinding: { expectedSha256: expectedHash, actualSha256: actualHash, matched: expectedHash !== null && actualHash === expectedHash },
@@ -150,7 +152,7 @@ export function replayV3(rawRoot, evidenceRoot, outputRoot) {
   const rows = [];
   for (const provider of ['codex', 'claude']) {
     const oldPath = path.join(evidenceRoot, `${provider}-candidate-ledger.jsonl`);
-    const old = fs.existsSync(oldPath) ? new Map(readJsonLines(oldPath).map((entry) => [entry.handle, entry])) : new Map();
+    const old = fs.existsSync(oldPath) ? new Map(readJsonLinesWithDiagnostics(oldPath).events.map((entry) => [entry.handle, entry])) : new Map();
     for (const file of fs.readdirSync(path.join(rawRoot, provider)).filter((name) => name.endsWith('.jsonl')).sort()) {
       const handle = file.slice(0, -'.jsonl'.length);
       const request = requestByHandle.get(handle);
