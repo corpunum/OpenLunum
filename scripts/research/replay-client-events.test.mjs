@@ -15,6 +15,19 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.ok(value.conventions.modality.includes('distinct'));
   assert.ok(value.conventions.termTypes.parcel.includes('object'));
   assert.equal(Object.hasOwn(value, 'gold'), false);
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v2.json', 'utf8'));
+  assert.equal(next.status, 'frozen-for-next-source-only-run');
+  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.3');
+  assert.equal(next.freeze.coreContractHash, 'e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782');
+  assert.equal(next.freeze.coreContractJsonSerializationSha256, '66442516a42f693c04db2b86c503b23e3c45d675e29a82c1896333d5c5b918a2');
+  assert.equal(next.freeze.schemaHash, '8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593');
+  assert.equal(next.freeze.frameRegistryHash, '5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377');
+  assert.equal(next.freeze.protocolRegistryHash, '116e90d37bbb2b769e6d6727b02a5518d28742fa7c34f1c07cbdaa91eeeca289');
+  assert.equal(hash('packages/core/dist/src/agent-native.js'), next.freeze.coreArtifactSha256);
+  assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
+  assert.equal(hash('packages/mcp/dist/src/tools.js'), next.freeze.toolImplementationSha256);
+  assert.equal(Object.hasOwn(next, 'gold'), false);
 });
 
 const request = { handle: 'x', sourceText: 'Dana allows Mira.', sourceSha256: 'placeholder' };

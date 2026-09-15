@@ -146,6 +146,7 @@ function dispatch(workdir, env = {}) {
     env: {
       ...process.env,
       ...env,
+      OPENLUNUM_PI_PROVIDER: env.OPENLUNUM_PI_PROVIDER ?? 'openai-codex',
       OPENLUNUM_PI_DISPATCH_LOCK_PATH:
         env.OPENLUNUM_PI_DISPATCH_LOCK_PATH ?? path.join(tmpdir(), `openlunum-pi-dispatch-${path.basename(workdir)}.lock`),
       OPENLUNUM_ASSIGNMENT_FILE:
@@ -185,6 +186,7 @@ test('uses the assigned pi_model when invoking pi and archives the declared invo
       FAKE_PI_MARKER: marker,
       FAKE_PI_ARGS_FILE: argsFile,
       PI_MODEL: 'ignored/model',
+      OPENLUNUM_PI_PROVIDER: 'openai-codex',
       PI_TIMEOUT_SECONDS: '30',
     });
 
@@ -195,14 +197,14 @@ test('uses the assigned pi_model when invoking pi and archives the declared invo
     const modelIndex = args.indexOf('--model');
     assert.ok(modelIndex >= 0, `expected --model in ${args.join(' ')}`);
     assert.equal(args[modelIndex + 1], 'assigned/model-1');
-    assert.equal(args[args.indexOf('--provider') + 1], 'local-llama');
+    assert.equal(args[args.indexOf('--provider') + 1], 'openai-codex');
     assert.equal(args[args.indexOf('--thinking') + 1], 'high');
     assert.equal(args[args.indexOf('--session-id') + 1], 'openlunum-dispatch-296');
     const archive = await readArchivedAssignment(workdir);
     assert.match(archive, /pi_model: assigned\/model-1/);
     assert.match(archive, /dispatch_pi_model_declared: assigned\/model-1/);
     assert.match(archive, /dispatch_pi_model_argument: assigned\/model-1/);
-    assert.match(archive, /dispatch_pi_provider: local-llama/);
+    assert.match(archive, /dispatch_pi_provider: openai-codex/);
     assert.match(archive, /dispatch_pi_thinking: high/);
     assert.match(archive, /dispatch_pi_session_id: openlunum-dispatch-296/);
     assert.match(archive, /dispatch_pi_timeout_seconds: 30/);
@@ -242,6 +244,38 @@ test('fails closed before invoking pi when pi_model is malformed', async () => {
     assert.match(result.stderr, /assignment pi_model must not contain whitespace/);
     await assert.rejects(readFile(marker, 'utf8'));
     await assert.rejects(readdir(path.join(workdir, 'reports/orchestrator/assignments')));
+  });
+});
+
+test('rejects local or unknown provider before invoking pi', async () => {
+  await withTempDir(async (root) => {
+    const { workdir } = await setupGitRepo(root);
+    await writeAssignment(workdir);
+    const { binDir, marker } = await writeFakePi(root, 'exit 0\n');
+    const result = dispatch(workdir, {
+      PATH: `${binDir}:${process.env.PATH}`,
+      FAKE_PI_MARKER: marker,
+      OPENLUNUM_PI_PROVIDER: 'local-llama'
+    });
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /disallowed Pi provider/);
+    await assert.rejects(readFile(marker, 'utf8'));
+  });
+});
+
+test('requires explicit provider selection before invoking pi', async () => {
+  await withTempDir(async (root) => {
+    const { workdir } = await setupGitRepo(root);
+    await writeAssignment(workdir);
+    const { binDir, marker } = await writeFakePi(root, 'exit 0\n');
+    const result = dispatch(workdir, {
+      PATH: `${binDir}:${process.env.PATH}`,
+      FAKE_PI_MARKER: marker,
+      OPENLUNUM_PI_PROVIDER: ''
+    });
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /PI_PROVIDER is required/);
+    await assert.rejects(readFile(marker, 'utf8'));
   });
 });
 
