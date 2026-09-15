@@ -103,4 +103,5 @@ test('conflicting Claude results are retained as a conflict, not silently accept
   const row = replaySession([{ message: { role: 'assistant', content: [use] } }, event('{"submission":{"source":{"text":"Dana allows Mira."},"sem":{}}}'), event('{"submission":{"source":{"text":"Dana allows Mira."},"sem":null}}')], request);
   assert.ok(row.diagnostics.includes('conflicting_duplicate_events'));
   assert.ok(row.duplicateOrConflictingEvents.includes('toolu-conflict'));
+  assert.equal(row.conflictingResultEvents.length, 2);
 });
