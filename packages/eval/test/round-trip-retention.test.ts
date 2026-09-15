@@ -108,11 +108,96 @@ const testModelProfiles = [
 // Import the round-trip retention runner
 import {
   modelProfileReportFilename,
-  runRoundTripRetentionExperiment,
+  runRoundTripRetentionExperiment as runRoundTripRetentionExperimentWithClient,
   selectBestModelIds
 } from '../src/round-trip-retention.js';
+import type { ModelCompletion } from '../src/types.js';
+
+const mockSem = {
+  schema: 'lunum-sem/0.1-draft',
+  world: 'real',
+  kind: 'preference',
+  clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } } }]
+};
+
+function deterministicModelFactory(mode: 'success' | 'semantic-failure' | 'malformed' | 'transport' = 'success') {
+  return () => ({
+    async complete(system: string): Promise<ModelCompletion> {
+      if (system.startsWith('Realize the supplied')) {
+        return { content: 'The user prefers concise answers.', finishReason: 'stop', usage: null };
+      }
+      if (mode === 'transport') throw new Error('mock transport failure');
+      if (mode === 'malformed') return { content: 'not-json', finishReason: 'stop', usage: null };
+      const mockClause = mockSem.clauses[0]!;
+      const sem = mode === 'semantic-failure'
+        ? { ...mockSem, clauses: [{ predicate: 'allow', roles: { agent: { type: 'actor', id: 'user' }, theme: mockClause.roles.theme } }] }
+        : mockSem;
+      return { content: JSON.stringify(sem), finishReason: 'stop', usage: null };
+    }
+  });
+}
+
+// All tests in this file use the deterministic client seam. Production callers
+// retain the runner's real OpenAI-compatible default explicitly.
+const runRoundTripRetentionExperiment = (manifest: any, root: string, dataset: any[], profiles: any[]) =>
+  runRoundTripRetentionExperimentWithClient(manifest, root, dataset, profiles, deterministicModelFactory());
+
+async function runMockMode(mode: 'semantic-failure' | 'malformed' | 'transport') {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rt-retention-mock-'));
+  try {
+    const manifest = { ...testManifest, outputDirectory: tmpDir, limits: { ...testManifest.limits, maxItems: 1 } } as any;
+    return await runRoundTripRetentionExperimentWithClient(
+      manifest,
+      WORKSPACE_ROOT,
+      testDataset.slice(0, 1),
+      testModelProfiles.slice(0, 1),
+      deterministicModelFactory(mode)
+    );
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+}
 
 // ── Tests ─────────────────────────────────────────────────────────
+
+test('round-trip retention: deterministic seam preserves semantic failures', async () => {
+  const { results } = await runMockMode('semantic-failure');
+  assert.equal(results.length, 4);
+  assert.ok(results.every(result => result.status === 'failed'));
+  assert.ok(results.every(result => result.error === undefined));
+});
+
+test('round-trip retention: malformed and transport failures remain errors', async () => {
+  const malformed = await runMockMode('malformed');
+  assert.equal(malformed.results.length, 4);
+  assert.ok(malformed.results.every(result => result.status === 'error'));
+  assert.ok(malformed.results.every(result => result.error?.includes('Model output')));
+
+  const transport = await runMockMode('transport');
+  assert.equal(transport.results.length, 4);
+  assert.ok(transport.results.every(result => result.status === 'error'));
+  assert.ok(transport.results.every(result => result.error?.includes('mock transport failure')));
+});
+
+test('round-trip retention: injected tests make no model network requests', async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = (async () => { throw new Error('unexpected model network request'); }) as typeof fetch;
+  try {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rt-retention-network-'));
+    try {
+      const manifest = { ...testManifest, outputDirectory: tmpDir, limits: { ...testManifest.limits, maxItems: 1 } } as any;
+      const { results } = await runRoundTripRetentionExperimentWithClient(
+        manifest, WORKSPACE_ROOT, testDataset.slice(0, 1), testModelProfiles.slice(0, 1), deterministicModelFactory()
+      );
+      assert.equal(results.length, 4);
+      assert.ok(results.every(result => result.status === 'passed'));
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
 
 test('round-trip retention: processes all 4 languages × 2 models', async () => {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rt-retention-test-'));

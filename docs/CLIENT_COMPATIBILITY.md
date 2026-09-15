@@ -264,3 +264,29 @@ The v3 task-convention delivery was not proven by the historical streams. The
 next extraction must deliver and hash
 `experiments/natural-development-v8/extraction/public-instruction-package-v1.json`,
 which is tested for core/task/scorer hash integrity and contains no gold.
+
+## Current cloud execution and test-path repair
+
+The current bounded live evidence is recorded in
+`reports/diagnostic/2026-09-15/cloud-execution-v1.json`. Codex 0.154.0, using
+the requested `gpt-5.6-luna` route, completed a cloud smoke and retrieved the
+V2 contract through native MCP. Its subsequent source-only attempt made two
+real but invalid `lunum_build_candidate` calls; no semantic submission or
+abstention is claimed. Claude Code 2.1.270 reported `claude-sonnet-5` for its
+cloud smoke under a Claude Pro login. Its safe-mode MCP attempt initialized
+with no registered Lunum server, and the non-safe retry has no recoverable
+native stream in this checkout, so Claude MCP execution is not claimed.
+
+The round-trip retention unit test no longer contacts model URLs. The runner
+has a narrow injectable model seam; tests provide deterministic success,
+semantic-failure, malformed-output, and transport-failure responses and trap
+unexpected `fetch` calls. The production default remains the real
+OpenAI-compatible client. The focused test file passes 25/25 and full
+`pnpm verify` passes. This repair is test-path evidence, not automatic
+extraction evidence.
+
+The Codex smoke exposed usage counters (`input_tokens`, cached input, output,
+and reasoning output); Claude exposed input, cache creation/read, output, and
+a provider-reported estimated cost. These counters are client/provider
+specific and are not a cross-client cost comparison. No receiving-context
+comparison or cross-language restart recall was completed in this attempt.

@@ -22,7 +22,7 @@ import { OpenAICompatibleModel } from './model.js';
 import { parsePrompt, realizePrompt } from './prompts.js';
 import { parseStrictJsonObject } from './strict-json.js';
 import { findWorkspaceRoot, writeJson } from './io.js';
-import type { ExperimentManifest, ExperimentItem, ModelProfile } from './types.js';
+import type { ExperimentManifest, ExperimentItem, ModelCompletion, ModelProfile } from './types.js';
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -133,6 +133,13 @@ interface ModelSelectionCandidate {
   failed: number;
 }
 
+/** Narrow client seam used by deterministic tests and explicit transports. */
+export interface RoundTripModelClient {
+  complete(system: string, user: string): Promise<ModelCompletion>;
+}
+
+export type RoundTripModelFactory = (profile: ModelProfile) => RoundTripModelClient;
+
 /** Select every top-scoring model; error-only candidates are not evaluated. */
 export function selectBestModelIds(candidates: ModelSelectionCandidate[]): string[] {
   const evaluated = candidates.filter(candidate => candidate.passed + candidate.failed > 0);
@@ -226,7 +233,8 @@ export async function runRoundTripRetentionExperiment(
   manifest: ExperimentManifest,
   root: string,
   dataset: ExperimentItem[],
-  modelProfiles: ModelProfile[]
+  modelProfiles: ModelProfile[],
+  modelFactory: RoundTripModelFactory = (profile) => new OpenAICompatibleModel(profile)
 ): Promise<{ results: RoundTripResult[]; report: RoundTripReport }> {
   const profileIds = modelProfiles.map(profile => profile.id);
   if (profileIds.some(id => !id.trim())) throw new Error('Model profile ids must be non-empty');
@@ -256,7 +264,7 @@ export async function runRoundTripRetentionExperiment(
   }
 
   // Initialize model clients
-  const models = modelProfiles.map(p => new OpenAICompatibleModel(p));
+  const models = modelProfiles.map(modelFactory);
 
   // Run round-trip for each item × language × model
   for (const item of dataset.slice(0, manifest.limits.maxItems)) {
