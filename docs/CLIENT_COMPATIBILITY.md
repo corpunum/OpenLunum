@@ -222,20 +222,23 @@ provide the missing human/native English review.
 
 The initial captured streams are retained but excluded because V8 froze
 `lunum-agent/0.2` while the tested server returned `lunum-agent/0.3`.
-`client-run-v2/freeze-manifest.json` freezes the exact returned contract hash
-(`e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782`) before
-the corrected rerun. The same eight source-only items, V8 target subset,
+`client-run-v3/freeze-manifest.json` was committed before extraction and
+freezes the exact returned contract hash
+(`e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782`). The
+same eight source-only items, V8 target subset,
 client settings, one-attempt policy, and prompt-level isolation were used for
 Codex and Claude; no repair pass was run. Native event streams, tool-call
 evidence, ledgers, usage summaries, and mechanically generated scorer results
 are retained in that directory.
 
-The corrected run had no missing or malformed ledger entries. Codex returned
-four parse candidates and four explicit abstentions (one of two abstention
-targets correct); Claude returned eight parse candidates (zero of two
-abstentions correct). Source-relative matches were zero for both clients;
-exact identity was not comparable for Codex and was comparable for one Claude
-item, with zero exact matches. These are small development diagnostics, not a
+The committed v3 run had no missing or malformed ledger entries. Codex
+returned four parse candidates and four explicit abstentions; both abstention
+targets were false parses. Claude returned eight parse candidates, so both
+abstention targets were false parses. Source-relative matches were zero for
+both clients; exact identity had a denominator of zero for Codex and three for
+Claude, with zero exact matches. The obligation-versus-permission contrast was
+fully available and distinct for Claude, but unavailable for Codex because of
+missing endpoint outputs. These are small development diagnostics, not a
 client or model ranking.
 
 Official command references consulted:

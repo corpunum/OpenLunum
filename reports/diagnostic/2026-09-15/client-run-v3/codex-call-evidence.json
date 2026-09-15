@@ -1,0 +1,258 @@
+[
+  {
+    "handle": "diag-01",
+    "calls": [
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "completed"
+      }
+    ],
+    "submissionPresent": true,
+    "semPresent": false,
+    "transportValid": true
+  },
+  {
+    "handle": "diag-02",
+    "calls": [
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "completed"
+      }
+    ],
+    "submissionPresent": true,
+    "semPresent": true,
+    "transportValid": true
+  },
+  {
+    "handle": "diag-03",
+    "calls": [
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "failed"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "completed"
+      }
+    ],
+    "submissionPresent": true,
+    "semPresent": false,
+    "transportValid": false
+  },
+  {
+    "handle": "diag-04",
+    "calls": [
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "completed"
+      }
+    ],
+    "submissionPresent": true,
+    "semPresent": false,
+    "transportValid": true
+  },
+  {
+    "handle": "diag-05",
+    "calls": [
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "completed"
+      }
+    ],
+    "submissionPresent": true,
+    "semPresent": false,
+    "transportValid": true
+  },
+  {
+    "handle": "diag-06",
+    "calls": [
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "completed"
+      }
+    ],
+    "submissionPresent": true,
+    "semPresent": true,
+    "transportValid": true
+  },
+  {
+    "handle": "diag-07",
+    "calls": [
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "completed"
+      }
+    ],
+    "submissionPresent": true,
+    "semPresent": true,
+    "transportValid": true
+  },
+  {
+    "handle": "diag-08",
+    "calls": [
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_get_extraction_contract",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_build_candidate",
+        "status": "completed"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "in_progress"
+      },
+      {
+        "tool": "lunum_submit_candidate",
+        "status": "completed"
+      }
+    ],
+    "submissionPresent": true,
+    "semPresent": true,
+    "transportValid": true
+  }
+]
