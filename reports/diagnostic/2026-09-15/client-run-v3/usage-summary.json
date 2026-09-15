@@ -9,73 +9,129 @@
           "handle": "diag-01",
           "exitStatus": 0,
           "model": "gpt-5.6-luna",
-          "usage": null,
+          "usage": {
+            "input_tokens": 117219,
+            "cached_input_tokens": 103168,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1814,
+            "reasoning_output_tokens": 574
+          },
           "costUsd": null,
           "durationMs": null,
-          "streamSha256": "78d09f42b71a5282d34af924738522c0c54c55860ed65733a330f2d303902c3f"
+          "streamSha256": "78d09f42b71a5282d34af924738522c0c54c55860ed65733a330f2d303902c3f",
+          "eventType": "turn.completed"
         },
         {
           "handle": "diag-02",
           "exitStatus": 0,
           "model": "gpt-5.6-luna",
-          "usage": null,
+          "usage": {
+            "input_tokens": 117792,
+            "cached_input_tokens": 69376,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2215,
+            "reasoning_output_tokens": 538
+          },
           "costUsd": null,
           "durationMs": null,
-          "streamSha256": "82b1c69c70ce27a44d345628e346c0f2b590a74d68f99bc2b7f42cad0479bfc8"
+          "streamSha256": "82b1c69c70ce27a44d345628e346c0f2b590a74d68f99bc2b7f42cad0479bfc8",
+          "eventType": "turn.completed"
         },
         {
           "handle": "diag-03",
           "exitStatus": 0,
           "model": "gpt-5.6-luna",
-          "usage": null,
+          "usage": {
+            "input_tokens": 120213,
+            "cached_input_tokens": 103168,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1669,
+            "reasoning_output_tokens": 711
+          },
           "costUsd": null,
           "durationMs": null,
-          "streamSha256": "9a962a89baa80b43331cd4b83cbef436a3ab5291543f6cab009ae85843e311e9"
+          "streamSha256": "9a962a89baa80b43331cd4b83cbef436a3ab5291543f6cab009ae85843e311e9",
+          "eventType": "turn.completed"
         },
         {
           "handle": "diag-04",
           "exitStatus": 0,
           "model": "gpt-5.6-luna",
-          "usage": null,
+          "usage": {
+            "input_tokens": 117607,
+            "cached_input_tokens": 80640,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1837,
+            "reasoning_output_tokens": 408
+          },
           "costUsd": null,
           "durationMs": null,
-          "streamSha256": "57ce1005b5194c2557c37330caf8160046522012b27f9293988fc897f6ed29ba"
+          "streamSha256": "57ce1005b5194c2557c37330caf8160046522012b27f9293988fc897f6ed29ba",
+          "eventType": "turn.completed"
         },
         {
           "handle": "diag-05",
           "exitStatus": 0,
           "model": "gpt-5.6-luna",
-          "usage": null,
+          "usage": {
+            "input_tokens": 117349,
+            "cached_input_tokens": 103168,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1679,
+            "reasoning_output_tokens": 561
+          },
           "costUsd": null,
           "durationMs": null,
-          "streamSha256": "469bb7955fdf97f3bbb7cdbc8a5c6210ed75e2ceae5fa67e0f0b92fc12c4caaa"
+          "streamSha256": "469bb7955fdf97f3bbb7cdbc8a5c6210ed75e2ceae5fa67e0f0b92fc12c4caaa",
+          "eventType": "turn.completed"
         },
         {
           "handle": "diag-06",
           "exitStatus": 0,
           "model": "gpt-5.6-luna",
-          "usage": null,
+          "usage": {
+            "input_tokens": 118815,
+            "cached_input_tokens": 92928,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 2676,
+            "reasoning_output_tokens": 682
+          },
           "costUsd": null,
           "durationMs": null,
-          "streamSha256": "d7efc330753cb853b256c7a3c0404b642ce93234e7995eb64ee68d81b31a9e8c"
+          "streamSha256": "d7efc330753cb853b256c7a3c0404b642ce93234e7995eb64ee68d81b31a9e8c",
+          "eventType": "turn.completed"
         },
         {
           "handle": "diag-07",
           "exitStatus": 0,
           "model": "gpt-5.6-luna",
-          "usage": null,
+          "usage": {
+            "input_tokens": 116912,
+            "cached_input_tokens": 86784,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1164,
+            "reasoning_output_tokens": 682
+          },
           "costUsd": null,
           "durationMs": null,
-          "streamSha256": "2af1729eda48ccf3cb8c5ff5d4fcb2ebfb09df51dca9399aff44dbce55450e74"
+          "streamSha256": "2af1729eda48ccf3cb8c5ff5d4fcb2ebfb09df51dca9399aff44dbce55450e74",
+          "eventType": "turn.completed"
         },
         {
           "handle": "diag-08",
           "exitStatus": 0,
           "model": "gpt-5.6-luna",
-          "usage": null,
+          "usage": {
+            "input_tokens": 116618,
+            "cached_input_tokens": 80640,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1330,
+            "reasoning_output_tokens": 389
+          },
           "costUsd": null,
           "durationMs": null,
-          "streamSha256": "c4d06186f74c5329b4a1b48f4f68b07b646c63d9ceaa48f2f620a3e7534b5f5f"
+          "streamSha256": "c4d06186f74c5329b4a1b48f4f68b07b646c63d9ceaa48f2f620a3e7534b5f5f",
+          "eventType": "turn.completed"
         }
       ],
       "accountingNote": "Codex result usage is client/provider-reported and no billed cost was exposed."
