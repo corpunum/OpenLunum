@@ -1,0 +1,5 @@
+{
+  "status": "excluded-from-frozen-comparison",
+  "reason": "freeze manifest was not committed before extraction",
+  "supersededBy": "../client-run-v3"
+}

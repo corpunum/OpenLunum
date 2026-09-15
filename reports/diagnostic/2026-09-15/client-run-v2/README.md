@@ -3,13 +3,15 @@
 This is `DIAGNOSTIC DEVELOPMENT COMPARISON — NOT #685 QUALIFICATION`.
 It is a two-client run: Codex and Claude completed native MCP calls. AGY and
 Gemini CLI were blocked before model execution by authentication/permission
-boundaries recorded in `run-manifest.json`; no fallback model was used.
+boundaries recorded in the freeze manifest; no fallback model was used.
 
 The first captured run is retained in `../client-run/` but excluded because
 V8's persisted contract was `lunum-agent/0.2` while the tested MCP build
-returned `lunum-agent/0.3`. This corrected run freezes the exact returned
-contract before extraction and keeps the same eight source items, V8 target
-subset, public inputs, and one-attempt policy.
+returned `lunum-agent/0.3`. The v2 run used that exact contract, but its freeze
+record was not committed before extraction; it is therefore retained as
+post-hoc diagnostic evidence, not claimed as chronologically proven. The
+committed v3 freeze in `../client-run-v3/freeze-manifest.json` is the valid
+checkpoint for the final rerun.
 
 Native streams are under `../raw-v2/{codex,claude}/`. `*-call-evidence.json`,
 the candidate ledgers, and `usage-summary.json` are derived mechanically from
