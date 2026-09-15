@@ -1,0 +1,73 @@
+{
+  "format": "openlunum-cloud-execution-evidence/1",
+  "status": "bounded-live-attempt-incomplete",
+  "scope": "test-repair-and-v2-preflight",
+  "repository": {
+    "baseSha": "5ee583140e43403bdf6bbd1a1515783db4a982c5",
+    "remoteBranchesObserved": ["main"],
+    "issue": 709,
+    "qualificationIssue": 685,
+    "qualificationStatus": "unchanged-open"
+  },
+  "policy": {
+    "localInference": "not-used",
+    "localModelCallers": "not-invoked",
+    "paidFallback": "not-enabled",
+    "rawNativeStreamsPersisted": false,
+    "redaction": "No credentials were collected. Native stream fragments were visible during execution but were not persisted as raw files; unavailable portions are not reconstructed."
+  },
+  "v2Package": {
+    "path": "experiments/natural-development-v8/extraction/public-instruction-package-v2.json",
+    "coreContractVersion": "lunum-agent/0.3",
+    "coreContractHash": "e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782",
+    "instructionHash": "71445c37703c5021dee13f5f1f337a6b86ef16f7028bf5c9221aecf3ddd3cc4b",
+    "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+    "frameRegistryHash": "5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377",
+    "stdioPreflight": "pass",
+    "deliveryEvidence": "Codex native MCP retrieval returned the contract and matching component hashes; subsequent extraction was not successful."
+  },
+  "clients": [
+    {
+      "client": "codex",
+      "version": "0.154.0",
+      "requestedModel": "gpt-5.6-luna",
+      "reportedModel": null,
+      "authRoute": "ChatGPT login",
+      "smoke": "pass",
+      "smokeUsage": {"inputTokens": 16183, "cachedInputTokens": 8960, "outputTokens": 9, "reasoningOutputTokens": 0},
+      "mcpContractRetrieval": "pass",
+      "sourceOnlyExtraction": "failed-client-tool-execution",
+      "observedEvents": [
+        {"event": "item.completed", "itemId": "item_0", "type": "mcp_tool_call", "tool": "lunum_build_candidate", "resultError": "unknown_builder_fields:itemId,sourceLanguage,sourceText"},
+        {"event": "item.completed", "itemId": "item_1", "type": "mcp_tool_call", "tool": "lunum_build_candidate", "arguments": {}, "resultError": "builder_world_string_required"}
+      ],
+      "submission": "not-observed",
+      "abstention": "not-observed",
+      "rawStream": "not-persisted"
+    },
+    {
+      "client": "claude-code",
+      "version": "2.1.270",
+      "requestedModel": "sonnet",
+      "reportedModel": "claude-sonnet-5",
+      "authRoute": "Claude Pro account; apiKeySource none; overage rejected",
+      "smoke": "pass",
+      "smokeUsage": {"inputTokens": 2, "cacheCreationInputTokens": 5042, "cacheReadInputTokens": 16680, "outputTokens": 16, "providerReportedCostUsd": 0.024676},
+      "mcpContractRetrieval": "not-proven",
+      "sourceOnlyExtraction": "not-run",
+      "safeModeMcpAttempt": "native initialization reported mcp_servers=[] and no Lunum call",
+      "nonSafeRetry": "no-recoverable-native-stream-in-workspace",
+      "rawStream": "not-persisted"
+    }
+  ],
+  "testRepair": {
+    "target": "packages/eval/test/round-trip-retention.test.ts",
+    "change": "injectable deterministic model factory with fetch trap; production default remains OpenAICompatibleModel",
+    "focusedResult": "25/25 passed",
+    "fullVerifyResult": "pass",
+    "networkAssertion": "unexpected model network requests reject",
+    "semanticFailureAssertion": "valid wrong Sem remains failed, not transport/error",
+    "malformedAndTransportAssertions": "remain errors"
+  },
+  "nextAction": "Add a thin, general client-side builder contract adapter or prompt/tool-schema correction, then run one fresh Codex/Claude V2 extraction with persisted native streams; do not weaken core validation."
+}
