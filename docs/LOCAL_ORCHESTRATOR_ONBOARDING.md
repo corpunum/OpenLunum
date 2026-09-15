@@ -245,7 +245,7 @@ The assignment must use:
 work/<worker>/<issue-number>-<short-name>
 ```
 
-The current dispatcher uses one global lock at `/tmp/openlunum-pi-dispatch-once.lock`. Therefore the supported safe mode is one active dispatcher process at a time. The orchestrator can spawn different workers in sequence and may maintain up to three active issue branches/PRs, but it must not bypass the lock or run concurrent dispatchers until a reviewed per-lane locking change exists.
+The current dispatcher uses one global lock at `/tmp/openlunum-pi-dispatch-once.lock`. Therefore the supported safe mode is one active dispatcher process at a time. The orchestrator can spawn different workers in sequence and may maintain up to three active issue branches/PRs, but it must not bypass the lock or run concurrent dispatchers until a reviewed per-lane locking change exists. Pi routing is cloud-only and opt-in: set `OPENLUNUM_PI_PROVIDER` to `openai-codex` or `anthropic` and select a verified authorized model with `OPENLUNUM_PI_MODEL`; missing, local, or unknown routes fail before dispatch. Historical local-run evidence remains archival and is not a permitted fallback.
 
 A worker must not select another issue after its assignment finishes. The orchestrator reviews the result before any new assignment is written.
 

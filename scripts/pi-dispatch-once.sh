@@ -90,6 +90,21 @@ if [[ ! "$pi_model" =~ ^[A-Za-z0-9._/@:+-]+$ ]]; then
   fail_blocked "assignment pi_model is malformed"
 fi
 
+# Model execution is opt-in and cloud-route explicit. The previous implicit
+# local-llama default could consume an assignment before policy was checked.
+pi_provider="${OPENLUNUM_PI_PROVIDER:-}"
+pi_model_argument="${OPENLUNUM_PI_MODEL:-$pi_model}"
+if [[ -z "$pi_provider" ]]; then
+  fail_blocked "OPENLUNUM_PI_PROVIDER is required; local/default inference is disabled"
+fi
+case "$pi_provider" in
+  openai-codex|anthropic) ;;
+  *) fail_blocked "disallowed Pi provider: $pi_provider (use an explicit authorized cloud subscription route)" ;;
+esac
+if [[ ! "$pi_model_argument" =~ ^[A-Za-z0-9._/@:+-]+$ ]] || [[ "$pi_model_argument" =~ (local|llama|ollama|lm-studio|localhost|127\.0\.0\.1) ]]; then
+  fail_blocked "disallowed or malformed cloud model selection"
+fi
+
 if [[ ! "$branch" =~ ^work/[a-zA-Z0-9._-]+/${issue}-[a-zA-Z0-9._-]+$ ]]; then
   fail_blocked "branch must match work/<worker>/${issue}-<short-name>"
 fi
@@ -137,10 +152,8 @@ remote_branch_snapshot_without_assigned "$branch" >"$pre_remote_refs_without_ass
 timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
 log_file="$LOG_DIR/${assignment_id}-${timestamp}.log"
 archive_file="$ARCHIVE_DIR/${assignment_id}-${timestamp}.md"
-pi_provider="local-llama"
 pi_thinking="high"
 pi_session_id="openlunum-${assignment_id}"
-pi_model_argument="$pi_model"
 
 cp "$ASSIGNMENT_FILE" "$archive_file"
 rm -f "$ASSIGNMENT_FILE"

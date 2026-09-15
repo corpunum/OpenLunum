@@ -231,7 +231,7 @@ Dispatch with:
 pnpm worker:dispatch -- <worktree>
 ```
 
-The dispatcher refuses missing or malformed assignments, reused branches, and simultaneous dispatcher processes. It archives the assignment and log locally and exits after one model invocation.
+The dispatcher refuses missing or malformed assignments, reused branches, and simultaneous dispatcher processes. It archives the assignment and log locally and exits after one model invocation. Model routing is explicit: `OPENLUNUM_PI_PROVIDER` must select an authorized cloud subscription route (`openai-codex` or `anthropic`), and `OPENLUNUM_PI_MODEL` may not name a local model or endpoint. There is no local/default inference fallback; route validation occurs before branch or assignment mutation.
 
 Worker results:
 

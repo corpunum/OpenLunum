@@ -18,6 +18,33 @@ SANDBOX=/home/corpunum/openlunum-workers/eval-sandbox
 OUT="$REPO/reports/agent-eval/tier2-results.jsonl"
 PI_TIMEOUT=1500
 
+# This evaluator used to hard-code the retired local-llama route.  Keep the
+# historical artifacts readable, but never make a new local inference call.
+PI_PROVIDER="${OPENLUNUM_PI_PROVIDER:-}"
+if [[ -z "$PI_PROVIDER" ]]; then
+  echo "blocked: OPENLUNUM_PI_PROVIDER is required; local/default inference is disabled" >&2
+  exit 2
+fi
+case "$PI_PROVIDER" in
+  openai-codex|anthropic) ;;
+  *)
+    echo "blocked: disallowed Pi provider: $PI_PROVIDER" >&2
+    exit 2
+    ;;
+esac
+
+validate_model() {
+  local model="$1"
+  if [[ ! "$model" =~ ^[A-Za-z0-9._/@:+-]+$ ]] || [[ "$model" =~ (local|llama|ollama|lm-studio|localhost|127\.0\.0\.1) ]]; then
+    echo "blocked: disallowed or malformed cloud model selection: $model" >&2
+    exit 2
+  fi
+}
+
+for model in "$@"; do
+  validate_model "$model"
+done
+
 mkdir -p "$(dirname "$OUT")"
 
 slug() { echo "$1" | tr '/:.' '---'; }
@@ -84,7 +111,7 @@ score_task_b() {
 run_task() {
   local model="$1" taskname="$2" prompt="$3" logf="$4"
   (cd "$SANDBOX" && timeout "$PI_TIMEOUT" pi --print \
-    --provider local-llama \
+    --provider "$PI_PROVIDER" \
     --model "$model" \
     --thinking high \
     --no-session \
