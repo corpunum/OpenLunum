@@ -54,6 +54,23 @@ if (!rederive) {
   if (build.status !== 0) process.exit(1);
 }
 
+// Served-artifact binding: the dist files the MCP server will load must match
+// the package freeze, checked before the run and again after it. dist/ is
+// untracked, so the git clean-tree check cannot see it.
+const BOUND_ARTIFACTS = { coreArtifactSha256: 'packages/core/dist/src/agent-native.js', frameValidatorArtifactSha256: 'packages/core/dist/src/frame-registry.js', toolImplementationSha256: 'packages/mcp/dist/src/tools.js', mcpArtifactSha256: 'packages/mcp/dist/bin/lunum-mcp.js' };
+function artifactBinding() {
+  const checks = Object.entries(BOUND_ARTIFACTS).filter(([key]) => pkg.freeze[key]).map(([key, file]) => {
+    const actual = fs.existsSync(path.join(root, file)) ? sha256(fs.readFileSync(path.join(root, file))) : null;
+    return { key, file, expected: pkg.freeze[key], actual, match: actual === pkg.freeze[key] };
+  });
+  return { match: checks.every((check) => check.match), checks };
+}
+const bindingAtStart = rederive ? null : artifactBinding();
+if (bindingAtStart && !bindingAtStart.match && !args.includes('--allow-unbound')) {
+  console.error(`served artifacts do not match ${path.basename(PACKAGE)}: ${bindingAtStart.checks.filter((check) => !check.match).map((check) => check.file).join(', ')} (pass --allow-unbound to record anyway)`);
+  process.exit(3);
+}
+
 fs.mkdirSync(path.join(outDir, 'raw'), { recursive: true });
 const mcpConfigPath = path.join(outDir, 'mcp-config.json');
 fs.writeFileSync(mcpConfigPath, `${JSON.stringify({ mcpServers: { lunum: { command: 'node', args: [path.join(root, 'scripts/lunum-mcp-launch.mjs')], env: { LUNUM_MCP_SKIP_BUILD: '1', LUNUM_COMPACTION: 'off', LUNUM_MULTILINGUAL: 'on', LUNUM_CONTEXT_MODE: 'mixed' } } } }, null, 2)}\n`);
@@ -127,6 +144,8 @@ function classify(request, stdout, code, stderr) {
       const init = events.find((event) => event.type === 'system' && event.subtype === 'init');
       const result = events.findLast((event) => event.type === 'result');
       const calls = toolUses(events);
+      const contractCall = calls.find((call) => call.name === 'mcp__lunum__lunum_get_extraction_contract' && call.result?.contract);
+      const observedContractVersion = contractCall?.result?.contract?.contractVersion ?? null;
       const submits = calls.filter((call) => call.name === 'mcp__lunum__lunum_submit_candidate');
       // A submit with candidateSem null is core's explicit abstention, not a parse.
       const succeeded = submits.filter((call) => !call.isError && call.result?.success === true);
@@ -139,6 +158,7 @@ function classify(request, stdout, code, stderr) {
       else { status = null; candidateSem = undefined; failure = !result ? 'no_result_event' : !declared ? 'unparseable_final_status' : declared.status === 'parse' ? 'parse_claimed_without_accepted_submission' : 'abstain_after_accepted_submission'; }
       return {
         handle: request.handle, sourceLanguage: request.sourceLanguage, exitCode: code, failure,
+        observedContractVersion, observedContractMatchesPackage: observedContractVersion === null ? null : observedContractVersion === pkg.freeze.coreContractVersion,
         status, candidateSem, declared,
         model: { requested: model, reported: Object.keys(result?.modelUsage ?? {}), initModel: init?.model ?? null },
         mcpServers: init?.mcp_servers ?? null, toolsOffered: init?.tools ?? null,
@@ -186,6 +206,9 @@ const summary = {
   toolErrors: rows.reduce((sum, row) => sum + row.calls.filter((call) => call.isError || call.error).length, 0),
   totalCostUsd: Number(rows.reduce((sum, row) => sum + (row.costUsd ?? 0), 0).toFixed(4)),
   candidateLedgerSha256: sha256(ledgerText), runLedgerSha256: sha256(runText),
+  servedArtifactBinding: rederive ? 'not-checked (rederive)' : { atStart: bindingAtStart.match, atEnd: artifactBinding().match, checks: bindingAtStart.checks },
+  observedContractVersions: [...new Set(rows.map((row) => row.observedContractVersion).filter(Boolean))],
+  itemsWithoutObservedContract: rows.filter((row) => !row.observedContractVersion).length,
 };
 fs.writeFileSync(path.join(outDir, 'run-summary.json'), `${JSON.stringify(summary, null, 2)}\n`);
 console.log(JSON.stringify(summary, null, 2));
