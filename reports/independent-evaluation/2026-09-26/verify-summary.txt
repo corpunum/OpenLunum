@@ -1,0 +1,54 @@
+packages/core test:unit: # tests 1824
+packages/core test:unit: # pass 1824
+packages/core test:unit: # fail 0
+packages/adapter-openunum test:unit: # tests 45
+packages/adapter-openunum test:unit: # pass 45
+packages/adapter-openunum test:unit: # fail 0
+packages/mcp test:unit: # tests 62
+packages/mcp test:unit: # pass 62
+packages/mcp test:unit: # fail 0
+packages/api test:unit: # tests 202
+packages/api test:unit: # pass 202
+packages/api test:unit: # fail 0
+packages/mcp test:unit: # tests 2
+packages/mcp test:unit: # pass 2
+packages/mcp test:unit: # fail 0
+packages/cli test:unit: # tests 189
+packages/cli test:unit: # pass 189
+packages/cli test:unit: # fail 0
+packages/eval test:unit: # tests 1892
+packages/eval test:unit: # pass 1892
+packages/eval test:unit: # fail 0
+# tests 15
+# pass 15
+# fail 0
+# tests 8
+# pass 8
+# fail 0
+# tests 16
+# pass 16
+# fail 0
+# tests 2
+# pass 2
+# fail 0
+# tests 8
+# pass 8
+# fail 0
+# tests 2
+# pass 2
+# fail 0
+# tests 19
+# pass 19
+# fail 0
+# tests 10
+# pass 10
+# fail 0
+# tests 5
+# pass 5
+# fail 0
+# tests 5
+# pass 5
+# fail 0
+  "items": 16,
+  "datasetSha256": "6a5dfd6eeea0c368218003a12a56221f61ad3119fc22aa431c4fd4cc99826873"
+exit=0

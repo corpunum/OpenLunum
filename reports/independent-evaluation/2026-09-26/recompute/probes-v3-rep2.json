@@ -1,0 +1,48 @@
+{
+ "format": "openlunum-probe-outcomes/0.1",
+ "overall": {
+  "n": 16,
+  "correct": 16,
+  "observed": {
+   "abstain": 5,
+   "parse": 11
+  }
+ },
+ "byExpected": {
+  "abstain": {
+   "n": 5,
+   "correct": 5,
+   "observed": {
+    "abstain": 5
+   }
+  },
+  "parse": {
+   "n": 11,
+   "correct": 11,
+   "observed": {
+    "parse": 11
+   }
+  }
+ },
+ "either": [],
+ "byLanguage": {
+  "el": {
+   "n": 6,
+   "correct": 6,
+   "observed": {
+    "abstain": 2,
+    "parse": 4
+   }
+  },
+  "en": {
+   "n": 10,
+   "correct": 10,
+   "observed": {
+    "parse": 7,
+    "abstain": 3
+   }
+  }
+ },
+ "pairsBothCorrect": 16,
+ "pairs": 16
+}

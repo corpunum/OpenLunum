@@ -1,0 +1,292 @@
+{
+  "format": "openlunum-probe-outcomes/0.1",
+  "overall": {
+    "n": 24,
+    "correct": 13,
+    "observed": {
+      "abstain": 13,
+      "parse": 11
+    }
+  },
+  "byExpected": {
+    "abstain": {
+      "n": 8,
+      "correct": 5,
+      "observed": {
+        "abstain": 5,
+        "parse": 3
+      }
+    },
+    "parse": {
+      "n": 16,
+      "correct": 8,
+      "observed": {
+        "abstain": 8,
+        "parse": 8
+      }
+    }
+  },
+  "either": [],
+  "byLanguage": {
+    "el": {
+      "n": 8,
+      "correct": 5,
+      "observed": {
+        "abstain": 3,
+        "parse": 5
+      }
+    },
+    "en": {
+      "n": 16,
+      "correct": 8,
+      "observed": {
+        "abstain": 10,
+        "parse": 6
+      }
+    }
+  },
+  "pairsBothCorrect": 13,
+  "pairs": 24,
+  "items": [
+    {
+      "handle": "eval-03aefa27dd768ee7",
+      "pair": "p19",
+      "frame": "permitted",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-2a84a765b254a88b",
+      "pair": "p07",
+      "frame": "prohibited",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-3ed2ef0443c70bd6",
+      "pair": "p12",
+      "frame": "delete",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-42f141bcdbbdc2bb",
+      "pair": "p22",
+      "frame": "publish",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-453e48c047627d39",
+      "pair": "p17",
+      "frame": "send",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-4c9eae5346d46660",
+      "pair": "p15",
+      "frame": "retry",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-5af86f8c92b60ca3",
+      "pair": "p04",
+      "frame": "prohibit",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "parse",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-6f6265fb19de6992",
+      "pair": "p11",
+      "frame": "enable",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-728394c5f228f479",
+      "pair": "p08",
+      "frame": "prohibited",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-73c32c6c4489b57b",
+      "pair": "p23",
+      "frame": "disable",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-7a7b3e7348ef39a0",
+      "pair": "p21",
+      "frame": "enable",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-828ad8f2af7eef74",
+      "pair": "p10",
+      "frame": "none",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-88bbcb8625167d3a",
+      "pair": "p02",
+      "frame": "publish",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-8b9a238d798bad23",
+      "pair": "p14",
+      "frame": "disable",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-964a9a931dee44d7",
+      "pair": "p16",
+      "frame": "conditional",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-a18cbe07dba6951f",
+      "pair": "p03",
+      "frame": "allow",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "parse",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-a1a5e52b2fe765fc",
+      "pair": "p18",
+      "frame": "allow",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "parse",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-a26b5cdc26a60108",
+      "pair": "p06",
+      "frame": "permitted",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-a4c4ba4c270b1315",
+      "pair": "p20",
+      "frame": "prohibited",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-db2ef489f9baec1c",
+      "pair": "p09",
+      "frame": "none",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-dc27b63251fcef88",
+      "pair": "p24",
+      "frame": "conditional",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-f732dd2ed326bb6c",
+      "pair": "p13",
+      "frame": "run",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-fb11c92763664df3",
+      "pair": "p05",
+      "frame": "permitted",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-fb535309a18cd70a",
+      "pair": "p01",
+      "frame": "send",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    }
+  ]
+}

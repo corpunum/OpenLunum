@@ -1,0 +1,275 @@
+{
+ "format": "openlunum-natural-source-only-extraction/0.2",
+ "status": "diagnostic-development-only",
+ "protected": false,
+ "localInferenceUsed": false,
+ "procedure": {
+  "oneFirstPassPerItem": true,
+  "deterministicRepair": false,
+  "sourceOnlyRequest": "experiments/natural-development-v8/frame-0.2-successor/extraction/source-only-request.jsonl",
+  "sourceOnlyLedger": "experiments/natural-development-v8/frame-0.2-successor/../../../reports/diagnostic/2026-09-26/contract-0.8/v8-rep1/candidate-ledger.jsonl",
+  "contract": "experiments/natural-development-v8/frame-0.2-successor/extraction/source-only-contract.json",
+  "extractor": "fresh isolated agent; packet restricted to source-only request and frozen contract",
+  "goldIsolation": "extractor was instructed not to read certified subset, reviews, manifests, or generator files; scorer accesses gold privately",
+  "ledgerRequiredFields": [
+   "handle",
+   "status",
+   "candidateSem",
+   "sourceSha256",
+   "contractHash",
+   "extractorType"
+  ],
+  "exactIdentityRule": "exact identity is scored only when candidate and target have available identities, corresponding role terms use compatible reference/literal identity modes, and every literal identity value is source-anchored or represented by an allowed reference"
+ },
+ "artifacts": {
+  "sourceOnlyRequestSha256": "5e884ba6b9c8971fd9015aaec75abe316eb97fd0f86181bd1c36e7d8ab45d73f",
+  "sourceOnlyContractSha256": "2b2736675831cb93b41e5932e0e06cb0c6efc7e371400add9e894eeb59850e2e",
+  "sourceOnlyPrivateMapSha256": "416fce1fefa5385c746d97d76cf5763d8d8042bf00fa57136c6b47f3e896b64e",
+  "candidateLedgerSha256": "d78ab72f30d2aecdb70eed6c1b62ba0ee1f25cecf6dae4788162e8cc2f43481f",
+  "certificationReportSha256": "2bf3121145a69112eb5ebb5cde03cddd5b279a8b8fab4fdb22f75e6a4b07c89a"
+ },
+ "corpus": {
+  "rows": 24,
+  "parseTargets": 21,
+  "abstentionTargets": 3,
+  "languages": [
+   "el",
+   "en"
+  ],
+  "datasetSha256": "b336552a3afd018d5482b3cbb5e6193e595d9aa72cdc49ee18b4d1739fc4d6a0"
+ },
+ "stages": {
+  "parseSubmissions": 20,
+  "explicitAbstentions": 4,
+  "missing": 0,
+  "malformed": 0,
+  "transportValid": 20,
+  "structuralValid": 20,
+  "protocolCanonical": 20,
+  "frameValid": 20,
+  "grounded": 20,
+  "identityAvailable": 20
+ },
+ "parse": {
+  "attempts": 21,
+  "exact": 16,
+  "sourceRelativeMatch": 19,
+  "sourceRelativeMismatch": 1,
+  "sourceRelativeUnresolved": 0,
+  "sourceRelativeContractUnresolved": 0,
+  "identityComparable": 16,
+  "exactNotComparable": 5,
+  "falseAbstentions": 1,
+  "missing": 0,
+  "malformed": 0,
+  "semanticHardMismatches": 0,
+  "structural": {
+   "world": 19,
+   "kind": 20,
+   "predicate": 20,
+   "negated": 20,
+   "roleNames": 20,
+   "roleTypes": 20,
+   "modality": 20,
+   "nested": 5
+  },
+  "recursiveStructural": {
+   "clauseCountComparable": 20,
+   "clauseCountMatch": 20,
+   "nestedClauseCountComparable": 20,
+   "nestedClauseCountMatch": 20,
+   "nestedExpected": 10,
+   "nestedCandidate": 10,
+   "nestedMatched": 10,
+   "nestedMismatched": 0,
+   "nestedUnresolved": 0
+  },
+  "byLanguage": {
+   "el": {
+    "attempts": 8,
+    "submitted": 8,
+    "exact": 7,
+    "identityComparable": 7,
+    "hardMismatches": 0
+   },
+   "en": {
+    "attempts": 13,
+    "submitted": 12,
+    "exact": 9,
+    "identityComparable": 9,
+    "hardMismatches": 0
+   }
+  }
+ },
+ "abstention": {
+  "targets": 3,
+  "correct": 3,
+  "unexpectedParses": 0,
+  "missing": 0,
+  "malformed": 0
+ },
+ "multilingual": {
+  "groups": 8,
+  "completeParseGroups": 6,
+  "completeAbstentionGroups": 1,
+  "candidateConverging": 6,
+  "groupResults": [
+   {
+    "group": "conditional-obligation",
+    "rows": 3,
+    "outputsAvailable": 3,
+    "completeParseOutputs": true,
+    "allExplicitAbstentions": false,
+    "candidateConverges": true,
+    "exact": true
+   },
+   {
+    "group": "conditional-permission",
+    "rows": 3,
+    "outputsAvailable": 2,
+    "completeParseOutputs": false,
+    "allExplicitAbstentions": false,
+    "candidateConverges": false,
+    "exact": false
+   },
+   {
+    "group": "send-courier",
+    "rows": 3,
+    "outputsAvailable": 3,
+    "completeParseOutputs": true,
+    "allExplicitAbstentions": false,
+    "candidateConverges": true,
+    "exact": true
+   },
+   {
+    "group": "publish-audience-61",
+    "rows": 3,
+    "outputsAvailable": 3,
+    "completeParseOutputs": true,
+    "allExplicitAbstentions": false,
+    "candidateConverges": true,
+    "exact": true
+   },
+   {
+    "group": "publish-audience-62",
+    "rows": 3,
+    "outputsAvailable": 3,
+    "completeParseOutputs": true,
+    "allExplicitAbstentions": false,
+    "candidateConverges": true,
+    "exact": true
+   },
+   {
+    "group": "retry-seven",
+    "rows": 3,
+    "outputsAvailable": 3,
+    "completeParseOutputs": true,
+    "allExplicitAbstentions": false,
+    "candidateConverges": true,
+    "exact": false
+   },
+   {
+    "group": "allow-action-access",
+    "rows": 3,
+    "outputsAvailable": 3,
+    "completeParseOutputs": true,
+    "allExplicitAbstentions": false,
+    "candidateConverges": true,
+    "exact": true
+   },
+   {
+    "group": "abstain-unsupported-domain",
+    "rows": 3,
+    "outputsAvailable": 0,
+    "completeParseOutputs": false,
+    "allExplicitAbstentions": true,
+    "candidateConverges": false,
+    "exact": false
+   }
+  ]
+ },
+ "criticalContrasts": {
+  "familiesDefined": 2,
+  "familiesWithBothOutputs": 1,
+  "familiesWithCompleteOutputs": 1,
+  "meaningDistinctionPreserved": 1,
+  "falseEquivalence": 0,
+  "pairResults": [
+   {
+    "pairId": "obligation-vs-permission",
+    "groups": [
+     "conditional-obligation",
+     "conditional-permission"
+    ],
+    "available": false,
+    "leftComplete": true,
+    "rightComplete": false,
+    "leftConverges": false,
+    "rightConverges": false,
+    "distinct": null
+   },
+   {
+    "pairId": "audience-61-vs-62",
+    "groups": [
+     "publish-audience-61",
+     "publish-audience-62"
+    ],
+    "available": true,
+    "leftComplete": true,
+    "rightComplete": true,
+    "leftConverges": true,
+    "rightConverges": true,
+    "distinct": true
+   }
+  ],
+  "note": "Contrast labels remain scorer-private; a family is counted only when every prescribed parse endpoint has a candidate output, and distinction uses candidate semantics rather than candidate absence."
+ },
+ "denominators": {
+  "rows": 24,
+  "parseTargets": 21,
+  "abstentionTargets": 3,
+  "sourceRelative": 20,
+  "exactComparable": 16,
+  "groups": 8,
+  "completeParseGroups": 6,
+  "criticalContrastFamilies": 2,
+  "criticalContrastFamiliesComplete": 1
+ },
+ "sourceRelativeDimensions": {
+  "modality": {
+   "observations": 30,
+   "match": 30,
+   "mismatch": 0,
+   "unresolved": 0,
+   "contractUnresolved": 0
+  },
+  "negated": {
+   "observations": 30,
+   "match": 30,
+   "mismatch": 0,
+   "unresolved": 0,
+   "contractUnresolved": 0
+  },
+  "predicate": {
+   "observations": 30,
+   "match": 30,
+   "mismatch": 0,
+   "unresolved": 0,
+   "contractUnresolved": 0
+  },
+  "roles": {
+   "observations": 80,
+   "match": 80,
+   "mismatch": 0,
+   "unresolved": 0,
+   "contractUnresolved": 0
+  },
+  "time": {
+   "observations": 30,
+   "match": 30,
+   "mismatch": 0,
+   "unresolved": 0,
+   "contractUnresolved": 0
+  }
+ }
+}
