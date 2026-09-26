@@ -8,7 +8,7 @@
       "env": {
         "LUNUM_COMPACTION": "off",
         "LUNUM_MULTILINGUAL": "on",
-        "LUNUM_CONTEXT_MODE": "identity_dedup"
+        "LUNUM_CONTEXT_MODE": "natural"
       }
     }
   }

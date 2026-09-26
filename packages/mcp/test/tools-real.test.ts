@@ -293,12 +293,12 @@ test('blind evaluator factory permits explicit null abstention', async () => {
   assert.equal(received, null);
 });
 
-test('the MCP default context mode is identity_dedup (decisions/0013)', async () => {
+test('the MCP default context mode is natural (decisions/0013 amendment 1)', async () => {
   const { resolveConfig } = await import('../src/config.js');
   const saved = process.env.LUNUM_CONTEXT_MODE;
   delete process.env.LUNUM_CONTEXT_MODE;
   try {
-    assert.equal(resolveConfig().contextMode, 'identity_dedup');
+    assert.equal(resolveConfig().contextMode, 'natural');
     assert.equal(resolveConfig({ contextMode: 'mixed' }).contextMode, 'mixed');
   } finally {
     if (saved !== undefined) process.env.LUNUM_CONTEXT_MODE = saved;

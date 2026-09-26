@@ -144,15 +144,8 @@ async function pool(tasks) {
   return results;
 }
 
-const normalize = (value) => String(value ?? '').toLowerCase().normalize('NFKC');
-function grade(question, text) {
-  // Some models wrap the JSON in a code fence; take the first JSON object.
-  let answer = text; try { answer = JSON.parse(String(text).match(/\{[\s\S]*\}/u)[0]).answer; } catch { /* grade raw text */ }
-  const normalized = normalize(answer);
-  const accepted = question.accept.some((token) => normalized.includes(token));
-  const rejected = question.reject.some((token) => normalized.includes(token));
-  return { answer, correct: accepted && !rejected };
-}
+// Grading lives in qa-grader.mjs (v2, strict); v1 substring matching was lenient.
+const { grade, GRADER_VERSION } = await import(pathToFileURL(path.join(root, 'scripts/research/qa-grader.mjs')).href);
 
 // ── Run ─────────────────────────────────────────────────────────────────
 fs.mkdirSync(outDir, { recursive: true });
@@ -175,7 +168,7 @@ const summary = {
   model: { requested: model, served: [...new Set(calls.flatMap((call) => call.models))] }, tokenizer: 'provider-reported input tokens of the served model (memory block minus empty block)',
   ledger: path.relative(root, path.resolve(ledgerPath)), ledgerSha256: sha256(fs.readFileSync(path.resolve(ledgerPath))), questionsSha256: sha256(fs.readFileSync(QUESTIONS)),
   codeCommit: (await import('node:child_process')).execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
-  reps, questions: questions.length, failedCalls: calls.filter((call) => call.isError || call.text == null).length,
+  grader: GRADER_VERSION, reps, questions: questions.length, failedCalls: calls.filter((call) => call.isError || call.text == null).length,
   totalCostUsd: Number([empty, ...measured, ...calls].reduce((sum, call) => sum + (call.costUsd ?? 0), 0).toFixed(4)),
   conditions: Object.fromEntries(Object.keys(conditions).map((name) => {
     const perRep = Array.from({ length: reps }, (_, index) => calls.filter((call) => call.condition === name && call.rep === index + 1).filter((call) => call.correct).length);

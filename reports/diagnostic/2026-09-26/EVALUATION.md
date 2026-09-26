@@ -81,6 +81,26 @@ The remaining V8 misses are a false abstention on one "is permitted to" paraphra
   - fresh probes v4 (unlisted synonyms): 13/14, where the one miss is a probe with a valid second reading;
   - probes v3: 16/16.
 
+## Independent evaluation and corrections (added later the same day)
+
+A separate Claude Code session audited commit `7657cab` ([report](../../independent-evaluation/2026-09-26/REPORT.md)). It is the same vendor and model family, not a human review.
+
+**Confirmed:**
+- 4,306 tests pass;
+- every contract-0.8 V8 and probe score reproduces exactly from the committed ledgers;
+- the package v10 hash bindings hold;
+- an independent fingerprint scan found no identity change across the 0.9 alias change.
+
+**Corrected here:**
+- **Grader:** substring matching accepted wrong numeric answers. Re-graded with strict grader v2, Haiku with identity-dedup memory answered one question wrong in 5 of 9 runs, by adding up unmerged paraphrases. The MCP default was reverted to `natural` (decisions/0013 amendment 1).
+- **Narrative:** the contract-0.8 README misdescribed the remaining V8 misses; see the correction at its top.
+- **Out-of-sample claims:** probes v3 are not out-of-sample for the alias table.
+
+**Open findings:**
+- **Frame coverage:** only 23 predicates have frames, so permissions with no stated permitter can't be represented for verbs like read, approve or run. The evaluator's fresh probes parsed 0/6 of those, and scored 13/24 overall against its own expectations.
+- **Runtime binding:** the runner does not verify the served build against the package it records.
+- **Reproducibility:** the repository-wide fingerprint-scan counts in ADRs 0007–0011 came from an uncommitted script.
+
 ## Separate CI note
 
 CI on `7b0c21f` (a commit that added only evidence files, pushed without running local `verify`) failed 2 eval tests. They passed in 6 local runs of a fresh clone of that commit and on the next CI run (`ea7fb5d`). The failing test names could not be recovered: the GitHub log tool truncates, and this container cannot reach the log host. The cause is unidentified; it is recorded here rather than dismissed as a flake.

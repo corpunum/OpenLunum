@@ -10,7 +10,7 @@ Codex has built-in MCP support. The Lunum MCP server connects directly over stdi
 codex mcp add lunum \
   --env LUNUM_COMPACTION=auto \
   --env LUNUM_MULTILINGUAL=off \
-  --env LUNUM_CONTEXT_MODE=identity_dedup \
+  --env LUNUM_CONTEXT_MODE=natural \
   -- node /home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js
 ```
 

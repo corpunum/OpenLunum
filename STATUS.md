@@ -10,12 +10,9 @@ The runtime candidate schema is `lunum-sem/0.1-draft`; the current strict semant
 
 ## What the current evidence says
 
-**Live client extraction and consumer benchmark, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md), self-reviewed).** Claude Code (`claude-sonnet-5`) was run through the MCP tools, three repetitions per configuration, on contract `lunum-agent/0.8` (a single-repetition check of 0.9 improved V8 to 20/21 source-relative and 18/18 exact):
-- fresh probes: 16/16 in every repetition;
-- earlier probes: 38/38 in every repetition;
-- V8: refusals 3/3 and exact identity 16–17/16–17 in every repetition, source-relative 19/21.
+**Live client extraction and consumer benchmark, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md); [independent evaluation](reports/independent-evaluation/2026-09-26/REPORT.md)).** On the development set (V8) and the author's own probe sets, Claude Code (`claude-sonnet-5`) reliably refuses missing-argument sentences and parses fully specified sentences built from framed predicates. An independent session's fresh sentences in ordinary wording parsed only 8 of the 16 it expected to be representable. The gap is frame coverage (23 framed predicates) and permissions with no stated permitter.
 
-In the consumer benchmark, **natural text deduplicated by Lunum identity** (context mode `identity_dedup`) kept every answer with 60–62% fewer tokens, for two answering models. **The saving comes from identity-based deduplication, not compact Lunum-Code**, and it grows as extraction converges more paraphrases. The default renderer (0.1) loses answers. The corpus is small and paraphrase-built, so the percentage is not a general claim.
+In the consumer benchmark, natural text deduplicated by identity used about 60% fewer tokens. `claude-sonnet-5` kept every answer. **`claude-haiku-4-5` got one question wrong in 5 of 9 runs**, adding up paraphrases that extraction had not merged. The MCP default is therefore `natural`, and `identity_dedup` is opt-in. The default Lunum-Code renderer (0.1) loses answers. These are small, self-built corpora; nothing here is a general claim.
 
 The earlier [V8 iteration-2 report](experiments/natural-development-v8/extraction/results-iteration2.json) (an agent extractor given the repository-side packet) recorded 17/18 source-relative matches, 14/14 exact among comparable, 6/6 abstentions and one false abstention. Both are narrow 24-row development results in English and Greek, not protected generalization, broad multilingual support or a training result. Human Greek review covers specific strings only.
 
@@ -35,9 +32,11 @@ Development is trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATIN
 
 Next, in order:
 
-1. **Real memory data (blocked on the owner).** The saving depends on how often real memory repeats itself, which a self-authored corpus cannot tell us. Needs a sample of real product memory (for example OpenUnum conversation logs, with consent and redaction), then the same benchmark with retrieval rather than full context, and extraction cost amortized over queries.
-2. **Renderer default: done at the product surface.** The MCP default is now `identity_dedup` (decisions/0013). The core library default is still `mixed`; switching it is an API change to schedule.
-3. **Remaining extraction miss.** Bare-identifier typing (`attempts on U-31` → `identifier`, not `task`). The "is permitted to activate" false abstention was fixed in contract 0.9.
+1. **Frame coverage.** Frame the common registered predicates (read, update, run, approve, access, …), so permissions without a stated permitter and plain statements with those verbs can be represented. Allow imperatives with no agent where other frames do.
+2. **Run-time provenance.** The runner must hash the served build against the package it records, and refuse to run on a mismatch. Commit the fingerprint-stability scan used in ADRs.
+3. **Out-of-sample evaluation by someone other than the author**, on a larger fresh set, after each change.
+4. **Real memory data (owner).** Needed before any token-saving claim.
+5. Remaining V8 misses: bare-identifier typing, and the unit `attempts` vs `times`.
 
 #685 still needs a human native English review of the V8 English strings. It is recorded as blocked on that input, not re-audited.
 

@@ -1,0 +1,44 @@
+{
+  "format": "openlunum-consumer-qa-regrade/0.1",
+  "grader": "qa-grader/2",
+  "source": "calls.jsonl",
+  "model": {
+    "requested": "sonnet",
+    "served": [
+      "claude-sonnet-5"
+    ]
+  },
+  "conditions": {
+    "natural-all": {
+      "correct": 20,
+      "wrong": [],
+      "changedFromV1": []
+    },
+    "lunum-0.1": {
+      "correct": 18,
+      "wrong": [
+        {
+          "question": "q01",
+          "answer": "unknown",
+          "reason": "unknown"
+        },
+        {
+          "question": "q15",
+          "answer": "unknown",
+          "reason": "unknown"
+        }
+      ],
+      "changedFromV1": []
+    },
+    "lunum-0.2": {
+      "correct": 20,
+      "wrong": [],
+      "changedFromV1": []
+    },
+    "natural-oracle-dedup": {
+      "correct": 20,
+      "wrong": [],
+      "changedFromV1": []
+    }
+  }
+}

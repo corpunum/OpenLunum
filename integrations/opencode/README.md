@@ -28,7 +28,7 @@ Or add directly to `~/.config/opencode/opencode.jsonc`:
       "env": {
         "LUNUM_COMPACTION": "auto",
         "LUNUM_MULTILINGUAL": "off",
-        "LUNUM_CONTEXT_MODE": "identity_dedup"
+        "LUNUM_CONTEXT_MODE": "natural"
       }
     }
   }

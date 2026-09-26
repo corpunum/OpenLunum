@@ -1,0 +1,67 @@
+{
+  "format": "openlunum-consumer-qa-regrade/0.1",
+  "grader": "qa-grader/2",
+  "source": "calls.jsonl",
+  "model": {
+    "requested": "haiku",
+    "served": [
+      "claude-haiku-4-5-20251001"
+    ]
+  },
+  "conditions": {
+    "natural-all": {
+      "correct": 20,
+      "wrong": [],
+      "changedFromV1": []
+    },
+    "lunum-0.1": {
+      "correct": 17,
+      "wrong": [
+        {
+          "question": "q01",
+          "answer": "S-11 must send O-11 N-11 (send notice N-11 to O-11)",
+          "reason": "no-accepted-token"
+        },
+        {
+          "question": "q04",
+          "answer": "unknown",
+          "reason": "unknown"
+        },
+        {
+          "question": "q15",
+          "answer": "unknown",
+          "reason": "unknown"
+        }
+      ],
+      "changedFromV1": []
+    },
+    "lunum-0.2": {
+      "correct": 20,
+      "wrong": [],
+      "changedFromV1": []
+    },
+    "natural-lunum-dedup": {
+      "correct": 19,
+      "wrong": [
+        {
+          "question": "q14",
+          "answer": "14 times (7 retries on 2027-01-14, plus 7 further attempts on the same date)",
+          "reason": "numbers 14,7"
+        }
+      ],
+      "changedFromV1": [
+        {
+          "question": "q14",
+          "v1": true,
+          "v2": false,
+          "answer": "14 times (7 retries on 2027-01-14, plus 7 further attempts on the same date)"
+        }
+      ]
+    },
+    "natural-oracle-dedup": {
+      "correct": 20,
+      "wrong": [],
+      "changedFromV1": []
+    }
+  }
+}

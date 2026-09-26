@@ -1,5 +1,8 @@
 # Consumer memory QA v1: three runs
 
+> **Grader note:** these runs were re-graded with strict grader v2 (`summary-regraded.json`); no verdict changed.
+
+
 **Diagnostic development evidence, self-reviewed.** [Benchmark design](../../../../experiments/consumer-memory-qa-v1/README.md).
 - Answering model: `claude-sonnet-5`. Tokens are its provider-reported input tokens for the memory block.
 - Each run pairs frame-0.2 extraction repetition *i* with one answering pass over 20 questions. `aggregate.json` has the totals. Cost: $2.27, 0 failed calls.

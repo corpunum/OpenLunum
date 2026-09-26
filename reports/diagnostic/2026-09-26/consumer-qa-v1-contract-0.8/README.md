@@ -1,5 +1,8 @@
 # Consumer memory QA v1 on contract-0.8 extractions, two answering models
 
+> **Correction after [independent evaluation](../../../independent-evaluation/2026-09-26/REPORT.md)** (rows 11–12). The grader used substring matching and accepted "14 times (7 retries …)" as "7". Re-graded with strict grader v2 (`summary-regraded.json` in each run folder; no new model calls), **Haiku natural-lunum-dedup is 20 / 19 / 19, not 20 / 20 / 20.** Every other cell is unchanged. The per-run token savings range over −55/−62/−62% (Sonnet) and −56/−66/−66% (Haiku); run 1 saves less. The "keeps every answer" claim below is false for Haiku.
+
+
 **Diagnostic development evidence, self-reviewed.** Same [benchmark](../../../../experiments/consumer-memory-qa-v1/README.md) and code as [consumer-qa-v1](../consumer-qa-v1/README.md), at `500fc1a`, with two changes:
 - the ledgers come from the [contract-0.8 runs](../contract-0.8/README.md): benchmark run *i* uses extraction repetition *i*;
 - there is a second answering model.

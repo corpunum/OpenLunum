@@ -1,5 +1,16 @@
 # Contract `lunum-agent/0.8`: three repeated live runs
 
+> **Corrections after [independent evaluation](../../../independent-evaluation/2026-09-26/REPORT.md)** (audit rows 2, 5, 8). The original text below is unchanged.
+> - **Remaining V8 misses, per the ledgers:**
+>   - rep 1: `g2-en-b` false abstention, plus `g2-en-a` with `world: tool` (not `real`);
+>   - rep 2: `g2-en-b`, plus `g6-en-b` theme typed `identifier` and count unit `attempts`;
+>   - rep 3: `g2-en-b`, plus `g6-en-b` unit `attempts`.
+>
+>   The "typed `identifier` in 2 of 3 repetitions" statement below was wrong: it was 1 of 3, and one repetition's miss was a different error (`world`).
+> - **Probes v3 are not out-of-sample for the aliases.** Their verbs (modify, remove, execute, inspect) were put into the alias table three minutes after v3 was frozen, by the same author. The v3 alias results show a table lookup, not generalization. Probes v4 is the out-of-table test ([contract-0.9](../contract-0.9/README.md)).
+> - **"Exact 16/16" excludes items whose literals need normalization** (the scorer's source-anchored rule drops the date/number-normalized retry group and `g2-en-a`). Exact identity was therefore tested on 16–17 of 21 parse targets, not all 21.
+
+
 **Diagnostic development evidence, self-reviewed.** Setup:
 - Claude Code with `claude-sonnet-5`, one fresh isolated process per item.
 - Package v8: frame 0.3 (a permission needs a stated permitter, decisions/0010) and protocol 0.3 (verb aliases, decisions/0011).

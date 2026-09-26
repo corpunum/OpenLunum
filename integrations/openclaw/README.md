@@ -12,7 +12,7 @@ openclaw mcp add lunum \
   --arg /home/corpunum/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js \
   --env LUNUM_COMPACTION=auto \
   --env LUNUM_MULTILINGUAL=off \
-  --env LUNUM_CONTEXT_MODE=identity_dedup
+  --env LUNUM_CONTEXT_MODE=natural
 ```
 
 Verify:

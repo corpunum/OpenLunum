@@ -1,5 +1,8 @@
 # Consumer benchmark: the product `identity_dedup` path
 
+> **Correction after [independent evaluation](../../../independent-evaluation/2026-09-26/REPORT.md)** (rows 13–14). Re-graded with strict grader v2: **Haiku product-identity-dedup is 20 / 20 / 19, and natural-lunum-dedup is 20 / 19 / 19.** The q14 "14" error is not a single observation. It appeared in 5 of 9 Haiku dedup condition-runs and 0 of 6 Haiku natural-all runs, always where extraction left two paraphrases of one event unmerged. The MCP default was reverted to `natural` (decisions/0013 amendment 1).
+
+
 **Diagnostic development evidence, self-reviewed.**
 - Same [benchmark](../../../../experiments/consumer-memory-qa-v1/README.md) as the two-model run, at `23331fe`, on the contract-0.8 extraction ledgers (run *i* uses repetition *i*).
 - The added condition `product-identity-dedup` builds the memory with core `compileContext(…, {mode: 'identity_dedup'})`, the shipped code path.
