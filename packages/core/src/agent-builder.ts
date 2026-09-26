@@ -67,7 +67,9 @@ export function getCandidateBuilderSchema(): Record<string, unknown> {
     const roleAliases = SEMANTIC_PROTOCOL_REGISTRY.aliases.role;
     for (const role of frame.roles) {
       const aliases = Object.entries(roleAliases).filter(([, canonical]) => canonical === role.name).map(([alias]) => alias);
-      const roleSchema = role.allowedTermTypes?.length
+      const roleSchema = role.vocabulary === 'predicate'
+        ? { type: 'string', enum: [...SEMANTIC_PROTOCOL_REGISTRY.predicates] }
+        : role.allowedTermTypes?.length
         ? { oneOf: role.allowedTermTypes.map((type) => ({ $ref: '#/$defs/termObject', properties: { type: { const: type } }, required: ['type'] })) }
         : { $ref: '#/$defs/term' };
       for (const name of [role.name, ...aliases]) roleProperties[name] = roleSchema;

@@ -1,12 +1,14 @@
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
 
-export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.1' as const;
+export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.2' as const;
 
 export interface FrameRoleRequirement {
   name: string;
   required: boolean;
   allowedTermTypes?: readonly string[];
+  /** The filler must be a registered protocol predicate given as a bare identifier (decisions/0008). */
+  vocabulary?: 'predicate';
   description?: string;
 }
 
@@ -27,7 +29,8 @@ export function canonicalFramePromptBlock(): string {
       ...(optional.length ? [`optional: ${optional.join(', ')}`] : []),
       ...(frame.atLeastOneOf?.length ? [`at least one of: ${frame.atLeastOneOf.join('|')}`] : []),
       ...(frame.exclusiveGroups?.flatMap((group) => [`${group.join('|')} (mutually exclusive)`]) ?? []),
-      ...frame.roles.flatMap((role) => role.allowedTermTypes?.length ? [`${role.name}: ${role.allowedTermTypes.join('|')}`] : [])
+      ...frame.roles.flatMap((role) => role.allowedTermTypes?.length ? [`${role.name}: ${role.allowedTermTypes.join('|')}`] : []),
+      ...frame.roles.flatMap((role) => role.vocabulary === 'predicate' ? [`${role.name}: a registered predicate`] : [])
     ];
     return `${frame.predicate}(${required.length ? required.join(', ') : 'no required roles'}${extras.length ? `; ${extras.join('; ')}` : ''}) — ${frame.description}`;
   }).join('\n');
@@ -36,7 +39,7 @@ export function canonicalFramePromptBlock(): string {
 export interface FrameValidationIssue {
   path: string;
   predicate: string;
-  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role';
+  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role' | 'unregistered_action';
   message: string;
 }
 
@@ -159,18 +162,22 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     roles: Object.freeze([
       { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
-      { name: 'theme', required: true }
+      { name: 'theme', required: false },
+      { name: 'action', required: false, vocabulary: 'predicate' as const }
     ]),
-    description: 'An agent permits a recipient to perform an action or access a theme.'
+    atLeastOneOf: Object.freeze(['theme', 'action']),
+    description: 'An agent permits a recipient to perform an action (a registered predicate) and/or to act on a theme (the object or resource).'
   }),
   prohibit: Object.freeze({
     predicate: 'prohibit',
     roles: Object.freeze([
       { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
-      { name: 'theme', required: true }
+      { name: 'theme', required: false },
+      { name: 'action', required: false, vocabulary: 'predicate' as const }
     ]),
-    description: 'An agent forbids a recipient from performing an action or accessing a theme.'
+    atLeastOneOf: Object.freeze(['theme', 'action']),
+    description: 'An agent forbids a recipient from performing an action (a registered predicate) and/or from acting on a theme (the object or resource).'
   }),
   deploy: Object.freeze({
     predicate: 'deploy',
@@ -357,6 +364,16 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
         code: 'missing_required_role',
         message: `Predicate '${predicate}' requires role '${req.name}'`
       });
+    }
+
+    if (roleMap.has(req.name) && req.vocabulary === 'predicate') {
+      const value = roleMap.get(req.name);
+      if (typeof value !== 'string' || value !== basicIdentifier(value) || !SEMANTIC_PROTOCOL_REGISTRY.predicates.includes(value)) {
+        issues.push({
+          path: `${pathPrefix}.roles.${req.name}`, predicate, code: 'unregistered_action',
+          message: `Role '${req.name}' for predicate '${predicate}' must be a registered predicate identifier (e.g. 'read', 'update'); abstain if the action has no registered predicate`
+        });
+      }
     }
 
     if (roleMap.has(req.name) && req.allowedTermTypes?.length) {

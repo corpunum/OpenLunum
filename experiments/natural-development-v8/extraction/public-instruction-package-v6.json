@@ -1,0 +1,79 @@
+{
+  "format": "openlunum-public-extraction-package/0.2",
+  "status": "frozen-for-next-source-only-run",
+  "supersedes": {
+    "path": "public-instruction-package-v5.json",
+    "reason": "Frame lunum-frame/0.2 / protocol 0.2 / contract lunum-agent/0.6: allow and prohibit gain an action role (decisions/0008, owner decision)."
+  },
+  "freeze": {
+    "sourceSha": null,
+    "builtWith": "pnpm --filter @corpunum/lunum-mcp... build (or node scripts/lunum-mcp-launch.mjs)",
+    "mcpEntrypoint": "packages/mcp/dist/bin/lunum-mcp.js",
+    "coreArtifactSha256": "bc05db1f2928c56587cd78595b7959849e629ea0befb2c810cd5815ce551d763",
+    "mcpArtifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+    "toolImplementationSha256": "48aa0a0c8ddb9505c7db2767ca89518a20d6ffb20210f1b5ea8d5676a3ab0299",
+    "coreContractVersion": "lunum-agent/0.6",
+    "coreContractHash": "2a6b271ca9553caf472c6e4c5e9c86f3bbd9067bd50ad123afaf258723d230e5",
+    "coreContractHashAlgorithm": "sha256(stableStringify(contract)) using @corpunum/lunum canonicalization",
+    "coreContractJsonSerializationSha256": "73e01cbfca7c6d453b394b500f7950e9f3c5bde10b19b1106193a02d4e0ba388",
+    "instructionVersion": "agent-extraction-instructions/0.3",
+    "instructionHash": "71445c37703c5021dee13f5f1f337a6b86ef16f7028bf5c9221aecf3ddd3cc4b",
+    "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+    "frameRegistryHash": "1f208b72d05e2d7eda000a1b6dff04de56918dbb504aa3fcd8c80aa5f68d46b2",
+    "protocolRegistryHash": "d601e58b9c532967e40464d67d1ded06fb9ea3cf8b167fe413a821f8ebcd41ad",
+    "taskContractPath": "../task-contract.json",
+    "taskContractSha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+    "scorerPath": "../../../scripts/research/score-natural-source-only-extraction.mjs",
+    "scorerSha256": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec",
+    "sourceBinding": "The commit that added this file (git log --diff-filter=A -- <this file>). The artifact hashes below are the binding.",
+    "launcher": "scripts/lunum-mcp-launch.mjs",
+    "launcherSha256": "9b35bc921abe05369432aa57fa454045b1a8a5c0e2df29d33c5aafc1a424a69d",
+    "frameValidatorArtifactSha256": "8a1943b3296eab586143dca7b4e6c74a8e0eaeba3ac3478070032164c5e5ec14",
+    "taskProfilePath": "public-task-profile-iteration4.json",
+    "taskProfileSha256": "f3d5b26df2491e033aa9c410961b1768cc4be9754d48df869d4ca018d1ac6cc0",
+    "frameRegistryVersion": "lunum-frame/0.2",
+    "protocolVersion": "lunum-protocol/0.2"
+  },
+  "input": [
+    "opaque handle",
+    "source text",
+    "source language",
+    "task contract",
+    "core extraction contract"
+  ],
+  "forbidden": [
+    "gold targets",
+    "reviews",
+    "semantic groups",
+    "contrast labels",
+    "private map",
+    "prior candidates"
+  ],
+  "conventions": {
+    "kind": "Use the task-declared kind only when source evidence supports it; parcel/document/object distinctions are typed semantic choices, not aliases.",
+    "conditional": [
+      "root is the primary action",
+      "additional coordinated actions are consequences",
+      "repeat the named agent",
+      "repeat explicitly stated modality on coordinated actions"
+    ],
+    "roles": [
+      "send(agent, object, recipient); recipient is not destination",
+      "publish uses audience",
+      "retry preserves count and date when stated",
+      "below uses subject and value",
+      "enable uses theme",
+      "allow/prohibit: theme is the object or resource; action is the permitted/forbidden action as a registered predicate; at least one of them; abstain if neither is stated or no registered predicate expresses the action"
+    ],
+    "modality": "Obligation and permission are distinct; lexical negation uses negated and is never rewritten as an antonym.",
+    "quantityAndTime": "Preserve finite numeric value and ISO date at clause time; normalize units per the task profile (% -> percent).",
+    "identity": "Exact identity only for source-visible stable names, identifiers, literals, dates, and task-typed roles; never infer private handles.",
+    "abstention": "Explicitly abstain for unsupported, ambiguous, or unresolved meaning, and when the source does not state a role the frame requires; never fill a role with its type name or the verb. Retain source and provenance. If the builder rejects a filler with placeholder_role or missing_required_role, abstain rather than re-typing or re-wording it."
+  },
+  "delivery": {
+    "requiredBeforeExtraction": true,
+    "receiptMustIncludeArtifactHashes": true,
+    "preflight": "Call lunum_get_extraction_contract through the built stdio MCP server and require the returned contractVersion, instructionHash, schemaHash, and frameRegistryHash to match freeze; compute sha256(stableStringify(contract)) with @corpunum/lunum canonicalization and require it to match freeze.coreContractHash. JSON.stringify bytes are a separate serialization hash.",
+    "historicalDelivery": "unverified"
+  }
+}

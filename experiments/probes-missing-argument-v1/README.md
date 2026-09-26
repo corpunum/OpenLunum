@@ -7,3 +7,7 @@ Frozen 2026-09-26, before any extraction run against it. The probes are out of s
 - Scoring is by outcome only: a parse counts when a submission was accepted with identity, and an abstain counts when the extractor abstained. There are no target Sem objects, so correct parses are not checked for exact meaning.
 
 **Review status:** authored by an AI agent (Claude Code). The Greek sentences have **not** been reviewed by a human native speaker. The expected outcomes are the author's judgment. Treat this as a diagnostic probe, not reviewed evaluation data.
+
+## Frame 0.2 successor expectations
+
+`private-expectations-frame-0.2.jsonl` supersedes the original expectations for runs against frame `lunum-frame/0.2` (decisions/0008). The original file is unchanged. Verb-only `allow` sentences become `parse` (`action: read`/`update`). Self-authored, unreviewed.

@@ -158,3 +158,23 @@ test('placeholder rule leaves named instances and real literals alone', () => {
     assert.ok(!issues.some((issue) => issue.code === 'placeholder_role'), JSON.stringify(theme));
   }
 });
+
+test('allow/prohibit take a registered-predicate action and need theme or action (decisions/0008)', () => {
+  const actors = { agent: { type: 'actor', id: 'Lena' }, recipient: { type: 'actor', id: 'Tomas' } };
+  for (const predicate of ['allow', 'prohibit']) {
+    // "Lena allows Tomas to edit."
+    assert.deepEqual(validateClauseFrame({ predicate, roles: { ...actors, action: 'update' } }), []);
+    // "Lena allows Tomas to edit page P-3."
+    assert.deepEqual(validateClauseFrame({ predicate, roles: { ...actors, action: 'update', theme: { type: 'document', id: 'P-3' } } }), []);
+    // Theme-only permissions stay valid, so existing Sem keeps its meaning.
+    assert.deepEqual(validateClauseFrame({ predicate, roles: { ...actors, theme: { type: 'resource', id: 'R-9' } } }), []);
+    // "Lena allows Tomas." states neither.
+    assert.ok(validateClauseFrame({ predicate, roles: actors }).some((issue) => issue.code === 'missing_required_role'));
+  }
+  for (const action of ['edit', 'Update', { type: 'task', value: 'update' }, 'download']) {
+    const issues = validateClauseFrame({ predicate: 'allow', roles: { ...actors, action: action as never } });
+    assert.ok(issues.some((issue) => issue.code === 'unregistered_action'), JSON.stringify(action));
+  }
+  // The predicate itself is still a placeholder, not an action.
+  assert.ok(validateClauseFrame({ predicate: 'allow', roles: { ...actors, action: 'allow' } }).some((issue) => issue.code === 'placeholder_role'));
+});

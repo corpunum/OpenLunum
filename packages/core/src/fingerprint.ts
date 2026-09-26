@@ -72,6 +72,9 @@ export function semanticIdentityProjection(sem: LunumSem): Record<string, unknow
     return grounded ? [grounded.normalize('NFKC').replace(/\s+/gu, '_').toLocaleLowerCase('und')] : [];
   }))].sort().map((ref) => ({ ref }));
   return {
+    // Identity-projection tag, frozen with lfp:2.1. It is not SEMANTIC_PROTOCOL_VERSION:
+    // additive registry changes (lunum-protocol/0.2 added `action`) must not move
+    // existing identities. Changing this literal changes every fingerprint.
     protocol: 'lunum-protocol/0.1',
     schema: sem.schema,
     world: sem.world,
