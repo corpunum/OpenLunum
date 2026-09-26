@@ -74,7 +74,7 @@ export const compileContextTool: LunumToolDefinition = {
       mode: {
         type: 'string',
         description: 'Context compilation mode',
-        enum: ['natural', 'lunum', 'mixed', 'shadow_mixed'],
+        enum: ['natural', 'lunum', 'mixed', 'shadow_mixed', 'identity_dedup'],
       },
     },
     required: ['messages'],

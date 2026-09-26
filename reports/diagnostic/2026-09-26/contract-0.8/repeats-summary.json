@@ -1,0 +1,212 @@
+{
+  "format": "openlunum-frame-0.2-repeats/0.1",
+  "status": "diagnostic-development-only, self-reviewed",
+  "reps": 3,
+  "perRep": [
+    {
+      "rep": 1,
+      "v8": {
+        "sourceRelativeMatch": 19,
+        "parseTargets": 21,
+        "exact": 16,
+        "comparable": 16,
+        "falseAbstentions": 1,
+        "abstainCorrect": 3,
+        "abstainTargets": 3,
+        "convergingGroups": 6
+      },
+      "probesV1": {
+        "abstain": {
+          "n": 8,
+          "correct": 8,
+          "observed": {
+            "abstain": 8
+          }
+        },
+        "parse": {
+          "n": 12,
+          "correct": 12,
+          "observed": {
+            "parse": 12
+          }
+        }
+      },
+      "probesV2": {
+        "abstain": {
+          "n": 6,
+          "correct": 6,
+          "observed": {
+            "abstain": 6
+          }
+        },
+        "parse": {
+          "n": 12,
+          "correct": 12,
+          "observed": {
+            "parse": 12
+          }
+        },
+        "either": [
+          {
+            "pair": "prohibit",
+            "language": "el",
+            "observed": "abstain"
+          },
+          {
+            "pair": "prohibit",
+            "language": "en",
+            "observed": "abstain"
+          }
+        ]
+      },
+      "costUsd": 6.3983
+    },
+    {
+      "rep": 2,
+      "v8": {
+        "sourceRelativeMatch": 19,
+        "parseTargets": 21,
+        "exact": 17,
+        "comparable": 17,
+        "falseAbstentions": 1,
+        "abstainCorrect": 3,
+        "abstainTargets": 3,
+        "convergingGroups": 5
+      },
+      "probesV1": {
+        "abstain": {
+          "n": 8,
+          "correct": 8,
+          "observed": {
+            "abstain": 8
+          }
+        },
+        "parse": {
+          "n": 12,
+          "correct": 12,
+          "observed": {
+            "parse": 12
+          }
+        }
+      },
+      "probesV2": {
+        "abstain": {
+          "n": 6,
+          "correct": 6,
+          "observed": {
+            "abstain": 6
+          }
+        },
+        "parse": {
+          "n": 12,
+          "correct": 12,
+          "observed": {
+            "parse": 12
+          }
+        },
+        "either": [
+          {
+            "pair": "prohibit",
+            "language": "el",
+            "observed": "abstain"
+          },
+          {
+            "pair": "prohibit",
+            "language": "en",
+            "observed": "abstain"
+          }
+        ]
+      },
+      "costUsd": 6.2119
+    },
+    {
+      "rep": 3,
+      "v8": {
+        "sourceRelativeMatch": 19,
+        "parseTargets": 21,
+        "exact": 17,
+        "comparable": 17,
+        "falseAbstentions": 1,
+        "abstainCorrect": 3,
+        "abstainTargets": 3,
+        "convergingGroups": 5
+      },
+      "probesV1": {
+        "abstain": {
+          "n": 8,
+          "correct": 8,
+          "observed": {
+            "abstain": 8
+          }
+        },
+        "parse": {
+          "n": 12,
+          "correct": 12,
+          "observed": {
+            "parse": 12
+          }
+        }
+      },
+      "probesV2": {
+        "abstain": {
+          "n": 6,
+          "correct": 6,
+          "observed": {
+            "abstain": 6
+          }
+        },
+        "parse": {
+          "n": 12,
+          "correct": 12,
+          "observed": {
+            "parse": 12
+          }
+        },
+        "either": [
+          {
+            "pair": "prohibit",
+            "language": "el",
+            "observed": "abstain"
+          },
+          {
+            "pair": "prohibit",
+            "language": "en",
+            "observed": "abstain"
+          }
+        ]
+      },
+      "costUsd": 6.1364
+    }
+  ],
+  "range": {
+    "v8SourceRelativeMatch": {
+      "min": 19,
+      "max": 19
+    },
+    "v8Exact": {
+      "min": 16,
+      "max": 17
+    },
+    "v8AbstainCorrect": {
+      "min": 3,
+      "max": 3
+    },
+    "probesV1AbstainCorrect": {
+      "min": 8,
+      "max": 8
+    },
+    "probesV1ParseCorrect": {
+      "min": 12,
+      "max": 12
+    },
+    "probesV2AbstainCorrect": {
+      "min": 6,
+      "max": 6
+    },
+    "probesV2ParseCorrect": {
+      "min": 12,
+      "max": 12
+    }
+  },
+  "totalCostUsd": 18.7466
+}

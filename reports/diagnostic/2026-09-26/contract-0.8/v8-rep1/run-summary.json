@@ -1,0 +1,26 @@
+{
+  "format": "openlunum-client-extraction-run/0.1",
+  "client": "claude-code",
+  "clientVersion": "2.1.283 (Claude Code)",
+  "requestedModel": "sonnet",
+  "reportedModels": [
+    "claude-sonnet-5"
+  ],
+  "codeCommit": "c89e7c6d9d880d68cbf6cb27da5b7e51e72dc821",
+  "workingTreeCleanAtStart": true,
+  "mode": "live",
+  "package": "experiments/natural-development-v8/extraction/public-instruction-package-v8.json",
+  "packageSha256": "d7b4fa68582428e434474f3036080722b46d316d1e5be18e1faa08c64e299f9f",
+  "requestsSha256": "5e884ba6b9c8971fd9015aaec75abe316eb97fd0f86181bd1c36e7d8ab45d73f",
+  "profileSha256": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+  "isolation": "fresh claude -p process per item in an empty temp cwd; built-in tools disabled (--tools \"\"); --strict-mcp-config with only contract/build/submit/validate allowed; prompt-level source-only, not a technical sandbox (the MCP server process runs from the repository checkout)",
+  "rows": 24,
+  "parse": 20,
+  "abstain": 4,
+  "failed": 0,
+  "failures": [],
+  "toolErrors": 0,
+  "totalCostUsd": 2.9908,
+  "candidateLedgerSha256": "d78ab72f30d2aecdb70eed6c1b62ba0ee1f25cecf6dae4788162e8cc2f43481f",
+  "runLedgerSha256": "350475152c317cdd46c66d4e8b489e94fc91090b6fc6336365af67fb29dc4032"
+}

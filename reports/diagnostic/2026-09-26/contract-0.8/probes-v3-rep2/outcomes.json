@@ -1,0 +1,210 @@
+{
+  "format": "openlunum-probe-outcomes/0.1",
+  "overall": {
+    "n": 16,
+    "correct": 16,
+    "observed": {
+      "abstain": 5,
+      "parse": 11
+    }
+  },
+  "byExpected": {
+    "abstain": {
+      "n": 5,
+      "correct": 5,
+      "observed": {
+        "abstain": 5
+      }
+    },
+    "parse": {
+      "n": 11,
+      "correct": 11,
+      "observed": {
+        "parse": 11
+      }
+    }
+  },
+  "either": [],
+  "byLanguage": {
+    "el": {
+      "n": 6,
+      "correct": 6,
+      "observed": {
+        "abstain": 2,
+        "parse": 4
+      }
+    },
+    "en": {
+      "n": 10,
+      "correct": 10,
+      "observed": {
+        "parse": 7,
+        "abstain": 3
+      }
+    }
+  },
+  "pairsBothCorrect": 16,
+  "pairs": 16,
+  "items": [
+    {
+      "handle": "probe3-044cc6d719e776ee",
+      "pair": "allow-nothing",
+      "frame": "allow",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-046a771905ceedf8",
+      "pair": "permitted-send",
+      "frame": "permitted",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-19d7770cd4d05a73",
+      "pair": "allow-inspect-obj",
+      "frame": "allow",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-2f4109d88d568f00",
+      "pair": "allow-inspect-obj",
+      "frame": "allow",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-369d01567eafca1e",
+      "pair": "allow-print",
+      "frame": "allow",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-603e47f55dd3049b",
+      "pair": "allow-nothing",
+      "frame": "allow",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-616c736c729331a9",
+      "pair": "prohibit-whistle",
+      "frame": "prohibit",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-6c3d97d2803ac051",
+      "pair": "allow-print",
+      "frame": "allow",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-a4a94b88d76f9d69",
+      "pair": "allow-modify",
+      "frame": "allow",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-a745e8443ce89380",
+      "pair": "permitted-enable",
+      "frame": "permitted",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-ac2a5ba3ae734017",
+      "pair": "permitted-enable",
+      "frame": "permitted",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-ad49ecee590f02b0",
+      "pair": "permitted-publish",
+      "frame": "permitted",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-ca2069acb26fc681",
+      "pair": "prohibit-remove",
+      "frame": "prohibit",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-de9f5b8eba2b867e",
+      "pair": "allow-modify",
+      "frame": "allow",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-ec7156221d2ffd87",
+      "pair": "prohibit-remove",
+      "frame": "prohibit",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe3-fd69a5e72afa7497",
+      "pair": "allow-execute",
+      "frame": "allow",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    }
+  ]
+}

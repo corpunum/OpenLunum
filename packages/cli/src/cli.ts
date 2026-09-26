@@ -730,7 +730,7 @@ async function main(): Promise<void> {
     const path = flag('messages');
     if (!path) throw new Error('--messages <path> is required');
     const messages = await readJson<ContextMessage[]>(path);
-    console.log(JSON.stringify(compileContext(messages, { mode: (flag('mode') as 'natural' | 'lunum' | 'mixed' | 'shadow_mixed' | undefined) ?? 'mixed' }), null, 2));
+    console.log(JSON.stringify(compileContext(messages, { mode: (flag('mode') as 'natural' | 'lunum' | 'mixed' | 'shadow_mixed' | 'identity_dedup' | undefined) ?? 'mixed' }), null, 2));
     return;
   }
   if (command === 'migrate') {

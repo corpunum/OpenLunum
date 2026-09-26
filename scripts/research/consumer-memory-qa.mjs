@@ -130,7 +130,8 @@ async function pool(tasks) {
 
 const normalize = (value) => String(value ?? '').toLowerCase().normalize('NFKC');
 function grade(question, text) {
-  let answer = text; try { answer = JSON.parse(String(text).trim().split('\n').at(-1)).answer; } catch { /* grade raw text */ }
+  // Some models wrap the JSON in a code fence; take the first JSON object.
+  let answer = text; try { answer = JSON.parse(String(text).match(/\{[\s\S]*\}/u)[0]).answer; } catch { /* grade raw text */ }
   const normalized = normalize(answer);
   const accepted = question.accept.some((token) => normalized.includes(token));
   const rejected = question.reject.some((token) => normalized.includes(token));

@@ -56,13 +56,19 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(v7.freeze.protocolRegistryHash, v6.freeze.protocolRegistryHash, 'decisions/0010 changes frames, not the protocol vocabulary');
   assert.notEqual(v7.freeze.frameRegistryHash, v6.freeze.frameRegistryHash);
 
-  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v8.json', 'utf8'));
+  // v8 is history; the recorded contract-0.8 runs bind it.
+  const v8 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v8.json', 'utf8'));
+  assert.equal(v8.supersedes.path, 'public-instruction-package-v7.json');
+  assert.equal(v8.freeze.toolImplementationSha256, '48aa0a0c8ddb9505c7db2767ca89518a20d6ffb20210f1b5ea8d5676a3ab0299');
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v9.json', 'utf8'));
   assert.equal(next.status, 'frozen-for-next-source-only-run');
-  assert.equal(next.supersedes.path, 'public-instruction-package-v7.json');
+  assert.equal(next.supersedes.path, 'public-instruction-package-v8.json');
+  assert.equal(next.freeze.coreContractHash, v8.freeze.coreContractHash, 'v9 rebinds the build; the contract is unchanged');
   assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.8');
   assert.equal(next.freeze.protocolVersion, 'lunum-protocol/0.3');
   assert.equal(next.freeze.schemaHash, previous.freeze.schemaHash, 'transport schema unchanged since v2');
-  assert.notEqual(next.freeze.protocolRegistryHash, v7.freeze.protocolRegistryHash, 'decisions/0011 extends the predicate aliases');
+  assert.notEqual(v8.freeze.protocolRegistryHash, v7.freeze.protocolRegistryHash, 'decisions/0011 extends the predicate aliases');
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
   assert.equal(hash('packages/mcp/dist/src/tools.js'), next.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);

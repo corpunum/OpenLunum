@@ -26,7 +26,7 @@ function loadConfigFile(): Partial<LunumConfig> {
     const result: Partial<LunumConfig> = {};
     if (raw.compaction === 'on' || raw.compaction === 'off' || raw.compaction === 'auto') result.compaction = raw.compaction;
     if (typeof raw.multilingual === 'boolean') result.multilingual = raw.multilingual;
-    if (['natural', 'lunum', 'mixed', 'shadow_mixed'].includes(raw.contextMode)) result.contextMode = raw.contextMode;
+    if (['natural', 'lunum', 'mixed', 'shadow_mixed', 'identity_dedup'].includes(raw.contextMode)) result.contextMode = raw.contextMode;
     if (typeof raw.maxContextItems === 'number' && raw.maxContextItems > 0) result.maxContextItems = raw.maxContextItems;
     if (typeof raw.defaultLanguage === 'string') result.defaultLanguage = raw.defaultLanguage;
     return result;
@@ -42,7 +42,7 @@ function loadEnvOverrides(): Partial<LunumConfig> {
   if (process.env.LUNUM_MULTILINGUAL === 'on') result.multilingual = true;
   if (process.env.LUNUM_MULTILINGUAL === 'off') result.multilingual = false;
   const m = process.env.LUNUM_CONTEXT_MODE;
-  if (m && ['natural', 'lunum', 'mixed', 'shadow_mixed'].includes(m)) result.contextMode = m as ContextMode;
+  if (m && ['natural', 'lunum', 'mixed', 'shadow_mixed', 'identity_dedup'].includes(m)) result.contextMode = m as ContextMode;
   const n = Number(process.env.LUNUM_MAX_CONTEXT_ITEMS);
   if (n > 0) result.maxContextItems = n;
   return result;

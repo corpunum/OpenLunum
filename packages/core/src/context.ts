@@ -1,7 +1,13 @@
 import { ROUGH_TOKEN_COUNTER, type TokenCounter } from './derive.js';
 import type { ContextMessage, EligibilityDecision } from './types.js';
 
-export type ContextMode = 'natural' | 'lunum' | 'mixed' | 'shadow_mixed';
+/**
+ * identity_dedup (decisions/0012): natural text only, dropping a message whose
+ * core-issued lfp:2.1 identity already appeared. In the consumer benchmark this
+ * was the cheapest context that kept every answer; Lunum-Code renderings cost
+ * more tokens per fact than the source sentence.
+ */
+export type ContextMode = 'natural' | 'lunum' | 'mixed' | 'shadow_mixed' | 'identity_dedup';
 
 function normalizeMessage(message: ContextMessage): { role: string; natural: string; code: string | null; meta: Partial<EligibilityDecision> } {
   const natural = String(message.content ?? message.source?.text ?? '');
@@ -34,15 +40,26 @@ export function compileContext(messages: ContextMessage[], options: { mode?: Con
   const naturalMessages = normalized.map(({ value: message }) => ({ role: message.role, content: message.natural }));
   const lunumMessages = normalized.map(({ value: message, original }) => ({ role: message.role, content: canServeSemanticCode(message, original) ? message.code! : message.natural }));
   const mixedMessages = normalized.map(({ value: message, original }) => ({ role: message.role, content: canServeSemanticCode(message, original) ? message.code! : message.natural }));
-  const selectedMessages = mode === 'natural' || mode === 'shadow_mixed' ? naturalMessages : mode === 'lunum' ? lunumMessages : mixedMessages;
+  const seenIdentities = new Set<string>();
+  const identityDedupMessages = normalized.flatMap(({ value: message, original }) => {
+    const identity = original.record?.semanticFingerprint;
+    // Only core-issued semantic identities deduplicate; anything else is kept verbatim.
+    if (typeof identity === 'string' && identity.startsWith('lfp:2.')) {
+      if (seenIdentities.has(identity)) return [];
+      seenIdentities.add(identity);
+    }
+    return [{ role: message.role, content: message.natural }];
+  });
+  const selectedMessages = mode === 'natural' || mode === 'shadow_mixed' ? naturalMessages : mode === 'lunum' ? lunumMessages : mode === 'identity_dedup' ? identityDedupMessages : mixedMessages;
   const sum = (rows: Array<{ content: string }>) => rows.reduce((total, row) => total + counter(row.content), 0);
   const naturalTokens = sum(naturalMessages);
   const lunumTokens = sum(lunumMessages);
   const mixedTokens = sum(mixedMessages);
-  const selectedTokens = mode === 'lunum' ? lunumTokens : mode === 'natural' ? naturalTokens : mixedTokens;
+  const identityDedupTokens = sum(identityDedupMessages);
+  const selectedTokens = mode === 'lunum' ? lunumTokens : mode === 'natural' ? naturalTokens : mode === 'identity_dedup' ? identityDedupTokens : mixedTokens;
   return {
-    version: 'lunum-context/0.1-draft', mode, tokenCounter: counterLabel, selectedMessages, naturalMessages, lunumMessages, mixedMessages,
-    naturalTokens, lunumTokens, mixedTokens,
+    version: 'lunum-context/0.1-draft', mode, tokenCounter: counterLabel, selectedMessages, naturalMessages, lunumMessages, mixedMessages, identityDedupMessages,
+    naturalTokens, lunumTokens, mixedTokens, identityDedupTokens,
     ratio: naturalTokens ? selectedTokens / naturalTokens : 1,
     estimatedSavings: naturalTokens ? 1 - selectedTokens / naturalTokens : 0
   };
