@@ -1,0 +1,20 @@
+{"handle": "probe-02b783c28e209ee2", "sourceLanguage": "en", "sourceText": "System S-40 sends to operator O-40.", "sourceSha256": "02b783c28e209ee21f18e2ea00019d08d40c5e67dfaa835d0c04bf43985e1dd9"}
+{"handle": "probe-077998a22884cee7", "sourceLanguage": "en", "sourceText": "Backup job J-9 copies to location L-9.", "sourceSha256": "077998a22884cee77abf7ea4b3e36bb7e8bce46673357e9e4430d5e1c75b9d68"}
+{"handle": "probe-24e3424f777273fd", "sourceLanguage": "en", "sourceText": "Editor E-70 publishes to audience A-70.", "sourceSha256": "24e3424f777273fdde326b4c38fb1a5d3a4a0acc2a249a73e7ea529adc56b1ce"}
+{"handle": "probe-2a274a4863f11eb9", "sourceLanguage": "en", "sourceText": "Release bot B-5 deploys.", "sourceSha256": "2a274a4863f11eb93365c1444149903e8815c1d9d323334edb1e612c29c2d199"}
+{"handle": "probe-4917ec0fe5d2b546", "sourceLanguage": "en", "sourceText": "Release bot B-5 deploys to environment ENV-5.", "sourceSha256": "4917ec0fe5d2b546926706ae18dac2958f0c5f1164ea0bc31681cc94fc624581"}
+{"handle": "probe-58a24b21a09b10d9", "sourceLanguage": "el", "sourceText": "Το σύστημα S-60 ενεργοποιεί.", "sourceSha256": "58a24b21a09b10d9388414c6a491bc9e8a5c9d57f1d1f85b72eeab892e8b02f5"}
+{"handle": "probe-5a272ae20310568f", "sourceLanguage": "el", "sourceText": "Το σύστημα S-60 ενεργοποιεί τη λειτουργία F-60.", "sourceSha256": "5a272ae20310568f72866a189a666905e51e12c562b51e48760db23a1c85dc45"}
+{"handle": "probe-6cc4dde7e2951d21", "sourceLanguage": "en", "sourceText": "System S-60 enables.", "sourceSha256": "6cc4dde7e2951d210a986d72004f2c39db4d3504a5762569b88451ad9e8fc098"}
+{"handle": "probe-6e39334637115319", "sourceLanguage": "el", "sourceText": "Ο συντάκτης E-70 δημοσιεύει στο κοινό A-70.", "sourceSha256": "6e39334637115319856cd726344c5c958e72dea0b946d1bbc4a03118cb3e644d"}
+{"handle": "probe-710d4e525fc4e605", "sourceLanguage": "en", "sourceText": "Editor E-70 publishes report R-70 to audience A-70.", "sourceSha256": "710d4e525fc4e6054761fde384042f02182dec3a23bfdc4d61bb1faed546c5d0"}
+{"handle": "probe-7b6303928a174e85", "sourceLanguage": "el", "sourceText": "Ο Omar επιτρέπει στην Priya να δει.", "sourceSha256": "7b6303928a174e85e863fba65fec56f5129cb172b10944fe101615bb1fde9d8a"}
+{"handle": "probe-7b76119452a7df54", "sourceLanguage": "el", "sourceText": "Το σύστημα S-40 στέλνει την ειδοποίηση A-40 στον χειριστή O-40.", "sourceSha256": "7b76119452a7df540a84cf5fe4c4282c41a8660ee7fa194eeaa4a0dfa7b8c0a4"}
+{"handle": "probe-8dc2bb4f50604f0b", "sourceLanguage": "en", "sourceText": "System S-40 sends alert A-40 to operator O-40.", "sourceSha256": "8dc2bb4f50604f0b772f12757bb2b10f1de4bb341ce88c3dad852c060177792f"}
+{"handle": "probe-9363f3e242f5f7da", "sourceLanguage": "el", "sourceText": "Ο Omar επιτρέπει στην Priya να δει την αναφορά R-17.", "sourceSha256": "9363f3e242f5f7da8721562e3e1a95d945ad6bd720e92392c5ff836e99383d91"}
+{"handle": "probe-a1513046cbf09da0", "sourceLanguage": "en", "sourceText": "Backup job J-9 copies from location K-9 to location L-9.", "sourceSha256": "a1513046cbf09da0b04d5660da1e40be09c4a7a1a4bc9544f0459fe28c944e65"}
+{"handle": "probe-a638372f25bfa514", "sourceLanguage": "en", "sourceText": "Omar allows Priya to view report R-17.", "sourceSha256": "a638372f25bfa514c448e4ab09670606ee9722b7c34de73ceb99108d4e973328"}
+{"handle": "probe-c6e7775eceed63f4", "sourceLanguage": "el", "sourceText": "Το σύστημα S-40 στέλνει στον χειριστή O-40.", "sourceSha256": "c6e7775eceed63f409e2ff1dbcff777845f746d27d8bd3f5cd6faa581131f6de"}
+{"handle": "probe-ce3e648d33a666e5", "sourceLanguage": "el", "sourceText": "Ο συντάκτης E-70 δημοσιεύει την αναφορά R-70 στο κοινό A-70.", "sourceSha256": "ce3e648d33a666e592b40c668826962056f2882ec081a452d77d5564c7db2ab4"}
+{"handle": "probe-d83ac1907309c322", "sourceLanguage": "en", "sourceText": "Omar allows Priya to view.", "sourceSha256": "d83ac1907309c3222fa16b635caca97daeaa959cd69f3ba7478e518d1b001e01"}
+{"handle": "probe-fba6bdeea16cbdba", "sourceLanguage": "en", "sourceText": "System S-60 enables feature F-60.", "sourceSha256": "fba6bdeea16cbdba2dbd23e9e5130da9c6762a1f040e3e893cfa9a09e607d269"}

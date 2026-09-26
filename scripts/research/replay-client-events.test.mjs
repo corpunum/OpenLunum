@@ -23,27 +23,27 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(previous.status, 'frozen-for-next-source-only-run');
   assert.equal(previous.freeze.toolImplementationSha256, '9f9b094d5c598959eea0e0f6a565e26fd12abccf75ed78b8a2da76e87c79e1c8');
 
-  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v3.json', 'utf8'));
+  // v3 is preserved as history: it froze lunum-agent/0.3, before the
+  // placeholder_role rule (decisions/0007). Only its records are checked.
+  const v3 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v3.json', 'utf8'));
+  assert.equal(v3.supersedes.path, 'public-instruction-package-v2.json');
+  assert.equal(v3.freeze.coreContractVersion, 'lunum-agent/0.3');
+  assert.equal(v3.freeze.coreContractHash, 'e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782');
+  assert.equal(v3.freeze.toolImplementationSha256, '48aa0a0c8ddb9505c7db2767ca89518a20d6ffb20210f1b5ea8d5676a3ab0299');
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v4.json', 'utf8'));
   assert.equal(next.status, 'frozen-for-next-source-only-run');
-  assert.equal(next.supersedes.path, 'public-instruction-package-v2.json');
-  // launcherSha256 records the launcher at freeze time; it only builds and
-  // imports the server, so the artifact hashes below are the binding.
+  assert.equal(next.supersedes.path, 'public-instruction-package-v3.json');
+  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.4');
+  for (const key of ['schemaHash', 'frameRegistryHash', 'protocolRegistryHash']) {
+    assert.equal(next.freeze[key], previous.freeze[key], `${key} must be unchanged since v2`);
+  }
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
   assert.equal(hash('packages/mcp/dist/src/tools.js'), next.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-native.js'), next.freeze.coreArtifactSha256);
-  for (const key of ['coreContractHash', 'coreContractJsonSerializationSha256', 'schemaHash', 'frameRegistryHash', 'protocolRegistryHash', 'instructionHash', 'coreArtifactSha256', 'mcpArtifactSha256']) {
-    assert.equal(next.freeze[key], previous.freeze[key], `${key} must be unchanged from v2`);
-  }
-  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.3');
-  assert.equal(next.freeze.coreContractHash, 'e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782');
-  assert.equal(next.freeze.coreContractJsonSerializationSha256, '66442516a42f693c04db2b86c503b23e3c45d675e29a82c1896333d5c5b918a2');
-  assert.equal(next.freeze.schemaHash, '8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593');
-  assert.equal(next.freeze.frameRegistryHash, '5391eaa4a7a49bb5ee1c7e13d7e61c30e8ddc5edd609c92b07b19ee1db9e2377');
-  assert.equal(next.freeze.protocolRegistryHash, '116e90d37bbb2b769e6d6727b02a5518d28742fa7c34f1c07cbdaa91eeeca289');
-  assert.equal(hash('packages/core/dist/src/agent-native.js'), next.freeze.coreArtifactSha256);
-  assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
-  assert.equal(hash('packages/mcp/dist/src/tools.js'), next.freeze.toolImplementationSha256);
+  assert.equal(hash('packages/core/dist/src/frame-registry.js'), next.freeze.frameValidatorArtifactSha256);
+  assert.equal(hash('experiments/natural-development-v8/extraction/public-task-profile-iteration3.json'), next.freeze.taskProfileSha256);
   assert.equal(Object.hasOwn(next, 'gold'), false);
 });
 

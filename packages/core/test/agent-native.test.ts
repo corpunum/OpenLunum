@@ -183,3 +183,15 @@ test('agent grounding proposals are deterministic evidence but cannot grant exac
   assert.equal(result.failureClass, 'grounding_pending');
   assert.match(result.grounding.proposals[0]?.groundingFingerprint ?? '', /^gnd:/u);
 });
+
+test('placeholder role fillers get no semantic identity (decisions/0007)', () => {
+  const candidateSem = { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'event', clauses: [{ predicate: 'allow', roles: {
+    agent: { type: 'actor', id: 'Dana' }, recipient: { type: 'actor', id: 'Mira' }, theme: { type: 'access', value: 'access' },
+  } }] };
+  const result = submitCandidate({ sourceText: 'Dana allows Mira to access.', sourceLanguage: 'en', candidateSem, provenance });
+  assert.equal(result.frameValid, false);
+  assert.equal(result.candidateIdentityAvailable, false);
+  assert.equal(result.semanticFingerprint, null);
+  assert.ok(result.diagnostics.some((message) => message.includes('restates its type or predicate')));
+  assert.ok(getExtractionContract().abstentionRules.some((rule) => rule.includes('placeholder_role')));
+});

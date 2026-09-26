@@ -23,19 +23,20 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const V8 = path.join(root, 'experiments/natural-development-v8');
-const REQUESTS = path.join(V8, 'extraction/source-only-request.jsonl');
-const PROFILE = path.join(V8, 'extraction/public-task-profile-iteration2.json');
-const PACKAGE = path.join(V8, 'extraction/public-instruction-package-v3.json');
 const ALLOWED_TOOLS = ['lunum_get_extraction_contract', 'lunum_build_candidate', 'lunum_submit_candidate', 'lunum_validate'].map((name) => `mcp__lunum__${name}`);
 
 const args = process.argv.slice(2);
 const flag = (name, fallback) => { const index = args.indexOf(`--${name}`); return index >= 0 ? args[index + 1] : fallback; };
 const outDir = path.resolve(args[0] ?? '');
-if (!args[0] || args[0].startsWith('--')) { console.error('usage: run-claude-code-source-only.mjs <outDir> [--model sonnet] [--concurrency 4] [--limit N]'); process.exit(2); }
+if (!args[0] || args[0].startsWith('--')) { console.error('usage: run-claude-code-source-only.mjs <outDir> [--requests f] [--profile f] [--package f] [--model sonnet] [--concurrency 4] [--limit N] [--rederive]'); process.exit(2); }
 const model = flag('model', 'sonnet');
 const concurrency = Number(flag('concurrency', '4'));
 const limit = Number(flag('limit', '0'));
 const rederive = args.includes('--rederive');
+// Defaults are the inputs of the recorded 2026-09-26 v3 run so --rederive reproduces it.
+const REQUESTS = path.resolve(root, flag('requests', path.join(V8, 'extraction/source-only-request.jsonl')));
+const PROFILE = path.resolve(root, flag('profile', path.join(V8, 'extraction/public-task-profile-iteration2.json')));
+const PACKAGE = path.resolve(root, flag('package', path.join(V8, 'extraction/public-instruction-package-v3.json')));
 
 const sha256 = (value) => crypto.createHash('sha256').update(value).digest('hex');
 const requests = fs.readFileSync(REQUESTS, 'utf8').split('\n').filter(Boolean).map((line) => JSON.parse(line));
@@ -144,6 +145,8 @@ function classify(request, stdout, code, stderr) {
         calls: calls.map((call) => ({ name: call.name.replace('mcp__lunum__', ''), isError: call.isError, error: call.isError || call.result?.success === false ? (call.result?.error ?? call.result) : undefined })),
         usage: result?.usage ?? null, costUsd: result?.total_cost_usd ?? null, numTurns: result?.num_turns ?? null,
         abstentionSubmitted: succeeded.some((call) => call.input?.candidateSem == null),
+        // What core concluded about the last non-null submission, accepted or not.
+        lastSubmission: (() => { const last = submits.filter((call) => call.input?.candidateSem != null).at(-1); const sub = last?.result?.submission; return sub ? { frameValid: sub.frameValid, candidateIdentityAvailable: sub.candidateIdentityAvailable, failureClass: sub.failureClass, diagnostics: sub.diagnostics } : null; })(),
         rawStream: path.relative(outDir, rawPath), rawStreamSha256: sha256(stdout), stderrTail: stderr?.slice(-500) || undefined,
       };
 }
@@ -165,7 +168,7 @@ await Promise.all(Array.from({ length: Math.min(concurrency, selected.length) },
 // stay in the raw run ledger and are reported as missing by the scorer.
 const requestByHandle = new Map(requests.map((request) => [request.handle, request]));
 const ledger = rows.filter((row) => row.status).map((row) => ({
-  handle: row.handle, sourceSha256: requestByHandle.get(row.handle).sourceSha256, contractHash: requestByHandle.get(row.handle).contractHash,
+  handle: row.handle, sourceSha256: requestByHandle.get(row.handle).sourceSha256, contractHash: requestByHandle.get(row.handle).contractHash ?? pkg.freeze.coreContractHash,
   status: row.status, candidateSem: row.candidateSem, extractorType: 'agent', extractorId: `claude-code/${row.model.reported.join('+') || model}`,
 }));
 const ledgerText = ledger.map((entry) => JSON.stringify(entry)).join('\n') + '\n';

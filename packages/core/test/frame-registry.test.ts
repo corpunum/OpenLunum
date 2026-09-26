@@ -131,3 +131,27 @@ test('frames reject duplicate time channels', () => {
   }, time: { type: 'date', value: '2027-01-01' } });
   assert.ok(issues.some((issue) => issue.code === 'duplicate_semantic_channel'));
 });
+
+test('frames reject a role that restates its own type or the predicate (decisions/0007)', () => {
+  const actors = { agent: { type: 'actor', id: 'Dana' }, recipient: { type: 'actor', id: 'Mira' } };
+  // Observed live: "Dana allows Mira to access." (object of access unstated).
+  const typeEcho = validateClauseFrame({ predicate: 'allow', roles: { ...actors, theme: { type: 'access', value: 'access' } } });
+  assert.ok(typeEcho.some((issue) => issue.code === 'placeholder_role' && issue.path.endsWith('roles.theme')));
+  const predicateEcho = validateClauseFrame({ predicate: 'allow', roles: { ...actors, theme: 'allow' } });
+  assert.ok(predicateEcho.some((issue) => issue.code === 'placeholder_role'));
+  const caseInsensitive = validateClauseFrame({ predicate: 'allow', roles: { ...actors, theme: { type: 'access', value: 'Access' } } });
+  assert.ok(caseInsensitive.some((issue) => issue.code === 'placeholder_role'));
+});
+
+test('placeholder rule leaves named instances and real literals alone', () => {
+  const actors = { agent: { type: 'actor', id: 'Dana' }, recipient: { type: 'actor', id: 'Mira' } };
+  for (const theme of [
+    { type: 'access', id: 'access' },                 // a named instance, even if oddly named
+    { type: 'resource', id: 'R-9' },
+    { type: 'access', value: 'read-only access to R-9' },
+    { type: 'quantity', value: 7, unit: 'times' },
+  ]) {
+    const issues = validateClauseFrame({ predicate: 'allow', roles: { ...actors, theme } });
+    assert.ok(!issues.some((issue) => issue.code === 'placeholder_role'), JSON.stringify(theme));
+  }
+});

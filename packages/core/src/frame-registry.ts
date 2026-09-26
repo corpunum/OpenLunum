@@ -36,7 +36,7 @@ export function canonicalFramePromptBlock(): string {
 export interface FrameValidationIssue {
   path: string;
   predicate: string;
-  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel';
+  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role';
   message: string;
 }
 
@@ -267,6 +267,23 @@ function getTermType(term: LunumTerm | undefined): string | undefined {
 /**
  * Validates a single clause against registered canonical frame requirements if defined.
  */
+/**
+ * A role filler that restates only its own term type or the clause predicate
+ * (`allow … theme: {type: 'access', value: 'access'}`) names no argument; it
+ * is how extractors paper over a role the source leaves unstated. Treat it as
+ * absent so the frame fails and the extractor must abstain (decisions/0007).
+ * Terms with an `id` are named instances and never placeholders.
+ */
+function isPlaceholderTerm(term: LunumTerm | undefined, predicate: string): boolean {
+  if (typeof term === 'string') return basicIdentifier(term) === predicate;
+  if (!term || typeof term !== 'object' || Array.isArray(term)) return false;
+  const record = term as Record<string, unknown>;
+  if (record.id !== undefined && record.id !== null && record.id !== '') return false;
+  if (typeof record.value !== 'string') return false;
+  const value = basicIdentifier(record.value);
+  return value === predicate || (typeof record.type === 'string' && value === basicIdentifier(record.type));
+}
+
 export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'): FrameValidationIssue[] {
   const issues: FrameValidationIssue[] = [];
   const predicate = basicIdentifier(clause.predicate);
@@ -319,6 +336,12 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
     }
     if (!declaredRoles.has(role)) {
       issues.push({ path: `${pathPrefix}.roles.${role}`, predicate, code: 'unexpected_role', message: `Role '${role}' is not allowed by the canonical '${predicate}' frame` });
+    }
+  }
+
+  for (const [role, term] of roleMap) {
+    if (isPlaceholderTerm(term, predicate)) {
+      issues.push({ path: `${pathPrefix}.roles.${role}`, predicate, code: 'placeholder_role', message: `Role '${role}' for predicate '${predicate}' restates its type or predicate instead of naming an argument; abstain if the source does not state it` });
     }
   }
 
