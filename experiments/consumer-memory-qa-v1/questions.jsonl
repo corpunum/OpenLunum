@@ -1,0 +1,20 @@
+{"id": "q01", "question": "What must system S-11 enable when battery B-11 falls below 20 percent?", "accept": ["f-11"], "reject": []}
+{"id": "q02", "question": "Below what battery percentage does system S-11 have to act?", "accept": ["20"], "reject": ["15"]}
+{"id": "q03", "question": "Who receives notice N-11?", "accept": ["o-11"], "reject": []}
+{"id": "q04", "question": "Is system S-11 required or only permitted to enable its feature? Answer \"required\" or \"permitted\".", "accept": ["required"], "reject": ["permitted"]}
+{"id": "q05", "question": "Is system S-22 required or only permitted to enable its feature? Answer \"required\" or \"permitted\".", "accept": ["permitted"], "reject": ["required"]}
+{"id": "q06", "question": "Below what battery percentage may system S-22 act?", "accept": ["15"], "reject": ["20"]}
+{"id": "q07", "question": "What does system S-22 enable when its condition holds?", "accept": ["f-22"], "reject": []}
+{"id": "q08", "question": "Who receives notice N-22?", "accept": ["o-22"], "reject": []}
+{"id": "q09", "question": "What does Ari send to courier C-41?", "accept": ["p-41"], "reject": []}
+{"id": "q10", "question": "To whom does Ari send P-41?", "accept": ["c-41"], "reject": []}
+{"id": "q11", "question": "Which report does editor E-61 publish?", "accept": ["r-61"], "reject": []}
+{"id": "q12", "question": "To which audience is report R-62 published?", "accept": ["a-62"], "reject": ["a-61"]}
+{"id": "q13", "question": "Who publishes report R-62?", "accept": ["e-62"], "reject": ["e-61"]}
+{"id": "q14", "question": "How many times does Rhea retry U-31?", "accept": ["7", "seven"], "reject": []}
+{"id": "q15", "question": "On what date does Rhea retry U-31? Answer as YYYY-MM-DD.", "accept": ["2027-01-14"], "reject": []}
+{"id": "q16", "question": "Which task does Rhea retry?", "accept": ["u-31"], "reject": []}
+{"id": "q17", "question": "What is Mira allowed to do?", "accept": ["access"], "reject": []}
+{"id": "q18", "question": "How much money does Dana transfer from account Q-81?", "accept": ["30"], "reject": ["45"]}
+{"id": "q19", "question": "From which account are 45 EUR transferred?", "accept": ["q-83"], "reject": []}
+{"id": "q20", "question": "Does the memory say where Dana transfers the 30 EUR to? Answer \"yes\" or \"no\".", "accept": ["no"], "reject": ["yes"]}
