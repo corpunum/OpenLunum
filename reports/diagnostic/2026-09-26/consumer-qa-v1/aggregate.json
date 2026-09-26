@@ -1,0 +1,104 @@
+{
+  "format": "openlunum-consumer-memory-qa-aggregate/0.1",
+  "status": "diagnostic-development-only, self-reviewed",
+  "runs": [
+    "rep1",
+    "rep2",
+    "rep3"
+  ],
+  "excluded": {
+    "rep1-initial": "first run, 4 conditions; kept as record, superseded by rep1 with natural-lunum-dedup"
+  },
+  "model": {
+    "requested": "sonnet",
+    "served": [
+      "claude-sonnet-5"
+    ]
+  },
+  "questionsPerRun": 20,
+  "failedCalls": 0,
+  "totalCostUsd": 2.2663,
+  "conditions": {
+    "natural-all": {
+      "contextTokensPerRun": [
+        925,
+        929,
+        929
+      ],
+      "meanTokens": 927.7,
+      "tokensVsNaturalAll": "0%",
+      "correctPerRun": [
+        20,
+        20,
+        20
+      ],
+      "wrongQuestions": []
+    },
+    "lunum-0.1": {
+      "contextTokensPerRun": [
+        386,
+        345,
+        371
+      ],
+      "meanTokens": 367.3,
+      "tokensVsNaturalAll": "-60%",
+      "correctPerRun": [
+        18,
+        16,
+        16
+      ],
+      "wrongQuestions": [
+        "q01",
+        "q04",
+        "q07",
+        "q12",
+        "q15"
+      ]
+    },
+    "lunum-0.2": {
+      "contextTokensPerRun": [
+        604,
+        616,
+        632
+      ],
+      "meanTokens": 617.3,
+      "tokensVsNaturalAll": "-33%",
+      "correctPerRun": [
+        20,
+        20,
+        20
+      ],
+      "wrongQuestions": []
+    },
+    "natural-lunum-dedup": {
+      "contextTokensPerRun": [
+        453,
+        455,
+        453
+      ],
+      "meanTokens": 453.7,
+      "tokensVsNaturalAll": "-51%",
+      "correctPerRun": [
+        20,
+        20,
+        20
+      ],
+      "wrongQuestions": []
+    },
+    "natural-oracle-dedup": {
+      "contextTokensPerRun": [
+        279,
+        279,
+        281
+      ],
+      "meanTokens": 279.7,
+      "tokensVsNaturalAll": "-70%",
+      "correctPerRun": [
+        20,
+        20,
+        20
+      ],
+      "wrongQuestions": []
+    }
+  }
+}

@@ -16,6 +16,10 @@
 - Contract `lunum-agent/0.4`/`0.5`: placeholder role fillers (self-echo or type-only terms) are frame-invalid and receive no identity; abstention rules updated (decisions/0007).
 - V8 task profile iteration 3 and packages v4/v5; missing-argument probe sets v1 and v2; outcome scorer; live evaluation summary (`reports/diagnostic/2026-09-26/EVALUATION.md`).
 
+- Frame `lunum-frame/0.2` / protocol 0.2 / contract `lunum-agent/0.6`: `action` role for allow/prohibit (decisions/0008); V8 frame-0.2 successor targets and probe expectations; existing identities verified unchanged.
+- Renderer profile `generic-en-pivot/0.2` (lossless; 0.1 unchanged and still default, decisions/0009).
+- Consumer memory QA benchmark v1 and results (`reports/diagnostic/2026-09-26/consumer-qa-v1`).
+
 ### Changed
 - Trunk-based development on `main`; the multi-agent operating model is archived under `research/archive/operating-model-multi-agent-2026-09/`.
 

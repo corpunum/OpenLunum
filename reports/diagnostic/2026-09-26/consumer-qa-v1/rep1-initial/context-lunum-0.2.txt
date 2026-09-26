@@ -1,0 +1,15 @@
+Some memory lines are Lunum-Code: "R" marks a real-world statement; predicate(role=value, ...) names each participant; "must" = obligation, "may" = permission, "not" = negation; "if A then B ; C" means B and C apply when A holds; "@date" is when it happens. Identifiers are lowercased.
+
+- R if below(subject=b-11, value=20 percent) then must enable(agent=s-11, theme=f-11) ; must send(agent=s-11, recipient=o-11, object=n-11)
+- R if below(subject=b-22, value=15 percent) then may enable(agent=s-22, theme=f-22) ; may send(agent=s-22, recipient=o-22, object=n-22)
+- Once B-22 falls under 15%, System S-22 is permitted to activate F-22 and send notice N-22 to O-22.
+- R if below(subject=b-22, value=15 percent) then may allow(agent=s-22, theme=f-22, action=enable) ; may allow(agent=s-22, recipient=o-22, theme=n-22, action=send)
+- R send(agent=ari, recipient=c-41, object=p-41)
+- R publish(agent=e-61, theme=r-61, audience=a-61)
+- R publish(agent=e-62, theme=r-62, audience=a-62)
+- R retry(agent=rhea, theme=u-31, count=7 times) @2027-01-14
+- R retry(agent=rhea, theme=u-31, count=7 times) @2027-01-14
+- R allow(agent=dana, recipient=mira, action=access)
+- Dana transfers 30 EUR from bank account Q-81.
+- Η Dana μεταφέρει 30 EUR από τον λογαριασμό Q-82.
+- Transfer 45 EUR from account Q-83.

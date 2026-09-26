@@ -10,12 +10,12 @@ The runtime candidate schema is `lunum-sem/0.1-draft`; the current strict semant
 
 ## What the current evidence says
 
-**Live client extraction, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md), self-reviewed).** Claude Code (`claude-sonnet-5`) was run through the MCP tools on V8 and on two fresh missing-argument probe sets: 64 English and Greek sentences, $12.56 in total.
-- Tool delivery works.
-- On V8, after closing contract gaps (in-sample), source-relative matches reached 18/18 and exact identity 15/15.
-- Every probe sentence with its argument stated was parsed. 8 of 10 with a missing argument were refused, in each probe set.
+**Live client extraction and first consumer benchmark, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md), self-reviewed).** Claude Code (`claude-sonnet-5`) was run through the MCP tools, with repeated runs.
+- Missing-argument refusals are now reliable on the probe sets.
+- V8 exact identity was stable at 16/16 across three repetitions.
+- The new `allow` `action` role introduced a permission-encoding ambiguity (2 V8 rows) and over-refusal of unmapped verbs.
 
-The remaining failure is `allow`/`prohibit` with a verb complement ("allows Priya to view"): the model uses the verb as the theme, and the frame's own description permits that reading. Placeholder fillers no longer get identity (decisions/0007). An added instruction to abstain after rejection did not change model behaviour. Results move by about one item between identical runs.
+In the first standalone-consumer benchmark, natural text deduplicated by Lunum fingerprints kept every answer with 51% fewer tokens. **The saving comes entirely from identity-based deduplication, not from compact Lunum-Code**, which costs more tokens per fact than English. The default renderer loses meaning. The corpus is small and paraphrase-heavy, so this is a direction, not a general result.
 
 The earlier [V8 iteration-2 report](experiments/natural-development-v8/extraction/results-iteration2.json) (an agent extractor given the repository-side packet) recorded 17/18 source-relative matches, 14/14 exact among comparable, 6/6 abstentions and one false abstention. Both are narrow 24-row development results in English and Greek, not protected generalization, broad multilingual support or a training result. Human Greek review covers specific strings only.
 
@@ -35,9 +35,10 @@ Development is trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATIN
 
 Next, in order:
 
-1. **Owner decision: what `theme` means in `allow`/`prohibit`.** Either it is the object or resource, and a sentence without one must be refused; or add an `action` role. This is a frame change (new registry hash, golden vectors, new V8 profile) and blocks the last known missing-argument failure.
-2. **Repeat runs before claiming differences.** Run each configuration at least three times and report spread. Single runs move by about one item.
-3. **The standalone-consumer milestone.** One consumer with a frozen natural-text baseline, real extraction, a named tokenizer, task-quality results, costs and fallback coverage. No compression or benefit claim exists until this does.
+1. **Permission encoding rule.** Use `allow`/`prohibit` only when a permitting party is stated; otherwise the modality is `permission` on the action's own predicate. Needs a mechanical check or a frame constraint; instructions alone have not held.
+2. **Verb vocabulary.** Decide how to cover common actions (view, edit, download) as predicate aliases or new predicates. Evaluate on a fresh probe set, never on the verbs that motivated the change.
+3. **A realistic consumer corpus.** The benchmark needs memory with a natural duplication rate, retrieval rather than full-context, more questions, a second answering model, and extraction cost amortized over queries. Until then the 51% figure is specific to a paraphrase-built corpus.
+4. **Renderer default.** Do not ship 0.1 as the model-facing default; decide between 0.2 and natural-text-by-identity using the benchmark.
 
 #685 still needs a human native English review of the V8 English strings. It is recorded as blocked on that input, not re-audited.
 

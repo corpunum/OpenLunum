@@ -45,6 +45,20 @@ Additional facts:
 
 Anything beyond one model on 64 short English and Greek sentences. The probe expectations and Greek wording are AI-authored and have no human review. There is no token-cost or downstream-quality measurement and no second model.
 
+## Frame 0.2 and the consumer benchmark (added later the same day)
+
+- **Owner decision:** `allow`/`prohibit` gained an `action` role (decisions/0008). Existing identities were verified unchanged. Three repeated runs ([frame-0.2](frame-0.2/README.md), $18.50):
+  - missing-argument refusals: 8/8 and 6/6 in every repetition;
+  - V8 exact: 16/16 in every repetition;
+  - V8 source-relative: 18/21 in every repetition, after a **regression the change caused**: "is permitted to" is now encoded as `allow`, with the permitted party as permitter;
+  - verb-only `allow` sentences are over-refused (9 of 12).
+- **Renderer 0.1 loses meaning** (decisions/0009). A lossless 0.2 profile was added.
+- **[Consumer benchmark](consumer-qa-v1/README.md)** ($2.27, 3 runs, 20 questions, `claude-sonnet-5`):
+  - natural text deduplicated by Lunum fingerprints kept 20/20 answers with **51% fewer** tokens than the natural baseline;
+  - Lunum-Code 0.2 kept 20/20 at −33%;
+  - Lunum-Code 0.1 saved 60% but lost 2–4 answers per run.
+  - All of the saving comes from identity-based deduplication. The paraphrase-heavy corpus inflates it, and extraction cost is not included.
+
 ## Separate CI note
 
 CI on `7b0c21f` (a commit that added only evidence files, pushed without running local `verify`) failed 2 eval tests. They passed in 6 local runs of a fresh clone of that commit and on the next CI run (`ea7fb5d`). The failing test names could not be recovered: the GitHub log tool truncates, and this container cannot reach the log host. The cause is unidentified; it is recorded here rather than dismissed as a flake.

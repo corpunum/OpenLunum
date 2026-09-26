@@ -1,0 +1,15 @@
+Some memory lines are Lunum-Code: "R" marks a real-world statement; then an optional "not", a modality word (obligation, permission), a predicate, and its role values in a fixed order (agent, recipient, object, theme, value, ...); "if A then B" is a condition. Identifiers are lowercased.
+
+- R if below b-11 20 then obligation send s-11 o-11 n-11
+- R if below b-22 15 then permission send s-22 o-22 n-22
+- R if below b-22 15 then permission send s-22 o-22 n-22
+- R if below b-22 15 then permission allow s-22 o-22 n-22 send
+- R send ari c-41 p-41
+- R publish e-61 r-61 a-61
+- R publish e-62 r-62 a-62
+- R retry rhea u-31 7
+- R retry rhea u-31 7
+- R allow dana mira access
+- Dana transfers 30 EUR from bank account Q-81.
+- R send dana 30
+- Transfer 45 EUR from account Q-83.

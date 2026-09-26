@@ -1,0 +1,85 @@
+{
+  "format": "openlunum-consumer-memory-qa/0.1",
+  "status": "diagnostic-development-only, self-reviewed",
+  "model": {
+    "requested": "sonnet",
+    "served": [
+      "claude-sonnet-5"
+    ]
+  },
+  "tokenizer": "provider-reported input tokens of the served model (memory block minus empty block)",
+  "ledger": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep1/candidate-ledger.jsonl",
+  "ledgerSha256": "fc3397c4f7fe5d6886e2105336bbbdc17deb7d00d38736e406fdb117ea34cba5",
+  "questionsSha256": "deef27c3c6d1369ac3cdbaf7e0275bf015cdddfdcc576b22712a29d0356fee7a",
+  "codeCommit": "1e4ee3a639fd1843338a734eee4d5a20e92f58f2",
+  "reps": 1,
+  "questions": 20,
+  "failedCalls": 0,
+  "totalCostUsd": 0.6117,
+  "conditions": {
+    "natural-all": {
+      "contextTokens": 923,
+      "contextChars": 1765,
+      "coverage": {
+        "items": 24
+      },
+      "correctPerRep": [
+        20
+      ],
+      "min": 20,
+      "max": 20,
+      "wrongQuestions": []
+    },
+    "lunum-0.1": {
+      "contextTokens": 384,
+      "contextChars": 851,
+      "coverage": {
+        "rendered": 9,
+        "deduplicated": 11,
+        "fallbackAbstain": 3,
+        "fallbackInvalid": 0,
+        "fallbackMissing": 1
+      },
+      "correctPerRep": [
+        18
+      ],
+      "min": 18,
+      "max": 18,
+      "wrongQuestions": [
+        "q01",
+        "q15"
+      ]
+    },
+    "lunum-0.2": {
+      "contextTokens": 600,
+      "contextChars": 1289,
+      "coverage": {
+        "rendered": 9,
+        "deduplicated": 11,
+        "fallbackAbstain": 3,
+        "fallbackInvalid": 0,
+        "fallbackMissing": 1
+      },
+      "correctPerRep": [
+        20
+      ],
+      "min": 20,
+      "max": 20,
+      "wrongQuestions": []
+    },
+    "natural-oracle-dedup": {
+      "contextTokens": 277,
+      "contextChars": 615,
+      "coverage": {
+        "groups": 10,
+        "usesGoldLabels": true
+      },
+      "correctPerRep": [
+        20
+      ],
+      "min": 20,
+      "max": 20,
+      "wrongQuestions": []
+    }
+  }
+}
