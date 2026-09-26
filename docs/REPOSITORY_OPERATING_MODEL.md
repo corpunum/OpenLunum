@@ -5,10 +5,10 @@
 ## How work lands
 
 1. Work on `main`. Do not create task, worker, campaign or status branches.
-   - **GitHub branch protection on `main` still requires a pull request and four status checks (as of 2026-09-26)**, so direct pushes are rejected. The owner can enable true trunk mode by allowing direct pushes (Settings → Branches → rule for `main` → uncheck "Require a pull request before merging", keeping the status checks). Until then, verified `main` commits travel through one short-lived PR that is merged on green checks and whose branch is deleted immediately. The PR is transport, not a review queue.
+   - Direct pushes to `main` are enabled (2026-09-26): the branch rule no longer requires a pull request or pre-merge status checks. `ci.yml` runs after every push instead of before it, so local `pnpm verify` is the gate.
 2. Before every push: `pnpm verify` passes locally on the exact tree being pushed, and `git status` is clean afterwards (tests must not rewrite tracked files).
 3. Small, coherent commits with messages that say what changed and why. Push after each coherent step, not in large batches.
-4. `ci.yml` runs on every push to `main`. A red `main` is fixed or reverted before other work continues.
+4. `ci.yml` runs on every push to `main`. Check its result after pushing; a red `main` is fixed or reverted before other work continues.
 5. The acting agent reviews its own diff adversarially before pushing. Evidence reviewed only by its author says so in its record; it is not described as independently reviewed.
 
 ## Principles that remain binding

@@ -15,7 +15,7 @@ Do not build on a failing baseline; fix it first or report why you cannot.
 
 ## Workflow
 
-Trunk-based on `main` (owner-authorized 2026-09-26). No task branches. While GitHub branch protection still requires PRs, verified `main` commits travel through one short-lived PR, merged on green checks, branch deleted. `pnpm verify` must pass and the tree must be clean before every push. Details and the binding principles are in the operating model.
+Trunk-based on `main` (owner-authorized 2026-09-26). No task branches or PRs; push directly to `main` and check the post-push CI run. `pnpm verify` must pass and the tree must be clean before every push. Details and the binding principles are in the operating model.
 
 ## Architecture boundaries
 
