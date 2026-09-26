@@ -121,7 +121,7 @@ test('frames reject globally registered but undeclared roles and unframed predic
     experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'digest' }, manner: { type: 'concept', id: 'csv' }
   }});
   assert.ok(extra.some((issue) => issue.code === 'unexpected_role'));
-  const unframed = validateClauseFrame({ predicate: 'share', roles: { agent: { type: 'actor', id: 'user' } } });
+  const unframed = validateClauseFrame({ predicate: 'observe', roles: { agent: { type: 'actor', id: 'user' } } });
   assert.ok(unframed.some((issue) => issue.code === 'unframed_predicate'));
 });
 
@@ -190,4 +190,15 @@ test('allow/prohibit with an action need a distinct stated recipient (decisions/
     // Theme-only permissions keep their earlier meaning and need no recipient.
     assert.deepEqual(validateClauseFrame({ predicate, roles: { agent: { type: 'actor', id: 'Dana' }, theme: { type: 'resource', id: 'R-9' } } }), []);
   }
+});
+
+test('common predicates are framed and permitter-less permissions use them (decisions/0014)', () => {
+  // "Nadia is permitted to read the payroll report."
+  assert.deepEqual(validateClauseFrame({ predicate: 'read', modality: 'permission', roles: { agent: { type: 'actor', id: 'Nadia' }, theme: { type: 'document', id: 'payroll-report' } } }), []);
+  // "Start the backup job." (imperative, no agent)
+  assert.deepEqual(validateClauseFrame({ predicate: 'run', roles: { theme: { type: 'task', id: 'backup-job' } } }), []);
+  // "Retry the upload 3 times." (imperative retry)
+  assert.deepEqual(validateClauseFrame({ predicate: 'retry', roles: { theme: { type: 'task', id: 'upload' }, count: { type: 'quantity', value: 3, unit: 'times' } } }), []);
+  assert.ok(validateClauseFrame({ predicate: 'notify', roles: { agent: { type: 'system', id: 'S-1' } } }).some((issue) => issue.code === 'missing_required_role'));
+  assert.ok(validateClauseFrame({ predicate: 'approve', roles: { agent: { type: 'actor', id: 'Tom' } } }).some((issue) => issue.code === 'missing_required_role'));
 });

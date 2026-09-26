@@ -18,6 +18,6 @@ test('semantic IR abstention is explicit and never constructs a Sem', () => {
 
 test('semantic IR fails closed for missing fields, unframed predicates, and unknown fields', () => {
   assert.throws(() => buildCandidateFromSemanticIR({ ...base, roles: undefined }), /roles_required/);
-  assert.throws(() => buildCandidateFromSemanticIR({ ...base, predicate: 'share' }), /unframed_predicate/);
+  assert.throws(() => buildCandidateFromSemanticIR({ ...base, predicate: 'observe' }), /unframed_predicate/);
   assert.throws(() => buildCandidateFromSemanticIR({ ...base, confidence: 1 }), /unknown_fields/);
 });

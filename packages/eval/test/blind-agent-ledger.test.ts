@@ -27,7 +27,7 @@ test('blind ledger rejects missing, duplicate, and evaluator-private fields recu
 });
 
 test('blind ledger rejects unframed candidates instead of inflating identity coverage', () => {
-  const unframed = { ...sem, clauses: [{ ...sem.clauses[0]!, predicate: 'share' }] } as never;
+  const unframed = { ...sem, clauses: [{ ...sem.clauses[0]!, predicate: 'observe' }] } as never;
   const result = validateBlindAgentLedger(source, [{ handle: 'opaque-a', result: { candidateSem: unframed } }]);
   assert.equal(result.valid, false);
   assert.equal(result.identityAvailable, 0);

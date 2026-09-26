@@ -65,14 +65,21 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(v9.supersedes.path, 'public-instruction-package-v8.json');
   assert.equal(v9.freeze.coreContractHash, v8.freeze.coreContractHash, 'v9 rebinds the build; the contract is unchanged');
 
-  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v10.json', 'utf8'));
+  const v10 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v10.json', 'utf8'));
+  assert.equal(v10.supersedes.path, 'public-instruction-package-v9.json');
+  assert.equal(v10.freeze.coreContractVersion, 'lunum-agent/0.9');
+  assert.equal(v10.freeze.frameRegistryHash, v9.freeze.frameRegistryHash, 'amendment 1 changes vocabulary, not frames');
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v11.json', 'utf8'));
   assert.equal(next.status, 'frozen-for-next-source-only-run');
-  assert.equal(next.supersedes.path, 'public-instruction-package-v9.json');
-  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.9');
-  assert.equal(next.freeze.frameRegistryHash, v9.freeze.frameRegistryHash, 'amendment 1 changes vocabulary, not frames');
+  assert.equal(next.supersedes.path, 'public-instruction-package-v10.json');
+  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.10');
+  assert.equal(next.freeze.frameRegistryVersion, 'lunum-frame/0.4');
+  assert.equal(next.freeze.protocolRegistryHash, v10.freeze.protocolRegistryHash, 'decisions/0014 changes frames, not vocabulary');
   assert.equal(v8.freeze.coreContractVersion, 'lunum-agent/0.8');
   assert.equal(v8.freeze.protocolVersion, 'lunum-protocol/0.3');
   assert.equal(next.freeze.protocolVersion, 'lunum-protocol/0.4');
+  assert.equal(v10.freeze.protocolVersion, 'lunum-protocol/0.4');
   assert.equal(next.freeze.schemaHash, previous.freeze.schemaHash, 'transport schema unchanged since v2');
   assert.notEqual(v8.freeze.protocolRegistryHash, v7.freeze.protocolRegistryHash, 'decisions/0011 extends the predicate aliases');
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);

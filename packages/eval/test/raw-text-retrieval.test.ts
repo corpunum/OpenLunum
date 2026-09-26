@@ -84,7 +84,7 @@ test('retrieval candidate count contains only identity-usable memories', async (
       { id: 'unframed', text: 'Unframed fact.', language: 'en' },
     ],
     queries: [{ id: 'q', text: 'Usable fact?', language: 'en', expectedMemoryIds: ['usable'] }],
-    extract: ({ text }) => text.startsWith('Unframed') ? sem('share', 'fact') : sem('publish', 'fact'),
+    extract: ({ text }) => text.startsWith('Unframed') ? sem('observe', 'fact') : sem('publish', 'fact'),
   });
   assert.equal(report.metrics.memoryIdentityAvailable, 1);
   assert.equal(report.queryResults[0]?.candidateCount, 1);
@@ -190,7 +190,7 @@ test('noncanonical schema-valid extraction is contained and does not enter seman
 });
 
 test('identity coverage excludes structurally normalized but unframed candidates', async () => {
-  const unframed = sem('share', 'guide');
+  const unframed = sem('observe', 'guide');
   const report = await runRawTextRetrievalEvaluation({
     memories: [{ id: 'm', text: 'Share the guide.', language: 'en' }],
     queries: [{ id: 'q', text: 'Share the guide?', language: 'en', expectedMemoryIds: ['m'] }],

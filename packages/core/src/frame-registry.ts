@@ -1,7 +1,7 @@
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
 
-export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.3' as const;
+export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.4' as const;
 
 export interface FrameRoleRequirement {
   name: string;
@@ -110,12 +110,12 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
   retry: Object.freeze({
     predicate: 'retry',
     roles: Object.freeze([
-      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'count', required: false, allowedTermTypes: ['quantity'] },
       { name: 'theme', required: false }
     ]),
     atLeastOneOf: Object.freeze(['count', 'theme']),
-    description: 'An agent attempts an action again, with a count or action theme.'
+    description: 'An agent (optional in imperatives) attempts an action again, with a count or action theme.'
   }),
   request: Object.freeze({
     predicate: 'request',
@@ -271,6 +271,64 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     ]),
     atLeastOneOf: Object.freeze(['agent', 'theme']),
     description: 'An agent confirms an action or transaction.'
+  }),
+  // decisions/0014: common registered predicates with a conventional argument
+  // structure, so plain statements and permitter-less permissions using them
+  // can be represented. Agent is optional (imperatives), as for enable/delete.
+  ...Object.fromEntries(([
+    ['read', 'reads a document, record or resource'],
+    ['write', 'writes to a document, record or resource'],
+    ['update', 'updates or edits a document, record or resource'],
+    ['create', 'creates a document, record or resource'],
+    ['access', 'accesses a resource or place'],
+    ['archive', 'archives a document, record or resource'],
+    ['store', 'stores or saves an item'],
+    ['approve', 'approves a request, document or action'],
+    ['run', 'runs or executes a job, task or process'],
+    ['restart', 'restarts a system, service or process'],
+  ] as const).map(([predicate, gloss]) => [predicate, Object.freeze({
+    predicate,
+    roles: Object.freeze([
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'theme', required: true }
+    ]),
+    description: `An agent ${gloss}.`
+  })])),
+  share: Object.freeze({
+    predicate: 'share',
+    roles: Object.freeze([
+      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'theme', required: true },
+      { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system', 'group', 'audience'] }
+    ]),
+    description: 'An agent shares a theme, optionally with a recipient.'
+  }),
+  notify: Object.freeze({
+    predicate: 'notify',
+    roles: Object.freeze([
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'recipient', required: true, allowedTermTypes: ['actor', 'entity', 'system', 'group', 'audience'] },
+      { name: 'theme', required: false }
+    ]),
+    description: 'An agent notifies a recipient, optionally about a theme.'
+  }),
+  grant: Object.freeze({
+    predicate: 'grant',
+    roles: Object.freeze([
+      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system', 'group'] },
+      { name: 'theme', required: true }
+    ]),
+    description: 'An agent grants a theme (access, a role, a credential) to a recipient.'
+  }),
+  revoke: Object.freeze({
+    predicate: 'revoke',
+    roles: Object.freeze([
+      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system', 'group'] },
+      { name: 'theme', required: true }
+    ]),
+    description: 'An agent revokes a theme (access, a role, a credential) from a recipient.'
   })
 });
 

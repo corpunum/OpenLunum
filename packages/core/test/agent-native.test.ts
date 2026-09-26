@@ -28,9 +28,9 @@ test('frame-first builder creates only a canonical transport envelope', () => {
     world: 'real', kind: 'instruction', predicate: 'retry',
     roles: { agent: { type: 'actor', id: 'uploader' }, theme: { type: 'object', id: 'upload' } },
   });
-  assert.deepEqual(retry.requiredRoles, ['agent']);
+  assert.deepEqual(retry.requiredRoles, []); // decisions/0014: agent optional for imperatives
   assert.deepEqual(retry.atLeastOneOf, ['count', 'theme']);
-  assert.throws(() => buildCandidateSem({ world: 'real', kind: 'simple_fact', predicate: 'share', roles: {} }), /unframed_predicate/);
+  assert.throws(() => buildCandidateSem({ world: 'real', kind: 'simple_fact', predicate: 'observe', roles: {} }), /unframed_predicate/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'preference', predicate: 'prefer', roles: {} }), /invalid_builder_frame/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'instruction', predicate: 'send', roles: { agent: 'maria', object: 'report' } }), /invalid_builder_frame/);
   assert.throws(() => buildCandidateSem({ world: 'real', kind: 'instruction', predicate: 'send', roles: {
@@ -44,7 +44,7 @@ test('frame-first builder creates only a canonical transport envelope', () => {
   assert.throws(() => buildCandidateSem({
     world: 'real', kind: 'conditional_instruction', predicate: 'enable',
     roles: { theme: { type: 'feature', id: 'backups' } },
-    conditions: [{ predicate: 'share', roles: {} }],
+    conditions: [{ predicate: 'observe', roles: {} }],
   }), /invalid_builder_frame/);
   assert.throws(() => buildCandidateSem({
     world: 'real', kind: 'preference', predicate: 'prefer',
