@@ -9,6 +9,11 @@ import {
   type RetrievalPairItem
 } from '../src/retrieval-measurement.js';
 
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+
+// Write reports to a temp root so test runs never rewrite tracked evidence.
+const TEST_OUTPUT_ROOT = mkdtempSync(path.join(tmpdir(), 'lunum-eval-test-'));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
@@ -84,7 +89,7 @@ describe('Cross-language retrieval measurement infrastructure (#381)', () => {
     }
 
     // Write report to eval-results/retrieval/retrieval-measurement-report.json
-    const reportDir = path.join(WORKSPACE_ROOT, 'eval-results', 'retrieval');
+    const reportDir = path.join(TEST_OUTPUT_ROOT, 'eval-results', 'retrieval');
     mkdirSync(reportDir, { recursive: true });
     const reportFilePath = path.join(reportDir, 'retrieval-measurement-report.json');
     writeFileSync(reportFilePath, JSON.stringify(report, null, 2), 'utf-8');

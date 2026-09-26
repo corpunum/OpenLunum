@@ -10,6 +10,11 @@ import {
 } from '../src/schema-freeze-conformance.js';
 import type { ConformanceReport } from '../src/schema-freeze-conformance.js';
 
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+
+// Write reports to a temp root so test runs never rewrite tracked evidence.
+const TEST_OUTPUT_ROOT = mkdtempSync(path.join(tmpdir(), 'lunum-eval-test-'));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
@@ -88,7 +93,7 @@ describe('conformance tests', () => {
   });
 
   it('writes report to eval-results', async () => {
-    const outDir = path.join(WORKSPACE_ROOT, 'eval-results', 'schema-freeze');
+    const outDir = path.join(TEST_OUTPUT_ROOT, 'eval-results', 'schema-freeze');
     await mkdir(outDir, { recursive: true });
     await writeFile(
       path.join(outDir, 'conformance-report.json'),

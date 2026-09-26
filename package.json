@@ -12,7 +12,7 @@
     "clean": "pnpm -r clean",
     "build": "pnpm -r --sort build",
     "typecheck": "pnpm build && pnpm -r --sort typecheck",
-    "test": "pnpm build && pnpm -r --sort test:unit && pnpm test:merge-policy && pnpm test:quality-gate-runner && pnpm test:worker-dispatch && pnpm test:tier2-policy && pnpm test:nightly-window && pnpm test:verify-audit-endpoints && pnpm test:source-only-scoring && pnpm test:client-event-replay && node --test examples/structured-record-demo.test.mjs && pnpm test:license",
+    "test": "node scripts/ensure-git-history.mjs && pnpm build && pnpm -r --sort test:unit && pnpm test:merge-policy && pnpm test:quality-gate-runner && pnpm test:worker-dispatch && pnpm test:tier2-policy && pnpm test:nightly-window && pnpm test:verify-audit-endpoints && pnpm test:source-only-scoring && pnpm test:client-event-replay && node --test examples/structured-record-demo.test.mjs && pnpm test:license",
     "test:merge-policy": "node --test scripts/pi-merge-policy.test.mjs",
     "test:quality-gate-runner": "node --test scripts/run-quality-gates-ci.test.mjs",
     "test:worker-dispatch": "node --test scripts/pi-dispatch-once.test.mjs",

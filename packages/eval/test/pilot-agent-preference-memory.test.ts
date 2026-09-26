@@ -13,6 +13,11 @@ import {
 } from '../src/pilot-agent-preference-memory.js';
 import type { PilotReport } from '../src/pilot-agent-preference-memory.js';
 
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+
+// Write reports to a temp root so test runs never rewrite tracked evidence.
+const TEST_OUTPUT_ROOT = mkdtempSync(path.join(tmpdir(), 'lunum-eval-test-'));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
@@ -57,7 +62,7 @@ describe('pilot-agent-preference-memory runPilot', () => {
   });
 
   it('writes report to eval-results', async () => {
-    const outDir = path.join(WORKSPACE_ROOT, 'eval-results', 'pilots');
+    const outDir = path.join(TEST_OUTPUT_ROOT, 'eval-results', 'pilots');
     await mkdir(outDir, { recursive: true });
     await writeFile(
       path.join(outDir, 'agent-preference-memory-report.json'),

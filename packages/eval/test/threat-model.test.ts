@@ -18,6 +18,11 @@ import {
   type IncidentExerciseResult
 } from '../src/threat-model.js';
 
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+
+// Write reports to a temp root so test runs never rewrite tracked evidence.
+const TEST_OUTPUT_ROOT = mkdtempSync(path.join(tmpdir(), 'lunum-eval-test-'));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
@@ -284,7 +289,7 @@ test('write threat model report to eval-results', async () => {
     };
 
     // Ensure directory exists
-    const reportDir = path.join(WORKSPACE_ROOT, 'eval-results', 'security');
+    const reportDir = path.join(TEST_OUTPUT_ROOT, 'eval-results', 'security');
     await mkdir(reportDir, { recursive: true });
 
     // Write report

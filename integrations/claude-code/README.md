@@ -4,17 +4,17 @@
 
 ## Setup
 
-The repo ships a `.mcp.json` at the project root. When you start Claude Code inside the OpenLunum directory, it can discover the MCP server and register the current ten `lunum_*` tools after the build.
+The repo ships a `.mcp.json` at the project root. When you start Claude Code inside the OpenLunum directory, it discovers the MCP server and registers the current ten `lunum_*` tools. The launcher installs dependencies if `node_modules` is missing and rebuilds core+mcp (a few seconds) on every start, so a fresh clone or a stale `dist/` cannot serve an outdated tool schema.
 
 ```json
 {
   "mcpServers": {
     "lunum": {
       "command": "node",
-      "args": ["./packages/mcp/dist/bin/lunum-mcp.js"],
+      "args": ["./scripts/lunum-mcp-launch.mjs"],
       "env": {
-        "LUNUM_COMPACTION": "auto",
-        "LUNUM_MULTILINGUAL": "off",
+        "LUNUM_COMPACTION": "off",
+        "LUNUM_MULTILINGUAL": "on",
         "LUNUM_CONTEXT_MODE": "mixed"
       }
     }
@@ -22,7 +22,7 @@ The repo ships a `.mcp.json` at the project root. When you start Claude Code ins
 }
 ```
 
-Prerequisites: `pnpm install && pnpm build` (or at minimum `pnpm --filter @corpunum/lunum --filter @corpunum/lunum-mcp build`).
+Prerequisites: Node.js 22+ and pnpm (via `corepack enable`). Set `LUNUM_MCP_SKIP_BUILD=1` to launch an existing build without rebuilding.
 
 For global install (any repo, not just OpenLunum), add the server to `~/.claude.json`:
 
@@ -31,7 +31,7 @@ For global install (any repo, not just OpenLunum), add the server to `~/.claude.
   "mcpServers": {
     "lunum": {
       "command": "node",
-      "args": ["/absolute/path/to/OpenLunum/packages/mcp/dist/bin/lunum-mcp.js"]
+      "args": ["/absolute/path/to/OpenLunum/scripts/lunum-mcp-launch.mjs"]
     }
   }
 }

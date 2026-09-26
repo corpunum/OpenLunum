@@ -46,7 +46,17 @@ async function main(): Promise<void> {
   const command = process.argv[2];
   if (command === 'smoke') { console.log(JSON.stringify(await runSmoke(), null, 2)); return; }
   if (command === 'status') {
-    console.log(['OpenLunum worker status', '- Read START_HERE.md and AGENTS.md', '- Select one area from WORK_QUEUE.md', '- Run pnpm verify', '- Create a bounded experiment', '- Push an agent/... branch; do not merge autonomously'].join('\n'));
+    const root = await findWorkspaceRoot();
+    const git = (...args: string[]): string => { try { return execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return 'unknown'; } };
+    const dirty = git('status', '--porcelain');
+    console.log([
+      'OpenLunum status',
+      `- branch: ${git('rev-parse', '--abbrev-ref', 'HEAD')} @ ${git('rev-parse', '--short', 'HEAD')}`,
+      `- working tree: ${dirty === '' ? 'clean' : dirty === 'unknown' ? 'unknown' : 'dirty'}`,
+      `- history: ${git('rev-parse', '--is-shallow-repository') === 'false' ? 'full' : 'shallow (pnpm test fetches full history)'}`,
+      '- workflow: trunk-based on main; run `pnpm verify` before every push (docs/REPOSITORY_OPERATING_MODEL.md)',
+      '- current work: STATUS.md "Next" and open GitHub issues',
+    ].join('\n'));
     return;
   }
   if (command === 'doctor') {

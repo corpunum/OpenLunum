@@ -40,6 +40,7 @@ export type EvidenceIssueCode =
   | 'dirty_execution_tree'
   | 'missing_raw_exchange'
   | 'reported_baseline_predates_prompt_fix'
+  | 'history_unavailable'
   | 'heldout_dataset_is_repo_visible'
   | 'missing_dataset_declaration'
   | 'multiple_dataset_declarations'
@@ -405,9 +406,14 @@ export async function auditEvidenceRun(repoRoot: string, manifestPath: string): 
     }
 
     const baseline = stringAt(manifest, 'baselineCommit');
-    if (manifest?.task === 'parse' && baseline && gitCommitExists(repoRoot, baseline)
-      && !isAncestor(repoRoot, PARSE_SYSTEM_PROMPT_FIX_COMMIT, baseline)) {
-      issues.push({ code: 'reported_baseline_predates_prompt_fix', message: 'The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran.' });
+    if (manifest?.task === 'parse' && baseline && gitCommitExists(repoRoot, baseline)) {
+      // A shallow checkout cannot answer the ancestry question. Fail closed,
+      // but say why instead of claiming the baseline predates the fix.
+      if (!gitCommitExists(repoRoot, PARSE_SYSTEM_PROMPT_FIX_COMMIT)) {
+        issues.push({ code: 'history_unavailable', message: `Commit ${PARSE_SYSTEM_PROMPT_FIX_COMMIT.slice(0, 7)} is absent (shallow clone?); run \`git fetch --unshallow\` to audit prompt provenance.` });
+      } else if (!isAncestor(repoRoot, PARSE_SYSTEM_PROMPT_FIX_COMMIT, baseline)) {
+        issues.push({ code: 'reported_baseline_predates_prompt_fix', message: 'The reported baseline predates the parse system-prompt runner fix; it cannot establish which system prompt actually ran.' });
+      }
     }
   }
 

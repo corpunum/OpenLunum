@@ -21,6 +21,11 @@ import {
   type BenchmarkCategory
 } from '../src/context-compaction-benchmark.js';
 
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+
+// Write reports to a temp root so test runs never rewrite tracked evidence.
+const TEST_OUTPUT_ROOT = mkdtempSync(path.join(tmpdir(), 'lunum-eval-test-'));
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..');
 
@@ -276,7 +281,7 @@ describe('Context Compaction Benchmark', () => {
 
   it('should write report to eval-results directory', async () => {
     const report = runBenchmark(BENCHMARK_TASKS);
-    const reportDir = path.join(WORKSPACE_ROOT, 'eval-results', 'compaction');
+    const reportDir = path.join(TEST_OUTPUT_ROOT, 'eval-results', 'compaction');
 
     await mkdir(reportDir, { recursive: true });
 

@@ -2,7 +2,9 @@
   "mcpServers": {
     "lunum": {
       "command": "node",
-      "args": ["./packages/mcp/dist/bin/lunum-mcp.js"],
+      "args": [
+        "./scripts/lunum-mcp-launch.mjs"
+      ],
       "env": {
         "LUNUM_COMPACTION": "off",
         "LUNUM_MULTILINGUAL": "on",

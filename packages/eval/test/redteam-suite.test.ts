@@ -1,5 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { runRedTeamSuite, saveRedTeamReport } from '../src/redteam-suite.js';
 
 describe('Red-Team Security Evaluation Suite', () => {
@@ -9,7 +12,9 @@ describe('Red-Team Security Evaluation Suite', () => {
     assert.strictEqual(summary.failCount, 0, `${summary.failCount} red-team test cases failed`);
     assert.strictEqual(summary.passCount, summary.totalTests);
 
-    const savedPath = await saveRedTeamReport(summary);
+    // Save outside the checkout so test runs never rewrite tracked evidence.
+    const outDir = mkdtempSync(path.join(tmpdir(), 'lunum-redteam-'));
+    const savedPath = await saveRedTeamReport(summary, path.join(outDir, 'redteam-report.json'));
     assert.ok(savedPath.endsWith('redteam-report.json'), `Report should be saved to redteam-report.json, got: ${savedPath}`);
   });
 
