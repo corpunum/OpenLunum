@@ -1,0 +1,65 @@
+{
+  "format": "openlunum-client-extraction-run/0.1",
+  "client": "claude-code",
+  "clientVersion": "{\"type\":\"result\",\"subtype\":\"success\",\"is_error\":false,\"result\":\"fake\",\"total_cost_usd\":0}",
+  "requestedModel": "sonnet",
+  "reportedModels": [],
+  "codeCommit": "a2909a3a048e556148e72ea10e335e65fd85d7ef",
+  "workingTreeCleanAtStart": true,
+  "mode": "live",
+  "package": "experiments/natural-development-v8/extraction/public-instruction-package-v11.json",
+  "packageSha256": "89d5555b46258b2d5af073dd8da7c7f217d5db5e68e879f5c12f82f12e08b106",
+  "requestsSha256": "5e884ba6b9c8971fd9015aaec75abe316eb97fd0f86181bd1c36e7d8ab45d73f",
+  "profileSha256": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+  "isolation": "fresh claude -p process per item in an empty temp cwd; built-in tools disabled (--tools \"\"); --strict-mcp-config with only contract/build/submit/validate allowed; prompt-level source-only, not a technical sandbox (the MCP server process runs from the repository checkout)",
+  "rows": 1,
+  "parse": 0,
+  "abstain": 0,
+  "failed": 1,
+  "failures": [
+    {
+      "handle": "extract-3bc0f282a7138537",
+      "failure": "unparseable_final_status"
+    }
+  ],
+  "toolErrors": 0,
+  "totalCostUsd": 0,
+  "candidateLedgerSha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+  "runLedgerSha256": "fa7732696d40df6b7409a1281bf721b759aff1769298a02486c772701039e6de",
+  "servedArtifactBinding": {
+    "atStart": true,
+    "atEnd": true,
+    "checks": [
+      {
+        "key": "coreArtifactSha256",
+        "file": "packages/core/dist/src/agent-native.js",
+        "expected": "2206e6038ff651ae649ca67076ce8d24e002f80844ce87394203568287133dee",
+        "actual": "2206e6038ff651ae649ca67076ce8d24e002f80844ce87394203568287133dee",
+        "match": true
+      },
+      {
+        "key": "frameValidatorArtifactSha256",
+        "file": "packages/core/dist/src/frame-registry.js",
+        "expected": "547c1d837cccb6bcf7354ceb0723fc79f8928567b2d1451f95646e6cff5c6238",
+        "actual": "547c1d837cccb6bcf7354ceb0723fc79f8928567b2d1451f95646e6cff5c6238",
+        "match": true
+      },
+      {
+        "key": "toolImplementationSha256",
+        "file": "packages/mcp/dist/src/tools.js",
+        "expected": "87f0ff8479df27353666a98bf0e9f17db80eaeda657e45283431c9ccf86ea624",
+        "actual": "87f0ff8479df27353666a98bf0e9f17db80eaeda657e45283431c9ccf86ea624",
+        "match": true
+      },
+      {
+        "key": "mcpArtifactSha256",
+        "file": "packages/mcp/dist/bin/lunum-mcp.js",
+        "expected": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+        "actual": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+        "match": true
+      }
+    ]
+  },
+  "observedContractVersions": [],
+  "itemsWithoutObservedContract": 1
+}

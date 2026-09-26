@@ -1,0 +1,8 @@
+{"handle":"eval-03aefa27dd768ee7","pair":"p19","frame":"permitted","language":"el","expectedOutcome":"parse"}
+{"handle":"eval-2a84a765b254a88b","pair":"p07","frame":"prohibited","language":"en","expectedOutcome":"parse"}
+{"handle":"eval-4c9eae5346d46660","pair":"p15","frame":"retry","language":"en","expectedOutcome":"parse"}
+{"handle":"eval-728394c5f228f479","pair":"p08","frame":"prohibited","language":"en","expectedOutcome":"parse"}
+{"handle":"eval-a26b5cdc26a60108","pair":"p06","frame":"permitted","language":"en","expectedOutcome":"parse"}
+{"handle":"eval-a4c4ba4c270b1315","pair":"p20","frame":"prohibited","language":"el","expectedOutcome":"parse"}
+{"handle":"eval-f732dd2ed326bb6c","pair":"p13","frame":"run","language":"en","expectedOutcome":"parse"}
+{"handle":"eval-fb11c92763664df3","pair":"p05","frame":"permitted","language":"en","expectedOutcome":"parse"}

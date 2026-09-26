@@ -1,0 +1,374 @@
+{
+ "/tmp/eval2/regrade/consumer-qa-v1-contract-0.8/haiku-rep1/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-contract-0.8/haiku-rep2/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 17,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 19,
+   "changed": 1
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-contract-0.8/haiku-rep3/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 17,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 19,
+   "changed": 1
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-contract-0.8/sonnet-rep1/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 17,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-contract-0.8/sonnet-rep2/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-contract-0.8/sonnet-rep3/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-product-path/haiku-rep1/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "product-identity-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-product-path/haiku-rep2/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 17,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 19,
+   "changed": 0
+  },
+  "product-identity-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-product-path/haiku-rep3/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 19,
+   "changed": 1
+  },
+  "product-identity-dedup": {
+   "v2": 19,
+   "changed": 1
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-product-path/sonnet-rep1/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "product-identity-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-product-path/sonnet-rep2/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 17,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "product-identity-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1-product-path/sonnet-rep3/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "product-identity-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1/rep1-initial/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1/rep1/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 18,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1/rep2/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 16,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ },
+ "/tmp/eval2/regrade/consumer-qa-v1/rep3/": {
+  "natural-all": {
+   "v2": 20,
+   "changed": 0
+  },
+  "lunum-0.1": {
+   "v2": 16,
+   "changed": 0
+  },
+  "lunum-0.2": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-lunum-dedup": {
+   "v2": 20,
+   "changed": 0
+  },
+  "natural-oracle-dedup": {
+   "v2": 20,
+   "changed": 0
+  }
+ }
+}

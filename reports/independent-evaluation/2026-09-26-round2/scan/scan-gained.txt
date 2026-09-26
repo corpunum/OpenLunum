@@ -1,0 +1,16 @@
+6 datasets/adversarial/critical-semantic-differences-v1.jsonl | added c4aa257 2026-09-07 08:41:33 +0300
+     run(agent,theme)
+     approve(agent,theme)
+     restart(agent,theme)
+6 datasets/adversarial/safety-critical-suites-v1.jsonl | added d4cb7ed 2026-07-27 14:38:20 +0300
+     grant(agent,recipient,theme)
+     revoke(agent,recipient,theme)
+     approve(agent,theme)
+7 datasets/dev/scorer-eval-heldout-v1.jsonl | added 5e05a56 2026-07-26 19:06:28 +0300
+     archive(agent,theme)
+     notify(agent,recipient,theme)
+     share(agent,recipient,theme)
+     share(agent,theme)
+     approve(agent,theme)
+1 datasets/retention-expanded-v1.jsonl | added 211cc51 2026-07-27 20:32:26 +0300
+     archive(theme)

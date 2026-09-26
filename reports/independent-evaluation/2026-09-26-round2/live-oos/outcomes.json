@@ -1,0 +1,351 @@
+{
+  "format": "openlunum-probe-outcomes/0.1",
+  "overall": {
+    "n": 30,
+    "correct": 27,
+    "observed": {
+      "parse": 23,
+      "abstain": 7
+    }
+  },
+  "byExpected": {
+    "abstain": {
+      "n": 4,
+      "correct": 4,
+      "observed": {
+        "abstain": 4
+      }
+    },
+    "parse": {
+      "n": 26,
+      "correct": 23,
+      "observed": {
+        "parse": 23,
+        "abstain": 3
+      }
+    }
+  },
+  "either": [],
+  "byLanguage": {
+    "en": {
+      "n": 20,
+      "correct": 17,
+      "observed": {
+        "parse": 14,
+        "abstain": 6
+      }
+    },
+    "el": {
+      "n": 10,
+      "correct": 10,
+      "observed": {
+        "parse": 9,
+        "abstain": 1
+      }
+    }
+  },
+  "pairsBothCorrect": 25,
+  "pairs": 28,
+  "items": [
+    {
+      "handle": "eval2-c8a5e25ad48fbc90",
+      "pair": "e01",
+      "frame": "e01",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-5f8e92b6ac4c4d23",
+      "pair": "e02",
+      "frame": "e02",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-174bd8d7b3f69cae",
+      "pair": "e03",
+      "frame": "e03",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-f5a5eddfa74f3df6",
+      "pair": "e04",
+      "frame": "e04",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-fe67df8f0603b0b6",
+      "pair": "e05",
+      "frame": "e05",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-6f591650afce1b3e",
+      "pair": "e06",
+      "frame": "e06",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-2f0f80aab83b234b",
+      "pair": "e07",
+      "frame": "e07",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-80094c0bd1b819bd",
+      "pair": "e08",
+      "frame": "e08",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-cff37a30c28a7493",
+      "pair": "e09",
+      "frame": "e09",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-28607ca31fa51824",
+      "pair": "e10",
+      "frame": "e10",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-ea8dc56fae796f70",
+      "pair": "e11",
+      "frame": "e11",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-2498a6f19c4efabb",
+      "pair": "e12",
+      "frame": "e12",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-05d10f9e33ed5130",
+      "pair": "e13",
+      "frame": "e13",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-d885d989453301f2",
+      "pair": "e14",
+      "frame": "e14",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-941e078e334f87a8",
+      "pair": "e15",
+      "frame": "e15",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-4c47ae1fb508110b",
+      "pair": "e16",
+      "frame": "e16",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-4433cd42c6dd3a72",
+      "pair": "e17",
+      "frame": "e17",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-35ad1bd90b33c221",
+      "pair": "e18",
+      "frame": "e18",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-e4063b53c4e338f0",
+      "pair": "P1",
+      "frame": "e19",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-3784ce8a31c5146f",
+      "pair": "P1",
+      "frame": "e20",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-17fed6c4303a2ef4",
+      "pair": "g01",
+      "frame": "g01",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-c2f7350d69b07431",
+      "pair": "g02",
+      "frame": "g02",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-71205821dc69c1ce",
+      "pair": "g03",
+      "frame": "g03",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-d115f6118271be01",
+      "pair": "g04",
+      "frame": "g04",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-af66144d26bb7dfd",
+      "pair": "g05",
+      "frame": "g05",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-ee58861644ed584c",
+      "pair": "g06",
+      "frame": "g06",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-2b99a8becd4b896f",
+      "pair": "g07",
+      "frame": "g07",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-e663735532ab0308",
+      "pair": "g08",
+      "frame": "g08",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-05199ff79d259c4e",
+      "pair": "P2",
+      "frame": "g09",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval2-37ce3e3ba437ae27",
+      "pair": "P2",
+      "frame": "g10",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    }
+  ]
+}

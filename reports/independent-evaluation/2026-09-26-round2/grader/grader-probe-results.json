@@ -1,0 +1,374 @@
+{
+ "cases": [
+  {
+   "id": "q14",
+   "answer": "Rhea retries U-31 7 times.",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q14",
+   "answer": "7 times, on 2027-01-14",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q14",
+   "answer": "7 (the memory mentions it twice; both say 7)",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q14",
+   "answer": "7 retries, i.e. 1 initial attempt plus 7 retries",
+   "human": true,
+   "grader": false,
+   "reason": "numbers 7,1",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q14",
+   "answer": "Seven times.",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q14",
+   "answer": "7 times, not 14",
+   "human": true,
+   "grader": false,
+   "reason": "numbers 7,14",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q14",
+   "answer": "14 (7 + 7)",
+   "human": false,
+   "grader": false,
+   "reason": "numbers 14,7",
+   "flag": ""
+  },
+  {
+   "id": "q14",
+   "answer": "Either 7 or 14",
+   "human": false,
+   "grader": false,
+   "reason": "numbers 7,14",
+   "flag": ""
+  },
+  {
+   "id": "q14",
+   "answer": "7.0",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q14",
+   "answer": "seventy",
+   "human": false,
+   "grader": false,
+   "reason": "numbers none",
+   "flag": ""
+  },
+  {
+   "id": "q02",
+   "answer": "Below 20%",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q02",
+   "answer": "20 percent (not 15)",
+   "human": true,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q02",
+   "answer": "below 20 percent; S-22 uses 15",
+   "human": true,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q06",
+   "answer": "15 percent",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q18",
+   "answer": "30 EUR",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q18",
+   "answer": "€30",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q18",
+   "answer": "30 EUR (the 45 EUR is from Q-83)",
+   "human": true,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q18",
+   "answer": "EUR 30.00",
+   "human": true,
+   "grader": true,
+   "reason": "numeric-match",
+   "flag": ""
+  },
+  {
+   "id": "q20",
+   "answer": "No, it does not say.",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q20",
+   "answer": "No.",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q20",
+   "answer": "The memory does not say.",
+   "human": true,
+   "grader": false,
+   "reason": "no-accepted-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q20",
+   "answer": "Yes — to account Q-82",
+   "human": false,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": ""
+  },
+  {
+   "id": "q20",
+   "answer": "It is not stated; no",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q17",
+   "answer": "Mira may access the resource",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q17",
+   "answer": "Mira is allowed to access",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q17",
+   "answer": "Mira has permission to access the lab",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q17",
+   "answer": "Mira is not permitted; she may never access it",
+   "human": false,
+   "grader": false,
+   "reason": "negated",
+   "flag": ""
+  },
+  {
+   "id": "q17",
+   "answer": "Mira cannot do anything; access is not granted",
+   "human": false,
+   "grader": true,
+   "reason": "token-match",
+   "flag": "FALSE-POS"
+  },
+  {
+   "id": "q17",
+   "answer": "Nothing is known about access",
+   "human": false,
+   "grader": true,
+   "reason": "token-match",
+   "flag": "FALSE-POS"
+  },
+  {
+   "id": "q17",
+   "answer": "Access is denied",
+   "human": false,
+   "grader": true,
+   "reason": "token-match",
+   "flag": "FALSE-POS"
+  },
+  {
+   "id": "q17",
+   "answer": "Access",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q17",
+   "answer": "Mira is allowed to read files (no access info)",
+   "human": false,
+   "grader": true,
+   "reason": "token-match",
+   "flag": "FALSE-POS"
+  },
+  {
+   "id": "q04",
+   "answer": "required",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q04",
+   "answer": "Required (not merely permitted)",
+   "human": true,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q04",
+   "answer": "It is required, not permitted.",
+   "human": true,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q05",
+   "answer": "permitted",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q05",
+   "answer": "Permitted, not required",
+   "human": true,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q12",
+   "answer": "A-62 (not A-61)",
+   "human": true,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q13",
+   "answer": "E-62",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q13",
+   "answer": "Not E-61; it is E-62",
+   "human": true,
+   "grader": false,
+   "reason": "rejected-token",
+   "flag": "FALSE-NEG"
+  },
+  {
+   "id": "q16",
+   "answer": "U-31",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q16",
+   "answer": "Unknown task, possibly U-31",
+   "human": false,
+   "grader": false,
+   "reason": "unknown",
+   "flag": ""
+  },
+  {
+   "id": "q01",
+   "answer": "feature F-11",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q01",
+   "answer": "No feature; F-11 is not mentioned",
+   "human": false,
+   "grader": true,
+   "reason": "token-match",
+   "flag": "FALSE-POS"
+  },
+  {
+   "id": "q15",
+   "answer": "2027-01-14",
+   "human": true,
+   "grader": true,
+   "reason": "token-match",
+   "flag": ""
+  },
+  {
+   "id": "q15",
+   "answer": "14 January 2027",
+   "human": true,
+   "grader": false,
+   "reason": "no-accepted-token",
+   "flag": "FALSE-NEG"
+  }
+ ],
+ "falsePositives": 5,
+ "falseNegatives": 12
+}

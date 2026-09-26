@@ -1,0 +1,6 @@
+Scope: 2 of 7 workspace projects
+packages/core build$ tsc -p tsconfig.json
+packages/core build: Done
+packages/mcp build$ tsc -p tsconfig.json
+packages/mcp build: Done
+served artifacts do not match public-instruction-package-v8.json: packages/core/dist/src/agent-native.js, packages/core/dist/src/frame-registry.js, packages/mcp/dist/src/tools.js (pass --allow-unbound to record anyway)

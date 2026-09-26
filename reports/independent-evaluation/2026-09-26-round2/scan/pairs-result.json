@@ -1,0 +1,18 @@
+{
+ "datasets/adversarial/critical-semantic-differences-v1.jsonl": {
+  "pairs": 15,
+  "bothIdentityNew": 13,
+  "bothIdentityOld": 10,
+  "expectedCaughtFalse": 0,
+  "collisions": 0,
+  "col": []
+ },
+ "datasets/adversarial/safety-critical-suites-v1.jsonl": {
+  "pairs": 43,
+  "bothIdentityNew": 6,
+  "bothIdentityOld": 3,
+  "expectedCaughtFalse": 0,
+  "collisions": 0,
+  "col": []
+ }
+}

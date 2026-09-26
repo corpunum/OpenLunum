@@ -1,0 +1,125 @@
+{
+  "format": "openlunum-probe-outcomes/0.1",
+  "overall": {
+    "n": 8,
+    "correct": 8,
+    "observed": {
+      "parse": 8
+    }
+  },
+  "byExpected": {
+    "abstain": {
+      "n": 0,
+      "correct": 0,
+      "observed": {}
+    },
+    "parse": {
+      "n": 8,
+      "correct": 8,
+      "observed": {
+        "parse": 8
+      }
+    }
+  },
+  "either": [],
+  "byLanguage": {
+    "el": {
+      "n": 2,
+      "correct": 2,
+      "observed": {
+        "parse": 2
+      }
+    },
+    "en": {
+      "n": 6,
+      "correct": 6,
+      "observed": {
+        "parse": 6
+      }
+    }
+  },
+  "pairsBothCorrect": 8,
+  "pairs": 8,
+  "items": [
+    {
+      "handle": "eval-03aefa27dd768ee7",
+      "pair": "p19",
+      "frame": "permitted",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-2a84a765b254a88b",
+      "pair": "p07",
+      "frame": "prohibited",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-4c9eae5346d46660",
+      "pair": "p15",
+      "frame": "retry",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-728394c5f228f479",
+      "pair": "p08",
+      "frame": "prohibited",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-a26b5cdc26a60108",
+      "pair": "p06",
+      "frame": "permitted",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-a4c4ba4c270b1315",
+      "pair": "p20",
+      "frame": "prohibited",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-f732dd2ed326bb6c",
+      "pair": "p13",
+      "frame": "run",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "eval-fb11c92763664df3",
+      "pair": "p05",
+      "frame": "permitted",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    }
+  ]
+}
