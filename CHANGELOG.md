@@ -20,6 +20,10 @@
 - Renderer profile `generic-en-pivot/0.2` (lossless; 0.1 unchanged and still default, decisions/0009).
 - Consumer memory QA benchmark v1 and results (`reports/diagnostic/2026-09-26/consumer-qa-v1`).
 
+- Frame 0.3 (`allow`/`prohibit` with an action need a distinct stated recipient, decisions/0010); protocol 0.3 verb aliases for `action` (decisions/0011); contract `lunum-agent/0.8`.
+- Context mode `identity_dedup` in `compileContext`, the MCP tool and the CLI (decisions/0012).
+- Probes v3; repeated contract-0.8 runs; the consumer benchmark with two answering models.
+
 ### Changed
 - Trunk-based development on `main`; the multi-agent operating model is archived under `research/archive/operating-model-multi-agent-2026-09/`.
 

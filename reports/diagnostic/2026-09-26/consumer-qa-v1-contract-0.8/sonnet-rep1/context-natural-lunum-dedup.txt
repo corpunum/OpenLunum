@@ -1,0 +1,12 @@
+- When battery B-11 falls below 20 percent, System S-11 must enable feature F-11 and send notice N-11 to operator O-11.
+- If battery B-22 is below 15 percent, System S-22 may activate feature F-22 and send notice N-22 to operator O-22.
+- Once B-22 falls under 15%, System S-22 is permitted to activate F-22 and send notice N-22 to O-22.
+- Αν η μπαταρία B-22 είναι κάτω από 15%, επιτρέπεται στο σύστημα S-22 να ενεργοποιήσει τη λειτουργία F-22 και να στείλει την ειδοποίηση N-22 στον χειριστή O-22.
+- Ari sends document P-41 to courier C-41.
+- Editor E-61 publishes report R-61 for audience A-61.
+- Editor E-62 publishes report R-62 for audience A-62.
+- On 2027-01-14, Rhea retries task U-31 exactly seven times.
+- Dana allows Mira to access.
+- Dana transfers 30 EUR from bank account Q-81.
+- Η Dana μεταφέρει 30 EUR από τον λογαριασμό Q-82.
+- Transfer 45 EUR from account Q-83.

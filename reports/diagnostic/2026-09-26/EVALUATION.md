@@ -59,6 +59,20 @@ Anything beyond one model on 64 short English and Greek sentences. The probe exp
   - Lunum-Code 0.1 saved 60% but lost 2–4 answers per run.
   - All of the saving comes from identity-based deduplication. The paraphrase-heavy corpus inflates it, and extraction cost is not included.
 
+## Contract 0.8 and the two-model benchmark (added later the same day)
+
+- **Permission needs a stated permitter** (decisions/0010, frame 0.3). The old encoding was shown live through the MCP server to receive a second identity for the same meaning.
+- **Verb aliases for `action`** (decisions/0011, protocol 0.3).
+
+Three repeated runs ([contract-0.8](contract-0.8/README.md), $23.71):
+- fresh probes v3: 16/16 in every repetition;
+- probes v1: 20/20 and v2: 18/18 in every repetition;
+- V8: abstentions 3/3, exact 16–17 of 16–17 comparable, and source-relative 19/21, in every repetition.
+
+The remaining V8 misses are a false abstention on one "is permitted to" paraphrase and a persistent typing miss.
+
+**Consumer benchmark on those ledgers with two answering models** ([report](consumer-qa-v1-contract-0.8/README.md), $3.08). Natural text deduplicated by identity kept 20/20 answers at −60% (Sonnet) and −62% (Haiku) tokens. Renderer 0.1 lost 2–3 answers per run for both models. `compileContext` now offers that context as mode `identity_dedup` (decisions/0012).
+
 ## Separate CI note
 
 CI on `7b0c21f` (a commit that added only evidence files, pushed without running local `verify`) failed 2 eval tests. They passed in 6 local runs of a fresh clone of that commit and on the next CI run (`ea7fb5d`). The failing test names could not be recovered: the GitHub log tool truncates, and this container cannot reach the log host. The cause is unidentified; it is recorded here rather than dismissed as a flake.

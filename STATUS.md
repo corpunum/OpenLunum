@@ -10,12 +10,12 @@ The runtime candidate schema is `lunum-sem/0.1-draft`; the current strict semant
 
 ## What the current evidence says
 
-**Live client extraction and first consumer benchmark, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md), self-reviewed).** Claude Code (`claude-sonnet-5`) was run through the MCP tools, with repeated runs.
-- Missing-argument refusals are now reliable on the probe sets.
-- V8 exact identity was stable at 16/16 across three repetitions.
-- The new `allow` `action` role introduced a permission-encoding ambiguity (2 V8 rows) and over-refusal of unmapped verbs.
+**Live client extraction and consumer benchmark, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md), self-reviewed).** Claude Code (`claude-sonnet-5`) was run through the MCP tools, three repetitions per configuration, on contract `lunum-agent/0.8`:
+- fresh probes: 16/16 in every repetition;
+- earlier probes: 38/38 in every repetition;
+- V8: refusals 3/3 and exact identity 16–17/16–17 in every repetition, source-relative 19/21.
 
-In the first standalone-consumer benchmark, natural text deduplicated by Lunum fingerprints kept every answer with 51% fewer tokens. **The saving comes entirely from identity-based deduplication, not from compact Lunum-Code**, which costs more tokens per fact than English. The default renderer loses meaning. The corpus is small and paraphrase-heavy, so this is a direction, not a general result.
+In the consumer benchmark, **natural text deduplicated by Lunum identity** (context mode `identity_dedup`) kept every answer with 60–62% fewer tokens, for two answering models. **The saving comes from identity-based deduplication, not compact Lunum-Code**, and it grows as extraction converges more paraphrases. The default renderer (0.1) loses answers. The corpus is small and paraphrase-built, so the percentage is not a general claim.
 
 The earlier [V8 iteration-2 report](experiments/natural-development-v8/extraction/results-iteration2.json) (an agent extractor given the repository-side packet) recorded 17/18 source-relative matches, 14/14 exact among comparable, 6/6 abstentions and one false abstention. Both are narrow 24-row development results in English and Greek, not protected generalization, broad multilingual support or a training result. Human Greek review covers specific strings only.
 
@@ -35,10 +35,9 @@ Development is trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATIN
 
 Next, in order:
 
-1. **Permission encoding rule.** Use `allow`/`prohibit` only when a permitting party is stated; otherwise the modality is `permission` on the action's own predicate. Needs a mechanical check or a frame constraint; instructions alone have not held.
-2. **Verb vocabulary.** Decide how to cover common actions (view, edit, download) as predicate aliases or new predicates. Evaluate on a fresh probe set, never on the verbs that motivated the change.
-3. **A realistic consumer corpus.** The benchmark needs memory with a natural duplication rate, retrieval rather than full-context, more questions, a second answering model, and extraction cost amortized over queries. Until then the 51% figure is specific to a paraphrase-built corpus.
-4. **Renderer default.** Do not ship 0.1 as the model-facing default; decide between 0.2 and natural-text-by-identity using the benchmark.
+1. **Real memory data (blocked on the owner).** The saving depends on how often real memory repeats itself, which a self-authored corpus cannot tell us. Needs a sample of real product memory (for example OpenUnum conversation logs, with consent and redaction), then the same benchmark with retrieval rather than full context, and extraction cost amortized over queries.
+2. **Renderer default.** Renderer 0.1 loses answers for both tested models. Make `identity_dedup` or `natural` the recommended model-facing mode, and stop presenting 0.1 as a compact context.
+3. **Remaining extraction misses.** A false abstention on "Once …, X is permitted to …", and bare-identifier typing (`attempts on U-31` → `identifier`, not `task`).
 
 #685 still needs a human native English review of the V8 English strings. It is recorded as blocked on that input, not re-audited.
 
