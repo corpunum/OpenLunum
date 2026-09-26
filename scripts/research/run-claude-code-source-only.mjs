@@ -45,7 +45,7 @@ const pkg = JSON.parse(fs.readFileSync(PACKAGE, 'utf8'));
 
 // Record source state before any model call; the tree may change later.
 const gitHead = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim();
-const gitDirtyAtStart = spawnSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).stdout.trim() !== '';
+const gitDirtyAtStart = spawnSync('git', ['status', '--porcelain', '--untracked-files=no'], { cwd: root, encoding: 'utf8' }).stdout.trim() !== '';
 
 // Build once so parallel launches do not race on dist/.
 if (!rederive) {
