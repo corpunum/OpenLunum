@@ -139,6 +139,9 @@ test('frames reject a role that restates its own type or the predicate (decision
   assert.ok(typeEcho.some((issue) => issue.code === 'placeholder_role' && issue.path.endsWith('roles.theme')));
   const predicateEcho = validateClauseFrame({ predicate: 'allow', roles: { ...actors, theme: 'allow' } });
   assert.ok(predicateEcho.some((issue) => issue.code === 'placeholder_role'));
+  // Observed live after the first rule shipped: the extractor dropped the value.
+  const typeOnly = validateClauseFrame({ predicate: 'allow', roles: { ...actors, theme: { type: 'access' } } });
+  assert.ok(typeOnly.some((issue) => issue.code === 'placeholder_role'));
   const caseInsensitive = validateClauseFrame({ predicate: 'allow', roles: { ...actors, theme: { type: 'access', value: 'Access' } } });
   assert.ok(caseInsensitive.some((issue) => issue.code === 'placeholder_role'));
 });

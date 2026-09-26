@@ -31,10 +31,16 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(v3.freeze.coreContractHash, 'e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782');
   assert.equal(v3.freeze.toolImplementationSha256, '48aa0a0c8ddb9505c7db2767ca89518a20d6ffb20210f1b5ea8d5676a3ab0299');
 
-  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v4.json', 'utf8'));
+  // v4 (lunum-agent/0.4) is history; the recorded 2026-09-26 v4 run binds it.
+  const v4 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v4.json', 'utf8'));
+  assert.equal(v4.supersedes.path, 'public-instruction-package-v3.json');
+  assert.equal(v4.freeze.coreContractVersion, 'lunum-agent/0.4');
+  assert.equal(v4.freeze.coreContractHash, 'bdb1092d167a2d3ded4d1c18cf3e1eb4d2ae35b4bc3ff5b84a262071e8f3c34c');
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v5.json', 'utf8'));
   assert.equal(next.status, 'frozen-for-next-source-only-run');
-  assert.equal(next.supersedes.path, 'public-instruction-package-v3.json');
-  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.4');
+  assert.equal(next.supersedes.path, 'public-instruction-package-v4.json');
+  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.5');
   for (const key of ['schemaHash', 'frameRegistryHash', 'protocolRegistryHash']) {
     assert.equal(next.freeze[key], previous.freeze[key], `${key} must be unchanged since v2`);
   }

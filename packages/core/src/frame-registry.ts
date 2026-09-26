@@ -272,13 +272,16 @@ function getTermType(term: LunumTerm | undefined): string | undefined {
  * (`allow … theme: {type: 'access', value: 'access'}`) names no argument; it
  * is how extractors paper over a role the source leaves unstated. Treat it as
  * absent so the frame fails and the extractor must abstain (decisions/0007).
- * Terms with an `id` are named instances and never placeholders.
+ * A typed term with no content at all (`{type: 'access'}`) is also a
+ * placeholder. Terms with an `id` are named instances and never placeholders.
  */
 function isPlaceholderTerm(term: LunumTerm | undefined, predicate: string): boolean {
   if (typeof term === 'string') return basicIdentifier(term) === predicate;
   if (!term || typeof term !== 'object' || Array.isArray(term)) return false;
   const record = term as Record<string, unknown>;
   if (record.id !== undefined && record.id !== null && record.id !== '') return false;
+  // A typed term with no id, value or other content names nothing.
+  if (Object.keys(record).every((key) => key === 'type' || record[key] === undefined || record[key] === null || record[key] === '')) return true;
   if (typeof record.value !== 'string') return false;
   const value = basicIdentifier(record.value);
   return value === predicate || (typeof record.type === 'string' && value === basicIdentifier(record.type));

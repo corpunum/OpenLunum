@@ -1,6 +1,6 @@
 # ADR 0007 — Placeholder role fillers are not arguments
 
-**Status:** Implemented 2026-09-26 (extraction contract `lunum-agent/0.4`). Self-reviewed.
+**Status:** Implemented 2026-09-26 (`lunum-agent/0.4`, amended in `0.5`). Self-reviewed.
 
 ## Context
 
@@ -28,3 +28,12 @@ The extraction contract adds the abstention rule "Abstain when the source does n
 - Canonicalization, fingerprint bytes and frame registry data are unchanged, and existing valid Sem keeps its identity. The frame registry hash is unchanged. The contract hash and version change.
 - The rule catches only the self-echo pattern. An extractor that invents a different filler (`theme: {type: "concept", id: "system"}`) still passes. Detecting that needs source-evidence alignment, which core does not have.
 - A sentence such as "Dana grants Mira access." with a filler of `{type: "access", value: "access"}` is also rejected. That is intended: the thing accessed is unstated, and failing closed is correct for identity.
+
+## Amendment 1 — contract `lunum-agent/0.5` (same day)
+
+The first live run under 0.4 showed the extractor routing around the gate. After `placeholder_role` rejected `theme: {type: "access", value: "access"}`, it re-submitted `{type: "access"}`, with no value at all, and `{type: "concept", value: "access"}`. Both passed. On fresh probes it also used the complement verb: `allow … theme: {type: "task", value: "view"}`.
+
+- A typed term with no `id`, no `value` and no other content is now also a placeholder. A rescan of the repository matched only the two `allow … access` patterns (135 occurrences in extractor outputs), with no hits in datasets, targets or fixtures.
+- The contract adds: "A placeholder_role or missing_required_role rejection means the source lacks that argument: abstain; do not re-type, re-word, or empty the filler to pass validation."
+
+The complement-verb filler (`task: view`) cannot be detected mechanically without aligning the filler to source evidence. It remains an instruction-level rule, and its effect has to be measured, not assumed.

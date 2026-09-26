@@ -194,4 +194,5 @@ test('placeholder role fillers get no semantic identity (decisions/0007)', () =>
   assert.equal(result.semanticFingerprint, null);
   assert.ok(result.diagnostics.some((message) => message.includes('restates its type or predicate')));
   assert.ok(getExtractionContract().abstentionRules.some((rule) => rule.includes('placeholder_role')));
+  assert.ok(getExtractionContract().abstentionRules.some((rule) => rule.includes('do not re-type')));
 });
