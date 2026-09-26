@@ -13,6 +13,9 @@
 - `scripts/research/run-claude-code-source-only.mjs` and the first persisted live Claude Code extraction run over V8 ([record](reports/diagnostic/2026-09-26/claude-code-v3/README.md)).
 - V8 public instruction package v3 (supersedes v2, which froze the defective tool build).
 
+- Contract `lunum-agent/0.4`/`0.5`: placeholder role fillers (self-echo or type-only terms) are frame-invalid and receive no identity; abstention rules updated (decisions/0007).
+- V8 task profile iteration 3 and packages v4/v5; missing-argument probe sets v1 and v2; outcome scorer; live evaluation summary (`reports/diagnostic/2026-09-26/EVALUATION.md`).
+
 ### Changed
 - Trunk-based development on `main`; the multi-agent operating model is archived under `research/archive/operating-model-multi-agent-2026-09/`.
 

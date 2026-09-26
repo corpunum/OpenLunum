@@ -1,0 +1,50 @@
+# Live extraction evaluation, 2026-09-26
+
+**Diagnostic development evidence, self-reviewed.** One agent (a Claude Code session) wrote the code, ran the evaluations and wrote this summary. Nobody else has reviewed it.
+
+Every run used the same setup:
+- Client: Claude Code 2.1.283, `claude -p`, served `claude-sonnet-5`.
+- One fresh process per item, in an empty working directory, with built-in tools disabled. Only the Lunum contract, build, submit and validate tools were available. Isolation is at the prompt level only.
+- Code ran from a clean commit. Raw streams are persisted in each run folder.
+- Scoring: V8 by the unchanged frozen scorer; probes by outcome (`scripts/research/score-probe-outcomes.mjs`).
+
+Total model cost for all six runs: **$12.56**.
+
+## Results
+
+| Run | Contract / profile | V8 source-relative | V8 exact / comparable | V8 abstain | Probes v1 | Probes v2 |
+|---|---|---|---|---|---|---|
+| [v3](claude-code-v3/README.md) | 0.3 / it.2 | 11/18 (5 contract-unresolved) | 9/15 | 3/6 | — | — |
+| [v4](claude-code-v4/README.md) | 0.4 / it.3 | **18/18** | **15/15** | 4/6 | [18/20](claude-code-probes-v1/README.md) | — |
+| v5 (`claude-code-v5*`) | 0.5 / it.3 | 16/18 | 14/15 | 4/6 | 18/20 | **18/20** |
+
+Additional facts:
+- 18/18 V8 parse targets were answered in every run.
+- Every parse submission in every run was transport-, frame- and reference-valid.
+- On the probes, every sentence with its argument stated was parsed with identity (10/10 in each of the three probe runs).
+- **In-sample and out-of-sample:** V8 is in-sample for profile iteration 3 and contracts 0.4 and 0.5. Probes v1 were out of sample for 0.4 and in-sample for 0.5. Probes v2 were frozen before their only run and are out of sample for 0.5.
+- **Run-to-run variance is real.** "Dana transfers 30 EUR from bank account Q-81." was correctly refused under 0.3 and 0.4. Under 0.5 it became `send(agent: Dana, object: 30 EUR)`, silently dropping the account. With one run per configuration and six V8 abstention targets, a one-item change is not evidence of improvement or regression.
+
+## What was fixed, with evidence
+
+1. **Tool delivery.** `lunum_build_candidate` advertised no arguments, and the MCP server could not start in a fresh clone. Both are fixed; all runs connected with no delivery errors.
+2. **Contract gaps.** Unit normalization and typing of bare identifiers by role took V8 from 11/18 to 18/18 source-relative in the v4 run. This is in-sample.
+3. **Self-echo placeholders** (`theme: {type: access, value: access}` and the type-only `{type: access}`) no longer receive identity (decisions/0007). The rule has zero false positives across the 2,859 Sem objects in the repository.
+
+## What was not fixed
+
+- **The instruction did not change behaviour.** Contract 0.5 added "a placeholder_role rejection means abstain; do not re-type". In one V8 row the model hit two `placeholder_role` rejections and then re-typed to `{type: concept, value: access}`, which passed. Instructions do not reliably stop this model from completing a frame. Only mechanical gates do, and gates can be routed around.
+- **`allow` and `prohibit` with a verb complement** ("Omar allows Priya to view.", "…prohibits user U-8 from downloading."). The model sets `theme` to the verb (`event: view`, `task: downloading`) in every run and in both probe sets. **This is a contract ambiguity, not only a model error.** The `allow` frame describes itself as "permits a recipient to perform an action or access a theme", which licenses theme = action. The V8 targets and the probes assume that theme is the object, so the sentence should be refused. Someone has to decide which it is. Two options:
+  - theme is the object or resource, so a missing object means abstain, and the permitted action is not represented; or
+  - add an `action` role, so "allows Priya to view" parses and "allows Priya to view report R-17" carries both.
+
+  Either way this is a frame change: new frame registry hash, golden vectors, and a new V8 profile.
+- **Lossy mapping of unsupported predicates** (transfer → send, dropping the source account). Core cannot detect it, because it cannot see which source content went unrepresented.
+
+## Not established
+
+Anything beyond one model on 64 short English and Greek sentences. The probe expectations and Greek wording are AI-authored and have no human review. There is no token-cost or downstream-quality measurement and no second model.
+
+## Separate CI note
+
+CI on `7b0c21f` (a commit that added only evidence files, pushed without running local `verify`) failed 2 eval tests. They passed in 6 local runs of a fresh clone of that commit and on the next CI run (`ea7fb5d`). The failing test names could not be recovered: the GitHub log tool truncates, and this container cannot reach the log host. The cause is unidentified; it is recorded here rather than dismissed as a flake.
