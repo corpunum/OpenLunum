@@ -14,6 +14,4 @@
 # Repository controls and worker infrastructure
 /.github/ @corpunum
 /scripts/pi-* @corpunum
-/ORCHESTRATOR.md @corpunum
-/ORCHESTRATOR-PROMPT.md @corpunum
 /docs/REPOSITORY_OPERATING_MODEL.md @corpunum

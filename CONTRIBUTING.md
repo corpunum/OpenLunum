@@ -23,10 +23,10 @@ Use a short-lived PR branch (or the agreed fork workflow), not a persistent agen
 
 ## Semantic and evidence-sensitive changes
 
-Schema, fingerprint/canonicalization, parser scoring, protected data and safety changes need an independently reviewed candidate and appropriate compatibility tests. Preserve source evidence, version meaning-changing contracts, and keep implementation changes separate from protected evaluation data.
+Schema, fingerprint/canonicalization, parser scoring, protected data and safety changes need explicit review (labelled as self-review when the author is the only reviewer) and appropriate compatibility tests. Preserve source evidence, version meaning-changing contracts, and keep implementation changes separate from protected evaluation data.
 
 A faster renderer is not a compression success unless a named tokenizer and downstream task evaluation support it. A schema-valid candidate is not automatically a correct interpretation. An agent review is not a human/native-speaker review.
 
 ## Maintainer-run automation
 
-Only managed agents and orchestration processes need the full [operating model](docs/REPOSITORY_OPERATING_MODEL.md) and [AGENTS.md](AGENTS.md). Assignment files, worker budgets and dispatcher locks govern that automation; they are not a barrier to public feedback. Core review and CI requirements still apply to everyone proposing changes.
+Agents follow [AGENTS.md](AGENTS.md) and the trunk-based [operating model](docs/REPOSITORY_OPERATING_MODEL.md). External contributors can still open issues and pull requests; CI requirements apply to everyone.

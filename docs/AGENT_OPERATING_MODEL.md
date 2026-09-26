@@ -1,5 +1,7 @@
 # Agent operating model
 
+> **Suspended 2026-09-26.** The repository runs trunk-based on `main`; see [the operating model](REPOSITORY_OPERATING_MODEL.md). This document describes the archived multi-agent workflow.
+
 OpenLunum uses local workers to generate candidates and run experiments, but autonomy is bounded by explicit issues, work-in-progress limits, branch budgets, independent evaluation, Actions budgets, and maintainer control of `main`.
 
 The canonical repository workflow is defined in `docs/REPOSITORY_OPERATING_MODEL.md`. Local orchestrators begin with `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md`.

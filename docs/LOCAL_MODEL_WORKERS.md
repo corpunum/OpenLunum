@@ -1,5 +1,7 @@
 # Local model workers
 
+> **Suspended 2026-09-26.** The repository runs trunk-based on `main`; see [the operating model](REPOSITORY_OPERATING_MODEL.md). This document describes the archived multi-agent workflow.
+
 OpenLunum supports local OpenAI-compatible chat servers so bounded experiments and implementation tasks can run without per-call API cost. The runner does not assume a specific model family.
 
 Local workers are assignment-driven. They do not continuously scan archived queues or invent work. The local orchestrator begins with `docs/LOCAL_ORCHESTRATOR_ONBOARDING.md`.

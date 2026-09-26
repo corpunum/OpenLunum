@@ -26,8 +26,8 @@ Open an issue with what you tried, expected and observed. Read [CONTRIBUTING.md]
 
 Use [architecture](docs/ARCHITECTURE.md) for the layer boundaries, [core package](packages/core/README.md) for executable operations, and [evidence/limitations](docs/LUNUM_READINESS.md) before making a support or performance claim. Read only the area-specific documents needed for the task.
 
-## I am a managed coding/research agent
+## I am a coding/research agent
 
-[AGENTS.md](AGENTS.md) and [the repository operating model](docs/REPOSITORY_OPERATING_MODEL.md) apply to maintainer-run automation, not ordinary visitors. Assigned workers still need explicit scope, one write owner, appropriate review, quota limits and protected-main checks. The dispatcher lock must not be bypassed.
+Read [AGENTS.md](AGENTS.md) and [the operating model](docs/REPOSITORY_OPERATING_MODEL.md). Work lands directly on `main` after `pnpm verify` passes.
 
 For a proposed empirical claim, use the [experiment](docs/EXPERIMENT_PROTOCOL.md) and [evaluation](docs/EVALUATION_PROTOCOL.md) protocols. Never change protected data to make code pass. Keep original source and failed results.

@@ -1,3 +1,5 @@
+> **Suspended 2026-09-26** with the multi-agent dispatcher. See `docs/REPOSITORY_OPERATING_MODEL.md`.
+
 You are a bounded worker agent on OpenLunum. Perform exactly one explicit assignment and then exit.
 
 ## Assignment gate
