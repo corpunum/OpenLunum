@@ -10,7 +10,7 @@ The runtime candidate schema is `lunum-sem/0.1-draft`; the current strict semant
 
 ## What the current evidence says
 
-**Live client extraction and consumer benchmark, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md), self-reviewed).** Claude Code (`claude-sonnet-5`) was run through the MCP tools, three repetitions per configuration, on contract `lunum-agent/0.8`:
+**Live client extraction and consumer benchmark, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md), self-reviewed).** Claude Code (`claude-sonnet-5`) was run through the MCP tools, three repetitions per configuration, on contract `lunum-agent/0.8` (a single-repetition check of 0.9 improved V8 to 20/21 source-relative and 18/18 exact):
 - fresh probes: 16/16 in every repetition;
 - earlier probes: 38/38 in every repetition;
 - V8: refusals 3/3 and exact identity 16–17/16–17 in every repetition, source-relative 19/21.
@@ -36,8 +36,8 @@ Development is trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATIN
 Next, in order:
 
 1. **Real memory data (blocked on the owner).** The saving depends on how often real memory repeats itself, which a self-authored corpus cannot tell us. Needs a sample of real product memory (for example OpenUnum conversation logs, with consent and redaction), then the same benchmark with retrieval rather than full context, and extraction cost amortized over queries.
-2. **Renderer default.** Renderer 0.1 loses answers for both tested models. Make `identity_dedup` or `natural` the recommended model-facing mode, and stop presenting 0.1 as a compact context.
-3. **Remaining extraction misses.** A false abstention on "Once …, X is permitted to …", and bare-identifier typing (`attempts on U-31` → `identifier`, not `task`).
+2. **Renderer default: done at the product surface.** The MCP default is now `identity_dedup` (decisions/0013). The core library default is still `mixed`; switching it is an API change to schedule.
+3. **Remaining extraction miss.** Bare-identifier typing (`attempts on U-31` → `identifier`, not `task`). The "is permitted to activate" false abstention was fixed in contract 0.9.
 
 #685 still needs a human native English review of the V8 English strings. It is recorded as blocked on that input, not re-audited.
 

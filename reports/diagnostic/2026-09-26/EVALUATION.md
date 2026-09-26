@@ -73,6 +73,14 @@ The remaining V8 misses are a false abstention on one "is permitted to" paraphra
 
 **Consumer benchmark on those ledgers with two answering models** ([report](consumer-qa-v1-contract-0.8/README.md), $3.08). Natural text deduplicated by identity kept 20/20 answers at −60% (Sonnet) and −62% (Haiku) tokens. Renderer 0.1 lost 2–3 answers per run for both models. `compileContext` now offers that context as mode `identity_dedup` (decisions/0012).
 
+## Contract 0.9 and the product path (added later the same day)
+
+- **Product path:** `compileContext` in `identity_dedup` mode, measured as a benchmark condition ([report](consumer-qa-v1-product-path/README.md), $3.65), kept 20/20 answers in all six runs at −60% (Sonnet) and −62% (Haiku) tokens. The MCP default model-facing mode is now `identity_dedup` (decisions/0013).
+- **Contract 0.9:** the extractor had been treating the published alias list as exhaustive and refused "activate". The contract now says aliases are not exhaustive (decisions/0011 amendment 1). One live check ([contract-0.9](contract-0.9/README.md), $6.15, single repetition):
+  - V8: 20/21 source-relative, 18/18 exact, 0 false abstentions;
+  - fresh probes v4 (unlisted synonyms): 13/14, where the one miss is a probe with a valid second reading;
+  - probes v3: 16/16.
+
 ## Separate CI note
 
 CI on `7b0c21f` (a commit that added only evidence files, pushed without running local `verify`) failed 2 eval tests. They passed in 6 local runs of a fresh clone of that commit and on the next CI run (`ea7fb5d`). The failing test names could not be recovered: the GitHub log tool truncates, and this container cannot reach the log host. The cause is unidentified; it is recorded here rather than dismissed as a flake.

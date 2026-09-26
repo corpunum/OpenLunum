@@ -24,7 +24,11 @@
 - Context mode `identity_dedup` in `compileContext`, the MCP tool and the CLI (decisions/0012).
 - Probes v3; repeated contract-0.8 runs; the consumer benchmark with two answering models.
 
+- Contract `lunum-agent/0.9` / protocol 0.4: aliases are not exhaustive (decisions/0011 amendment 1). Probes v4.
+- Product-path consumer benchmark condition.
+
 ### Changed
+- MCP default context mode is `identity_dedup` (decisions/0013).
 - Trunk-based development on `main`; the multi-agent operating model is archived under `research/archive/operating-model-multi-agent-2026-09/`.
 
 > The "Readiness Sprint" section below reports percentages from simulations and validation runners. They are superseded and are not capability evidence; see [STATUS.md](STATUS.md).
