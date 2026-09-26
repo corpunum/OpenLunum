@@ -1,0 +1,14 @@
+{"handle": "probe4-1285abfea860ae4b", "pair": "alter-perm", "frame": "alter-perm", "language": "en", "expectedOutcome": "parse"}
+{"handle": "probe4-2e084794aa1f024e", "pair": "switch-on", "frame": "switch-on", "language": "en", "expectedOutcome": "parse"}
+{"handle": "probe4-37850f972912a460", "pair": "send-missing", "frame": "send-missing", "language": "el", "expectedOutcome": "abstain"}
+{"handle": "probe4-421799ed62a5200a", "pair": "purge-perm", "frame": "purge-perm", "language": "en", "expectedOutcome": "parse"}
+{"handle": "probe4-4e7c17ca4f42e166", "pair": "switch-missing", "frame": "switch-missing", "language": "en", "expectedOutcome": "abstain"}
+{"handle": "probe4-5039e5e712470a79", "pair": "juggle", "frame": "juggle", "language": "el", "expectedOutcome": "abstain"}
+{"handle": "probe4-5634e0e802301f68", "pair": "permitted-switch", "frame": "permitted-switch", "language": "el", "expectedOutcome": "parse"}
+{"handle": "probe4-8c875d4c4a069bd9", "pair": "switch-on", "frame": "switch-on", "language": "el", "expectedOutcome": "parse"}
+{"handle": "probe4-b6b2d4830c3bd3d4", "pair": "alter-perm", "frame": "alter-perm", "language": "el", "expectedOutcome": "parse"}
+{"handle": "probe4-bbc31aaa91e1534a", "pair": "paint", "frame": "paint", "language": "en", "expectedOutcome": "abstain"}
+{"handle": "probe4-c3123b9bc3574cf3", "pair": "permitted-switch", "frame": "permitted-switch", "language": "en", "expectedOutcome": "parse"}
+{"handle": "probe4-c85ce19625a576e3", "pair": "juggle", "frame": "juggle", "language": "en", "expectedOutcome": "abstain"}
+{"handle": "probe4-d1eed17b70de9f36", "pair": "kickoff-perm", "frame": "kickoff-perm", "language": "en", "expectedOutcome": "parse"}
+{"handle": "probe4-e3317f3ee3669ae5", "pair": "shut-off", "frame": "shut-off", "language": "en", "expectedOutcome": "parse"}
