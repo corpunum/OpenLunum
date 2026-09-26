@@ -84,6 +84,7 @@ export function getCandidateBuilderSchema(): Record<string, unknown> {
       const aliases = Object.entries(roleAliases).filter(([, canonical]) => canonical === role).map(([alias]) => alias);
       return { anyOf: [role, ...aliases].map((name) => ({ properties: { [name]: {} }, required: [name] })) };
     });
+    if (frame.requiredWith) roleSchema.dependentRequired = Object.fromEntries(Object.entries(frame.requiredWith).map(([trigger, dependents]) => [trigger, [...dependents]]));
     if (frame.exclusiveGroups?.length) roleSchema.allOf = [
       ...(roleSchema.allOf as unknown[] ?? []),
       ...frame.exclusiveGroups.flatMap((group) => group.flatMap((left, index) => group.slice(index + 1).map((right) => ({ not: { properties: { [left]: {}, [right]: {} }, required: [left, right] } })))),

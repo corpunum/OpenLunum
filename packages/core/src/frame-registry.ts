@@ -1,7 +1,7 @@
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
 
-export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.2' as const;
+export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.3' as const;
 
 export interface FrameRoleRequirement {
   name: string;
@@ -17,6 +17,10 @@ export interface PredicateFrameDefinition {
   roles: readonly FrameRoleRequirement[];
   atLeastOneOf?: readonly string[];
   exclusiveGroups?: readonly (readonly string[])[];
+  /** If the key role is present, every listed role must be present too (decisions/0010). */
+  requiredWith?: Readonly<Record<string, readonly string[]>>;
+  /** Each pair of roles, when both present, must not be the same term (decisions/0010). */
+  distinctRoles?: readonly (readonly [string, string])[];
   description: string;
 }
 
@@ -29,6 +33,8 @@ export function canonicalFramePromptBlock(): string {
       ...(optional.length ? [`optional: ${optional.join(', ')}`] : []),
       ...(frame.atLeastOneOf?.length ? [`at least one of: ${frame.atLeastOneOf.join('|')}`] : []),
       ...(frame.exclusiveGroups?.flatMap((group) => [`${group.join('|')} (mutually exclusive)`]) ?? []),
+      ...Object.entries(frame.requiredWith ?? {}).map(([trigger, dependents]) => `${trigger} requires ${dependents.join(', ')}`),
+      ...(frame.distinctRoles ?? []).map(([left, right]) => `${left} and ${right} must differ`),
       ...frame.roles.flatMap((role) => role.allowedTermTypes?.length ? [`${role.name}: ${role.allowedTermTypes.join('|')}`] : []),
       ...frame.roles.flatMap((role) => role.vocabulary === 'predicate' ? [`${role.name}: a registered predicate`] : [])
     ];
@@ -39,7 +45,7 @@ export function canonicalFramePromptBlock(): string {
 export interface FrameValidationIssue {
   path: string;
   predicate: string;
-  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role' | 'unregistered_action';
+  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role' | 'unregistered_action' | 'dependent_role_missing' | 'identical_roles';
   message: string;
 }
 
@@ -166,7 +172,9 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'action', required: false, vocabulary: 'predicate' as const }
     ]),
     atLeastOneOf: Object.freeze(['theme', 'action']),
-    description: 'An agent permits a recipient to perform an action (a registered predicate) and/or to act on a theme (the object or resource).'
+    requiredWith: Object.freeze({ action: Object.freeze(['recipient']) }),
+    distinctRoles: Object.freeze([Object.freeze(['agent', 'recipient'] as const)]),
+    description: 'A stated permitter (agent) permits a recipient to perform an action (a registered predicate) and/or to act on a theme (the object or resource). With no stated permitter ("X is permitted to Y"), use modality permission on Y instead.'
   }),
   prohibit: Object.freeze({
     predicate: 'prohibit',
@@ -177,7 +185,9 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'action', required: false, vocabulary: 'predicate' as const }
     ]),
     atLeastOneOf: Object.freeze(['theme', 'action']),
-    description: 'An agent forbids a recipient from performing an action (a registered predicate) and/or from acting on a theme (the object or resource).'
+    requiredWith: Object.freeze({ action: Object.freeze(['recipient']) }),
+    distinctRoles: Object.freeze([Object.freeze(['agent', 'recipient'] as const)]),
+    description: 'A stated authority (agent) forbids a recipient from performing an action (a registered predicate) and/or from acting on a theme (the object or resource). With no stated authority ("X must not Y"), use negation or modality on Y instead.'
   }),
   deploy: Object.freeze({
     predicate: 'deploy',
@@ -282,6 +292,14 @@ function getTermType(term: LunumTerm | undefined): string | undefined {
  * A typed term with no content at all (`{type: 'access'}`) is also a
  * placeholder. Terms with an `id` are named instances and never placeholders.
  */
+function identityKey(term: LunumTerm | undefined): string {
+  if (term && typeof term === 'object' && !Array.isArray(term)) {
+    const record = term as Record<string, unknown>;
+    return basicIdentifier(String(record.id ?? record.ref ?? record.value ?? ''));
+  }
+  return basicIdentifier(String(term ?? ''));
+}
+
 function isPlaceholderTerm(term: LunumTerm | undefined, predicate: string): boolean {
   if (typeof term === 'string') return basicIdentifier(term) === predicate;
   if (!term || typeof term !== 'object' || Array.isArray(term)) return false;
@@ -387,6 +405,18 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
           message: `Role '${req.name}' for predicate '${predicate}' has ${termType ? `disallowed term type '${termType}'` : 'no typed term'}; expected one of [${req.allowedTermTypes.join(', ')}]`
         });
       }
+    }
+  }
+
+  for (const [trigger, dependents] of Object.entries(frame.requiredWith ?? {})) {
+    if (!roleMap.has(trigger)) continue;
+    for (const dependent of dependents) {
+      if (!roleMap.has(dependent)) issues.push({ path: `${pathPrefix}.roles`, predicate, code: 'dependent_role_missing', message: `Predicate '${predicate}' with role '${trigger}' also requires role '${dependent}'; if the source does not state it, use modality on the action's own predicate or abstain` });
+    }
+  }
+  for (const [left, right] of frame.distinctRoles ?? []) {
+    if (roleMap.has(left) && roleMap.has(right) && identityKey(roleMap.get(left)) === identityKey(roleMap.get(right))) {
+      issues.push({ path: `${pathPrefix}.roles.${right}`, predicate, code: 'identical_roles', message: `Predicate '${predicate}' needs different '${left}' and '${right}'` });
     }
   }
 

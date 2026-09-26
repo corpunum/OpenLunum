@@ -42,21 +42,28 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(v5.freeze.coreContractVersion, 'lunum-agent/0.5');
   assert.equal(v5.freeze.frameRegistryHash, previous.freeze.frameRegistryHash);
 
-  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v6.json', 'utf8'));
-  assert.equal(next.status, 'frozen-for-next-source-only-run');
-  assert.equal(next.supersedes.path, 'public-instruction-package-v5.json');
-  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.6');
-  assert.equal(next.freeze.frameRegistryVersion, 'lunum-frame/0.2');
-  assert.equal(next.freeze.schemaHash, previous.freeze.schemaHash, 'transport schema unchanged since v2');
+  // v6 (frame 0.2) is history; the recorded frame-0.2 runs bind it.
+  const v6 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v6.json', 'utf8'));
+  assert.equal(v6.freeze.coreContractVersion, 'lunum-agent/0.6');
+  assert.equal(v6.freeze.frameRegistryVersion, 'lunum-frame/0.2');
   // decisions/0008 deliberately changed the frame and protocol registries.
-  assert.notEqual(next.freeze.frameRegistryHash, v5.freeze.frameRegistryHash);
-  assert.notEqual(next.freeze.protocolRegistryHash, v5.freeze.protocolRegistryHash);
+  assert.notEqual(v6.freeze.frameRegistryHash, v5.freeze.frameRegistryHash);
+  assert.notEqual(v6.freeze.protocolRegistryHash, v5.freeze.protocolRegistryHash);
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v7.json', 'utf8'));
+  assert.equal(next.status, 'frozen-for-next-source-only-run');
+  assert.equal(next.supersedes.path, 'public-instruction-package-v6.json');
+  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.7');
+  assert.equal(next.freeze.frameRegistryVersion, 'lunum-frame/0.3');
+  assert.equal(next.freeze.schemaHash, previous.freeze.schemaHash, 'transport schema unchanged since v2');
+  assert.equal(next.freeze.protocolRegistryHash, v6.freeze.protocolRegistryHash, 'decisions/0010 changes frames, not the protocol vocabulary');
+  assert.notEqual(next.freeze.frameRegistryHash, v6.freeze.frameRegistryHash);
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
   assert.equal(hash('packages/mcp/dist/src/tools.js'), next.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-native.js'), next.freeze.coreArtifactSha256);
   assert.equal(hash('packages/core/dist/src/frame-registry.js'), next.freeze.frameValidatorArtifactSha256);
-  assert.equal(hash('experiments/natural-development-v8/extraction/public-task-profile-iteration4.json'), next.freeze.taskProfileSha256);
+  assert.equal(hash('experiments/natural-development-v8/extraction/public-task-profile-iteration5.json'), next.freeze.taskProfileSha256);
   assert.equal(Object.hasOwn(next, 'gold'), false);
 });
 

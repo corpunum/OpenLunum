@@ -178,3 +178,16 @@ test('allow/prohibit take a registered-predicate action and need theme or action
   // The predicate itself is still a placeholder, not an action.
   assert.ok(validateClauseFrame({ predicate: 'allow', roles: { ...actors, action: 'allow' } }).some((issue) => issue.code === 'placeholder_role'));
 });
+
+test('allow/prohibit with an action need a distinct stated recipient (decisions/0010)', () => {
+  for (const predicate of ['allow', 'prohibit']) {
+    // "System S-22 is permitted to activate F-22" mis-encoded with the permitted party as permitter.
+    const noRecipient = validateClauseFrame({ predicate, roles: { agent: { type: 'system', id: 'S-22' }, theme: { type: 'feature', id: 'F-22' }, action: 'enable' } });
+    assert.ok(noRecipient.some((issue) => issue.code === 'dependent_role_missing'));
+    const self = validateClauseFrame({ predicate, roles: { agent: { type: 'system', id: 'S-22' }, recipient: { type: 'system', id: 's-22' }, action: 'enable' } });
+    assert.ok(self.some((issue) => issue.code === 'identical_roles'));
+    assert.deepEqual(validateClauseFrame({ predicate, roles: { agent: { type: 'actor', id: 'Dana' }, recipient: { type: 'actor', id: 'Mira' }, action: 'access' } }), []);
+    // Theme-only permissions keep their earlier meaning and need no recipient.
+    assert.deepEqual(validateClauseFrame({ predicate, roles: { agent: { type: 'actor', id: 'Dana' }, theme: { type: 'resource', id: 'R-9' } } }), []);
+  }
+});

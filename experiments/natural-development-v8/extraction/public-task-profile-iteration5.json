@@ -1,0 +1,160 @@
+{
+  "format": "openlunum-public-task-profile/0.1",
+  "version": "v8-iteration5-frame-0.3",
+  "visibility": "extractor-public",
+  "purpose": "Explicit task-profile projection of the frozen public extraction rules; contains no gold targets, groups, contrasts, reviews, or private mappings.",
+  "kindPolicy": {
+    "conditional": "conditional_instruction",
+    "ordinaryDeclarativeAction": "event"
+  },
+  "conditionalRepresentation": {
+    "root": "first primary action in the main clause",
+    "consequences": "remaining coordinated actions as nested consequences of the root",
+    "conditionAttachment": "condition attaches to the root conditional clause",
+    "repeatNamedAgent": true,
+    "repeatExplicitModality": true,
+    "maximumNestedDepth": 1
+  },
+  "rolePolicy": {
+    "send": {
+      "required": [
+        "agent",
+        "object"
+      ],
+      "optional": [
+        "recipient",
+        "destination"
+      ],
+      "recipientAndDestinationMutuallyExclusive": true
+    },
+    "publish": {
+      "required": [
+        "agent",
+        "theme"
+      ],
+      "optional": [
+        "audience"
+      ]
+    },
+    "retry": {
+      "required": [
+        "agent"
+      ],
+      "optional": [
+        "theme",
+        "count"
+      ],
+      "countType": "quantity"
+    },
+    "below": {
+      "required": [
+        "subject",
+        "value"
+      ],
+      "thresholdRoleName": "value"
+    },
+    "enable": {
+      "required": [
+        "theme"
+      ],
+      "optional": [
+        "agent"
+      ]
+    },
+    "allow": {
+      "required": [
+        "agent"
+      ],
+      "optional": [
+        "recipient",
+        "theme",
+        "action"
+      ],
+      "atLeastOneOf": [
+        "theme",
+        "action"
+      ],
+      "theme": "the object or resource acted on",
+      "action": "the permitted action as a registered predicate identifier; abstain if no registered predicate expresses it",
+      "requiredWith": {
+        "action": [
+          "recipient"
+        ]
+      },
+      "agent": "the stated permitter/authority; never the permitted party"
+    },
+    "prohibit": {
+      "required": [
+        "agent"
+      ],
+      "optional": [
+        "recipient",
+        "theme",
+        "action"
+      ],
+      "atLeastOneOf": [
+        "theme",
+        "action"
+      ],
+      "theme": "the object or resource acted on",
+      "action": "the forbidden action as a registered predicate identifier; abstain if no registered predicate expresses it",
+      "requiredWith": {
+        "action": [
+          "recipient"
+        ]
+      },
+      "agent": "the stated permitter/authority; never the permitted party"
+    }
+  },
+  "termTypePolicy": {
+    "system": "system",
+    "person": "actor",
+    "document": "document",
+    "file": "document",
+    "report": "document",
+    "notice": "document",
+    "parcel": "object",
+    "audience": "audience",
+    "task": "task",
+    "metric": "metric",
+    "feature": "feature",
+    "quantity": "quantity",
+    "date": "date",
+    "battery": "metric",
+    "operator": "actor"
+  },
+  "encodingPolicy": {
+    "namedSourceIdentifiers": "id",
+    "literalQuantitiesAndDates": "value",
+    "explicitQuantityUnit": "preserve exactly; for seven times use {type: quantity, value: 7, unit: times}",
+    "explicitDate": "clause-level time term",
+    "unitNormalization": {
+      "%": "percent",
+      "percent": "percent",
+      "per cent": "percent",
+      "τοις εκατό": "percent",
+      "times": "times"
+    }
+  },
+  "modalityPolicy": "obligation and permission are distinct; preserve explicit modality on root and coordinated consequences; lexical negation uses negated=true; \"X is permitted to Y\" / \"X may Y\" with no stated permitter is modality permission on Y, not allow",
+  "abstentionPolicy": {
+    "explicit": "status abstain with candidateSem null",
+    "reasons": [
+      "unsupported",
+      "ambiguous",
+      "unresolved"
+    ],
+    "missingRequiredFrameArgument": "unsupported: abstain when the source does not state a role the frame requires; never fill it with the role's type name or the verb (core rejects this as placeholder_role)",
+    "unsupportedDomain": "unsupported"
+  },
+  "supersedes": "public-task-profile-iteration4.json",
+  "derivation": "Frame lunum-frame/0.3 (decisions/0010): allow/prohibit with an action require a distinct stated recipient. V8 is in-sample (the rule was written after V8 g2 rows failed).",
+  "roleDefaultTypes": {
+    "_rule": "When the source gives only a bare identifier with no typing noun, use the role default below.",
+    "below.subject": "metric",
+    "above.subject": "metric",
+    "send.recipient": "actor",
+    "retry.theme": "task",
+    "publish.audience": "audience"
+  }
+}

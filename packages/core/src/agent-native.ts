@@ -25,7 +25,7 @@ import { resolveGroundingCascade, toGroundingResolution } from './grounding-prov
 import type { LunumSem, SemanticTrustDecision } from './types.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.6' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.7' as const;
 export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.3' as const;
 
 // SHA-256 of schemas/lunum-sem.schema.json at this protocol version. Keep
