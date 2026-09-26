@@ -1,0 +1,250 @@
+{
+  "format": "openlunum-probe-outcomes/0.1",
+  "overall": {
+    "n": 20,
+    "correct": 18,
+    "observed": {
+      "abstain": 8,
+      "parse": 12
+    }
+  },
+  "byExpected": {
+    "abstain": {
+      "n": 10,
+      "correct": 8,
+      "observed": {
+        "abstain": 8,
+        "parse": 2
+      }
+    },
+    "parse": {
+      "n": 10,
+      "correct": 10,
+      "observed": {
+        "parse": 10
+      }
+    }
+  },
+  "byLanguage": {
+    "en": {
+      "n": 12,
+      "correct": 11,
+      "observed": {
+        "abstain": 5,
+        "parse": 7
+      }
+    },
+    "el": {
+      "n": 8,
+      "correct": 7,
+      "observed": {
+        "abstain": 3,
+        "parse": 5
+      }
+    }
+  },
+  "pairsBothCorrect": 8,
+  "pairs": 10,
+  "items": [
+    {
+      "handle": "probe-02b783c28e209ee2",
+      "pair": "send",
+      "frame": "send",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-077998a22884cee7",
+      "pair": "copy",
+      "frame": "copy",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-24e3424f777273fd",
+      "pair": "publish",
+      "frame": "publish",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-2a274a4863f11eb9",
+      "pair": "deploy",
+      "frame": "deploy",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-4917ec0fe5d2b546",
+      "pair": "deploy",
+      "frame": "deploy",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-58a24b21a09b10d9",
+      "pair": "enable",
+      "frame": "enable",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-5a272ae20310568f",
+      "pair": "enable",
+      "frame": "enable",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-6cc4dde7e2951d21",
+      "pair": "enable",
+      "frame": "enable",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-6e39334637115319",
+      "pair": "publish",
+      "frame": "publish",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-710d4e525fc4e605",
+      "pair": "publish",
+      "frame": "publish",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-7b6303928a174e85",
+      "pair": "allow",
+      "frame": "allow",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "parse",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-7b76119452a7df54",
+      "pair": "send",
+      "frame": "send",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-8dc2bb4f50604f0b",
+      "pair": "send",
+      "frame": "send",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-9363f3e242f5f7da",
+      "pair": "allow",
+      "frame": "allow",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-a1513046cbf09da0",
+      "pair": "copy",
+      "frame": "copy",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-a638372f25bfa514",
+      "pair": "allow",
+      "frame": "allow",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-c6e7775eceed63f4",
+      "pair": "send",
+      "frame": "send",
+      "language": "el",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-ce3e648d33a666e5",
+      "pair": "publish",
+      "frame": "publish",
+      "language": "el",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-d83ac1907309c322",
+      "pair": "allow",
+      "frame": "allow",
+      "language": "en",
+      "expectedOutcome": "abstain",
+      "observed": "parse",
+      "correct": false,
+      "failureClass": null
+    },
+    {
+      "handle": "probe-fba6bdeea16cbdba",
+      "pair": "enable",
+      "frame": "enable",
+      "language": "en",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "correct": true,
+      "failureClass": null
+    }
+  ]
+}
