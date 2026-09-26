@@ -1,5 +1,23 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-09-26
+
+### Fixed
+- `lunum_build_candidate` advertised an empty top-level `properties`, so MCP clients that ignore `oneOf` saw a no-argument tool (cause of the failed 2026-09-15 Codex run). Top-level envelope is now declared and tested over real stdio.
+- `.mcp.json` pointed at gitignored `dist/` and failed in every fresh clone; it now starts `scripts/lunum-mcp-launch.mjs`, which installs if needed and rebuilds before serving.
+- `pnpm test` unshallows the clone first (7 evidence tests failed in shallow cloud checkouts); the evidence audit reports `history_unavailable` instead of a false "baseline predates prompt fix".
+- Seven eval tests no longer rewrite tracked `eval-results/` files on every run.
+- `pnpm agent:status` reports repository state instead of stale instructions.
+
+### Added
+- `scripts/research/run-claude-code-source-only.mjs` and the first persisted live Claude Code extraction run over V8 ([record](reports/diagnostic/2026-09-26/claude-code-v3/README.md)).
+- V8 public instruction package v3 (supersedes v2, which froze the defective tool build).
+
+### Changed
+- Trunk-based development on `main`; the multi-agent operating model is archived under `research/archive/operating-model-multi-agent-2026-09/`.
+
+> The "Readiness Sprint" section below reports percentages from simulations and validation runners. They are superseded and are not capability evidence; see [STATUS.md](STATUS.md).
+
 ## Since 0.2.2 (Readiness Sprint)
 
 ### Added — Readiness Phases 20–27 (PRs #611–#661)

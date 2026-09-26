@@ -1,6 +1,6 @@
 # Project status
 
-**As of 2026-09-14.** Experimental research/reference implementation; not a qualified general production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track active work.
+**As of 2026-09-26.** Experimental research/reference implementation; not a qualified general production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track active work.
 
 ## What exists
 
@@ -10,9 +10,9 @@ The runtime candidate schema is `lunum-sem/0.1-draft`; the current strict semant
 
 ## What the current evidence says
 
-The [V8 iteration-2 report](experiments/natural-development-v8/extraction/results-iteration2.json) records a 24-row English/Greek development task: 18 parse targets, 17 parse submissions, one false abstention, and six correct expected abstentions. It reports 14 exact matches among 14 legitimately comparable outputs, not 24/24 task success. Five of six parse groups are complete. See the [freeze/iteration manifest](experiments/natural-development-v8/extraction/iteration2-manifest.json), [review scope](experiments/natural-development-v8/README.md), and [issue #685](https://github.com/corpunum/OpenLunum/issues/685) for limitations and acceptance state.
+**Live client extraction works end to end (2026-09-26, [run record](reports/diagnostic/2026-09-26/claude-code-v3/README.md), self-reviewed).** Claude Code (`claude-sonnet-5`) ran all 24 V8 items through the MCP tools with 0 tool errors. It answered 18/18 parse targets and matched the predicate, role names, modality and nesting of each. Exact identity matched 9 of 15 comparable parses, and 3 of 6 abstention targets were handled correctly. The other three are the safety failure: "Dana allows Mira to access." (object missing) was parsed as `theme: access` instead of refused, and core's grounding accepted it. The other misses are contract gaps: `%` versus `percent`, and nouns such as *battery* that have no term type. The Sep 15 attempt failed because `lunum_build_candidate` advertised no arguments; that is fixed.
 
-This is a narrow development result after iterative work, not protected generalization, broad multilingual support, or a training result. Human Greek review covers specific strings; it is not human validation of every target or English sentence.
+The earlier [V8 iteration-2 report](experiments/natural-development-v8/extraction/results-iteration2.json) (an agent extractor given the repository-side packet) recorded 17/18 source-relative matches, 14/14 exact among comparable, 6/6 abstentions and one false abstention. Both are narrow 24-row development results in English and Greek, not protected generalization, broad multilingual support or a training result. Human Greek review covers specific strings only.
 
 ## What is not established
 
@@ -26,9 +26,15 @@ The repository contains relevant code, tests, historical runs and simulations. T
 
 ## Current work and boundaries
 
-#685 remains the source-only evaluation track. Its specific review and false-abstention limitations must be resolved or explicitly retained; this public-docs correction does not change its acceptance criteria or declare it complete. Do not keep launching audits when the required external input has not changed.
+Development is trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATING_MODEL.md)). The earlier multi-agent process is archived.
 
-A useful subsequent public milestone is one standalone consumer with a frozen natural-text baseline, actual extraction where claimed, named tokenizer/model, task-quality results, costs, failures and fallback coverage. The supplied-Sem demo is an onboarding aid, not that milestone.
+Next, in order:
+
+1. **Missing-argument grounding.** Core must not treat a role filled only by the predicate's own lexical head (`allow … theme: access`) as grounded. This is a semantic rule change, so it gets a versioned decision and tests. Then re-run the three failing rows plus a small new set of missing-argument probes.
+2. **Contract gaps from the live run.** Decide `%` → `percent` (or accept both) and extend the term-type table (battery, operator, task) in a new task-profile version. Do not edit V8 artifacts; supersede them.
+3. **The standalone-consumer milestone.** One consumer with a frozen natural-text baseline, real extraction, a named tokenizer, task-quality results, costs and fallback coverage. No compression or benefit claim exists until this does.
+
+#685 still needs a human native English review of the V8 English strings. It is recorded as blocked on that input, not re-audited.
 
 OpenUnum is a separate product. The in-tree compatibility adapter is not independent adoption evidence and is not needed to use the core.
 

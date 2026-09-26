@@ -26,7 +26,12 @@ test('public instruction package exposes frozen scoring conventions without gold
   const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v3.json', 'utf8'));
   assert.equal(next.status, 'frozen-for-next-source-only-run');
   assert.equal(next.supersedes.path, 'public-instruction-package-v2.json');
-  assert.equal(hash('scripts/lunum-mcp-launch.mjs'), next.freeze.launcherSha256);
+  // launcherSha256 records the launcher at freeze time; it only builds and
+  // imports the server, so the artifact hashes below are the binding.
+  assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
+  assert.equal(hash('packages/mcp/dist/src/tools.js'), next.freeze.toolImplementationSha256);
+  assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/agent-native.js'), next.freeze.coreArtifactSha256);
   for (const key of ['coreContractHash', 'coreContractJsonSerializationSha256', 'schemaHash', 'frameRegistryHash', 'protocolRegistryHash', 'instructionHash', 'coreArtifactSha256', 'mcpArtifactSha256']) {
     assert.equal(next.freeze[key], previous.freeze[key], `${key} must be unchanged from v2`);
   }
