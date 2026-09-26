@@ -25,7 +25,7 @@ import { resolveGroundingCascade, toGroundingResolution } from './grounding-prov
 import type { LunumSem, SemanticTrustDecision } from './types.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.10' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.11' as const;
 export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.3' as const;
 
 // SHA-256 of schemas/lunum-sem.schema.json at this protocol version. Keep
@@ -158,6 +158,8 @@ export function getExtractionContract(): ExtractionContract {
       'Abstain when meaning is ambiguous, unsupported, ungrounded, or requires invented protocol symbols.',
       'Abstain when the source does not state a role the frame requires; never fill a role with its own term type or the predicate (placeholder_role).',
       'A placeholder_role or missing_required_role rejection means the source lacks that argument: abstain; do not re-type, re-word, or empty the filler to pass validation.',
+      'A prohibition without a stated authority ("X may not Y", "X must not Y") is modality obligation with negated=true on Y; never permission with negated=true (ambiguous_negated_permission).',
+      'If the sentence states a restriction, threshold, deadline, recurrence or exception that no role of the chosen frame can hold, abstain rather than drop it.',
       'Predicate aliases are accepted spellings, not an exhaustive list: when a verb clearly means a registered predicate (e.g. activate -> enable), use that predicate; abstain only when no registered predicate has the same meaning.',
       'Retain source text and provenance even when candidate semantics are rejected.',
       'Caller confidence never promotes a candidate.',

@@ -8,6 +8,8 @@
 >
 >   The "typed `identifier` in 2 of 3 repetitions" statement below was wrong: it was 1 of 3, and one repetition's miss was a different error (`world`).
 > - **Probes v3 are not out-of-sample for the aliases.** Their verbs (modify, remove, execute, inspect) were put into the alias table three minutes after v3 was frozen, by the same author. The v3 alias results show a table lookup, not generalization. Probes v4 is the out-of-table test ([contract-0.9](../contract-0.9/README.md)).
+> - **"Probes v3 (fresh)" and "The permission fix works … Fresh … sentences" below are withdrawn as general claims.** All four permitter-less v3 sentences used framed predicates. On an independent evaluator's fresh sentences, permitter-less permissions parsed 0/6, because common verbs had no frame (fixed later by decisions/0014).
+> - **Probes v2 relabelling:** two v2 items ("prohibits … from downloading") were relabelled `either` by the frame-0.2 expectations, and so are excluded from the v2 counts in the table. Both were observed as abstain.
 > - **"Exact 16/16" excludes items whose literals need normalization** (the scorer's source-anchored rule drops the date/number-normalized retry group and `g2-en-a`). Exact identity was therefore tested on 16–17 of 21 parse targets, not all 21.
 
 

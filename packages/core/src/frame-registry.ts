@@ -1,7 +1,7 @@
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
 
-export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.4' as const;
+export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.5' as const;
 
 export interface FrameRoleRequirement {
   name: string;
@@ -45,7 +45,7 @@ export function canonicalFramePromptBlock(): string {
 export interface FrameValidationIssue {
   path: string;
   predicate: string;
-  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role' | 'unregistered_action' | 'dependent_role_missing' | 'identical_roles';
+  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role' | 'unregistered_action' | 'dependent_role_missing' | 'identical_roles' | 'ambiguous_negated_permission';
   message: string;
 }
 
@@ -297,7 +297,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
   share: Object.freeze({
     predicate: 'share',
     roles: Object.freeze([
-      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'theme', required: true },
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system', 'group', 'audience'] }
     ]),
@@ -315,7 +315,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
   grant: Object.freeze({
     predicate: 'grant',
     roles: Object.freeze([
-      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system', 'group'] },
       { name: 'theme', required: true }
     ]),
@@ -324,7 +324,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
   revoke: Object.freeze({
     predicate: 'revoke',
     roles: Object.freeze([
-      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'recipient', required: false, allowedTermTypes: ['actor', 'entity', 'system', 'group'] },
       { name: 'theme', required: true }
     ]),
@@ -385,6 +385,14 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
   const roleMap = new Map<string, LunumTerm>();
   for (const [k, v] of Object.entries(clause.roles ?? {})) {
     roleMap.set(basicIdentifier(k), v);
+  }
+
+  // decisions/0015: a prohibition is modality obligation + negated (the protocol
+  // normalizes must_not/forbidden that way). permission + negated literally means
+  // "permitted not to", which extractors misuse for prohibitions and which then
+  // splits one meaning across two identities. Fail closed.
+  if (clause.modality === 'permission' && clause.negated === true) {
+    issues.push({ path: `${pathPrefix}.modality`, predicate, code: 'ambiguous_negated_permission', message: "permission with negated=true is ambiguous; for a prohibition use modality 'obligation' with negated=true (or prohibit with a stated authority); abstain for 'permitted not to'" });
   }
 
   const exclusiveGroups = frame.exclusiveGroups ?? [];

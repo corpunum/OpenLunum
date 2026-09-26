@@ -32,11 +32,16 @@ Development is trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATIN
 
 Next, in order:
 
-1. **Frame coverage.** Frame the common registered predicates (read, update, run, approve, access, …), so permissions without a stated permitter and plain statements with those verbs can be represented. Allow imperatives with no agent where other frames do.
-2. **Run-time provenance.** The runner must hash the served build against the package it records, and refuse to run on a mismatch. Commit the fingerprint-stability scan used in ADRs.
-3. **Out-of-sample evaluation by someone other than the author**, on a larger fresh set, after each change.
-4. **Real memory data (owner).** Needed before any token-saving claim.
-5. Remaining V8 misses: bare-identifier typing, and the unit `attempts` vs `times`.
+1. **Meaning-level evaluation.** Outcome scores ("parsed with identity" or "abstained") overstate fidelity. The round-2 evaluator's fresh sentences scored 27/30 on outcome but 20/30 on meaning, because thresholds, dates and recurrences were dropped under a confident identity. Probe sets need target meanings and a scorer that compares them. The decisions/0015 abstention rule has to be measured against that.
+2. **Out-of-sample evaluation after each change**, by someone other than the author. Two AI evaluations of the same model family exist; human or cross-vendor review does not.
+3. **Real memory data (owner)** before any token-saving claim. The MCP default is `natural`; `identity_dedup` is opt-in.
+4. Review the semantic judgements made without human review: the alias table (decisions/0011), and the extractor's own mapping of use, open and enter to `access`.
+
+Done since the first evaluation:
+- frame coverage for common predicates (decisions/0014);
+- the canonical prohibition encoding and imperative grants (decisions/0015);
+- run-time artifact binding;
+- the committed fingerprint scan.
 
 #685 still needs a human native English review of the V8 English strings. It is recorded as blocked on that input, not re-audited.
 

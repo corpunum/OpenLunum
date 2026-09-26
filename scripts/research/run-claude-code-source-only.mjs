@@ -58,12 +58,17 @@ if (!rederive) {
 // the package freeze, checked before the run and again after it. dist/ is
 // untracked, so the git clean-tree check cannot see it.
 const BOUND_ARTIFACTS = { coreArtifactSha256: 'packages/core/dist/src/agent-native.js', frameValidatorArtifactSha256: 'packages/core/dist/src/frame-registry.js', toolImplementationSha256: 'packages/mcp/dist/src/tools.js', mcpArtifactSha256: 'packages/mcp/dist/bin/lunum-mcp.js' };
+// Every key must be present: a package without them must not pass vacuously
+// (round-2 evaluation). The launcher and the task profile are bound too.
 function artifactBinding() {
-  const checks = Object.entries(BOUND_ARTIFACTS).filter(([key]) => pkg.freeze[key]).map(([key, file]) => {
+  const bound = { ...BOUND_ARTIFACTS, launcherSha256: 'scripts/lunum-mcp-launch.mjs' };
+  if (pkg.freeze?.taskProfileSha256) bound.taskProfileSha256 = path.relative(root, PROFILE);
+  const checks = Object.entries(bound).map(([key, file]) => {
+    const expected = pkg.freeze?.[key] ?? null;
     const actual = fs.existsSync(path.join(root, file)) ? sha256(fs.readFileSync(path.join(root, file))) : null;
-    return { key, file, expected: pkg.freeze[key], actual, match: actual === pkg.freeze[key] };
+    return { key, file, expected, actual, match: expected !== null && actual === expected };
   });
-  return { match: checks.every((check) => check.match), checks };
+  return { match: checks.length > 0 && checks.every((check) => check.match), checks };
 }
 const bindingAtStart = rederive ? null : artifactBinding();
 if (bindingAtStart && !bindingAtStart.match && !args.includes('--allow-unbound')) {
@@ -212,3 +217,12 @@ const summary = {
 };
 fs.writeFileSync(path.join(outDir, 'run-summary.json'), `${JSON.stringify(summary, null, 2)}\n`);
 console.log(JSON.stringify(summary, null, 2));
+// A binding that broke during the run, or a live server reporting a different
+// contract, invalidates the run: record it and fail loudly (round-2 evaluation).
+if (!rederive) {
+  const contractMismatches = rows.filter((row) => row.observedContractMatchesPackage === false).length;
+  if (!summary.servedArtifactBinding.atEnd || contractMismatches > 0) {
+    console.error(`run invalid: served artifacts at end ${summary.servedArtifactBinding.atEnd ? 'bound' : 'MISMATCHED'}; ${contractMismatches} item(s) observed a different contract`);
+    process.exit(4);
+  }
+}

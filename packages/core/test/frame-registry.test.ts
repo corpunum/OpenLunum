@@ -202,3 +202,12 @@ test('common predicates are framed and permitter-less permissions use them (deci
   assert.ok(validateClauseFrame({ predicate: 'notify', roles: { agent: { type: 'system', id: 'S-1' } } }).some((issue) => issue.code === 'missing_required_role'));
   assert.ok(validateClauseFrame({ predicate: 'approve', roles: { agent: { type: 'actor', id: 'Tom' } } }).some((issue) => issue.code === 'missing_required_role'));
 });
+
+test('prohibition encoding is canonical and imperative grants parse (decisions/0015)', () => {
+  const interns = { agent: { type: 'group', id: 'interns' }, theme: { type: 'document', id: 'purchase-orders' } };
+  // "The interns may not approve purchase orders."
+  assert.deepEqual(validateClauseFrame({ predicate: 'approve', modality: 'obligation', negated: true, roles: { ...interns, agent: { type: 'entity', id: 'interns' } } }), []);
+  assert.ok(validateClauseFrame({ predicate: 'approve', modality: 'permission', negated: true, roles: { ...interns, agent: { type: 'entity', id: 'interns' } } }).some((issue) => issue.code === 'ambiguous_negated_permission'));
+  // "Grant Priya access to the staging database." (imperative)
+  assert.deepEqual(validateClauseFrame({ predicate: 'grant', roles: { recipient: { type: 'actor', id: 'Priya' }, theme: { type: 'resource', id: 'staging-db-access' } } }), []);
+});

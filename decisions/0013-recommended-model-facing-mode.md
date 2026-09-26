@@ -32,7 +32,7 @@ The [independent evaluation](../reports/independent-evaluation/2026-09-26/REPORT
 
 `claude-sonnet-5` is unchanged at 20/20 in every run.
 
-The wrong answers all come from one mechanism. Where extraction did not merge two paraphrases of one event ("retries U-31 exactly seven times" and "makes seven further attempts on U-31"), Haiku sometimes added them up and answered 14. That happened in 5 of 9 Haiku dedup runs and in 0 of 6 Haiku natural-all runs. **The claim above that identity_dedup "kept 20/20 answers" was false for Haiku.**
+The wrong answers are **correlated** with, but not explained by, one pattern. Where extraction did not merge two paraphrases of one event ("retries U-31 exactly seven times" and "makes seven further attempts on U-31"), Haiku sometimes added them up and answered 14. That happened in 5 of 9 Haiku dedup runs and in 0 of 6 Haiku natural-all runs. The natural-all context contains the **same two unmerged English lines, plus a Greek third**, and never produced the error, so unmerged duplicates alone do not explain it (round-2 evaluation). The mechanism is a hypothesis. **The claim above that identity_dedup "kept 20/20 answers" was false for Haiku.**
 
 Decision:
 - The MCP default, `.mcp.json` and the integration guides use **`natural`**, the only mode with no observed answer loss for either model.

@@ -101,6 +101,26 @@ A separate Claude Code session audited commit `7657cab` ([report](../../independ
 - **Runtime binding:** the runner does not verify the served build against the package it records.
 - **Reproducibility:** the repository-wide fingerprint-scan counts in ADRs 0007–0011 came from an uncommitted script.
 
+## Round-2 independent evaluation (added later the same day)
+
+A second, separate session audited `a2909a3` ([report](../../independent-evaluation/2026-09-26-round2/REPORT.md)).
+
+**Verified as fixed:** the grader hole (the re-grade reproduces byte-for-byte), the MCP default, the refusal of mismatched builds, and the committed fingerprint scan.
+
+**Its fresh sentences:** **27/30 on outcome, but 20/30 on meaning.** 7 of 23 parses dropped a threshold, date or recurrence, or used the wrong verb, and still got an identity. Both paraphrase pairs converged.
+
+**Acted on in decisions/0015 and the runner:**
+- the canonical prohibition encoding (`permission` + negated now fails closed);
+- imperative `grant`/`revoke`/`share`;
+- a contract rule to abstain rather than drop a restriction, threshold, deadline, recurrence or exception;
+- a binding check that no longer passes vacuously, that binds the launcher and the profile, and that fails the run on an end-of-run or contract mismatch.
+
+**Still open:**
+- **Meaning-level scoring:** probe sets have no target meanings, so outcome scores overstate fidelity.
+- The grader is still a token matcher.
+- The mapping of use, open and enter to `access` is unreviewed.
+- The "14" mechanism is a hypothesis, not established.
+
 ## Separate CI note
 
 CI on `7b0c21f` (a commit that added only evidence files, pushed without running local `verify`) failed 2 eval tests. They passed in 6 local runs of a fresh clone of that commit and on the next CI run (`ea7fb5d`). The failing test names could not be recovered: the GitHub log tool truncates, and this container cannot reach the log host. The cause is unidentified; it is recorded here rather than dismissed as a flake.

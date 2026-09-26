@@ -32,3 +32,10 @@ The independent evaluator's fresh sentences parsed 0/6 permitter-less permission
 ## Limits
 
 These are shapes, not lexical coverage. Verbs like "use", "open" or "enter" still have no predicate, and abstaining on them stays correct. Out-of-sample behaviour must be measured by someone other than the author.
+
+## Amendment 1: corrections from the round-2 independent evaluation
+
+- **"Independent support for the chosen shapes" was overstated.** The 20 datasets that gained identity were written in this same project, and the author could see them while choosing the frames.
+- **"All 19 pairs … 0 collisions" covers only the pairs that have identity:** 19 of 58 adversarial pairs. The other 39 are untested by that check.
+- **The Limits section was wrong about the product.** Live, the extractor mapped "use", "open" and "enter" to `access` on its own, although none of them is an alias. Whether those mappings are correct is an unreviewed semantic judgement.
+- `grant`, `revoke` and `share` were made agent-required, which recreated the imperative gap this ADR fixed for `retry`. decisions/0015 makes them agent-optional.
