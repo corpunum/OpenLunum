@@ -80,6 +80,21 @@ function naturalLunumDedupContext() {
   return { text: lines.map((line) => `- ${line.text}`).join('\n'), coverage };
 }
 
+// The product path: core compileContext in identity_dedup mode (decisions/0012),
+// fed each item's source text and core-issued identity. Unlike the harness
+// condition above it keeps the first occurrence rather than preferring English.
+function productIdentityDedupContext() {
+  const messages = requests.map((request) => {
+    const entry = ledger.get(request.handle);
+    const submission = entry?.status === 'parse' && entry.candidateSem
+      ? core.submitCandidate({ sourceText: request.sourceText, sourceLanguage: request.sourceLanguage, candidateSem: entry.candidateSem, provenance: { extractorType: 'agent' } })
+      : null;
+    return { role: 'user', content: request.sourceText, record: submission?.semanticFingerprint ? { semanticFingerprint: submission.semanticFingerprint } : {} };
+  });
+  const result = core.compileContext(messages, { mode: 'identity_dedup' });
+  return { text: result.selectedMessages.map((message) => `- ${message.content}`).join('\n'), coverage: { kept: result.selectedMessages.length, dropped: messages.length - result.selectedMessages.length } };
+}
+
 // Reference only: one natural sentence per gold meaning group (uses gold labels).
 function oracleDedupContext() {
   const byGroup = new Map();
@@ -96,6 +111,7 @@ const conditions = {
   'lunum-0.1': lunumContext('generic-en-pivot/0.1'),
   'lunum-0.2': lunumContext('generic-en-pivot/0.2'),
   'natural-lunum-dedup': naturalLunumDedupContext(),
+  'product-identity-dedup': productIdentityDedupContext(),
   'natural-oracle-dedup': oracleDedupContext(),
 };
 

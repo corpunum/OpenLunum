@@ -7,6 +7,7 @@ The standalone-consumer benchmark named in `STATUS.md`. A downstream model answe
   - `natural-all`: all 24 sentences verbatim.
   - `lunum-0.1` / `lunum-0.2`: a real extraction ledger. Each item that core gives an identity is rendered, and duplicates are removed by fingerprint. Everything else falls back to its natural source sentence. A short legend explaining Lunum-Code is included and counted.
   - `natural-lunum-dedup`: Lunum is used for identity only. The context keeps one natural source sentence per fingerprint, English preferred, and every item without identity verbatim. There are no gold labels. **Added after the first run** (kept as `rep1-initial`) showed that the Lunum saving came from deduplication, not from compact spelling.
+  - `product-identity-dedup`: the same idea, produced by the product code path `compileContext(…, {mode: 'identity_dedup'})`. It keeps the first occurrence rather than preferring English. Added 2026-09-26 to show that the shipped mode matches the benchmark condition.
   - `natural-oracle-dedup`: **reference only**. One natural sentence per gold meaning group. It uses gold labels, which no real consumer has.
 - Tokens: provider-reported input tokens of the answering model (the named tokenizer): the memory call minus an empty-memory call with the same wrapper.
 - Scoring: an answer is correct if it contains an accepted token and no rejected token.
