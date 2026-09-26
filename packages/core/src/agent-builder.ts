@@ -68,7 +68,7 @@ export function getCandidateBuilderSchema(): Record<string, unknown> {
     for (const role of frame.roles) {
       const aliases = Object.entries(roleAliases).filter(([, canonical]) => canonical === role.name).map(([alias]) => alias);
       const roleSchema = role.vocabulary === 'predicate'
-        ? { type: 'string', enum: [...SEMANTIC_PROTOCOL_REGISTRY.predicates] }
+        ? { type: 'string', enum: [...SEMANTIC_PROTOCOL_REGISTRY.predicates, ...Object.keys(SEMANTIC_PROTOCOL_REGISTRY.aliases.predicate)] }
         : role.allowedTermTypes?.length
         ? { oneOf: role.allowedTermTypes.map((type) => ({ $ref: '#/$defs/termObject', properties: { type: { const: type } }, required: ['type'] })) }
         : { $ref: '#/$defs/term' };
@@ -152,7 +152,9 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
     if (typeof rawRole !== 'string') throw new TypeError('builder_role_string_required');
     const normalizedRole = SEMANTIC_PROTOCOL_REGISTRY.aliases.role[basicIdentifier(rawRole)] ?? basicIdentifier(rawRole);
     if (roles[normalizedRole] !== undefined) throw new TypeError(`role_collision:${rawRole}->${normalizedRole}`);
-    roles[normalizedRole] = term;
+    roles[normalizedRole] = normalizedRole === 'action' && typeof term === 'string'
+      ? (SEMANTIC_PROTOCOL_REGISTRY.aliases.predicate[basicIdentifier(term)] ?? basicIdentifier(term)) as LunumTerm
+      : term;
   }
   const allowedRoles = frame.roles.map((role) => role.name);
   const unexpected = Object.keys(roles).filter((role) => !allowedRoles.includes(basicIdentifier(role)));

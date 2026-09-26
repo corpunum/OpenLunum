@@ -31,3 +31,16 @@ test('English and Greek sources that select the same action converge', () => {
   assert.equal(en.semanticFingerprint, el.semanticFingerprint);
   assert.notEqual(en.source.sha256, el.source.sha256);
 });
+
+test('verb aliases converge on the registered predicate (decisions/0011)', () => {
+  const provenance = { extractorType: 'agent' as const };
+  const withAction = (action: string) => submitCandidate({ sourceText: 'Lena allows Tomas to edit.', sourceLanguage: 'en', candidateSem: allow({ action }), provenance });
+  const canonical = withAction('update');
+  for (const alias of ['edit', 'modify', 'Change']) {
+    const aliased = withAction(alias);
+    assert.equal(aliased.candidateIdentityAvailable, true, alias);
+    assert.equal(aliased.semanticFingerprint, canonical.semanticFingerprint, alias);
+  }
+  // Ambiguous verbs are not aliased and get no identity.
+  assert.equal(withAction('download').candidateIdentityAvailable, false);
+});

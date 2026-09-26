@@ -16,7 +16,7 @@ const base: LunumSem = {
 
 test('registry is inspectable and independent of evaluation fixtures', () => {
   assert.equal(SEMANTIC_PROTOCOL_REGISTRY.worlds.join(','), 'real,fiction,tool,dream,belief,metaphor');
-  assert.match(protocolVocabularyBlock(), /lunum-protocol\/0\.2/);
+  assert.match(protocolVocabularyBlock(), /lunum-protocol\/0\.3/);
   assert.doesNotMatch(protocolVocabularyBlock(), /medical_report|orion_migration/);
 });
 

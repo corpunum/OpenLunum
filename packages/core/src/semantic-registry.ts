@@ -5,7 +5,7 @@ import { canonicalizeSem, validateSem } from './canonicalize.js';
  * Versioned protocol vocabulary. This is intentionally a protocol registry,
  * not an application ontology: instance identifiers remain open data.
  */
-export const SEMANTIC_PROTOCOL_VERSION = 'lunum-protocol/0.2' as const;
+export const SEMANTIC_PROTOCOL_VERSION = 'lunum-protocol/0.3' as const;
 export type ProtocolField = 'world' | 'kind' | 'predicate' | 'role' | 'term_type' | 'modality';
 
 export interface ProtocolRegistry {
@@ -71,7 +71,17 @@ export const SEMANTIC_PROTOCOL_REGISTRY: ProtocolRegistry = Object.freeze({
     role: freezeMap({ receiver: 'recipient', addressee: 'recipient' }),
     predicate: freezeMap({
       ask: 'request', inquire: 'request', client_request: 'request', customer_request: 'request',
-      permit: 'allow', forbid: 'prohibit', keep_private: 'keep'
+      permit: 'allow', forbid: 'prohibit', keep_private: 'keep',
+      // Common action verbs, mainly for the allow/prohibit `action` role
+      // (decisions/0011). Only clear near-synonyms; ambiguous verbs such as
+      // download, open or upload are deliberately absent, so they abstain.
+      view: 'read', see: 'read', inspect: 'read', browse: 'read',
+      edit: 'update', modify: 'update', change: 'update', amend: 'update',
+      remove: 'delete', erase: 'delete',
+      execute: 'run', launch: 'run',
+      inform: 'notify', alert: 'notify',
+      save: 'store',
+      log_in: 'authenticate', login: 'authenticate', sign_in: 'authenticate'
     }),
     term_type: freezeMap({ person: 'actor', human: 'actor', datetime: 'date' }),
     modality: freezeMap({ must: 'obligation', mandatory: 'obligation', required: 'obligation', must_not: 'obligation', shall_not: 'obligation', prohibited: 'obligation', forbidden: 'obligation', may: 'permission', allowed: 'permission', optional: 'permission', might: 'possibility', possible: 'possibility', certain: 'certainty', believed: 'belief' })
@@ -164,7 +174,10 @@ function normalizeClause(clause: LunumClause, path: string, issues: SemanticNorm
       issues.push({ path: `${path}.roles.${rawRole}`, field: 'role', code: 'symbol_collision', severity: 'error', message: `role '${rawRole}' collides with another role after protocol normalization` });
       continue;
     }
-    roles[role] = normalizeTerm(term, `${path}.roles.${rawRole}`, issues, strict);
+    // The action role names a protocol predicate, so it takes predicate aliases.
+    roles[role] = role === 'action' && typeof term === 'string'
+      ? mapSymbol(term, 'predicate', `${path}.roles.${rawRole}`, issues, strict)
+      : normalizeTerm(term, `${path}.roles.${rawRole}`, issues, strict);
   }
   const rawPredicate = basicIdentifier(clause.predicate);
   const predicate = mapSymbol(clause.predicate, 'predicate', `${path}.predicate`, issues, strict);
