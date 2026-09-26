@@ -1,0 +1,117 @@
+{
+  "format": "openlunum-consumer-memory-qa/0.1",
+  "status": "diagnostic-development-only, self-reviewed",
+  "model": {
+    "requested": "haiku",
+    "served": [
+      "claude-haiku-4-5-20251001"
+    ]
+  },
+  "tokenizer": "provider-reported input tokens of the served model (memory block minus empty block)",
+  "ledger": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep2/candidate-ledger.jsonl",
+  "ledgerSha256": "93c4b22616434bd1c9e7b08fb85798a5265000a36ad9b6a07d594f97481fa4d0",
+  "questionsSha256": "deef27c3c6d1369ac3cdbaf7e0275bf015cdddfdcc576b22712a29d0356fee7a",
+  "codeCommit": "23331feb69933084aa8a741340504734e7f61d15",
+  "reps": 1,
+  "questions": 20,
+  "failedCalls": 0,
+  "totalCostUsd": 0.3511,
+  "conditions": {
+    "natural-all": {
+      "contextTokens": 837,
+      "contextChars": 1765,
+      "coverage": {
+        "items": 24
+      },
+      "correctPerRep": [
+        20
+      ],
+      "min": 20,
+      "max": 20,
+      "wrongQuestions": []
+    },
+    "lunum-0.1": {
+      "contextTokens": 295,
+      "contextChars": 788,
+      "coverage": {
+        "rendered": 8,
+        "deduplicated": 12,
+        "fallbackAbstain": 4,
+        "fallbackInvalid": 0,
+        "fallbackMissing": 0
+      },
+      "correctPerRep": [
+        17
+      ],
+      "min": 17,
+      "max": 17,
+      "wrongQuestions": [
+        "q01",
+        "q12",
+        "q15"
+      ]
+    },
+    "lunum-0.2": {
+      "contextTokens": 435,
+      "contextChars": 1119,
+      "coverage": {
+        "rendered": 8,
+        "deduplicated": 12,
+        "fallbackAbstain": 4,
+        "fallbackInvalid": 0,
+        "fallbackMissing": 0
+      },
+      "correctPerRep": [
+        20
+      ],
+      "min": 20,
+      "max": 20,
+      "wrongQuestions": []
+    },
+    "natural-lunum-dedup": {
+      "contextTokens": 286,
+      "contextChars": 780,
+      "coverage": {
+        "fingerprints": 8,
+        "deduplicated": 12,
+        "verbatim": 4
+      },
+      "correctPerRep": [
+        19
+      ],
+      "min": 19,
+      "max": 19,
+      "wrongQuestions": [
+        "q14"
+      ]
+    },
+    "product-identity-dedup": {
+      "contextTokens": 286,
+      "contextChars": 780,
+      "coverage": {
+        "kept": 12,
+        "dropped": 12
+      },
+      "correctPerRep": [
+        20
+      ],
+      "min": 20,
+      "max": 20,
+      "wrongQuestions": []
+    },
+    "natural-oracle-dedup": {
+      "contextTokens": 228,
+      "contextChars": 615,
+      "coverage": {
+        "groups": 10,
+        "usesGoldLabels": true
+      },
+      "correctPerRep": [
+        20
+      ],
+      "min": 20,
+      "max": 20,
+      "wrongQuestions": []
+    }
+  }
+}

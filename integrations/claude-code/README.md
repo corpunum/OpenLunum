@@ -15,7 +15,7 @@ The repo ships a `.mcp.json` at the project root. When you start Claude Code ins
       "env": {
         "LUNUM_COMPACTION": "off",
         "LUNUM_MULTILINGUAL": "on",
-        "LUNUM_CONTEXT_MODE": "mixed"
+        "LUNUM_CONTEXT_MODE": "identity_dedup"
       }
     }
   }
@@ -45,7 +45,7 @@ All options can be set via env vars in `.mcp.json` or a shared config file at `~
 |---|---|---|---|
 | `LUNUM_COMPACTION` | `on`, `off`, `auto` | `auto` | Enable/disable surface telegraph compaction |
 | `LUNUM_MULTILINGUAL` | `on`, `off` | `off` | Enable multilingual support |
-| `LUNUM_CONTEXT_MODE` | `natural`, `lunum`, `mixed`, `shadow_mixed` | `mixed` | Context compilation mode |
+| `LUNUM_CONTEXT_MODE` | `natural`, `lunum`, `mixed`, `shadow_mixed`, `identity_dedup` | `identity_dedup` | Context compilation mode. `identity_dedup` serves natural text deduplicated by semantic identity (decisions/0012–0013); `lunum`/`mixed` serve renderer-0.1 Lunum-Code, which lost answers in the consumer benchmark. |
 | `LUNUM_MAX_CONTEXT_ITEMS` | integer | `1000` | Max items in the context manager |
 
 Each tool also accepts per-call overrides via its arguments.

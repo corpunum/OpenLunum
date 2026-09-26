@@ -14,7 +14,7 @@ export interface LunumConfig {
 const DEFAULTS: LunumConfig = {
   compaction: 'auto',
   multilingual: false,
-  contextMode: 'mixed',
+  contextMode: 'identity_dedup',
   maxContextItems: 1000,
   defaultLanguage: 'en',
 };
