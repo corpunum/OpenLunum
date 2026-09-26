@@ -60,6 +60,26 @@ function lunumContext(profile) {
   return { text: `${LEGEND[profile]}\n\n${lines.map((line) => `- ${line}`).join('\n')}`, coverage };
 }
 
+// Lunum for identity, natural text for the model: one source sentence per
+// fingerprint (English preferred), everything without identity kept verbatim.
+// Added after the first run showed the saving comes from deduplication.
+function naturalLunumDedupContext() {
+  const chosen = new Map(); const lines = []; const coverage = { fingerprints: 0, deduplicated: 0, verbatim: 0 };
+  for (const request of requests) {
+    const entry = ledger.get(request.handle);
+    const submission = entry?.status === 'parse' && entry.candidateSem
+      ? core.submitCandidate({ sourceText: request.sourceText, sourceLanguage: request.sourceLanguage, candidateSem: entry.candidateSem, provenance: { extractorType: 'agent' } })
+      : null;
+    if (!submission?.candidateIdentityAvailable) { coverage.verbatim++; lines.push({ text: request.sourceText }); continue; }
+    const fingerprint = submission.semanticFingerprint;
+    if (!chosen.has(fingerprint)) { coverage.fingerprints++; const slot = { text: request.sourceText, language: request.sourceLanguage }; chosen.set(fingerprint, slot); lines.push(slot); continue; }
+    coverage.deduplicated++;
+    const slot = chosen.get(fingerprint);
+    if (slot.language !== 'en' && request.sourceLanguage === 'en') Object.assign(slot, { text: request.sourceText, language: 'en' });
+  }
+  return { text: lines.map((line) => `- ${line.text}`).join('\n'), coverage };
+}
+
 // Reference only: one natural sentence per gold meaning group (uses gold labels).
 function oracleDedupContext() {
   const byGroup = new Map();
@@ -75,6 +95,7 @@ const conditions = {
   'natural-all': { text: requests.map((request) => `- ${request.sourceText}`).join('\n'), coverage: { items: requests.length } },
   'lunum-0.1': lunumContext('generic-en-pivot/0.1'),
   'lunum-0.2': lunumContext('generic-en-pivot/0.2'),
+  'natural-lunum-dedup': naturalLunumDedupContext(),
   'natural-oracle-dedup': oracleDedupContext(),
 };
 
