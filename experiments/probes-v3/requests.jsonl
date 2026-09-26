@@ -1,0 +1,16 @@
+{"handle": "probe3-044cc6d719e776ee", "sourceLanguage": "el", "sourceText": "Η Nora επιτρέπει στον Felix.", "sourceSha256": "044cc6d719e776eed787893fb158471d8ff672bee810f705bcc974a6da4e5bd7"}
+{"handle": "probe3-046a771905ceedf8", "sourceLanguage": "en", "sourceText": "Robot R-6 may send report D-6 to manager M-6.", "sourceSha256": "046a771905ceedf821e7a1bc6a33eeb7f7ea025dc848c92269971fbffe4e1353"}
+{"handle": "probe3-19d7770cd4d05a73", "sourceLanguage": "el", "sourceText": "Ο ελεγκτής M-8 επιτρέπει στην Irene να επιθεωρήσει το βιβλίο L-8.", "sourceSha256": "19d7770cd4d05a73034d6e9331eb2c3e59017bdb0b2d40314b974cfd215b8d56"}
+{"handle": "probe3-2f4109d88d568f00", "sourceLanguage": "en", "sourceText": "Auditor M-8 allows Irene to inspect ledger L-8.", "sourceSha256": "2f4109d88d568f001c353b8e812a6a61c384d0fbcb884b62e891633a94bdea34"}
+{"handle": "probe3-369d01567eafca1e", "sourceLanguage": "el", "sourceText": "Η Nora επιτρέπει στον Felix να εκτυπώσει.", "sourceSha256": "369d01567eafca1e1340417fcd656c09e93434e87f91c60c2e699661a5622535"}
+{"handle": "probe3-603e47f55dd3049b", "sourceLanguage": "en", "sourceText": "Nora allows Felix.", "sourceSha256": "603e47f55dd3049b608fc6a7a7da7e1c916e9a062e265036e0c316cf19bf6c9b"}
+{"handle": "probe3-616c736c729331a9", "sourceLanguage": "en", "sourceText": "Coach T-3 prohibits player P-9 from whistling.", "sourceSha256": "616c736c729331a929ac9598c5bf5d8500bce57effd68cd1ac9e8a7d67713cf4"}
+{"handle": "probe3-6c3d97d2803ac051", "sourceLanguage": "en", "sourceText": "Nora allows Felix to print.", "sourceSha256": "6c3d97d2803ac05184521a9a492889d70bfa41a0a9e63e47536c4cc41696791d"}
+{"handle": "probe3-a4a94b88d76f9d69", "sourceLanguage": "en", "sourceText": "Nora allows Felix to modify.", "sourceSha256": "a4a94b88d76f9d699e6f18871e630741a0869bc560ed13a55aed7d139a237a97"}
+{"handle": "probe3-a745e8443ce89380", "sourceLanguage": "en", "sourceText": "Service Z-5 is permitted to enable feature Q-5.", "sourceSha256": "a745e8443ce893808912ec1d7fa022bad449249a235f829b62f33fefaf457e13"}
+{"handle": "probe3-ac2a5ba3ae734017", "sourceLanguage": "el", "sourceText": "Επιτρέπεται στην υπηρεσία Z-5 να ενεργοποιήσει τη λειτουργία Q-5.", "sourceSha256": "ac2a5ba3ae73401780dfc1693715d61fa1d79b4c9372011675619f520f993761"}
+{"handle": "probe3-ad49ecee590f02b0", "sourceLanguage": "en", "sourceText": "Editor E-9 is allowed to publish article W-9.", "sourceSha256": "ad49ecee590f02b06b641216090b40b4dd25c78a1c1fc2b15d32d041d81459cc"}
+{"handle": "probe3-ca2069acb26fc681", "sourceLanguage": "el", "sourceText": "Ο διαχειριστής K-7 απαγορεύει στον χρήστη V-2 να αφαιρέσει.", "sourceSha256": "ca2069acb26fc68186b9b271febf2984bb1579ff8fc4d5e5e8b35a7bbc93f760"}
+{"handle": "probe3-de9f5b8eba2b867e", "sourceLanguage": "el", "sourceText": "Η Nora επιτρέπει στον Felix να τροποποιήσει.", "sourceSha256": "de9f5b8eba2b867e35c918554d4e223ccaa0b0ad960a6f74a061b06a2560901d"}
+{"handle": "probe3-ec7156221d2ffd87", "sourceLanguage": "en", "sourceText": "Admin K-7 prohibits user V-2 from removing.", "sourceSha256": "ec7156221d2ffd878fb7d62fe0be9b29831019643d48bbae3b62b17d05c09265"}
+{"handle": "probe3-fd69a5e72afa7497", "sourceLanguage": "en", "sourceText": "Operator H-4 allows agent G-4 to execute.", "sourceSha256": "fd69a5e72afa749754e5e10f1896934ac645c8d4e1f722a174113bd2686abf82"}
