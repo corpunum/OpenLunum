@@ -41,7 +41,7 @@ test('lunum_build_candidate advertises its envelope to clients that ignore oneOf
   for (const field of ['world', 'kind', 'predicate', 'roles']) assert.ok(schema.properties[field], `missing top-level ${field}`);
   assert.deepEqual(schema.required, ['world', 'kind', 'predicate', 'roles']);
   assert.equal(schema.additionalProperties, false);
-  assert.ok(schema.properties.predicate.enum?.includes('prefer'));
+  assert.ok(schema.properties.predicate?.enum?.includes('prefer'));
   assert.equal(schema.properties.sourceText, undefined);
 });
 

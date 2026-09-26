@@ -22,6 +22,6 @@ function run(cmd, args) {
 }
 
 if (!existsSync(path.join(root, 'node_modules'))) run('pnpm', ['install', '--frozen-lockfile']);
-if (process.env.LUNUM_MCP_SKIP_BUILD !== '1') run('pnpm', ['--silent', '--filter', '@corpunum/lunum-mcp...', 'build']);
+if (process.env.LUNUM_MCP_SKIP_BUILD !== '1') run('pnpm', ['--filter', '@corpunum/lunum-mcp...', 'build']);
 
 await import(pathToFileURL(path.join(root, 'packages/mcp/dist/bin/lunum-mcp.js')).href);
