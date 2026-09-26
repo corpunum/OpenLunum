@@ -13,6 +13,7 @@
 //
 // Usage:
 //   node scripts/research/run-claude-code-source-only.mjs <outDir> [--model sonnet] [--concurrency 4] [--limit N]
+//   node scripts/research/run-claude-code-source-only.mjs <outDir> --rederive   # rebuild ledgers from <outDir>/raw, no model calls
 import { spawn, spawnSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -34,6 +35,7 @@ if (!args[0] || args[0].startsWith('--')) { console.error('usage: run-claude-cod
 const model = flag('model', 'sonnet');
 const concurrency = Number(flag('concurrency', '4'));
 const limit = Number(flag('limit', '0'));
+const rederive = args.includes('--rederive');
 
 const sha256 = (value) => crypto.createHash('sha256').update(value).digest('hex');
 const requests = fs.readFileSync(REQUESTS, 'utf8').split('\n').filter(Boolean).map((line) => JSON.parse(line));
@@ -41,9 +43,15 @@ const selected = limit > 0 ? requests.slice(0, limit) : requests;
 const profileText = fs.readFileSync(PROFILE, 'utf8');
 const pkg = JSON.parse(fs.readFileSync(PACKAGE, 'utf8'));
 
+// Record source state before any model call; the tree may change later.
+const gitHead = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim();
+const gitDirtyAtStart = spawnSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).stdout.trim() !== '';
+
 // Build once so parallel launches do not race on dist/.
-const build = spawnSync('pnpm', ['--filter', '@corpunum/lunum-mcp...', 'build'], { cwd: root, stdio: 'inherit' });
-if (build.status !== 0) process.exit(1);
+if (!rederive) {
+  const build = spawnSync('pnpm', ['--filter', '@corpunum/lunum-mcp...', 'build'], { cwd: root, stdio: ['ignore', process.stderr, process.stderr] });
+  if (build.status !== 0) process.exit(1);
+}
 
 fs.mkdirSync(path.join(outDir, 'raw'), { recursive: true });
 const mcpConfigPath = path.join(outDir, 'mcp-config.json');
@@ -106,31 +114,38 @@ function runOne(request) {
     child.stderr.on('data', (chunk) => { stderr += chunk; });
     child.on('close', (code) => {
       fs.rmSync(workdir, { recursive: true, force: true });
+      fs.writeFileSync(path.join(outDir, 'raw', `${request.handle}.jsonl`), stdout);
+      resolve(classify(request, stdout, code, stderr));
+    });
+  });
+}
+
+function classify(request, stdout, code, stderr) {
       const rawPath = path.join(outDir, 'raw', `${request.handle}.jsonl`);
-      fs.writeFileSync(rawPath, stdout);
       const events = stdout.split('\n').filter(Boolean).flatMap((line) => { try { return [JSON.parse(line)]; } catch { return []; } });
       const init = events.find((event) => event.type === 'system' && event.subtype === 'init');
       const result = events.findLast((event) => event.type === 'result');
       const calls = toolUses(events);
       const submits = calls.filter((call) => call.name === 'mcp__lunum__lunum_submit_candidate');
-      const accepted = submits.filter((call) => !call.isError && call.result?.success === true);
+      // A submit with candidateSem null is core's explicit abstention, not a parse.
+      const succeeded = submits.filter((call) => !call.isError && call.result?.success === true);
+      const accepted = succeeded.filter((call) => call.input?.candidateSem != null);
       const declared = finalStatus(result?.result);
       const lastAccepted = accepted.at(-1) ?? null;
       let status; let candidateSem; let failure = null;
       if (declared?.status === 'abstain' && !lastAccepted) { status = 'abstain'; candidateSem = null; }
       else if (declared?.status === 'parse' && lastAccepted) { status = 'parse'; candidateSem = lastAccepted.input.candidateSem; }
       else { status = null; candidateSem = undefined; failure = !result ? 'no_result_event' : !declared ? 'unparseable_final_status' : declared.status === 'parse' ? 'parse_claimed_without_accepted_submission' : 'abstain_after_accepted_submission'; }
-      resolve({
+      return {
         handle: request.handle, sourceLanguage: request.sourceLanguage, exitCode: code, failure,
         status, candidateSem, declared,
         model: { requested: model, reported: Object.keys(result?.modelUsage ?? {}), initModel: init?.model ?? null },
         mcpServers: init?.mcp_servers ?? null, toolsOffered: init?.tools ?? null,
         calls: calls.map((call) => ({ name: call.name.replace('mcp__lunum__', ''), isError: call.isError, error: call.isError || call.result?.success === false ? (call.result?.error ?? call.result) : undefined })),
         usage: result?.usage ?? null, costUsd: result?.total_cost_usd ?? null, numTurns: result?.num_turns ?? null,
-        rawStream: path.relative(outDir, rawPath), rawStreamSha256: sha256(stdout), stderrTail: stderr.slice(-500) || undefined,
-      });
-    });
-  });
+        abstentionSubmitted: succeeded.some((call) => call.input?.candidateSem == null),
+        rawStream: path.relative(outDir, rawPath), rawStreamSha256: sha256(stdout), stderrTail: stderr?.slice(-500) || undefined,
+      };
 }
 
 const rows = new Array(selected.length);
@@ -138,7 +153,9 @@ let next = 0;
 await Promise.all(Array.from({ length: Math.min(concurrency, selected.length) }, async () => {
   while (next < selected.length) {
     const index = next++;
-    rows[index] = await runOne(selected[index]);
+    rows[index] = rederive
+      ? classify(selected[index], fs.readFileSync(path.join(outDir, 'raw', `${selected[index].handle}.jsonl`), 'utf8'), null, null)
+      : await runOne(selected[index]);
     const row = rows[index];
     console.error(`${row.handle} ${row.sourceLanguage} -> ${row.status ?? `FAILED(${row.failure})`} calls=${row.calls.map((c) => `${c.name}${c.isError ? '!' : ''}`).join(',')} $${row.costUsd}`);
   }
@@ -156,11 +173,9 @@ const runText = rows.map((row) => JSON.stringify(row)).join('\n') + '\n';
 fs.writeFileSync(path.join(outDir, 'candidate-ledger.jsonl'), ledgerText);
 fs.writeFileSync(path.join(outDir, 'run-ledger.jsonl'), runText);
 const claudeVersion = spawnSync('claude', ['--version'], { encoding: 'utf8' }).stdout.trim();
-const gitHead = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).stdout.trim();
-const gitDirty = spawnSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).stdout.trim() !== '';
 const summary = {
   format: 'openlunum-client-extraction-run/0.1', client: 'claude-code', clientVersion: claudeVersion, requestedModel: model,
-  reportedModels: [...new Set(rows.flatMap((row) => row.model.reported))], codeCommit: gitHead, workingTreeClean: !gitDirty,
+  reportedModels: [...new Set(rows.flatMap((row) => row.model.reported))], ...(rederive ? { classifierCommit: gitHead } : { codeCommit: gitHead }), workingTreeCleanAtStart: !gitDirtyAtStart, mode: rederive ? 'rederived-from-raw' : 'live',
   package: path.relative(root, PACKAGE), packageSha256: sha256(fs.readFileSync(PACKAGE)), requestsSha256: sha256(fs.readFileSync(REQUESTS)), profileSha256: sha256(fs.readFileSync(PROFILE)),
   isolation: 'fresh claude -p process per item in an empty temp cwd; built-in tools disabled (--tools ""); --strict-mcp-config with only contract/build/submit/validate allowed; prompt-level source-only, not a technical sandbox (the MCP server process runs from the repository checkout)',
   rows: rows.length, parse: rows.filter((row) => row.status === 'parse').length, abstain: rows.filter((row) => row.status === 'abstain').length,
