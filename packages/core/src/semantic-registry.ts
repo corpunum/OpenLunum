@@ -5,7 +5,7 @@ import { canonicalizeSem, validateSem } from './canonicalize.js';
  * Versioned protocol vocabulary. This is intentionally a protocol registry,
  * not an application ontology: instance identifiers remain open data.
  */
-export const SEMANTIC_PROTOCOL_VERSION = 'lunum-protocol/0.3' as const;
+export const SEMANTIC_PROTOCOL_VERSION = 'lunum-protocol/0.4' as const;
 export type ProtocolField = 'world' | 'kind' | 'predicate' | 'role' | 'term_type' | 'modality';
 
 export interface ProtocolRegistry {
@@ -81,7 +81,8 @@ export const SEMANTIC_PROTOCOL_REGISTRY: ProtocolRegistry = Object.freeze({
       execute: 'run', launch: 'run',
       inform: 'notify', alert: 'notify',
       save: 'store',
-      log_in: 'authenticate', login: 'authenticate', sign_in: 'authenticate'
+      log_in: 'authenticate', login: 'authenticate', sign_in: 'authenticate',
+      activate: 'enable', turn_on: 'enable', deactivate: 'disable', turn_off: 'disable'
     }),
     term_type: freezeMap({ person: 'actor', human: 'actor', datetime: 'date' }),
     modality: freezeMap({ must: 'obligation', mandatory: 'obligation', required: 'obligation', must_not: 'obligation', shall_not: 'obligation', prohibited: 'obligation', forbidden: 'obligation', may: 'permission', allowed: 'permission', optional: 'permission', might: 'possibility', possible: 'possibility', certain: 'certainty', believed: 'belief' })
