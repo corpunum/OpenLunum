@@ -16,8 +16,20 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.ok(value.conventions.termTypes.parcel.includes('object'));
   assert.equal(Object.hasOwn(value, 'gold'), false);
 
-  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v2.json', 'utf8'));
+  // v2 is preserved as history: it froze the build whose lunum_build_candidate
+  // advertised no top-level properties. Its contract hashes still hold; its
+  // tool artifact no longer matches the current build by design.
+  const previous = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v2.json', 'utf8'));
+  assert.equal(previous.status, 'frozen-for-next-source-only-run');
+  assert.equal(previous.freeze.toolImplementationSha256, '9f9b094d5c598959eea0e0f6a565e26fd12abccf75ed78b8a2da76e87c79e1c8');
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v3.json', 'utf8'));
   assert.equal(next.status, 'frozen-for-next-source-only-run');
+  assert.equal(next.supersedes.path, 'public-instruction-package-v2.json');
+  assert.equal(hash('scripts/lunum-mcp-launch.mjs'), next.freeze.launcherSha256);
+  for (const key of ['coreContractHash', 'coreContractJsonSerializationSha256', 'schemaHash', 'frameRegistryHash', 'protocolRegistryHash', 'instructionHash', 'coreArtifactSha256', 'mcpArtifactSha256']) {
+    assert.equal(next.freeze[key], previous.freeze[key], `${key} must be unchanged from v2`);
+  }
   assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.3');
   assert.equal(next.freeze.coreContractHash, 'e17e3f702eb1a0b459b02ea0cb169ef92c9b27fe287d70d5d340a0b92c30d782');
   assert.equal(next.freeze.coreContractJsonSerializationSha256, '66442516a42f693c04db2b86c503b23e3c45d675e29a82c1896333d5c5b918a2');

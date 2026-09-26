@@ -94,6 +94,10 @@ test('real stdio MCP handshake, discovery, fixture calls, and fail-closed checks
     for (const tool of tools) {
       assert.equal(tool.inputSchema?.type, 'object', `${tool.name} has no object-root schema`);
     }
+    // What a client that ignores oneOf actually sees over the wire.
+    const builder = tools.find((tool) => tool.name === 'lunum_build_candidate');
+    assert.deepEqual(Object.keys(builder.inputSchema.properties).filter((key) => ['world', 'kind', 'predicate', 'roles'].includes(key)).sort(), ['kind', 'predicate', 'roles', 'world']);
+    assert.deepEqual(builder.inputSchema.required, ['world', 'kind', 'predicate', 'roles']);
 
     const contract = textResult(await server.request(3, 'tools/call', {
       name: 'lunum_get_extraction_contract', arguments: {},

@@ -176,17 +176,36 @@ export const submitCandidateTool: LunumToolDefinition = {
   },
 };
 
+/**
+ * MCP clients require an object-root schema, and several (Codex among them)
+ * render only top-level `properties`, ignoring `oneOf`. An empty `properties`
+ * therefore told the model this tool takes no arguments; in the 2026-09-15
+ * live run it guessed `itemId/sourceText` and then sent `{}`. Expose the
+ * shared envelope at the top level, derived from the same registry variants,
+ * and keep the per-frame `oneOf` as the authoritative detail.
+ */
+function buildCandidateInputSchema(): LunumToolDefinition['inputSchema'] {
+  const schema = getCandidateBuilderSchema();
+  const variants = schema.oneOf as Array<{ properties: Record<string, unknown> }>;
+  const predicates = variants.map((variant) => (variant.properties.predicate as { const: string }).const);
+  const { predicate: _predicate, roles: _roles, ...common } = variants[0]!.properties;
+  return {
+    ...schema,
+    type: 'object',
+    properties: {
+      ...common,
+      predicate: { type: 'string', enum: predicates, description: 'Canonical framed predicate. Call lunum_get_extraction_contract for each frame\'s roles.' },
+      roles: { type: 'object', description: 'Role slots keyed by the frame\'s canonical role names, e.g. {"experiencer": {"type": "actor", "id": "maria"}}. Allowed and required roles depend on predicate.' },
+    },
+    required: ['world', 'kind', 'predicate', 'roles'],
+    additionalProperties: false,
+  } as LunumToolDefinition['inputSchema'];
+}
+
 export const buildCandidateTool: LunumToolDefinition = {
   name: 'lunum_build_candidate',
-  description: 'Build an untrusted transport-shaped candidate from agent-selected canonical frame slots. The result must still be submitted for deterministic validation and grounding.',
-  inputSchema: {
-    ...getCandidateBuilderSchema() as LunumToolDefinition['inputSchema'],
-    // MCP clients require the top-level tool schema to declare an object
-    // input. The frame builder's registry-derived schema is a JSON Schema
-    // `oneOf` and remains authoritative for the variant details.
-    type: 'object',
-    properties: {},
-  },
+  description: 'Build an untrusted Lunum-Sem candidate from semantic slots you have already chosen: world, kind, a framed predicate and its roles. It does not read source text; pass the source to lunum_submit_candidate together with the returned candidate for deterministic validation and grounding.',
+  inputSchema: buildCandidateInputSchema(),
   handler: async (input): Promise<McpToolResponse> => {
     try {
       const result = buildCandidateSem(input as unknown as CandidateBuilderInput);

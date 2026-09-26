@@ -34,6 +34,17 @@ test('every MCP tool advertises an object-root input schema', () => {
   }
 });
 
+test('lunum_build_candidate advertises its envelope to clients that ignore oneOf', () => {
+  const schema = find('lunum_build_candidate').inputSchema as unknown as {
+    properties: Record<string, { enum?: string[] }>; required?: string[]; additionalProperties?: boolean;
+  };
+  for (const field of ['world', 'kind', 'predicate', 'roles']) assert.ok(schema.properties[field], `missing top-level ${field}`);
+  assert.deepEqual(schema.required, ['world', 'kind', 'predicate', 'roles']);
+  assert.equal(schema.additionalProperties, false);
+  assert.ok(schema.properties.predicate.enum?.includes('prefer'));
+  assert.equal(schema.properties.sourceText, undefined);
+});
+
 test('lunum_build_candidate returns a candidate without certifying it', async () => {
   const data = JSON.parse(getText(await find('lunum_build_candidate').handler({
     world: 'real', kind: 'preference', predicate: 'prefer',
