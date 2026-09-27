@@ -75,11 +75,16 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(v11.freeze.frameRegistryVersion, 'lunum-frame/0.4');
   assert.equal(v11.freeze.protocolRegistryHash, v10.freeze.protocolRegistryHash, 'decisions/0014 changes frames, not vocabulary');
 
-  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v12.json', 'utf8'));
+  const v12 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v12.json', 'utf8'));
+  assert.equal(v12.freeze.coreContractVersion, 'lunum-agent/0.11');
+  assert.equal(v12.freeze.frameRegistryVersion, 'lunum-frame/0.5');
+
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v13.json', 'utf8'));
   assert.equal(next.status, 'frozen-for-next-source-only-run');
-  assert.equal(next.supersedes.path, 'public-instruction-package-v11.json');
-  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.11');
-  assert.equal(next.freeze.frameRegistryVersion, 'lunum-frame/0.5');
+  assert.equal(next.supersedes.path, 'public-instruction-package-v12.json');
+  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.12');
+  assert.equal(next.freeze.frameRegistryHash, v12.freeze.frameRegistryHash, 'decisions/0016 changes submission gating, not frames');
+  assert.equal(next.freeze.protocolRegistryHash, v12.freeze.protocolRegistryHash, 'decisions/0016 changes submission gating, not vocabulary');
   assert.equal(v8.freeze.coreContractVersion, 'lunum-agent/0.8');
   assert.equal(v8.freeze.protocolVersion, 'lunum-protocol/0.3');
   assert.equal(next.freeze.protocolVersion, 'lunum-protocol/0.4');
@@ -91,6 +96,7 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-native.js'), next.freeze.coreArtifactSha256);
   assert.equal(hash('packages/core/dist/src/frame-registry.js'), next.freeze.frameValidatorArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/literal-retention.js'), next.freeze.literalRetentionArtifactSha256);
   assert.equal(hash('experiments/natural-development-v8/extraction/public-task-profile-iteration6.json'), next.freeze.taskProfileSha256);
   assert.equal(Object.hasOwn(next, 'gold'), false);
 });

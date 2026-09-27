@@ -1,0 +1,64 @@
+{
+  "summary": {
+    "goldPairs": 163,
+    "goldBlocked": 2,
+    "liveParses": 472,
+    "v8ScorerMatchedParses": 176,
+    "v8ScorerMatchedBlocked": 0,
+    "otherLiveParsesBlocked": 4
+  },
+  "goldBlocked": [
+    {
+      "file": "datasets/downstream-benchmark-v1.jsonl",
+      "id": "extraction-02",
+      "source": "Error ERR-4521: Database connection timeout after 30 seconds. Affected service: payment-gateway. Severity: critical. Timestamp: 2025-01-20T08:42:15Z.",
+      "missing": [
+        2025,
+        1,
+        20,
+        8,
+        42,
+        15
+      ]
+    },
+    {
+      "file": "datasets/downstream-benchmark-v1.jsonl",
+      "id": "summarization-03",
+      "source": "Version 3.2 introduces automatic schema migration, reducing deployment time by 40%. The new plugin API allows third-party extensions without recompiling the core. Breaking changes: the config file format moves from YAML to TOML, and the deprecated /v1 endpoints are removed.",
+      "missing": [
+        3.2
+      ]
+    }
+  ],
+  "v8MatchedBlocked": [],
+  "otherBlockedDistinct": [
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v5/candidate-ledger.jsonl",
+      "source": "Dana transfers 30 EUR from bank account Q-81.",
+      "missing": [
+        "q-81"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep2/candidate-ledger.jsonl",
+      "source": "Η Dana μεταφέρει 30 EUR από τον λογαριασμό Q-82.",
+      "missing": [
+        "q-82"
+      ]
+    },
+    {
+      "file": "reports/independent-evaluation/2026-09-26-round2/live-oos/candidate-ledger.jsonl",
+      "source": "Ο διευθυντής επιτρέπει στον Νίκο να εγκρίνει δαπάνες έως 2.000 ευρώ.",
+      "missing": [
+        2000
+      ]
+    },
+    {
+      "file": "reports/independent-evaluation/2026-09-26-round2/live-oos/candidate-ledger.jsonl",
+      "source": "Αρχειοθέτησε τα 12 παλιά έργα μέχρι τις 31 Δεκεμβρίου.",
+      "missing": [
+        31
+      ]
+    }
+  ]
+}

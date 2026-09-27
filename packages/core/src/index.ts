@@ -13,6 +13,7 @@ export * from './context.js';
 export * from './compare.js';
 export * from './semantic-invariants.js';
 export * from './protected-literal-registry.js';
+export * from './literal-retention.js';
 export * from './fallback-policy.js';
 export type {
   ParseConfidence,

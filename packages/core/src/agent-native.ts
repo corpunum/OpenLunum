@@ -23,9 +23,10 @@ import { materializeGroundingResolutions, canonicalizeGroundingProposal } from '
 import type { GroundingProvider, GroundingProviderResult } from './grounding-provider.js';
 import { resolveGroundingCascade, toGroundingResolution } from './grounding-provider.js';
 import type { LunumSem, SemanticTrustDecision } from './types.js';
+import { checkLiteralRetention, type LiteralRetentionResult } from './literal-retention.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.11' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.12' as const;
 export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.3' as const;
 
 // SHA-256 of schemas/lunum-sem.schema.json at this protocol version. Keep
@@ -160,6 +161,7 @@ export function getExtractionContract(): ExtractionContract {
       'A placeholder_role or missing_required_role rejection means the source lacks that argument: abstain; do not re-type, re-word, or empty the filler to pass validation.',
       'A prohibition without a stated authority ("X may not Y", "X must not Y") is modality obligation with negated=true on Y; never permission with negated=true (ambiguous_negated_permission).',
       'If the sentence states a restriction, threshold, deadline, recurrence or exception that no role of the chosen frame can hold, abstain rather than drop it.',
+      'Every number and identifier written in digits in the source must appear in the candidate; otherwise core withholds identity (unretained_source_literal) and the rejection means abstain.',
       'Predicate aliases are accepted spellings, not an exhaustive list: when a verb clearly means a registered predicate (e.g. activate -> enable), use that predicate; abstain only when no registered predicate has the same meaning.',
       'Retain source text and provenance even when candidate semantics are rejected.',
       'Caller confidence never promotes a candidate.',
@@ -217,6 +219,8 @@ export interface CandidateSubmissionResult {
   failureClass: string | null;
   diagnostics: string[];
   sem: LunumSem | null;
+  /** Numbers and identifiers of the source that the candidate carries (decisions/0016); null when not checked. */
+  literalRetention: LiteralRetentionResult | null;
 }
 
 export interface GroundedCandidateSubmissionResult extends CandidateSubmissionResult {
@@ -228,11 +232,12 @@ export interface ProviderGroundedCandidateSubmissionResult extends CandidateSubm
   providerResults: readonly GroundingProviderResult[];
 }
 
-function failureClass(input: { structuralValid: boolean; protocolCanonical: boolean; frameValid: boolean; grounded: boolean; candidateIdentityAvailable: boolean; diagnostics: readonly string[] }): string | null {
+function failureClass(input: { structuralValid: boolean; protocolCanonical: boolean; frameValid: boolean; grounded: boolean; literalsRetained: boolean; candidateIdentityAvailable: boolean; diagnostics: readonly string[] }): string | null {
   if (!input.structuralValid) return 'transport_or_structural_invalid';
   if (!input.protocolCanonical) return 'protocol_noncanonical';
   if (!input.frameValid) return 'frame_noncanonical';
   if (!input.grounded) return 'ungrounded_identity';
+  if (!input.literalsRetained) return 'unretained_source_literal';
   if (!input.candidateIdentityAvailable) return 'semantic_identity_unavailable';
   return null;
 }
@@ -266,7 +271,7 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
       source: { text: sourceText, language: input.sourceLanguage ?? null, sha256: sourceHash }, provenance,
       transportValid, structuralValid: false, protocolCanonical: false, frameValid: false, grounded: false,
       candidateIdentityAvailable: false, semanticFingerprint: null, promotable: false, trust,
-      failureClass: 'transport_or_structural_invalid', diagnostics: structural.errors, sem: null,
+      failureClass: 'transport_or_structural_invalid', diagnostics: structural.errors, sem: null, literalRetention: null,
     };
   }
 
@@ -281,19 +286,26 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
     ...normalization.issues.map((issue) => issue.message),
     ...frameResult.issues.map((issue) => issue.message),
   ];
-  if (sem && protocolCanonical && frameValid && grounded) {
+  // A candidate that drops a number or identifier stated in its source claims a
+  // broader meaning than the source: no identity (decisions/0016).
+  const literalRetention = sem && sourceText.trim() !== '' ? checkLiteralRetention(sourceText, sem) : null;
+  const literalsRetained = literalRetention?.retained ?? true;
+  if (literalRetention && !literalsRetained) {
+    diagnostics.push(`unretained_source_literal: the candidate does not carry ${[...literalRetention.missingNumbers.map(String), ...literalRetention.missingIdentifiers].join(', ')} from the source; abstain unless a role can hold it`);
+  }
+  if (sem && protocolCanonical && frameValid && grounded && literalsRetained) {
     try { identity = semanticFingerprint(sem); } catch (error) { diagnostics.push(error instanceof Error ? error.message : String(error)); }
   }
   const candidateIdentityAvailable = identity !== null;
   const trust = sem
     ? evaluateSemanticTrust({ sem, sourceText, canonicalProtocol: protocolCanonical, normalizationIssues: normalization.issues, knownPredicates: new Set(SEMANTIC_PROTOCOL_REGISTRY.predicates) })
     : { status: 'abstained' as const, confidence: 0, promoted: false, requiresHumanReview: true, reasons: ['missing_sem'] };
-  const failure = failureClass({ structuralValid: true, protocolCanonical, frameValid, grounded, candidateIdentityAvailable, diagnostics });
+  const failure = failureClass({ structuralValid: true, protocolCanonical, frameValid, grounded, literalsRetained, candidateIdentityAvailable, diagnostics });
   return {
     source: { text: sourceText, language: input.sourceLanguage ?? null, sha256: sourceHash }, provenance,
     transportValid, structuralValid: true, protocolCanonical, frameValid, grounded,
     candidateIdentityAvailable, semanticFingerprint: identity, promotable: trust.promoted && candidateIdentityAvailable,
-    trust, failureClass: failure, diagnostics, sem,
+    trust, failureClass: failure, diagnostics, sem, literalRetention,
   };
 }
 

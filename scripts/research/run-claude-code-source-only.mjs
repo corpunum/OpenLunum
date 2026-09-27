@@ -57,7 +57,7 @@ if (!rederive) {
 // Served-artifact binding: the dist files the MCP server will load must match
 // the package freeze, checked before the run and again after it. dist/ is
 // untracked, so the git clean-tree check cannot see it.
-const BOUND_ARTIFACTS = { coreArtifactSha256: 'packages/core/dist/src/agent-native.js', frameValidatorArtifactSha256: 'packages/core/dist/src/frame-registry.js', toolImplementationSha256: 'packages/mcp/dist/src/tools.js', mcpArtifactSha256: 'packages/mcp/dist/bin/lunum-mcp.js' };
+const BOUND_ARTIFACTS = { coreArtifactSha256: 'packages/core/dist/src/agent-native.js', frameValidatorArtifactSha256: 'packages/core/dist/src/frame-registry.js', toolImplementationSha256: 'packages/mcp/dist/src/tools.js', mcpArtifactSha256: 'packages/mcp/dist/bin/lunum-mcp.js', literalRetentionArtifactSha256: 'packages/core/dist/src/literal-retention.js' };
 // Every key must be present: a package without them must not pass vacuously
 // (round-2 evaluation). The launcher and the task profile are bound too.
 function artifactBinding() {
