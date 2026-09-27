@@ -17,9 +17,9 @@ No `WORKER_ASSIGNMENT.md`, agent dispatcher, prescribed eight-document reading o
 1. Keep one focused change and link the relevant discussion. A typo or broken link does not need a research campaign.
 2. Read the affected module and its tests; follow [START_HERE.md](START_HERE.md) for setup.
 3. Run relevant tests and `git diff --check`. Before a merge candidate, run `pnpm verify` and report any failure honestly.
-4. Explain what changed, what was tested and what remains unproven. Maintainers handle required CI and protected-main merging.
+4. Explain what changed, what was tested and what remains unproven.
 
-Use a short-lived PR branch (or the agreed fork workflow), not a persistent agent/campaign branch. Delete the branch after merge. Never bypass protection or force-push over a reviewed SHA.
+External contributors open a pull request from a fork or a short-lived branch; a maintainer lands it on `main`. The maintainers themselves work trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATING_MODEL.md)). Never force-push over published history.
 
 ## Semantic and evidence-sensitive changes
 

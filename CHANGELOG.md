@@ -1,6 +1,6 @@
 # OpenLunum Changelog
 
-## Unreleased — 2026-09-26
+## Unreleased — 2026-09-26 to 2026-09-27
 
 ### Fixed
 - `lunum_build_candidate` advertised an empty top-level `properties`, so MCP clients that ignore `oneOf` saw a no-argument tool (cause of the failed 2026-09-15 Codex run). Top-level envelope is now declared and tested over real stdio.
@@ -27,8 +27,20 @@
 - Contract `lunum-agent/0.9` / protocol 0.4: aliases are not exhaustive (decisions/0011 amendment 1). Probes v4.
 - Product-path consumer benchmark condition.
 
+- Frame `lunum-frame/0.4`, contract `lunum-agent/0.10`: frames for 14 common predicates; optional agent for `retry` (decisions/0014).
+- Frame `lunum-frame/0.5`, contract `lunum-agent/0.11`, including:
+  - the canonical prohibition encoding (`permission` + `negated` fails closed);
+  - optional agent for `grant`, `revoke` and `share`;
+  - an abstain-rather-than-drop rule (decisions/0015).
+- Contract `lunum-agent/0.12`: core withholds identity when a candidate drops a number or identifier written in digits in its source (`unretained_source_literal`, decisions/0016). An audit on recorded runs is in `reports/diagnostic/2026-09-27/`.
+- Strict answer grader v2 for the memory QA benchmark, and a re-grade of all runs.
+- A committed fingerprint-stability scan.
+- The runner binds served artifacts, the launcher and the task profile to the frozen package, and fails the run on a mismatch.
+- Two independent-session evaluations (`reports/independent-evaluation/`).
+- README, STATUS, ROADMAP, START_HERE, the readiness page and the MCP README are rewritten to the current evidence.
+
 ### Changed
-- MCP default context mode is `identity_dedup` (decisions/0013).
+- The MCP default context mode was briefly `identity_dedup` (decisions/0013). It was reverted to `natural` after the strict grader found Haiku errors (decisions/0013 amendment 1).
 - Trunk-based development on `main`; the multi-agent operating model is archived under `research/archive/operating-model-multi-agent-2026-09/`.
 
 > The "Readiness Sprint" section below reports percentages from simulations and validation runners. They are superseded and are not capability evidence; see [STATUS.md](STATUS.md).

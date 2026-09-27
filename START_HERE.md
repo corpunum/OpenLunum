@@ -18,6 +18,14 @@ The demo supplies its own Sem. It demonstrates validation, representation identi
 
 No local model, GPU, API key, OpenUnum installation, `agent:status`, or worker assignment is required for this walkthrough. Third-party data and models retain their separate terms.
 
+## I want to try it with an agent
+
+Open the repository in Claude Code. The `lunum` MCP server in `.mcp.json` starts and builds itself. See [packages/mcp/README.md](packages/mcp/README.md) for the extraction path, and for what a rejection means.
+
+## I want to check the evidence
+
+Start with [STATUS.md](STATUS.md). Then read the [live evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md) and the [independent evaluations](reports/independent-evaluation/). Every run keeps its raw streams, ledgers, cost and the frozen package it was bound to. The ADRs in [decisions/](decisions/) state each change's cost.
+
 ## I found a problem or want to contribute
 
 Open an issue with what you tried, expected and observed. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the small checklist. You do not need to read the agent operating manuals or obtain an assignment to ask a question or report a defect. Contributions should identify any third-party material and its license.

@@ -1,17 +1,22 @@
 # Roadmap
 
-## Current evidence checkpoint — 2026-09-14
+## Current checkpoint — 2026-09-27
 
-Issue #680 is the active semantic-evaluation blocker. Source-only scorer
-hardening is merged, including explicit abstention handling, recursive
-source-relative diagnostics, contract-unresolved accounting, and guarded
-exact-identity comparability. The historical V5 extraction remains diagnostic
-only: its exact-identity denominator is zero and it is not training evidence.
+The 2026-09-14 checkpoint asked for a frozen successor task, a fresh source-only extraction and an independent evaluation. All three now exist:
+- V8 frame-0.2 successor targets;
+- live Claude Code runs bound to frozen instruction packages;
+- two independent-session audits.
 
-The next required step is a small, frozen, answerable successor development
-task followed by fresh source-only extraction and independent evaluation. Do
-not begin training or broad corpus expansion until that evidence separates
-learned semantic error from contract, target, and grounding error.
+See [STATUS.md](STATUS.md).
+
+They moved the blocker. Extraction now behaves as specified on the author's material. On fresh sentences, however, **meaning fidelity** falls short: 27/30 on outcome but 20/30 on meaning.
+
+The next steps, in order:
+1. A meaning-level scorer, with target meanings for the probe sets.
+2. Out-of-sample, preferably human or cross-vendor, evaluation of each contract change.
+3. Real memory data before any token-saving claim.
+
+Training and broad corpus expansion stay out of scope until those exist. The milestones below are the long-range plan. None of them is complete in the sense of independently verified evidence.
 
 ## Milestone 0 — repository foundation (completed in 0.2)
 

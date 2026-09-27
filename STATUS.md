@@ -1,54 +1,74 @@
 # Project status
 
-**As of 2026-09-26.** Experimental research/reference implementation; not a qualified general production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track active work.
+**As of 2026-09-27.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
 
 ## What exists
 
-Six workspace packages provide semantic types, candidate validation, canonicalization, versioned fingerprints, comparison/rendering, CLI/MCP surfaces, an HTTP scaffold and a typed product adapter. Some paths are legacy or experimental. Use the [package boundaries and runnable example](README.md), not historical completion scores, to find the entry point.
+**Versions:**
 
-The runtime candidate schema is `lunum-sem/0.1-draft`; the current strict semantic fingerprint path emits `lfp:2.1`. Other schema/fingerprint contracts and migration fixtures coexist. A file named `1.0` or a frozen internal contract does not establish external ratification, universal compatibility or production support.
+| Artifact | Version |
+|---|---|
+| Candidate schema | `lunum-sem/0.1-draft` |
+| Strict identity | `lfp:2.1` |
+| Protocol | `lunum-protocol/0.4`: 46 predicates, with verb aliases |
+| Frames | `lunum-frame/0.5`: 37 framed predicates |
+| Agent contract | `lunum-agent/0.12` |
+| Frozen instruction package | v13 |
 
-## What the current evidence says
+Other schema and fingerprint contracts, and migration fixtures, coexist. A file named `1.0`, or an internally frozen contract, is not external ratification.
 
-**Live client extraction and consumer benchmark, 2026-09-26 ([evaluation summary](reports/diagnostic/2026-09-26/EVALUATION.md); [independent evaluation](reports/independent-evaluation/2026-09-26/REPORT.md)).** On the development set (V8) and the author's own probe sets, Claude Code (`claude-sonnet-5`) reliably refuses missing-argument sentences and parses fully specified sentences built from framed predicates. An independent session's fresh sentences in ordinary wording parsed only 8 of the 16 it expected to be representable. The gap is frame coverage (23 framed predicates) and permissions with no stated permitter.
+**Core refuses identity to a candidate that:**
+- is malformed or non-canonical;
+- violates its frame, including required, dependent and distinct roles;
+- fills a role with a placeholder (decisions/0007);
+- uses the ambiguous `permission` + `negated` prohibition (decisions/0015);
+- drops a number or identifier written in digits in its source (decisions/0016).
 
-In the consumer benchmark, natural text deduplicated by identity used about 60% fewer tokens. `claude-sonnet-5` kept every answer. **`claude-haiku-4-5` got one question wrong in 5 of 9 runs**, adding up paraphrases that extraction had not merged. The MCP default is therefore `natural`, and `identity_dedup` is opt-in. The default Lunum-Code renderer (0.1) loses answers. These are small, self-built corpora; nothing here is a general claim.
+The rejected source text is still kept.
 
-The earlier [V8 iteration-2 report](experiments/natural-development-v8/extraction/results-iteration2.json) (an agent extractor given the repository-side packet) recorded 17/18 source-relative matches, 14/14 exact among comparable, 6/6 abstentions and one false abstention. Both are narrow 24-row development results in English and Greek, not protected generalization, broad multilingual support or a training result. Human Greek review covers specific strings only.
+**Surfaces:**
+- MCP server; default context mode `natural`, with `identity_dedup` opt-in;
+- CLI;
+- HTTP scaffold, with placeholder routes;
+- in-tree OpenUnum adapter.
+
+## What the evidence says
+
+All live runs used Claude Code (`claude-sonnet-5`), one fresh process per sentence, with Lunum MCP tools only. See the [summary](reports/diagnostic/2026-09-26/EVALUATION.md).
+
+- **On the author's material, extraction behaves as specified:**
+  - missing-argument probes 20/20, 18/18 and 16/16 in each of 3 repetitions;
+  - V8 development set: 19–20 of 21 source-relative and 3/3 abstentions.
+  - This is in-sample or author-written.
+- **On fresh sentences from an independent session, meaning fidelity is the weak point.** [Round 2](reports/independent-evaluation/2026-09-26-round2/REPORT.md) scored **27/30 on outcome but 20/30 on meaning**: parses dropped thresholds, dates or recurrences, or used a wrong verb, and still got an identity.
+  - The prohibition split and the dropped digit literals (2 of those 7 losses) are now mechanically blocked.
+  - Dropped words, recurrences and wrong predicates are not blocked.
+- **Memory QA:** natural text deduplicated by identity used about 60% fewer input tokens. Sonnet kept 20/20 answers; **Haiku answered 1 question wrong in 5 of 9 runs**. The Lunum-Code renderer 0.1 loses answers. The corpus is 24 self-built sentences with paraphrase-heavy duplication, so this is not a savings estimate for real memory.
+- **Identity stability:** a committed scan found no identity change from any vocabulary or frame change after it was introduced. Every loss of identity is listed in the ADRs.
+
+Evaluation has been done by the author and by two other sessions of the same vendor and model family. There has been **no human, native-speaker or cross-vendor review**.
 
 ## What is not established
 
 - Reliable general raw-text-to-Sem conversion across languages and domains.
-- A validated general near-semantic threshold under extraction errors.
-- Model/tokenizer-specific compaction that preserves downstream task quality in a qualified live benchmark.
-- Production-scale security, operations, source-retention/deletion integration or unrelated-product adoption.
-- A trained semantic compiler that improves an untouched evaluation set.
+- Token savings with preserved answers on real memory data.
+- A validated near-semantic threshold under extraction errors.
+- Production security, operations, deletion integration, or adoption by an unrelated product.
+- A trained semantic compiler.
 
-The repository contains relevant code, tests, historical runs and simulations. Their existence does not close these gaps. [Evidence and limitations](docs/LUNUM_READINESS.md) distinguishes those categories.
+## Next, in order
 
-## Current work and boundaries
+1. **Meaning-level evaluation.** Give the probe sets target meanings and a scorer that compares them, so fidelity is measured rather than read by hand. Then measure the 0.11 abstention rule and the 0.12 literal gate live.
+2. **Out-of-sample evaluation after each change**, preferably human or cross-vendor.
+3. **Real memory data (owner)** before any token-saving claim.
+4. **Review of unreviewed semantic judgements:**
+   - the alias table (decisions/0011);
+   - the extractor's mapping of use, open and enter to `access`;
+   - the Greek wording: #685 is blocked on a native reviewer.
 
-Development is trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATING_MODEL.md)). The earlier multi-agent process is archived.
+## Process
 
-Next, in order:
-
-1. **Meaning-level evaluation.** Outcome scores ("parsed with identity" or "abstained") overstate fidelity. The round-2 evaluator's fresh sentences scored 27/30 on outcome but 20/30 on meaning, because thresholds, dates and recurrences were dropped under a confident identity. Probe sets need target meanings and a scorer that compares them. The decisions/0015 abstention rule has to be measured against that.
-2. **Out-of-sample evaluation after each change**, by someone other than the author. Two AI evaluations of the same model family exist; human or cross-vendor review does not.
-3. **Real memory data (owner)** before any token-saving claim. The MCP default is `natural`; `identity_dedup` is opt-in.
-4. Review the semantic judgements made without human review: the alias table (decisions/0011), and the extractor's own mapping of use, open and enter to `access`.
-
-Done since the first evaluation:
-- frame coverage for common predicates (decisions/0014);
-- the canonical prohibition encoding and imperative grants (decisions/0015);
-- run-time artifact binding;
-- the committed fingerprint scan.
-
-#685 still needs a human native English review of the V8 English strings. It is recorded as blocked on that input, not re-audited.
-
-OpenUnum is a separate product. The in-tree compatibility adapter is not independent adoption evidence and is not needed to use the core.
-
-## Licensing and contributions
-
-Original OpenLunum code is now **Apache-2.0**, following the owner's explicit authorization on 2026-09-14. [LICENSE](LICENSE) contains the terms; [LICENSE.md](LICENSE.md) explains scope and unchanged third-party terms. Package publication flags and all capability limitations above are unchanged. [CONTRIBUTING.md](CONTRIBUTING.md) separates human feedback from managed-agent coordination.
-
-No readiness/completion percentages are maintained. Historical scorecards are [archived and superseded](research/archive/readiness-before-public-review-20260914.md), not erased or accepted as current evidence.
+- Trunk-based on `main` ([operating model](docs/REPOSITORY_OPERATING_MODEL.md)). The earlier multi-agent process is [archived](research/archive/operating-model-multi-agent-2026-09/).
+- Original code is Apache-2.0 since 2026-09-14 ([LICENSE](LICENSE), [scope](LICENSE.md)).
+- No readiness percentages are maintained. The historical scorecards are [archived](research/archive/readiness-before-public-review-20260914.md) as superseded.
+- OpenUnum is a separate product; the in-tree adapter is not adoption evidence.

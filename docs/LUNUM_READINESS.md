@@ -1,6 +1,6 @@
 # Evidence and limitations
 
-**Reconciled 2026-09-14 against main `a2b5e93002b3d7ca8b1434e72853123aeaa85dd2`.**
+**Last reconciled 2026-09-27** (the first reconciliation was 2026-09-14, against `a2b5e93`). The live results are summarized in [STATUS.md](../STATUS.md) and [EVALUATION.md](../reports/diagnostic/2026-09-26/EVALUATION.md).
 
 This page replaces the former percentage-based readiness tracker. There is no defensible conversion from tests, merged issues or implemented modules to a percentage of the Lunum vision completed. The [old scorecard](../research/archive/readiness-before-public-review-20260914.md) is retained byte-for-byte as a superseded historical artifact; its 97–100% figures are not current capability claims. Relative links inside that unedited archive refer to its [original location at the pinned commit](https://github.com/corpunum/OpenLunum/blob/a2b5e93002b3d7ca8b1434e72853123aeaa85dd2/docs/LUNUM_READINESS.md).
 
@@ -15,15 +15,17 @@ This page replaces the former percentage-based readiness tracker. There is no de
 | Semantic records | `packages/core/src/types.ts`, `semantic-registry.ts`, `frame-registry.ts` | A constrained typed IR, not a universal natural-language parser. |
 | Exact identity | `packages/core/src/fingerprint.ts`, conformance/migration tests | Deterministic identity of accepted representations; does not prove source equivalence. Strict `semanticFingerprint` and legacy `fingerprintSem` are different versioned paths. |
 | Near-semantic comparison | Feature comparison and threshold experiments | Experimental; gold-aligned fixtures or a few negatives do not establish production calibration. |
-| Extraction | Agent contract/builder/submission and source-only development harness | Model interpretation remains fallible. The V8 example below is small and not a protected result. |
+| Extraction | Agent contract `lunum-agent/0.12`, frame-first builder, submission gates (placeholders, prohibition encoding, source literal retention), and a live Claude Code runner bound to frozen packages | Development-measured on one model (`claude-sonnet-5`). An independent session's fresh sentences scored 27/30 on outcome but **20/30 on meaning**. There is no meaning-level scorer yet, and no human or cross-vendor review. |
 | Languages/models | Historical multilingual corpora and named model-profile files | Fixture/profile presence is not declared language/model support. Human review is scoped to the exact reviewed material. |
-| Rendering/compaction | `renderSem`, profile tooling, context compiler | No accepted general live token-savings-plus-task-quality result. Some counters are estimates; never advertise estimates as tokenizer measurements. |
+| Rendering/compaction | `renderSem` (0.1 default and lossy; 0.2 lossless), context compiler including `identity_dedup` | Development-measured on a 24-sentence self-built memory QA set: identity deduplication saved about 60% of input tokens, with Sonnet 20/20 and Haiku wrong in 5 of 9 runs. Renderer 0.1 loses answers. There is no real-memory result, and no general savings claim. |
 | Source/policy/lifecycle | Source fields, candidate trust/promotion, lifecycle contracts and tests | Applications must wire storage, access control, deletion and safe serving. Tests do not establish deployed privacy/security behavior. |
-| CLI/MCP | Core-backed operations and tests | Usable research interfaces within their implemented scope, not a model-quality guarantee. |
+| CLI/MCP | Core-backed operations and tests. The MCP server runs in Claude Code from `.mcp.json`; its default context mode is `natural`. | Used in every live run listed above. It is a research interface, not a model-quality guarantee. |
 | HTTP | Reference routes and service tests | Parse/realize/render/retrieve routes include placeholders. See the [package warning](../packages/api/README.md). |
 | Product adoption | In-tree adapter and research examples | No accepted evidence of unrelated products relying on Lunum in production-like conditions. No numeric adoption score. |
 
-## Inspect a current development result
+## Inspect a development result
+
+The current live results are in [EVALUATION.md](../reports/diagnostic/2026-09-26/EVALUATION.md) and the [independent evaluations](../reports/independent-evaluation/). The older, pre-live result below is kept for reference.
 
 [V8 iteration-2](../experiments/natural-development-v8/extraction/results-iteration2.json) records:
 
@@ -47,4 +49,4 @@ A result needs a declared task and baseline, frozen inputs and comparison rules,
 
 For compression: publish actual named-tokenizer counts **and** downstream quality, latency/cost and fallback rates. For adoption: provide an independently attributable consumer and a reproducible result. An internal demo is not an external adopter.
 
-Internal schema freezes are compatibility decisions, not external standardization. Current [license terms](../LICENSE.md) remain a separate blocker to open-source reuse.
+Internal schema freezes are compatibility decisions, not external standardization. Original code has been Apache-2.0 since 2026-09-14 ([license scope](../LICENSE.md)).

@@ -124,3 +124,14 @@ A second, separate session audited `a2909a3` ([report](../../independent-evaluat
 ## Separate CI note
 
 CI on `7b0c21f` (a commit that added only evidence files, pushed without running local `verify`) failed 2 eval tests. They passed in 6 local runs of a fresh clone of that commit and on the next CI run (`ea7fb5d`). The failing test names could not be recovered: the GitHub log tool truncates, and this container cannot reach the log host. The cause is unidentified; it is recorded here rather than dismissed as a flake.
+
+## Source literal retention gate (added 2026-09-27)
+
+Contract `lunum-agent/0.12` ([decisions/0016](../../../decisions/0016-source-literal-retention-gate.md)): core withholds identity when a candidate drops a number or identifier written in digits in its source.
+
+The audit on recorded data, with no model calls ([JSON](../2026-09-27/literal-retention-audit.json)):
+- 0 of 176 scorer-matched V8 live parses are blocked;
+- 4 of 296 other live parses are blocked, all genuine losses;
+- 2 of 163 gold pairs are blocked, both lossy gold Sems.
+
+It catches 2 of round 2's 7 meaning losses. The ledger shows that round 2's e02 kept its threshold as a condition, so that finding does not reproduce. The gate has **not been run live** yet.
