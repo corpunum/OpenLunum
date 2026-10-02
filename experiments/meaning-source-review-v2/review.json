@@ -1,0 +1,168 @@
+{
+  "format": "openlunum-source-disposition-review/0.1",
+  "status": "post-hoc-diagnostic-not-protected",
+  "baselineCommit": "dfb1b004f0a012bdc5e28307b274a743ac0e9d66",
+  "contract": { "agent": "lunum-agent/0.14", "protocol": "lunum-protocol/0.4", "frames": "lunum-frame/0.5", "identity": "2.1" },
+  "supersedes": {
+    "review": "experiments/meaning-source-review-v1/review.json",
+    "originalReviewSha256": "808598d7e3f86a78c2b5904ea6574da947179a9b8dc7c48e96a98ea601eab84d",
+    "reason": "Runtime binding migration to agent contract 0.14 only. This is the same original review and author provenance, with no new review, source, gold, outcome, or interpretation changes. Protocol 0.4, frames 0.5, and identity 2.1 are unchanged."
+  },
+  "inputs": {
+    "probes": { "path": "reports/independent-evaluation/2026-09-26-round2/probes-authored.json", "sha256": "942600af5b86dd68518ede07302253f4204a29f26fa9cab12f030cbbb6ce9614" },
+    "targets": { "path": "experiments/meaning-scoring-recorded-v1/targets.jsonl", "sha256": "c2cde55bc2bf833c0c30917649b290719327c6fa0f11b12d90303e6d9e717ff9" }
+  },
+  "review": {
+    "method": "Source-only read-only Luna workers saw the requested source texts and protocol/frame contract, not historical model outputs or gold targets. Parent had already seen visible diagnostic targets and independently reviewed conclusions against the contract.",
+    "workers": [
+      { "id": "01a0fbca-53e5-7421-9ef0-025c18f008a9", "model": "gpt-6-luna", "scope": "eight English sources" },
+      { "id": "01a0fbca-5530-7d02-bb2f-b855e4115127", "model": "gpt-6-luna", "scope": "six Greek sources" }
+    ],
+    "human": false,
+    "nativeSpeaker": false,
+    "independentProtectedReview": false,
+    "newProviderCalls": 0,
+    "limits": "Same-family non-human review. Atom spans bind observations to source but do not mechanically prove semantic completeness. Options are source-relative diagnostics, not certified gold or cross-language entity grounding. All 14 historical scoring targets remain unresolved."
+  },
+  "items": [
+    {
+      "probeId": "e06", "sourceText": "Grant Priya access to the staging database until 30 November 2026.", "language": "en", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "predicate", "span": "Grant" }, { "dimension": "recipient", "span": "Priya" },
+        { "dimension": "scope", "span": "access to the staging database" }, { "dimension": "expiry", "span": "until 30 November 2026" }
+      ],
+      "reason": "Grant now allows an unstated imperative agent, but access expiry is not a deadline. Opaque clause.time text preserves evidence without defining a canonical expiry operator. Do not substitute a date at which the grant occurs or hide expiry in theme.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: grant", "packages/core/src/agent-native.ts: abstentionRules", "docs/SEMANTIC_CONTRACT.md: identity and time channels"]
+    },
+    {
+      "probeId": "e09", "sourceText": "Nobody except the auditor may delete audit logs.", "language": "en", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "quantified_exception", "span": "Nobody except the auditor" }, { "dimension": "permission", "span": "may" },
+        { "dimension": "predicate", "span": "delete" }, { "dimension": "theme", "span": "audit logs" }
+      ],
+      "reason": "Permission for the auditor alone omits the prohibition for everyone else. No scoped universal exception operator or stated authority is available. Do not convert the exception into a role label.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: allow/prohibit/delete", "packages/core/src/agent-native.ts: abstentionRules"]
+    },
+    {
+      "probeId": "e10", "sourceText": "Run the backup script every night at 02:00.", "language": "en", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "predicate", "span": "Run" }, { "dimension": "theme", "span": "backup script" },
+        { "dimension": "recurrence", "span": "every night" }, { "dimension": "time", "span": "02:00" }
+      ],
+      "reason": "No active canonical recurrence operator. Time zone is unstated; opaque nightly prose in clause.time is not a canonical recurring schedule.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: run", "packages/core/src/agent-native.ts: abstentionRules", "packages/core/src/types.ts: active LunumClause"]
+    },
+    {
+      "probeId": "e11", "sourceText": "Send three reminders before the deadline on 15 March.", "language": "en", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "predicate", "span": "Send" }, { "dimension": "quantity", "span": "three" }, { "dimension": "theme", "span": "reminders" },
+        { "dimension": "temporal_relation", "span": "before the deadline" }, { "dimension": "date", "span": "15 March" }
+      ],
+      "reason": "Send requires an agent not stated by the imperative. The before-deadline relation must not be replaced by retry or a plain send date; year and recipient are unstated. Do not invent a sender or event binding.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: send/before/deadline", "packages/core/src/agent-native.ts: missing required role abstention"]
+    },
+    {
+      "probeId": "e13", "sourceText": "Jonas should polish the onboarding slides before Friday.", "language": "en", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "agent", "span": "Jonas" }, { "dimension": "modality", "span": "should" }, { "dimension": "predicate", "span": "polish" },
+        { "dimension": "theme", "span": "onboarding slides" }, { "dimension": "temporal_relation", "span": "before Friday" }
+      ],
+      "reason": "Update would not preserve the refining/improving meaning of polish merely because it is registered. No justified equivalent predicate or event-to-Friday binding is supplied. Do not infer a particular Friday date.",
+      "contractBasis": ["packages/core/src/semantic-registry.ts: controlled predicates and justified aliases", "packages/core/src/frame-registry.ts: update/before"]
+    },
+    {
+      "probeId": "e14", "sourceText": "Do not restart the cluster during business hours.", "language": "en", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "prohibition", "span": "Do not" }, { "dimension": "predicate", "span": "restart" }, { "dimension": "theme", "span": "cluster" },
+        { "dimension": "temporal_scope", "span": "during business hours" }
+      ],
+      "reason": "Negative obligation on restart captures the prohibition but not its during-business-hours restriction. An arbitrary time string has no defined during/recurrence scope. Unrestricted prohibition would broaden meaning.",
+      "contractBasis": ["decisions/0015-canonical-prohibition-and-imperative-grants.md", "packages/core/src/frame-registry.ts: restart", "packages/core/src/agent-native.ts: unsupported restriction abstention"]
+    },
+    {
+      "probeId": "e15", "sourceText": "If more than 5 login attempts fail, lock the account.", "language": "en", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "condition", "span": "If" }, { "dimension": "strict_threshold", "span": "more than 5" },
+        { "dimension": "failed_attempt_filter", "span": "login attempts fail" }, { "dimension": "predicate", "span": "lock" }, { "dimension": "theme", "span": "account" }
+      ],
+      "reason": "Counting all attempts drops the failed qualifier. Lock is not established equivalent to disable; no registered action faithfully expresses the consequence. A strict above threshold alone does not make the whole statement representable.",
+      "contractBasis": ["packages/core/src/semantic-registry.ts: predicates", "packages/core/src/frame-registry.ts: above/disable", "packages/core/src/agent-native.ts: abstentionRules"]
+    },
+    {
+      "probeId": "e19", "sourceText": "Ahmed can view the incident report.", "language": "en", "originalExpectedOutcome": "parse",
+      "disposition": "ambiguous", "representationOption": null,
+      "atoms": [
+        { "dimension": "agent", "span": "Ahmed" }, { "dimension": "ambiguous_modality", "span": "can" },
+        { "dimension": "predicate", "span": "view" }, { "dimension": "theme", "span": "incident report" }
+      ],
+      "reason": "View can normalize to read; can does not establish permission rather than ability without context. The original pairing with explicit permission e20 is an annotation assumption, not source proof.",
+      "contractBasis": ["packages/core/src/semantic-registry.ts: read alias, ability/permission", "packages/core/src/agent-native.ts: ambiguous meaning abstention"]
+    },
+    {
+      "probeId": "g01", "sourceText": "Η Ελένη μπορεί να διαβάσει το αρχείο μισθοδοσίας.", "language": "el", "originalExpectedOutcome": "parse",
+      "disposition": "ambiguous", "representationOption": null,
+      "atoms": [
+        { "dimension": "agent", "span": "Ελένη" }, { "dimension": "ambiguous_modality", "span": "μπορεί" },
+        { "dimension": "predicate", "span": "διαβάσει" }, { "dimension": "theme", "span": "αρχείο μισθοδοσίας" }
+      ],
+      "reason": "Ability/permission readings need context and native review. No Greek-to-English open-ID equivalence is asserted.",
+      "contractBasis": ["packages/core/src/semantic-registry.ts: modalities", "packages/core/src/frame-registry.ts: read", "docs/SEMANTIC_CONTRACT.md: open data"]
+    },
+    {
+      "probeId": "g02", "sourceText": "Ο διευθυντής επιτρέπει στον Νίκο να εγκρίνει δαπάνες έως 2.000 ευρώ.", "language": "el", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "authority", "span": "διευθυντής" }, { "dimension": "permission", "span": "επιτρέπει" }, { "dimension": "recipient", "span": "Νίκο" },
+        { "dimension": "action", "span": "εγκρίνει" }, { "dimension": "theme", "span": "δαπάνες" }, { "dimension": "inclusive_upper_bound", "span": "έως 2.000 ευρώ" }
+      ],
+      "reason": "Inclusive up-to cap is not strict below. Allow and an approve action do not supply the amount-to-expense cap relationship. Packing the cap into a document string retains text but does not define canonical restriction semantics.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: allow/below", "decisions/0008-allow-prohibit-action-role.md", "packages/core/src/agent-native.ts: restriction abstention"]
+    },
+    {
+      "probeId": "g04", "sourceText": "Επανεκκίνησε τον διακομιστή αλληλογραφίας.", "language": "el", "originalExpectedOutcome": "parse",
+      "disposition": "representation-option-pending-native-review",
+      "representationOption": { "schema": "lunum-sem/0.1-draft", "world": "real", "kind": "command", "clauses": [{ "predicate": "restart", "roles": { "theme": { "type": "system", "value": "διακομιστή αλληλογραφίας", "language": "el" } } }] },
+      "atoms": [ { "dimension": "predicate", "span": "Επανεκκίνησε" }, { "dimension": "theme", "span": "διακομιστή αλληλογραφίας" } ],
+      "reason": "Restart permits an omitted imperative agent; command does not identify its implicit addressee. Source-relative server literal can retain this filler without asserting mail_server is the same entity. Real/command and system rather than service typing are diagnostic task conventions, not context or classification independently established by this sentence.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: restart", "docs/SEMANTIC_CONTRACT.md: open instance identity"]
+    },
+    {
+      "probeId": "g05", "sourceText": "Ειδοποίησε την ομάδα αν η θερμοκρασία ξεπεράσει τους 40 βαθμούς.", "language": "el", "originalExpectedOutcome": "parse",
+      "disposition": "representation-option-pending-native-review",
+      "representationOption": { "schema": "lunum-sem/0.1-draft", "world": "real", "kind": "conditional_instruction", "clauses": [{ "predicate": "notify", "roles": { "recipient": { "type": "group", "value": "ομάδα", "language": "el" } }, "conditions": [{ "predicate": "above", "roles": { "subject": { "type": "metric", "value": "θερμοκρασία", "language": "el" }, "value": { "type": "quantity", "value": 40, "unit": "βαθμούς", "language": "el" } } }] }] },
+      "atoms": [
+        { "dimension": "predicate", "span": "Ειδοποίησε" }, { "dimension": "recipient", "span": "ομάδα" }, { "dimension": "condition", "span": "αν" },
+        { "dimension": "metric", "span": "θερμοκρασία" }, { "dimension": "strict_comparison", "span": "ξεπεράσει" }, { "dimension": "quantity", "span": "40" }, { "dimension": "unit", "span": "βαθμούς" }
+      ],
+      "reason": "Notify and above frames fit with a nested condition. Metric typing is a diagnostic classification choice; notification content is unstated and not invented. Degrees scale is unspecified: retain the literal Greek unit, not Celsius. No shared cross-language group, metric or unit grounding is claimed. Native review and surrounding real-world context remain missing.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: notify/above", "packages/core/src/types.ts: nested conditions", "docs/SEMANTIC_CONTRACT.md: source evidence"]
+    },
+    {
+      "probeId": "g07", "sourceText": "Αρχειοθέτησε τα 12 παλιά έργα μέχρι τις 31 Δεκεμβρίου.", "language": "el", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "predicate", "span": "Αρχειοθέτησε" }, { "dimension": "quantity", "span": "12" }, { "dimension": "qualified_theme", "span": "παλιά έργα" },
+        { "dimension": "deadline_relation", "span": "μέχρι τις" }, { "dimension": "date", "span": "31 Δεκεμβρίου" }
+      ],
+      "reason": "A qualified collection can preserve 12 and old projects but not the deadline relation by itself. No justified binding between archive action and a separate deadline event is defined. Do not invent a year, relation or grounded event reference.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: archive/deadline", "docs/SEMANTIC_CONTRACT.md: canonical channels and references"]
+    },
+    {
+      "probeId": "g08", "sourceText": "Ο Πέτρος δεν πρέπει να εκτελεί σενάρια στην παραγωγή.", "language": "el", "originalExpectedOutcome": "parse",
+      "disposition": "unsupported", "representationOption": null,
+      "atoms": [
+        { "dimension": "agent", "span": "Πέτρος" }, { "dimension": "prohibition", "span": "δεν πρέπει" }, { "dimension": "predicate", "span": "εκτελεί" },
+        { "dimension": "theme", "span": "σενάρια" }, { "dimension": "environment_scope", "span": "στην παραγωγή" }
+      ],
+      "reason": "Obligation plus negation on run captures prohibition, but the run frame has no execution-environment slot. Omitting production broadens it; production is not a world or part of a script's identity. Do not bury the action context in theme.",
+      "contractBasis": ["packages/core/src/frame-registry.ts: run", "decisions/0015-canonical-prohibition-and-imperative-grants.md", "docs/SEMANTIC_CONTRACT.md: world versus environment"]
+    }
+  ]
+}

@@ -206,6 +206,14 @@ test('runner rejects invalid metadata anywhere in the full dataset before any pr
         maxItems: 1
       },
       {
+        name: 'changed-date-with-same-number-set',
+        rows: [item({ sourceText: 'Orion deadline is 2026-04-05.', goldSem: {
+          schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'project_state',
+          clauses: [{ predicate: 'deadline', roles: { subject: { type: 'project', id: 'Orion' }, time: { type: 'date', value: '2026-05-04' } }, negated: false }]
+        } })],
+        maxItems: 1
+      },
+      {
         name: 'empty-dataset',
         rows: [],
         maxItems: 1

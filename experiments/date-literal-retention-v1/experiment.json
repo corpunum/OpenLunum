@@ -1,0 +1,27 @@
+{
+  "format": "openlunum-experiment/0.1",
+  "id": "date-literal-retention-v1",
+  "area": "source-bound semantic literal retention",
+  "baselineCommit": "eace760811c880452d08501cf19d2feaa20c3171",
+  "hypothesis": "Explicit calendar-valid unambiguous full dates can normalize independently of quantities, while exact date mutations and evidence-only literal laundering fail the same source gate used by candidates and gold.",
+  "data": {
+    "class": "development/regression",
+    "baselinePath": "experiments/gold-metadata-preflight-v1/date-literal-counterexample.json",
+    "baselineSha256": "91584b77a427790aacd236dc7473709a44288ecbec33e9238525d9f750db2f03",
+    "additionalData": "New independently authored deterministic numerical/role fixtures; no protected corpus or model output used for tuning."
+  },
+  "modelProfiles": [],
+  "budgets": { "providerCalls": 0, "providerSpendUsd": 0 },
+  "hardGates": [
+    "Gregorian-valid ISO dates and dotted day>12/month/year converge without locale guesses.",
+    "Dates remain separate exact literals; changed dates and missing quantities cannot be hidden by component numbers.",
+    "Only identity-bearing semantic fields satisfy literal retention; evidence remains recoverable but does not rescue an omitted literal.",
+    "No Sem, registry, frame or fingerprint projection changes; previously retained unchanged representations keep their fingerprints.",
+    "Candidate identity is not semantic correctness or trust promotion.",
+    "Ambiguous/invalid/partial dates receive no guessed normalization.",
+    "New versioned runtime package supersedes but never edits v15 or historical evidence.",
+    "Full verification and deliberate weakening sensitivity before publication."
+  ],
+  "metrics": ["deterministic normalization", "harmful-date rejection", "numeric/date isolation", "evidence-laundering rejection", "identity stability", "pnpm verify"],
+  "nonClaims": ["No general semantic fidelity, native review, live parser accuracy or deployed privacy/storage behavior.", "Role binding, literal frequency, spelled-out dates and unit conversions remain outside this floor."]
+}

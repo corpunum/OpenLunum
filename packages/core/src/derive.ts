@@ -112,7 +112,7 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
         reasons: [...new Set([
           ...frameTrust.reasons,
           'unretained_source_literal',
-          `source literals missing from candidate: ${[...literalRetention.missingNumbers.map(String), ...literalRetention.missingIdentifiers].join(', ')}`,
+          `source literals missing from candidate: ${[...literalRetention.missingNumbers.map(String), ...literalRetention.missingIdentifiers, ...literalRetention.missingDates].join(', ')}`,
         ])],
       }
     : frameTrust;

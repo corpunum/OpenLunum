@@ -1,12 +1,31 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import { validateSourceDispositions, validateSourceDispositionFiles } from './validate-source-dispositions.mjs';
 
-const reviewPath = 'experiments/meaning-source-review-v1/review.json';
+const reviewPath = 'experiments/meaning-source-review-v2/review.json';
 const review = JSON.parse(fs.readFileSync(reviewPath));
 const probes = JSON.parse(fs.readFileSync(review.inputs.probes.path));
 const targets = fs.readFileSync(review.inputs.targets.path, 'utf8').split('\n').filter(Boolean).map(JSON.parse);
+
+test('v2 is an additive 0.14 binding migration with byte-identical original review values', () => {
+  const oldRaw = fs.readFileSync('experiments/meaning-source-review-v1/review.json');
+  const oldReview = JSON.parse(oldRaw);
+  assert.equal(createHash('sha256').update(oldRaw).digest('hex'), review.supersedes.originalReviewSha256);
+  const migrated = structuredClone(review);
+  delete migrated.supersedes;
+  migrated.contract.agent = oldReview.contract.agent;
+  assert.deepEqual(migrated, oldReview);
+  assert.deepEqual(review.inputs, oldReview.inputs);
+  assert.deepEqual(review.review, oldReview.review);
+  assert.deepEqual(review.items, oldReview.items);
+  assert.equal(review.contract.agent, 'lunum-agent/0.14');
+  assert.equal(review.contract.protocol, oldReview.contract.protocol);
+  assert.equal(review.contract.frames, oldReview.contract.frames);
+  assert.equal(review.contract.identity, oldReview.contract.identity);
+  assert.throws(() => validateSourceDispositionFiles('experiments/meaning-source-review-v1/review.json'), /review_contract_binding_mismatch/);
+});
 
 test('all14 historical unresolved targets stay unresolved; options pass current gates without promotion', () => {
   const report = validateSourceDispositionFiles(reviewPath);

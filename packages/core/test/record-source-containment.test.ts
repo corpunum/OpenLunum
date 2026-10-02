@@ -64,8 +64,10 @@ test('createRecord withholds source-bound identity and promotion when a digit li
     retained: false,
     sourceNumbers: [5],
     sourceIdentifiers: [],
+    sourceDates: [],
     missingNumbers: [5],
     missingIdentifiers: [],
+    missingDates: [],
   });
   assert.equal(record.meta.semanticTrustStatus, 'candidate');
   assert.equal(record.meta.semanticPromoted, false);

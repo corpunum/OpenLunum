@@ -161,7 +161,7 @@ export interface GoldValidationReport {
   sourceLiteralRetentionChecked: number;
   sourceLiteralRetentionValid: number;
   abstentionCases: number;
-  invalid: Array<{ id: string; stages: string[]; metadataErrors?: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; semanticAtomErrors?: unknown[]; sourceLiteralErrors?: { missingNumbers: number[]; missingIdentifiers: string[] }; identityError?: string }>;
+  invalid: Array<{ id: string; stages: string[]; metadataErrors?: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; semanticAtomErrors?: unknown[]; sourceLiteralErrors?: { missingNumbers: number[]; missingIdentifiers: string[]; missingDates?: string[] }; identityError?: string }>;
 }
 
 /**
@@ -302,7 +302,8 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
         ...(sourceLiteralRetention && !sourceLiteralRetention.retained ? {
           sourceLiteralErrors: {
             missingNumbers: sourceLiteralRetention.missingNumbers,
-            missingIdentifiers: sourceLiteralRetention.missingIdentifiers
+            missingIdentifiers: sourceLiteralRetention.missingIdentifiers,
+            ...(sourceLiteralRetention.missingDates.length ? { missingDates: sourceLiteralRetention.missingDates } : {})
           }
         } : {}),
         ...(identityError ? { identityError } : {})
@@ -312,7 +313,7 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
   const groupFingerprints = new Map<string, Array<{ id: string; fingerprint: string | null }>>();
   for (const [index, item] of items.entries()) {
     if (metadataErrorsByIndex.has(index)) continue;
-    if (!item.semanticGroup || item.goldSem === null || item.expectedOutcome === 'abstain') continue;
+    if (!item.semanticGroup || item.goldSem === null) continue;
     const rows = groupFingerprints.get(item.semanticGroup) ?? [];
     let fingerprint: string | null = null;
     try { fingerprint = semanticFingerprint(item.goldSem); } catch { /* existing item-level stages carry the reason */ }

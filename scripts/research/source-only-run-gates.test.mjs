@@ -9,7 +9,7 @@ import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeMan
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
-const packagePath = path.join(packageDirectory, 'public-instruction-package-v15.json');
+const packagePath = path.join(packageDirectory, 'public-instruction-package-v16.json');
 const pkg = JSON.parse(fs.readFileSync(packagePath));
 const legacyPackagePath = path.join(packageDirectory, 'public-instruction-package-v14.json');
 const legacyPkg = JSON.parse(fs.readFileSync(legacyPackagePath));
@@ -18,7 +18,7 @@ const contract = getExtractionContract();
 const plan = budgetPlan({ model: 'claude-test-exact-20261002', totalUsd: '0.20', itemUsd: '0.10', count: 2, concurrency: 1, timeoutMs: 1000 });
 const binding = () => artifactBinding(root, packagePath, profilePath, pkg);
 
-test('v15 binds every current artifact, dependency and served runtime manifest', () => {
+test('v16 binds every current artifact, dependency and served runtime manifest', () => {
   const result = binding();
   assert.equal(result.match, true);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
@@ -57,6 +57,14 @@ test('legacy v14 has no live served-runtime binding', () => {
   assert.equal(artifactBinding(root, legacyPackagePath, legacyProfilePath, legacyPkg).match, false);
 });
 
+test('v15 remains frozen historical binding and cannot certify current contract0.14', () => {
+  const historicalPath = path.join(packageDirectory, 'public-instruction-package-v15.json');
+  const historical = JSON.parse(fs.readFileSync(historicalPath));
+  const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
+  assert.equal(artifactBinding(root, historicalPath, profile, historical).match, false);
+  assert.equal(checkServedContract(contract, historical).match, false);
+});
+
 test('served runtime manifest detects unlisted dependency drift and rejects malformed trees', () => {
   const temp = fs.mkdtempSync(path.join(root, '.git', 'served-runtime-test-'));
   const outsideTemp = fs.mkdtempSync(path.join(root, '.git', 'served-runtime-outside-'));
@@ -78,26 +86,28 @@ test('served runtime manifest detects unlisted dependency drift and rejects malf
     assert.ok(manifest.artifacts.every(row => /^[a-f0-9]{64}$/u.test(row.sha256)));
     assert.deepEqual(validateServedRuntimeManifest(temp, manifest), { match: true, errors: [], artifactCount: 3 });
 
-    // Recreate v14's selected checks in an isolated fake repository. Its named
-    // checks stay green when an unlisted served dependency appears; the closed
-    // runtime inventory detects the same change.
+    // Recreate v14's selected-check mechanism with an explicitly counterfactual
+    // freeze of current bytes. This is not certification of frozen v14. Named
+    // checks still miss an unlisted dependency; the closed inventory rejects it.
     const counterfactualRoot = path.join(temp, 'v14-counterfactual');
     const legacyProfilePath = path.resolve(path.dirname(legacyPackagePath), legacyPkg.freeze.taskProfilePath);
     const v14Checks = artifactBinding(root, legacyPackagePath, legacyProfilePath, legacyPkg).checks
       .filter(check => check.key !== 'servedRuntimeManifestSha256');
+    const counterfactualPkg = structuredClone(legacyPkg);
     for (const check of v14Checks) {
       const destination = path.join(counterfactualRoot, check.file);
       fs.mkdirSync(path.dirname(destination), { recursive: true });
       fs.copyFileSync(path.join(root, check.file), destination);
+      if (check.key !== 'transportValidatorDependency') counterfactualPkg.freeze[check.key] = check.actual;
     }
     const counterfactualPackagePath = path.join(counterfactualRoot, 'experiments/natural-development-v8/extraction/public-instruction-package-v14.json');
     fs.mkdirSync(path.dirname(counterfactualPackagePath), { recursive: true });
-    fs.copyFileSync(legacyPackagePath, counterfactualPackagePath);
+    fs.writeFileSync(counterfactualPackagePath, JSON.stringify(counterfactualPkg));
     fs.mkdirSync(path.join(counterfactualRoot, 'packages/core/node_modules/ajv'), { recursive: true });
     fs.writeFileSync(path.join(counterfactualRoot, 'packages/core/node_modules/ajv/package.json'), JSON.stringify({ name: 'ajv', version: legacyPkg.freeze.transportValidatorDependency.version }));
     for (const runtimeRoot of runtimeRoots) fs.mkdirSync(path.join(counterfactualRoot, runtimeRoot), { recursive: true });
     const counterfactualProfilePath = path.resolve(path.dirname(counterfactualPackagePath), legacyPkg.freeze.taskProfilePath);
-    const oldNamedChecks = () => artifactBinding(counterfactualRoot, counterfactualPackagePath, counterfactualProfilePath, legacyPkg).checks
+    const oldNamedChecks = () => artifactBinding(counterfactualRoot, counterfactualPackagePath, counterfactualProfilePath, counterfactualPkg).checks
       .filter(check => check.key !== 'servedRuntimeManifestSha256');
     assert.ok(oldNamedChecks().every(check => check.match), 'v14 named checks pass before mutation');
     const counterfactualManifest = captureServedRuntimeManifest(counterfactualRoot);

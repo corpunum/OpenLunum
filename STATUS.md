@@ -12,8 +12,8 @@
 | Strict identity | `lfp:2.1` |
 | Protocol | `lunum-protocol/0.4`: 46 predicates, with verb aliases |
 | Frames | `lunum-frame/0.5`: 37 framed predicates |
-| Agent contract | `lunum-agent/0.13` |
-| Frozen instruction package | v15 (same public conventions; complete repository-owned served-JS inventory) |
+| Agent contract | `lunum-agent/0.14` |
+| Frozen instruction package | v16 (date/evidence retention; complete repository-owned served-JS inventory) |
 
 Other schema and fingerprint contracts, and migration fixtures, coexist. A file named `1.0`, or an internally frozen contract, is not external ratification.
 
@@ -22,7 +22,7 @@ Other schema and fingerprint contracts, and migration fixtures, coexist. A file 
 - violates its frame, including required, dependent and distinct roles;
 - fills a role with a placeholder (decisions/0007);
 - uses the ambiguous `permission` + `negated` prohibition (decisions/0015);
-- drops a number or identifier written in digits in its source (decisions/0016).
+- drops a number, identifier or recognized unambiguous full date in its source, or puts it only in identity-excluded evidence (decisions/0016 and [0018](decisions/0018-date-and-evidence-retention-boundary.md)). This is a presence floor, not role/meaning verification.
 
 The rejected source text is still kept.
 
@@ -49,6 +49,13 @@ Historical scored MCP runs used Claude Code (`claude-sonnet-5`), one fresh proce
 
 Evaluation has been done by the author and by two other sessions of the same vendor and model family. There has been **no human, native-speaker or cross-vendor review**.
 
+**Current contract 0.14 is not live-qualified.** Deterministic checks correct a
+false rejection of a dotted German date and block date swaps, quantity/date
+confusion and evidence-only literal laundering. Sem date values and the
+`lfp:2.1` projection are unchanged. See [ADR 0018](decisions/0018-date-and-evidence-retention-boundary.md).
+These checks do not turn source retention or candidate identity into semantic
+accuracy or trust. Historical 0.13 pilot/reviews remain historical.
+
 ## What is not established
 
 - Reliable general raw-text-to-Sem conversion across languages and domains.
@@ -59,7 +66,7 @@ Evaluation has been done by the author and by two other sessions of the same ven
 
 ## Next, in order
 
-1. **Complete meaning-level evaluation.** Actual wire enforcement and builder nested-clause agreement are now deterministic-tested (contract 0.13), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. A [source-only diagnostic review](experiments/meaning-source-review-v1/README.md) classifies 10 as unsupported, 2 as ambiguous and 2 as source-relative representation options pending native review; it does not rewrite expectations or certify gold. The [human source-only packet](experiments/meaning-human-review-packet-v1/README.md) contains those sources with all reviews pending and no previous answers. The [runner](scripts/research/SOURCE_ONLY_RUNNER.md) now binds the complete repository-owned served-JS inventory in v15; v14's selected files were only a partial runtime binding. These preflight and requested budget/timeout gates are tested without provider calls. Obtain independent/native source adjudication, freeze fresh protocol-conforming data, then measure the latest contract live under an agreed model and budget.
+1. **Complete meaning-level evaluation.** Wire enforcement, builder agreement and date/evidence retention are deterministic-tested (current contract 0.14), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. A [source-only diagnostic review](experiments/meaning-source-review-v2/README.md) rebinds unchanged prior dispositions: 10 unsupported, 2 ambiguous and 2 source-relative representation options pending native review; it does not rewrite expectations or certify gold. The [human source-only packet](experiments/meaning-human-review-packet-v1/README.md) contains those sources with all reviews pending and no previous answers. The [runner](scripts/research/SOURCE_ONLY_RUNNER.md) binds the complete repository-owned served-JS inventory in v16; v14's selected files were partial, and v15 binds an older runtime. These preflight and requested budget/timeout gates are tested without provider calls. Obtain independent/native source adjudication, freeze fresh protocol-conforming data, then measure the latest contract live under an agreed model and budget.
 2. **Out-of-sample evaluation after each change**, preferably human or cross-vendor.
 3. **Real memory data (owner)** before any token-saving claim.
 4. **Review of unreviewed semantic judgements:**

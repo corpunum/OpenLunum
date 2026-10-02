@@ -18,6 +18,9 @@ const cases = [
   { name: 'served-runtime-closure-validation-disabled', package: 'research', source: 'source-only-run-gates.mjs', test: 'source-only-run-gates.test.mjs', from: 'export function validateServedRuntimeManifest(root, manifest) {', to: 'export function validateServedRuntimeManifest(root, manifest) { return { match: true, errors: [], artifactCount: manifest?.artifacts?.length ?? 0 };' },
   { name: 'gold-metadata-validation-disabled', package: 'eval', source: 'parse-experiment.js', test: 'gold-metadata-preflight.test.js', from: 'if (metadataErrors.length > 0) {', to: 'if (false) {' },
   { name: 'gold-source-literal-validation-disabled', package: 'eval', source: 'parse-experiment.js', test: 'gold-metadata-preflight.test.js', from: 'checkLiteralRetention(item.sourceText, normalization.sem)', to: '({ retained: true, sourceNumbers: [], sourceIdentifiers: [], missingNumbers: [], missingIdentifiers: [] })' },
+  { name: 'exact-date-retention-disabled', source: 'literal-retention.js', test: 'date-literal-retention.test.js', from: 'const missingDates = sourceDates.filter((date) => !candidateDates.has(date));', to: 'const missingDates = [];' },
+  { name: 'evidence-field-filter-disabled', source: 'literal-retention.js', test: 'date-literal-retention.test.js', from: 'for (const key of SEMANTIC_LITERAL_FIELDS) {', to: 'for (const key of Object.keys(term)) {' },
+  { name: 'ambiguous-date-guessing-enabled', source: 'literal-retention.js', test: 'date-literal-retention.test.js', from: 'return day > 12 ? validIsoDate(year, month, day) : null;', to: 'return validIsoDate(year, month, day);' },
 ];
 function run(directory, test, research = false) {
   const result = spawnSync(process.execPath, ['--test', path.join(directory, research ? 'scripts/research' : 'test', test)], { cwd: root, encoding: 'utf8', timeout: 30_000, maxBuffer: 8 * 1024 * 1024 });

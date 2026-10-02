@@ -2,7 +2,8 @@
 // Measure the source-literal retention check (decisions/0016) on recorded data,
 // without model calls:
 //  - gold (source, Sem) pairs in datasets: a block is a check false positive or a lossy gold Sem;
-//  - V8 live parses the frozen scorer judged source-relative matches: blocks are false positives;
+//  - V8 parses the frozen scorer judged matches: blocks require source inspection;
+//    the historical scorer label is not proof of complete meaning fidelity;
 //  - all other recorded live parses: blocks are listed for inspection.
 //   node scripts/research/literal-retention-audit.mjs
 import fs from 'node:fs';
@@ -30,7 +31,7 @@ function walkGold(dir) {
           if (typeof source !== 'string' || !isSem(row[semKey])) continue;
           gold.pairs++;
           const result = checkLiteralRetention(source, row[semKey]);
-          if (!result.retained) gold.blocked.push({ file, id: row.id, source, missing: [...result.missingNumbers, ...result.missingIdentifiers] });
+          if (!result.retained) gold.blocked.push({ file, id: row.id, source, missing: [...result.missingNumbers, ...result.missingIdentifiers, ...result.missingDates] });
         }
       }
     }
@@ -58,8 +59,8 @@ function walkLedgers(dir) {
       if (row.status !== 'parse' || !isSem(row.candidateSem) || !texts.has(row.handle)) continue;
       live.parses++;
       const result = checkLiteralRetention(texts.get(row.handle), row.candidateSem);
-      if (matched.has(row.handle)) { live.v8MatchedParses++; if (!result.retained) live.v8MatchedBlocked.push({ file, source: texts.get(row.handle), missing: [...result.missingNumbers, ...result.missingIdentifiers] }); }
-      else if (!result.retained) live.otherBlocked.push({ file, source: texts.get(row.handle), missing: [...result.missingNumbers, ...result.missingIdentifiers] });
+      if (matched.has(row.handle)) { live.v8MatchedParses++; if (!result.retained) live.v8MatchedBlocked.push({ file, source: texts.get(row.handle), missing: [...result.missingNumbers, ...result.missingIdentifiers, ...result.missingDates] }); }
+      else if (!result.retained) live.otherBlocked.push({ file, source: texts.get(row.handle), missing: [...result.missingNumbers, ...result.missingIdentifiers, ...result.missingDates] });
     }
   }
 }

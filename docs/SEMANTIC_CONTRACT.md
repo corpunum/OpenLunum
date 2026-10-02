@@ -86,9 +86,16 @@ mean `ALLOW(X)`. A negative deontic modality must not be duplicated with
 Surface evidence such as a pronoun token, source language, or provider-added
 reference type remains in the Sem/source artifact but is excluded from exact
 semantic identity. An ungrounded reference cannot establish exact identity.
-Agent contract 0.13 enforces the actual wire schema before normalization;
+Agent contract 0.14 retains 0.13's actual wire-schema enforcement before normalization;
 the structural checker alone is not transport validation. Rejections retain
 source evidence and diagnostics, and no normalized identity is issued.
+Its source-retention floor separates unambiguous full calendar dates from
+quantities and excludes identity-excluded evidence from satisfying literals
+([ADR 0018](../decisions/0018-date-and-evidence-retention-boundary.md)). It does
+not rewrite Sem date values, prove role/meaning fidelity or promote candidates.
 The active transport schema remains `lunum-sem/0.1-draft`. Frozen historical
 schemas are not silently rewritten. Evaluation startup validates every gold
-Sem against the exact transport schema sent to the model.
+Sem against the exact transport schema sent to the model, structural/protocol/
+frame/identity rules, source literal retention and corpus metadata. It rejects
+the complete corpus before provider contact; a valid gold object alone is not
+evidence that its annotation faithfully represents the source.
