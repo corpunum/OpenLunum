@@ -24,17 +24,14 @@ import type { GroundingProvider, GroundingProviderResult } from './grounding-pro
 import { resolveGroundingCascade, toGroundingResolution } from './grounding-provider.js';
 import type { LunumSem, SemanticTrustDecision } from './types.js';
 import { checkLiteralRetention, type LiteralRetentionResult } from './literal-retention.js';
+import { validateSemanticTransport, SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './semantic-transport.js';
+export { SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './semantic-transport.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.12' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.13' as const;
 export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.3' as const;
 
-// SHA-256 of schemas/lunum-sem.schema.json at this protocol version. Keep
-// this explicit so an agent can bind its candidate to the actual wire schema,
-// while the descriptor hash below fingerprints the core structural checks.
-export const SEMANTIC_TRANSPORT_SCHEMA_SHA256 = '8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593' as const;
-
-/** Stable description of the structural transport contract enforced by core. */
+/** Summary only; schemaHash binds the full authoritative enforced wire schema. */
 const TRANSPORT_SCHEMA_DESCRIPTOR = Object.freeze({
   schema: SEM_SCHEMA,
   required: Object.freeze(['schema', 'world', 'kind', 'clauses']),
@@ -115,7 +112,7 @@ export function getExtractionContract(): ExtractionContract {
     protocol: { version: SEMANTIC_PROTOCOL_VERSION, registryHash: PROTOCOL_REGISTRY_HASH, registry: SEMANTIC_PROTOCOL_REGISTRY },
     identity: {
       version: SEMANTIC_IDENTITY_FINGERPRINT_VERSION,
-      exactIdentityRequires: Object.freeze(['structural-validity', 'protocol-canonicality', 'canonical-frame', 'grounded-identity', 'classified-identity-fields']),
+      exactIdentityRequires: Object.freeze(['transport-schema-validity', 'structural-validity', 'protocol-canonicality', 'canonical-frame', 'grounded-identity', 'classified-identity-fields']),
     },
     frames: {
       version: SEMANTIC_FRAME_REGISTRY_VERSION,
@@ -263,15 +260,19 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
     sourceHash,
     timestamp: suppliedProvenance.timestamp ?? new Date().toISOString(),
   };
-  const structural = validateSemanticCandidate(input.candidateSem);
-  const transportValid = structural.ok;
-  if (!structural.ok) {
-    const trust: SemanticTrustDecision = { status: 'abstained', confidence: 0, promoted: false, requiresHumanReview: true, reasons: structural.errors.map((error) => `invalid_sem:${error}`) };
+  // Enforce the actual wire contract before normalization can hide invalid fields.
+  const transport = validateSemanticTransport(input.candidateSem);
+  // Do not recurse through unsafe objects after transport validation rejects them.
+  const structural = transport.ok ? validateSemanticCandidate(input.candidateSem) : null;
+  const transportValid = transport.ok;
+  if (!transport.ok || !structural?.ok) {
+    const errors = transport.ok ? structural!.errors : transport.errors;
+    const trust: SemanticTrustDecision = { status: 'abstained', confidence: 0, promoted: false, requiresHumanReview: true, reasons: errors.map((error) => `invalid_sem:${error}`) };
     return {
       source: { text: sourceText, language: input.sourceLanguage ?? null, sha256: sourceHash }, provenance,
       transportValid, structuralValid: false, protocolCanonical: false, frameValid: false, grounded: false,
       candidateIdentityAvailable: false, semanticFingerprint: null, promotable: false, trust,
-      failureClass: 'transport_or_structural_invalid', diagnostics: structural.errors, sem: null, literalRetention: null,
+      failureClass: 'transport_or_structural_invalid', diagnostics: errors, sem: null, literalRetention: null,
     };
   }
 
@@ -316,6 +317,9 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
  */
 export function submitCandidateWithGrounding(input: SubmitGroundedCandidateInput): GroundedCandidateSubmissionResult {
   const base = submitCandidate(input);
+  if (!base.transportValid || !base.structuralValid) {
+    return { ...base, grounding: { exactIdentityAvailable: false, status: 'invalid', proposals: [], issues: base.diagnostics } };
+  }
   const grounding = evaluateGroundingProposals(input.candidateSem, input.grounding);
   if (grounding.status === 'pending') {
     return {
@@ -348,6 +352,9 @@ export function submitCandidateWithGroundingProviders(
   providers: readonly GroundingProvider[],
 ): ProviderGroundedCandidateSubmissionResult {
   const base = submitCandidate(input);
+  if (!base.transportValid || !base.structuralValid) {
+    return { ...base, grounding: { exactIdentityAvailable: false, status: 'invalid', proposals: [], issues: base.diagnostics }, providerResults: [] };
+  }
   const grounding = evaluateGroundingProposals(input.candidateSem, input.grounding);
   if (grounding.status !== 'pending') {
     return { ...base, candidateIdentityAvailable: false, semanticFingerprint: null, failureClass: 'grounding_invalid', diagnostics: [...base.diagnostics, ...grounding.issues], grounding, providerResults: [] };

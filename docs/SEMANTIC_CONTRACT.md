@@ -10,7 +10,7 @@ Source text remains authoritative. A model may produce a candidate Sem, but
 JSON/schema validity is only structural evidence:
 
 ```
-source evidence -> candidate Sem -> structural validation
+source evidence -> candidate Sem -> authoritative transport validation -> structural validation
                -> protocol normalization -> canonical Sem
                -> trust/promotion -> semantic identity and retrieval
 ```
@@ -86,6 +86,9 @@ mean `ALLOW(X)`. A negative deontic modality must not be duplicated with
 Surface evidence such as a pronoun token, source language, or provider-added
 reference type remains in the Sem/source artifact but is excluded from exact
 semantic identity. An ungrounded reference cannot establish exact identity.
+Agent contract 0.13 enforces the actual wire schema before normalization;
+the structural checker alone is not transport validation. Rejections retain
+source evidence and diagnostics, and no normalized identity is issued.
 The active transport schema remains `lunum-sem/0.1-draft`. Frozen historical
 schemas are not silently rewritten. Evaluation startup validates every gold
 Sem against the exact transport schema sent to the model.

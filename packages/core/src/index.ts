@@ -109,6 +109,7 @@ export * from './threshold-calibration.js';
 export * from './release-governance.js';
 export * from './agent-interop.js';
 export * from './agent-native.js';
+export { validateSemanticTransport } from './semantic-transport.js';
 export * from './agent-builder.js';
 export * from './semantic-ir.js';
 export * from './grounding.js';

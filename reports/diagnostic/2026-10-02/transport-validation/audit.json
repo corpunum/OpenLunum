@@ -1,0 +1,748 @@
+{
+  "format": "openlunum-transport-validation-audit/0.1",
+  "mode": "offline-deterministic-no-model-calls",
+  "nodeVersion": "v22.22.2",
+  "validator": "Ajv2020 8.20.0; no coercion/defaults/field removal",
+  "baselineCommit": "7470a2322a686ee4d3d6558b77d31b20f7ea8b6c",
+  "baselineAgentSourceSha256": "a451b37bc1254433d9af92ee7282fe46bdf25a9e7b723d19cef85ca09b56172d",
+  "candidateContract": "lunum-agent/0.13",
+  "implementationBinding": "Commit that added this report; artifact hashes bind the tested build.",
+  "candidateAgentArtifactSha256": "7f930eb8d2aadbe27d8449a4df7901f534dfd18f3c2e4c9ae36020b803ba9bb7",
+  "candidateValidatorArtifactSha256": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476",
+  "candidateSchemaArtifactSha256": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+  "method": "Baseline agent-native.ts transpiled in memory against unchanged current protocol/frame/fingerprint helpers. sourceText is empty to isolate wire enforcement. No source-fidelity or model-quality claims.",
+  "summary": {
+    "ledgers": 37,
+    "parses": 556,
+    "oldIdentity": 544,
+    "retainedIdentity": 496,
+    "identityChanged": 0,
+    "identityLost": 48,
+    "newlyAvailable": 0,
+    "transportRejected": 53,
+    "frozenScorerMatches": 176,
+    "frozenScorerMatchesRejected": 38
+  },
+  "artifacts": [
+    {
+      "path": "experiments/natural-development-v5/extraction/candidate-ledger.jsonl",
+      "sha256": "c6f8595cfaa930e5efda208be52dc3ce68dcfcfa7301b95e36c506a20ed6f9b2"
+    },
+    {
+      "path": "experiments/natural-development-v6/extraction/candidate-ledger.jsonl",
+      "sha256": "80f388d20b46ec4bf822c32c869428ac29c977c8a5999c2b675ac3cca8c4ea08"
+    },
+    {
+      "path": "experiments/natural-development-v7/extraction/candidate-ledger.jsonl",
+      "sha256": "cb4e589d6d9856b542ccd07a70f7002a67f3c8a4eae7c59a6167390d0c137182"
+    },
+    {
+      "path": "experiments/natural-development-v8/extraction/candidate-ledger.jsonl",
+      "sha256": "886af45c65feea483cbf4bb4311d68a31c124b050a3af00080d9191260388532"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/claude-code-probes-v1/candidate-ledger.jsonl",
+      "sha256": "6c343ed66a510189d3c33b30e51eae905e98f6fb72feb882d1be74702070fff6"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/claude-code-v3/candidate-ledger.jsonl",
+      "sha256": "438ddffec3e8f4d9c31037bf531bd4c917b3ed6ca19139ebc340cbf230553f83"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/claude-code-v4/candidate-ledger.jsonl",
+      "sha256": "e5dd9e8d87b298d240d905a0de3e46165b988bfe2e491d5c43dad24d2af2d60b"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v1/candidate-ledger.jsonl",
+      "sha256": "b3f4a7a2e985c8b2f9c824779c5a32732f4eaca6d897e30ebd07f730be67518a"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v2/candidate-ledger.jsonl",
+      "sha256": "be70c833ef6ea21e5ac5492d08bd86ecc9c1c6bfb0703822ae94c164e17f776a"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/claude-code-v5/candidate-ledger.jsonl",
+      "sha256": "17369b6815052f040d9843b062a96e17087a5256f36eeb5f2f885f79823afa00"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v1-rep1/candidate-ledger.jsonl",
+      "sha256": "1024bbd957f2a01533178518c8c1c2578089405e356c3fd4fcb587a541a3345f"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v1-rep2/candidate-ledger.jsonl",
+      "sha256": "74aa2438b4fe7491ff3b38d989ea2d26441fc2f35c5b76b65546847757e82316"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v1-rep3/candidate-ledger.jsonl",
+      "sha256": "ccc69bf35879341b09f672c439b5323fa420b5ce9b9e307966ee3c04945e25c4"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v2-rep1/candidate-ledger.jsonl",
+      "sha256": "e9796328d3a1afc990e2bcb2284c4e6806be980a92cf261cf6abb3142f90ac7d"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v2-rep2/candidate-ledger.jsonl",
+      "sha256": "e8a9e5d6dee5a1479f4ff3649e2d085d0776cb4877d523430356a899a2b50946"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v2-rep3/candidate-ledger.jsonl",
+      "sha256": "ca4ee67b677f6c54fd5542f4301abd410b02651771cde65740a2bf9593a22404"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v3-rep1/candidate-ledger.jsonl",
+      "sha256": "44507beb22b5371765892e9d8741aa038d089364f30f71fd60026f3f862af6a8"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v3-rep2/candidate-ledger.jsonl",
+      "sha256": "a2893029b4fbed3b9bd5d7071fec9e24a2d055cfffae8588bf10157eaac6ee9d"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/probes-v3-rep3/candidate-ledger.jsonl",
+      "sha256": "bb30ace3616bee73bd7ea172bf6005ea847d9ce240747cece9759c5253b8fb1a"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep1/candidate-ledger.jsonl",
+      "sha256": "d78ab72f30d2aecdb70eed6c1b62ba0ee1f25cecf6dae4788162e8cc2f43481f"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep2/candidate-ledger.jsonl",
+      "sha256": "93c4b22616434bd1c9e7b08fb85798a5265000a36ad9b6a07d594f97481fa4d0"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep3/candidate-ledger.jsonl",
+      "sha256": "1db84d17500d8f0b992d35fa9aed42dd2096bbc7227883a1d7e9220b14c11919"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.9/probes-v3-rep1/candidate-ledger.jsonl",
+      "sha256": "328eeee4caa0f8d0b9b231b1cc3b6a2be30039ef8d08ad7a14210e7ae2fda964"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.9/probes-v4-rep1/candidate-ledger.jsonl",
+      "sha256": "51dbabcadb96b512878624219b3621d1e5790b00685d59490f3bc1560ab5906d"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/contract-0.9/v8-rep1/candidate-ledger.jsonl",
+      "sha256": "016e4a3c094cb04c026cbcb61dd9ac7ff8136c939cf7026f104a211075b27879"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/probes-v1-rep1/candidate-ledger.jsonl",
+      "sha256": "9bd44eeac380783f32586ef0f3864380b98ccdb3a4ced7a00f0773189c680431"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/probes-v1-rep2/candidate-ledger.jsonl",
+      "sha256": "77db9f221d53cbd762111249834fc30ec4e415334b7e6d1efb11dcff792bde27"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/probes-v1-rep3/candidate-ledger.jsonl",
+      "sha256": "8de3fb55adc07aace9e5990c9394638c0cdf1c3811bfc1616f1840aa565b710d"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/probes-v2-rep1/candidate-ledger.jsonl",
+      "sha256": "237da7d5094bbf9d46921c1fafef9f7adac155f2400103a798935aa463f6c7f8"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/probes-v2-rep2/candidate-ledger.jsonl",
+      "sha256": "caba5f4596855cbeff246066da461eb78e3823c4c8652978256ecbddf4484b29"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/probes-v2-rep3/candidate-ledger.jsonl",
+      "sha256": "8d929ba93944f5212fb63993fb486593001e2ea436ecc2f50fe700df96de9d26"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep1/candidate-ledger.jsonl",
+      "sha256": "fc3397c4f7fe5d6886e2105336bbbdc17deb7d00d38736e406fdb117ea34cba5"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep2/candidate-ledger.jsonl",
+      "sha256": "c9dce922eddfcf1eb37bece413e3c637b77f3c7b7b4f589ee9de8f8d780ae5c9"
+    },
+    {
+      "path": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep3/candidate-ledger.jsonl",
+      "sha256": "2baab6fa9ee588a293cb5d712815adec6a9ddc47455e6d0595f7cce5fcc32098"
+    },
+    {
+      "path": "reports/independent-evaluation/2026-09-26-round2/live-insample/candidate-ledger.jsonl",
+      "sha256": "10cb261c62601b52701a7767bed9b86ab2b40e6bbfee607d6a43c5b523bc199e"
+    },
+    {
+      "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/candidate-ledger.jsonl",
+      "sha256": "282e5ba77169d6daaf83e1db2900deb6b152fea9a6d0a76001e2d08102c748e9"
+    },
+    {
+      "path": "reports/independent-evaluation/2026-09-26/live/candidate-ledger.jsonl",
+      "sha256": "6bffbcc9fea98e6de46bd1559b8a8ae2f4f91ef96c2f3d543d776f4b313fa1b0"
+    }
+  ],
+  "lost": [
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v3/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v3/candidate-ledger.jsonl",
+      "row": 2,
+      "handle": "extract-1bfbb57c852d4b0d",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v3/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v3/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v3/candidate-ledger.jsonl",
+      "row": 6,
+      "handle": "extract-4bbf91a514491153",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v4/candidate-ledger.jsonl",
+      "row": 2,
+      "handle": "extract-1bfbb57c852d4b0d",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v4/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v4/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v4/candidate-ledger.jsonl",
+      "row": 5,
+      "handle": "extract-7782441467d33962",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v4/candidate-ledger.jsonl",
+      "row": 6,
+      "handle": "extract-4bbf91a514491153",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v5/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v5/candidate-ledger.jsonl",
+      "row": 2,
+      "handle": "extract-1bfbb57c852d4b0d",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v5/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v5/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v5/candidate-ledger.jsonl",
+      "row": 5,
+      "handle": "extract-7782441467d33962",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/claude-code-v5/candidate-ledger.jsonl",
+      "row": 6,
+      "handle": "extract-4bbf91a514491153",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep1/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep1/candidate-ledger.jsonl",
+      "row": 2,
+      "handle": "extract-1bfbb57c852d4b0d",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep1/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep1/candidate-ledger.jsonl",
+      "row": 6,
+      "handle": "extract-4bbf91a514491153",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep2/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep2/candidate-ledger.jsonl",
+      "row": 2,
+      "handle": "extract-1bfbb57c852d4b0d",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep2/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep2/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep2/candidate-ledger.jsonl",
+      "row": 6,
+      "handle": "extract-4bbf91a514491153",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep3/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep3/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep3/candidate-ledger.jsonl",
+      "row": 6,
+      "handle": "extract-4bbf91a514491153",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.9/probes-v4-rep1/candidate-ledger.jsonl",
+      "row": 7,
+      "handle": "probe4-5634e0e802301f68",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.9/v8-rep1/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.9/v8-rep1/candidate-ledger.jsonl",
+      "row": 2,
+      "handle": "extract-1bfbb57c852d4b0d",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.9/v8-rep1/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.9/v8-rep1/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/contract-0.9/v8-rep1/candidate-ledger.jsonl",
+      "row": 5,
+      "handle": "extract-7782441467d33962",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep1/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep1/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep1/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep2/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep2/candidate-ledger.jsonl",
+      "row": 2,
+      "handle": "extract-1bfbb57c852d4b0d",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep2/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep2/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep3/candidate-ledger.jsonl",
+      "row": 1,
+      "handle": "extract-3bc0f282a7138537",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep3/candidate-ledger.jsonl",
+      "row": 2,
+      "handle": "extract-1bfbb57c852d4b0d",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep3/candidate-ledger.jsonl",
+      "row": 3,
+      "handle": "extract-71e6744c943f46f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep3/candidate-ledger.jsonl",
+      "row": 4,
+      "handle": "extract-2e9eaccedb5848f6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/consequences/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/independent-evaluation/2026-09-26-round2/live-oos/candidate-ledger.jsonl",
+      "row": 5,
+      "handle": "eval2-fe67df8f0603b0b6",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/independent-evaluation/2026-09-26-round2/live-oos/candidate-ledger.jsonl",
+      "row": 15,
+      "handle": "eval2-941e078e334f87a8",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    },
+    {
+      "file": "reports/independent-evaluation/2026-09-26-round2/live-oos/candidate-ledger.jsonl",
+      "row": 25,
+      "handle": "eval2-af66144d26bb7dfd",
+      "failureClass": "transport_or_structural_invalid",
+      "diagnostics": [
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"world\"}: must NOT have additional properties",
+        "transport:/clauses/0/conditions/0:additionalProperties:{\"additionalProperty\":\"kind\"}: must NOT have additional properties"
+      ]
+    }
+  ],
+  "changed": [],
+  "newlyAvailable": []
+}

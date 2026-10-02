@@ -79,10 +79,14 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(v12.freeze.coreContractVersion, 'lunum-agent/0.11');
   assert.equal(v12.freeze.frameRegistryVersion, 'lunum-frame/0.5');
 
-  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v13.json', 'utf8'));
+  // v13 is frozen history; v14 binds the authoritative transport enforcement.
+  const v13 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v13.json', 'utf8'));
+  assert.equal(v13.freeze.coreContractVersion, 'lunum-agent/0.12');
+  assert.equal(v13.freeze.coreContractHash, 'c969f5d01c758c27b9cee71afc4770e422b0a391881ffe3bcff340c39cdcb682');
+  const next = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v14.json', 'utf8'));
   assert.equal(next.status, 'frozen-for-next-source-only-run');
-  assert.equal(next.supersedes.path, 'public-instruction-package-v12.json');
-  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.12');
+  assert.equal(next.supersedes.path, 'public-instruction-package-v13.json');
+  assert.equal(next.freeze.coreContractVersion, 'lunum-agent/0.13');
   assert.equal(next.freeze.frameRegistryHash, v12.freeze.frameRegistryHash, 'decisions/0016 changes submission gating, not frames');
   assert.equal(next.freeze.protocolRegistryHash, v12.freeze.protocolRegistryHash, 'decisions/0016 changes submission gating, not vocabulary');
   assert.equal(v8.freeze.coreContractVersion, 'lunum-agent/0.8');
@@ -97,6 +101,9 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(hash('packages/core/dist/src/agent-native.js'), next.freeze.coreArtifactSha256);
   assert.equal(hash('packages/core/dist/src/frame-registry.js'), next.freeze.frameValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/literal-retention.js'), next.freeze.literalRetentionArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/semantic-transport.js'), next.freeze.transportValidatorArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/semantic-transport-schema.js'), next.freeze.transportSchemaArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/agent-builder.js'), next.freeze.builderArtifactSha256);
   assert.equal(hash('experiments/natural-development-v8/extraction/public-task-profile-iteration6.json'), next.freeze.taskProfileSha256);
   assert.equal(Object.hasOwn(next, 'gold'), false);
 });

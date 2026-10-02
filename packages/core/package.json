@@ -21,10 +21,13 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "tsc -p tsconfig.json",
+    "build": "node ../../scripts/generate-sem-transport.mjs --check && tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm build && node --test dist/test/*.test.js",
     "test:unit": "node --test dist/test/*.test.js"
+  },
+  "dependencies": {
+    "ajv": "8.20.0"
   },
   "license": "Apache-2.0"
 }

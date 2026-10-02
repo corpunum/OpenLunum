@@ -1,0 +1,201 @@
+{
+  "format": "openlunum-main-branch-inventory/0.1",
+  "baseline": "7470a2322a686ee4d3d6558b77d31b20f7ea8b6c",
+  "remoteMain": "3e42fc665aa10c7c82d53f6686c5e92e602dbf7c",
+  "rows": [
+    {
+      "branch": "agent/qwen/eval/context-size-bytes",
+      "sha": "6775d776552fe24e59e51d3f904bfbe5f1075c51",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "6775d776552fe24e59e51d3f904bfbe5f1075c51"
+      ]
+    },
+    {
+      "branch": "backup/local-pre-squash-20260914",
+      "sha": "62fb83ec900a5a4d1d031f79a66c69f2baf6c85b",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "f4ed09b3b40fc0f914334fe3babf48bcf86dda9e",
+        "62fb83ec900a5a4d1d031f79a66c69f2baf6c85b"
+      ]
+    },
+    {
+      "branch": "backup/local-pre-squash-contract-20260914",
+      "sha": "7eebc38218ca76c3c4f02347a57ba1880e72cc37",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "backup/local-v8-freeze-20260914",
+      "sha": "244a21bea7a17a5025e2aa3e5033e9f4eb13f313",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "backup/local-v8-iter1-20260914",
+      "sha": "a45600ce9b8388b0dcdfc1749771f8317e274ddd",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "backup/local-v8-iter2-20260914",
+      "sha": "edeb3edddc68f984870ba9789cc993ce28238767",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "docs/sync-august-readiness",
+      "sha": "2eaca02d90d24da7525aa26dc3747715dda213c5",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "evidence/live-parse-2026-08-08",
+      "sha": "e720c67fb4246f19cd716184ea1c37c7c7906049",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "issue-685-replay-followup",
+      "sha": "aca34d74da982705d2837e4e3d63e70265719b45",
+      "classification": "ancestor",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "local-replay-before-squash",
+      "sha": "d2964e2dd28fd3c0ed0b6ebd513d597c2607d5ab",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "d2964e2dd28fd3c0ed0b6ebd513d597c2607d5ab"
+      ]
+    },
+    {
+      "branch": "stage3-openlunum-semantic-contract-20260901",
+      "sha": "c69b9477876f53bcde4790624c1553b2ff4a43d3",
+      "classification": "ancestor",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "stage3-openlunum-semantic-contract-eval-20260901",
+      "sha": "5c2f353f55e05e8ed32fedb96415b6f1cf39863d",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "a6b1b14484c58e9be827f96fd34f2fbd3a3439bc",
+        "5c2f353f55e05e8ed32fedb96415b6f1cf39863d"
+      ]
+    },
+    {
+      "branch": "stage3-openlunum-semantic-contract-eval-v2-20260901",
+      "sha": "9dcdb64a300703d0eef51da3a4427406ad1f9774",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/luna/685-scorer-contract",
+      "sha": "4609ea4cb00dc5db328105276b57ede4d9d385e2",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/luna/685-v7-baseline",
+      "sha": "7f7e3b2eea86a84e875372524eaf99b7ff6b00ad",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "995a5fc3a3b01f425a711e2d87574ec551f74105",
+        "7f7e3b2eea86a84e875372524eaf99b7ff6b00ad"
+      ]
+    },
+    {
+      "branch": "work/luna/685-v7-iteration4",
+      "sha": "2dedbefbc35fabf9252948aa7595b8075cdad504",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "ecd39558d05d874a432a47a05d22ead1a1d507c6",
+        "c6a8378eb161a94eb76f711d8ae6d608d6916731",
+        "0cf6adccb6709f63184130e4d300d583f5c6a23d",
+        "2dedbefbc35fabf9252948aa7595b8075cdad504"
+      ]
+    },
+    {
+      "branch": "work/luna/685-v7-provenance",
+      "sha": "8a1314fda41f3b85c135b31e86d9b44eb16e0dc2",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "a6055864c96b3fed3ba045c5e460e4d5fdafc990",
+        "8a1314fda41f3b85c135b31e86d9b44eb16e0dc2"
+      ]
+    },
+    {
+      "branch": "work/luna/frame-conditional-test",
+      "sha": "85e10ccf52608b5b685276fb54e98ee314608f6c",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/pi/481-exact-tokenizer-counts",
+      "sha": "d75d7416e31c7d346b0032f933ac71de3b92b6f8",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/pi/482-context-eligibility",
+      "sha": "d37167b75a9bf00e103e58431b9ea75c86956a78",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/pi/484-health-probes",
+      "sha": "eba65c7fa8746a8abc6f3656fe06a6b6a444cd10",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/pi/488-tenant-isolation",
+      "sha": "cb9951d82603d978f00e3721d6559b32c43c7dcb",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "91dc1bc558a4fd755692916deefca20f40bafae9",
+        "cb9951d82603d978f00e3721d6559b32c43c7dcb"
+      ]
+    },
+    {
+      "branch": "work/pi/490-evidence-lineage",
+      "sha": "910b5c21368fdd2bd51024018f0a6e4239bc1921",
+      "classification": "unique-patch-id-reviewed-already-represented",
+      "uniquePatchIds": [
+        "7e6d6355191584843c8b3d99cbe5f735f8521a8f",
+        "910b5c21368fdd2bd51024018f0a6e4239bc1921"
+      ]
+    },
+    {
+      "branch": "work/pi/492-package-lifecycle",
+      "sha": "f7bbc77d5217b073b8e392af9b81eced886f0485",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/pi/493-privacy-audit-map",
+      "sha": "9ae7e3e7b4278fae5dbdea93e22a9f7b550f15d6",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/pi/496-preservation-metrics",
+      "sha": "0965671846baa584ed927a5872d360ee636fe0ed",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    },
+    {
+      "branch": "work/pi/573-fingerprint-contract-freeze",
+      "sha": "4e3a6365f36fb6a4fec21bc779986fc73c33f8b2",
+      "classification": "patch-equivalent",
+      "uniquePatchIds": []
+    }
+  ],
+  "counts": {
+    "unique-patch-id-reviewed-already-represented": 9,
+    "patch-equivalent": 16,
+    "ancestor": 2
+  }
+}

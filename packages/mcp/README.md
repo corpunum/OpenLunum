@@ -15,7 +15,7 @@ To use it from another client, run the same launcher:
 ## Extraction path
 
 ```text
-lunum_get_extraction_contract      contract lunum-agent/0.12: frames, roles, aliases, abstention rules
+lunum_get_extraction_contract      contract lunum-agent/0.13: wire validation, frames, roles, aliases, abstention rules
   -> agent decides: parse or abstain
   -> lunum_build_candidate         frame-first builder (world, kind, predicate, roles, conditions)
   -> lunum_submit_candidate        validation, then identity or a failureClass with diagnostics

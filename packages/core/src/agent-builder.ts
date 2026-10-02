@@ -1,7 +1,8 @@
 import { SEM_SCHEMA } from './constants.js';
 import { CANONICAL_SEMANTIC_FRAMES, validateSemFrames } from './frame-registry.js';
 import { SEMANTIC_PROTOCOL_REGISTRY, basicIdentifier } from './semantic-registry.js';
-import { validateSem } from './canonicalize.js';
+import { validateSemanticTransport } from './semantic-transport.js';
+import { SEMANTIC_TRANSPORT_SCHEMA } from './semantic-transport-schema.js';
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 
 /**
@@ -36,9 +37,11 @@ export interface CandidateBuilderResult {
  * semantic/frame invariant (grounding and exact identity in particular).
  */
 export function getCandidateBuilderSchema(): Record<string, unknown> {
+  const wireTermObject = SEMANTIC_TRANSPORT_SCHEMA.$defs.term.oneOf.find(item => item.type === 'object')!;
   const termObject: Record<string, unknown> = {
-    type: 'object',
+    ...wireTermObject,
     properties: {
+      ...wireTermObject.properties,
       type: { type: 'string', enum: [...SEMANTIC_PROTOCOL_REGISTRY.termTypes] },
       id: { type: 'string' },
       value: {},
@@ -96,12 +99,17 @@ export function getCandidateBuilderSchema(): Record<string, unknown> {
       additionalProperties: false,
     };
   });
+  // World/kind are envelope fields, never fields of a nested clause.
+  const clauseVariants = variants.map(variant => {
+    const { world: _world, kind: _kind, ...properties } = variant.properties as Record<string, unknown>;
+    return { ...variant, properties: { ...properties, annotations: { type: 'object' } }, required: ['predicate', 'roles'] };
+  });
   return {
     $schema: 'https://json-schema.org/draft/2020-12/schema',
-    $id: 'https://lunum.dev/schema/agent-builder/0.1',
+    $id: 'https://lunum.dev/schema/agent-builder/0.2',
     title: 'OpenLunum frame-first candidate builder input',
     oneOf: variants,
-    $defs: { term, termObject, clause: { oneOf: variants }, },
+    $defs: { term, termObject, clause: { oneOf: clauseVariants }, },
   };
 }
 
@@ -165,6 +173,9 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
   if (input.time !== undefined) clause.time = input.time;
   if (input.conditions !== undefined) clause.conditions = input.conditions;
   if (input.consequences !== undefined) clause.consequences = input.consequences;
+  const sem: LunumSem = { schema: SEM_SCHEMA, world, kind, clauses: [clause] };
+  const transport = validateSemanticTransport(sem);
+  if (!transport.ok) throw new TypeError(`invalid_builder_candidate:${transport.errors.join('; ')}`);
   if (input.conditions !== undefined) {
     if (!Array.isArray(input.conditions)) throw new TypeError('invalid_builder_conditions:must be an array');
     assertNestedFrames(input.conditions, 'conditions');
@@ -173,9 +184,6 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
     if (!Array.isArray(input.consequences)) throw new TypeError('invalid_builder_consequences:must be an array');
     assertNestedFrames(input.consequences, 'consequences');
   }
-  const sem: LunumSem = { schema: SEM_SCHEMA, world, kind, clauses: [clause] };
-  const transport = validateSem(sem);
-  if (!transport.ok) throw new TypeError(`invalid_builder_candidate:${transport.errors.join('; ')}`);
   const frameValidation = validateSemFrames(sem);
   if (!frameValidation.valid) throw new TypeError(`invalid_builder_frame:${frameValidation.issues.map((issue) => issue.code).join(',')}`);
   return {

@@ -202,7 +202,7 @@ test('source digit loss and target-source drift are rejected before scoring', ()
 });
 
 test('file-bound replay refuses altered schema/version, dataset, targets, package and raw streams', () => {
-  const manifest = JSON.parse(fs.readFileSync('experiments/meaning-scoring-recorded-v1/input-manifest.json', 'utf8'));
+  const manifest = JSON.parse(fs.readFileSync('experiments/meaning-scoring-recorded-v2/input-manifest.json', 'utf8'));
   const temp = mkdtempSync(path.join(os.tmpdir(), 'lunum-meaning-test-'));
   try {
     for (const mutate of [x => { x.scoringContract.schemaSha256 = 'a'.repeat(64); },
@@ -213,7 +213,8 @@ test('file-bound replay refuses altered schema/version, dataset, targets, packag
       const file = path.join(temp, 'manifest.json'); fs.writeFileSync(file, JSON.stringify(changed));
       assert.throws(() => scoreRecordedMeaningFiles(file), /binding_mismatch|artifact_hash_mismatch/);
     }
-    assert.equal(scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v1/input-manifest.json').overall.total, 30);
+    assert.throws(() => scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v1/input-manifest.json'), /scoring_contract_binding_mismatch/, 'frozen v1 stays bound to 0.12, never silently relabelled');
+    assert.equal(scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v2/input-manifest.json').overall.total, 30);
     const changed = structuredClone(manifest);
     const runs = fs.readFileSync(changed.inputs.runs.path, 'utf8').trim().split('\n').map(JSON.parse);
     for (const run of runs) run.rawStream = path.resolve(path.dirname(changed.inputs.runs.path), run.rawStream);
@@ -246,7 +247,7 @@ test('offline replay performs no fetch/model request', () => {
   const previous = globalThis.fetch;
   globalThis.fetch = () => { throw new Error('unexpected_network_call'); };
   try {
-    assert.equal(scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v1/input-manifest.json').newModelCalls, 0);
+    assert.equal(scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v2/input-manifest.json').newModelCalls, 0);
   } finally { globalThis.fetch = previous; }
 });
 
