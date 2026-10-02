@@ -1,0 +1,114 @@
+TAP version 13
+# Subtest: v15 binds every current artifact, dependency and served runtime manifest
+ok 1 - v15 binds every current artifact, dependency and served runtime manifest
+  ---
+  duration_ms: 34.838201
+  type: 'test'
+  ...
+# Subtest: legacy v14 has no live served-runtime binding
+ok 2 - legacy v14 has no live served-runtime binding
+  ---
+  duration_ms: 1.098765
+  type: 'test'
+  ...
+# Subtest: served runtime manifest detects unlisted dependency drift and rejects malformed trees
+not ok 3 - served runtime manifest detects unlisted dependency drift and rejects malformed trees
+  ---
+  duration_ms: 13.447775
+  type: 'test'
+  location: '<repo>/<generated-mutation-root>/served-runtime-closure-validation-disabled/scripts/research/source-only-run-gates.test.mjs:60:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<repo>/<generated-mutation-root>/served-runtime-closure-validation-disabled/scripts/research/source-only-run-gates.test.mjs:107:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: missing or mutated served contracts fail, including non-version fields
+ok 4 - missing or mutated served contracts fail, including non-version fields
+  ---
+  duration_ms: 10.811353
+  type: 'test'
+  ...
+# Subtest: explicit spending reservations and timeouts fail before launching
+ok 5 - explicit spending reservations and timeouts fail before launching
+  ---
+  duration_ms: 0.813497
+  type: 'test'
+  ...
+# Subtest: source-only requests reject gold, changed source hashes, contract drift and unsafe handles
+ok 6 - source-only requests reject gold, changed source hashes, contract drift and unsafe handles
+  ---
+  duration_ms: 0.606115
+  type: 'test'
+  ...
+# Subtest: successful outcome does not excuse unknown cost, model, exit, contract or timeout
+ok 7 - successful outcome does not excuse unknown cost, model, exit, contract or timeout
+  ---
+  duration_ms: 0.686441
+  type: 'test'
+  ...
+# Subtest: subprocess bytes checkpoint before close and timeout preserves partial evidence
+ok 8 - subprocess bytes checkpoint before close and timeout preserves partial evidence
+  ---
+  duration_ms: 210.438121
+  type: 'test'
+  ...
+# Subtest: launch failure is recorded, and provider reasoning is removed rather than parsed or stored
+ok 9 - launch failure is recorded, and provider reasoning is removed rather than parsed or stored
+  ---
+  duration_ms: 36.277632
+  type: 'test'
+  ...
+# Subtest: real CLI refuses missing model/budget before writing output or launching provider
+ok 10 - real CLI refuses missing model/budget before writing output or launching provider
+  ---
+  duration_ms: 179.790047
+  type: 'test'
+  ...
+# Subtest: event integrity rejects swapped source/language, unmatched calls, early extraction and duplicates
+ok 11 - event integrity rejects swapped source/language, unmatched calls, early extraction and duplicates
+  ---
+  duration_ms: 2.767976
+  type: 'test'
+  ...
+# Subtest: split UTF-8 provider chunks preserve Greek source exactly
+ok 12 - split UTF-8 provider chunks preserve Greek source exactly
+  ---
+  duration_ms: 77.044519
+  type: 'test'
+  ...
+# Subtest: handled parent interruption stops the owned child and cannot yield valid evidence
+ok 13 - handled parent interruption stops the owned child and cannot yield valid evidence
+  ---
+  duration_ms: 32.351094
+  type: 'test'
+  ...
+# Subtest: prose abstention cannot erase canonical submission; explicit withdrawal and rejection differ
+ok 14 - prose abstention cannot erase canonical submission; explicit withdrawal and rejection differ
+  ---
+  duration_ms: 0.409083
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 13
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 810.757814

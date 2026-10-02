@@ -1,0 +1,111 @@
+{
+  "format": "openlunum-readiness-verification/1",
+  "implementationCommit": "a504fb163fb774a1c95a36a816bf6278a47548fd",
+  "branch": "main",
+  "providerParserCalls": 0,
+  "fullVerification": {
+    "command": "pnpm verify",
+    "exitCode": 0,
+    "tests": 4421,
+    "passed": 4421,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "smoke": {
+      "items": 16,
+      "groups": 4
+    },
+    "logSha256": "c842e9ab5c33c5d39113d200c5ab2fb3e6e50d39d7ea466a6ab9f29b961ede3b"
+  },
+  "workingTreeClean": false,
+  "scope": "Task code committed; unrelated owner documents/reports/deleted runtime marker retained. No existing process, server or external repository modified.",
+  "gates": {
+    "ownedStdioMcpPreflight": "PASS: lunum-agent/0.13, 93 repository-owned served JS artifacts bound",
+    "goldMetadata": "PASS: bad gold denied before discovery/generation, including unselected tail",
+    "mutations": "PASS: 9/9 deliberately weakened mechanisms fail assertion checks",
+    "protectedExtraction": "NOT RUN",
+    "protectedRawRetrieval": "NOT RUN",
+    "embedding": "NOT RUN",
+    "nativeHumanReview": "PENDING",
+    "readiness": "NOT READY"
+  },
+  "preservation": {
+    "ownerNonruntimeFilesChecked": 39,
+    "changed": 0,
+    "deletedRuntimeMarker": "remains absent",
+    "runtimeMetrics": "not restored or rewritten; background appends are owner process state"
+  },
+  "failedDevelopmentVerification": [
+    {
+      "name": "verify-candidate.log",
+      "sha256": "b7fd0ad68f9f2350d78de29e324767d4012b02a26a3fb0fba6a943f32c6f250a",
+      "tests": 4271,
+      "pass": 4270,
+      "fail": 1,
+      "skipped": 0,
+      "cancelled": 0,
+      "exitCode": 1,
+      "reason": "Existing mixed-result test supplied source Test 1. but dropped 1 in gold. Gate retained; source/test assertions repaired."
+    },
+    {
+      "name": "verify-candidate-repaired.log",
+      "sha256": "a2216553be84643f407d85ffb770bddc3dc86f64f469010cdfec9761def7d04e",
+      "tests": 4398,
+      "pass": 4362,
+      "fail": 36,
+      "skipped": 0,
+      "cancelled": 0,
+      "exitCode": 1,
+      "reason": "Source-bound offline callers omitted source/language metadata. Forwarded existing evidence; pure Sem comparison remains separate."
+    }
+  ],
+  "integrationVerification": {
+    "name": "verify-integrated.log",
+    "sha256": "89bcb5b39fb1d52bd76ecdac31a0f9d038576cca71b8af8d4c08672c002790a5",
+    "tests": 4421,
+    "pass": 4421,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "publishedRawMutationLogs": [
+    {
+      "name": "served-runtime-closure-validation-disabled",
+      "kind": "unmutated",
+      "originalSha256": "1e904410f03df13fd835d967270b05074cbd180e4fd30ea6f80716757ea5d49d",
+      "publishedSha256": "1e904410f03df13fd835d967270b05074cbd180e4fd30ea6f80716757ea5d49d"
+    },
+    {
+      "name": "served-runtime-closure-validation-disabled",
+      "kind": "weakened",
+      "originalSha256": "1fef261662e343bb21189b21f727ecc99843887b8b84e1d6f5f7b4dff18d0d98",
+      "publishedSha256": "524686eb5af052288a310b1746a86d801beefc519dd836f2075677317fe449cc"
+    },
+    {
+      "name": "gold-metadata-validation-disabled",
+      "kind": "unmutated",
+      "originalSha256": "d78fdec751845fbd6d542d4c5c3fd26e6660e3f9f53c6c9b26fa06af7aafc0c4",
+      "publishedSha256": "d78fdec751845fbd6d542d4c5c3fd26e6660e3f9f53c6c9b26fa06af7aafc0c4"
+    },
+    {
+      "name": "gold-metadata-validation-disabled",
+      "kind": "weakened",
+      "originalSha256": "316a2b8db7243282a5a68bb90d5fe0ddf1838f72d98f47094bc345dc384cf854",
+      "publishedSha256": "a3be5387cf45b0f0179886fc97022e494338d135675ce5ac18d46905b0d44e34"
+    },
+    {
+      "name": "gold-source-literal-validation-disabled",
+      "kind": "unmutated",
+      "originalSha256": "ab8395bf3c41297c0102aeed393367059e0ca4610f95fdc8148127570559b9d5",
+      "publishedSha256": "ab8395bf3c41297c0102aeed393367059e0ca4610f95fdc8148127570559b9d5"
+    },
+    {
+      "name": "gold-source-literal-validation-disabled",
+      "kind": "weakened",
+      "originalSha256": "a46620d5144456367617f35eaf121f3cdb01bf7fe1cbf5c05eb08d155e963e38",
+      "publishedSha256": "b68f9ee090be5ac729122eb2f1a08fb7c25140784d9e66775d993aef5da63d7d"
+    }
+  ],
+  "receipts": "Public preflight and mutation report/TAP are committed alongside this file. Full original verify logs remain unmodified in the local Git administrative directory; SHA-256 recorded for traceability. Run pnpm verify to reproduce, not model quality.",
+  "auditScriptBinding": "Existing-corpus audit uses the current compiled validator; supplemental wrapper file SHA-256 was recorded when publishing. Timestamps/dirty state are provenance, not quality evidence."
+}

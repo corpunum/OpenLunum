@@ -1,0 +1,135 @@
+{
+  "format": "openlunum-literal-floor-counterexample/1",
+  "codeCommit": "a504fb163fb774a1c95a36a816bf6278a47548fd",
+  "providerCalls": 0,
+  "evidenceClass": "Hand-authored deterministic source regression, not model output or protected quality evidence",
+  "coreArtifactSha256": "62ba1bf8be98fb8ce5e86397d7432cb9a4a8ceec139b6881cf0cb4f4e15f5a1c",
+  "request": {
+    "sourceText": "Orion’s deadline is 30.11.2026.",
+    "sourceLanguage": "en",
+    "candidateSem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "project_state",
+      "clauses": [
+        {
+          "predicate": "deadline",
+          "roles": {
+            "subject": {
+              "type": "project",
+              "id": "Orion"
+            },
+            "time": {
+              "type": "date",
+              "value": "2026-11-30"
+            }
+          },
+          "negated": false
+        }
+      ]
+    },
+    "provenance": {
+      "extractorType": "agent",
+      "extractorId": "deterministic-date-counterexample"
+    }
+  },
+  "response": {
+    "source": {
+      "text": "Orion’s deadline is 30.11.2026.",
+      "language": "en",
+      "sha256": "ae3dbabe870981b8591d6f02498304ae7462d087ea7873caeb20eca9a4e61581"
+    },
+    "provenance": {
+      "extractorType": "agent",
+      "extractorId": "deterministic-date-counterexample",
+      "contractVersion": "lunum-agent/0.13",
+      "contractHash": "c19e0a4a06af5b48100893359a64350a556c0ab74207c1fd8f43ea5a6d2c0131",
+      "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+      "frameRegistryHash": "1ecf8f1a08206f4f6773e4f8fb3d95e121b842d480add66a1d73248eb7eb30fc",
+      "sourceHash": "ae3dbabe870981b8591d6f02498304ae7462d087ea7873caeb20eca9a4e61581",
+      "timestamp": "2026-10-02T12:55:15.885Z"
+    },
+    "transportValid": true,
+    "structuralValid": true,
+    "protocolCanonical": true,
+    "frameValid": true,
+    "grounded": true,
+    "candidateIdentityAvailable": false,
+    "semanticFingerprint": null,
+    "promotable": false,
+    "trust": {
+      "status": "candidate",
+      "confidence": 0,
+      "promoted": false,
+      "requiresHumanReview": true,
+      "reasons": [
+        "evidence_confidence_below_0.90",
+        "insufficient_confidence_evidence",
+        "missing_classification_evidence",
+        "risk_unknown",
+        "missing_independent_verification"
+      ]
+    },
+    "failureClass": "unretained_source_literal",
+    "diagnostics": [
+      "unretained_source_literal: the candidate does not carry 30.11 from the source; abstain unless a role can hold it"
+    ],
+    "sem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "project_state",
+      "clauses": [
+        {
+          "predicate": "deadline",
+          "roles": {
+            "subject": {
+              "type": "project",
+              "id": "Orion"
+            },
+            "time": {
+              "type": "date",
+              "value": "2026-11-30"
+            }
+          },
+          "negated": false
+        }
+      ]
+    },
+    "literalRetention": {
+      "retained": false,
+      "sourceNumbers": [
+        30.11,
+        2026
+      ],
+      "sourceIdentifiers": [],
+      "missingNumbers": [
+        30.11
+      ],
+      "missingIdentifiers": []
+    }
+  },
+  "comparison": {
+    "sourceNumbers": [
+      30.11,
+      2026
+    ],
+    "candidateDateNumbers": [
+      2026,
+      11,
+      30
+    ],
+    "retention": {
+      "retained": false,
+      "sourceNumbers": [
+        30.11,
+        2026
+      ],
+      "sourceIdentifiers": [],
+      "missingNumbers": [
+        30.11
+      ],
+      "missingIdentifiers": []
+    }
+  },
+  "interpretation": "The source’s unambiguous day/month/year date is preserved as ISO, but the current numeric floor interprets 30.11 as decimal. This is a checker false rejection. No source, gold, or checker has been changed."
+}

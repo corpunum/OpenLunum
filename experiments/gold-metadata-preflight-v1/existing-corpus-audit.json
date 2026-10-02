@@ -1,0 +1,2438 @@
+{
+  "format": "openlunum-existing-corpus-preflight-audit/1",
+  "generatedAt": "2026-10-02T12:52:58.553Z",
+  "codeCommit": "a504fb163fb774a1c95a36a816bf6278a47548fd",
+  "workingTreeClean": false,
+  "providerCalls": 0,
+  "evidenceClass": "Offline current-contract diagnostics only; not semantic accuracy or protected model-quality evidence.",
+  "sourceMeaningAudit": "NOT PERFORMED. Literal presence and frame conformance are necessary, not source-meaning adjudication.",
+  "schemaSha256": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+  "protocolVersion": "lunum-protocol/0.4",
+  "frameRegistryVersion": "lunum-frame/0.5",
+  "boundArtifacts": [
+    {
+      "path": "packages/eval/src/parse-experiment.ts",
+      "sha256": "c08b92f18877d98d134da22bf514f4e9f6043514b498d3f96924465461cd9998"
+    },
+    {
+      "path": "packages/eval/dist/src/parse-experiment.js",
+      "sha256": "0c81cc7a2e0366ba1202201d2573bceceba49758ca52537d83e9250f1740152f"
+    },
+    {
+      "path": "experiments/natural-development-v8/extraction/public-instruction-package-v15.json",
+      "sha256": "c9dac043ce3777ea198d2f97474f57de81684965965d75b7312cefce72880fb1"
+    },
+    {
+      "path": "experiments/natural-development-v8/extraction/public-served-runtime-v15.json",
+      "sha256": "9a5623244515b0ea67eddb3f3097b6bbb3e4952159284f74c74850c6ff91f5a8"
+    },
+    {
+      "path": "experiments/gold-metadata-preflight-v1/audit-existing-corpora.mjs",
+      "sha256": "f1644bc6d1ce5f246d1bf34f56b9a66b2059bfc482a70eaec3eecc546329a04a"
+    }
+  ],
+  "corpora": [
+    {
+      "path": "protected-eval/stage3-superqwen-semantic-contract-20260901/corpus.jsonl",
+      "sha256": "bc392d724815419ed79b9db50103c7c62ebdc03c1b839fb5c9d672322dcaf3b8",
+      "limitation": "Previously scored historical Stage 3 data; not fresh for this candidate.",
+      "currentMechanicalGate": "FAIL",
+      "freshProtectedEvidenceForCurrentCandidate": false,
+      "humanNativeReview": "NOT ESTABLISHED",
+      "parseTargets": 48,
+      "languageCounts": {
+        "en": 9,
+        "el": 9,
+        "es": 9,
+        "id": 9,
+        "fr": 9,
+        "de": 9
+      },
+      "semanticGroups": [
+        {
+          "id": "pref-dark-mode",
+          "size": 6
+        },
+        {
+          "id": "neg-delete-archive",
+          "size": 6
+        },
+        {
+          "id": "mod-obligation-approve",
+          "size": 6
+        },
+        {
+          "id": "cond-low-power",
+          "size": 6
+        },
+        {
+          "id": "ref-send-contract",
+          "size": 6
+        },
+        {
+          "id": "list-review-date",
+          "size": 6
+        },
+        {
+          "id": "ambiguous-ready",
+          "size": 6
+        },
+        {
+          "id": "critical-transfer-ab",
+          "size": 6
+        },
+        {
+          "id": "critical-transfer-ba",
+          "size": 6
+        }
+      ],
+      "goldValidation": {
+        "total": 54,
+        "transportValid": 48,
+        "structuralValid": 48,
+        "protocolCanonical": 18,
+        "frameCanonical": 18,
+        "identityValid": 18,
+        "semanticAtomsValid": 48,
+        "sourceLiteralRetentionChecked": 18,
+        "sourceLiteralRetentionValid": 18,
+        "abstentionCases": 6,
+        "invalid": [
+          {
+            "id": "mod-approve-en",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'obligation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "mod-approve-el",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'obligation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "mod-approve-es",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'obligation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "mod-approve-id",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'obligation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "mod-approve-fr",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'obligation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "mod-approve-de",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'obligation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "ref-contract-en",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'delegation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "ref-contract-el",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'delegation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "ref-contract-es",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'delegation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "ref-contract-id",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'delegation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "ref-contract-fr",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'delegation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "ref-contract-de",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'delegation' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "list-review-en",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'project_schedule' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].roles.attendees",
+                "field": "role",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "role 'attendees' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'invite' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[2].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'budget' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "list-review-el",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'project_schedule' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].roles.attendees",
+                "field": "role",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "role 'attendees' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'invite' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[2].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'budget' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "list-review-es",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'project_schedule' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].roles.attendees",
+                "field": "role",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "role 'attendees' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'invite' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[2].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'budget' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "list-review-id",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'project_schedule' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].roles.attendees",
+                "field": "role",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "role 'attendees' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'invite' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[2].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'budget' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "list-review-fr",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'project_schedule' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].roles.attendees",
+                "field": "role",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "role 'attendees' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'invite' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[2].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'budget' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "list-review-de",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'project_schedule' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].roles.attendees",
+                "field": "role",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "role 'attendees' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[1].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'invite' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[2].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'budget' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ab-en",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ab-el",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ab-es",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ab-id",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ab-fr",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ab-de",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ba-en",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ba-el",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ba-es",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ba-id",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ba-fr",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "transfer-ba-de",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "kind",
+                "field": "kind",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "kind 'financial_action' is not registered and remains unresolved"
+              },
+              {
+                "path": "clauses[0].predicate",
+                "field": "predicate",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "predicate 'transfer' is not registered and remains unresolved"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "experiments/protected-eval/stage3-superqwen-semantic-contract-v2-20260902/corpus.jsonl",
+      "sha256": "46e1fed448fadeed19672c484fb5fef1fc358a554a2f40f0cac0480a99238c47",
+      "limitation": "Existing visible frozen data. Historical live result is NOT_RUN; no new live run here.",
+      "currentMechanicalGate": "FAIL",
+      "freshProtectedEvidenceForCurrentCandidate": false,
+      "humanNativeReview": "NOT ESTABLISHED",
+      "parseTargets": 54,
+      "languageCounts": {
+        "en": 11,
+        "el": 11,
+        "es": 11,
+        "id": 11,
+        "fr": 11,
+        "de": 11
+      },
+      "semanticGroups": [
+        {
+          "id": "pref-csv-digest",
+          "size": 6
+        },
+        {
+          "id": "prohibit-address-publish",
+          "size": 6
+        },
+        {
+          "id": "obligation-rotate-key",
+          "size": 6
+        },
+        {
+          "id": "conditional-retry-batch",
+          "size": 6
+        },
+        {
+          "id": "belief-incident-resolved",
+          "size": 6
+        },
+        {
+          "id": "reference-send-waiver",
+          "size": 6
+        },
+        {
+          "id": "critical-send-jules-kim",
+          "size": 6
+        },
+        {
+          "id": "critical-send-kim-jules",
+          "size": 6
+        },
+        {
+          "id": "critical-negated-archive",
+          "size": 6
+        },
+        {
+          "id": "abstain-vendor-exception",
+          "size": 6
+        },
+        {
+          "id": "abstain-less-noisy",
+          "size": 6
+        }
+      ],
+      "goldValidation": {
+        "total": 66,
+        "transportValid": 54,
+        "structuralValid": 54,
+        "protocolCanonical": 54,
+        "frameCanonical": 6,
+        "identityValid": 6,
+        "semanticAtomsValid": 54,
+        "sourceLiteralRetentionChecked": 54,
+        "sourceLiteralRetentionValid": 54,
+        "abstentionCases": 12,
+        "invalid": [
+          {
+            "id": "pref-csv-digest-en",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "prefer",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'prefer' frame"
+              }
+            ]
+          },
+          {
+            "id": "pref-csv-digest-el",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "prefer",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'prefer' frame"
+              }
+            ]
+          },
+          {
+            "id": "pref-csv-digest-es",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "prefer",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'prefer' frame"
+              }
+            ]
+          },
+          {
+            "id": "pref-csv-digest-id",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "prefer",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'prefer' frame"
+              }
+            ]
+          },
+          {
+            "id": "pref-csv-digest-fr",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "prefer",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'prefer' frame"
+              }
+            ]
+          },
+          {
+            "id": "pref-csv-digest-de",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "prefer",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'prefer' frame"
+              }
+            ]
+          },
+          {
+            "id": "prohibit-address-publish-en",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "publish",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'publish' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "publish",
+                "code": "missing_required_role",
+                "message": "Predicate 'publish' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "prohibit-address-publish-el",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "publish",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'publish' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "publish",
+                "code": "missing_required_role",
+                "message": "Predicate 'publish' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "prohibit-address-publish-es",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "publish",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'publish' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "publish",
+                "code": "missing_required_role",
+                "message": "Predicate 'publish' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "prohibit-address-publish-id",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "publish",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'publish' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "publish",
+                "code": "missing_required_role",
+                "message": "Predicate 'publish' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "prohibit-address-publish-fr",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "publish",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'publish' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "publish",
+                "code": "missing_required_role",
+                "message": "Predicate 'publish' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "prohibit-address-publish-de",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "publish",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'publish' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "publish",
+                "code": "missing_required_role",
+                "message": "Predicate 'publish' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "obligation-rotate-key-en",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles.time",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'time' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "rotate",
+                "code": "missing_required_role",
+                "message": "Predicate 'rotate' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "obligation-rotate-key-el",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles.time",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'time' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "rotate",
+                "code": "missing_required_role",
+                "message": "Predicate 'rotate' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "obligation-rotate-key-es",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles.time",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'time' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "rotate",
+                "code": "missing_required_role",
+                "message": "Predicate 'rotate' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "obligation-rotate-key-id",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles.time",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'time' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "rotate",
+                "code": "missing_required_role",
+                "message": "Predicate 'rotate' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "obligation-rotate-key-fr",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles.time",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'time' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "rotate",
+                "code": "missing_required_role",
+                "message": "Predicate 'rotate' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "obligation-rotate-key-de",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles.time",
+                "predicate": "rotate",
+                "code": "unexpected_role",
+                "message": "Role 'time' is not allowed by the canonical 'rotate' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "rotate",
+                "code": "missing_required_role",
+                "message": "Predicate 'rotate' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "conditional-retry-batch-en",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "retry",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'retry' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "retry",
+                "code": "missing_required_role",
+                "message": "Predicate 'retry' requires at least one of [count, theme]"
+              }
+            ]
+          },
+          {
+            "id": "conditional-retry-batch-el",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "retry",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'retry' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "retry",
+                "code": "missing_required_role",
+                "message": "Predicate 'retry' requires at least one of [count, theme]"
+              }
+            ]
+          },
+          {
+            "id": "conditional-retry-batch-es",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "retry",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'retry' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "retry",
+                "code": "missing_required_role",
+                "message": "Predicate 'retry' requires at least one of [count, theme]"
+              }
+            ]
+          },
+          {
+            "id": "conditional-retry-batch-id",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "retry",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'retry' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "retry",
+                "code": "missing_required_role",
+                "message": "Predicate 'retry' requires at least one of [count, theme]"
+              }
+            ]
+          },
+          {
+            "id": "conditional-retry-batch-fr",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "retry",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'retry' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "retry",
+                "code": "missing_required_role",
+                "message": "Predicate 'retry' requires at least one of [count, theme]"
+              }
+            ]
+          },
+          {
+            "id": "conditional-retry-batch-de",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "retry",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'retry' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "retry",
+                "code": "missing_required_role",
+                "message": "Predicate 'retry' requires at least one of [count, theme]"
+              }
+            ]
+          },
+          {
+            "id": "reference-send-waiver-en",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.theme",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'theme' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "reference-send-waiver-el",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.theme",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'theme' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "reference-send-waiver-es",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.theme",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'theme' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "reference-send-waiver-id",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.theme",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'theme' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "reference-send-waiver-fr",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.theme",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'theme' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "reference-send-waiver-de",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.theme",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'theme' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-jules-kim-en",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-jules-kim-el",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-jules-kim-es",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-jules-kim-id",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-jules-kim-fr",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-jules-kim-de",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-kim-jules-en",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-kim-jules-el",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-kim-jules-es",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-kim-jules-id",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-kim-jules-fr",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-send-kim-jules-de",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.amount",
+                "predicate": "send",
+                "code": "unexpected_role",
+                "message": "Role 'amount' is not allowed by the canonical 'send' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "send",
+                "code": "missing_required_role",
+                "message": "Predicate 'send' requires role 'object'"
+              }
+            ]
+          },
+          {
+            "id": "critical-negated-archive-en",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "archive",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'archive' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "archive",
+                "code": "missing_required_role",
+                "message": "Predicate 'archive' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "critical-negated-archive-el",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "archive",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'archive' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "archive",
+                "code": "missing_required_role",
+                "message": "Predicate 'archive' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "critical-negated-archive-es",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "archive",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'archive' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "archive",
+                "code": "missing_required_role",
+                "message": "Predicate 'archive' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "critical-negated-archive-id",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "archive",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'archive' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "archive",
+                "code": "missing_required_role",
+                "message": "Predicate 'archive' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "critical-negated-archive-fr",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "archive",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'archive' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "archive",
+                "code": "missing_required_role",
+                "message": "Predicate 'archive' requires role 'theme'"
+              }
+            ]
+          },
+          {
+            "id": "critical-negated-archive-de",
+            "stages": [
+              "frame-canonicality",
+              "semantic-identity",
+              "semantic-group-identity"
+            ],
+            "normalizationIssues": [],
+            "frameIssues": [
+              {
+                "path": "clauses[0].roles.object",
+                "predicate": "archive",
+                "code": "unexpected_role",
+                "message": "Role 'object' is not allowed by the canonical 'archive' frame"
+              },
+              {
+                "path": "clauses[0].roles",
+                "predicate": "archive",
+                "code": "missing_required_role",
+                "message": "Predicate 'archive' requires role 'theme'"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "experiments/protected-eval/fresh-v1-20260905/corpus.jsonl",
+      "sha256": "0114a7761e725dccd18f26bc134ffd85d69eb1c5cec7d48e23f5b3855bb0a820",
+      "limitation": "Previously scored parent-authored data bound to an older candidate, not a fresh independent current-candidate qualification.",
+      "currentMechanicalGate": "FAIL",
+      "freshProtectedEvidenceForCurrentCandidate": false,
+      "humanNativeReview": "NOT ESTABLISHED",
+      "parseTargets": 52,
+      "languageCounts": {
+        "en": 22,
+        "el": 11,
+        "es": 5,
+        "fr": 7,
+        "de": 6,
+        "id": 5
+      },
+      "semanticGroups": [
+        {
+          "id": "prefer-concise",
+          "size": 6
+        },
+        {
+          "id": "prefer-detailed",
+          "size": 6
+        },
+        {
+          "id": "send-recipient",
+          "size": 2
+        },
+        {
+          "id": "send-destination",
+          "size": 2
+        },
+        {
+          "id": "believe-policy",
+          "size": 3
+        },
+        {
+          "id": "publish-bulletin",
+          "size": 2
+        },
+        {
+          "id": "retry-upload",
+          "size": 2
+        },
+        {
+          "id": "enable-power",
+          "size": 3
+        },
+        {
+          "id": "disable-alerts",
+          "size": 2
+        },
+        {
+          "id": "delete-confirmed",
+          "size": 2
+        },
+        {
+          "id": "confirm-deployment",
+          "size": 2
+        },
+        {
+          "id": "deploy-production",
+          "size": 3
+        },
+        {
+          "id": "receive-notification",
+          "size": 2
+        },
+        {
+          "id": "deadline-release",
+          "size": 2
+        },
+        {
+          "id": "below-battery",
+          "size": 3
+        },
+        {
+          "id": "above-capacity",
+          "size": 2
+        },
+        {
+          "id": "before-review",
+          "size": 2
+        },
+        {
+          "id": "after-approval",
+          "size": 2
+        },
+        {
+          "id": "allow-team",
+          "size": 2
+        },
+        {
+          "id": "prohibit-public",
+          "size": 2
+        },
+        {
+          "id": "unframed-abstention",
+          "size": 2
+        },
+        {
+          "id": "unsupported-abstention",
+          "size": 2
+        }
+      ],
+      "goldValidation": {
+        "total": 56,
+        "transportValid": 52,
+        "structuralValid": 52,
+        "protocolCanonical": 52,
+        "frameCanonical": 52,
+        "identityValid": 51,
+        "semanticAtomsValid": 52,
+        "sourceLiteralRetentionChecked": 52,
+        "sourceLiteralRetentionValid": 51,
+        "abstentionCases": 4,
+        "invalid": [
+          {
+            "id": "deadline-release-de",
+            "stages": [
+              "source-literal-retention",
+              "semantic-identity"
+            ],
+            "normalizationIssues": [],
+            "sourceLiteralErrors": {
+              "missingNumbers": [
+                30.11
+              ],
+              "missingIdentifiers": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "experiments/protected-eval/fresh-v2-20260905/corpus.jsonl",
+      "sha256": "3df9e9111c4cbcb6be1360c30c992a55ff9b76333ed3278bb89ea76361c2cbbf",
+      "limitation": "Preserved contaminated preflight attempt. Its CONTAMINATED.md expressly disallows repair/reuse for a capability claim.",
+      "currentMechanicalGate": "FAIL",
+      "freshProtectedEvidenceForCurrentCandidate": false,
+      "humanNativeReview": "NOT ESTABLISHED",
+      "parseTargets": 71,
+      "languageCounts": {
+        "en": 46,
+        "el": 15,
+        "es": 4,
+        "fr": 4,
+        "de": 4,
+        "id": 4
+      },
+      "semanticGroups": [
+        {
+          "id": "mail-preference",
+          "size": 6
+        },
+        {
+          "id": "invoice-delivery",
+          "size": 6
+        },
+        {
+          "id": "package-arrival",
+          "size": 6
+        },
+        {
+          "id": "analyst-hypothesis",
+          "size": 6
+        },
+        {
+          "id": "public-notice",
+          "size": 2
+        },
+        {
+          "id": "thermal-control",
+          "size": 2
+        },
+        {
+          "id": "telemetry-off",
+          "size": 2
+        },
+        {
+          "id": "cache-safety",
+          "size": 2
+        },
+        {
+          "id": "staging-release",
+          "size": 2
+        },
+        {
+          "id": "migration-date",
+          "size": 2
+        },
+        {
+          "id": "audit-order",
+          "size": 2
+        },
+        {
+          "id": "approval-order",
+          "size": 2
+        },
+        {
+          "id": "retry-snapshot",
+          "size": 1
+        },
+        {
+          "id": "keep-public",
+          "size": 1
+        },
+        {
+          "id": "confirm-release",
+          "size": 1
+        },
+        {
+          "id": "permission-window",
+          "size": 1
+        },
+        {
+          "id": "no-external-access",
+          "size": 1
+        },
+        {
+          "id": "vault-transfer",
+          "size": 1
+        },
+        {
+          "id": "key-rotation",
+          "size": 1
+        },
+        {
+          "id": "queue-threshold",
+          "size": 1
+        },
+        {
+          "id": "latency-threshold",
+          "size": 1
+        },
+        {
+          "id": "edge-delivery",
+          "size": 1
+        },
+        {
+          "id": "recipient-alert",
+          "size": 1
+        },
+        {
+          "id": "negative-negation-left",
+          "size": 1
+        },
+        {
+          "id": "negative-negation-right",
+          "size": 1
+        },
+        {
+          "id": "negative-modality-left",
+          "size": 1
+        },
+        {
+          "id": "negative-modality-right",
+          "size": 1
+        },
+        {
+          "id": "negative-direction-left",
+          "size": 1
+        },
+        {
+          "id": "negative-direction-right",
+          "size": 1
+        },
+        {
+          "id": "negative-quantity-left",
+          "size": 1
+        },
+        {
+          "id": "negative-quantity-right",
+          "size": 1
+        },
+        {
+          "id": "negative-unit-left",
+          "size": 1
+        },
+        {
+          "id": "negative-unit-right",
+          "size": 1
+        },
+        {
+          "id": "negative-environment-left",
+          "size": 1
+        },
+        {
+          "id": "negative-environment-right",
+          "size": 1
+        },
+        {
+          "id": "negative-visibility-left",
+          "size": 1
+        },
+        {
+          "id": "negative-visibility-right",
+          "size": 1
+        },
+        {
+          "id": "negative-role-left",
+          "size": 1
+        },
+        {
+          "id": "negative-role-right",
+          "size": 1
+        },
+        {
+          "id": "negative-source-destination-left",
+          "size": 1
+        },
+        {
+          "id": "negative-source-destination-right",
+          "size": 1
+        },
+        {
+          "id": "negative-date-left",
+          "size": 1
+        },
+        {
+          "id": "negative-date-right",
+          "size": 1
+        },
+        {
+          "id": "abstention-registered-unframed",
+          "size": 2
+        },
+        {
+          "id": "abstention-unsupported",
+          "size": 2
+        },
+        {
+          "id": "abstention-uncertain",
+          "size": 2
+        }
+      ],
+      "goldValidation": {
+        "total": 77,
+        "transportValid": 71,
+        "structuralValid": 71,
+        "protocolCanonical": 66,
+        "frameCanonical": 66,
+        "identityValid": 66,
+        "semanticAtomsValid": 71,
+        "sourceLiteralRetentionChecked": 66,
+        "sourceLiteralRetentionValid": 66,
+        "abstentionCases": 6,
+        "invalid": [
+          {
+            "id": "keep-public-en",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "clauses[0].roles.visibility.type",
+                "field": "term_type",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "term_type 'visibility' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "negation-open",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "clauses[0].roles.visibility.type",
+                "field": "term_type",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "term_type 'visibility' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "negation-closed",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "clauses[0].roles.visibility.type",
+                "field": "term_type",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "term_type 'visibility' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "visibility-public",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "clauses[0].roles.visibility.type",
+                "field": "term_type",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "term_type 'visibility' is not registered and remains unresolved"
+              }
+            ]
+          },
+          {
+            "id": "visibility-private",
+            "stages": [
+              "protocol-canonicality",
+              "semantic-identity"
+            ],
+            "normalizationIssues": [
+              {
+                "path": "clauses[0].roles.visibility.type",
+                "field": "term_type",
+                "code": "unknown_protocol_symbol",
+                "severity": "error",
+                "message": "term_type 'visibility' is not registered and remains unresolved"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "format": "openlunum-readiness-gate-mutations/0.1",
+  "generatedAt": "2026-10-02T12:52:19.380Z",
+  "codeCommit": "a504fb163fb774a1c95a36a816bf6278a47548fd",
+  "workingTreeClean": false,
+  "evidence": "Deterministic regression sensitivity, not model quality or deployed persistence.",
+  "providerCalls": 0,
+  "results": [
+    {
+      "name": "record-literal-identity-bypass",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "recursive-risk-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "schema-valid-always-promoted",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "deletion-plan-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "retrieval-routing-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "retrieval-gold-leakage-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "served-runtime-closure-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "gold-metadata-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "gold-source-literal-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    }
+  ],
+  "allCaught": true
+}
