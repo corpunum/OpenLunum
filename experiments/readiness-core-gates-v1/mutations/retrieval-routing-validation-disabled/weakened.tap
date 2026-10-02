@@ -1,0 +1,165 @@
+TAP version 13
+# Subtest: raw-text retrieval extracts both sides and measures cross-language ranking
+ok 1 - raw-text retrieval extracts both sides and measures cross-language ranking
+  ---
+  duration_ms: 44.092651
+  type: 'test'
+  ...
+# Subtest: raw-text retrieval attributes extractor abstention and rejects wrong-but-valid role binding
+ok 2 - raw-text retrieval attributes extractor abstention and rejects wrong-but-valid role binding
+  ---
+  duration_ms: 4.198007
+  type: 'test'
+  ...
+# Subtest: negative rejection does not treat query abstention as a comparable safe rejection
+ok 3 - negative rejection does not treat query abstention as a comparable safe rejection
+  ---
+  duration_ms: 1.991923
+  type: 'test'
+  ...
+# Subtest: retrieval candidate count contains only identity-usable memories
+ok 4 - retrieval candidate count contains only identity-usable memories
+  ---
+  duration_ms: 5.220647
+  type: 'test'
+  ...
+# Subtest: retrieval input rejects duplicate IDs, unknown gold references, and invalid bounds
+ok 5 - retrieval input rejects duplicate IDs, unknown gold references, and invalid bounds
+  ---
+  duration_ms: 1.603468
+  type: 'test'
+  ...
+# Subtest: baseline hooks receive raw text only and are reported beside semantic retrieval
+ok 6 - baseline hooks receive raw text only and are reported beside semantic retrieval
+  ---
+  duration_ms: 4.512245
+  type: 'test'
+  ...
+# Subtest: extractor receives no evaluator-private retrieval labels
+ok 7 - extractor receives no evaluator-private retrieval labels
+  ---
+  duration_ms: 3.146498
+  type: 'test'
+  ...
+# Subtest: baseline failures remain visible instead of disappearing from denominators
+ok 8 - baseline failures remain visible instead of disappearing from denominators
+  ---
+  duration_ms: 2.891458
+  type: 'test'
+  ...
+# Subtest: routing is separate from semantic equivalence and baselines use the routed pool
+ok 9 - routing is separate from semantic equivalence and baselines use the routed pool
+  ---
+  duration_ms: 6.686051
+  type: 'test'
+  ...
+# Subtest: noncanonical schema-valid extraction is contained and does not enter semantic retrieval
+ok 10 - noncanonical schema-valid extraction is contained and does not enter semantic retrieval
+  ---
+  duration_ms: 2.341779
+  type: 'test'
+  ...
+# Subtest: identity coverage excludes structurally normalized but unframed candidates
+ok 11 - identity coverage excludes structurally normalized but unframed candidates
+  ---
+  duration_ms: 2.253683
+  type: 'test'
+  ...
+# Subtest: expected retrieval IDs must belong to the target-language route
+not ok 12 - expected retrieval IDs must belong to the target-language route
+  ---
+  duration_ms: 4.682388
+  type: 'test'
+  location: '<generated-isolated-copy>/retrieval-routing-validation-disabled/test/raw-text-retrieval.test.js:193:1'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file://<generated-isolated-copy>/retrieval-routing-validation-disabled/test/raw-text-retrieval.test.js:194:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: query extraction failure retains routed-out semantic equivalents
+ok 13 - query extraction failure retains routed-out semantic equivalents
+  ---
+  duration_ms: 2.478894
+  type: 'test'
+  ...
+# Subtest: confusion universe is routed raw corpus while identity-available pool stays separate
+ok 14 - confusion universe is routed raw corpus while identity-available pool stays separate
+  ---
+  duration_ms: 6.615033
+  type: 'test'
+  ...
+# Subtest: raw-pool FPR and examined conditional FPR disclose a partial identity pool
+ok 15 - raw-pool FPR and examined conditional FPR disclose a partial identity pool
+  ---
+  duration_ms: 4.431488
+  type: 'test'
+  ...
+# Subtest: baseline exceptions are visible failures, not comparable negative rejections
+ok 16 - baseline exceptions are visible failures, not comparable negative rejections
+  ---
+  duration_ms: 2.875148
+  type: 'test'
+  ...
+# Subtest: baseline top1Accuracy is the positive-only alias and thrown runs do not count as top1 successes
+ok 17 - baseline top1Accuracy is the positive-only alias and thrown runs do not count as top1 successes
+  ---
+  duration_ms: 5.832024
+  type: 'test'
+  ...
+# Subtest: unexamined negative pairs include every routed record when query extraction fails
+ok 18 - unexamined negative pairs include every routed record when query extraction fails
+  ---
+  duration_ms: 2.32607
+  type: 'test'
+  ...
+# Subtest: candidate identity uses submitCandidate transport and source-literal gates
+ok 19 - candidate identity uses submitCandidate transport and source-literal gates
+  ---
+  duration_ms: 4.361171
+  type: 'test'
+  ...
+# Subtest: semantic gold fields in raw retrieval rows fail before extraction
+ok 20 - semantic gold fields in raw retrieval rows fail before extraction
+  ---
+  duration_ms: 0.960293
+  type: 'test'
+  ...
+# Subtest: retrieval reports separate exact and near provenance and candidate identity status
+ok 21 - retrieval reports separate exact and near provenance and candidate identity status
+  ---
+  duration_ms: 5.427029
+  type: 'test'
+  ...
+# Subtest: type metadata cannot hide gold and target language must be a nonempty string
+ok 22 - type metadata cannot hide gold and target language must be a nonempty string
+  ---
+  duration_ms: 0.574897
+  type: 'test'
+  ...
+# Subtest: baselines receive isolated raw projections, never labels or shared mutable sources
+ok 23 - baselines receive isolated raw projections, never labels or shared mutable sources
+  ---
+  duration_ms: 3.076721
+  type: 'test'
+  ...
+# Subtest: extractor cannot rewrite the source used for candidate validation
+ok 24 - extractor cannot rewrite the source used for candidate validation
+  ---
+  duration_ms: 2.676466
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 23
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 346.636869

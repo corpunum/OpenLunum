@@ -1,0 +1,47 @@
+{
+  "format": "openlunum-readiness-gate-mutations/0.1",
+  "generatedAt": "2026-10-02T12:03:53.381Z",
+  "codeCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+  "workingTreeClean": false,
+  "evidence": "Deterministic regression sensitivity, not model quality or deployed persistence.",
+  "providerCalls": 0,
+  "results": [
+    {
+      "name": "record-literal-identity-bypass",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "recursive-risk-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "schema-valid-always-promoted",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "deletion-plan-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "retrieval-routing-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "retrieval-gold-leakage-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    }
+  ],
+  "allCaught": true
+}

@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: high risk is found through arbitrarily nested conditions and consequences
+ok 1 - high risk is found through arbitrarily nested conditions and consequences
+  ---
+  duration_ms: 0.50963
+  type: 'test'
+  ...
+# Subtest: canonical obligation and necessity plus registered legacy obligation aliases are high risk
+ok 2 - canonical obligation and necessity plus registered legacy obligation aliases are high risk
+  ---
+  duration_ms: 0.161394
+  type: 'test'
+  ...
+# Subtest: permission and possibility are not collapsed into high-risk obligation modalities
+ok 3 - permission and possibility are not collapsed into high-risk obligation modalities
+  ---
+  duration_ms: 0.066037
+  type: 'test'
+  ...
+# Subtest: canonical high-risk descendant prevents createRecord promotion despite complete bound evidence
+ok 4 - canonical high-risk descendant prevents createRecord promotion despite complete bound evidence
+  ---
+  duration_ms: 5.569174
+  type: 'test'
+  ...
+# Subtest: public risk inspection terminates on a malformed cyclic clause graph
+ok 5 - public risk inspection terminates on a malformed cyclic clause graph
+  ---
+  duration_ms: 0.129425
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 137.357984

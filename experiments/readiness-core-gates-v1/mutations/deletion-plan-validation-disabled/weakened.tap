@@ -1,0 +1,135 @@
+TAP version 13
+# Subtest: privacy-derived-lifecycle
+    # Subtest: rejects inherited property names in every closed privacy-enum boundary
+    ok 1 - rejects inherited property names in every closed privacy-enum boundary
+      ---
+      duration_ms: 3.975665
+      type: 'test'
+      ...
+    # Subtest: inherits stricter source sensitivity and never extends source retention
+    ok 2 - inherits stricter source sensitivity and never extends source retention
+      ---
+      duration_ms: 0.27651
+      type: 'test'
+      ...
+    # Subtest: fails closed on placeholder provenance and cannot promote schema-valid semantics
+    ok 3 - fails closed on placeholder provenance and cannot promote schema-valid semantics
+      ---
+      duration_ms: 0.25599
+      type: 'test'
+      ...
+    # Subtest: cascades source deletion through semantic, all fingerprint, index, and cache registrations
+    ok 4 - cascades source deletion through semantic, all fingerprint, index, and cache registrations
+      ---
+      duration_ms: 3.643059
+      type: 'test'
+      ...
+    # Subtest: adversarially detects a skipped cache deletion and retains registry state for retry
+    ok 5 - adversarially detects a skipped cache deletion and retains registry state for retry
+      ---
+      duration_ms: 0.555339
+      type: 'test'
+      ...
+    # Subtest: refuses shortened, forged, duplicate, additional, and mismatched plans before calling the deleter
+    not ok 6 - refuses shortened, forged, duplicate, additional, and mismatched plans before calling the deleter
+      ---
+      duration_ms: 1.521871
+      type: 'test'
+      location: '<generated-isolated-copy>/deletion-plan-validation-disabled/test/privacy-derived-lifecycle.test.js:128:5'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+
+        true !== false
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: false
+      actual: true
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file://<generated-isolated-copy>/deletion-plan-validation-disabled/test/privacy-derived-lifecycle.test.js:148:20)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: binds every registration and deletion plan to one immutable source lineage
+    ok 7 - binds every registration and deletion plan to one immutable source lineage
+      ---
+      duration_ms: 0.634126
+      type: 'test'
+      ...
+    # Subtest: snapshots registered lifecycle data and refuses artifact ID replacement
+    ok 8 - snapshots registered lifecycle data and refuses artifact ID replacement
+      ---
+      duration_ms: 0.525829
+      type: 'test'
+      ...
+    # Subtest: rejects a completed plan after the same source ID is registered with a new content hash
+    not ok 9 - rejects a completed plan after the same source ID is registered with a new content hash
+      ---
+      duration_ms: 0.806839
+      type: 'test'
+      location: '<generated-isolated-copy>/deletion-plan-validation-disabled/test/privacy-derived-lifecycle.test.js:182:5'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+
+        true !== false
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: false
+      actual: true
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file://<generated-isolated-copy>/deletion-plan-validation-disabled/test/privacy-derived-lifecycle.test.js:193:16)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: requires registry issuance and exact lineage for a source-only plan
+    not ok 10 - requires registry issuance and exact lineage for a source-only plan
+      ---
+      duration_ms: 0.851547
+      type: 'test'
+      location: '<generated-isolated-copy>/deletion-plan-validation-disabled/test/privacy-derived-lifecycle.test.js:197:5'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+
+        true !== false
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: false
+      actual: true
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file://<generated-isolated-copy>/deletion-plan-validation-disabled/test/privacy-derived-lifecycle.test.js:219:20)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: blocks registrations while an asynchronous cascade is in flight and preserves retry state on failure
+    ok 11 - blocks registrations while an asynchronous cascade is in flight and preserves retry state on failure
+      ---
+      duration_ms: 0.817319
+      type: 'test'
+      ...
+    1..11
+not ok 1 - privacy-derived-lifecycle
+  ---
+  duration_ms: 15.539428
+  type: 'suite'
+  location: '<generated-isolated-copy>/deletion-plan-validation-disabled/test/privacy-derived-lifecycle.test.js:27:1'
+  failureType: 'subtestsFailed'
+  error: '3 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 11
+# suites 1
+# pass 8
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 95.449209

@@ -1,0 +1,93 @@
+{
+  "format": "openlunum-readiness-path-reproduction/0.1",
+  "baselineCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+  "observedAt": "2026-10-02T11:28:44.508Z",
+  "providerCalls": 0,
+  "method": "Historical source via Node type stripping with current built imported dependencies; deterministic unit fixtures only.",
+  "bindings": [
+    {
+      "path": "packages/core/src/derive.ts",
+      "sourceCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+      "sourceSha256": "2553e2c9ed64b6814585c5d3cd8415fe98f358698c3331bb5f170becf9aab75e",
+      "generatedSha256": "768dc96e6f34ec847abc8ec1b05f0c31c8f7f6ea955f0baaee9dc570b07bf525"
+    },
+    {
+      "path": "packages/core/src/privacy-derived-lifecycle.ts",
+      "sourceCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+      "sourceSha256": "d6bf0ccc695b8ecc4ef76249dd2c6dff245f7645dc9c67de46eae44be34ff9b5",
+      "generatedSha256": "11fa42ad43e23a68428189a69be2941f11e5fc35c403c3ea88ef2503ccc4c0fb"
+    },
+    {
+      "path": "packages/eval/src/raw-text-retrieval.ts",
+      "sourceCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+      "sourceSha256": "9792b611ca4a7f225bb9b7c4ae1d99738730cd9b72773d112f782e864ce672aa",
+      "generatedSha256": "1ab3544f521ca64de3a356f6c60e523e41d7fd5c4ff761e233350efed19ead74"
+    },
+    {
+      "path": "packages/core/src/fallback-policy.ts",
+      "sourceCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+      "sourceSha256": "dc29ab518152f379bc06afc0492928f4f91cc737164ed4b3284662cc37b78134",
+      "generatedSha256": "66b841c0c0dd8b1ffd42d6889914aca5f21ce5eba5dca13b83ee26379029de85"
+    }
+  ],
+  "defects": {
+    "sourceLiteralBypass": {
+      "source": "Priya retries R-42 5 times.",
+      "candidateCount": 50,
+      "exactIdentityIssued": true,
+      "promoted": false
+    },
+    "shortenedDeletionPlan": {
+      "registeredTargets": 3,
+      "requestedTargets": 1,
+      "deleted": [
+        "diagnostic-source-1"
+      ],
+      "reportedComplete": true,
+      "derivativesStillRegistered": 0
+    },
+    "retrievalFailureAccounting": {
+      "globalTrueNegatives": 0,
+      "byLanguagePair": {
+        "en-*": {
+          "queries": 2,
+          "precision": 1,
+          "recall": 0,
+          "f1": 0,
+          "falsePositiveRate": 0,
+          "topKRecall": 0
+        }
+      },
+      "semanticMatchingFailures": 2,
+      "queryExtractionFailures": 1
+    },
+    "baselineErrorRejection": {
+      "precision": 1,
+      "recall": 0,
+      "f1": 0,
+      "falsePositiveRate": 0,
+      "top1Accuracy": 1,
+      "positiveTop1Accuracy": 0,
+      "negativeRejectionAccuracy": 1,
+      "topKRecall": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "trueNegatives": 1,
+      "failures": 1
+    },
+    "nestedRisk": {
+      "highRisk": false,
+      "reasons": []
+    },
+    "canonicalRisk": {
+      "highRisk": false,
+      "reasons": []
+    }
+  },
+  "nonClaims": [
+    "Not live extraction quality.",
+    "Not a complete baseline build.",
+    "Not deployed deletion evidence."
+  ]
+}

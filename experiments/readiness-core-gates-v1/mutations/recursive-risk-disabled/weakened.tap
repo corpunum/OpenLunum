@@ -1,0 +1,98 @@
+TAP version 13
+# Subtest: high risk is found through arbitrarily nested conditions and consequences
+not ok 1 - high risk is found through arbitrarily nested conditions and consequences
+  ---
+  duration_ms: 0.790339
+  type: 'test'
+  location: '<generated-isolated-copy>/recursive-risk-disabled/test/canonical-risk-containment.test.js:26:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/recursive-risk-disabled/test/canonical-risk-containment.test.js:41:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: canonical obligation and necessity plus registered legacy obligation aliases are high risk
+not ok 2 - canonical obligation and necessity plus registered legacy obligation aliases are high risk
+  ---
+  duration_ms: 0.145494
+  type: 'test'
+  location: '<generated-isolated-copy>/recursive-risk-disabled/test/canonical-risk-containment.test.js:44:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    obligation
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/recursive-risk-disabled/test/canonical-risk-containment.test.js:46:16)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: permission and possibility are not collapsed into high-risk obligation modalities
+ok 3 - permission and possibility are not collapsed into high-risk obligation modalities
+  ---
+  duration_ms: 0.088717
+  type: 'test'
+  ...
+# Subtest: canonical high-risk descendant prevents createRecord promotion despite complete bound evidence
+not ok 4 - canonical high-risk descendant prevents createRecord promotion despite complete bound evidence
+  ---
+  duration_ms: 5.691189
+  type: 'test'
+  location: '<generated-isolated-copy>/recursive-risk-disabled/test/canonical-risk-containment.test.js:54:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/recursive-risk-disabled/test/canonical-risk-containment.test.js:90:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: public risk inspection terminates on a malformed cyclic clause graph
+ok 5 - public risk inspection terminates on a malformed cyclic clause graph
+  ---
+  duration_ms: 0.120325
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 2
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 85.776164

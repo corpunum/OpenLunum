@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: schema-valid Sem plus caller confidence is a candidate, never an automatic promotion
+ok 1 - schema-valid Sem plus caller confidence is a candidate, never an automatic promotion
+  ---
+  duration_ms: 4.254475
+  type: 'test'
+  ...
+# Subtest: record creation contains wrong-but-schema-valid Sem instead of marking it eligible
+ok 2 - record creation contains wrong-but-schema-valid Sem instead of marking it eligible
+  ---
+  duration_ms: 7.855555
+  type: 'test'
+  ...
+# Subtest: only corroborated, low-risk, vocabulary-checked Sem is promoted
+ok 3 - only corroborated, low-risk, vocabulary-checked Sem is promoted
+  ---
+  duration_ms: 1.984833
+  type: 'test'
+  ...
+# Subtest: verification bound to a different source or candidate cannot promote a wrong-but-valid Sem
+ok 4 - verification bound to a different source or candidate cannot promote a wrong-but-valid Sem
+  ---
+  duration_ms: 0.442512
+  type: 'test'
+  ...
+# Subtest: a category/risk assertion that disagrees with its evidence cannot be promoted
+ok 5 - a category/risk assertion that disagrees with its evidence cannot be promoted
+  ---
+  duration_ms: 0.477652
+  type: 'test'
+  ...
+# Subtest: prohibited source domains remain candidate Sem even with otherwise complete evidence
+ok 6 - prohibited source domains remain candidate Sem even with otherwise complete evidence
+  ---
+  duration_ms: 0.308858
+  type: 'test'
+  ...
+# Subtest: candidate validation rejects malformed nested clauses before canonicalization
+ok 7 - candidate validation rejects malformed nested clauses before canonicalization
+  ---
+  duration_ms: 0.813399
+  type: 'test'
+  ...
+# Subtest: sidecar exposes structural Sem separately from its trust status
+ok 8 - sidecar exposes structural Sem separately from its trust status
+  ---
+  duration_ms: 1.581088
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 190.155277

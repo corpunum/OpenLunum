@@ -1,0 +1,180 @@
+TAP version 13
+# Subtest: schema-valid Sem plus caller confidence is a candidate, never an automatic promotion
+not ok 1 - schema-valid Sem plus caller confidence is a candidate, never an automatic promotion
+  ---
+  duration_ms: 2.126647
+  type: 'test'
+  location: '<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:49:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + 'promoted'
+    - 'candidate'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'candidate'
+  actual: 'promoted'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:57:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: record creation contains wrong-but-schema-valid Sem instead of marking it eligible
+not ok 2 - record creation contains wrong-but-schema-valid Sem instead of marking it eligible
+  ---
+  duration_ms: 6.636573
+  type: 'test'
+  location: '<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:64:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + 'promoted'
+    - 'candidate'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'candidate'
+  actual: 'promoted'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:80:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: only corroborated, low-risk, vocabulary-checked Sem is promoted
+ok 3 - only corroborated, low-risk, vocabulary-checked Sem is promoted
+  ---
+  duration_ms: 1.568759
+  type: 'test'
+  ...
+# Subtest: verification bound to a different source or candidate cannot promote a wrong-but-valid Sem
+not ok 4 - verification bound to a different source or candidate cannot promote a wrong-but-valid Sem
+  ---
+  duration_ms: 0.283699
+  type: 'test'
+  location: '<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:93:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:99:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a category/risk assertion that disagrees with its evidence cannot be promoted
+not ok 5 - a category/risk assertion that disagrees with its evidence cannot be promoted
+  ---
+  duration_ms: 0.220142
+  type: 'test'
+  location: '<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:102:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:108:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: prohibited source domains remain candidate Sem even with otherwise complete evidence
+not ok 6 - prohibited source domains remain candidate Sem even with otherwise complete evidence
+  ---
+  duration_ms: 0.273319
+  type: 'test'
+  location: '<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:111:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:117:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: candidate validation rejects malformed nested clauses before canonicalization
+ok 7 - candidate validation rejects malformed nested clauses before canonicalization
+  ---
+  duration_ms: 0.939613
+  type: 'test'
+  ...
+# Subtest: sidecar exposes structural Sem separately from its trust status
+not ok 8 - sidecar exposes structural Sem separately from its trust status
+  ---
+  duration_ms: 1.767132
+  type: 'test'
+  location: '<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:133:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<generated-isolated-copy>/schema-valid-always-promoted/test/semantic-trust.test.js:140:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 2
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 195.866355

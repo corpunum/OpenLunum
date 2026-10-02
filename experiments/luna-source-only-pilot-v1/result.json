@@ -1,0 +1,367 @@
+{
+  "format": "openlunum-development-pilot/0.1",
+  "status": "observed-development-extraction",
+  "requestSha256": "71ecda66e1255a4915bcedfbecac401a4d8482ac94d29e0c5ea99cf64b5826f1",
+  "promptSha256": "22dabacae8de2f5aba3a237f7515c8439d9878212a97f66cb8fe15d50336107c",
+  "sourceSha256": "b542693439c3b291714eae34d12787e08153d8f047b86103c47caf1bd3813ad2",
+  "protectionClass": "development",
+  "source": {
+    "handle": "pilot-a7f41d",
+    "sourceLanguage": "en",
+    "sourceText": "Priya sends R-42 to Leo."
+  },
+  "implementationCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+  "workingTreeClean": false,
+  "evidenceLevel": "model-only development observation; not protected quality qualification",
+  "provider": "openai",
+  "model": "gpt-6-luna",
+  "modelIdentityBasis": "actual fresh Codex session turn_context, not a model-weight checksum",
+  "endpointProfile": "Codex subagent subsystem; HTTP endpoint and immutable deployment identity unavailable",
+  "decoding": {
+    "reasoningEffort": "high",
+    "temperature": null,
+    "seed": null,
+    "maxOutputTokens": null
+  },
+  "tokenUsage": {
+    "input_tokens": 26116,
+    "cached_input_tokens": 18176,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 206,
+    "reasoning_output_tokens": 142,
+    "total_tokens": 26322
+  },
+  "costUsd": null,
+  "costStatus": "not exposed by subagent subsystem; do not infer zero cost",
+  "session": {
+    "metadata": [
+      {
+        "timestamp": "2026-10-02T11:18:14.094Z",
+        "id": "01a0fc56-1104-7f12-ae8d-fb51c7b33409",
+        "cliVersion": "0.160.0",
+        "provider": "openai",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a059b1-a427-7492-bd33-062d71372f4a",
+              "depth": 1,
+              "agent_path": null,
+              "agent_nickname": "Hypatia",
+              "agent_role": null
+            }
+          }
+        }
+      }
+    ],
+    "contexts": [
+      {
+        "timestamp": "2026-10-02T11:18:22.001Z",
+        "model": "gpt-6-luna",
+        "effort": "high"
+      }
+    ],
+    "toolCalls": [],
+    "userPromptObserved": true,
+    "completed": true,
+    "timing": {
+      "durationMs": 12726,
+      "timeToFirstTokenMs": 11555
+    }
+  },
+  "privacy": "Reasoning and encrypted reasoning blocks are neither included nor interpreted.",
+  "contractHash": "c19e0a4a06af5b48100893359a64350a556c0ab74207c1fd8f43ea5a6d2c0131",
+  "artifacts": {
+    "match": true,
+    "checks": [
+      {
+        "key": "coreArtifactSha256",
+        "file": "packages/core/dist/src/agent-native.js",
+        "expected": "7f930eb8d2aadbe27d8449a4df7901f534dfd18f3c2e4c9ae36020b803ba9bb7",
+        "actual": "7f930eb8d2aadbe27d8449a4df7901f534dfd18f3c2e4c9ae36020b803ba9bb7",
+        "match": true
+      },
+      {
+        "key": "frameValidatorArtifactSha256",
+        "file": "packages/core/dist/src/frame-registry.js",
+        "expected": "4cdcb45237d3158421f2915e6181c2b14f1a8989061790a87ffcc12066bfcf85",
+        "actual": "4cdcb45237d3158421f2915e6181c2b14f1a8989061790a87ffcc12066bfcf85",
+        "match": true
+      },
+      {
+        "key": "toolImplementationSha256",
+        "file": "packages/mcp/dist/src/tools.js",
+        "expected": "87f0ff8479df27353666a98bf0e9f17db80eaeda657e45283431c9ccf86ea624",
+        "actual": "87f0ff8479df27353666a98bf0e9f17db80eaeda657e45283431c9ccf86ea624",
+        "match": true
+      },
+      {
+        "key": "mcpArtifactSha256",
+        "file": "packages/mcp/dist/bin/lunum-mcp.js",
+        "expected": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+        "actual": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+        "match": true
+      },
+      {
+        "key": "literalRetentionArtifactSha256",
+        "file": "packages/core/dist/src/literal-retention.js",
+        "expected": "62ba1bf8be98fb8ce5e86397d7432cb9a4a8ceec139b6881cf0cb4f4e15f5a1c",
+        "actual": "62ba1bf8be98fb8ce5e86397d7432cb9a4a8ceec139b6881cf0cb4f4e15f5a1c",
+        "match": true
+      },
+      {
+        "key": "builderArtifactSha256",
+        "file": "packages/core/dist/src/agent-builder.js",
+        "expected": "58bf96ec983db307cc2f3634da2645940633629dbfdfe5422c1461291a32c395",
+        "actual": "58bf96ec983db307cc2f3634da2645940633629dbfdfe5422c1461291a32c395",
+        "match": true
+      },
+      {
+        "key": "transportValidatorArtifactSha256",
+        "file": "packages/core/dist/src/semantic-transport.js",
+        "expected": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476",
+        "actual": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476",
+        "match": true
+      },
+      {
+        "key": "transportSchemaArtifactSha256",
+        "file": "packages/core/dist/src/semantic-transport-schema.js",
+        "expected": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+        "actual": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+        "match": true
+      },
+      {
+        "key": "launcherSha256",
+        "file": "scripts/lunum-mcp-launch.mjs",
+        "expected": "9b35bc921abe05369432aa57fa454045b1a8a5c0e2df29d33c5aafc1a424a69d",
+        "actual": "9b35bc921abe05369432aa57fa454045b1a8a5c0e2df29d33c5aafc1a424a69d",
+        "match": true
+      },
+      {
+        "key": "taskContractSha256",
+        "file": "experiments/natural-development-v8/task-contract.json",
+        "expected": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+        "actual": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+        "match": true
+      },
+      {
+        "key": "scorerSha256",
+        "file": "scripts/research/score-natural-source-only-extraction.mjs",
+        "expected": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec",
+        "actual": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec",
+        "match": true
+      },
+      {
+        "key": "taskProfileSha256",
+        "file": "experiments/natural-development-v8/extraction/public-task-profile-iteration6.json",
+        "expected": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+        "actual": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+        "match": true
+      },
+      {
+        "key": "transportValidatorDependency",
+        "file": "pnpm-lock.yaml",
+        "expected": {
+          "name": "ajv",
+          "version": "8.20.0",
+          "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
+        },
+        "actual": {
+          "name": "ajv",
+          "version": "8.20.0",
+          "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
+        },
+        "match": true
+      }
+    ]
+  },
+  "rawResponse": "{\"status\":\"parse\",\"builderInput\":{\"world\":\"real\",\"kind\":\"event\",\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Priya\"},\"object\":{\"type\":\"object\",\"id\":\"R-42\"},\"recipient\":{\"type\":\"actor\",\"id\":\"Leo\"}}}}",
+  "rawResponseSha256": "957ab623da0117488a5d0d407a67990ace9f775847ed753156e019370b27b541",
+  "output": {
+    "status": "parse",
+    "builderInput": {
+      "world": "real",
+      "kind": "event",
+      "predicate": "send",
+      "roles": {
+        "agent": {
+          "type": "actor",
+          "id": "Priya"
+        },
+        "object": {
+          "type": "object",
+          "id": "R-42"
+        },
+        "recipient": {
+          "type": "actor",
+          "id": "Leo"
+        }
+      }
+    }
+  },
+  "builder": {
+    "sem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "event",
+      "clauses": [
+        {
+          "predicate": "send",
+          "roles": {
+            "agent": {
+              "type": "actor",
+              "id": "Priya"
+            },
+            "object": {
+              "type": "object",
+              "id": "R-42"
+            },
+            "recipient": {
+              "type": "actor",
+              "id": "Leo"
+            }
+          }
+        }
+      ]
+    },
+    "frame": {
+      "predicate": "send",
+      "roles": [
+        {
+          "name": "agent",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "object",
+          "required": true
+        },
+        {
+          "name": "recipient",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "destination",
+          "required": false
+        }
+      ],
+      "exclusiveGroups": [
+        [
+          "recipient",
+          "destination"
+        ]
+      ],
+      "description": "An agent transmits an object to a recipient or destination."
+    },
+    "allowedRoles": [
+      "agent",
+      "object",
+      "recipient",
+      "destination"
+    ],
+    "requiredRoles": [
+      "agent",
+      "object"
+    ],
+    "atLeastOneOf": null
+  },
+  "submission": {
+    "source": {
+      "text": "Priya sends R-42 to Leo.",
+      "language": "en",
+      "sha256": "b542693439c3b291714eae34d12787e08153d8f047b86103c47caf1bd3813ad2"
+    },
+    "provenance": {
+      "extractorType": "codex_agent",
+      "extractorModelId": "gpt-6-luna",
+      "provider": "openai",
+      "promptVersion": "luna-subagent-single-output-builder-development/0.1",
+      "promptSha256": "22dabacae8de2f5aba3a237f7515c8439d9878212a97f66cb8fe15d50336107c",
+      "implementationCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+      "decoding": {
+        "reasoningEffort": "high",
+        "temperature": null,
+        "seed": null
+      },
+      "contractVersion": "lunum-agent/0.13",
+      "contractHash": "c19e0a4a06af5b48100893359a64350a556c0ab74207c1fd8f43ea5a6d2c0131",
+      "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+      "frameRegistryHash": "1ecf8f1a08206f4f6773e4f8fb3d95e121b842d480add66a1d73248eb7eb30fc",
+      "sourceHash": "b542693439c3b291714eae34d12787e08153d8f047b86103c47caf1bd3813ad2",
+      "timestamp": "2026-10-02T11:22:08.263Z"
+    },
+    "transportValid": true,
+    "structuralValid": true,
+    "protocolCanonical": true,
+    "frameValid": true,
+    "grounded": true,
+    "candidateIdentityAvailable": true,
+    "semanticFingerprint": "lfp:2.1:sha256:6f9c7b4ad340a67adc55cb0f9437c21c",
+    "promotable": false,
+    "trust": {
+      "status": "candidate",
+      "confidence": 0,
+      "promoted": false,
+      "requiresHumanReview": true,
+      "reasons": [
+        "evidence_confidence_below_0.90",
+        "insufficient_confidence_evidence",
+        "missing_classification_evidence",
+        "risk_unknown",
+        "category_not_auto_promotable:event",
+        "missing_independent_verification"
+      ]
+    },
+    "failureClass": null,
+    "diagnostics": [],
+    "sem": {
+      "schema": "lunum-sem/0.1-draft",
+      "world": "real",
+      "kind": "event",
+      "clauses": [
+        {
+          "predicate": "send",
+          "roles": {
+            "agent": {
+              "type": "actor",
+              "id": "Priya"
+            },
+            "object": {
+              "type": "object",
+              "id": "R-42"
+            },
+            "recipient": {
+              "type": "actor",
+              "id": "Leo"
+            }
+          },
+          "negated": false
+        }
+      ]
+    },
+    "literalRetention": {
+      "retained": true,
+      "sourceNumbers": [],
+      "sourceIdentifiers": [
+        "r-42"
+      ],
+      "missingNumbers": [],
+      "missingIdentifiers": []
+    }
+  },
+  "failure": null,
+  "qualityMetrics": "NOT SCORED; no protected or certified gold used",
+  "nonClaims": [
+    "No SuperQwen or Claude result.",
+    "No protected accuracy or readiness claim.",
+    "No deployment or promotion evidence."
+  ]
+}
