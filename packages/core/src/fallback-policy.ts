@@ -40,7 +40,8 @@ export interface UncertaintyReason {
 /**
  * ParseConfidence: aggregated confidence score with evidence breakdown.
  *
- * The score represents P(correct parse | input).
+ * The score aggregates available evidence factors. It is not a calibrated
+ * probability that the parse is correct.
  * Evidence factors explain what contributes to the score.
  * Uncertainty reasons explain what could be wrong.
  *
@@ -140,25 +141,33 @@ const HIGH_RISK_PREDICATES = new Set([
   'launch', 'execute', 'deploy',
 ]);
 
-const HIGH_RISK_MODALITIES = new Set(['must', 'must_not', 'shall', 'shall_not']);
+const HIGH_RISK_MODALITIES = new Set([
+  // Canonical protocol modalities.
+  'obligation', 'necessity',
+  // Registered and legacy surface aliases for obligation.
+  'must', 'must_not', 'shall', 'shall_not', 'mandatory', 'required',
+  'prohibited', 'forbidden',
+]);
 
 export function isHighRisk(sem: LunumSem): { highRisk: boolean; reasons: string[] } {
   const reasons: string[] = [];
-  for (const clause of sem.clauses) {
+  const pending = [...sem.clauses];
+  const visited = new Set<object>();
+  while (pending.length > 0) {
+    const clause = pending.pop()!;
+    if (!clause || typeof clause !== 'object' || visited.has(clause)) continue;
+    visited.add(clause);
+
     if (HIGH_RISK_PREDICATES.has(clause.predicate)) {
       reasons.push(`predicate '${clause.predicate}' is safety-critical`);
     }
-    if (clause.modality && HIGH_RISK_MODALITIES.has(clause.modality)) {
+    if (clause.modality && HIGH_RISK_MODALITIES.has(clause.modality.trim().toLowerCase().replace(/[ -]+/gu, '_'))) {
       reasons.push(`modality '${clause.modality}' on '${clause.predicate}' implies obligation/prohibition`);
     }
     if (clause.negated === true && HIGH_RISK_PREDICATES.has(clause.predicate)) {
       reasons.push(`negated safety-critical predicate '${clause.predicate}'`);
     }
-    for (const condition of clause.conditions ?? []) {
-      if (HIGH_RISK_PREDICATES.has(condition.predicate)) {
-        reasons.push(`condition predicate '${condition.predicate}' is safety-critical`);
-      }
-    }
+    pending.push(...(clause.conditions ?? []), ...(clause.consequences ?? []));
   }
   return { highRisk: reasons.length > 0, reasons };
 }

@@ -1,0 +1,66 @@
+{
+  "format": "openlunum-experiment/0.1",
+  "id": "readiness-core-gates-v1",
+  "area": "source-bound semantic candidate use",
+  "task": "Reproduce and close record-identity, recursive risk, registered deletion, and retrieval-accounting bypasses without claiming live extraction qualification.",
+  "createdAt": "2026-10-02",
+  "baselineCommit": "14c0ebc1e3db4cc99280778c14c12230790f95a3",
+  "scope": "OpenLunum only, main only; no existing process or external repository changes",
+  "status": "development",
+  "hypothesis": "Record creation, canonical recursive risk assessment, registered-derivative deletion, and raw-text retrieval accounting have bypasses or denominator errors that deterministic adversarial fixtures can reproduce and prevent.",
+  "visionGuardrails": [
+    "Original source evidence is authoritative and recoverable.",
+    "Semantics and stable identity remain model- and language-independent; open strings are not proof of referent identity.",
+    "Candidate identity is not verified semantics or promotion.",
+    "Surface, exact semantic, and near-semantic identities remain distinct and versioned.",
+    "Retrieval augments proven retrieval methods; rendering and compaction are separate hypotheses.",
+    "Unsafe or uncertain interpretations fail closed, remain observable, and retain natural evidence.",
+    "Derived data inherits source sensitivity, bounded retention, and deletion linkage.",
+    "Failed and frozen evaluation evidence is immutable; model-only judgment is not human/native qualification."
+  ],
+  "areas": [
+    "source-bound candidate identity at record creation",
+    "canonical modality and recursive condition/consequence risk assessment",
+    "registry-derived deletion plan completeness and lineage",
+    "raw retrieval routing, pool, failure-stage and metric accounting"
+  ],
+  "data": {
+    "class": "development/regression",
+    "source": "existing visible repository tests and new deterministic adversarial fixtures",
+    "protectedCorpus": "NOT USED",
+    "goldOrHistoricalModelOutputsUsedForPromptTuning": false
+  },
+  "dataset": {
+    "class": "existing visible regression fixtures",
+    "artifacts": [
+      { "path": "packages/core/test/semantic-trust.test.ts", "sha256": "13810a0fdcef3ca313cb9358285f1b271156de0591eccc227afb2c0490d5f263" },
+      { "path": "packages/core/test/privacy-derived-lifecycle.test.ts", "sha256": "4a05830875d07dd50308ad310819b8296e66ab85d3021eb003e66fac0d47e798" },
+      { "path": "packages/eval/test/raw-text-retrieval.test.ts", "sha256": "65256b1d36fa2df3aeeb024b31b0aa67862383ca9a5207c56fed3d7314173428" }
+    ],
+    "hashNote": "Hashes name the baseline test inputs, not subsequent adversarial extensions."
+  },
+  "modelProfiles": [],
+  "budgets": { "modelCalls": 0, "providerSpendUsd": 0 },
+  "providerBudget": {
+    "calls": 0,
+    "newProviderSpending": 0
+  },
+  "metrics": [
+    "reproduced bypass count",
+    "adversarial regression pass/fail",
+    "full pnpm verify pass/fail"
+  ],
+  "hardGates": [
+    "source-literal mismatch cannot issue source-bound exact identity or promotion through createRecord",
+    "canonical obligation and safety-critical nested conditions/consequences cannot evade risk assessment",
+    "incomplete, forged, stale or lineage-mismatched deletion plans cannot execute or claim cascade completion",
+    "routing-ineligible equivalent records are not semantic false positives",
+    "confusion counts use an explicit common routed raw-memory universe",
+    "extraction failures and baseline exceptions are not successful negative rejection or semantic matching failures",
+    "owner work and existing processes remain untouched"
+  ],
+  "nonClaims": [
+    "No live semantic accuracy, deployed deletion, embedding, compaction, or OpenUnum integration result is established by this experiment.",
+    "No readiness decision follows merely from deterministic tests."
+  ]
+}

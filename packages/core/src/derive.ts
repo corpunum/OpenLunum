@@ -11,6 +11,8 @@ import {
 } from './policy.js';
 import { normalizeSemanticCandidate } from './semantic-registry.js';
 import { validateSemFrames } from './frame-registry.js';
+import { validateSemanticTransport } from './semantic-transport.js';
+import { checkLiteralRetention } from './literal-retention.js';
 import type { ConfidenceEvidenceFactors } from './fallback-policy.js';
 import type { LunumRecord, LunumSem, LunumSidecar, Risk } from './types.js';
 
@@ -63,6 +65,10 @@ export interface CreateRecordInput {
 }
 
 export function createRecord(input: CreateRecordInput): LunumRecord {
+  const transportValidation = validateSemanticTransport(input.sem);
+  if (!transportValidation.ok) {
+    throw new TypeError(`Invalid Lunum-Sem candidate: transport validation failed: ${transportValidation.errors.join('; ')}`);
+  }
   const candidateValidation = validateSemanticCandidate(input.sem);
   if (!candidateValidation.ok) {
     throw new TypeError(`Invalid Lunum-Sem candidate: ${candidateValidation.errors.join('; ')}`);
@@ -86,7 +92,9 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
     normalizationIssues: normalization.issues,
   });
   const frameValidation = validateSemFrames(canonical);
-  const effectiveTrust = frameValidation.valid
+  const sourceBound = typeof input.sourceText === 'string' && input.sourceText.trim().length > 0;
+  const literalRetention = sourceBound ? checkLiteralRetention(input.sourceText!, canonical) : null;
+  const frameTrust = frameValidation.valid
     ? trust
     : {
         ...trust,
@@ -95,6 +103,19 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
         requiresHumanReview: true,
         reasons: [...trust.reasons, ...frameValidation.issues.map((issue) => `semantic frame: ${issue.message}`)]
       };
+  const effectiveTrust = literalRetention && !literalRetention.retained
+    ? {
+        ...frameTrust,
+        status: 'candidate' as const,
+        promoted: false,
+        requiresHumanReview: true,
+        reasons: [...new Set([
+          ...frameTrust.reasons,
+          'unretained_source_literal',
+          `source literals missing from candidate: ${[...literalRetention.missingNumbers.map(String), ...literalRetention.missingIdentifiers].join(', ')}`,
+        ])],
+      }
+    : frameTrust;
   const basePolicy = classifyEligibility({
     category: input.category ?? canonical.kind,
     risk: input.risk ?? 'unknown',
@@ -110,7 +131,9 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
       ...effectiveTrust.reasons
     ])],
   };
-  const semanticIdentity = normalization.canonical && frameValidation.valid ? semanticFingerprint(canonical) : undefined;
+  const semanticIdentity = normalization.canonical && frameValidation.valid && literalRetention?.retained !== false
+    ? semanticFingerprint(canonical)
+    : undefined;
   return {
     recordVersion: RECORD_SCHEMA,
     source: { text: input.sourceText ?? '', language: input.sourceLanguage ?? null, role: input.role ?? null, ref: input.sourceRef ?? null },
@@ -127,6 +150,8 @@ export function createRecord(input: CreateRecordInput): LunumRecord {
       semanticPromoted: effectiveTrust.promoted,
       semanticTrust: effectiveTrust,
       semanticNormalization: normalization,
+      semanticIdentityBinding: sourceBound ? 'source-bound' : 'unbound',
+      sourceLiteralRetention: literalRetention,
     }
   };
 }

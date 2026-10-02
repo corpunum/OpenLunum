@@ -200,5 +200,298 @@ test('identity coverage excludes structurally normalized but unframed candidates
   assert.equal(report.metrics.queryExtractionFailures, 1);
   assert.equal(report.metrics.memoryIdentityAvailable, 0);
   assert.equal(report.metrics.queryIdentityAvailable, 0);
-  assert.match(report.queryResults[0]!.extractionError!, /semantic identity unavailable/u);
+  assert.match(report.queryResults[0]!.extractionError!, /candidate identity unavailable/u);
+});
+
+test('expected retrieval IDs must belong to the target-language route', async () => {
+  await assert.rejects(() => runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'guide-en', text: 'English guide.', language: 'en' },
+      { id: 'guide-el', text: 'Greek guide.', language: 'el' },
+    ],
+    queries: [{
+      id: 'q-el', text: 'Find the guide.', language: 'en', targetLanguage: 'el',
+      expectedMemoryIds: ['guide-en'], semanticEquivalentMemoryIds: ['guide-en', 'guide-el'],
+    }],
+    extract: () => sem('publish', 'guide'),
+  }), /expected.*target language|route/u);
+});
+
+test('query extraction failure retains routed-out semantic equivalents', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'guide-en', text: 'English guide.', language: 'en' },
+      { id: 'guide-el', text: 'Greek guide.', language: 'el' },
+    ],
+    queries: [{
+      id: 'q-el', text: 'Find the guide.', language: 'el', targetLanguage: 'el',
+      expectedMemoryIds: ['guide-el'], semanticEquivalentMemoryIds: ['guide-en', 'guide-el'],
+    }],
+    extract: ({ kind }) => kind === 'query' ? null : sem('publish', 'guide'),
+  });
+  assert.deepEqual(report.queryResults[0]?.routedOutEquivalentMemoryIds, ['guide-en']);
+  assert.deepEqual(report.queryResults[0]?.semanticMatchingFailures, []);
+});
+
+test('confusion universe is routed raw corpus while identity-available pool stays separate', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'positive', text: 'Known matching fact.', language: 'en' },
+      { id: 'available-negative', text: 'Known unrelated fact.', language: 'en' },
+      { id: 'unavailable-negative', text: 'Unparsed unrelated fact.', language: 'en' },
+      { id: 'unavailable-positive', text: 'Unparsed matching fact.', language: 'en' },
+    ],
+    queries: [
+      { id: 'q-positive', text: 'Known matching fact?', language: 'en', expectedMemoryIds: ['positive', 'unavailable-positive'] },
+      { id: 'q-negative', text: 'Unrelated negative?', language: 'en', expectedMemoryIds: [] },
+    ],
+    extract: ({ kind, text }) => {
+      if (kind === 'memory' && text.startsWith('Unparsed')) return null;
+      if (kind === 'query' && text.startsWith('Unrelated')) return sem('delete', 'unknown_fact');
+      return sem('publish', text.includes('unrelated') ? 'other_fact' : 'matching_fact');
+    },
+    baselines: { lexical: ({ query }) => query.id === 'q-positive' ? ['positive'] : [] },
+  });
+  const result = report.queryResults[0] as unknown as Record<string, unknown>;
+  assert.equal(result.routedCorpusCount, 4);
+  assert.equal(result.identityAvailableCandidateCount, 2);
+  assert.deepEqual(result.identityUnavailableMemoryIds, ['unavailable-negative', 'unavailable-positive']);
+  assert.deepEqual(result.identityUnavailableExpectedMemoryIds, ['unavailable-positive']);
+  assert.deepEqual(result.identityUnavailableNegativeMemoryIds, ['unavailable-negative']);
+  assert.deepEqual(report.queryResults[0]!.rankingFailures, []);
+  assert.equal(report.metrics.rankingFailures, 0);
+  assert.equal(report.metrics.semanticMatchingFailures, 0);
+  assert.equal(report.metrics.truePositives, 1);
+  assert.equal(report.metrics.falseNegatives, 1);
+  assert.equal(report.metrics.trueNegatives, 6);
+  assert.equal(report.metrics.routedRawCandidatePairs, 8);
+  assert.equal(report.metrics.identityAvailableCandidatePairs, 4);
+  assert.equal(report.metrics.identityUnavailableCandidatePairs, 4);
+  assert.equal(report.metrics.identityUnavailableExpectedCandidatePairs, 1);
+  assert.equal(report.metrics.identityUnavailableNegativeCandidatePairs, 3);
+  assert.equal(report.metrics.conditionalRecall, 1);
+  assert.equal(report.metrics.negativeComparableQueryCount, 0);
+  assert.equal(report.baselines.lexical?.trueNegatives, 6);
+  assert.equal(report.baselines.lexical?.falseNegatives, 1);
+});
+
+test('raw-pool FPR and examined conditional FPR disclose a partial identity pool', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'expected', text: 'Expected guide.', language: 'en' },
+      { id: 'false-positive', text: 'Unrelated note.', language: 'en' },
+      { id: 'unavailable-negative', text: 'Unparsed note.', language: 'en' },
+    ],
+    queries: [{ id: 'q', text: 'Find the guide.', language: 'en', expectedMemoryIds: ['expected'] }],
+    extract: ({ kind, text }) => kind === 'memory' && text.startsWith('Unparsed') ? null : sem('publish', 'guide'),
+    baselines: { lexical: () => ['false-positive'] },
+  });
+  const result = report.queryResults[0]!;
+  const pair = report.metrics.byLanguagePair['en-*']!;
+  assert.equal(report.metrics.falsePositives, 1);
+  assert.equal(report.metrics.trueNegatives, 1);
+  assert.equal(report.metrics.falsePositiveRate, 0.5);
+  assert.equal(report.metrics.examinedFalsePositiveRate, 1);
+  assert.equal(report.metrics.examinedNegativePairs, 1);
+  assert.equal(report.metrics.unexaminedNegativePairs, 1);
+  assert.deepEqual(result.identityUnavailableNegativeMemoryIds, ['unavailable-negative']);
+  assert.equal(result.falsePositiveRate, 0.5);
+  assert.equal(result.examinedFalsePositiveRate, 1);
+  assert.equal(pair.falsePositiveRate, 0.5);
+  assert.equal(pair.examinedFalsePositiveRate, 1);
+  assert.equal(report.baselines.lexical?.falsePositiveRate, 0.5);
+  assert.equal(report.baselines.lexical?.examinedFalsePositiveRate, 0.5);
+});
+
+test('baseline exceptions are visible failures, not comparable negative rejections', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [{ id: 'm', text: 'Known fact.', language: 'en' }],
+    queries: [{ id: 'negative', text: 'Unknown fact?', language: 'en', expectedMemoryIds: [] }],
+    extract: ({ kind }) => kind === 'memory' ? sem('publish', 'known_fact') : sem('delete', 'unknown_fact'),
+    baselines: { broken: () => { throw new Error('baseline unavailable'); } },
+  });
+  assert.equal(report.baselines.broken?.failures, 1);
+  assert.equal(report.baselines.broken?.negativeRejectionAccuracy, 0);
+  assert.equal((report.baselines.broken as unknown as Record<string, unknown>)?.negativeComparableQueryCount, 0);
+  assert.equal(report.baselines.broken?.top1Accuracy, 0);
+  assert.equal(report.baselines.broken?.precision, 0);
+  assert.equal((report.baselines.broken as unknown as Record<string, unknown>)?.unexaminedNegativePairs, 1);
+  assert.equal(report.baselines.broken?.falsePositiveRate, 0);
+  assert.equal(report.baselines.broken?.examinedFalsePositiveRate, null);
+});
+
+test('baseline top1Accuracy is the positive-only alias and thrown runs do not count as top1 successes', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'positive', text: 'Known fact.', language: 'en' },
+      { id: 'negative-decoy', text: 'Unrelated fact.', language: 'en' },
+    ],
+    queries: [
+      { id: 'positive-query', text: 'Known fact?', language: 'en', expectedMemoryIds: ['positive'] },
+      { id: 'negative-query', text: 'Missing fact?', language: 'en', expectedMemoryIds: [] },
+    ],
+    extract: ({ kind }) => kind === 'memory' ? sem('publish', 'fact') : sem('delete', 'fact'),
+    baselines: {
+      mixed: ({ query }) => query.id === 'positive-query' ? [] : [],
+      throws: ({ query }) => { if (query.id === 'negative-query') throw new Error('baseline unavailable'); return []; },
+    },
+  });
+  assert.equal(report.baselines.mixed?.positiveTop1Accuracy, 0);
+  assert.equal(report.baselines.mixed?.top1Accuracy, report.baselines.mixed?.positiveTop1Accuracy);
+  assert.equal(report.baselines.throws?.top1Accuracy, report.baselines.throws?.positiveTop1Accuracy);
+  assert.equal(report.baselines.throws?.top1Accuracy, 0);
+});
+
+test('unexamined negative pairs include every routed record when query extraction fails', async () => {
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'one', text: 'Known fact one.', language: 'en' },
+      { id: 'two', text: 'Known fact two.', language: 'en' },
+    ],
+    queries: [{ id: 'negative', text: 'Unparseable negative?', language: 'en', expectedMemoryIds: [] }],
+    extract: ({ kind }) => kind === 'query' ? null : sem('publish', 'fact'),
+  });
+  const result = report.queryResults[0] as unknown as Record<string, unknown>;
+  assert.equal(result.unexaminedNegativePairs, 2);
+  const metrics = report.metrics as unknown as Record<string, unknown>;
+  assert.equal(metrics.unexaminedNegativePairs, 2);
+  assert.equal(metrics.examinedNegativePairs, 0);
+  assert.equal(report.metrics.falsePositiveRate, 0);
+  assert.equal(report.metrics.examinedFalsePositiveRate, null);
+  assert.equal(report.queryResults[0]?.falsePositiveRate, 0);
+  assert.equal(report.queryResults[0]?.examinedFalsePositiveRate, null);
+  assert.equal(report.metrics.negativeComparableQueryCount, 0);
+});
+
+test('candidate identity uses submitCandidate transport and source-literal gates', async () => {
+  const transportInvalid = sem('publish', 'guide') as unknown as {
+    schema: string; world: string; kind: string;
+    clauses: Array<Record<string, unknown>>;
+  };
+  transportInvalid.clauses[0] = {
+    ...transportInvalid.clauses[0],
+    conditions: [{ predicate: 'confirmed', roles: { agent: { type: 'actor', id: 'user' } }, negated: false, world: 'real' }],
+  };
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'wire-invalid', text: 'The assistant publishes the guide.', language: 'en' },
+      { id: 'literal-dropped', text: 'The assistant publishes the guide below 5000 euros.', language: 'en' },
+    ],
+    queries: [
+      { id: 'wire-query', text: 'The assistant publishes the guide.', language: 'en', expectedMemoryIds: ['wire-invalid'] },
+      { id: 'literal-query', text: 'The assistant publishes the guide below 5000 euros?', language: 'en', expectedMemoryIds: ['literal-dropped'] },
+    ],
+    extract: ({ text }) => text.includes('5000') ? sem('publish', 'guide') : transportInvalid as unknown as LunumSem,
+  });
+  assert.equal(report.metrics.memoryIdentityAvailable, 0);
+  assert.equal(report.metrics.queryIdentityAvailable, 0);
+  assert.match(report.queryResults.find((item) => item.queryId === 'wire-query')?.extractionError ?? '', /transport|identity unavailable/u);
+  assert.match(report.queryResults.find((item) => item.queryId === 'literal-query')?.extractionError ?? '', /5000|literal|identity unavailable/u);
+  assert.equal(report.metrics.falseNegatives, 2);
+});
+
+test('semantic gold fields in raw retrieval rows fail before extraction', async () => {
+  let extractionCalls = 0;
+  const extract = () => { extractionCalls += 1; return sem('publish', 'fact'); };
+  for (const field of ['sem', 'querySem', 'targetSem', 'querySemGold']) {
+    await assert.rejects(() => runRawTextRetrievalEvaluation({
+      memories: [{ id: 'm', text: 'Fact.', language: 'en' }],
+      queries: [{ id: 'q', text: 'Fact?', language: 'en', expectedMemoryIds: [], [field]: sem('publish', 'fact') } as never],
+      extract,
+    }), new RegExp(field, 'u'));
+  }
+  await assert.rejects(() => runRawTextRetrievalEvaluation({
+    memories: [{ id: 'm', text: 'Fact.', language: 'en', sem: sem('publish', 'fact') } as never],
+    queries: [{ id: 'q', text: 'Fact?', language: 'en', expectedMemoryIds: [] }],
+    extract,
+  }), /sem/u);
+  await assert.rejects(() => runRawTextRetrievalEvaluation({
+    memories: [{ id: 'm', text: 'Fact.', language: 'en' }],
+    queries: [{ id: 'q', text: 'Fact?', language: 'en', expectedMemoryIds: [], hiddenPayload: 'unexpected' } as never],
+    extract,
+  }), /unknown input field: hiddenPayload/u);
+  assert.equal(extractionCalls, 0);
+});
+
+test('retrieval reports separate exact and near provenance and candidate identity status', async () => {
+  const exact = sem('publish', 'guide');
+  const near = sem('publish', 'manual');
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [
+      { id: 'exact', text: 'Exact guide.', language: 'en' },
+      { id: 'near', text: 'Related manual.', language: 'en' },
+    ],
+    queries: [{ id: 'q', text: 'Find guide.', language: 'en', expectedMemoryIds: ['exact'] }],
+    extract: ({ kind, text }) => kind === 'query' || text === 'Exact guide.' ? exact : near,
+    threshold: 0.1,
+    mode: 'near-semantic',
+    topK: 2,
+  });
+  const result = report.queryResults[0] as unknown as Record<string, unknown>;
+  const output = report as unknown as Record<string, unknown>;
+  assert.deepEqual(result.exactRetrievedMemoryIds, ['exact']);
+  assert.deepEqual(result.nearSemanticRetrievedMemoryIds, ['near']);
+  assert.equal(output.retrievalBasis, 'candidate-identity-not-promoted');
+  assert.equal(report.version, '0.6.0');
+  assert.equal(report.metrics.exactRetrievedCount, 1);
+  assert.equal(report.metrics.nearSemanticRetrievedCount, 1);
+});
+
+test('type metadata cannot hide gold and target language must be a nonempty string', async () => {
+  let calls = 0;
+  const extract = () => { calls += 1; return null; };
+  await assert.rejects(() => runRawTextRetrievalEvaluation({
+    memories: [{ id: 'm', text: 'Fact.', language: 'en', type: { goldSem: sem('publish', 'fact') } } as never],
+    queries: [{ id: 'q', text: 'Fact?', language: 'en', expectedMemoryIds: [] }], extract,
+  }), /invalid memory type/u);
+  for (const targetLanguage of ['', 42]) {
+    await assert.rejects(() => runRawTextRetrievalEvaluation({
+      memories: [{ id: 'm', text: 'Fact.', language: 'en' }],
+      queries: [{ id: 'q', text: 'Fact?', language: 'en', expectedMemoryIds: [], targetLanguage } as never], extract,
+    }), /invalid query target language/u);
+  }
+  assert.equal(calls, 0);
+});
+
+test('baselines receive isolated raw projections, never labels or shared mutable sources', async () => {
+  const memory = { id: 'm', text: 'Raw memory.', language: 'en', type: 'memory' };
+  const query = { id: 'q', text: 'Raw query.', language: 'en', type: 'query', targetLanguage: 'en', expectedMemoryIds: ['m'], semanticEquivalentMemoryIds: ['m'] };
+  const report = await runRawTextRetrievalEvaluation({
+    memories: [memory], queries: [query], extract: () => sem('publish', 'fact'),
+    baselines: {
+      first: ({ query: raw, memories }) => {
+        assert.deepEqual(Object.keys(raw).sort(), ['id', 'language', 'targetLanguage', 'text']);
+        assert.deepEqual(Object.keys(memories[0]!).sort(), ['id', 'language', 'text']);
+        assert.throws(() => { raw.text = 'changed'; }, TypeError);
+        assert.throws(() => { memories[0]!.text = 'changed'; }, TypeError);
+        memories.splice(0, 1);
+        return [];
+      },
+      second: ({ query: raw, memories }) => {
+        assert.equal(raw.text, 'Raw query.');
+        assert.equal(memories.length, 1);
+        assert.equal(memories[0]!.text, 'Raw memory.');
+        return ['m'];
+      },
+    },
+  });
+  assert.equal(report.baselines.first?.failures, 0);
+  assert.equal(report.baselines.second?.positiveTop1Accuracy, 1);
+  assert.equal(memory.text, 'Raw memory.');
+  assert.equal(query.text, 'Raw query.');
+});
+
+test('extractor cannot rewrite the source used for candidate validation', async () => {
+  const seen: string[] = [];
+  await runRawTextRetrievalEvaluation({
+    memories: [{ id: 'm', text: 'Raw memory.', language: 'en' }],
+    queries: [{ id: 'q', text: 'Raw query.', language: 'en', expectedMemoryIds: ['m'] }],
+    extract: input => {
+      assert.equal(Object.isFrozen(input), true);
+      assert.throws(() => { input.text = 'different source'; }, TypeError);
+      seen.push(input.text);
+      return sem('publish', 'fact');
+    },
+  });
+  assert.deepEqual(seen, ['Raw memory.', 'Raw query.']);
 });

@@ -11,7 +11,7 @@
  * content identifier is a SHA-256 digest supplied by the caller.
  */
 
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import {
   classifyDataCategory,
   getRetentionPolicy,
@@ -145,6 +145,10 @@ function strongerDeletionMethod(
   return DELETION_STRENGTH[first] >= DELETION_STRENGTH[second] ? first : second;
 }
 
+function isDeletionMethod(value: unknown): value is PrivacyRetentionPolicy['deletionMethod'] {
+  return typeof value === 'string' && Object.hasOwn(DELETION_STRENGTH, value);
+}
+
 /** Hash source content without retaining it in the resulting lineage metadata. */
 export function hashSourceContent(sourceContent: string): string {
   return createHash('sha256').update(sourceContent).digest('hex');
@@ -155,13 +159,13 @@ export function validateSourcePrivacyLineage(source: SourcePrivacyLineage): stri
   const errors: string[] = [];
   if (!isUsableText(source.sourceId)) errors.push('sourceId must be a non-placeholder opaque identifier');
   if (!isSha256(source.sourceContentHash)) errors.push('sourceContentHash must be a 64-character lowercase SHA-256 hex digest');
-  if (!(source.sensitivity in SENSITIVITY_ORDER)) errors.push('source sensitivity is invalid');
+  if (!Object.hasOwn(SENSITIVITY_ORDER, source.sensitivity)) errors.push('source sensitivity is invalid');
   try {
     parseTimestamp(source.retentionExpiresAt, 'source retentionExpiresAt');
   } catch (error) {
     errors.push(error instanceof Error ? error.message : String(error));
   }
-  if (!(source.deletionMethod in DELETION_STRENGTH)) errors.push('source deletionMethod is invalid');
+  if (!isDeletionMethod(source.deletionMethod)) errors.push('source deletionMethod is invalid');
   return errors;
 }
 
@@ -213,6 +217,9 @@ export function createDerivedDataLifecycle(input: CreateDerivedDataLifecycleInpu
   if (input.requestedRetentionDays !== undefined && (!Number.isFinite(input.requestedRetentionDays) || input.requestedRetentionDays < 0)) {
     throw new Error('requestedRetentionDays must be a finite non-negative number');
   }
+  if (input.requestedSensitivity !== undefined && !Object.hasOwn(SENSITIVITY_ORDER, input.requestedSensitivity)) {
+    throw new Error('requestedSensitivity is invalid');
+  }
 
   const now = parseTimestamp(input.now ?? new Date().toISOString(), 'now');
   const requestedDays = input.requestedRetentionDays ?? categoryPolicy.retentionDays;
@@ -245,7 +252,12 @@ export interface DeletionTarget {
 }
 
 export interface DerivedDeletionPlan {
+  /** Version of the registry-issued plan integrity receipt; this is not human or deployed authorization. */
+  readonly contractVersion: 'derived-deletion-plan/1';
+  readonly planId: string;
   readonly sourceId: string;
+  /** Immutable source identity and policy snapshot; never includes source text. */
+  readonly lineage: SourcePrivacyLineage;
   /** This plan covers only artifacts registered in this registry instance. */
   readonly scope: 'registered-artifacts-only';
   readonly targets: readonly DeletionTarget[];
@@ -260,9 +272,10 @@ export interface DerivedDeletionReport {
   readonly plan: DerivedDeletionPlan;
   readonly results: readonly DeletionTargetResult[];
   readonly complete: boolean;
+  readonly error?: string;
 }
 
-export type DeleteTarget = (target: DeletionTarget) => void | boolean;
+export type DeleteTarget = (target: DeletionTarget) => void | boolean | Promise<void | boolean>;
 
 /**
  * Registry of derivatives owned by one storage boundary.  It is intentionally
@@ -271,6 +284,9 @@ export type DeleteTarget = (target: DeletionTarget) => void | boolean;
  */
 export class DerivedDataLifecycleRegistry {
   private readonly artifactsBySource = new Map<string, Map<string, DerivedArtifactRegistration>>();
+  private readonly sourceLineageById = new Map<string, SourcePrivacyLineage>();
+  private readonly issuedPlans = new Map<string, DerivedDeletionPlan>();
+  private readonly deletingSources = new Set<string>();
 
   register(artifact: DerivedArtifactRegistration): void {
     if (!isUsableText(artifact.artifactId)) throw new Error('artifactId must be non-empty and not a placeholder');
@@ -279,6 +295,8 @@ export class DerivedDataLifecycleRegistry {
     const provenanceErrors = validateDerivedSemanticProvenance(artifact.lifecycle.provenance);
     const errors = [...sourceErrors, ...provenanceErrors];
     if (!getRetentionPolicy(artifact.lifecycle.category)) errors.push(`unknown derived category ${artifact.lifecycle.category}`);
+    if (!isDeletionMethod(artifact.lifecycle.deletionMethod)) errors.push('artifact deletion method is invalid');
+    if (!Object.hasOwn(SENSITIVITY_ORDER, artifact.lifecycle.sensitivity)) errors.push('artifact sensitivity is invalid');
     if (SENSITIVITY_ORDER[artifact.lifecycle.sensitivity] < SENSITIVITY_ORDER[artifact.lifecycle.source.sensitivity]) {
       errors.push('artifact sensitivity is weaker than its source sensitivity');
     }
@@ -294,10 +312,20 @@ export class DerivedDataLifecycleRegistry {
     }
     if (errors.length > 0) throw new Error(`Invalid derived artifact registration: ${errors.join('; ')}`);
     const sourceId = artifact.lifecycle.source.sourceId;
+    if (this.deletingSources.has(sourceId)) throw new Error(`Cannot register artifacts while deletion is in progress for source ${sourceId}`);
+    const registeredLineage = this.sourceLineageById.get(sourceId);
+    if (registeredLineage && !sameSourceLineage(registeredLineage, artifact.lifecycle.source)) {
+      throw new Error(`Source lineage mismatch for source ${sourceId}`);
+    }
     const byId = this.artifactsBySource.get(sourceId) ?? new Map<string, DerivedArtifactRegistration>();
     if (byId.has(artifact.artifactId)) throw new Error(`Artifact ${artifact.artifactId} is already registered for source ${sourceId}`);
-    byId.set(artifact.artifactId, Object.freeze({ ...artifact }));
+    const source = Object.freeze({ ...artifact.lifecycle.source });
+    const provenance = Object.freeze({ ...artifact.lifecycle.provenance });
+    const lifecycle = Object.freeze({ ...artifact.lifecycle, source, provenance });
+    byId.set(artifact.artifactId, Object.freeze({ ...artifact, lifecycle }));
     this.artifactsBySource.set(sourceId, byId);
+    if (!registeredLineage) this.sourceLineageById.set(sourceId, source);
+    this.invalidatePlans(sourceId);
   }
 
   list(sourceId: string): readonly DerivedArtifactRegistration[] {
@@ -307,44 +335,201 @@ export class DerivedDataLifecycleRegistry {
   buildDeletionPlan(source: SourcePrivacyLineage): DerivedDeletionPlan {
     const sourceErrors = validateSourcePrivacyLineage(source);
     if (sourceErrors.length > 0) throw new Error(`Invalid deletion source: ${sourceErrors.join('; ')}`);
+    let registeredLineage = this.sourceLineageById.get(source.sourceId);
+    if (registeredLineage && !sameSourceLineage(registeredLineage, source)) {
+      throw new Error(`Deletion source lineage mismatch for source ${source.sourceId}`);
+    }
+    if (!registeredLineage) {
+      registeredLineage = Object.freeze({ ...source });
+      this.sourceLineageById.set(source.sourceId, registeredLineage);
+    }
     const artifacts = this.list(source.sourceId);
     const targets: DeletionTarget[] = [
-      { targetId: source.sourceId, kind: 'source', sourceId: source.sourceId, deletionMethod: source.deletionMethod },
       ...artifacts.map((artifact) => ({
         targetId: artifact.artifactId,
         kind: artifact.kind,
         sourceId: source.sourceId,
         deletionMethod: artifact.lifecycle.deletionMethod,
       })),
+      { targetId: source.sourceId, kind: 'source', sourceId: source.sourceId, deletionMethod: source.deletionMethod },
     ];
-    return Object.freeze({ sourceId: source.sourceId, scope: 'registered-artifacts-only', targets: Object.freeze(targets) });
+    const plan: DerivedDeletionPlan = Object.freeze({
+      contractVersion: 'derived-deletion-plan/1',
+      planId: randomUUID(),
+      sourceId: source.sourceId,
+      lineage: registeredLineage,
+      scope: 'registered-artifacts-only',
+      targets: Object.freeze(targets.map((target) => Object.freeze({ ...target }))),
+    });
+    this.issuedPlans.set(plan.planId, plan);
+    return plan;
   }
 
-  executeDeletion(plan: DerivedDeletionPlan, deleteTarget: DeleteTarget): DerivedDeletionReport {
-    const results: DeletionTargetResult[] = [];
-    for (const target of plan.targets) {
-      try {
-        const outcome = deleteTarget(target);
-        if (outcome === false) {
-          results.push({ ...target, deleted: false, error: 'deleter reported target not deleted' });
-        } else {
-          results.push({ ...target, deleted: true });
-        }
-      } catch (error) {
-        results.push({ ...target, deleted: false, error: error instanceof Error ? error.message : String(error) });
-      }
+  /**
+   * Execute a registry-issued plan. This method is async; callers must await
+   * the report before treating any deletion outcome as final.
+   */
+  async executeDeletion(plan: DerivedDeletionPlan, deleteTarget: DeleteTarget): Promise<DerivedDeletionReport> {
+    const sourceId = plan && typeof plan.sourceId === 'string' ? plan.sourceId : '';
+    const canonicalPlan = this.validateDeletionPlan(plan);
+    if (!canonicalPlan) {
+      return Object.freeze({ plan, results: Object.freeze([]), complete: false, error: 'deletion plan is invalid, stale, or was not issued by this registry' });
     }
-    const complete = results.length === plan.targets.length && results.every((result) => result.deleted);
-    if (complete) this.artifactsBySource.delete(plan.sourceId);
-    return Object.freeze({ plan, results: Object.freeze(results), complete });
+    if (this.deletingSources.has(sourceId)) {
+      return Object.freeze({ plan: canonicalPlan, results: Object.freeze([]), complete: false, error: 'deletion is already in progress for this source' });
+    }
+
+    this.deletingSources.add(sourceId);
+    const results: DeletionTargetResult[] = [];
+    let derivativeFailed = false;
+    try {
+      for (const target of canonicalPlan.targets) {
+        if (target.kind === 'source' && derivativeFailed) {
+          results.push(Object.freeze({ ...target, deleted: false, error: 'source deletion skipped because a derived target failed' }));
+          continue;
+        }
+        try {
+          const outcome = await deleteTarget(target);
+          if (outcome === false) {
+            results.push(Object.freeze({ ...target, deleted: false, error: 'deleter reported target not deleted' }));
+            if (target.kind !== 'source') derivativeFailed = true;
+          } else {
+            results.push(Object.freeze({ ...target, deleted: true }));
+          }
+        } catch (error) {
+          results.push(Object.freeze({ ...target, deleted: false, error: error instanceof Error ? error.message : String(error) }));
+          if (target.kind !== 'source') derivativeFailed = true;
+        }
+      }
+      const complete = results.length === canonicalPlan.targets.length && results.every((result) => result.deleted);
+      if (complete) {
+        this.artifactsBySource.delete(sourceId);
+        this.sourceLineageById.delete(sourceId);
+        this.invalidatePlans(sourceId);
+      }
+      return Object.freeze({ plan: canonicalPlan, results: Object.freeze(results), complete });
+    } finally {
+      this.deletingSources.delete(sourceId);
+    }
   }
+
+  private validateDeletionPlan(plan: DerivedDeletionPlan): DerivedDeletionPlan | undefined {
+    if (!plan || typeof plan !== 'object' || typeof plan.sourceId !== 'string' ||
+        !isUsableText(plan.sourceId) || Object.keys(plan).length !== 6 ||
+        plan.contractVersion !== 'derived-deletion-plan/1' || typeof plan.planId !== 'string' ||
+        plan.scope !== 'registered-artifacts-only' || !Array.isArray(plan.targets) ||
+        !plan.lineage || typeof plan.lineage !== 'object' || Object.keys(plan.lineage).length !== 5 ||
+        validateSourcePrivacyLineage(plan.lineage).length > 0) return undefined;
+    const registeredLineage = this.sourceLineageById.get(plan.sourceId);
+    const issued = this.issuedPlans.get(plan.planId);
+    if (!registeredLineage || !sameSourceLineage(registeredLineage, plan.lineage) || !issued || !sameDeletionPlan(plan, issued)) return undefined;
+    const artifacts = this.artifactsBySource.get(plan.sourceId);
+    const expected: DeletionTarget[] = [
+      ...[...(artifacts?.values() ?? [])].map((artifact) => ({
+        targetId: artifact.artifactId,
+        kind: artifact.kind,
+        sourceId: plan.sourceId,
+        deletionMethod: artifact.lifecycle.deletionMethod,
+      })),
+      { targetId: plan.sourceId, kind: 'source', sourceId: plan.sourceId, deletionMethod: registeredLineage.deletionMethod },
+    ];
+    if (!sameTargetSet(plan.targets, expected)) return undefined;
+    const targets = Object.freeze(expected.map((target) => Object.freeze({ ...target })));
+    return Object.freeze({
+      contractVersion: 'derived-deletion-plan/1',
+      planId: plan.planId,
+      sourceId: plan.sourceId,
+      lineage: Object.freeze({ ...registeredLineage }),
+      scope: 'registered-artifacts-only',
+      targets,
+    });
+  }
+
+  private invalidatePlans(sourceId: string): void {
+    for (const [planId, plan] of this.issuedPlans) {
+      if (plan.sourceId === sourceId) this.issuedPlans.delete(planId);
+    }
+  }
+}
+
+function targetKey(target: Pick<DeletionTarget, 'targetId' | 'kind' | 'sourceId' | 'deletionMethod'>): string {
+  return JSON.stringify([target.targetId, target.kind, target.sourceId, target.deletionMethod]);
+}
+
+function sameTargetSet(actual: readonly DeletionTarget[], expected: readonly DeletionTarget[]): boolean {
+  if (actual.length !== expected.length) return false;
+  const counts = new Map<string, number>();
+  for (const target of expected) counts.set(targetKey(target), (counts.get(targetKey(target)) ?? 0) + 1);
+  for (const target of actual) {
+    if (!target || typeof target !== 'object' || Object.keys(target).length !== 4 ||
+        typeof target.targetId !== 'string' || typeof target.sourceId !== 'string' ||
+        typeof target.kind !== 'string' || !isDeletionMethod(target.deletionMethod)) return false;
+    const key = targetKey(target);
+    const count = counts.get(key) ?? 0;
+    if (count === 0) return false;
+    counts.set(key, count - 1);
+  }
+  return [...counts.values()].every((count) => count === 0);
+}
+
+function sameDeletionPlan(first: DerivedDeletionPlan, second: DerivedDeletionPlan): boolean {
+  return first.contractVersion === second.contractVersion &&
+    first.planId === second.planId &&
+    first.sourceId === second.sourceId &&
+    first.scope === second.scope &&
+    sameSourceLineage(first.lineage, second.lineage) &&
+    sameTargetSet(first.targets, second.targets);
+}
+
+function sameSourceLineage(first: SourcePrivacyLineage, second: SourcePrivacyLineage): boolean {
+  return first.sourceId === second.sourceId &&
+    first.sourceContentHash === second.sourceContentHash &&
+    first.sensitivity === second.sensitivity &&
+    first.retentionExpiresAt === second.retentionExpiresAt &&
+    first.deletionMethod === second.deletionMethod;
 }
 
 /** A cascade is invalid if a single source/derivative deletion was skipped or failed. */
 export function verifyDerivedDeletionCascade(report: DerivedDeletionReport): boolean {
-  const planned = new Set(report.plan.targets.map((target) => `${target.kind}:${target.targetId}`));
-  const successful = new Set(report.results.filter((result) => result.deleted).map((result) => `${result.kind}:${result.targetId}`));
-  return report.complete && planned.size === report.plan.targets.length && planned.size === successful.size && [...planned].every((key) => successful.has(key));
+  try {
+    const { plan, results } = report;
+    if (!report.complete || plan.contractVersion !== 'derived-deletion-plan/1' ||
+        Object.keys(plan).length !== 6 || !isUsableText(plan.planId) || plan.scope !== 'registered-artifacts-only' ||
+        plan.sourceId !== plan.lineage.sourceId || !isUsableText(plan.sourceId) ||
+        Object.keys(plan.lineage).length !== 5 ||
+        validateSourcePrivacyLineage(plan.lineage).length > 0 ||
+        !Array.isArray(plan.targets) || !Array.isArray(results) || results.length !== plan.targets.length) return false;
+    const sourceTargets = plan.targets.filter((target) => target.kind === 'source');
+    if (sourceTargets.length !== 1 || sourceTargets[0]?.targetId !== plan.sourceId ||
+        sourceTargets[0]?.sourceId !== plan.sourceId || sourceTargets[0]?.deletionMethod !== plan.lineage.deletionMethod ||
+        plan.targets.at(-1)?.kind !== 'source') return false;
+    if (plan.targets.some((target) => target.sourceId !== plan.sourceId)) return false;
+    const remaining = new Map<string, number>();
+    for (const target of plan.targets) {
+      if (!target || Object.keys(target).length !== 4 ||
+          typeof target.targetId !== 'string' || !isUsableText(target.targetId) ||
+          target.sourceId !== plan.sourceId ||
+          (target.kind !== 'source' && !DERIVED_ARTIFACT_KINDS.includes(target.kind)) ||
+          !isDeletionMethod(target.deletionMethod)) return false;
+      const key = targetKey(target);
+      remaining.set(key, (remaining.get(key) ?? 0) + 1);
+    }
+    if (remaining.size !== plan.targets.length) return false;
+    for (const [index, result] of results.entries()) {
+      if (!result || typeof result.deleted !== 'boolean' ||
+          (Object.keys(result).length !== 5 && Object.keys(result).length !== 6) ||
+          (result.error !== undefined && typeof result.error !== 'string')) return false;
+      const key = targetKey(result);
+      if (key !== targetKey(plan.targets[index]!)) return false;
+      const count = remaining.get(key) ?? 0;
+      if (count === 0) return false;
+      remaining.set(key, count - 1);
+    }
+    if ([...remaining.values()].some((count) => count !== 0) || results.some((result) => !result.deleted)) return false;
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**
