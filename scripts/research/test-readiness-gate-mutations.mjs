@@ -15,26 +15,39 @@ const cases = [
   { name: 'deletion-plan-validation-disabled', source: 'privacy-derived-lifecycle.js', test: 'privacy-derived-lifecycle.test.js', from: 'const canonicalPlan = this.validateDeletionPlan(plan);', to: 'const canonicalPlan = plan;' },
   { name: 'retrieval-routing-validation-disabled', package: 'eval', source: 'raw-text-retrieval.js', test: 'raw-text-retrieval.test.js', from: 'throw new TypeError(`query ${query.id} expected IDs must belong to the target language route`);', to: ';' },
   { name: 'retrieval-gold-leakage-validation-disabled', package: 'eval', source: 'raw-text-retrieval.js', test: 'raw-text-retrieval.test.js', from: 'function validateInputFields(record, label, allowed) {', to: 'function validateInputFields(record, label, allowed) { return;' },
+  { name: 'served-runtime-closure-validation-disabled', package: 'research', source: 'source-only-run-gates.mjs', test: 'source-only-run-gates.test.mjs', from: 'export function validateServedRuntimeManifest(root, manifest) {', to: 'export function validateServedRuntimeManifest(root, manifest) { return { match: true, errors: [], artifactCount: manifest?.artifacts?.length ?? 0 };' },
+  { name: 'gold-metadata-validation-disabled', package: 'eval', source: 'parse-experiment.js', test: 'gold-metadata-preflight.test.js', from: 'if (metadataErrors.length > 0) {', to: 'if (false) {' },
+  { name: 'gold-source-literal-validation-disabled', package: 'eval', source: 'parse-experiment.js', test: 'gold-metadata-preflight.test.js', from: 'checkLiteralRetention(item.sourceText, normalization.sem)', to: '({ retained: true, sourceNumbers: [], sourceIdentifiers: [], missingNumbers: [], missingIdentifiers: [] })' },
 ];
-function run(directory, test) {
-  const result = spawnSync(process.execPath, ['--test', path.join(directory, 'test', test)], { cwd: root, encoding: 'utf8', timeout: 30_000, maxBuffer: 8 * 1024 * 1024 });
+function run(directory, test, research = false) {
+  const result = spawnSync(process.execPath, ['--test', path.join(directory, research ? 'scripts/research' : 'test', test)], { cwd: root, encoding: 'utf8', timeout: 30_000, maxBuffer: 8 * 1024 * 1024 });
   return { status: result.status, signal: result.signal, error: result.error?.message ?? null, output: `${result.stdout ?? ''}${result.stderr ?? ''}` };
 }
 const results = [];
 for (const mutation of cases) {
   const directory = path.join(out, mutation.name);
   const packageName = mutation.package ?? 'core';
-  fs.mkdirSync(path.join(directory, 'test'), { recursive: true });
-  fs.cpSync(path.join(root, 'packages', packageName, 'dist/src'), path.join(directory, 'src'), { recursive: true });
-  fs.copyFileSync(path.join(root, 'packages', packageName, 'dist/test', mutation.test), path.join(directory, 'test', mutation.test));
-  fs.symlinkSync(path.join(root, 'packages', packageName, 'node_modules'), path.join(directory, 'node_modules'), 'dir');
-  const clean = run(directory, mutation.test);
+  const research = packageName === 'research';
+  if (research) {
+    fs.mkdirSync(path.join(directory, 'scripts/research'), { recursive: true });
+    fs.mkdirSync(path.join(directory, 'packages'), { recursive: true });
+    for (const file of [mutation.source, mutation.test, 'replay-client-events.mjs']) {
+      fs.copyFileSync(path.join(root, 'scripts/research', file), path.join(directory, 'scripts/research', file));
+    }
+    fs.symlinkSync(path.join(root, 'packages/core'), path.join(directory, 'packages/core'), 'dir');
+  } else {
+    fs.mkdirSync(path.join(directory, 'test'), { recursive: true });
+    fs.cpSync(path.join(root, 'packages', packageName, 'dist/src'), path.join(directory, 'src'), { recursive: true });
+    fs.copyFileSync(path.join(root, 'packages', packageName, 'dist/test', mutation.test), path.join(directory, 'test', mutation.test));
+    fs.symlinkSync(path.join(root, 'packages', packageName, 'node_modules'), path.join(directory, 'node_modules'), 'dir');
+  }
+  const clean = run(directory, mutation.test, research);
   if (clean.status !== 0) throw Error(`unmutated_fixture_failed:${mutation.name}:${clean.output}`);
-  const file = path.join(directory, 'src', mutation.source);
+  const file = path.join(directory, research ? 'scripts/research' : 'src', mutation.source);
   const text = fs.readFileSync(file, 'utf8');
   if (text.split(mutation.from).length !== 2) throw Error(`mutation_site_missing_or_ambiguous:${mutation.name}`);
   fs.writeFileSync(file, text.replace(mutation.from, mutation.to));
-  const weakened = run(directory, mutation.test);
+  const weakened = run(directory, mutation.test, research);
   const caught = weakened.status === 1 && !weakened.error && /# fail [1-9]\d*/u.test(weakened.output) && /ERR_ASSERTION/u.test(weakened.output) && !/ERR_MODULE_NOT_FOUND|SyntaxError|ENOENT/u.test(weakened.output);
   fs.writeFileSync(path.join(directory, 'unmutated.tap'), clean.output, { flag: 'wx' });
   fs.writeFileSync(path.join(directory, 'weakened.tap'), weakened.output, { flag: 'wx' });

@@ -1,0 +1,34 @@
+{
+  "format": "openlunum-experiment/0.1",
+  "id": "served-runtime-binding-v1",
+  "baselineCommit": "a4aa081b675532855bf4360bcb790dcc9275a881",
+  "area": "evaluation provenance",
+  "hypothesis": "A closed, versioned manifest of all repository-owned core/MCP served JavaScript detects dependency drift that v14's selected-artifact list misses before provider contact.",
+  "visionGuardrails": [
+    "Original source evidence and historical failed runs remain authoritative and recoverable.",
+    "Semantic schema, registry, fingerprint projection and parser vocabulary are unchanged.",
+    "Model and product independence remain intact; these are evaluation-client provenance gates.",
+    "Deterministic runtime binding is not semantic fidelity, human review or deployed trust."
+  ],
+  "data": {
+    "class": "development/regression",
+    "datasetPath": "scripts/research/source-only-run-gates.test.mjs",
+    "datasetSha256": "87a78dd4e9cd6b7c30b223c47c7bdac6e1c8556565f9f532ecb99d01eb2b5010",
+    "datasetHashBasis": "baseline git blob before changing tests",
+    "protectedData": "NOT USED"
+  },
+  "modelProfiles": [],
+  "budgets": { "modelCalls": 0, "providerSpendUsd": 0 },
+  "metrics": ["preflight drift detection", "mutation assertion failures", "pnpm verify"],
+  "hardGates": [
+    "Missing, changed, added, deleted or symlink-escaped repository-owned served JavaScript invalidates live artifact binding.",
+    "Missing or malformed runtime manifests cannot count as valid live evidence.",
+    "Frozen v14 artifacts and old runs are never edited.",
+    "No existing service, external repository, semantic identity or protected gold is changed."
+  ],
+  "nonClaims": [
+    "This binds repository-owned served artifacts, not all operating-system binaries or dependency supply-chain authenticity.",
+    "AJV installed version and lockfile remain explicit separate checks; immutable provider weights may be unavailable.",
+    "No model quality or readiness claim follows from a passing handshake."
+  ]
+}

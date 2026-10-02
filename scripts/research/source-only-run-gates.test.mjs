@@ -5,19 +5,30 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { getExtractionContract } from '../../packages/core/dist/src/index.js';
-import { artifactBinding, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, sha256 } from './source-only-run-gates.mjs';
+import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeManifest, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, sha256 } from './source-only-run-gates.mjs';
 
 const root = process.cwd();
-const packagePath = path.join(root, 'experiments/natural-development-v8/extraction/public-instruction-package-v14.json');
+const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
+const packagePath = path.join(packageDirectory, 'public-instruction-package-v15.json');
 const pkg = JSON.parse(fs.readFileSync(packagePath));
+const legacyPackagePath = path.join(packageDirectory, 'public-instruction-package-v14.json');
+const legacyPkg = JSON.parse(fs.readFileSync(legacyPackagePath));
 const profilePath = path.resolve(path.dirname(packagePath), pkg.freeze.taskProfilePath);
 const contract = getExtractionContract();
 const plan = budgetPlan({ model: 'claude-test-exact-20261002', totalUsd: '0.20', itemUsd: '0.10', count: 2, concurrency: 1, timeoutMs: 1000 });
 const binding = () => artifactBinding(root, packagePath, profilePath, pkg);
 
-test('v14 binds every current artifact and dependency, not just the old five', () => {
-  assert.equal(binding().match, true);
-  for (const check of binding().checks) {
+test('v15 binds every current artifact, dependency and served runtime manifest', () => {
+  const result = binding();
+  assert.equal(result.match, true);
+  const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
+  const manifestPath = path.resolve(packageDirectory, pkg.freeze.servedRuntimeManifestPath);
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  assert.equal(runtimeCheck.actual, sha256(fs.readFileSync(manifestPath)));
+  assert.equal(runtimeCheck.runtime.match, true);
+  assert.equal(runtimeCheck.runtime.artifactCount, manifest.artifacts.length);
+  assert.equal(runtimeCheck.match, true);
+  for (const check of result.checks) {
     const mutant = structuredClone(pkg);
     if (check.key === 'transportValidatorDependency') mutant.freeze[check.key].lockfileSha256 = '0'.repeat(64);
     else mutant.freeze[check.key] = '0'.repeat(64);
@@ -25,9 +36,120 @@ test('v14 binds every current artifact and dependency, not just the old five', (
     delete mutant.freeze[check.key];
     assert.equal(artifactBinding(root, packagePath, profilePath, mutant).match, false, `missing ${check.key}`);
   }
+  for (const key of ['servedRuntimeManifestPath', 'servedRuntimeManifestSha256']) {
+    const mutant = structuredClone(pkg);
+    delete mutant.freeze[key];
+    assert.equal(artifactBinding(root, packagePath, profilePath, mutant).match, false, `missing ${key}`);
+  }
+  const changedManifestHash = structuredClone(pkg);
+  changedManifestHash.freeze.servedRuntimeManifestSha256 = '0'.repeat(64);
+  assert.equal(artifactBinding(root, packagePath, profilePath, changedManifestHash).match, false, 'manifest content hash');
+  const missingManifest = structuredClone(pkg);
+  missingManifest.freeze.servedRuntimeManifestPath = 'missing-manifest.json';
+  assert.equal(artifactBinding(root, packagePath, profilePath, missingManifest).match, false, 'missing manifest file');
   assert.equal(artifactBinding(root, packagePath, path.join(root, 'experiments/natural-development-v8/extraction/public-task-profile-iteration2.json'), pkg).match, false);
   const newDependency = structuredClone(pkg); newDependency.freeze.forgottenArtifactSha256 = '0'.repeat(64);
   assert.throws(() => artifactBinding(root, packagePath, profilePath, newDependency), /unhandled_freeze_binding/);
+});
+
+test('legacy v14 has no live served-runtime binding', () => {
+  const legacyProfilePath = path.resolve(path.dirname(legacyPackagePath), legacyPkg.freeze.taskProfilePath);
+  assert.equal(artifactBinding(root, legacyPackagePath, legacyProfilePath, legacyPkg).match, false);
+});
+
+test('served runtime manifest detects unlisted dependency drift and rejects malformed trees', () => {
+  const temp = fs.mkdtempSync(path.join(root, '.git', 'served-runtime-test-'));
+  const outsideTemp = fs.mkdtempSync(path.join(root, '.git', 'served-runtime-outside-'));
+  const outsideFile = path.join(outsideTemp, 'outside.js');
+  const runtimeRoots = ['packages/core/dist/src', 'packages/mcp/dist/src', 'packages/mcp/dist/bin'];
+  const writeRuntime = () => {
+    for (const [index, runtimeRoot] of runtimeRoots.entries()) {
+      const directory = path.join(temp, runtimeRoot);
+      fs.mkdirSync(directory, { recursive: true });
+      fs.writeFileSync(path.join(directory, `entry-${index}.js`), `export const entry${index} = ${index};\n`);
+    }
+  };
+  try {
+    writeRuntime();
+    const manifest = captureServedRuntimeManifest(temp);
+    assert.equal(manifest.format, 'openlunum-served-runtime-manifest/1');
+    assert.deepEqual(manifest.roots, runtimeRoots);
+    assert.deepEqual(manifest.artifacts.map(row => row.path), [...manifest.artifacts.map(row => row.path)].sort());
+    assert.ok(manifest.artifacts.every(row => /^[a-f0-9]{64}$/u.test(row.sha256)));
+    assert.deepEqual(validateServedRuntimeManifest(temp, manifest), { match: true, errors: [], artifactCount: 3 });
+
+    // Recreate v14's selected checks in an isolated fake repository. Its named
+    // checks stay green when an unlisted served dependency appears; the closed
+    // runtime inventory detects the same change.
+    const counterfactualRoot = path.join(temp, 'v14-counterfactual');
+    const legacyProfilePath = path.resolve(path.dirname(legacyPackagePath), legacyPkg.freeze.taskProfilePath);
+    const v14Checks = artifactBinding(root, legacyPackagePath, legacyProfilePath, legacyPkg).checks
+      .filter(check => check.key !== 'servedRuntimeManifestSha256');
+    for (const check of v14Checks) {
+      const destination = path.join(counterfactualRoot, check.file);
+      fs.mkdirSync(path.dirname(destination), { recursive: true });
+      fs.copyFileSync(path.join(root, check.file), destination);
+    }
+    const counterfactualPackagePath = path.join(counterfactualRoot, 'experiments/natural-development-v8/extraction/public-instruction-package-v14.json');
+    fs.mkdirSync(path.dirname(counterfactualPackagePath), { recursive: true });
+    fs.copyFileSync(legacyPackagePath, counterfactualPackagePath);
+    fs.mkdirSync(path.join(counterfactualRoot, 'packages/core/node_modules/ajv'), { recursive: true });
+    fs.writeFileSync(path.join(counterfactualRoot, 'packages/core/node_modules/ajv/package.json'), JSON.stringify({ name: 'ajv', version: legacyPkg.freeze.transportValidatorDependency.version }));
+    for (const runtimeRoot of runtimeRoots) fs.mkdirSync(path.join(counterfactualRoot, runtimeRoot), { recursive: true });
+    const counterfactualProfilePath = path.resolve(path.dirname(counterfactualPackagePath), legacyPkg.freeze.taskProfilePath);
+    const oldNamedChecks = () => artifactBinding(counterfactualRoot, counterfactualPackagePath, counterfactualProfilePath, legacyPkg).checks
+      .filter(check => check.key !== 'servedRuntimeManifestSha256');
+    assert.ok(oldNamedChecks().every(check => check.match), 'v14 named checks pass before mutation');
+    const counterfactualManifest = captureServedRuntimeManifest(counterfactualRoot);
+    const extraDependency = path.join(counterfactualRoot, 'packages/core/dist/src/policy-dependency.js');
+    fs.writeFileSync(extraDependency, 'export const policy = "changed dependency";\n');
+    assert.ok(oldNamedChecks().every(check => check.match), 'v14 named checks miss the extra dependency');
+    assert.equal(validateServedRuntimeManifest(counterfactualRoot, counterfactualManifest).match, false);
+
+    const changedPath = path.join(temp, runtimeRoots[0], 'entry-0.js');
+    const original = fs.readFileSync(changedPath);
+    fs.writeFileSync(changedPath, 'export const entry0 = "changed";\n');
+    assert.equal(validateServedRuntimeManifest(temp, manifest).match, false, 'changed JavaScript');
+    fs.writeFileSync(changedPath, original);
+
+    const addedPath = path.join(temp, runtimeRoots[1], 'added.js');
+    fs.writeFileSync(addedPath, 'export {};\n');
+    assert.equal(validateServedRuntimeManifest(temp, manifest).match, false, 'added JavaScript');
+    fs.unlinkSync(addedPath);
+    const removedPath = path.join(temp, runtimeRoots[2], 'entry-2.js');
+    const removedBytes = fs.readFileSync(removedPath);
+    fs.unlinkSync(removedPath);
+    assert.equal(validateServedRuntimeManifest(temp, manifest).match, false, 'removed JavaScript');
+    fs.writeFileSync(removedPath, removedBytes);
+
+    for (const malformed of [
+      null,
+      {},
+      { ...manifest, format: 'corrupt' },
+      { ...manifest, artifacts: [] },
+      { ...manifest, artifacts: [...manifest.artifacts, structuredClone(manifest.artifacts[0])] },
+      { ...manifest, artifacts: [...manifest.artifacts, { path: '../outside.js', sha256: '0'.repeat(64) }] },
+      { ...manifest, artifacts: [{ ...manifest.artifacts[0], sha256: 'not-a-hash' }, ...manifest.artifacts.slice(1)] },
+      { ...manifest, roots: ['packages/core/dist/src', 'packages/mcp/dist/src'] },
+      { ...manifest, roots: [...manifest.roots, 'packages/other/dist/src'] },
+    ]) {
+      const result = validateServedRuntimeManifest(temp, malformed);
+      assert.equal(result.match, false, JSON.stringify(malformed));
+      assert.ok(result.errors.length > 0);
+    }
+
+    // Declaration metadata is deliberately outside the executable manifest.
+    fs.writeFileSync(path.join(temp, runtimeRoots[0], 'types.d.ts'), 'export type Policy = string;\n');
+    assert.equal(validateServedRuntimeManifest(temp, manifest).match, true, 'metadata-only declaration change');
+
+    fs.writeFileSync(outsideFile, 'export const escaped = true;\n');
+    const symlinkPath = path.join(temp, runtimeRoots[0], 'escaped.js');
+    fs.symlinkSync(outsideFile, symlinkPath);
+    assert.equal(validateServedRuntimeManifest(temp, manifest).match, false, 'symlink artifact escaping runtime root');
+  } finally {
+    fs.rmSync(temp, { recursive: true, force: true });
+    fs.rmSync(outsideTemp, { recursive: true, force: true });
+  }
 });
 
 test('missing or mutated served contracts fail, including non-version fields', () => {

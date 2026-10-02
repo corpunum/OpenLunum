@@ -20,6 +20,62 @@ const artifacts = {
   transportSchemaArtifactSha256: 'packages/core/dist/src/semantic-transport-schema.js',
   launcherSha256: 'scripts/lunum-mcp-launch.mjs',
 };
+export const SERVED_RUNTIME_ROOTS = Object.freeze([
+  'packages/core/dist/src', 'packages/mcp/dist/src', 'packages/mcp/dist/bin',
+]);
+
+/** Closed inventory of repository-owned executable artifacts, not host attestation. */
+export function captureServedRuntimeManifest(root) {
+  root = fs.realpathSync(root);
+  const records = [];
+  const visit = directory => {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)) {
+      const file = path.join(directory, entry.name);
+      if (entry.isSymbolicLink()) throw new Error('served_runtime_symlink');
+      if (entry.isDirectory()) visit(file);
+      else if (entry.isFile() && entry.name.endsWith('.js')) records.push({ path: path.relative(root, inside(root, file)).split(path.sep).join('/'), sha256: sha256(fs.readFileSync(file)) });
+    }
+  };
+  for (const relative of SERVED_RUNTIME_ROOTS) {
+    const directory = path.join(root, relative);
+    if (!fs.lstatSync(directory).isDirectory() || fs.lstatSync(directory).isSymbolicLink()) throw new Error('served_runtime_root_invalid');
+    const before = records.length;
+    visit(inside(root, directory));
+    if (records.length === before) throw new Error('served_runtime_root_empty');
+  }
+  records.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+  return { format: 'openlunum-served-runtime-manifest/1', roots: [...SERVED_RUNTIME_ROOTS], artifacts: records };
+}
+
+export function validateServedRuntimeManifest(root, manifest) {
+  try {
+    if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest) ||
+        Object.keys(manifest).sort().join(',') !== 'artifacts,format,roots' ||
+        manifest.format !== 'openlunum-served-runtime-manifest/1' ||
+        !Array.isArray(manifest.roots) || JSON.stringify(manifest.roots) !== JSON.stringify(SERVED_RUNTIME_ROOTS) ||
+        !Array.isArray(manifest.artifacts) || manifest.artifacts.length === 0) throw new Error('served_runtime_manifest_invalid');
+    const entries = new Map();
+    for (const row of manifest.artifacts) {
+      if (!row || typeof row !== 'object' || Array.isArray(row) || Object.keys(row).sort().join(',') !== 'path,sha256' ||
+          typeof row.path !== 'string' || !row.path.endsWith('.js') || !hash(row.sha256) ||
+          !SERVED_RUNTIME_ROOTS.some(prefix => row.path.startsWith(`${prefix}/`)) ||
+          row.path.split('/').some(part => !part || part === '.' || part === '..') || row.path.includes('\\') ||
+          entries.has(row.path)) throw new Error('served_runtime_manifest_artifact_invalid');
+      entries.set(row.path, row.sha256);
+    }
+    const current = captureServedRuntimeManifest(root);
+    const errors = [];
+    for (const row of current.artifacts) {
+      if (!entries.has(row.path)) errors.push(`served_runtime_unlisted:${row.path}`);
+      else if (entries.get(row.path) !== row.sha256) errors.push(`served_runtime_changed:${row.path}`);
+      entries.delete(row.path);
+    }
+    for (const relative of entries.keys()) errors.push(`served_runtime_missing:${relative}`);
+    return { match: errors.length === 0, errors, artifactCount: current.artifacts.length };
+  } catch (error) {
+    return { match: false, errors: [error.message], artifactCount: 0 };
+  }
+}
 
 function inside(root, file) {
   const resolved = path.resolve(file);
@@ -37,6 +93,7 @@ export function artifactBinding(root, packagePath, profilePath, pkg) {
     taskContractSha256: path.resolve(directory, freeze.taskContractPath ?? 'MISSING'),
     scorerSha256: path.resolve(directory, freeze.scorerPath ?? 'MISSING'),
     taskProfileSha256: profilePath,
+    servedRuntimeManifestSha256: path.resolve(directory, freeze.servedRuntimeManifestPath ?? 'MISSING'),
   };
   const contractHashes = new Set(['coreContractJsonSerializationSha256']);
   for (const key of Object.keys(freeze)) {
@@ -46,7 +103,15 @@ export function artifactBinding(root, packagePath, profilePath, pkg) {
     const expected = freeze[key] ?? null;
     let actual = null;
     try { actual = sha256(fs.readFileSync(inside(root, path.resolve(root, file)))); } catch { /* missing or outside is a failure */ }
-    return { key, file: path.relative(root, file.startsWith('/') ? file : path.join(root, file)), expected, actual, match: hash(expected) && actual === expected };
+    const check = { key, file: path.relative(root, file.startsWith('/') ? file : path.join(root, file)), expected, actual, match: hash(expected) && actual === expected };
+    if (key === 'servedRuntimeManifestSha256') {
+      let runtime;
+      try { runtime = validateServedRuntimeManifest(root, JSON.parse(fs.readFileSync(inside(root, path.resolve(root, file)), 'utf8'))); }
+      catch (error) { runtime = { match: false, errors: [error.message], artifactCount: 0 }; }
+      check.match &&= runtime.match;
+      check.runtime = runtime;
+    }
+    return check;
   });
   const dependency = freeze.transportValidatorDependency;
   let installedVersion = null;

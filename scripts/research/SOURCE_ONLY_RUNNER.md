@@ -30,12 +30,17 @@ overrun stops remaining launches and invalidates the run. Do not promise a
 hard dollar cap the provider does not enforce. All selected rows, including
 not-run rows, remain in the denominator/run ledger.
 
-Preflight defaults to v14 and its declared iteration6 profile; live requires an
+Preflight defaults to v15 and its declared iteration6 profile; live requires an
 explicit package. Resolved IDs use the `claude-*` form and must exactly match
 both reported usage IDs and the init event; this is not a model-weight hash or
 a claim that the provider exposes immutable weights. All frozen
 served artifacts, task/scorer/profile, AJV version and lockfile are checked
-before and after execution. The actual MCP contract receipt is checked before
+before and after execution. V15 additionally binds a closed inventory of every
+repository-owned JavaScript file under the served core/MCP trees. An added,
+missing, changed or symlinked artifact invalidates that binding. V14's selected
+files are legacy/partial and cannot pass the current live gate. This is not
+operating-system or dependency supply-chain attestation; installed AJV version
+and the dependency lockfile remain separate checks. The actual MCP contract receipt is checked before
 provider launch; each provider session must also return a matching contract.
 Missing identity, nonzero exit, interrupted/timeout processes, mismatched
 sources, malformed/conflicting tool events, and missing costs fail evidence

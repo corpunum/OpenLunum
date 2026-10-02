@@ -13,7 +13,7 @@
 | Protocol | `lunum-protocol/0.4`: 46 predicates, with verb aliases |
 | Frames | `lunum-frame/0.5`: 37 framed predicates |
 | Agent contract | `lunum-agent/0.13` |
-| Frozen instruction package | v14 |
+| Frozen instruction package | v15 (same public conventions; complete repository-owned served-JS inventory) |
 
 Other schema and fingerprint contracts, and migration fixtures, coexist. A file named `1.0`, or an internally frozen contract, is not external ratification.
 
@@ -59,7 +59,7 @@ Evaluation has been done by the author and by two other sessions of the same ven
 
 ## Next, in order
 
-1. **Complete meaning-level evaluation.** Actual wire enforcement and builder nested-clause agreement are now deterministic-tested (contract 0.13), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. A [source-only diagnostic review](experiments/meaning-source-review-v1/README.md) classifies 10 as unsupported, 2 as ambiguous and 2 as source-relative representation options pending native review; it does not rewrite expectations or certify gold. The [human source-only packet](experiments/meaning-human-review-packet-v1/README.md) contains those sources with all reviews pending and no previous answers. The [runner](scripts/research/SOURCE_ONLY_RUNNER.md) now has complete v14 preflight and requested budget/timeout gates, tested without provider calls. Obtain independent/native source adjudication, freeze fresh protocol-conforming data, then measure the latest contract live under an agreed model and budget.
+1. **Complete meaning-level evaluation.** Actual wire enforcement and builder nested-clause agreement are now deterministic-tested (contract 0.13), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. A [source-only diagnostic review](experiments/meaning-source-review-v1/README.md) classifies 10 as unsupported, 2 as ambiguous and 2 as source-relative representation options pending native review; it does not rewrite expectations or certify gold. The [human source-only packet](experiments/meaning-human-review-packet-v1/README.md) contains those sources with all reviews pending and no previous answers. The [runner](scripts/research/SOURCE_ONLY_RUNNER.md) now binds the complete repository-owned served-JS inventory in v15; v14's selected files were only a partial runtime binding. These preflight and requested budget/timeout gates are tested without provider calls. Obtain independent/native source adjudication, freeze fresh protocol-conforming data, then measure the latest contract live under an agreed model and budget.
 2. **Out-of-sample evaluation after each change**, preferably human or cross-vendor.
 3. **Real memory data (owner)** before any token-saving claim.
 4. **Review of unreviewed semantic judgements:**
