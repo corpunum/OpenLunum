@@ -4,7 +4,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { validateSem } from '@corpunum/lunum';
 import { loadDataset, readJson, sha256File } from '../src/io.js';
-import type { DatasetItem } from '../src/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,6 +41,7 @@ test('#383: retention-expanded-v1.jsonl loads via loadDataset with 200+ items', 
 test('#383: every item has a schema-valid goldSem per validateSem', async () => {
   const items = await loadDataset(DATASET_PATH);
   for (const item of items) {
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `item ${item.id} must be a parse target with non-null goldSem`);
     const result = validateSem(item.goldSem);
     assert.ok(result.ok, `item ${item.id} failed validateSem: ${result.errors.join('; ')}`);
   }
@@ -106,6 +106,7 @@ test('#383: conditional and nested-conditional items have conditions in their cl
   const condItems = items.filter((i) => i.semanticGroup === 'conditional' || i.semanticGroup === 'nested-conditional');
   assert.ok(condItems.length >= 30, `expected at least 30 conditional items`);
   for (const item of condItems) {
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `item ${item.id} must be a parse target with non-null goldSem`);
     const clauses = item.goldSem.clauses;
     const hasConditions = clauses.some((c: any) => c.conditions && c.conditions.length > 0);
     assert.ok(hasConditions, `item ${item.id} in ${item.semanticGroup} has no conditions`);
@@ -117,6 +118,7 @@ test('#383: negated and safety-constraint items have negated clauses', async () 
   const negItems = items.filter((i) => i.semanticGroup === 'negated' || i.semanticGroup === 'safety-constraint');
   assert.ok(negItems.length >= 20);
   for (const item of negItems) {
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `item ${item.id} must be a parse target with non-null goldSem`);
     const hasNegated = item.goldSem.clauses.some((c: any) => c.negated === true);
     assert.ok(hasNegated, `item ${item.id} in ${item.semanticGroup} has no negated clause`);
   }
@@ -127,6 +129,7 @@ test('#383: modal items have modality set', async () => {
   const modalItems = items.filter((i) => i.semanticGroup === 'modal');
   assert.ok(modalItems.length >= 10);
   for (const item of modalItems) {
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `item ${item.id} must be a parse target with non-null goldSem`);
     const hasModality = item.goldSem.clauses.some((c: any) => c.modality && c.modality.length > 0);
     assert.ok(hasModality, `item ${item.id} has no modality`);
   }
@@ -137,6 +140,7 @@ test('#383: temporal items have time fields in their clauses', async () => {
   const tempItems = items.filter((i) => i.semanticGroup === 'temporal');
   assert.ok(tempItems.length >= 10);
   for (const item of tempItems) {
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `item ${item.id} must be a parse target with non-null goldSem`);
     const hasTime = item.goldSem.clauses.some((c: any) => c.time != null);
     assert.ok(hasTime, `item ${item.id} has no time field`);
   }
@@ -147,6 +151,7 @@ test('#383: multi-clause items have 2+ clauses', async () => {
   const mcItems = items.filter((i) => i.semanticGroup === 'multi-clause');
   assert.ok(mcItems.length >= 10);
   for (const item of mcItems) {
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `item ${item.id} must be a parse target with non-null goldSem`);
     assert.ok(item.goldSem.clauses.length >= 2, `item ${item.id} has only ${item.goldSem.clauses.length} clause(s)`);
   }
 });

@@ -46,6 +46,14 @@ test('canonical dataset loads with exact four-item coverage for each language', 
   assert.equal(validated.length, 16);
 });
 
+test('canonical audit inventory rejects contradictory abstention metadata rather than dropping it', async () => {
+  const dataset = await loadTestLunumV1CanonicalDataset(path.join(WORKSPACE_ROOT, TESTLUNUMV1_CANONICAL_DATASET_PATH));
+  const explicitParse = dataset.map((item) => ({ ...item, expectedOutcome: 'parse' }));
+  assert.ok(validateTestLunumV1CanonicalDataset(explicitParse).every((item) => item.expectedOutcome === 'parse'));
+  const contradictory = dataset.map((item, index) => index === 0 ? { ...item, expectedOutcome: 'abstain' } : item);
+  assert.throws(() => validateTestLunumV1CanonicalDataset(contradictory), /expectedOutcome must be parse or omitted/u);
+});
+
 test('audit plan expands a two-slot matrix to unique execution ids with exact budget', async () => {
   const datasetPath = path.join(WORKSPACE_ROOT, TESTLUNUMV1_CANONICAL_DATASET_PATH);
   const dataset = await loadTestLunumV1CanonicalDataset(datasetPath);

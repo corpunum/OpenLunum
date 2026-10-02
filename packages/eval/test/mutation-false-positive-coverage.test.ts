@@ -27,10 +27,21 @@ type MutationType = (typeof MUTATION_TYPES)[number];
 // DatasetItem is loaded via a type assertion (JSON.parse(...) as DatasetItem)
 // in loadDataset, so these extra fields survive untouched; we re-assert
 // their presence and shape explicitly here rather than relying on the cast.
-interface MutationDatasetItem extends DatasetItem {
+type MutationDatasetItem = DatasetItem & {
   mutationType: string;
   sourceItemId: string;
   semanticDifference: string;
+};
+
+function asMutationDatasetItems(items: DatasetItem[]): MutationDatasetItem[] {
+  return items.map((item) => {
+    const candidate = item as DatasetItem & Partial<Omit<MutationDatasetItem, keyof DatasetItem>>;
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `${item.id}: mutation fixture must be a parse target with non-null goldSem`);
+    assert.ok(typeof candidate.mutationType === 'string', `${item.id}: mutationType tag is required`);
+    assert.ok(typeof candidate.sourceItemId === 'string', `${item.id}: sourceItemId is required`);
+    assert.ok(typeof candidate.semanticDifference === 'string', `${item.id}: semanticDifference is required`);
+    return candidate as MutationDatasetItem;
+  });
 }
 
 const DATASET_RELATIVE_PATH = 'datasets/adversarial/mutation-false-positive-v1.jsonl';
@@ -53,7 +64,7 @@ test('mutation false-positive corpus: loads through the real loadDataset without
   const workspaceRoot = await findWorkspaceRoot();
   const datasetPath = path.join(workspaceRoot, DATASET_RELATIVE_PATH);
 
-  const items = (await loadDataset(datasetPath)) as MutationDatasetItem[];
+  const items = asMutationDatasetItems(await loadDataset(datasetPath));
   assert.ok(items.length > 0, 'dataset must not be empty');
 
   const manifest = await readJson<{ items: number }>(path.join(workspaceRoot, MANIFEST_RELATIVE_PATH));
@@ -76,7 +87,7 @@ test('mutation false-positive corpus: loads through the real loadDataset without
 test('mutation false-positive corpus: every item id is unique', async () => {
   const workspaceRoot = await findWorkspaceRoot();
   const datasetPath = path.join(workspaceRoot, DATASET_RELATIVE_PATH);
-  const items = (await loadDataset(datasetPath)) as MutationDatasetItem[];
+  const items = asMutationDatasetItems(await loadDataset(datasetPath));
 
   const seen = new Set<string>();
   for (const item of items) {
@@ -88,7 +99,7 @@ test('mutation false-positive corpus: every item id is unique', async () => {
 test('mutation false-positive corpus: full category x language matrix is covered, no missing or duplicate combination', async () => {
   const workspaceRoot = await findWorkspaceRoot();
   const datasetPath = path.join(workspaceRoot, DATASET_RELATIVE_PATH);
-  const items = (await loadDataset(datasetPath)) as MutationDatasetItem[];
+  const items = asMutationDatasetItems(await loadDataset(datasetPath));
 
   const counts = new Map<string, number>();
   for (const item of items) {
@@ -132,7 +143,7 @@ test('mutation false-positive corpus: every item references a real source item i
   const coreItems = await loadDataset(coreDatasetPath);
   const coreIds = new Set(coreItems.map((item) => item.id));
 
-  const mutationItems = (await loadDataset(mutationDatasetPath)) as MutationDatasetItem[];
+  const mutationItems = asMutationDatasetItems(await loadDataset(mutationDatasetPath));
   for (const item of mutationItems) {
     assert.ok(
       coreIds.has(item.sourceItemId),

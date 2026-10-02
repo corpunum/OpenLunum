@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { TESTLUNUMV1_LANGUAGE_INVENTORY, TESTLUNUMV1_REPEAT_LABELS } from './testlunumv1-bundle.js';
 import type { DatasetItem } from './types.js';
+import type { LunumSem } from '@corpunum/lunum';
 
 export type TestLunumV1AuditSuiteId =
   | 'canonical'
@@ -187,11 +188,15 @@ function toDatasetItem(value: unknown, index: number): DatasetItem {
   if (!isRecord(value.goldSem)) {
     throw new Error(`canonical dataset item ${id}.goldSem must be an object`);
   }
+  if (value.expectedOutcome !== undefined && value.expectedOutcome !== 'parse') {
+    throw new Error(`canonical dataset item ${id}.expectedOutcome must be parse or omitted`);
+  }
   return {
     id,
     sourceLanguage: sourceLanguage as DatasetItem['sourceLanguage'],
     sourceText,
-    goldSem: value.goldSem as unknown as DatasetItem['goldSem'],
+    goldSem: value.goldSem as unknown as LunumSem,
+    ...(value.expectedOutcome === 'parse' ? { expectedOutcome: 'parse' as const } : {}),
     ...(value.targetLanguage !== undefined ? { targetLanguage: assertNonEmptyTrimmedString(value.targetLanguage, `canonical dataset item ${id}.targetLanguage`) } : {}),
     ...(value.semanticGroup !== undefined ? { semanticGroup: assertNonEmptyTrimmedString(value.semanticGroup, `canonical dataset item ${id}.semanticGroup`) } : {}),
     ...(Array.isArray(value.protectedLiterals) ? { protectedLiterals: value.protectedLiterals.map((entry, literalIndex) => assertNonEmptyTrimmedString(entry, `canonical dataset item ${id}.protectedLiterals[${literalIndex}]`)) } : {}),

@@ -171,11 +171,11 @@ interface FalsePositiveReviewMockFixtureResponse {
   error?: string;
 }
 
-interface MutationDatasetItem extends DatasetItem {
+type MutationDatasetItem = DatasetItem & {
   mutationType: string;
   sourceItemId: string;
   semanticDifference: string;
-}
+};
 
 /**
  * Thrown when a transport-level (infrastructure) failure occurs. Distinct

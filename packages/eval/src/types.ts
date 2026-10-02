@@ -136,19 +136,22 @@ export interface ExperimentManifest {
   implementationCommit?: string;
 }
 
-export interface DatasetItem {
+interface DatasetItemMetadata {
   id: string;
   semanticGroup?: string;
   sourceLanguage: string;
   sourceText: string;
   targetLanguage?: string;
-  /** Abstention fixtures encode no gold Sem at runtime and set expectedOutcome=abstain. */
-  goldSem: LunumSem;
-  expectedOutcome?: 'parse' | 'abstain';
   protectedLiterals?: string[];
   protectedSemanticAtoms?: ProtectedSemanticAtom[];
   tags?: string[];
 }
+
+/** Parse targets carry a semantic gold value; abstention targets explicitly carry null. */
+export type DatasetItem = DatasetItemMetadata & (
+  | { expectedOutcome?: 'parse'; goldSem: LunumSem }
+  | { expectedOutcome: 'abstain'; goldSem: null }
+);
 
 export interface ItemResult {
   id: string;

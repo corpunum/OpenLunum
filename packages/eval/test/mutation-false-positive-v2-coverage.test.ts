@@ -20,10 +20,21 @@ import type { DatasetItem } from '../src/types.js';
 const LANGUAGES = ['en', 'el', 'es', 'id'] as const;
 const MUTATION_TYPES = ['negation', 'modality', 'extra-clause', 'literal', 'role'] as const;
 
-interface MutationDatasetItem extends DatasetItem {
+type MutationDatasetItem = DatasetItem & {
   mutationType: string;
   sourceItemId: string;
   semanticDifference: string;
+};
+
+function asMutationDatasetItems(items: DatasetItem[]): MutationDatasetItem[] {
+  return items.map((item) => {
+    const candidate = item as DatasetItem & Partial<Omit<MutationDatasetItem, keyof DatasetItem>>;
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `${item.id}: mutation fixture must be a parse target with non-null goldSem`);
+    assert.ok(typeof candidate.mutationType === 'string', `${item.id}: mutationType tag is required`);
+    assert.ok(typeof candidate.sourceItemId === 'string', `${item.id}: sourceItemId is required`);
+    assert.ok(typeof candidate.semanticDifference === 'string', `${item.id}: semanticDifference is required`);
+    return candidate as MutationDatasetItem;
+  });
 }
 
 const V1_DATASET_PATH = 'datasets/adversarial/mutation-false-positive-v1.jsonl';
@@ -52,7 +63,7 @@ test('synthetic mutation sources: manifest hash matches the committed file conte
 
 test('v2 mutation corpus: loads cleanly, item count matches manifest, every item has required fields', async () => {
   const workspaceRoot = await findWorkspaceRoot();
-  const items = (await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH))) as MutationDatasetItem[];
+  const items = asMutationDatasetItems(await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH)));
   assert.ok(items.length > 0);
   const manifest = await readJson<{ items: number }>(path.join(workspaceRoot, V2_MANIFEST_PATH));
   assert.equal(items.length, manifest.items);
@@ -69,8 +80,8 @@ test('v2 mutation corpus: loads cleanly, item count matches manifest, every item
 
 test('v2 mutation corpus: every item id is unique and no id collides with v1', async () => {
   const workspaceRoot = await findWorkspaceRoot();
-  const v1Items = (await loadDataset(path.join(workspaceRoot, V1_DATASET_PATH))) as MutationDatasetItem[];
-  const v2Items = (await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH))) as MutationDatasetItem[];
+  const v1Items = asMutationDatasetItems(await loadDataset(path.join(workspaceRoot, V1_DATASET_PATH)));
+  const v2Items = asMutationDatasetItems(await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH)));
   const seen = new Set<string>();
   for (const item of v1Items) seen.add(item.id);
   for (const item of v2Items) {
@@ -83,7 +94,7 @@ test('v2 mutation corpus: every sourceItemId resolves against the NEW synthetic 
   const workspaceRoot = await findWorkspaceRoot();
   const sourceItems = await loadDataset(path.join(workspaceRoot, SOURCES_DATASET_PATH));
   const sourceIds = new Set(sourceItems.map((item) => item.id));
-  const v2Items = (await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH))) as MutationDatasetItem[];
+  const v2Items = asMutationDatasetItems(await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH)));
   for (const item of v2Items) {
     assert.ok(sourceIds.has(item.sourceItemId), `${item.id}: sourceItemId '${item.sourceItemId}' does not exist in ${SOURCES_DATASET_PATH}`);
   }
@@ -107,8 +118,8 @@ test('v2 mutation corpus: covers more predicates than the original four (prefer/
 
 test('v2 mutation corpus: combined with v1, every mutation category has at least 10 items (#356 R5.2 target)', async () => {
   const workspaceRoot = await findWorkspaceRoot();
-  const v1Items = (await loadDataset(path.join(workspaceRoot, V1_DATASET_PATH))) as MutationDatasetItem[];
-  const v2Items = (await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH))) as MutationDatasetItem[];
+  const v1Items = asMutationDatasetItems(await loadDataset(path.join(workspaceRoot, V1_DATASET_PATH)));
+  const v2Items = asMutationDatasetItems(await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH)));
   const counts = new Map<string, number>();
   for (const item of [...v1Items, ...v2Items]) {
     assert.ok((MUTATION_TYPES as readonly string[]).includes(item.mutationType), `${item.id}: unexpected mutationType '${item.mutationType}'`);
@@ -122,7 +133,7 @@ test('v2 mutation corpus: combined with v1, every mutation category has at least
 
 test('v2 mutation corpus: full category x language matrix has no missing combination', async () => {
   const workspaceRoot = await findWorkspaceRoot();
-  const items = (await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH))) as MutationDatasetItem[];
+  const items = asMutationDatasetItems(await loadDataset(path.join(workspaceRoot, V2_DATASET_PATH)));
   const counts = new Map<string, number>();
   for (const item of items) {
     assert.ok((LANGUAGES as readonly string[]).includes(item.sourceLanguage as (typeof LANGUAGES)[number]), `${item.id}: unexpected sourceLanguage '${item.sourceLanguage}'`);

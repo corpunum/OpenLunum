@@ -136,9 +136,10 @@ test('dataset comparison: current committed dataset is unaffected by semantic-gr
   const items = await loadDataset(datasetPath);
   assert.ok(items.length > 0);
 
-  const records: LunumRecord[] = items.map((item) =>
-    createRecord({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, sem: item.goldSem })
-  );
+  const records: LunumRecord[] = items.map((item) => {
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `${item.id}: multilingual core fixture must be a parse target with non-null goldSem`);
+    return createRecord({ sourceText: item.sourceText, sourceLanguage: item.sourceLanguage, sem: item.goldSem });
+  });
 
   // No schema is declared to match today's dataset, because today's
   // dataset declares no semanticGroupId annotations at all.

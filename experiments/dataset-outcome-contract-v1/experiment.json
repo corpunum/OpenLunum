@@ -1,0 +1,12 @@
+{
+  "format": "openlunum-experiment/0.1",
+  "id": "dataset-outcome-contract-v1",
+  "baselineCommit": "eace760811c880452d08501cf19d2feaa20c3171",
+  "area": "evaluation type/runtime parity",
+  "hypothesis": "The public evaluation DatasetItem type can encode the same explicit abstention/parse outcome contract as runtime gold preflight, with contradictory/null parse targets rejected statically as well as at runtime.",
+  "data": { "class": "development/regression", "source": "compile-time assignment and runtime preflight fixtures; no protected corpus edits" },
+  "modelProfiles": [],
+  "budgets": { "providerCalls": 0, "providerSpendUsd": 0 },
+  "hardGates": ["Explicit abstain requires null gold.", "Parse or omitted outcome requires nonnull gold.", "No casts hiding the valid contract in compile-time tests.", "Gold remains private to scoring, never parser prompt input.", "Transport schema and semantic identity unchanged."],
+  "nonClaims": ["Type safety is not source correctness, independent review or model qualification."]
+}

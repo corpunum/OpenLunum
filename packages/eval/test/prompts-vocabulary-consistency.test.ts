@@ -271,6 +271,7 @@ test('every worked example\'s use of a gold-shared controlled predicate uses the
   // the gold dataset (e.g. "confirmed" -> {"agent"}).
   const goldConditionRoleKeys = new Map<string, Set<string>>();
   for (const item of dataset) {
+    assert.ok(item.expectedOutcome !== 'abstain' && item.goldSem !== null, `${item.id}: multilingual core fixture must be a parse target with non-null goldSem`);
     for (const clause of item.goldSem.clauses ?? []) {
       for (const condition of (clause as { conditions?: Array<{ predicate: string; roles: Record<string, unknown> }> }).conditions ?? []) {
         const roleKeys = goldConditionRoleKeys.get(condition.predicate) ?? new Set<string>();
