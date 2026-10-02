@@ -54,6 +54,16 @@ function claudeCalls(events) {
   return [...calls.values()];
 }
 
+/** Public extraction-contract tool results, without reading/storing provider reasoning. */
+export function observedExtractionContracts(events) {
+  const calls = events.some(event => event?.item?.type === 'mcp_tool_call') ? codexCalls(events) : claudeCalls(events);
+  return calls.filter(call => call.tool === 'lunum_get_extraction_contract').flatMap(call => {
+    const result = jsonFromToolContent(call.completed?.result?.content ?? call.result?.content);
+    if (call.conflict || call.duplicateCompleted || call.duplicateResults || call.result?.is_error || call.completed?.status === 'failed') throw new Error('invalid_contract_tool_events');
+    return result?.success === true && result.contract ? [{ eventId: call.id, contract: result.contract }] : [];
+  });
+}
+
 export function replaySession(events, request, oldEntry = null) {
   const provider = events.some((event) => event?.item?.type === 'mcp_tool_call') ? 'codex' : 'claude';
   const calls = provider === 'codex' ? codexCalls(events) : claudeCalls(events);

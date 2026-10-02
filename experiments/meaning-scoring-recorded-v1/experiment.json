@@ -1,0 +1,22 @@
+{
+  "schema": "openlunum-experiment/0.1",
+  "id": "meaning-scoring-recorded-v1",
+  "area": "multilingual-parse",
+  "task": "parse",
+  "hypothesis": "Role-bound recursive comparison against reviewed targets detects meaning changes missed by parse-or-abstain scoring, without treating unresolved source interpretations as successes.",
+  "baselineCommit": "3e42fc665aa10c7c82d53f6686c5e92e602dbf7c",
+  "dataset": {
+    "path": "reports/independent-evaluation/2026-09-26-round2/probes-authored.json",
+    "sha256": "942600af5b86dd68518ede07302253f4204a29f26fa9cab12f030cbbb6ce9614"
+  },
+  "modelProfile": "recorded-claude-code-only; no new inference",
+  "limits": { "maxItems": 30, "maxAttemptsPerItem": 1, "maxModelCalls": 0 },
+  "gates": {
+    "targetPreflight": "transport, structure, protocol, frame, identity and review metadata",
+    "mutationSensitive": true,
+    "preserveFrozenEvidence": true,
+    "keepUnresolvedAndMissingInTotal": true
+  },
+  "outputDirectory": "reports/diagnostic/2026-10-02/meaning-scoring-v1",
+  "claimScope": "Self-reviewed diagnostic re-scoring of already-visible historical outputs, not held-out accuracy, live contract-0.12 evidence, or a production trust gate."
+}
