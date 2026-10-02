@@ -1,0 +1,23 @@
+{
+  "format": "openlunum-experiment/0.1",
+  "area": "source-only evaluation runner",
+  "task": "Fail closed on unbound artifacts, missing served contracts, unknown model identity, unbounded spend, and incomplete evidence before a new live extraction experiment.",
+  "hypothesis": "Deterministic preflight and subprocess regressions can expose invalid evidence without making a provider call or modifying semantic identity.",
+  "baselineCommit": "dfb1b004f0a012bdc5e28307b274a743ac0e9d66",
+  "dataset": {
+    "path": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+    "sha256": "c2cde55bc2bf833c0c30917649b290719327c6fa0f11b12d90303e6d9e717ff9",
+    "use": "Visible diagnostic source-review population only; no protected generalization claim. Runner tests use synthetic local subprocesses."
+  },
+  "modelProfiles": [],
+  "hardGates": [
+    "No provider call in deterministic tests or preflight-only mode",
+    "All declared public-package dependencies and actual MCP contract are bound",
+    "Explicit model and total/item requested spending ceilings and timeout required for live mode",
+    "Fresh output only; historical artifacts never overwritten",
+    "Unknown usage, missing model or contract, timeout and process failure cannot count as valid live evidence",
+    "Original source expectations and prior meaning targets remain immutable"
+  ],
+  "metrics": ["deterministic gate and deliberate weakening detection", "source-review disposition counts, not accuracy"],
+  "budgets": { "modelCalls": 0, "providerSpendUsd": 0, "liveRun": "NOT RUN; pending owner model and spending decision" }
+}

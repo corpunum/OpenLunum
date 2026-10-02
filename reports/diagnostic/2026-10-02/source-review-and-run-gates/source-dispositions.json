@@ -1,0 +1,68 @@
+{
+  "format": "openlunum-source-disposition-validation/0.1",
+  "providerCalls": 0,
+  "total": 14,
+  "dispositionCounts": {
+    "ambiguous": 2,
+    "representation-option-pending-native-review": 2,
+    "unsupported": 10
+  },
+  "representationOptions": [
+    {
+      "probeId": "g04",
+      "transportValid": true,
+      "structuralValid": true,
+      "protocolCanonical": true,
+      "frameValid": true,
+      "identityValid": true,
+      "literalRetention": {
+        "retained": true,
+        "sourceNumbers": [],
+        "sourceIdentifiers": [],
+        "missingNumbers": [],
+        "missingIdentifiers": []
+      },
+      "promoted": false,
+      "confidence": 0,
+      "identityScope": "source-relative candidate only; not cross-language grounded identity or semantic correctness"
+    },
+    {
+      "probeId": "g05",
+      "transportValid": true,
+      "structuralValid": true,
+      "protocolCanonical": true,
+      "frameValid": true,
+      "identityValid": true,
+      "literalRetention": {
+        "retained": true,
+        "sourceNumbers": [
+          40
+        ],
+        "sourceIdentifiers": [],
+        "missingNumbers": [],
+        "missingIdentifiers": []
+      },
+      "promoted": false,
+      "confidence": 0,
+      "identityScope": "source-relative candidate only; not cross-language grounded identity or semantic correctness"
+    }
+  ],
+  "historicalTargetsModified": 0,
+  "historicalUnresolvedRetained": 14,
+  "goldPromoted": 0,
+  "protected": false,
+  "humanReviewed": false,
+  "nativeSpeakerReviewed": false,
+  "completeness": "NOT mechanically certified; atom spans and source hashes are bindings, not meaning judgments",
+  "reviewSha256": "808598d7e3f86a78c2b5904ea6574da947179a9b8dc7c48e96a98ea601eab84d",
+  "inputs": {
+    "probes": {
+      "path": "reports/independent-evaluation/2026-09-26-round2/probes-authored.json",
+      "sha256": "942600af5b86dd68518ede07302253f4204a29f26fa9cab12f030cbbb6ce9614"
+    },
+    "targets": {
+      "path": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+      "sha256": "c2cde55bc2bf833c0c30917649b290719327c6fa0f11b12d90303e6d9e717ff9"
+    }
+  }
+}

@@ -59,7 +59,7 @@ Evaluation has been done by the author and by two other sessions of the same ven
 
 ## Next, in order
 
-1. **Complete meaning-level evaluation.** Actual wire enforcement and builder nested-clause agreement are now deterministic-tested (contract 0.13), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. Independently resolve source/representation and unsupported-case judgments before freezing fresh evaluation data. Then measure the latest contract live under an agreed budget.
+1. **Complete meaning-level evaluation.** Actual wire enforcement and builder nested-clause agreement are now deterministic-tested (contract 0.13), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. A [source-only diagnostic review](experiments/meaning-source-review-v1/README.md) classifies 10 as unsupported, 2 as ambiguous and 2 as source-relative representation options pending native review; it does not rewrite expectations or certify gold. The [runner](scripts/research/SOURCE_ONLY_RUNNER.md) now has complete v14 preflight and requested budget/timeout gates, tested without provider calls. Obtain independent/native source adjudication, freeze fresh protocol-conforming data, then measure the latest contract live under an agreed model and budget.
 2. **Out-of-sample evaluation after each change**, preferably human or cross-vendor.
 3. **Real memory data (owner)** before any token-saving claim.
 4. **Review of unreviewed semantic judgements:**
