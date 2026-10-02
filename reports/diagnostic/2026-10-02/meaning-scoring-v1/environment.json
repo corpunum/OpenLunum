@@ -1,0 +1,13 @@
+{
+  "mode": "offline-recorded-evidence-replay",
+  "recordedAtUtc": "2026-10-02T06:59:01Z",
+  "implementationCommit": "3803df6c40e5974e774df28c1d2ede5d7ccc085d",
+  "node": "v22.22.2",
+  "pnpm": "10.13.1",
+  "newModelCalls": 0,
+  "originalEvidenceMutated": false,
+  "preExistingDirtyFilesPreserved": 40,
+  "preExistingDeletionPreserved": true,
+  "verification": { "command": "pnpm verify", "exitCode": 0, "tests": 4355, "failed": 0 },
+  "publication": "Local commits only: clean-tree publication gate is blocked by unrelated preserved user work."
+}

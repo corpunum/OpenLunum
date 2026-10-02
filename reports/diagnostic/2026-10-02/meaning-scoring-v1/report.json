@@ -1,0 +1,3049 @@
+{
+  "format": "openlunum-recorded-meaning/0.1",
+  "status": "diagnostic-self-reviewed-not-protected",
+  "protected": false,
+  "newModelCalls": 0,
+  "goldValidation": {
+    "total": 30,
+    "transportValid": 12,
+    "structuralValid": 12,
+    "protocolCanonical": 12,
+    "frameCanonical": 12,
+    "identityValid": 12,
+    "semanticAtomsValid": 12,
+    "abstentionCases": 4,
+    "invalid": [],
+    "reviewed": 16,
+    "unresolved": 14
+  },
+  "overall": {
+    "total": 30,
+    "outcomeCorrect": 27,
+    "reviewed": 16,
+    "unresolved": 14,
+    "exactRepresentationMatches": 9,
+    "correctDeclaredAbstentions": 4,
+    "coreAbstentionsSubmitted": 0,
+    "reviewedMatchesOrDeclaredAbstentions": 13,
+    "statusCounts": {
+      "declared_correct_abstention": 4,
+      "invalid": 3,
+      "match": 9,
+      "unresolved": 14
+    },
+    "failureClasses": {
+      "EXTRA_OR_CHANGED_INFORMATION": 3,
+      "FRAME_INVALID": 2,
+      "IDENTITY_UNAVAILABLE": 2,
+      "MISSING_OR_CHANGED_INFORMATION": 2,
+      "REVIEW_UNRESOLVED": 14,
+      "TRANSPORT_SCHEMA_INVALID": 1,
+      "WRONG_KIND": 1,
+      "WRONG_MODALITY": 2
+    },
+    "features": {
+      "expected": 246,
+      "observed": 248,
+      "matched": 243,
+      "recall": 0.9878048780487805,
+      "precision": 0.9798387096774194
+    },
+    "featureDenominators": {
+      "reviewedParseTargets": 12,
+      "fullTaskPopulation": 30,
+      "unresolvedExcludedFromFeatures": 14
+    }
+  },
+  "byLanguage": {
+    "el": {
+      "total": 10,
+      "outcomeCorrect": 10,
+      "reviewed": 4,
+      "unresolved": 6,
+      "exactRepresentationMatches": 2,
+      "correctDeclaredAbstentions": 1,
+      "coreAbstentionsSubmitted": 0,
+      "reviewedMatchesOrDeclaredAbstentions": 3,
+      "statusCounts": {
+        "declared_correct_abstention": 1,
+        "invalid": 1,
+        "match": 2,
+        "unresolved": 6
+      },
+      "failureClasses": {
+        "EXTRA_OR_CHANGED_INFORMATION": 1,
+        "FRAME_INVALID": 1,
+        "IDENTITY_UNAVAILABLE": 1,
+        "MISSING_OR_CHANGED_INFORMATION": 1,
+        "REVIEW_UNRESOLVED": 6,
+        "WRONG_MODALITY": 1
+      },
+      "features": {
+        "expected": 54,
+        "observed": 54,
+        "matched": 53,
+        "recall": 0.9814814814814815,
+        "precision": 0.9814814814814815
+      },
+      "featureDenominators": {
+        "reviewedParseTargets": 3,
+        "fullTaskPopulation": 10,
+        "unresolvedExcludedFromFeatures": 6
+      }
+    },
+    "en": {
+      "total": 20,
+      "outcomeCorrect": 17,
+      "reviewed": 12,
+      "unresolved": 8,
+      "exactRepresentationMatches": 7,
+      "correctDeclaredAbstentions": 3,
+      "coreAbstentionsSubmitted": 0,
+      "reviewedMatchesOrDeclaredAbstentions": 10,
+      "statusCounts": {
+        "declared_correct_abstention": 3,
+        "invalid": 2,
+        "match": 7,
+        "unresolved": 8
+      },
+      "failureClasses": {
+        "EXTRA_OR_CHANGED_INFORMATION": 2,
+        "FRAME_INVALID": 1,
+        "IDENTITY_UNAVAILABLE": 1,
+        "MISSING_OR_CHANGED_INFORMATION": 1,
+        "REVIEW_UNRESOLVED": 8,
+        "TRANSPORT_SCHEMA_INVALID": 1,
+        "WRONG_KIND": 1,
+        "WRONG_MODALITY": 1
+      },
+      "features": {
+        "expected": 192,
+        "observed": 194,
+        "matched": 190,
+        "recall": 0.9895833333333334,
+        "precision": 0.979381443298969
+      },
+      "featureDenominators": {
+        "reviewedParseTargets": 9,
+        "fullTaskPopulation": 20,
+        "unresolvedExcludedFromFeatures": 8
+      }
+    }
+  },
+  "items": [
+    {
+      "probeId": "e01",
+      "handle": "eval2-c8a5e25ad48fbc90",
+      "language": "en",
+      "sourceText": "Maria may read the quarterly budget file.",
+      "sourceSha256": "c8a5e25ad48fbc906b1e395bc1ef2007a1f7a72ba2fd83d4474cb0a2437ccaa5",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed explicit permission, named actor and file. This is a strict representation target, not an independently certified source annotation.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 18,
+          "observed": 18,
+          "matched": 18,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 6,
+            "observed": 6,
+            "matched": 6,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "read",
+            "modality": "permission",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Maria"
+              },
+              "theme": {
+                "type": "document",
+                "id": "quarterly_budget_file"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-c8a5e25ad48fbc90.jsonl",
+      "rawStreamSha256": "e35ee83636d29b2977ebdbcf77abc48d717cb5b31eba33ed7a3634f4f6829b1a",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e02",
+      "handle": "eval2-5f8e92b6ac4c4d23",
+      "language": "en",
+      "sourceText": "The finance lead allows Omar to approve invoices under 5,000 euros.",
+      "sourceSha256": "5f8e92b6ac4c4d234066c3cd594834668e05490c3ae6b3d3b579d188ab0ee0e4",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed stated permitter, recipient, action, invoice scope and strict below-5000-euros restriction. Invoice is used as the bounded subject as permitted by the below frame; formal amount-to-invoice scope still needs external review. The historical threshold-dropped allegation is contradicted by the ledger.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 39,
+          "observed": 39,
+          "matched": 39,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 3,
+            "observed": 3,
+            "matched": 3,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 18,
+            "observed": 18,
+            "matched": 18,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 5,
+            "observed": 5,
+            "matched": 5,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "allow",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "finance lead"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "Omar"
+              },
+              "action": "approve",
+              "theme": {
+                "type": "document",
+                "id": "invoices"
+              }
+            },
+            "conditions": [
+              {
+                "predicate": "below",
+                "roles": {
+                  "subject": {
+                    "type": "document",
+                    "id": "invoices"
+                  },
+                  "value": {
+                    "type": "quantity",
+                    "value": 5000,
+                    "unit": "euros"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-5f8e92b6ac4c4d23.jsonl",
+      "rawStreamSha256": "7f93ac5f7d710b0c7be66adccc67559080c871ea1e15d36fc7dec18f7960e55e",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e03",
+      "handle": "eval2-174bd8d7b3f69cae",
+      "language": "en",
+      "sourceText": "Contractors must not share customer phone numbers.",
+      "sourceSha256": "174bd8d7b3f69cae1122a008aa33ea2a315d6fde775190ac830d250d54998da7",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed explicit obligation prohibition; contractors and customer phone numbers both retained.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 18,
+          "observed": 18,
+          "matched": 18,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 6,
+            "observed": 6,
+            "matched": 6,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "share",
+            "negated": true,
+            "modality": "obligation",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "contractors"
+              },
+              "theme": {
+                "type": "object",
+                "id": "customer_phone_numbers"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-174bd8d7b3f69cae.jsonl",
+      "rawStreamSha256": "e50066c46ff148363b5fda61fb8ff6c2e9a290f851226ab66b6078813c800039",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e04",
+      "handle": "eval2-f5a5eddfa74f3df6",
+      "language": "en",
+      "sourceText": "Restart the payment service.",
+      "sourceSha256": "f5a5eddfa74f3df6f59a85f305233e6ffed8c1b1c27b26ed685f7c5593623baa",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed imperative restart, service specified; no invented agent.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 14,
+          "observed": 14,
+          "matched": 14,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 3,
+            "observed": 3,
+            "matched": 3,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "command",
+        "clauses": [
+          {
+            "predicate": "restart",
+            "roles": {
+              "theme": {
+                "type": "service",
+                "id": "payment_service"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-f5a5eddfa74f3df6.jsonl",
+      "rawStreamSha256": "960e3a492a4b507e82be294a70bd5b5c099e7556e4d22c79ae6eed40e5c605af",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e05",
+      "handle": "eval2-fe67df8f0603b0b6",
+      "language": "en",
+      "sourceText": "Please notify the on-call engineer when disk usage goes above 90 percent.",
+      "sourceSha256": "fe67df8f0603b0b6c5c7cbfbaf74dae30c6324eaa334edad12dc2a8c3878e165",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed conditional notification; exact recipient, metric, strict above relation, quantity and unit. The source on-call hyphen is retained in its ID; a draft annotation typo was corrected before final binding, not aliased by the scorer. Nested world/kind labels are not permitted by the transport clause schema.",
+      "meaningStatus": "invalid",
+      "comparison": {
+        "status": "invalid",
+        "stages": {
+          "transportValid": false,
+          "transportErrors": [
+            {
+              "instancePath": "/clauses/0/conditions/0",
+              "schemaPath": "#/additionalProperties",
+              "keyword": "additionalProperties",
+              "params": {
+                "additionalProperty": "world"
+              },
+              "message": "must NOT have additional properties"
+            },
+            {
+              "instancePath": "/clauses/0/conditions/0",
+              "schemaPath": "#/additionalProperties",
+              "keyword": "additionalProperties",
+              "params": {
+                "additionalProperty": "kind"
+              },
+              "message": "must NOT have additional properties"
+            }
+          ],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [
+          "TRANSPORT_SCHEMA_INVALID",
+          "EXTRA_OR_CHANGED_INFORMATION"
+        ],
+        "features": {
+          "expected": 29,
+          "observed": 31,
+          "matched": 29,
+          "recall": 1,
+          "precision": 0.9354838709677419,
+          "missing": [],
+          "extra": [
+            {
+              "path": "clauses[0].conditions[0].kind",
+              "value": "condition",
+              "dimension": "unclassified"
+            },
+            {
+              "path": "clauses[0].conditions[0].world",
+              "value": "real",
+              "dimension": "unclassified"
+            }
+          ]
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 3,
+            "observed": 3,
+            "matched": 3,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 10,
+            "observed": 10,
+            "matched": 10,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 3,
+            "observed": 3,
+            "matched": 3,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "unclassified": {
+            "expected": 0,
+            "observed": 2,
+            "matched": 0,
+            "recall": null,
+            "precision": 0,
+            "missing": [],
+            "extra": [
+              {
+                "path": "clauses[0].conditions[0].kind",
+                "value": "condition",
+                "dimension": "unclassified"
+              },
+              {
+                "path": "clauses[0].conditions[0].world",
+                "value": "real",
+                "dimension": "unclassified"
+              }
+            ]
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "conditional_instruction",
+        "clauses": [
+          {
+            "predicate": "notify",
+            "roles": {
+              "recipient": {
+                "type": "actor",
+                "id": "on-call engineer"
+              }
+            },
+            "conditions": [
+              {
+                "world": "real",
+                "kind": "condition",
+                "predicate": "above",
+                "roles": {
+                  "subject": {
+                    "type": "metric",
+                    "id": "disk usage"
+                  },
+                  "value": {
+                    "type": "quantity",
+                    "value": 90,
+                    "unit": "percent"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-fe67df8f0603b0b6.jsonl",
+      "rawStreamSha256": "546f6b3f182900aedac16f10e3f89e5eaf86e5eee976d43c37f36851738af74e",
+      "failureClasses": [
+        "TRANSPORT_SCHEMA_INVALID",
+        "EXTRA_OR_CHANGED_INFORMATION"
+      ]
+    },
+    {
+      "probeId": "e06",
+      "handle": "eval2-6f591650afce1b3e",
+      "language": "en",
+      "sourceText": "Grant Priya access to the staging database until 30 November 2026.",
+      "sourceSha256": "6f591650afce1b3e935fade0f51e076a14f2499f797ff2552fef6c98d6ea973c",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "outcomeCorrect": false,
+      "reviewStatus": "unresolved",
+      "reviewNote": "An imperative agent gap existed in the historical contract; current grant permits missing agent. Until defines access expiry, not a by-deadline. No reviewed faithful temporal encoding is supplied. Original expectation retained, not relabelled.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": null,
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": false,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-6f591650afce1b3e.jsonl",
+      "rawStreamSha256": "eb6efac95cd51d1f9fd057fd046733921f0b5e075e703cec80788da6c30af1bc",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "e07",
+      "handle": "eval2-2f0f80aab83b234b",
+      "language": "en",
+      "sourceText": "Revoke.",
+      "sourceSha256": "2f0f80aab83b234b1bc8d2c122386c5c0cd5ec18d9447eedd0665edf0bb457ca",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed missing theme; abstention is supported by the frame.",
+      "meaningStatus": "declared_correct_abstention",
+      "comparison": null,
+      "candidateSem": null,
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": false,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-2f0f80aab83b234b.jsonl",
+      "rawStreamSha256": "7df94336206a2bd1317907a6e9511cbda5c0d7dc6429122dc2083677823e56fe",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e08",
+      "handle": "eval2-80094c0bd1b819bd",
+      "language": "en",
+      "sourceText": "Archive the tickets older than 90 days.",
+      "sourceSha256": "80094c0bd1b819bd7fdcc6cb4b5a8fab6bf8fcea577b1b2a5c7a60c5007e5825",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed complete qualified collection literal preserves older-than relation, 90 and days. It does not establish a compositional age query or cross-language identity.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 14,
+          "observed": 14,
+          "matched": 14,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 3,
+            "observed": 3,
+            "matched": 3,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "command",
+        "clauses": [
+          {
+            "predicate": "archive",
+            "roles": {
+              "theme": {
+                "type": "collection",
+                "value": "tickets older than 90 days"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-80094c0bd1b819bd.jsonl",
+      "rawStreamSha256": "442be6ead13b3d261d78f0f0dba7c538fcd9351ae84f047fd48d18af406ddd82",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e09",
+      "handle": "eval2-cff37a30c28a7493",
+      "language": "en",
+      "sourceText": "Nobody except the auditor may delete audit logs.",
+      "sourceSha256": "cff37a30c28a7493289d9b3b1ca90a416d4cdbd4ca07d151c673a171897401ac",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "outcomeCorrect": false,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Exclusive permission/exception encoding lacks a reviewed canonical representation. Historical parse expectation remains visible; fail-closed abstention is not silently credited as a successful parse.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": null,
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": false,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-cff37a30c28a7493.jsonl",
+      "rawStreamSha256": "fd36cf78407652dea1a3a8d97a216a93146f731d2b3116ccda24fbc543c777b0",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "e10",
+      "handle": "eval2-28607ca31fa51824",
+      "language": "en",
+      "sourceText": "Run the backup script every night at 02:00.",
+      "sourceSha256": "28607ca31fa51824e2547cf01473440a6dab2221081d57dd37e6b8fd81bec74e",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Recorded candidate omits every-night recurrence. No canonical recurrence target is invented to score it. Requires reviewed recurrence encoding or a separately specified unsupported/abstain task.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "command",
+        "clauses": [
+          {
+            "predicate": "run",
+            "roles": {
+              "theme": {
+                "type": "task",
+                "value": "backup script"
+              }
+            },
+            "time": {
+              "type": "time",
+              "value": "02:00"
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-28607ca31fa51824.jsonl",
+      "rawStreamSha256": "9756a69e551ef2db343c5ce764454628fc35af7f11517bf5da87d852a5bdebf3",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "e11",
+      "handle": "eval2-ea8dc56fae796f70",
+      "language": "en",
+      "sourceText": "Send three reminders before the deadline on 15 March.",
+      "sourceSha256": "ea8dc56fae796f70f8a5252fe8ad1e260e93730aacd1238d508fd26082197cec",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Recorded send-to-retry predicate change and absent before relation are determinate losses. Imperative send requires an unstated agent, and the complete temporal/quantity encoding has not been reviewed; no fabricated full gold.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "retry",
+            "roles": {
+              "theme": {
+                "type": "task",
+                "value": "reminder"
+              },
+              "count": {
+                "type": "quantity",
+                "value": 3
+              }
+            },
+            "time": {
+              "type": "date",
+              "value": "15 March"
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-ea8dc56fae796f70.jsonl",
+      "rawStreamSha256": "95c385a98d046e5631c95647eafdf19e5403f2ada1435100753237bda1a6845a",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "e12",
+      "handle": "eval2-2498a6f19c4efabb",
+      "language": "en",
+      "sourceText": "The team is allowed to approve.",
+      "sourceSha256": "2498a6f19c4efabb2494614f2ce877524fc3b2722ff3bc79e142ce9f0fa1eb42",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed approve requires a theme not supplied by the source.",
+      "meaningStatus": "declared_correct_abstention",
+      "comparison": null,
+      "candidateSem": null,
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": false,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-2498a6f19c4efabb.jsonl",
+      "rawStreamSha256": "a393eeefaf5023b08fa38868e35b78b9389fb64d6e4021390e3edc483a2d54bc",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e13",
+      "handle": "eval2-05d10f9e33ed5130",
+      "language": "en",
+      "sourceText": "Jonas should polish the onboarding slides before Friday.",
+      "sourceSha256": "05d10f9e33ed51304494a4c4e0dbe25da123ebe34a05d0d03d0e42d1d3a6827e",
+      "expectedOutcome": "parse",
+      "observed": "abstain",
+      "outcomeCorrect": false,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Original expectation conflicts with unsupported polish predicate. Correct abstention under the bounded protocol is plausible, but the original task is not rewritten after observing it.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": null,
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": false,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-05d10f9e33ed5130.jsonl",
+      "rawStreamSha256": "4eb1e12a5e551b3b83f458a44054b9e6658064c80e72625cc4b37fb284c77f4f",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "e14",
+      "handle": "eval2-d885d989453301f2",
+      "language": "en",
+      "sourceText": "Do not restart the cluster during business hours.",
+      "sourceSha256": "d885d989453301f27c493972797357c57121974aeea9efb02cd37ee7e50a823a",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Negative imperative modality and during-business-hours temporal scoping need a reviewed canonical target. Literal presence alone is insufficient.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "command",
+        "clauses": [
+          {
+            "predicate": "restart",
+            "negated": true,
+            "time": {
+              "type": "time",
+              "value": "business hours"
+            },
+            "roles": {
+              "theme": {
+                "type": "system",
+                "id": "cluster"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-d885d989453301f2.jsonl",
+      "rawStreamSha256": "73cb04c90d01f43991c4c2875910a522050cf3ce2b3ee671d178608fcb7bdcc7",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "e15",
+      "handle": "eval2-941e078e334f87a8",
+      "language": "en",
+      "sourceText": "If more than 5 login attempts fail, lock the account.",
+      "sourceSha256": "941e078e334f87a84712e13373fa584e8e1b56c857382e78ca68653eb2faf892",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Recorded condition counts login attempts without the failed qualifier. Lock-to-disable equivalence is unreviewed. Preserve both the definite omission and unresolved predicate judgement, without manufacturing a complete gold.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "conditional_instruction",
+        "clauses": [
+          {
+            "predicate": "disable",
+            "roles": {
+              "theme": {
+                "type": "resource",
+                "id": "account"
+              }
+            },
+            "conditions": [
+              {
+                "world": "real",
+                "kind": "condition",
+                "predicate": "above",
+                "roles": {
+                  "subject": {
+                    "type": "metric",
+                    "id": "login_attempts"
+                  },
+                  "value": {
+                    "type": "quantity",
+                    "value": 5
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-941e078e334f87a8.jsonl",
+      "rawStreamSha256": "ef7f1db8c41c3f50617d689bc4ac803d3a9544ec186c39c1b7271314378a2be3",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "e16",
+      "handle": "eval2-4c47ae1fb508110b",
+      "language": "en",
+      "sourceText": "Lena is permitted by the security team to revoke expired tokens.",
+      "sourceSha256": "4c47ae1fb508110be014174b878d1230a70252faf1b26d8e641e121b6b7b6d4d",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed stated permitter, recipient, revoke action, and expired-token scope.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 24,
+          "observed": 24,
+          "matched": 24,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 11,
+            "observed": 11,
+            "matched": 11,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 3,
+            "observed": 3,
+            "matched": 3,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "allow",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "security_team"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "Lena"
+              },
+              "action": "revoke",
+              "theme": {
+                "type": "credential",
+                "value": "expired tokens"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-4c47ae1fb508110b.jsonl",
+      "rawStreamSha256": "10ffb664b4e6ff15feb1b876fc22d8ee712de3d3d149c6a2c68a047259de37db",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e17",
+      "handle": "eval2-4433cd42c6dd3a72",
+      "language": "en",
+      "sourceText": "Share it with them.",
+      "sourceSha256": "4433cd42c6dd3a723e31ee62e4450c6e246ce3c13b9f59c8c4ec21bfd362431e",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed ungrounded object and recipient pronouns; no antecedents supplied.",
+      "meaningStatus": "declared_correct_abstention",
+      "comparison": null,
+      "candidateSem": null,
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": false,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-4433cd42c6dd3a72.jsonl",
+      "rawStreamSha256": "6854778d6494941901477025f20d805c50888e5bf088d1cfd466dcd979153142",
+      "failureClasses": []
+    },
+    {
+      "probeId": "e18",
+      "handle": "eval2-35ad1bd90b33c221",
+      "language": "en",
+      "sourceText": "The interns may not approve purchase orders.",
+      "sourceSha256": "35ad1bd90b33c221dce18a52b6a266eb3d10996a75d7cab39476414b5f80d278",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed prohibition, not permission not to act. Target follows decision0015; the historical parser used contract0.10 and is not being rerun.",
+      "meaningStatus": "invalid",
+      "comparison": {
+        "status": "invalid",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": false,
+          "frameIssues": [
+            {
+              "path": "clauses[0].modality",
+              "predicate": "approve",
+              "code": "ambiguous_negated_permission",
+              "message": "permission with negated=true is ambiguous; for a prohibition use modality 'obligation' with negated=true (or prohibit with a stated authority); abstain for 'permitted not to'"
+            }
+          ],
+          "identityValid": false
+        },
+        "failureClasses": [
+          "FRAME_INVALID",
+          "IDENTITY_UNAVAILABLE",
+          "WRONG_MODALITY",
+          "WRONG_KIND",
+          "MISSING_OR_CHANGED_INFORMATION",
+          "EXTRA_OR_CHANGED_INFORMATION"
+        ],
+        "features": {
+          "expected": 18,
+          "observed": 18,
+          "matched": 16,
+          "recall": 0.8888888888888888,
+          "precision": 0.8888888888888888,
+          "missing": [
+            {
+              "path": "kind",
+              "value": "instruction",
+              "dimension": "kind"
+            },
+            {
+              "path": "clauses[0].modality",
+              "value": "obligation",
+              "dimension": "modality"
+            }
+          ],
+          "extra": [
+            {
+              "path": "kind",
+              "value": "event",
+              "dimension": "kind"
+            },
+            {
+              "path": "clauses[0].modality",
+              "value": "permission",
+              "dimension": "modality"
+            }
+          ]
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0,
+            "missing": [
+              {
+                "path": "kind",
+                "value": "instruction",
+                "dimension": "kind"
+              }
+            ],
+            "extra": [
+              {
+                "path": "kind",
+                "value": "event",
+                "dimension": "kind"
+              }
+            ]
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0,
+            "missing": [
+              {
+                "path": "clauses[0].modality",
+                "value": "obligation",
+                "dimension": "modality"
+              }
+            ],
+            "extra": [
+              {
+                "path": "clauses[0].modality",
+                "value": "permission",
+                "dimension": "modality"
+              }
+            ]
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 6,
+            "observed": 6,
+            "matched": 6,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "approve",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "interns"
+              },
+              "theme": {
+                "type": "document",
+                "id": "purchase orders"
+              }
+            },
+            "negated": true,
+            "modality": "permission"
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-35ad1bd90b33c221.jsonl",
+      "rawStreamSha256": "2ed2409037383190d35d1f38ba2f3b85fd5eeef6d9226ae6a15933c5e9a953ed",
+      "failureClasses": [
+        "FRAME_INVALID",
+        "IDENTITY_UNAVAILABLE",
+        "WRONG_MODALITY",
+        "WRONG_KIND",
+        "MISSING_OR_CHANGED_INFORMATION",
+        "EXTRA_OR_CHANGED_INFORMATION"
+      ]
+    },
+    {
+      "probeId": "e19",
+      "handle": "eval2-e4063b53c4e338f0",
+      "language": "en",
+      "sourceText": "Ahmed can view the incident report.",
+      "sourceSha256": "e4063b53c4e338f0183808dca7b15f3fad539ebc2d57b8b3f53e63f02a3c4085",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Can may denote ability or permission. Identity equality with explicit-permission e20 does not settle this source interpretation.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "read",
+            "modality": "permission",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Ahmed"
+              },
+              "theme": {
+                "type": "document",
+                "id": "incident_report"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-e4063b53c4e338f0.jsonl",
+      "rawStreamSha256": "ae8593d9b56bc93536244632b606ce8aa987c1b08cfe9c024c2cd5db3a006af3",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "e20",
+      "handle": "eval2-3784ce8a31c5146f",
+      "language": "en",
+      "sourceText": "Ahmed is allowed to read the incident report.",
+      "sourceSha256": "3784ce8a31c5146f7d3681c8f1142b9a13881d03bec43834dd156aaef276daeb",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed explicit permission, actor Ahmed, incident-report scope.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 18,
+          "observed": 18,
+          "matched": 18,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 6,
+            "observed": 6,
+            "matched": 6,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "read",
+            "modality": "permission",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Ahmed"
+              },
+              "theme": {
+                "type": "document",
+                "id": "incident_report"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-3784ce8a31c5146f.jsonl",
+      "rawStreamSha256": "bfff4f37ec3ad83c89c33d9232fb8198ff126a83e4ab43652399d36cf6ce79b7",
+      "failureClasses": []
+    },
+    {
+      "probeId": "g01",
+      "handle": "eval2-17fed6c4303a2ef4",
+      "language": "el",
+      "sourceText": "Η Ελένη μπορεί να διαβάσει το αρχείο μισθοδοσίας.",
+      "sourceSha256": "17fed6c4303a2ef4c90698071eee8fe49505910bfdbc175e07a785091eafe300",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Μπορεί permits ability/permission/possibility readings without context. No native-speaker review; do not credit a selected modality automatically.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "read",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Ελένη"
+              },
+              "theme": {
+                "type": "document",
+                "id": "αρχείο μισθοδοσίας"
+              }
+            },
+            "modality": "permission"
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-17fed6c4303a2ef4.jsonl",
+      "rawStreamSha256": "c50d964fd4a3521e28a758676264f08a8de0e865fd9aeba17eac66a321d54a9e",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "g02",
+      "handle": "eval2-c2f7350d69b07431",
+      "language": "el",
+      "sourceText": "Ο διευθυντής επιτρέπει στον Νίκο να εγκρίνει δαπάνες έως 2.000 ευρώ.",
+      "sourceSha256": "c2f7350d69b07431dd6f1a9385e3ed389e17d87abd7bc4482b245ac5a54c69ea",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Candidate drops the up-to-2000-euros bound. Έως is inclusive, not strict below; no unsupported less-or-equal predicate is smuggled into gold. Translated open IDs also need referent review; no native-speaker certification.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "allow",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "director"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "Nikos"
+              },
+              "action": "approve",
+              "theme": {
+                "type": "object",
+                "value": "expenses"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-c2f7350d69b07431.jsonl",
+      "rawStreamSha256": "7b57cd9911f968e3a9025e38d9250305acac45cb3e91c6df6a463f644e48841c",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "g03",
+      "handle": "eval2-71205821dc69c1ce",
+      "language": "el",
+      "sourceText": "Απαγορεύεται στους επισκέπτες να κοινοποιούν τα προσωπικά δεδομένα.",
+      "sourceSha256": "71205821dc69c1cec691b7912bdb5bee50fb27e210d8e1dc3e3a522e952dd8fe",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed explicit prohibition on visitors sharing personal data; not native-speaker reviewed. Target follows decision0015, retaining literal Greek role fillers.",
+      "meaningStatus": "invalid",
+      "comparison": {
+        "status": "invalid",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": false,
+          "frameIssues": [
+            {
+              "path": "clauses[0].modality",
+              "predicate": "share",
+              "code": "ambiguous_negated_permission",
+              "message": "permission with negated=true is ambiguous; for a prohibition use modality 'obligation' with negated=true (or prohibit with a stated authority); abstain for 'permitted not to'"
+            }
+          ],
+          "identityValid": false
+        },
+        "failureClasses": [
+          "FRAME_INVALID",
+          "IDENTITY_UNAVAILABLE",
+          "WRONG_MODALITY",
+          "MISSING_OR_CHANGED_INFORMATION",
+          "EXTRA_OR_CHANGED_INFORMATION"
+        ],
+        "features": {
+          "expected": 18,
+          "observed": 18,
+          "matched": 17,
+          "recall": 0.9444444444444444,
+          "precision": 0.9444444444444444,
+          "missing": [
+            {
+              "path": "clauses[0].modality",
+              "value": "obligation",
+              "dimension": "modality"
+            }
+          ],
+          "extra": [
+            {
+              "path": "clauses[0].modality",
+              "value": "permission",
+              "dimension": "modality"
+            }
+          ]
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 0,
+            "recall": 0,
+            "precision": 0,
+            "missing": [
+              {
+                "path": "clauses[0].modality",
+                "value": "obligation",
+                "dimension": "modality"
+              }
+            ],
+            "extra": [
+              {
+                "path": "clauses[0].modality",
+                "value": "permission",
+                "dimension": "modality"
+              }
+            ]
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 6,
+            "observed": 6,
+            "matched": 6,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "share",
+            "modality": "permission",
+            "negated": true,
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "value": "επισκέπτες"
+              },
+              "theme": {
+                "type": "concept",
+                "value": "προσωπικά δεδομένα"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-71205821dc69c1ce.jsonl",
+      "rawStreamSha256": "50281f25ef9d51d4e242ecb06227ce5161cf8420ad163a72d72dc26e380d985e",
+      "failureClasses": [
+        "FRAME_INVALID",
+        "IDENTITY_UNAVAILABLE",
+        "WRONG_MODALITY",
+        "MISSING_OR_CHANGED_INFORMATION",
+        "EXTRA_OR_CHANGED_INFORMATION"
+      ]
+    },
+    {
+      "probeId": "g04",
+      "handle": "eval2-d115f6118271be01",
+      "language": "el",
+      "sourceText": "Επανεκκίνησε τον διακομιστή αλληλογραφίας.",
+      "sourceSha256": "d115f6118271be01afb065c788a9d3e550f1007b052af47559b3662c7d7dd485",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Restart meaning appears retained, but mail_server versus a Greek open ID is not grounded shared identity. No native/referent review; strict target withheld rather than invent equivalence.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "command",
+        "clauses": [
+          {
+            "predicate": "restart",
+            "roles": {
+              "theme": {
+                "type": "system",
+                "id": "mail_server"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-d115f6118271be01.jsonl",
+      "rawStreamSha256": "e625e25769c72af4022ca5e561249e40315599895f26aea25ff483b08cdf7a05",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "g05",
+      "handle": "eval2-af66144d26bb7dfd",
+      "language": "el",
+      "sourceText": "Ειδοποίησε την ομάδα αν η θερμοκρασία ξεπεράσει τους 40 βαθμούς.",
+      "sourceSha256": "af66144d26bb7dfdf6e221bb9096c5c6a1e1b699f7e177d7164834b27b807e28",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Meaning-level review of translated group/metric IDs and unspecified degrees unit is pending. Historical nested world/kind clause labels are transport-invalid; do not erase them to manufacture a valid output.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "conditional_instruction",
+        "clauses": [
+          {
+            "predicate": "notify",
+            "roles": {
+              "recipient": {
+                "type": "group",
+                "id": "team"
+              }
+            },
+            "conditions": [
+              {
+                "world": "real",
+                "kind": "condition",
+                "predicate": "above",
+                "roles": {
+                  "subject": {
+                    "type": "metric",
+                    "id": "temperature"
+                  },
+                  "value": {
+                    "type": "quantity",
+                    "value": 40,
+                    "unit": "degrees"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-af66144d26bb7dfd.jsonl",
+      "rawStreamSha256": "cfa62a1e0cb3da08d8656dbcb533555f3298aaa2ad94500f027855cf2ec748fa",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "g06",
+      "handle": "eval2-ee58861644ed584c",
+      "language": "el",
+      "sourceText": "Ανακάλεσε.",
+      "sourceSha256": "ee58861644ed584c42bb33f742c25ea846930502c07f8df9a41d9ecceabf2a03",
+      "expectedOutcome": "abstain",
+      "observed": "abstain",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed absent revoke theme. No native-speaker certification.",
+      "meaningStatus": "declared_correct_abstention",
+      "comparison": null,
+      "candidateSem": null,
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": false,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-ee58861644ed584c.jsonl",
+      "rawStreamSha256": "f06a0653dc57afa0eebc897877846d8722dbccfb73c5338b43279d67a1d664bb",
+      "failureClasses": []
+    },
+    {
+      "probeId": "g07",
+      "handle": "eval2-2b99a8becd4b896f",
+      "language": "el",
+      "sourceText": "Αρχειοθέτησε τα 12 παλιά έργα μέχρι τις 31 Δεκεμβρίου.",
+      "sourceSha256": "2b99a8becd4b896f72b53e5816105e6959dc053f91dc63e44746de5bfa7b3647",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Recorded candidate omits by-31-December deadline. Count12 survives in a qualified collection string. Complete deadline/collection encoding and Greek review remain pending; no current model output defines gold.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "archive",
+            "roles": {
+              "theme": {
+                "type": "collection",
+                "value": "12 old projects"
+              }
+            }
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-2b99a8becd4b896f.jsonl",
+      "rawStreamSha256": "0666b80abc3d2c4b85845c7a68bcb9d7d870bfcf650e4b58b09e4b49db60a0d4",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "g08",
+      "handle": "eval2-e663735532ab0308",
+      "language": "el",
+      "sourceText": "Ο Πέτρος δεν πρέπει να εκτελεί σενάρια στην παραγωγή.",
+      "sourceSha256": "e663735532ab030863751e276382ae676ba176d893091b6b43b800ef96264daa",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "unresolved",
+      "reviewNote": "Recorded candidate omits production scope, broadening prohibition to all scripts. The old report did not flag this. Full environment/frame encoding and native review remain pending.",
+      "meaningStatus": "unresolved",
+      "comparison": null,
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "safety_constraint",
+        "clauses": [
+          {
+            "predicate": "run",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Πέτρος"
+              },
+              "theme": {
+                "type": "resource",
+                "value": "σενάρια"
+              }
+            },
+            "negated": true,
+            "modality": "obligation"
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-e663735532ab0308.jsonl",
+      "rawStreamSha256": "d8abd7d951494fd340b90b9641ca70f62b6e62f30abff3b2deb77323711d6e3c",
+      "failureClasses": [
+        "REVIEW_UNRESOLVED"
+      ]
+    },
+    {
+      "probeId": "g09",
+      "handle": "eval2-05199ff79d259c4e",
+      "language": "el",
+      "sourceText": "Η Σοφία έχει δικαίωμα να διαβάζει την αναφορά συμβάντος.",
+      "sourceSha256": "05199ff79d259c4e745349eb22e1f94bdeb817d23d41f8746873ec7b4dbb9c40",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed explicit permission; source-relative Greek actor/document IDs retained. No native-speaker certification or English/Greek grounding claim.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 18,
+          "observed": 18,
+          "matched": 18,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 6,
+            "observed": 6,
+            "matched": 6,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "read",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Σοφία"
+              },
+              "theme": {
+                "type": "document",
+                "id": "αναφορά συμβάντος"
+              }
+            },
+            "modality": "permission"
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-05199ff79d259c4e.jsonl",
+      "rawStreamSha256": "d1daca02f315af32bf4fb597672fe99ed343948dc9f082cde8de65e658cf7b74",
+      "failureClasses": []
+    },
+    {
+      "probeId": "g10",
+      "handle": "eval2-37ce3e3ba437ae27",
+      "language": "el",
+      "sourceText": "Επιτρέπεται στη Σοφία να διαβάζει την αναφορά συμβάντος.",
+      "sourceSha256": "37ce3e3ba437ae270c135f85e6237ebf62d0b0dd4ce8f40fbdcaa3950dac494e",
+      "expectedOutcome": "parse",
+      "observed": "parse",
+      "outcomeCorrect": true,
+      "reviewStatus": "reviewed",
+      "reviewNote": "Self-reviewed explicit permission matching g09 under its source-relative ID convention. No native-speaker certification or cross-language referent assertion.",
+      "meaningStatus": "match",
+      "comparison": {
+        "status": "match",
+        "stages": {
+          "transportValid": true,
+          "transportErrors": [],
+          "structuralValid": true,
+          "structuralErrors": [],
+          "protocolCanonical": true,
+          "normalizationStatus": "canonical",
+          "frameValid": true,
+          "frameIssues": [],
+          "identityValid": true
+        },
+        "failureClasses": [],
+        "features": {
+          "expected": 18,
+          "observed": 18,
+          "matched": 18,
+          "recall": 1,
+          "precision": 1,
+          "missing": [],
+          "extra": []
+        },
+        "dimensions": {
+          "clause": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "condition": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "consequence": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "kind": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "modality": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "negation": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "predicate": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "role": {
+            "expected": 6,
+            "observed": 6,
+            "matched": 6,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "schema": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "termType": {
+            "expected": 2,
+            "observed": 2,
+            "matched": 2,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          },
+          "world": {
+            "expected": 1,
+            "observed": 1,
+            "matched": 1,
+            "recall": 1,
+            "precision": 1,
+            "missing": [],
+            "extra": []
+          }
+        }
+      },
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "read",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Σοφία"
+              },
+              "theme": {
+                "type": "document",
+                "id": "αναφορά συμβάντος"
+              }
+            },
+            "modality": "permission"
+          }
+        ]
+      },
+      "contractHash": "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f",
+      "recordedIdentityAvailable": true,
+      "recordedCoreAbstentionSubmitted": false,
+      "recordedContractVersion": "lunum-agent/0.10",
+      "rawStream": "raw/eval2-37ce3e3ba437ae27.jsonl",
+      "rawStreamSha256": "c2f2aba1b9e20c1b9274c77a258897ad9e3e1794127491ab672a64303a10a49d",
+      "failureClasses": []
+    }
+  ],
+  "provenance": {
+    "implementationCommit": "3803df6c40e5974e774df28c1d2ede5d7ccc085d",
+    "scorerSha256": "cac4da440505ce715e9e4afc2639e5bb0352e1b351045a2fe304d714196e76cc",
+    "schemaSha256": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+    "evaluatedContract": "lunum-agent/0.12",
+    "manifestSha256": "53850e701f598037cc8fab4f43c28188a190b37704c1cd35082812b7845feea2",
+    "artifacts": {
+      "probes": {
+        "path": "reports/independent-evaluation/2026-09-26-round2/probes-authored.json",
+        "sha256": "942600af5b86dd68518ede07302253f4204a29f26fa9cab12f030cbbb6ce9614"
+      },
+      "requests": {
+        "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/requests.jsonl",
+        "sha256": "673b19e2617e8686f07f89e004787a398efb605c3c015ddb890996ed3dfd7f7a"
+      },
+      "candidates": {
+        "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/candidate-ledger.jsonl",
+        "sha256": "282e5ba77169d6daaf83e1db2900deb6b152fea9a6d0a76001e2d08102c748e9"
+      },
+      "runs": {
+        "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/run-ledger.jsonl",
+        "sha256": "7bab03fdcb1ad2bda3b0f7a9e5eb60ad8af7965c0ffab267791c610d7288f442"
+      },
+      "targets": {
+        "path": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+        "sha256": "c2cde55bc2bf833c0c30917649b290719327c6fa0f11b12d90303e6d9e717ff9"
+      },
+      "summary": {
+        "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/run-summary.json",
+        "sha256": "e6772140d9d1b21049a30a2c34162157fc2844c7e2b305814848a6c768d33802"
+      },
+      "package": {
+        "path": "experiments/natural-development-v8/extraction/public-instruction-package-v11.json",
+        "sha256": "89d5555b46258b2d5af073dd8da7c7f217d5db5e68e879f5c12f82f12e08b106"
+      }
+    },
+    "observedHistoricalContractHashes": [
+      "cb444cab167c479f63d791a300ba51d816e06eec38ad588c7fb1e90e7280385f"
+    ],
+    "originalRun": {
+      "codeCommit": "a2909a3a048e556148e72ea10e335e65fd85d7ef",
+      "requestedModel": "sonnet",
+      "reportedModels": [
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-5"
+      ],
+      "originalCostUsd": 5.71,
+      "observedContractVersions": [
+        "lunum-agent/0.10"
+      ]
+    },
+    "originalRunValidity": "Not certified by this re-scoring: the historical runner has documented artifact-binding limitations. File hashes and raw-stream hashes are checked here, not provider execution independently reproduced.",
+    "review": {
+      "reviewer": "acting-agent; diagnostic source review with two Luna read-only audits",
+      "independent": false,
+      "nativeSpeaker": false,
+      "postHoc": true
+    },
+    "interpretation": "Offline strict representation diagnostics on post-hoc reviewed visible data. Unresolved rows prevent a complete meaning-accuracy claim. Current validity checks are not a live re-run of the original extractor."
+  }
+}

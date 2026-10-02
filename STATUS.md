@@ -1,6 +1,6 @@
 # Project status
 
-**As of 2026-09-27.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+**As of 2026-10-02.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
 
 ## What exists
 
@@ -40,9 +40,10 @@ All live runs used Claude Code (`claude-sonnet-5`), one fresh process per senten
   - missing-argument probes 20/20, 18/18 and 16/16 in each of 3 repetitions;
   - V8 development set: 19–20 of 21 source-relative and 3/3 abstentions.
   - This is in-sample or author-written.
-- **On fresh sentences from an independent session, meaning fidelity is the weak point.** [Round 2](reports/independent-evaluation/2026-09-26-round2/REPORT.md) scored **27/30 on outcome but 20/30 on meaning**: parses dropped thresholds, dates or recurrences, or used a wrong verb, and still got an identity.
+- **On fresh sentences from an independent session, meaning fidelity is the weak point.** [Round 2](reports/independent-evaluation/2026-09-26-round2/REPORT.md) scored **27/30 on outcome and reported 20/30 on meaning**. The manual meaning score is not settled: e02's threshold is present in the ledger, while other omissions and ambiguities were unflagged. The [offline diagnostic](reports/diagnostic/2026-10-02/meaning-scoring-v1/README.md) preserves the original evidence and expectations, with 12 valid self-reviewed parse targets, 4 abstention targets, and 14 unresolved cases. It is not a replacement overall accuracy score or a new live run.
   - The prohibition split and the dropped digit literals (2 of those 7 losses) are now mechanically blocked.
   - Dropped words, recurrences and wrong predicates are not blocked.
+  - The offline scorer also reproduced a current core/transport discrepancy: e05 fails the actual wire schema but `submitCandidate` reports transport-valid and issues identity. It remains unpromoted. This needs repair; schema validity and fidelity must not be inferred from issued identity.
 - **Memory QA:** natural text deduplicated by identity used about 60% fewer input tokens. Sonnet kept 20/20 answers; **Haiku answered 1 question wrong in 5 of 9 runs**. The Lunum-Code renderer 0.1 loses answers. The corpus is 24 self-built sentences with paraphrase-heavy duplication, so this is not a savings estimate for real memory.
 - **Identity stability:** a committed scan found no identity change from any vocabulary or frame change after it was introduced. Every loss of identity is listed in the ADRs.
 
@@ -58,7 +59,7 @@ Evaluation has been done by the author and by two other sessions of the same ven
 
 ## Next, in order
 
-1. **Meaning-level evaluation.** Give the probe sets target meanings and a scorer that compares them, so fidelity is measured rather than read by hand. Then measure the 0.11 abstention rule and the 0.12 literal gate live.
+1. **Repair actual transport validation and complete meaning-level evaluation.** First enforce the real wire schema at candidate submission without silently discarding invalid fields. An offline role-bound scorer now exists, but 14/30 diagnostic sources remain unresolved and the targets are self-reviewed. Independently resolve source/representation and unsupported-case judgments before freezing fresh evaluation data. Then measure the latest contract live under an agreed budget.
 2. **Out-of-sample evaluation after each change**, preferably human or cross-vendor.
 3. **Real memory data (owner)** before any token-saving claim.
 4. **Review of unreviewed semantic judgements:**
