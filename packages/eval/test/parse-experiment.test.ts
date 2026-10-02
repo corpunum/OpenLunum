@@ -375,14 +375,18 @@ function langMetricsLabel(lang: string): string {
 }
 
 test('parse experiment handles mixed pass/fail correctly', async () => {
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',
+    clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }]
+  };
   let callCount = 0;
   const server = createServer((request, response) => {
     if (request.url === '/v1/chat/completions') {
       callCount += 1;
       const isGood = callCount % 2 === 1;
       const content = isGood
-        ? JSON.stringify({ schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [] })
-        : JSON.stringify({ schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'unknown', clauses: [] });
+        ? JSON.stringify(sem)
+        : JSON.stringify({ ...sem, clauses: [{ ...sem.clauses[0], negated: true }] });
       response.writeHead(200, { 'content-type': 'application/json' });
       response.end(JSON.stringify({ choices: [{ message: { content } }] }));
       return;
@@ -398,7 +402,8 @@ test('parse experiment handles mixed pass/fail correctly', async () => {
   const temp = await mkdtemp(path.join(os.tmpdir(), 'openlunum-parse-mixed-'));
   try {
     const items = [
-      { id: 'test-en-1', sourceLanguage: 'en', sourceText: 'Test 1.', goldSem: { schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference', clauses: [{ predicate: 'prefer', roles: { experiencer: { type: 'actor', id: 'user' }, theme: { type: 'concept', id: 'concise_answers' } }, negated: false }] } }
+      { id: 'test-en-good', sourceLanguage: 'en', sourceText: 'The user prefers concise answers.', goldSem: sem },
+      { id: 'test-en-wrong-negation', sourceLanguage: 'en', sourceText: 'The user prefers concise answers.', goldSem: sem }
     ];
 
     const datasetPath = path.join(temp, 'dataset.jsonl');
@@ -432,7 +437,7 @@ test('parse experiment handles mixed pass/fail correctly', async () => {
         baselineCommit: 'test',
         dataset: { path: datasetPath, sha256: await sha256File(datasetPath) },
         modelProfile: profilePath,
-        limits: { maxItems: 1, maxAttemptsPerItem: 1, maxModelCalls: 1 },
+        limits: { maxItems: 2, maxAttemptsPerItem: 1, maxModelCalls: 2 },
         gates: { minimumFeatureRecall: 0, minimumExactRate: 0, requireProtectedLiteralCoverage: false },
         outputDirectory: outputDir
       }),
@@ -442,7 +447,12 @@ test('parse experiment handles mixed pass/fail correctly', async () => {
     const { report } = await runParseExperiment(manifestPath);
 
     // Should have exactly one language with results
-    assert.strictEqual(report.totalItems, 1);
+    assert.strictEqual(report.totalItems, 2);
+    assert.strictEqual(callCount, 2);
+    assert.strictEqual(report.totalPassed, 1);
+    assert.strictEqual(report.totalFailed, 1);
+    assert.strictEqual(report.totalErrors, 0);
+    assert.strictEqual(report.overallExactRate, 0.5);
     assert.strictEqual(report.languageMetrics.filter(m => m.totalItems > 0).length, 1);
   } finally {
     server.close();

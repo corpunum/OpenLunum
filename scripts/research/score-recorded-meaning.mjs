@@ -113,10 +113,17 @@ function compareAtoms(expected, actual) {
     precision: actual.length ? matched.length / actual.length : null, missing, extra };
 }
 
-/** Strict representation comparison. No translations, guessed aliases or id/value equivalences. */
+/**
+ * Pure Sem-to-Sem representation comparison, not source/gold qualification.
+ * Source-bound evaluation must first use validateMeaningTargets below; never
+ * synthesize a source sentence to make a Sem-only target pass that gate.
+ */
 export function compareMeaningSem(expected, actual) {
-  const gold = validateEvaluationGold([{ id: 'target', expectedOutcome: 'parse', goldSem: expected }], extractionSchema);
-  if (gold.invalid.length) throw new Error(`invalid_meaning_target:${JSON.stringify(gold.invalid)}`);
+  const gold = candidateStages(expected);
+  if (!gold.transportValid || !gold.structuralValid || !gold.protocolCanonical
+    || gold.normalizationStatus !== 'canonical' || !gold.frameValid || !gold.identityValid) {
+    throw new Error(`invalid_meaning_target:${JSON.stringify({ ...gold, sem: undefined })}`);
+  }
   const stages = candidateStages(actual);
   const expectedAtoms = meaningAtoms(expected);
   const actualAtoms = stages.structuralValid ? meaningAtoms(stages.sem) : [];
@@ -166,7 +173,8 @@ export function validateMeaningTargets(targets, probes) {
     }
     if ((target.expectedOutcome === 'abstain') !== (target.goldSem === null)) throw new Error(`target_outcome_gold_mismatch:${target.probeId}`);
     if (target.goldSem !== null && !checkLiteralRetention(target.sourceText, target.goldSem).retained) throw new Error(`target_source_literal_missing:${target.probeId}`);
-    goldItems.push({ id: target.probeId, expectedOutcome: target.expectedOutcome, goldSem: target.goldSem });
+    goldItems.push({ id: target.probeId, sourceText: target.sourceText, sourceLanguage: target.language,
+      expectedOutcome: target.expectedOutcome, goldSem: target.goldSem });
   }
   const report = validateEvaluationGold(goldItems, extractionSchema);
   if (report.invalid.length) throw new Error(`invalid_meaning_targets:${JSON.stringify(report.invalid)}`);

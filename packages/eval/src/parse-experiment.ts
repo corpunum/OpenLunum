@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import Ajv2020Module from 'ajv/dist/2020.js';
-import { canonicalizeSem, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, semanticFingerprint, stableStringify, validateSemanticCandidate, validateSemFrames } from '@corpunum/lunum';
+import { canonicalizeSem, checkLiteralRetention, compareSem, NearSemanticFingerprintGenerator, normalizeSemanticCandidate, semanticFingerprint, stableStringify, validateSemanticCandidate, validateSemFrames } from '@corpunum/lunum';
 import type { LunumSem } from '@corpunum/lunum';
 import { findWorkspaceRoot, loadDataset, readJson, readJsonlLedger, sha256File, sourceStateSha256, validateManifest, validateProfile, writeJson } from './io.js';
 import { effectiveSystemPrompt, ModelResponseError, OpenAICompatibleModel } from './model.js';
@@ -157,8 +157,11 @@ export interface GoldValidationReport {
   frameCanonical: number;
   identityValid: number;
   semanticAtomsValid: number;
+  /** Parse targets checked for source digit/identifier retention; this is not a semantic-completeness score. */
+  sourceLiteralRetentionChecked: number;
+  sourceLiteralRetentionValid: number;
   abstentionCases: number;
-  invalid: Array<{ id: string; stages: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; semanticAtomErrors?: unknown[]; identityError?: string }>;
+  invalid: Array<{ id: string; stages: string[]; metadataErrors?: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; semanticAtomErrors?: unknown[]; sourceLiteralErrors?: { missingNumbers: number[]; missingIdentifiers: string[] }; identityError?: string }>;
 }
 
 /**
@@ -177,11 +180,75 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
     frameCanonical: 0,
     identityValid: 0,
     semanticAtomsValid: 0,
+    sourceLiteralRetentionChecked: 0,
+    sourceLiteralRetentionValid: 0,
     abstentionCases: 0,
     invalid: []
   };
-  for (const item of items) {
-    if (item.goldSem === null || item.expectedOutcome === 'abstain') {
+  if (items.length === 0) {
+    report.invalid.push({
+      id: '',
+      stages: ['metadata'],
+      metadataErrors: ['dataset must contain at least one item']
+    });
+  }
+  const metadataErrorsByIndex = new Map<number, string[]>();
+  const addMetadataError = (index: number, message: string): void => {
+    const errors = metadataErrorsByIndex.get(index) ?? [];
+    errors.push(message);
+    metadataErrorsByIndex.set(index, errors);
+  };
+  const idIndexes = new Map<string, number[]>();
+  items.forEach((item, index) => {
+    const isRecord = item !== null && typeof item === 'object' && !Array.isArray(item);
+    const value = isRecord ? item as unknown as Record<string, unknown> : {};
+    if (!isRecord) addMetadataError(index, 'item must be an object');
+    if (typeof value.id !== 'string' || value.id.trim().length === 0) {
+      addMetadataError(index, 'id must be a nonempty string');
+    } else {
+      const normalizedId = value.id.trim();
+      const indexes = idIndexes.get(normalizedId) ?? [];
+      indexes.push(index);
+      idIndexes.set(normalizedId, indexes);
+    }
+    if (typeof value.sourceText !== 'string' || value.sourceText.trim().length === 0) {
+      addMetadataError(index, 'sourceText must be a nonempty string');
+    }
+    if (typeof value.sourceLanguage !== 'string' || value.sourceLanguage.trim().length === 0) {
+      addMetadataError(index, 'sourceLanguage must be a nonempty string');
+    } else if (!PARSE_LANGUAGES.includes(value.sourceLanguage as ParseLanguage)) {
+      addMetadataError(index, `sourceLanguage must be one of: ${PARSE_LANGUAGES.join(', ')}`);
+    }
+    if (value.expectedOutcome !== undefined && value.expectedOutcome !== 'parse' && value.expectedOutcome !== 'abstain') {
+      addMetadataError(index, 'expectedOutcome must be omitted, parse, or abstain');
+    }
+    const expectedOutcome = value.expectedOutcome === undefined ? 'parse' : value.expectedOutcome;
+    if (value.goldSem === undefined) {
+      addMetadataError(index, 'goldSem is required');
+    } else if (expectedOutcome === 'abstain' && value.goldSem !== null) {
+      addMetadataError(index, 'abstain outcome requires null goldSem');
+    } else if (expectedOutcome === 'parse' && value.goldSem === null) {
+      addMetadataError(index, 'parse outcome requires nonnull goldSem');
+    }
+  });
+  for (const indexes of idIndexes.values()) {
+    if (indexes.length > 1) {
+      for (const index of indexes) addMetadataError(index, 'id must be unique within the dataset');
+    }
+  }
+
+  for (const [index, item] of items.entries()) {
+    const metadataErrors = metadataErrorsByIndex.get(index) ?? [];
+    const rawItem = item as unknown;
+    const rawId = rawItem !== null && typeof rawItem === 'object' && !Array.isArray(rawItem)
+      ? (rawItem as Record<string, unknown>).id
+      : undefined;
+    const itemId = typeof rawId === 'string' ? rawId : String(rawId ?? '');
+    if (metadataErrors.length > 0) {
+      report.invalid.push({ id: itemId, stages: ['metadata'], metadataErrors });
+      continue;
+    }
+    if (item.expectedOutcome === 'abstain' && item.goldSem === null) {
       report.abstentionCases += 1;
       continue;
     }
@@ -196,11 +263,20 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
     // implementation-side rewrite.
     if (normalization?.canonical && normalization.status === 'canonical') report.protocolCanonical += 1;
     else if (normalization) stages.push('protocol-canonicality');
+    const sourceLiteralRetention = normalization?.sem
+      ? checkLiteralRetention(item.sourceText, normalization.sem)
+      : null;
+    if (sourceLiteralRetention) {
+      report.sourceLiteralRetentionChecked += 1;
+      if (sourceLiteralRetention.retained) report.sourceLiteralRetentionValid += 1;
+      else stages.push('source-literal-retention');
+    }
     const frameValidation = normalization?.canonical && normalization.sem ? validateSemFrames(canonicalizeSem(normalization.sem)) : null;
     if (frameValidation?.valid) report.frameCanonical += 1;
     else if (frameValidation) stages.push('frame-canonicality');
     let identityError: string | undefined;
-    if (normalization?.canonical && normalization.status === 'canonical' && normalization.sem && frameValidation?.valid) {
+    if (normalization?.canonical && normalization.status === 'canonical' && normalization.sem
+      && frameValidation?.valid && sourceLiteralRetention?.retained === true) {
       try {
         semanticFingerprint(normalization.sem);
         report.identityValid += 1;
@@ -216,19 +292,26 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
     else stages.push('semantic-atoms');
     if (stages.length > 0) {
       report.invalid.push({
-        id: item.id,
+        id: itemId,
         stages,
         ...(transportValid ? {} : { transportErrors: transportValidator.errors ?? [] }),
         ...(structural.ok ? {} : { structuralErrors: structural.errors }),
         ...(normalization ? { normalizationIssues: normalization.issues } : {}),
         ...(frameValidation && !frameValidation.valid ? { frameIssues: frameValidation.issues } : {}),
         ...(semanticAtoms.some((atom) => !atom.satisfied) ? { semanticAtomErrors: semanticAtoms.filter((atom) => !atom.satisfied) } : {}),
+        ...(sourceLiteralRetention && !sourceLiteralRetention.retained ? {
+          sourceLiteralErrors: {
+            missingNumbers: sourceLiteralRetention.missingNumbers,
+            missingIdentifiers: sourceLiteralRetention.missingIdentifiers
+          }
+        } : {}),
         ...(identityError ? { identityError } : {})
       });
     }
   }
   const groupFingerprints = new Map<string, Array<{ id: string; fingerprint: string | null }>>();
-  for (const item of items) {
+  for (const [index, item] of items.entries()) {
+    if (metadataErrorsByIndex.has(index)) continue;
     if (!item.semanticGroup || item.goldSem === null || item.expectedOutcome === 'abstain') continue;
     const rows = groupFingerprints.get(item.semanticGroup) ?? [];
     let fingerprint: string | null = null;
@@ -433,7 +516,7 @@ export async function runParseExperiment(
     throw new Error(`Dataset hash mismatch: expected ${manifest.dataset.sha256}, got ${actualHash}`);
   }
 
-  const items = ((await loadDataset(datasetPath)) as DatasetItem[]).slice(0, manifest.limits.maxItems);
+  const allItems = (await loadDataset(datasetPath)) as DatasetItem[];
   const profile = await readJson<ModelProfile>(modelProfilePath);
   validateProfile(profile);
   const modelProfileSha256 = await sha256File(modelProfilePath);
@@ -449,10 +532,11 @@ export async function runParseExperiment(
     fallback: 'json_object' as const
   };
   const transportValidator = new Ajv2020Module.Ajv2020({ allErrors: true, strict: false, validateSchema: false }).compile(extractionSchema);
-  const goldValidation = validateEvaluationGold(items, extractionSchema);
+  const goldValidation = validateEvaluationGold(allItems, extractionSchema);
   if (goldValidation.invalid.length > 0) {
     throw new Error(`Evaluation gold failed the complete preflight gate: ${JSON.stringify(goldValidation)}`);
   }
+  const items = allItems.slice(0, manifest.limits.maxItems);
 
   let startedAt = new Date().toISOString();
   const modelIdentity = await verifyModelIdentity(new OpenAICompatibleModel(profile), profile);

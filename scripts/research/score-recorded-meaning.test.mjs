@@ -180,6 +180,18 @@ test('unreviewed targets cannot silently supply gold or an invented review state
   assert.throws(() => validateMeaningTargets(x.targets, x.probes), /target_review_missing/);
 });
 
+test('source-bound meaning preflight rejects missing or unsupported source metadata without changing pure Sem comparison', () => {
+  assert.equal(compareMeaningSem(base, structuredClone(base)).status, 'match');
+  for (const mutate of [
+    x => { x.probes[0].language = 'xx'; x.targets[0].language = 'xx'; },
+    x => { x.probes[0].text = ' '; x.targets[0].sourceText = ' '; },
+    x => { x.probes[0].language = ''; x.targets[0].language = ''; }
+  ]) {
+    const input = population(); mutate(input);
+    assert.throws(() => validateMeaningTargets(input.targets, input.probes), /invalid_meaning_targets/);
+  }
+});
+
 test('round-two threshold correction and known meaning mutations reproduce from frozen evidence', () => {
   const dir = 'reports/independent-evaluation/2026-09-26-round2/';
   const read = file => fs.readFileSync(dir + file, 'utf8').trim().split('\n').map(JSON.parse);

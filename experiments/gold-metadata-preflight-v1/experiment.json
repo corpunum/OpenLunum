@@ -1,0 +1,13 @@
+{
+  "format": "openlunum-experiment/0.1",
+  "id": "gold-metadata-preflight-v1",
+  "baselineCommit": "a4aa081b675532855bf4360bcb790dcc9275a881",
+  "area": "evaluation gold preflight",
+  "hypothesis": "Contradictory parse/abstention metadata, dropped source digit/identifier literals and invalid gold outside a pilot's selected prefix must be rejected before provider discovery or generation.",
+  "visionGuardrails": ["Source and historical evidence remain unchanged.", "No semantic schema, vocabulary, identity or parser-prompt changes.", "Mechanical gold consistency is necessary, not human meaning adjudication."],
+  "data": { "class": "development/regression", "protectedData": "NOT USED", "source": "intentionally inconsistent evaluator metadata fixtures" },
+  "modelProfiles": [],
+  "budgets": { "modelCalls": 0, "providerSpendUsd": 0 },
+  "hardGates": ["Every full-corpus gold row receives metadata and semantic preflight.", "A parse target cannot have null gold; an abstention target must explicitly have null gold.", "Unknown outcomes/languages, missing source metadata and duplicate IDs fail before any provider call.", "Gold must meet the same necessary digit/identifier retention floor as extracted candidates.", "Permanent regression tests catch deliberate guard removal."],
+  "nonClaims": ["No source-understanding accuracy or native/human qualification.", "No historical corpus is repaired or re-scored as protected evidence."]
+}

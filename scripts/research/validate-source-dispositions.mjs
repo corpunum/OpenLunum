@@ -30,7 +30,8 @@ export function validateSourceDispositions(review, probes, targets) {
     if (!['unsupported', 'ambiguous', 'representation-option-pending-native-review'].includes(item.disposition)) throw new Error('unknown_review_disposition');
     if ((item.disposition === 'representation-option-pending-native-review') !== (item.representationOption !== null)) throw new Error('review_option_disposition_mismatch');
     if (item.representationOption !== null) {
-      const validation = validateEvaluationGold([{ id: item.probeId, expectedOutcome: 'parse', goldSem: item.representationOption }], schema);
+      const validation = validateEvaluationGold([{ id: item.probeId, sourceText: item.sourceText, sourceLanguage: item.language,
+        expectedOutcome: 'parse', goldSem: item.representationOption }], schema);
       if (validation.invalid.length || validation.identityValid !== 1) throw new Error(`invalid_review_option:${item.probeId}`);
       const submission = submitCandidate({ sourceText: item.sourceText, sourceLanguage: item.language, candidateSem: item.representationOption,
         provenance: { extractorType: 'agent' } });
