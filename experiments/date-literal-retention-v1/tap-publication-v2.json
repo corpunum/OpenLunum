@@ -1,0 +1,175 @@
+{
+  "format": "openlunum-mutation-tap-publication/2",
+  "supersedes": "tap-publication.json",
+  "normalization": "Raw local originals remain unchanged. Published stack paths replace the literal absolute repository prefix with <REPO>/. Trailing whitespace on diagnostic lines is removed for git diff --check. Assertions, outcome labels and line order are unchanged; these are normalized publications, not byte-exact raw receipts.",
+  "records": [
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/record-literal-identity-bypass/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/record-literal-identity-bypass/unmutated.tap",
+      "rawSha256": "72e006e1833619e526834dfcd72a776de8b084d1f42cb76a3a275ded74858f7a",
+      "publishedSha256": "72e006e1833619e526834dfcd72a776de8b084d1f42cb76a3a275ded74858f7a",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/record-literal-identity-bypass/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/record-literal-identity-bypass/weakened.tap",
+      "rawSha256": "eef799a138bc01d5a8380acc19995f4e077debb0b26b84807ed278aa2507ddb5",
+      "publishedSha256": "2edd2f3f9671bf2f54aed7dd07fb4ed46bcde07809fb6e61f37db5c60b9c7d8d",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/recursive-risk-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/recursive-risk-disabled/unmutated.tap",
+      "rawSha256": "f7cd99e3809bb620ca4670f7f74ea40d06d6b596405c7320e49491a9b01087cb",
+      "publishedSha256": "f7cd99e3809bb620ca4670f7f74ea40d06d6b596405c7320e49491a9b01087cb",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/recursive-risk-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/recursive-risk-disabled/weakened.tap",
+      "rawSha256": "864113c409ca65c0ab1ba3877d9abbc3cac22434d279c9ff768d912c1d9e584b",
+      "publishedSha256": "69bcbc4167a0ecd54e7955bc6ff4d39ff4d87978a6720ae3a1d3b7a899ed01ce",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/schema-valid-always-promoted/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/schema-valid-always-promoted/unmutated.tap",
+      "rawSha256": "b16d01574c1182d5423e8fa05dccdb6cfea7697e8051388e422e126ef8993578",
+      "publishedSha256": "b16d01574c1182d5423e8fa05dccdb6cfea7697e8051388e422e126ef8993578",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/schema-valid-always-promoted/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/schema-valid-always-promoted/weakened.tap",
+      "rawSha256": "bfb1e89525ac48ad7d63213b678b0c4447b50c1558ca45bd4a6afd54e2c32e2d",
+      "publishedSha256": "a1b2a04a7fbc7cb7f61dc142563b3e5061ac7fd4da840c8e8c1527a1aab763e4",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/deletion-plan-validation-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/deletion-plan-validation-disabled/unmutated.tap",
+      "rawSha256": "cc5d0d42077ba355cd2a57ee4bab2c35c1f8590e65685356279b725a1fda8e91",
+      "publishedSha256": "cc5d0d42077ba355cd2a57ee4bab2c35c1f8590e65685356279b725a1fda8e91",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/deletion-plan-validation-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/deletion-plan-validation-disabled/weakened.tap",
+      "rawSha256": "9c5d6d8d95a12805796cff417188fa905eef00d68b5f19afaf3da16241b8043d",
+      "publishedSha256": "974fabd4bd39b18f8770092401aa054285990034e37080bbdff75ba5d4d406af",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/retrieval-routing-validation-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/retrieval-routing-validation-disabled/unmutated.tap",
+      "rawSha256": "a5cb8d25c053ca8cf1b3eb403695df4b3d975bf59e75f113391c000f47836454",
+      "publishedSha256": "a5cb8d25c053ca8cf1b3eb403695df4b3d975bf59e75f113391c000f47836454",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/retrieval-routing-validation-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/retrieval-routing-validation-disabled/weakened.tap",
+      "rawSha256": "82c4050517b73c548bb63d453d88c9bdd26f0affca01710c11aed51bf06f4d20",
+      "publishedSha256": "113607b7f144e9555e8aea88b1751a9e8b2f4b2f86b34dbb1529d17a8b890387",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/retrieval-gold-leakage-validation-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/retrieval-gold-leakage-validation-disabled/unmutated.tap",
+      "rawSha256": "72dba1ac4e701829fb95b44b5f43a2adfae96171abf4afe93d6ed4a60158d48f",
+      "publishedSha256": "72dba1ac4e701829fb95b44b5f43a2adfae96171abf4afe93d6ed4a60158d48f",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/retrieval-gold-leakage-validation-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/retrieval-gold-leakage-validation-disabled/weakened.tap",
+      "rawSha256": "a17d0fea83dbe19bac82dd085ed72c801b297d9967381defe5dfddffd066c484",
+      "publishedSha256": "71f3f9b4a10e36e03b7700a69c7a53e0bc5726b10cacbff5a0ddd51ca32104c1",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/served-runtime-closure-validation-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/served-runtime-closure-validation-disabled/unmutated.tap",
+      "rawSha256": "3d363eccf6efbef77723ce96de8681e3997a8797e888d9bade9575931e2e271c",
+      "publishedSha256": "3d363eccf6efbef77723ce96de8681e3997a8797e888d9bade9575931e2e271c",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/served-runtime-closure-validation-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/served-runtime-closure-validation-disabled/weakened.tap",
+      "rawSha256": "4a543ace4420c17301ba41f76e60ddfc04973f8812c1768f5415cba74efae9ca",
+      "publishedSha256": "3cf3e73f08daf1af0dc15999f791c95314f13f175fca1db34c0f6c60379106bd",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/gold-metadata-validation-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/gold-metadata-validation-disabled/unmutated.tap",
+      "rawSha256": "2779ecb4d88df1d15255de2a8b0e70e1a95bcd787540270c52a9eb6eb47ac774",
+      "publishedSha256": "2779ecb4d88df1d15255de2a8b0e70e1a95bcd787540270c52a9eb6eb47ac774",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/gold-metadata-validation-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/gold-metadata-validation-disabled/weakened.tap",
+      "rawSha256": "847c212081e829438a6cde98330dd3f0a9d3433174c9bda177e3f9acf71d7b21",
+      "publishedSha256": "02f5e0ee1df346002436afa38a91f455fb7f65584460379db9c33b0b95132635",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/gold-source-literal-validation-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/gold-source-literal-validation-disabled/unmutated.tap",
+      "rawSha256": "7dcdc725660087721e02864ad75a46460966985d64055e8a326ad0f59cdd3eb9",
+      "publishedSha256": "7dcdc725660087721e02864ad75a46460966985d64055e8a326ad0f59cdd3eb9",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/gold-source-literal-validation-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/gold-source-literal-validation-disabled/weakened.tap",
+      "rawSha256": "3f7d3340aac80f923f8c939b8a9ef14e812bdf2310ad080769a2e06a6c574d15",
+      "publishedSha256": "9e19c32210a31ec44a0c126a528c896452828846b728f672e59bcd687a525eca",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/exact-date-retention-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/exact-date-retention-disabled/unmutated.tap",
+      "rawSha256": "ae5a049525d356b599435893ca97ffd0afeccee7572be71416ca57ccfb597d7f",
+      "publishedSha256": "ae5a049525d356b599435893ca97ffd0afeccee7572be71416ca57ccfb597d7f",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/exact-date-retention-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/exact-date-retention-disabled/weakened.tap",
+      "rawSha256": "c932adc8acec4cd1c680e97a8b4065bb1de9087e73243f64e1f33fad87066411",
+      "publishedSha256": "a4b5d351e99a0360be558e756a5c3db483a46ec10f1fe0e8964846dbe50fe011",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/evidence-field-filter-disabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/evidence-field-filter-disabled/unmutated.tap",
+      "rawSha256": "839670619f0772e8d52cf41213fbc60763ada7b08af3a67b0f40d35c341347f0",
+      "publishedSha256": "839670619f0772e8d52cf41213fbc60763ada7b08af3a67b0f40d35c341347f0",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/evidence-field-filter-disabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/evidence-field-filter-disabled/weakened.tap",
+      "rawSha256": "44c0d0f56009e5918a0d08890c9432f09c1147be2066c8f595bf84d8214fc595",
+      "publishedSha256": "68721aeb59c0f862c569bfe4c84b88267eace041d7b7133500230aa9fb713387",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/ambiguous-date-guessing-enabled/unmutated.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/ambiguous-date-guessing-enabled/unmutated.tap",
+      "rawSha256": "3dfae3031719d6a8a3e674d175df82ca2cbc4a3f3557ec257c9d266f42c7f942",
+      "publishedSha256": "3dfae3031719d6a8a3e674d175df82ca2cbc4a3f3557ec257c9d266f42c7f942",
+      "normalized": true
+    },
+    {
+      "rawLocalPath": ".git/readiness-gate-mutations-QNd7Nv/ambiguous-date-guessing-enabled/weakened.tap",
+      "publishedPath": "experiments/date-literal-retention-v1/mutations/ambiguous-date-guessing-enabled/weakened.tap",
+      "rawSha256": "1861115997676f85def8a7b17f7ef4b45092e366043bab9987fa2cb7e3a4a47a",
+      "publishedSha256": "8f4feb0ae57fe2562a9ab6a3b561a5e8716236a9935bc14cf2fe74b55c92c785",
+      "normalized": true
+    }
+  ]
+}

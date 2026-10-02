@@ -1,0 +1,103 @@
+TAP version 13
+# Subtest: datesInText normalizes valid ISO and unambiguous dotted dates only
+not ok 1 - datesInText normalizes valid ISO and unambiguous dotted dates only
+  ---
+  duration_ms: 4.444028
+  type: 'test'
+  location: '<REPO>/.git/readiness-gate-mutations-QNd7Nv/ambiguous-date-guessing-enabled/test/date-literal-retention.test.js:23:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+    + [
+    +   '2026-05-04',
+    +   '2026-11-12',
+    +   '2026-12-11'
+    + ]
+    - []
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: '2026-05-04'
+    1: '2026-11-12'
+    2: '2026-12-11'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<REPO>/.git/readiness-gate-mutations-QNd7Nv/ambiguous-date-guessing-enabled/test/date-literal-retention.test.js:28:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: date tokens use Unicode letter and number boundaries
+ok 2 - date tokens use Unicode letter and number boundaries
+  ---
+  duration_ms: 2.915847
+  type: 'test'
+  ...
+# Subtest: dotted date normalization is exact and does not turn a decimal into a date
+ok 3 - dotted date normalization is exact and does not turn a decimal into a date
+  ---
+  duration_ms: 1.043919
+  type: 'test'
+  ...
+# Subtest: date components cannot satisfy a quantity and numeric lookalikes cannot satisfy a date
+ok 4 - date components cannot satisfy a quantity and numeric lookalikes cannot satisfy a date
+  ---
+  duration_ms: 0.413244
+  type: 'test'
+  ...
+# Subtest: dates and literals in nested conditions and consequences are retained
+ok 5 - dates and literals in nested conditions and consequences are retained
+  ---
+  duration_ms: 0.282349
+  type: 'test'
+  ...
+# Subtest: surface evidence and metadata cannot launder date or numeric literals
+ok 6 - surface evidence and metadata cannot launder date or numeric literals
+  ---
+  duration_ms: 0.317078
+  type: 'test'
+  ...
+# Subtest: every identity-excluded evidence field cannot rescue omitted date/identifier content
+ok 7 - every identity-excluded evidence field cannot rescue omitted date/identifier content
+  ---
+  duration_ms: 26.750028
+  type: 'test'
+  ...
+# Subtest: semantic reference id/ref and declared identity-bearing term fields count
+ok 8 - semantic reference id/ref and declared identity-bearing term fields count
+  ---
+  duration_ms: 0.347547
+  type: 'test'
+  ...
+# Subtest: calendar property loop normalizes equivalent forms and rejects harmful swaps
+ok 9 - calendar property loop normalizes equivalent forms and rejects harmful swaps
+  ---
+  duration_ms: 15.973113
+  type: 'test'
+  ...
+# Subtest: submitCandidate and createRecord retain dates or withhold identity when they are dropped
+ok 10 - submitCandidate and createRecord retain dates or withhold identity when they are dropped
+  ---
+  duration_ms: 6.555127
+  type: 'test'
+  ...
+# Subtest: documented role and multiplicity limits stay explicit
+ok 11 - documented role and multiplicity limits stay explicit
+  ---
+  duration_ms: 0.374176
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 10
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 245.859052

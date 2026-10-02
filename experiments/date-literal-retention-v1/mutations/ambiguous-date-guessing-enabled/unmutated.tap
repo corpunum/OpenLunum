@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: datesInText normalizes valid ISO and unambiguous dotted dates only
+ok 1 - datesInText normalizes valid ISO and unambiguous dotted dates only
+  ---
+  duration_ms: 3.833582
+  type: 'test'
+  ...
+# Subtest: date tokens use Unicode letter and number boundaries
+ok 2 - date tokens use Unicode letter and number boundaries
+  ---
+  duration_ms: 2.988194
+  type: 'test'
+  ...
+# Subtest: dotted date normalization is exact and does not turn a decimal into a date
+ok 3 - dotted date normalization is exact and does not turn a decimal into a date
+  ---
+  duration_ms: 0.978252
+  type: 'test'
+  ...
+# Subtest: date components cannot satisfy a quantity and numeric lookalikes cannot satisfy a date
+ok 4 - date components cannot satisfy a quantity and numeric lookalikes cannot satisfy a date
+  ---
+  duration_ms: 0.452413
+  type: 'test'
+  ...
+# Subtest: dates and literals in nested conditions and consequences are retained
+ok 5 - dates and literals in nested conditions and consequences are retained
+  ---
+  duration_ms: 0.340017
+  type: 'test'
+  ...
+# Subtest: surface evidence and metadata cannot launder date or numeric literals
+ok 6 - surface evidence and metadata cannot launder date or numeric literals
+  ---
+  duration_ms: 0.304458
+  type: 'test'
+  ...
+# Subtest: every identity-excluded evidence field cannot rescue omitted date/identifier content
+ok 7 - every identity-excluded evidence field cannot rescue omitted date/identifier content
+  ---
+  duration_ms: 26.43583
+  type: 'test'
+  ...
+# Subtest: semantic reference id/ref and declared identity-bearing term fields count
+ok 8 - semantic reference id/ref and declared identity-bearing term fields count
+  ---
+  duration_ms: 0.351167
+  type: 'test'
+  ...
+# Subtest: calendar property loop normalizes equivalent forms and rejects harmful swaps
+ok 9 - calendar property loop normalizes equivalent forms and rejects harmful swaps
+  ---
+  duration_ms: 15.832469
+  type: 'test'
+  ...
+# Subtest: submitCandidate and createRecord retain dates or withhold identity when they are dropped
+ok 10 - submitCandidate and createRecord retain dates or withhold identity when they are dropped
+  ---
+  duration_ms: 6.448211
+  type: 'test'
+  ...
+# Subtest: documented role and multiplicity limits stay explicit
+ok 11 - documented role and multiplicity limits stay explicit
+  ---
+  duration_ms: 0.325597
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 246.444369

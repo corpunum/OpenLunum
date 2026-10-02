@@ -1,0 +1,83 @@
+{
+  "format": "openlunum-readiness-gate-mutations/0.1",
+  "generatedAt": "2026-10-02T13:33:21.122Z",
+  "codeCommit": "eace760811c880452d08501cf19d2feaa20c3171",
+  "workingTreeClean": false,
+  "evidence": "Deterministic regression sensitivity, not model quality or deployed persistence.",
+  "providerCalls": 0,
+  "results": [
+    {
+      "name": "record-literal-identity-bypass",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "recursive-risk-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "schema-valid-always-promoted",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "deletion-plan-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "retrieval-routing-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "retrieval-gold-leakage-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "served-runtime-closure-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "gold-metadata-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "gold-source-literal-validation-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "exact-date-retention-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "evidence-field-filter-disabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    },
+    {
+      "name": "ambiguous-date-guessing-enabled",
+      "unmutatedExit": 0,
+      "weakenedExit": 1,
+      "caught": true
+    }
+  ],
+  "allCaught": true
+}

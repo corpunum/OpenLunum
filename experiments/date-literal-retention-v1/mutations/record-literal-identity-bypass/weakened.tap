@@ -1,0 +1,53 @@
+TAP version 13
+# Subtest: createRecord withholds source-bound identity and promotion when a digit literal is dropped
+not ok 1 - createRecord withholds source-bound identity and promotion when a digit literal is dropped
+  ---
+  duration_ms: 14.382105
+  type: 'test'
+  location: '<REPO>/.git/readiness-gate-mutations-QNd7Nv/record-literal-identity-bypass/test/record-source-containment.test.js:51:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + 'lfp:2.1:sha256:e5d1aa198fe4cfbb56106219ac9ccc24'
+    - undefined
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual: 'lfp:2.1:sha256:e5d1aa198fe4cfbb56106219ac9ccc24'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<REPO>/.git/readiness-gate-mutations-QNd7Nv/record-literal-identity-bypass/test/record-source-containment.test.js:54:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: createRecord retains source-bound exact identity when the digit is present in the candidate
+ok 2 - createRecord retains source-bound exact identity when the digit is present in the candidate
+  ---
+  duration_ms: 3.289033
+  type: 'test'
+  ...
+# Subtest: source-absent records keep an explicitly unbound Sem fingerprint
+ok 3 - source-absent records keep an explicitly unbound Sem fingerprint
+  ---
+  duration_ms: 1.441374
+  type: 'test'
+  ...
+# Subtest: createRecord rejects transport-invalid fields before normalization
+ok 4 - createRecord rejects transport-invalid fields before normalization
+  ---
+  duration_ms: 0.78922
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 199.277961

@@ -1,0 +1,44 @@
+{
+  "format": "openlunum-date-outcome-verification/1",
+  "implementationCommit": "e7d7b1d5f6ca0f6284cad8af9007c9311b255e55",
+  "registeredBaseline": "eace760811c880452d08501cf19d2feaa20c3171",
+  "providerCalls": 0,
+  "workingTreeClean": false,
+  "evidenceClass": "Deterministic diagnostics only; no fresh live qualification.",
+  "sourceBinding": {
+    "receipt": "before-after-v3.json",
+    "repositoryOwnedSourceModules": 17,
+    "allHashesMatchImplementationCommit": true,
+    "generatorHashMatches": true,
+    "parentReplayCases": 8,
+    "parentRawCaseResultsIdentical": true,
+    "parentLocalReceiptSha256": "54a29c9ad6ce432df1df51a314f613a99e7cb564099e58b0dd4764f9b3290a44"
+  },
+  "verification": {
+    "command": "pnpm verify",
+    "exitCode": 0,
+    "tests": 4437,
+    "passed": 4437,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "smokeItems": 16,
+    "smokeGroups": 4,
+    "logSha256": "62b4dcf2da0b76debef6c8219c2fde37722006ddce033a2c3162918228bd395d",
+    "captureNote": "Frozen source tree before commit; its relevant source bytes match the implementation commit. An additional exact ending-HEAD verification is retained locally after the evidence commit."
+  },
+  "runtimeMutations": { "total": 12, "caught": 12 },
+  "typeMutations": { "total": 1, "caught": 1, "negativeAssignmentDiagnostics": 2 },
+  "publicTapReceiptsVerified": 24,
+  "contractVersion": "lunum-agent/0.14",
+  "identityVersion": "lfp:2.1",
+  "runtimeManifestSha256": "46cc8a7aeeb56ff926159af3b666725fda32f6c796ba7b1926b5f34a3e33faff",
+  "unqualifiedGates": [
+    "Human/native source review",
+    "Fresh protected live extraction",
+    "Protected raw multilingual retrieval",
+    "Noisy near-semantic threshold calibration",
+    "Embedding baseline",
+    "Deployed lifecycle/persistence behavior"
+  ]
+}

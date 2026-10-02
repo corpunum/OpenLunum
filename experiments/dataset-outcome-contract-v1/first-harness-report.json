@@ -1,0 +1,16 @@
+{
+  "format": "openlunum-dataset-outcome-type-mutation/1",
+  "codeCommit": "eace760811c880452d08501cf19d2feaa20c3171",
+  "workingTreeClean": false,
+  "providerCalls": 0,
+  "evidence": "Compile-time regression sensitivity only, not model/source correctness.",
+  "sourceSha256": "9c519c5f537657bab8b0d5fd8e477751265242bbf270d6074de3f5ba5ceac390",
+  "testSha256": "514d1c5c95393ad02cf5a24aae871fb082a05e3fef19219122ee77c080a8ca69",
+  "unmutatedExit": 0,
+  "weakenedExit": 1,
+  "negativeAssignmentsCaught": 2,
+  "unmutatedLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "weakenedLogSha256": "2d161856be42ec3391b5d8715deb653ccae4dc3e79a4076d792ed815b4deb6f4",
+  "caught": false,
+  "localArtifacts": ".git/dataset-outcome-type-mutation-vM8LQT"
+}

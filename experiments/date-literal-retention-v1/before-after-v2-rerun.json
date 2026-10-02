@@ -1,0 +1,1206 @@
+{
+  "format": "openlunum-date-literal-retention-reproduction/2",
+  "experiment": "date-literal-retention-v1",
+  "generatedAt": "2026-10-02T13:39:28.331Z",
+  "outcome": "PASS",
+  "scope": "Deterministic local source-path reproduction; no model/provider/service/external repository calls; no shared dist build.",
+  "binding": {
+    "baselineSourceCommit": "eace760811c880452d08501cf19d2feaa20c3171 (registered experiment baseline)",
+    "currentSourceCommit": "PARENT_REPORT_PENDING: current source state is bound by per-file hashes below.",
+    "dirtyTreeBinding": "Per-file SHA-256 binds all relevant modified/untracked source, test, experiment registration, served-runtime manifest, and directly loaded current source modules below; no whole-tree commit claim.",
+    "v15Manifest": {
+      "path": "experiments/natural-development-v8/extraction/public-served-runtime-v15.json",
+      "format": "openlunum-served-runtime-manifest/1",
+      "sha256": "9a5623244515b0ea67eddb3f3097b6bbb3e4952159284f74c74850c6ff91f5a8",
+      "historicalModuleCount": 17,
+      "historicalModules": {
+        "packages/core/dist/src/agent-native.js": "7f930eb8d2aadbe27d8449a4df7901f534dfd18f3c2e4c9ae36020b803ba9bb7",
+        "packages/core/dist/src/canonicalize.js": "16498c3cd1e17a2726b205b011d95acd15d867037a6dee555da8b5c53c3c94f5",
+        "packages/core/dist/src/constants.js": "d81a9cc7691b473b4dab6e7150e6adc288a8e069dcf1ff7e8cf1e704c129ff7f",
+        "packages/core/dist/src/derive.js": "873b64cb8cc90547e306c9c94c96c92adebb03c86f5727b07d80332a79b6b644",
+        "packages/core/dist/src/fallback-policy.js": "1e1339dd6ea5d3b3edc57bc065f62ef35dfb8e846d2f9f9c8c313afd074b17ed",
+        "packages/core/dist/src/fingerprint.js": "6e99dfdd7a4ec6c997bbdd97d0cca5854b1a831d196abb35a2648c288848bd55",
+        "packages/core/dist/src/frame-registry.js": "4cdcb45237d3158421f2915e6181c2b14f1a8989061790a87ffcc12066bfcf85",
+        "packages/core/dist/src/grounding-capability.js": "0ee2cef3c2444873e8efa16949e2d939418d3e01218332b05c06d76f50d2e7c0",
+        "packages/core/dist/src/grounding-provider.js": "d2ec9fe9d19af3abdcc47beb767cc32f88457d7f1656de9266d53e8b27b1e809",
+        "packages/core/dist/src/grounding.js": "57009a186b560fa1b5b28be77ec4646a8846c82d98d5776f01ff13045434cefe",
+        "packages/core/dist/src/literal-retention.js": "62ba1bf8be98fb8ce5e86397d7432cb9a4a8ceec139b6881cf0cb4f4e15f5a1c",
+        "packages/core/dist/src/policy.js": "69912d7a62824c1aa39aef73c00f2a0f5a9ca75fcb33363636f837094bdc2d0d",
+        "packages/core/dist/src/prohibited-domains.js": "b822a5e2066f5e624e9dee8208f70de1e699eca01ed8ee26684a965bb85c16c7",
+        "packages/core/dist/src/render.js": "fdb75e79129b7c05c85399c370da6bd75a4d37741b90334c2751d621e73f02f4",
+        "packages/core/dist/src/semantic-registry.js": "5554750680140b5013eca354f6a487d7cb4422ba84d168c0cab82d53c1f0cd0a",
+        "packages/core/dist/src/semantic-transport-schema.js": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+        "packages/core/dist/src/semantic-transport.js": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476"
+      }
+    },
+    "historicalBaselineDirectory": ".git/readiness-gate-mutations-Z6P6NC/deletion-plan-validation-disabled/src",
+    "generator": {
+      "path": "experiments/date-literal-retention-v1/reproduce-source-retention.mjs",
+      "sha256": "31dec8a41d7ef3d745b8d1959d58c98a124ed2beec39552195f4b556e10a9911"
+    },
+    "historicalLiteralRetention": {
+      "path": ".git/readiness-gate-mutations-Z6P6NC/deletion-plan-validation-disabled/src/literal-retention.js",
+      "sha256": "62ba1bf8be98fb8ce5e86397d7432cb9a4a8ceec139b6881cf0cb4f4e15f5a1c"
+    },
+    "frozenCounterexample": {
+      "path": "experiments/gold-metadata-preflight-v1/date-literal-counterexample.json",
+      "sha256": "91584b77a427790aacd236dc7473709a44288ecbec33e9238525d9f750db2f03",
+      "changed": false
+    },
+    "currentModules": {
+      "packages/core/src/agent-native.ts": "53a8d6216214a03e9983ba0355aed7e788667c98ea71c37cc9f51d7e292488fc",
+      "packages/core/src/canonicalize.ts": "87234a57359916ddc66e0e9d2c1470f2e5833c4dc56e9324930012c4469e4c35",
+      "packages/core/src/constants.ts": "b5c27c2e3a2d944ed1843f887bcf866c1f59bc4ef53963218bec4b0e2a0ed4eb",
+      "packages/core/src/derive.ts": "f0131b8f6f5209e948f819b7418f6c49654fdcf4e5afafa986628b32ab21e68f",
+      "packages/core/src/fallback-policy.ts": "489c6725ed99fd0e389a8a829b7e3a7dfcd863b05dd665d424c3aac0fa0f7350",
+      "packages/core/src/fingerprint.ts": "138f6cb7429e3896b5cebbda5713722515512edb820656e0326a8819aaba736b",
+      "packages/core/src/frame-registry.ts": "4a981a374d08190538645afc99c9aefa160930c1900a3be33e2826501ef4933d",
+      "packages/core/src/grounding-capability.ts": "2d775b10653894df91e63adfd5577d06756cbdc233f4e34c0fcced5afe3bc2da",
+      "packages/core/src/grounding-provider.ts": "144b3997e1b5c1b2617d8f5762a88f9b6b08acf1741d4bd2a24be9495ba0450a",
+      "packages/core/src/grounding.ts": "c623333d2e9181cb2de170252609cb13dc0e676ef64b3866d07595813a409461",
+      "packages/core/src/literal-retention.ts": "642d06f2c4107fffd2c3b254f725a7f74f94ac20323e650ea08bb823d1297465",
+      "packages/core/src/policy.ts": "1db2f603b1ad6697cc2ed0abdac9639030ffd841e832f718c09ec8f68b8275ae",
+      "packages/core/src/prohibited-domains.ts": "5165fa0f558cc57cc6536322ce94a9b4075d56d9000f0bb54259a7e9fe443e55",
+      "packages/core/src/render.ts": "99cc264ca9c47aea86adbea5f110b61bd56bee3ddc94f4f273a0b93eb4b2fba1",
+      "packages/core/src/semantic-registry.ts": "65b1b6fca7ac0ae99d5e7843259ba6d77a5383066288a153ecca56dc5f1e4045",
+      "packages/core/src/semantic-transport-schema.ts": "44ed5a497675b39ddbb162b30f4e03b798cb95cb497d36a5685cba6a49769590",
+      "packages/core/src/semantic-transport.ts": "1487dc021d33f4ad632795127543f6e0a61c01d1fc335040f6b29f4c02499302"
+    },
+    "sourceHashes": {
+      "packages/core/src/literal-retention.ts": "642d06f2c4107fffd2c3b254f725a7f74f94ac20323e650ea08bb823d1297465",
+      "packages/core/src/fingerprint.ts": "138f6cb7429e3896b5cebbda5713722515512edb820656e0326a8819aaba736b",
+      "packages/core/src/agent-native.ts": "53a8d6216214a03e9983ba0355aed7e788667c98ea71c37cc9f51d7e292488fc",
+      "packages/core/src/derive.ts": "f0131b8f6f5209e948f819b7418f6c49654fdcf4e5afafa986628b32ab21e68f",
+      "packages/core/src/types.ts": "e2b4bc1a0260898a9ffb78c9766ca2389fb36fa77a9132c9b89f620a572fcb50",
+      "packages/core/test/date-literal-retention.test.ts": "68c1abb545aa36ef18cf88d1a319573d06c28a84f87194d9d1f28ea46d2a50ea",
+      "experiments/date-literal-retention-v1/experiment.json": "1849c5c638421baffa262fa7a90d11e22f1232dfd95cc8328e99e5d16a5f7d09",
+      "experiments/natural-development-v8/extraction/public-served-runtime-v15.json": "9a5623244515b0ea67eddb3f3097b6bbb3e4952159284f74c74850c6ff91f5a8",
+      "experiments/natural-development-v8/extraction/public-served-runtime-v16.json": "46cc8a7aeeb56ff926159af3b666725fda32f6c796ba7b1926b5f34a3e33faff"
+    },
+    "currentDistStatus": "Not used; repository notes identify core dist as built from 0.14 and runtime freeze v16 is present in the dirty tree."
+  },
+  "cases": [
+    {
+      "id": "dotted-deadline-equivalent-iso",
+      "source": "Orion is due by 30.11.2026.",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "deadline",
+            "roles": {
+              "subject": {
+                "type": "project",
+                "id": "orion"
+              },
+              "time": {
+                "type": "date",
+                "value": "2026-11-30"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "sourceSha256": "1a9540b2f4f95c4aa7c3981a7949e74e426159bcefcdb31f1718c3886fc69b11",
+      "semSha256": "95a86bf16ef4b5cff9abe0908d1ed107777ee0983bf374e27bdad8076cd16241",
+      "sourceAndSemBinding": "SHA-256 of exact UTF-8 source and JSON.stringify(candidate Sem) used in both generations",
+      "historical": {
+        "checkLiteralRetention": {
+          "retained": false,
+          "sourceNumbers": [
+            30.11,
+            2026
+          ],
+          "sourceIdentifiers": [],
+          "sourceDates": null,
+          "missingNumbers": [
+            30.11
+          ],
+          "missingIdentifiers": [],
+          "missingDates": null
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:721d48c303cdcdd6bc4610ee4bc14ed1",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "failureClass": "unretained_source_literal",
+          "semanticFingerprintAvailable": false,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": false,
+            "sourceNumbers": [
+              30.11,
+              2026
+            ],
+            "sourceIdentifiers": [],
+            "sourceDates": null,
+            "missingNumbers": [
+              30.11
+            ],
+            "missingIdentifiers": [],
+            "missingDates": null
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": false,
+          "semanticFingerprint": null,
+          "legacyFingerprint": "lfp:0.1:sha256:d75ad0170134586bdadf0b07f1548cb0",
+          "retained": false,
+          "confidence": 0,
+          "promoted": false
+        }
+      },
+      "current": {
+        "checkLiteralRetention": {
+          "retained": true,
+          "sourceNumbers": [],
+          "sourceIdentifiers": [],
+          "sourceDates": [
+            "2026-11-30"
+          ],
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": []
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:721d48c303cdcdd6bc4610ee4bc14ed1",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:721d48c303cdcdd6bc4610ee4bc14ed1",
+          "failureClass": null,
+          "semanticFingerprintAvailable": true,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [
+              "2026-11-30"
+            ],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": []
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:721d48c303cdcdd6bc4610ee4bc14ed1",
+          "legacyFingerprint": "lfp:0.1:sha256:d75ad0170134586bdadf0b07f1548cb0",
+          "retained": true,
+          "confidence": 0,
+          "promoted": false
+        }
+      }
+    },
+    {
+      "id": "actual-date-change-with-same-components",
+      "source": "Orion is due on 2026-04-05.",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "deadline",
+            "roles": {
+              "subject": {
+                "type": "project",
+                "id": "orion"
+              },
+              "time": {
+                "type": "date",
+                "value": "2026-05-04"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "sourceSha256": "085047584e7e150261a6fe0bc443a77e89007cc5ae03c6e9310bd46c3342a265",
+      "semSha256": "a03c229abfa0dd8f40a7a3b1b006031c406ca1bf33a4feb34df9ccdd2cc99f4b",
+      "sourceAndSemBinding": "SHA-256 of exact UTF-8 source and JSON.stringify(candidate Sem) used in both generations",
+      "historical": {
+        "checkLiteralRetention": {
+          "retained": true,
+          "sourceNumbers": [
+            2026,
+            4,
+            5
+          ],
+          "sourceIdentifiers": [],
+          "sourceDates": null,
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": null
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:d36ab619b18806487e845e78c9db2de1",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:d36ab619b18806487e845e78c9db2de1",
+          "failureClass": null,
+          "semanticFingerprintAvailable": true,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [
+              2026,
+              4,
+              5
+            ],
+            "sourceIdentifiers": [],
+            "sourceDates": null,
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": null
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:d36ab619b18806487e845e78c9db2de1",
+          "legacyFingerprint": "lfp:0.1:sha256:46cb5cd81dddcdfc968e21eb833bd71e",
+          "retained": true,
+          "confidence": 0,
+          "promoted": false
+        }
+      },
+      "current": {
+        "checkLiteralRetention": {
+          "retained": false,
+          "sourceNumbers": [],
+          "sourceIdentifiers": [],
+          "sourceDates": [
+            "2026-04-05"
+          ],
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": [
+            "2026-04-05"
+          ]
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:d36ab619b18806487e845e78c9db2de1",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "failureClass": "unretained_source_literal",
+          "semanticFingerprintAvailable": false,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": false,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [
+              "2026-04-05"
+            ],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [
+              "2026-04-05"
+            ]
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": false,
+          "semanticFingerprint": null,
+          "legacyFingerprint": "lfp:0.1:sha256:46cb5cd81dddcdfc968e21eb833bd71e",
+          "retained": false,
+          "confidence": 0,
+          "promoted": false
+        }
+      }
+    },
+    {
+      "id": "date-components-cannot-rescue-separate-quantity",
+      "source": "Orion is due on 2026-04-13 and use 5 units.",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "deadline",
+            "roles": {
+              "subject": {
+                "type": "project",
+                "id": "orion"
+              },
+              "time": {
+                "type": "date",
+                "value": "2026-04-13"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "sourceSha256": "57834497c50869e009f726c90a321230765bc138a4e549d736a89d5e01b0be00",
+      "semSha256": "191b5a19622fd828d1d6f585deb87e6d6c730bb1e584c4965ac74417f93ec64b",
+      "sourceAndSemBinding": "SHA-256 of exact UTF-8 source and JSON.stringify(candidate Sem) used in both generations",
+      "historical": {
+        "checkLiteralRetention": {
+          "retained": false,
+          "sourceNumbers": [
+            2026,
+            4,
+            13,
+            5
+          ],
+          "sourceIdentifiers": [],
+          "sourceDates": null,
+          "missingNumbers": [
+            5
+          ],
+          "missingIdentifiers": [],
+          "missingDates": null
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:52b35873f899d27295f7fbecd9d6d9b0",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "failureClass": "unretained_source_literal",
+          "semanticFingerprintAvailable": false,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": false,
+            "sourceNumbers": [
+              2026,
+              4,
+              13,
+              5
+            ],
+            "sourceIdentifiers": [],
+            "sourceDates": null,
+            "missingNumbers": [
+              5
+            ],
+            "missingIdentifiers": [],
+            "missingDates": null
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": false,
+          "semanticFingerprint": null,
+          "legacyFingerprint": "lfp:0.1:sha256:ba79145db4ebda01ac77d45b0d79c967",
+          "retained": false,
+          "confidence": 0,
+          "promoted": false
+        }
+      },
+      "current": {
+        "checkLiteralRetention": {
+          "retained": false,
+          "sourceNumbers": [
+            5
+          ],
+          "sourceIdentifiers": [],
+          "sourceDates": [
+            "2026-04-13"
+          ],
+          "missingNumbers": [
+            5
+          ],
+          "missingIdentifiers": [],
+          "missingDates": []
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:52b35873f899d27295f7fbecd9d6d9b0",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "failureClass": "unretained_source_literal",
+          "semanticFingerprintAvailable": false,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": false,
+            "sourceNumbers": [
+              5
+            ],
+            "sourceIdentifiers": [],
+            "sourceDates": [
+              "2026-04-13"
+            ],
+            "missingNumbers": [
+              5
+            ],
+            "missingIdentifiers": [],
+            "missingDates": []
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": false,
+          "semanticFingerprint": null,
+          "legacyFingerprint": "lfp:0.1:sha256:ba79145db4ebda01ac77d45b0d79c967",
+          "retained": false,
+          "confidence": 0,
+          "promoted": false
+        }
+      }
+    },
+    {
+      "id": "date-numeric-components-rescue-distinct-quantity-5-in-old-set-check",
+      "source": "The date is 2026-04-05; use 5 units.",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "deadline",
+            "roles": {
+              "subject": {
+                "type": "project",
+                "id": "orion"
+              },
+              "time": {
+                "type": "date",
+                "value": "2026-04-05"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "sourceSha256": "6f8f44b98b0114a85681d43743a98bf66abebc4c02f16a389c80c5fc11fe7d3f",
+      "semSha256": "82482b313be2d5e4368c92f417c027eb6a142e3380b49d51fd881eeda7958837",
+      "sourceAndSemBinding": "SHA-256 of exact UTF-8 source and JSON.stringify(candidate Sem) used in both generations",
+      "historical": {
+        "checkLiteralRetention": {
+          "retained": true,
+          "sourceNumbers": [
+            2026,
+            4,
+            5
+          ],
+          "sourceIdentifiers": [],
+          "sourceDates": null,
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": null
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:ec0658d44d27d8804caaa54be7ee501d",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:ec0658d44d27d8804caaa54be7ee501d",
+          "failureClass": null,
+          "semanticFingerprintAvailable": true,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [
+              2026,
+              4,
+              5
+            ],
+            "sourceIdentifiers": [],
+            "sourceDates": null,
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": null
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:ec0658d44d27d8804caaa54be7ee501d",
+          "legacyFingerprint": "lfp:0.1:sha256:af5589ad3f78135de1b2925f17ce3749",
+          "retained": true,
+          "confidence": 0,
+          "promoted": false
+        }
+      },
+      "current": {
+        "checkLiteralRetention": {
+          "retained": false,
+          "sourceNumbers": [
+            5
+          ],
+          "sourceIdentifiers": [],
+          "sourceDates": [
+            "2026-04-05"
+          ],
+          "missingNumbers": [
+            5
+          ],
+          "missingIdentifiers": [],
+          "missingDates": []
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:ec0658d44d27d8804caaa54be7ee501d",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "failureClass": "unretained_source_literal",
+          "semanticFingerprintAvailable": false,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": false,
+            "sourceNumbers": [
+              5
+            ],
+            "sourceIdentifiers": [],
+            "sourceDates": [
+              "2026-04-05"
+            ],
+            "missingNumbers": [
+              5
+            ],
+            "missingIdentifiers": [],
+            "missingDates": []
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": false,
+          "semanticFingerprint": null,
+          "legacyFingerprint": "lfp:0.1:sha256:af5589ad3f78135de1b2925f17ce3749",
+          "retained": false,
+          "confidence": 0,
+          "promoted": false
+        }
+      }
+    },
+    {
+      "id": "base-volta-allow-manager-lina-read-reports",
+      "source": "Volta allows manager Lina to read reports.",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "allow",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "volta"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "read_reports"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "lina"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "sourceSha256": "0ebb2e2b0ebedbfeaf7f0b56611408e305e686be91d8954c7729e783bca3bd2a",
+      "semSha256": "5cb46cb02ee1c948e01deceb48c6fd041bfdda5b7f90be9d81c07ce747f373af",
+      "sourceAndSemBinding": "SHA-256 of exact UTF-8 source and JSON.stringify(candidate Sem) used in both generations",
+      "historical": {
+        "checkLiteralRetention": {
+          "retained": true,
+          "sourceNumbers": [],
+          "sourceIdentifiers": [],
+          "sourceDates": null,
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": null
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "failureClass": null,
+          "semanticFingerprintAvailable": true,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": null,
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": null
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "legacyFingerprint": "lfp:0.1:sha256:7d370c987b794ab1107119bca98940e6",
+          "retained": true,
+          "confidence": 0,
+          "promoted": false
+        }
+      },
+      "current": {
+        "checkLiteralRetention": {
+          "retained": true,
+          "sourceNumbers": [],
+          "sourceIdentifiers": [],
+          "sourceDates": [],
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": []
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "failureClass": null,
+          "semanticFingerprintAvailable": true,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": []
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "legacyFingerprint": "lfp:0.1:sha256:7d370c987b794ab1107119bca98940e6",
+          "retained": true,
+          "confidence": 0,
+          "promoted": false
+        }
+      }
+    },
+    {
+      "id": "metadata-only-laundering-same-base-sem",
+      "source": "Volta allows manager Lina to read reports; date 2026-04-05; identifier AC-7.",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "allow",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "volta",
+                "token": "2026-04-05 AC-7",
+                "surface": "Volta 2026-04-05 AC-7",
+                "metadata": {
+                  "sourceText": "2026-04-05 AC-7"
+                }
+              },
+              "theme": {
+                "type": "concept",
+                "id": "read_reports"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "lina"
+              }
+            },
+            "negated": false
+          }
+        ]
+      },
+      "sourceSha256": "74ed7f4e186ff0ea79583a3e136bcf889129551c8bea958f60399fdb3d1ff19e",
+      "semSha256": "47ef11c5ea3afdaa666788b3fcac0697be9404144c81cfba2688726247edb9f3",
+      "sourceAndSemBinding": "SHA-256 of exact UTF-8 source and JSON.stringify(candidate Sem) used in both generations",
+      "historical": {
+        "checkLiteralRetention": {
+          "retained": true,
+          "sourceNumbers": [
+            2026,
+            4,
+            5
+          ],
+          "sourceIdentifiers": [
+            "ac-7"
+          ],
+          "sourceDates": null,
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": null
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "failureClass": null,
+          "semanticFingerprintAvailable": true,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [
+              2026,
+              4,
+              5
+            ],
+            "sourceIdentifiers": [
+              "ac-7"
+            ],
+            "sourceDates": null,
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": null
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "legacyFingerprint": "lfp:0.1:sha256:3c0b031a57f6e1838a760bb1466a82b7",
+          "retained": true,
+          "confidence": 0,
+          "promoted": false
+        }
+      },
+      "current": {
+        "checkLiteralRetention": {
+          "retained": false,
+          "sourceNumbers": [],
+          "sourceIdentifiers": [
+            "ac-7"
+          ],
+          "sourceDates": [
+            "2026-04-05"
+          ],
+          "missingNumbers": [],
+          "missingIdentifiers": [
+            "ac-7"
+          ],
+          "missingDates": [
+            "2026-04-05"
+          ]
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "failureClass": "unretained_source_literal",
+          "semanticFingerprintAvailable": false,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": false,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [
+              "ac-7"
+            ],
+            "sourceDates": [
+              "2026-04-05"
+            ],
+            "missingNumbers": [],
+            "missingIdentifiers": [
+              "ac-7"
+            ],
+            "missingDates": [
+              "2026-04-05"
+            ]
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": false,
+          "semanticFingerprint": null,
+          "legacyFingerprint": "lfp:0.1:sha256:3c0b031a57f6e1838a760bb1466a82b7",
+          "retained": false,
+          "confidence": 0,
+          "promoted": false
+        }
+      }
+    },
+    {
+      "id": "surface-reference-only-laundering-same-base-sem",
+      "source": "Volta allows manager Lina to read reports; date 2026-04-05; identifier AC-7.",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "allow",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "volta"
+              },
+              "theme": {
+                "type": "concept",
+                "id": "read_reports"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "lina"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "references": [
+          {
+            "referenceKind": "surface-evidence",
+            "sourceRef": "fixture-source",
+            "surface": "Volta 2026-04-05 AC-7",
+            "span": {
+              "start": 0,
+              "end": 23
+            },
+            "id": "AC-7",
+            "ref": "2026-04-05",
+            "provider": "fixture",
+            "metadata": {
+              "value": "2026-04-05 AC-7"
+            }
+          }
+        ]
+      },
+      "sourceSha256": "74ed7f4e186ff0ea79583a3e136bcf889129551c8bea958f60399fdb3d1ff19e",
+      "semSha256": "318283f1d58981e30889cbb61d468b8426fadf99f8a5db1194db325b74cddfa6",
+      "sourceAndSemBinding": "SHA-256 of exact UTF-8 source and JSON.stringify(candidate Sem) used in both generations",
+      "historical": {
+        "checkLiteralRetention": {
+          "retained": true,
+          "sourceNumbers": [
+            2026,
+            4,
+            5
+          ],
+          "sourceIdentifiers": [
+            "ac-7"
+          ],
+          "sourceDates": null,
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": null
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "failureClass": null,
+          "semanticFingerprintAvailable": true,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [
+              2026,
+              4,
+              5
+            ],
+            "sourceIdentifiers": [
+              "ac-7"
+            ],
+            "sourceDates": null,
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": null
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "legacyFingerprint": "lfp:0.1:sha256:ad2264e654bc9770d0d98e5e092b76b4",
+          "retained": true,
+          "confidence": 0,
+          "promoted": false
+        }
+      },
+      "current": {
+        "checkLiteralRetention": {
+          "retained": false,
+          "sourceNumbers": [],
+          "sourceIdentifiers": [
+            "ac-7"
+          ],
+          "sourceDates": [
+            "2026-04-05"
+          ],
+          "missingNumbers": [],
+          "missingIdentifiers": [
+            "ac-7"
+          ],
+          "missingDates": [
+            "2026-04-05"
+          ]
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "failureClass": "unretained_source_literal",
+          "semanticFingerprintAvailable": false,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": false,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [
+              "ac-7"
+            ],
+            "sourceDates": [
+              "2026-04-05"
+            ],
+            "missingNumbers": [],
+            "missingIdentifiers": [
+              "ac-7"
+            ],
+            "missingDates": [
+              "2026-04-05"
+            ]
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": false,
+          "semanticFingerprint": null,
+          "legacyFingerprint": "lfp:0.1:sha256:ad2264e654bc9770d0d98e5e092b76b4",
+          "retained": false,
+          "confidence": 0,
+          "promoted": false
+        }
+      }
+    },
+    {
+      "id": "combined-metadata-and-surface-reference-laundering-same-base-sem",
+      "source": "Volta allows manager Lina to read reports; date 2026-04-05; identifier AC-7.",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "allow",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "volta",
+                "token": "2026-04-05 AC-7",
+                "surface": "Volta 2026-04-05 AC-7",
+                "metadata": {
+                  "sourceText": "2026-04-05 AC-7"
+                }
+              },
+              "theme": {
+                "type": "concept",
+                "id": "read_reports"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "lina"
+              }
+            },
+            "negated": false
+          }
+        ],
+        "references": [
+          {
+            "referenceKind": "surface-evidence",
+            "sourceRef": "fixture-source",
+            "surface": "Volta 2026-04-05 AC-7",
+            "span": {
+              "start": 0,
+              "end": 23
+            },
+            "id": "AC-7",
+            "ref": "2026-04-05",
+            "provider": "fixture",
+            "metadata": {
+              "value": "2026-04-05 AC-7"
+            }
+          }
+        ]
+      },
+      "sourceSha256": "74ed7f4e186ff0ea79583a3e136bcf889129551c8bea958f60399fdb3d1ff19e",
+      "semSha256": "5ed5f8fa4a641fd0f32a1ff9514d157570d69d43f656114be94d9cac69c4981c",
+      "sourceAndSemBinding": "SHA-256 of exact UTF-8 source and JSON.stringify(candidate Sem) used in both generations",
+      "historical": {
+        "checkLiteralRetention": {
+          "retained": true,
+          "sourceNumbers": [
+            2026,
+            4,
+            5
+          ],
+          "sourceIdentifiers": [
+            "ac-7"
+          ],
+          "sourceDates": null,
+          "missingNumbers": [],
+          "missingIdentifiers": [],
+          "missingDates": null
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "failureClass": null,
+          "semanticFingerprintAvailable": true,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [
+              2026,
+              4,
+              5
+            ],
+            "sourceIdentifiers": [
+              "ac-7"
+            ],
+            "sourceDates": null,
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": null
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+          "legacyFingerprint": "lfp:0.1:sha256:67538f584c37acc667a85d6169d62774",
+          "retained": true,
+          "confidence": 0,
+          "promoted": false
+        }
+      },
+      "current": {
+        "checkLiteralRetention": {
+          "retained": false,
+          "sourceNumbers": [],
+          "sourceIdentifiers": [
+            "ac-7"
+          ],
+          "sourceDates": [
+            "2026-04-05"
+          ],
+          "missingNumbers": [],
+          "missingIdentifiers": [
+            "ac-7"
+          ],
+          "missingDates": [
+            "2026-04-05"
+          ]
+        },
+        "projectionFingerprint": "lfp:2.1:sha256:2de8a813d71519fb5b53080520f7155a",
+        "submitCandidate": {
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "failureClass": "unretained_source_literal",
+          "semanticFingerprintAvailable": false,
+          "confidence": 0,
+          "promoted": false,
+          "literalRetention": {
+            "retained": false,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [
+              "ac-7"
+            ],
+            "sourceDates": [
+              "2026-04-05"
+            ],
+            "missingNumbers": [],
+            "missingIdentifiers": [
+              "ac-7"
+            ],
+            "missingDates": [
+              "2026-04-05"
+            ]
+          }
+        },
+        "createRecord": {
+          "semanticFingerprintAvailable": false,
+          "semanticFingerprint": null,
+          "legacyFingerprint": "lfp:0.1:sha256:67538f584c37acc667a85d6169d62774",
+          "retained": false,
+          "confidence": 0,
+          "promoted": false
+        }
+      }
+    }
+  ],
+  "limits": [
+    "This is a presence floor: it does not verify that a retained literal fills the semantically correct role.",
+    "Occurrences are compared as sets: multiplicity of repeated literals is not checked.",
+    "No semantic correctness, language coverage, parser quality, promotion, readiness, deployment, privacy lifecycle, or protected-evaluation claim follows.",
+    "Historical binding covers only the manifest-hash-verified import closure used by these literal/submission/record/fingerprint paths; it is not whole-runtime attestation."
+  ]
+}
