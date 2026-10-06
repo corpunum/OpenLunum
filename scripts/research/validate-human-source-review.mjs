@@ -11,6 +11,12 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 export const PACKET_PATH = 'experiments/meaning-human-review-packet-v1/source-only.jsonl';
 export const REVIEW_FORMAT = 'openlunum-human-source-review/0.1';
 const COMPETENT = new Set(['native', 'fluent']);
+// A review performed by a model on the owner's explicit delegation. It is a
+// supported, honestly labelled mode: it never counts as human or native
+// review, a model cannot declare native/fluent competence, and the report
+// says the human-review criterion is not satisfied.
+export const DELEGATED_MODEL_KIND = 'delegated-model';
+const MODEL_COMPETENCE = 'model';
 const ITEM_STATUSES = new Set(['reviewed', 'declined']);
 // Fields that would carry previous model output, proposed Sem or expected
 // outcomes into what must be an independent source-meaning review.
@@ -57,8 +63,10 @@ export function validateHumanSourceReview(review, packetRaw, { now = new Date() 
   if (!packet.every(row => PRIOR_STATUSES.has(row.reviewStatus) && sha256(Buffer.from(row.sourceText, 'utf8')) === row.sourceSha256)) throw new Error('packet_source_hash_mismatch');
   if (review?.format !== REVIEW_FORMAT) throw new Error('review_format_mismatch');
   if (review.packet?.path !== PACKET_PATH || review.packet?.sha256 !== sha256(packetRaw)) throw new Error('review_packet_binding_mismatch');
-  if (review.reviewKind !== 'human') throw new Error('review_kind_not_human');
-  if (review.modelAssisted !== false) throw new Error('model_assisted_review_is_not_human_review');
+  const delegated = review.reviewKind === DELEGATED_MODEL_KIND;
+  if (review.reviewKind !== 'human' && !delegated) throw new Error('review_kind_not_human');
+  if (!delegated && review.modelAssisted !== false) throw new Error('model_assisted_review_is_not_human_review');
+  if (delegated && review.modelAssisted !== true) throw new Error('delegated_model_review_must_declare_model');
   const reviewer = review.reviewer;
   if (!nonEmpty(reviewer?.id) || !nonEmpty(reviewer?.role) || typeof reviewer?.selfAttested !== 'boolean' || !Array.isArray(reviewer?.languages)) throw new Error('reviewer_identity_missing');
   const competence = new Map();
@@ -68,6 +76,17 @@ export function validateHumanSourceReview(review, packetRaw, { now = new Date() 
   }
   const reviewedAt = new Date(review.reviewedAt);
   if (!nonEmpty(review.reviewedAt) || Number.isNaN(reviewedAt.getTime()) || reviewedAt > now) throw new Error('reviewed_at_invalid');
+  let delegation = null;
+  if (delegated) {
+    if (!nonEmpty(reviewer.model)) throw new Error('delegated_model_reviewer_model_missing');
+    if (reviewer.selfAttested !== false) throw new Error('delegated_model_reviewer_cannot_self_attest');
+    if ([...competence.values()].some(value => value !== MODEL_COMPETENCE)) throw new Error('delegated_model_reviewer_cannot_claim_human_competence');
+    const d = review.delegation;
+    const authorizedAt = new Date(d?.authorizedAt);
+    if (!nonEmpty(d?.authorizedBy) || !nonEmpty(d?.authorization) || !nonEmpty(d?.scope) || !nonEmpty(d?.authorizedAt)
+      || Number.isNaN(authorizedAt.getTime()) || authorizedAt > reviewedAt) throw new Error('delegation_record_invalid');
+    delegation = { authorizedBy: d.authorizedBy, authorizedAt: d.authorizedAt, scope: d.scope };
+  } else if (review.delegation !== undefined) throw new Error('human_review_must_not_carry_delegation');
   const forbidden = forbiddenKeyPath(review);
   if (forbidden) throw new Error(`review_contains_model_or_target_field:${forbidden}`);
   if (!Array.isArray(review.items)) throw new Error('review_population_mismatch');
@@ -90,7 +109,7 @@ export function validateHumanSourceReview(review, packetRaw, { now = new Date() 
       tally.declined += 1;
       continue;
     }
-    if (!COMPETENT.has(competence.get(item.language))) throw new Error(`reviewer_not_competent_for_language:${item.id}:${item.language}`);
+    if (delegated ? competence.get(item.language) !== MODEL_COMPETENCE : !COMPETENT.has(competence.get(item.language))) throw new Error(`reviewer_not_competent_for_language:${item.id}:${item.language}`);
     if (item.meaningAtoms.length === 0) throw new Error(`review_meaning_missing:${item.id}`);
     for (const literal of item.explicitNamesAndLiterals) {
       if (!source.sourceText.includes(literal)) throw new Error(`review_literal_not_in_source:${item.id}`);
@@ -105,9 +124,12 @@ export function validateHumanSourceReview(review, packetRaw, { now = new Date() 
     total: seen.size,
     languages,
     languageCoverageComplete,
-    reviewer: { id: reviewer.id, role: reviewer.role, selfAttested: reviewer.selfAttested, languages: Object.fromEntries(competence) },
+    reviewKind: review.reviewKind,
+    reviewer: { id: reviewer.id, role: reviewer.role, ...(delegated ? { model: reviewer.model } : {}), selfAttested: reviewer.selfAttested, languages: Object.fromEntries(competence) },
     reviewedAt: review.reviewedAt,
-    humanReviewDeclared: true,
+    humanReviewDeclared: !delegated,
+    ...(delegated ? { delegation } : {}),
+    humanReviewCriterionSatisfied: !delegated && Object.values(languageCoverageComplete).every(Boolean),
     goldPromoted: 0,
     historicalTargetsModified: 0,
     protected: false,

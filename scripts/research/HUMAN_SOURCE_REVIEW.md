@@ -34,3 +34,14 @@ It reports per-language counts and whether English and Greek coverage is
 complete (#685 acceptance criterion). It does not judge whether a described
 meaning is correct, does not promote gold and does not certify protected data.
 Self-attested review is reported as self-attested.
+
+## Owner-delegated model review
+
+The owner may delegate the review to a model. The validator accepts that as
+`reviewKind: "delegated-model"` with `modelAssisted: true`, a `reviewer.model`,
+`selfAttested: false`, competence `model` for every language (never `native`
+or `fluent`), and a `delegation` record (`authorizedBy`, `authorizedAt`,
+verbatim `authorization`, `scope`). Its report says `humanReviewDeclared:
+false` and `humanReviewCriterionSatisfied: false`: a delegated model review is
+recorded honestly and never counts as the human/native review #685 asks for.
+The first one is `experiments/meaning-delegated-model-review-v1/`.

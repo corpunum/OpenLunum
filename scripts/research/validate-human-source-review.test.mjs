@@ -88,3 +88,41 @@ test('reviewed items need meaning, source-present literals and a past timestamp'
   review.items[0].explicitNamesAndLiterals = ['Priya', '30 November 2026'];
   assert.equal(validateHumanSourceReview(review, packetRaw, { now }).total, 14);
 });
+
+// Owner-delegated model review: supported, but never reported as human review.
+function delegatedFilled() {
+  const review = filled();
+  review.reviewKind = 'delegated-model';
+  review.modelAssisted = true;
+  review.reviewer = { id: 'synthetic-model', role: 'synthetic delegated reviewer', model: 'synthetic-model-1', selfAttested: false,
+    languages: [{ language: 'en', competence: 'model' }, { language: 'el', competence: 'model' }] };
+  review.delegation = { authorizedBy: 'synthetic-owner', authorizedAt: '2026-10-05T09:00:00Z',
+    authorization: 'synthetic delegation text', scope: 'synthetic scope' };
+  return review;
+}
+const rejectsDelegated = (mutate, pattern) => {
+  const review = delegatedFilled(); mutate(review);
+  assert.throws(() => validateHumanSourceReview(review, packetRaw, { now }), pattern);
+};
+
+test('delegated model review validates but is never reported as human review', () => {
+  const report = validateHumanSourceReview(delegatedFilled(), packetRaw, { now });
+  assert.equal(report.reviewKind, 'delegated-model');
+  assert.equal(report.humanReviewDeclared, false);
+  assert.equal(report.humanReviewCriterionSatisfied, false);
+  assert.equal(report.reviewer.model, 'synthetic-model-1');
+  assert.deepEqual(report.languageCoverageComplete, { en: true, el: true });
+  assert.equal(report.delegation.authorizedBy, 'synthetic-owner');
+  assert.equal(validateHumanSourceReview(filled(), packetRaw, { now }).humanReviewCriterionSatisfied, true);
+});
+
+test('delegated model review must declare the model, the delegation and no human competence', () => {
+  rejectsDelegated(review => { review.modelAssisted = false; }, /delegated_model_review_must_declare_model/);
+  rejectsDelegated(review => { delete review.reviewer.model; }, /delegated_model_reviewer_model_missing/);
+  rejectsDelegated(review => { review.reviewer.selfAttested = true; }, /delegated_model_reviewer_cannot_self_attest/);
+  rejectsDelegated(review => { review.reviewer.languages[1].competence = 'native'; }, /delegated_model_reviewer_cannot_claim_human_competence/);
+  rejectsDelegated(review => { delete review.delegation; }, /delegation_record_invalid/);
+  rejectsDelegated(review => { review.delegation.authorizedAt = '2026-10-05T11:00:00Z'; }, /delegation_record_invalid/);
+  rejectsDelegated(review => { review.delegation.authorization = ''; }, /delegation_record_invalid/);
+  rejects(review => { review.delegation = { authorizedBy: 'x' }; }, /human_review_must_not_carry_delegation/);
+});

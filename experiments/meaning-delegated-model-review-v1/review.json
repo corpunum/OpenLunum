@@ -1,0 +1,358 @@
+{
+  "format": "openlunum-human-source-review/0.1",
+  "packet": {
+    "path": "experiments/meaning-human-review-packet-v1/source-only.jsonl",
+    "sha256": "4ce954ff391c6f7f3f513f5980509971c12531ab5f5d77df8d8cc0cc9666c698"
+  },
+  "reviewKind": "delegated-model",
+  "modelAssisted": true,
+  "reviewer": {
+    "id": "claude-opus-5-5",
+    "role": "Owner-delegated model reviewer (Claude Code agent). Not a human and not a native speaker of either language.",
+    "model": "claude-opus-5-5",
+    "selfAttested": false,
+    "languages": [
+      {
+        "language": "en",
+        "competence": "model"
+      },
+      {
+        "language": "el",
+        "competence": "model"
+      }
+    ]
+  },
+  "reviewedAt": "2026-10-06T20:20:00Z",
+  "items": [
+    {
+      "id": "e06",
+      "language": "en",
+      "sourceText": "Grant Priya access to the staging database until 30 November 2026.",
+      "sourceSha256": "6f591650afce1b3e935fade0f51e076a14f2499f797ff2552fef6c98d6ea973c",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Imperative directive to an unstated addressee; the grantor is not named.",
+        "Act: give (grant) access. Recipient of the access: Priya.",
+        "Resource accessed: the staging database (definite; a specific database known from context).",
+        "Time bound: the access lasts until 30 November 2026 and is implied to end then; the start is unstated (by default: now).",
+        "Kind/level of access (read, write, admin) is unstated."
+      ],
+      "ambiguities": [
+        "'until 30 November 2026' inclusive (through the end of that day) vs exclusive (ends at its start); time of day and timezone unstated.",
+        "Less likely attachment: 'until' bounds when the grant may be made, not how long access lasts. The duration reading is strongly preferred.",
+        "Access level unstated; must not be inferred."
+      ],
+      "explicitNamesAndLiterals": [
+        "Priya",
+        "staging database",
+        "30 November 2026"
+      ],
+      "notes": "Unstated: grantor, access level, start time, timezone. Date has an explicit year."
+    },
+    {
+      "id": "e09",
+      "language": "en",
+      "sourceText": "Nobody except the auditor may delete audit logs.",
+      "sourceSha256": "cff37a30c28a7493289d9b3b1ca90a416d4cdbd4ca07d151c673a171897401ac",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Prohibition: deleting audit logs is not permitted for anyone.",
+        "Exception: the auditor is excluded from the prohibition.",
+        "Theme: audit logs (generic/plural; all audit logs in scope).",
+        "Deontic 'may' (permission), not epistemic possibility.",
+        "The authority issuing the rule is unstated."
+      ],
+      "ambiguities": [
+        "Whether the exception positively permits the auditor to delete (common implicature) or only removes the auditor from the prohibition (strict reading). An encoding that drops the exception inverts the meaning for the auditor.",
+        "'the auditor' as a role vs one specific person.",
+        "Scope of 'delete' (whole logs vs entries) is unstated."
+      ],
+      "explicitNamesAndLiterals": [
+        "Nobody except the auditor",
+        "auditor",
+        "audit logs"
+      ],
+      "notes": "Exception scope is meaning-critical. A frame that cannot hold an exception should keep natural text or abstain rather than store a bare prohibition."
+    },
+    {
+      "id": "e10",
+      "language": "en",
+      "sourceText": "Run the backup script every night at 02:00.",
+      "sourceSha256": "28607ca31fa51824e2547cf01473440a6dab2221081d57dd37e6b8fd81bec74e",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Imperative directive to an unstated addressee (person or scheduler).",
+        "Act: run (execute). Theme: the backup script (definite).",
+        "Recurrence: every night, i.e. daily.",
+        "Time of day: 02:00 (24-hour clock)."
+      ],
+      "ambiguities": [
+        "Timezone unstated.",
+        "02:00 is technically early morning of the next calendar day; 'every night' maps to one run per day.",
+        "Start/end of the schedule unstated."
+      ],
+      "explicitNamesAndLiterals": [
+        "backup script",
+        "every night",
+        "02:00"
+      ],
+      "notes": "Recurrence and clock time must both be retained; dropping 'every night' turns a schedule into a one-off."
+    },
+    {
+      "id": "e11",
+      "language": "en",
+      "sourceText": "Send three reminders before the deadline on 15 March.",
+      "sourceSha256": "ea8dc56fae796f70f8a5252fe8ad1e260e93730aacd1238d508fd26082197cec",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Imperative directive to an unstated addressee.",
+        "Act: send. Object: reminders, count exactly three.",
+        "Temporal constraint: all three are sent before the deadline.",
+        "The deadline is on 15 March; the year is unstated.",
+        "Recipients and reminder topic are unstated (topic presumably the deadline)."
+      ],
+      "ambiguities": [
+        "Attachment: 'on 15 March' most naturally modifies 'the deadline'; alternative reading sends the reminders on 15 March, before a same-day deadline.",
+        "Year unstated: must not be invented.",
+        "Spacing of the reminders and time of day of the deadline unstated."
+      ],
+      "explicitNamesAndLiterals": [
+        "three",
+        "15 March"
+      ],
+      "notes": "Count (three) and date (15 March, no year) are literals to retain."
+    },
+    {
+      "id": "e13",
+      "language": "en",
+      "sourceText": "Jonas should polish the onboarding slides before Friday.",
+      "sourceSha256": "05d10f9e33ed51304494a4c4e0dbe25da123ebe34a05d0d03d0e42d1d3a6827e",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Agent: Jonas. Act: polish, i.e. refine/improve. Theme: the onboarding slides (definite).",
+        "Modality: 'should', a recommendation or weak obligation (deontic); an epistemic expectation reading is possible but less likely.",
+        "Time: before Friday; which Friday is unstated (by default the next one)."
+      ],
+      "ambiguities": [
+        "Lower-case 'polish' = refine, not 'Polish' (translate into Polish); case-insensitive processing could confuse them.",
+        "'before Friday' exclusive (done by end of Thursday) vs a Friday deadline.",
+        "Which Friday is unstated."
+      ],
+      "explicitNamesAndLiterals": [
+        "Jonas",
+        "onboarding slides",
+        "Friday"
+      ],
+      "notes": "'should' is weaker than must; it must not be stored as obligation without that distinction."
+    },
+    {
+      "id": "e14",
+      "language": "en",
+      "sourceText": "Do not restart the cluster during business hours.",
+      "sourceSha256": "d885d989453301f27c493972797357c57121974aeea9efb02cd37ee7e50a823a",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Negative imperative: a prohibition addressed to an unstated party.",
+        "Forbidden act: restart. Theme: the cluster (definite).",
+        "Temporal scope: during business hours."
+      ],
+      "ambiguities": [
+        "'business hours' is undefined (whose hours, which timezone, which days).",
+        "Restarting outside business hours is not stated to be permitted; that is only an implicature.",
+        "Which cluster depends on context."
+      ],
+      "explicitNamesAndLiterals": [
+        "the cluster",
+        "business hours"
+      ],
+      "notes": "The temporal scope is meaning-critical: dropping it turns a scoped prohibition into a total one."
+    },
+    {
+      "id": "e15",
+      "language": "en",
+      "sourceText": "If more than 5 login attempts fail, lock the account.",
+      "sourceSha256": "941e078e334f87a84712e13373fa584e8e1b56c857382e78ca68653eb2faf892",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Condition: the number of failed login attempts is more than 5, i.e. 6 or more (strictly greater).",
+        "Consequence: lock the account (imperative; actor unstated, likely the system).",
+        "'the account' is the account whose login attempts failed (implicit anaphora)."
+      ],
+      "ambiguities": [
+        "Strict 'more than 5' (>5) vs a common misreading as 5 or more.",
+        "Consecutive vs cumulative failures; time window unstated.",
+        "Lock duration and unlock procedure unstated."
+      ],
+      "explicitNamesAndLiterals": [
+        "more than 5",
+        "login attempts",
+        "lock the account"
+      ],
+      "notes": "Comparison operator and threshold are literals to retain exactly (> 5, not >= 5)."
+    },
+    {
+      "id": "e19",
+      "language": "en",
+      "sourceText": "Ahmed can view the incident report.",
+      "sourceSha256": "e4063b53c4e338f0183808dca7b15f3fad539ebc2d57b8b3f53e63f02a3c4085",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Agent/experiencer: Ahmed. Act: view. Theme: the incident report (definite).",
+        "Modality 'can': ability, permission, or possibility; the sentence does not decide which.",
+        "No grantor, time or condition stated."
+      ],
+      "ambiguities": [
+        "'can' as permission (is allowed to view) vs ability (is able to view, e.g. has the link). This is the central ambiguity and should not be resolved to permission without context.",
+        "Which incident report depends on context."
+      ],
+      "explicitNamesAndLiterals": [
+        "Ahmed",
+        "incident report"
+      ],
+      "notes": "Should be stored with modality left ambiguous or abstained from as an exact permission target; compare g01, which has the same ambiguity in Greek."
+    },
+    {
+      "id": "g01",
+      "language": "el",
+      "sourceText": "Η Ελένη μπορεί να διαβάσει το αρχείο μισθοδοσίας.",
+      "sourceSha256": "17fed6c4303a2ef4c90698071eee8fe49505910bfdbc175e07a785091eafe300",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Agent/experiencer: Eleni (Ελένη). Act: read (διαβάσει). Theme: the payroll file/records (το αρχείο μισθοδοσίας).",
+        "Modality 'μπορεί να': ability, permission or epistemic possibility ('Eleni may/might read'); the sentence alone does not decide.",
+        "Translation: 'Eleni can/may read the payroll file.'"
+      ],
+      "ambiguities": [
+        "'μπορεί να' is three-way ambiguous (ability / permission / possibility), more so than English 'can'; the epistemic reading 'Eleni might read the payroll file' is natural Greek.",
+        "'αρχείο' = file or archive/records; 'αρχείο μισθοδοσίας' is the payroll file or payroll records.",
+        "Explicit permission would be 'επιτρέπεται στην Ελένη να ...' (as the V8 native-Greek review chose)."
+      ],
+      "explicitNamesAndLiterals": [
+        "Ελένη",
+        "αρχείο μισθοδοσίας"
+      ],
+      "notes": "Parallel to e19. Not a fail-closed exact permission target."
+    },
+    {
+      "id": "g02",
+      "language": "el",
+      "sourceText": "Ο διευθυντής επιτρέπει στον Νίκο να εγκρίνει δαπάνες έως 2.000 ευρώ.",
+      "sourceSha256": "c2f7350d69b07431dd6f1a9385e3ed389e17d87abd7bc4482b245ac5a54c69ea",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Permitter: the director/manager (ο διευθυντής, definite). Recipient: Nikos (στον Νίκο; nominative Νίκος).",
+        "Permission (επιτρέπει): Nikos is allowed to approve (να εγκρίνει) expenses (δαπάνες).",
+        "The permitted act is 'approve' and its object is 'expenses': two distinct parts of the permission.",
+        "Restriction: the expenses are up to 2,000 euros (έως 2.000 ευρώ). '2.000' uses the Greek thousands separator: two thousand, not two.",
+        "Present tense: a standing permission."
+      ],
+      "ambiguities": [
+        "'έως' normally inclusive (up to and including 2,000).",
+        "Limit per expense vs cumulative total: unstated; per-expense reading is more natural.",
+        "'διευθυντής' = director or manager.",
+        "Number format: '2.000' must not be parsed as 2.0."
+      ],
+      "explicitNamesAndLiterals": [
+        "διευθυντής",
+        "Νίκο",
+        "2.000 ευρώ"
+      ],
+      "notes": "Frame decision (see FRAME_DECISION.md): the source separates the permitted act (approve) from its object (expenses), so `allow` needs a separate action role and theme stays the object (ADR 0008). The monetary limit must be retained or the item abstained (ADR 0015 rule 3)."
+    },
+    {
+      "id": "g04",
+      "language": "el",
+      "sourceText": "Επανεκκίνησε τον διακομιστή αλληλογραφίας.",
+      "sourceSha256": "d115f6118271be01afb065c788a9d3e550f1007b052af47559b3662c7d7dd485",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Act: restart (επανεκκίνησε). Theme: the mail server (τον διακομιστή αλληλογραφίας, definite).",
+        "Preferred reading: second-person singular imperative 'Restart the mail server.' Addressee unstated."
+      ],
+      "ambiguities": [
+        "Morphological ambiguity: 'επανεκκίνησε' is identical to the aorist indicative 3rd singular, '(he/she/it) restarted the mail server', a past report with an unstated subject. Without punctuation, context or intonation both readings are grammatical; the packet context (instructions) favours the imperative.",
+        "Which mail server depends on context."
+      ],
+      "explicitNamesAndLiterals": [
+        "διακομιστή αλληλογραφίας"
+      ],
+      "notes": "The imperative/past-report ambiguity changes kind (directive vs event). It should be retained as ambiguous, not silently resolved."
+    },
+    {
+      "id": "g05",
+      "language": "el",
+      "sourceText": "Ειδοποίησε την ομάδα αν η θερμοκρασία ξεπεράσει τους 40 βαθμούς.",
+      "sourceSha256": "af66144d26bb7dfdf6e221bb9096c5c6a1e1b699f7e177d7164834b27b807e28",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Act: notify (ειδοποίησε). Recipient: the team (την ομάδα, definite).",
+        "Condition: if the temperature exceeds 40 degrees (αν η θερμοκρασία ξεπεράσει τους 40 βαθμούς).",
+        "Imperative directive to an unstated addressee."
+      ],
+      "ambiguities": [
+        "Temperature of what (room, device, server) is unstated.",
+        "Scale unstated: 'βαθμούς' = degrees; Celsius is the cultural default but is not stated and must not be invented.",
+        "'ξεπεράσει' = exceed, strictly above 40.",
+        "'ειδοποίησε' could formally be past 3sg, but with the future-conditional 'αν ... ξεπεράσει' (aorist subjunctive) the imperative reading is effectively forced."
+      ],
+      "explicitNamesAndLiterals": [
+        "ομάδα",
+        "40 βαθμούς"
+      ],
+      "notes": "Threshold 40, unit 'degrees' without scale, strict comparison: retain all."
+    },
+    {
+      "id": "g07",
+      "language": "el",
+      "sourceText": "Αρχειοθέτησε τα 12 παλιά έργα μέχρι τις 31 Δεκεμβρίου.",
+      "sourceSha256": "2b99a8becd4b896f72b53e5816105e6959dc053f91dc63e44746de5bfa7b3647",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Act: archive (αρχειοθέτησε). Theme: the 12 old projects (τα 12 παλιά έργα, definite: a known set of exactly 12).",
+        "Time: by / until 31 December (μέχρι τις 31 Δεκεμβρίου); year unstated.",
+        "Imperative directive to an unstated addressee."
+      ],
+      "ambiguities": [
+        "'μέχρι' = deadline ('by 31 December') vs duration ('until 31 December'); for an archiving task the deadline reading is preferred.",
+        "'αρχειοθέτησε' is formally also past 3sg ('(s)he archived'); imperative preferred.",
+        "'έργα' = projects or works.",
+        "Year unstated: must not be invented."
+      ],
+      "explicitNamesAndLiterals": [
+        "12",
+        "31 Δεκεμβρίου"
+      ],
+      "notes": "Count 12 and date 31 December (no year) are literals to retain."
+    },
+    {
+      "id": "g08",
+      "language": "el",
+      "sourceText": "Ο Πέτρος δεν πρέπει να εκτελεί σενάρια στην παραγωγή.",
+      "sourceSha256": "e663735532ab030863751e276382ae676ba176d893091b6b43b800ef96264daa",
+      "reviewStatus": "reviewed",
+      "meaningAtoms": [
+        "Agent: Petros (Ο Πέτρος). Prohibition: must not (δεν πρέπει να) run/execute (εκτελεί) scripts (σενάρια) in production (στην παραγωγή).",
+        "Imperfective subjunctive 'εκτελεί' gives a general/habitual rule (never run scripts), not a single event.",
+        "Authority unstated."
+      ],
+      "ambiguities": [
+        "'δεν πρέπει να' is normally a prohibition ('must not'), not lack of obligation ('need not', which would be 'δεν χρειάζεται να'); a weaker epistemic reading ('it is unlikely that') is possible only with context.",
+        "'σενάρια' = scripts here; elsewhere 'scenarios'/'screenplays'.",
+        "'στην παραγωγή' = in the production environment, not manufacturing.",
+        "Which scripts: all scripts (generic plural)."
+      ],
+      "explicitNamesAndLiterals": [
+        "Πέτρος",
+        "σενάρια",
+        "παραγωγή"
+      ],
+      "notes": "Stated prohibition with a named agent and no stated authority: encode as obligation + negated per ADR 0015, keeping the 'in production' scope."
+    }
+  ],
+  "delegation": {
+    "authorizedBy": "corpunum (repository owner)",
+    "authorizedAt": "2026-10-06T00:00:00Z",
+    "authorization": "\"work also on OpenLunum autonomously, without a human reviewer — you do the review.\" (owner direction 2026-10-06, relayed to this agent)",
+    "scope": "Source-meaning review of the 14 sources in experiments/meaning-human-review-packet-v1 only. Does not certify gold, Sem targets, protected data or native-speaker judgement, and does not satisfy the #685 human/native review criterion."
+  }
+}

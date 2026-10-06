@@ -1,0 +1,45 @@
+{
+  "format": "openlunum-human-source-review-validation/0.1",
+  "providerCalls": 0,
+  "total": 14,
+  "languages": {
+    "en": {
+      "total": 8,
+      "reviewed": 8,
+      "declined": 0
+    },
+    "el": {
+      "total": 6,
+      "reviewed": 6,
+      "declined": 0
+    }
+  },
+  "languageCoverageComplete": {
+    "en": true,
+    "el": true
+  },
+  "reviewKind": "delegated-model",
+  "reviewer": {
+    "id": "claude-opus-5-5",
+    "role": "Owner-delegated model reviewer (Claude Code agent). Not a human and not a native speaker of either language.",
+    "model": "claude-opus-5-5",
+    "selfAttested": false,
+    "languages": {
+      "en": "model",
+      "el": "model"
+    }
+  },
+  "reviewedAt": "2026-10-06T20:20:00Z",
+  "humanReviewDeclared": false,
+  "delegation": {
+    "authorizedBy": "corpunum (repository owner)",
+    "authorizedAt": "2026-10-06T00:00:00Z",
+    "scope": "Source-meaning review of the 14 sources in experiments/meaning-human-review-packet-v1 only. Does not certify gold, Sem targets, protected data or native-speaker judgement, and does not satisfy the #685 human/native review criterion."
+  },
+  "humanReviewCriterionSatisfied": false,
+  "goldPromoted": 0,
+  "historicalTargetsModified": 0,
+  "protected": false,
+  "completeness": "NOT mechanically certified; bindings, competence declarations and literal presence are checked, not meaning correctness",
+  "reviewSha256": "0a713b348037b5dde48468e6382ef8ec2208b6423831edf32bddfb7983530ec9"
+}
