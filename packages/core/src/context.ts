@@ -60,6 +60,9 @@ export function compileContext(messages: ContextMessage[], options: { mode?: Con
   return {
     version: 'lunum-context/0.1-draft', mode, tokenCounter: counterLabel, selectedMessages, naturalMessages, lunumMessages, mixedMessages, identityDedupMessages,
     naturalTokens, lunumTokens, mixedTokens, identityDedupTokens,
+    // The count behind ratio/estimatedSavings. shadow_mixed serves natural
+    // messages but measures the mixed shadow, so it reports mixedTokens.
+    selectedTokens,
     ratio: naturalTokens ? selectedTokens / naturalTokens : 1,
     estimatedSavings: naturalTokens ? 1 - selectedTokens / naturalTokens : 0
   };

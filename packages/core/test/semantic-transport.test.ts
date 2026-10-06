@@ -79,7 +79,7 @@ test('transport acceptance is not canonicality or promotion; valid identity byte
   assert.equal(result.candidateIdentityAvailable, true);
   assert.equal(result.semanticFingerprint, semanticFingerprint(base));
   assert.equal(result.trust.promoted, false);
-  assert.equal(result.provenance.contractVersion, 'lunum-agent/0.14');
+  assert.equal(result.provenance.contractVersion, 'lunum-agent/0.15');
   const x = structuredClone(base); x.clauses[0]!.predicate = 'invented';
   assert.equal(submit(x).transportValid, true);
   assert.equal(submit(x).protocolCanonical, false);

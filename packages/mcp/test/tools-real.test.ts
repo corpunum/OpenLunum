@@ -178,6 +178,33 @@ test('lunum_compile_context compiles messages', async () => {
   assert.strictEqual(data.messageCount, 2);
 });
 
+test('lunum_compile_context identity_dedup drops an EN/EL restatement with the same lfp:2.1 identity', async () => {
+  const provenance = { extractorType: 'agent' };
+  const sem = {
+    schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'event',
+    clauses: [{ predicate: 'deadline', roles: { subject: { type: 'project', id: 'orion' }, time: { type: 'date', value: '2027-01-14' } }, negated: false }],
+  };
+  // Month-name sources (#714) in both languages share the ISO date identity.
+  const sources = ['Project Orion is due on 14 January 2027.', 'Το έργο Orion λήγει στις 14 Ιανουαρίου 2027.', 'Dana reviews the plan.'];
+  const identities: string[] = [];
+  for (const sourceText of sources.slice(0, 2)) {
+    const data = JSON.parse(getText(await find('lunum_submit_candidate').handler({ sourceText, candidateSem: sem, provenance })));
+    identities.push(data.submission.semanticFingerprint);
+  }
+  assert.match(String(identities[0]), /^lfp:2\.1:/u);
+  assert.equal(identities[0], identities[1]);
+  const messages = sources.map((content, index) => ({ role: 'user', content, ...(identities[index] ? { record: { semanticFingerprint: identities[index] } } : {}) }));
+  const data = JSON.parse(getText(await find('lunum_compile_context').handler({ messages, mode: 'identity_dedup' })));
+  assert.equal(data.messageCount, 2);
+  assert.equal(data.selectedTokens, data.identityDedupTokens);
+  assert.ok(data.selectedTokens < data.naturalTokens);
+  assert.equal(data.ratio, data.selectedTokens / data.naturalTokens);
+  for (const mode of ['natural', 'mixed', 'lunum', 'shadow_mixed']) {
+    const other = JSON.parse(getText(await find('lunum_compile_context').handler({ messages, mode })));
+    assert.equal(other.ratio, other.selectedTokens / other.naturalTokens, mode);
+  }
+});
+
 test('lunum_fingerprint produces real lfp digest', async () => {
   const tool = find('lunum_fingerprint');
   const sem = {

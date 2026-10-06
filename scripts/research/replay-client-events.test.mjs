@@ -96,14 +96,26 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(next.freeze.schemaHash, previous.freeze.schemaHash, 'transport schema unchanged since v2');
   assert.notEqual(v8.freeze.protocolRegistryHash, v7.freeze.protocolRegistryHash, 'decisions/0011 extends the predicate aliases');
   const v15 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v15.json', 'utf8'));
-  const current = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v16.json', 'utf8'));
-  assert.equal(current.supersedes.path, 'public-instruction-package-v15.json');
-  assert.equal(current.freeze.coreContractVersion, 'lunum-agent/0.14');
+  const v16 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v16.json', 'utf8'));
+  assert.equal(v16.supersedes.path, 'public-instruction-package-v15.json');
+  assert.equal(v16.freeze.coreContractVersion, 'lunum-agent/0.14');
   for (const key of ['schemaHash', 'protocolRegistryHash', 'frameRegistryHash', 'taskProfileSha256']) {
-    assert.equal(current.freeze[key], v15.freeze[key], `${key} unchanged by date retention`);
+    assert.equal(v16.freeze[key], v15.freeze[key], `${key} unchanged by date retention`);
+  }
+  // v17 (decisions/0019, #713): month-name dates and the MCP compile_context
+  // token report; schema, vocabulary, frames and task profile are unchanged.
+  const current = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v17.json', 'utf8'));
+  assert.equal(current.supersedes.path, 'public-instruction-package-v16.json');
+  assert.equal(current.freeze.coreContractVersion, 'lunum-agent/0.15');
+  assert.equal(current.freeze.instructionVersion, 'agent-extraction-instructions/0.5');
+  for (const key of ['schemaHash', 'protocolRegistryHash', 'frameRegistryHash', 'taskProfileSha256']) {
+    assert.equal(current.freeze[key], v16.freeze[key], `${key} unchanged by month-name date retention`);
+  }
+  for (const key of ['literalRetentionArtifactSha256', 'toolImplementationSha256', 'coreContractHash', 'instructionHash', 'servedRuntimeManifestSha256']) {
+    assert.notEqual(current.freeze[key], v16.freeze[key], `${key} changed in v17`);
   }
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
-  assert.equal(hash('packages/mcp/dist/src/tools.js'), next.freeze.toolImplementationSha256);
+  assert.equal(hash('packages/mcp/dist/src/tools.js'), current.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-native.js'), current.freeze.coreArtifactSha256);
   assert.equal(hash('packages/core/dist/src/frame-registry.js'), next.freeze.frameValidatorArtifactSha256);

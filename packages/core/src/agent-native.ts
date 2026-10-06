@@ -28,8 +28,8 @@ import { validateSemanticTransport, SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './s
 export { SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './semantic-transport.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.14' as const;
-export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.4' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.15' as const;
+export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.5' as const;
 
 /** Summary only; schemaHash binds the full authoritative enforced wire schema. */
 const TRANSPORT_SCHEMA_DESCRIPTOR = Object.freeze({
@@ -56,7 +56,7 @@ const CANONICAL_RULES = Object.freeze([
   'deadline encodes time in roles.time, not clause.time.',
   'conditions and consequences are clause arrays, not role lookalikes.',
   'negated is compositional: lexical prohibit/allow use negated=false; negated=true means NOT that predicate; never infer not prohibited == allowed.',
-  'Retain full dates independently of quantities: valid ISO YYYY-MM-DD and unambiguous dotted day>12/month/four-digit-year spellings compare as exact ISO dates. Never guess ambiguous or invalid date spellings. Source evidence, metadata and date components cannot satisfy omitted semantic literals.',
+  'Retain full dates independently of quantities: valid ISO YYYY-MM-DD, unambiguous dotted day>12/month/four-digit-year, and English/Greek month-name dates with an explicit day and four-digit year (14 January 2027, January 14, 2027, 14 Ιανουαρίου 2027) compare as exact ISO dates. Never guess ambiguous, invalid or year-less date spellings; encode Sem date values as ISO. Source evidence, metadata and date components cannot satisfy omitted semantic literals.',
 ]);
 const EXTRACTION_SEM_TEMPLATE = `{"schema":"${SEM_SCHEMA}","world":"real","kind":"simple_fact","clauses":[{"predicate":"<registered-predicate>","roles":{},"negated":false}]}`;
 

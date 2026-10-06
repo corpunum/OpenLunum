@@ -30,18 +30,19 @@ overrun stops remaining launches and invalidates the run. Do not promise a
 hard dollar cap the provider does not enforce. All selected rows, including
 not-run rows, remain in the denominator/run ledger.
 
-Preflight defaults to v16 and its declared iteration6 profile; live requires an
+Preflight defaults to v17 and its declared iteration6 profile; live requires an
 explicit package. Resolved IDs use the `claude-*` form and must exactly match
 both reported usage IDs and the init event; this is not a model-weight hash or
 a claim that the provider exposes immutable weights. All frozen
 served artifacts, task/scorer/profile, AJV version and lockfile are checked
-before and after execution. V16 binds contract0.14's date/evidence retention
-gate and the same closed inventory of every
+before and after execution. V17 binds contract0.15's date/evidence retention
+gate with EN/EL month-name dates (ADR 0019), the corrected `lunum_compile_context`
+token report (#713), and the same closed inventory of every
 repository-owned JavaScript file under the served core/MCP trees. An added,
 missing, changed or symlinked artifact invalidates that binding. V14's selected
-files are legacy/partial; v15's complete older runtime binding is also historical
-and cannot certify the changed contract0.14 runtime. Neither passes the current
-live gate. This is not
+files are legacy/partial; v15's and v16's complete older runtime bindings are
+also historical and cannot certify the changed contract0.15 runtime. None
+passes the current live gate. This is not
 operating-system or dependency supply-chain attestation; installed AJV version
 and the dependency lockfile remain separate checks. The actual MCP contract receipt is checked before
 provider launch; each provider session must also return a matching contract.

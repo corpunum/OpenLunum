@@ -27,6 +27,9 @@ const cases = [
   { name: 'exact-date-retention-disabled', source: 'literal-retention.js', test: 'date-literal-retention.test.js', from: 'const missingDates = sourceDates.filter((date) => !candidateDates.has(date));', to: 'const missingDates = [];' },
   { name: 'evidence-field-filter-disabled', source: 'literal-retention.js', test: 'date-literal-retention.test.js', from: 'for (const key of SEMANTIC_LITERAL_FIELDS) {', to: 'for (const key of Object.keys(term)) {' },
   { name: 'ambiguous-date-guessing-enabled', source: 'literal-retention.js', test: 'date-literal-retention.test.js', from: 'return day > 12 ? validIsoDate(year, month, day) : null;', to: 'return validIsoDate(year, month, day);' },
+  { name: 'cross-field-month-date-composition-enabled', source: 'literal-retention.js', test: 'month-name-date-retention.test.js', from: 'const candidateDateParts = strings.map(separateDates);', to: "const candidateDateParts = [separateDates(strings.join(' '))];" },
+  { name: 'modal-may-month-guessing-enabled', source: 'literal-retention.js', test: 'month-name-date-retention.test.js', from: "if (key === 'may' && word !== 'May' && word !== 'MAY')", to: 'if (false)' },
+  { name: 'greek-month-first-order-enabled', source: 'literal-retention.js', test: 'month-name-date-retention.test.js', from: 'const month = monthNumber(word, period, true);', to: 'const month = monthNumber(word, period);' },
 ];
 function run(directory, test, research = false) {
   const result = spawnSync(process.execPath, ['--test', path.join(directory, research ? 'scripts/research' : 'test', test)], { cwd: root, encoding: 'utf8', timeout: 30_000, maxBuffer: 8 * 1024 * 1024 });
