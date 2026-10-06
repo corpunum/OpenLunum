@@ -297,6 +297,8 @@ test('positive compile fixture: TwoWay checks on actual public/generated types c
       '--moduleResolution', 'NodeNext',
       '--esModuleInterop',
       '--skipLibCheck',
+      // Plain diagnostics even when FORCE_COLOR is set in the environment.
+      '--pretty', 'false',
       fixturePath
     ],
     {
@@ -440,6 +442,8 @@ test('negative compile fixture: tsc produces exactly one TS2322', async () => {
       '--moduleResolution', 'NodeNext',
       '--esModuleInterop',
       '--skipLibCheck',
+      // Plain diagnostics even when FORCE_COLOR is set in the environment.
+      '--pretty', 'false',
       fixturePath
     ],
     {
