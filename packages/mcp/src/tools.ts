@@ -93,7 +93,13 @@ export const compileContextTool: LunumToolDefinition = {
         naturalTokens: result.naturalTokens,
         lunumTokens: result.lunumTokens,
         mixedTokens: result.mixedTokens,
-        selectedTokens: result.mode === 'lunum' ? result.lunumTokens : result.mode === 'natural' ? result.naturalTokens : result.mixedTokens,
+        identityDedupTokens: result.identityDedupTokens,
+        // Same selection as core compileContext; identity_dedup used to fall
+        // through to mixedTokens here while ratio/savings reported the dedup.
+        selectedTokens: result.mode === 'lunum' ? result.lunumTokens
+          : result.mode === 'natural' || result.mode === 'shadow_mixed' ? result.naturalTokens
+          : result.mode === 'identity_dedup' ? result.identityDedupTokens
+          : result.mixedTokens,
         ratio: result.ratio,
         estimatedSavings: `${(result.estimatedSavings * 100).toFixed(1)}%`,
         messageCount: result.selectedMessages.length,
