@@ -17,6 +17,9 @@ const profilePath = path.resolve(path.dirname(packagePath), pkg.freeze.taskProfi
 const contract = getExtractionContract();
 const plan = budgetPlan({ model: 'claude-test-exact-20261002', totalUsd: '0.20', itemUsd: '0.10', count: 2, concurrency: 1, timeoutMs: 1000 });
 const binding = () => artifactBinding(root, packagePath, profilePath, pkg);
+// Scratch space inside git metadata: `.git` is a file in a linked worktree, so
+// resolve the real git directory instead of assuming `<root>/.git/`.
+const gitScratch = spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: root, encoding: 'utf8' }).stdout.trim() || path.join(root, '.git');
 
 test('v16 binds every current artifact, dependency and served runtime manifest', () => {
   const result = binding();
@@ -66,8 +69,8 @@ test('v15 remains frozen historical binding and cannot certify current contract0
 });
 
 test('served runtime manifest detects unlisted dependency drift and rejects malformed trees', () => {
-  const temp = fs.mkdtempSync(path.join(root, '.git', 'served-runtime-test-'));
-  const outsideTemp = fs.mkdtempSync(path.join(root, '.git', 'served-runtime-outside-'));
+  const temp = fs.mkdtempSync(path.join(gitScratch, 'served-runtime-test-'));
+  const outsideTemp = fs.mkdtempSync(path.join(gitScratch, 'served-runtime-outside-'));
   const outsideFile = path.join(outsideTemp, 'outside.js');
   const runtimeRoots = ['packages/core/dist/src', 'packages/mcp/dist/src', 'packages/mcp/dist/bin'];
   const writeRuntime = () => {

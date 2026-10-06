@@ -7,7 +7,13 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const out = fs.mkdtempSync(path.join(root, '.git/readiness-gate-mutations-'));
+// Scratch copies must stay inside the checkout so module resolution reaches its
+// node_modules. In a linked worktree `.git` is a file, so fall back to the
+// ignored node_modules/.cache directory.
+const dotGit = path.join(root, '.git');
+const scratchBase = fs.statSync(dotGit).isDirectory() ? dotGit : path.join(root, 'node_modules', '.cache');
+fs.mkdirSync(scratchBase, { recursive: true });
+const out = fs.mkdtempSync(path.join(scratchBase, 'readiness-gate-mutations-'));
 const cases = [
   { name: 'record-literal-identity-bypass', source: 'derive.js', test: 'record-source-containment.test.js', from: 'literalRetention?.retained !== false', to: 'true' },
   { name: 'recursive-risk-disabled', source: 'fallback-policy.js', test: 'canonical-risk-containment.test.js', from: 'export function isHighRisk(sem) {', to: "export function isHighRisk(sem) { return {highRisk:false,reasons:[]};" },
