@@ -2,6 +2,8 @@
 
 **Mode: trunk-based on `main`, owner-authorized 2026-09-26.** The previous issue-driven multi-agent model (dispatcher, worker assignments, task branches, draft PRs, independent evaluators, merge policy) is suspended and archived in [research/archive/operating-model-multi-agent-2026-09](../research/archive/operating-model-multi-agent-2026-09/README.md). It produced careful evidence but more process than progress for a project with one owner and one active agent.
 
+The rig services of that model (`openlunum-worker`, `-worker-ally`, `-docs`, `-dashboard`, `-orchestrator` and `-watchdog` with their timers, `-rog-tunnel`) were stopped and disabled on 2026-10-06; their unit files and scripts remain for reference. Orchestrator runtime files (`velocity.csv`, `.thermal-elevated-since`, dispatch temp files) are no longer tracked.
+
 ## How work lands
 
 1. Work on `main`. Do not create task, worker, campaign or status branches.

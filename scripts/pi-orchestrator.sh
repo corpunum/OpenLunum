@@ -127,8 +127,12 @@ fi
 if [[ -f "$MERGE_LOG" ]]; then
   cutoff=$(date -d '3 hours ago' -Iseconds 2>/dev/null || date -v-3H -Iseconds 2>/dev/null || echo "")
   if [[ -n "$cutoff" ]]; then
-    merges_3h=$(awk -v c="$cutoff" '$0 ~ /MERGED/ && $0 > c' "$MERGE_LOG" | wc -l)
-    merges_3h=$((merges_3h / 2))  # log has duplicate lines
+    # Compare only the bracketed ISO timestamp (not the whole line) against
+    # the cutoff, and count distinct PR numbers because the log repeats lines.
+    merges_3h=$(awk -v c="$cutoff" '/ MERGED/ && match($0, /^\[[^]]+\]/) {
+        ts = substr($0, 2, RLENGTH - 2)
+        if (ts > c && match($0, /PR #[0-9]+/)) print substr($0, RSTART, RLENGTH)
+      }' "$MERGE_LOG" | sort -u | wc -l)
     log "VELOCITY: $merges_3h merges in last 3h"
     echo "$(date -Iseconds),$merges_3h" >> "$ORCH_DIR/velocity.csv"
   fi

@@ -20,6 +20,10 @@ reports/orchestrator/status.log
 reports/orchestrator/last-llm-advice.txt
 reports/orchestrator/stale-prs.log
 reports/orchestrator/velocity.csv
+reports/orchestrator/.thermal-elevated-since
+reports/orchestrator/.pi-dispatch-*
+reports/orchestrator/THERMAL_HALT
+reports/orchestrator/STUCK
 reports/orchestrator/NEEDS_CLOUD
 reports/experiments/smoke-test/environment.json
 reports/nightly/
