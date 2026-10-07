@@ -311,3 +311,16 @@ test('prose abstention cannot erase canonical submission; explicit withdrawal an
   assert.equal(contradictoryAbstention('abstain', [{ ...accepted, result: { success: true, submission: { candidateIdentityAvailable: false } } }]), false);
   assert.equal(contradictoryAbstention('abstain', [accepted, { input: { candidateSem: null }, result: { success: true } }]), false);
 });
+
+test('final status: last JSON line wins over leading prose; conflicting declarations are refused', async () => {
+  const { parseFinalStatus } = await import('./source-only-run-gates.mjs');
+  assert.deepEqual(parseFinalStatus('{"status":"parse"}'), { status: 'parse' });
+  assert.deepEqual(parseFinalStatus('Submission succeeded with a valid candidate.\n\n{"status":"parse"}'), { status: 'parse' });
+  assert.deepEqual(parseFinalStatus('No predicate fits.\n{"status":"abstain","reason":"unsupported"}'), { status: 'abstain', reason: 'unsupported' });
+  assert.equal(parseFinalStatus('{"status":"parse"}\n{"status":"abstain","reason":"ambiguous"}'), null);
+  assert.equal(parseFinalStatus('{"status":"parse"} and done'), null);
+  assert.equal(parseFinalStatus('{"status":"parse"}\nthat is all'), null);
+  assert.equal(parseFinalStatus('{"status":"maybe"}'), null);
+  assert.equal(parseFinalStatus(''), null);
+  assert.equal(parseFinalStatus(undefined), null);
+});

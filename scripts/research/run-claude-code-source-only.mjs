@@ -19,7 +19,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
-import { artifactBinding as bindArtifacts, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured } from './source-only-run-gates.mjs';
+import { artifactBinding as bindArtifacts, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, parseFinalStatus } from './source-only-run-gates.mjs';
 import { replaySession, parseJsonLines } from './replay-client-events.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -143,10 +143,9 @@ function toolUses(events) {
   return [...calls.values()];
 }
 
-function finalStatus(text) {
-  const lines = String(text ?? '').trim().split('\n').map((line) => line.trim()).filter(Boolean);
-  try { const value = JSON.parse(rederive ? lines.at(-1) : String(text ?? '').trim()); return ['parse', 'abstain'].includes(value?.status) ? value : null; } catch { return null; }
-}
+// Live and rederive read the same way: the last line is the status and no
+// earlier line may declare a second one (see parseFinalStatus).
+const finalStatus = parseFinalStatus;
 
 async function runOne(request) {
     const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'lunum-extract-'));
