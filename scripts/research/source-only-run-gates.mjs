@@ -251,6 +251,24 @@ export function evidenceFailures(row, pkg, model, plan) {
   return [...new Set(failures)];
 }
 
+/**
+ * The declared final status of a source-only session. The prompt asks the
+ * model to end with one JSON status line; models often put a sentence of prose
+ * before it. Accept the LAST non-empty line as the status, but refuse the
+ * result when any earlier line also parses as a status object (two
+ * declarations are a conflict, not a choice). Returns null when unparseable.
+ */
+export function parseFinalStatus(text) {
+  const lines = String(text ?? '').trim().split('\n').map((line) => line.trim()).filter(Boolean);
+  const asStatus = (line) => {
+    try { const value = JSON.parse(line); return value && typeof value === 'object' && !Array.isArray(value) && ['parse', 'abstain'].includes(value.status) ? value : null; } catch { return null; }
+  };
+  const last = lines.length ? asStatus(lines.at(-1)) : null;
+  if (!last) return null;
+  if (lines.slice(0, -1).some((line) => asStatus(line))) return null;
+  return last;
+}
+
 export function contradictoryAbstention(status, submissions) {
   if (status !== 'abstain') return false;
   const canonical = submissions.filter(call => !call.isError && call.result?.success === true && call.input?.candidateSem != null && call.result?.submission?.candidateIdentityAvailable === true);
