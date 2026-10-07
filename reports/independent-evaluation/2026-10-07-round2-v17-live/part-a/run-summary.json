@@ -1,0 +1,180 @@
+{
+  "format": "openlunum-client-extraction-run/0.2",
+  "client": "claude-code",
+  "clientVersion": "2.1.293 (Claude Code)",
+  "requestedModel": "claude-sonnet-5",
+  "reportedModels": [
+    "claude-sonnet-5"
+  ],
+  "codeCommit": "a5c03c1c02dc2d25abd53931db38b47026f269b3",
+  "workingTreeCleanAtStart": true,
+  "mode": "live",
+  "startedAt": "2026-10-07T18:46:14.648Z",
+  "endedAt": "2026-10-07T18:48:42.392Z",
+  "requestedBudget": {
+    "model": "claude-sonnet-5",
+    "totalUsd": 18,
+    "itemUsd": 0.6,
+    "timeoutMs": 300000,
+    "count": 30,
+    "concurrency": 1,
+    "requestedReservationUsd": 18,
+    "enforcement": "Serial launches; CLI requested per-item ceilings reserved in advance. Billing is provider-controlled, not a hard financial guarantee; unknown or over-ceiling reported cost stops remaining launches and invalidates evidence."
+  },
+  "codeCommitAtEnd": "a5c03c1c02dc2d25abd53931db38b47026f269b3",
+  "trackedWorkingTreeCleanAtEnd": true,
+  "decodingSettings": {
+    "temperature": "not exposed by this CLI invocation",
+    "seed": "not exposed by this CLI invocation",
+    "outputTokens": "provider/CLI controlled; not configured by runner"
+  },
+  "runnerSha256": "4a214c0ad4770e1cf28118744af3f7135273b1bf2f7483483d0b0ee4c6b7be25",
+  "gateSha256": "263cc47e0c0c7d3b2611cfc25b97a3fc4258b521f751a76f8661ca57ce599261",
+  "rawEventPolicy": "Provider JSON events with explicit thinking/reasoning blocks removed, never parsed as semantics. Non-JSON lines retained as hashes/byte counts, not prose. Not a byte-exact private-reasoning transcript.",
+  "package": "experiments/natural-development-v8/extraction/public-instruction-package-v17.json",
+  "packageSha256": "7f1cfb68b3064bc3fd079397157673585ad9656d23ef6dda728793c8e200040e",
+  "requestsSha256": "84bc3530860ece3fff37f39d09ea72b3066867b3e88bdb6ffb4844c81bf26498",
+  "profileSha256": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+  "isolation": "fresh claude -p process per item in an empty temp cwd; built-in tools disabled (--tools \"\"); --strict-mcp-config with only contract/build/submit/validate allowed; prompt-level source-only, not a technical sandbox (the MCP server process runs from the repository checkout)",
+  "rows": 30,
+  "completed": 7,
+  "notRun": 23,
+  "parse": 5,
+  "abstain": 2,
+  "failed": 24,
+  "failures": [
+    {
+      "handle": "eval2-2f0f80aab83b234b",
+      "failure": null,
+      "evidenceFailures": [
+        "CONTRACT_UNBOUND"
+      ]
+    }
+  ],
+  "toolErrors": 0,
+  "totalCostUsd": 0.9526,
+  "candidateLedgerSha256": "1e5ae5817ef991ab60d95aa99c2a7ddbb92eb6abffed78da8925baa0d705f359",
+  "runLedgerSha256": "a4e94f3ab2921e747034d09deb4220951212dd302a4bd7b824950452d7cf6bcf",
+  "servedArtifactBinding": {
+    "atStart": true,
+    "atEnd": true,
+    "checks": [
+      {
+        "key": "coreArtifactSha256",
+        "file": "packages/core/dist/src/agent-native.js",
+        "expected": "2aa45b3e7a79eebbab029a431361e1eb00faa0a49f80889c321cd20faadd069d",
+        "actual": "2aa45b3e7a79eebbab029a431361e1eb00faa0a49f80889c321cd20faadd069d",
+        "match": true
+      },
+      {
+        "key": "frameValidatorArtifactSha256",
+        "file": "packages/core/dist/src/frame-registry.js",
+        "expected": "4cdcb45237d3158421f2915e6181c2b14f1a8989061790a87ffcc12066bfcf85",
+        "actual": "4cdcb45237d3158421f2915e6181c2b14f1a8989061790a87ffcc12066bfcf85",
+        "match": true
+      },
+      {
+        "key": "toolImplementationSha256",
+        "file": "packages/mcp/dist/src/tools.js",
+        "expected": "d09a4fa900ac449637d5e0a143f155d2ede022bd0f3005c8c74d5725d715985a",
+        "actual": "d09a4fa900ac449637d5e0a143f155d2ede022bd0f3005c8c74d5725d715985a",
+        "match": true
+      },
+      {
+        "key": "mcpArtifactSha256",
+        "file": "packages/mcp/dist/bin/lunum-mcp.js",
+        "expected": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+        "actual": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+        "match": true
+      },
+      {
+        "key": "literalRetentionArtifactSha256",
+        "file": "packages/core/dist/src/literal-retention.js",
+        "expected": "d11078895331315bdcf22455ef0d9c3d419d6a649694ada2fdd8803071fedac4",
+        "actual": "d11078895331315bdcf22455ef0d9c3d419d6a649694ada2fdd8803071fedac4",
+        "match": true
+      },
+      {
+        "key": "builderArtifactSha256",
+        "file": "packages/core/dist/src/agent-builder.js",
+        "expected": "58bf96ec983db307cc2f3634da2645940633629dbfdfe5422c1461291a32c395",
+        "actual": "58bf96ec983db307cc2f3634da2645940633629dbfdfe5422c1461291a32c395",
+        "match": true
+      },
+      {
+        "key": "transportValidatorArtifactSha256",
+        "file": "packages/core/dist/src/semantic-transport.js",
+        "expected": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476",
+        "actual": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476",
+        "match": true
+      },
+      {
+        "key": "transportSchemaArtifactSha256",
+        "file": "packages/core/dist/src/semantic-transport-schema.js",
+        "expected": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+        "actual": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+        "match": true
+      },
+      {
+        "key": "launcherSha256",
+        "file": "scripts/lunum-mcp-launch.mjs",
+        "expected": "9b35bc921abe05369432aa57fa454045b1a8a5c0e2df29d33c5aafc1a424a69d",
+        "actual": "9b35bc921abe05369432aa57fa454045b1a8a5c0e2df29d33c5aafc1a424a69d",
+        "match": true
+      },
+      {
+        "key": "taskContractSha256",
+        "file": "experiments/natural-development-v8/task-contract.json",
+        "expected": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+        "actual": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+        "match": true
+      },
+      {
+        "key": "scorerSha256",
+        "file": "scripts/research/score-natural-source-only-extraction.mjs",
+        "expected": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec",
+        "actual": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec",
+        "match": true
+      },
+      {
+        "key": "taskProfileSha256",
+        "file": "experiments/natural-development-v8/extraction/public-task-profile-iteration6.json",
+        "expected": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+        "actual": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+        "match": true
+      },
+      {
+        "key": "servedRuntimeManifestSha256",
+        "file": "experiments/natural-development-v8/extraction/public-served-runtime-v17.json",
+        "expected": "d3b5ac07d87a6a26c343b5ef94d4ef67a8115a824958a0436085dfaf2eae7b45",
+        "actual": "d3b5ac07d87a6a26c343b5ef94d4ef67a8115a824958a0436085dfaf2eae7b45",
+        "match": true,
+        "runtime": {
+          "match": true,
+          "errors": [],
+          "artifactCount": 93
+        }
+      },
+      {
+        "key": "transportValidatorDependency",
+        "file": "pnpm-lock.yaml",
+        "expected": {
+          "name": "ajv",
+          "version": "8.20.0",
+          "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
+        },
+        "actual": {
+          "name": "ajv",
+          "version": "8.20.0",
+          "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
+        },
+        "match": true
+      }
+    ]
+  },
+  "observedContractVersions": [
+    "lunum-agent/0.15"
+  ],
+  "itemsWithoutObservedContract": 1,
+  "evidenceValid": false
+}
