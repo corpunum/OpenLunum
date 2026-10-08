@@ -1,0 +1,50 @@
+{
+  "format": "openlunum-recorded-meaning-input/0.1",
+  "scoringContract": {
+    "schemaSha256": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+    "agent": "lunum-agent/0.16",
+    "protocol": "lunum-protocol/0.4",
+    "frames": "lunum-frame/0.5",
+    "identity": "2.1"
+  },
+  "review": {
+    "reviewer": "acting-agent; diagnostic source review with two Luna read-only audits",
+    "independent": false,
+    "nativeSpeaker": false,
+    "postHoc": true
+  },
+  "inputs": {
+    "package": {
+      "path": "experiments/natural-development-v8/extraction/public-instruction-package-v11.json",
+      "sha256": "89d5555b46258b2d5af073dd8da7c7f217d5db5e68e879f5c12f82f12e08b106"
+    },
+    "probes": {
+      "path": "reports/independent-evaluation/2026-09-26-round2/probes-authored.json",
+      "sha256": "942600af5b86dd68518ede07302253f4204a29f26fa9cab12f030cbbb6ce9614"
+    },
+    "requests": {
+      "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/requests.jsonl",
+      "sha256": "673b19e2617e8686f07f89e004787a398efb605c3c015ddb890996ed3dfd7f7a"
+    },
+    "candidates": {
+      "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/candidate-ledger.jsonl",
+      "sha256": "282e5ba77169d6daaf83e1db2900deb6b152fea9a6d0a76001e2d08102c748e9"
+    },
+    "runs": {
+      "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/run-ledger.jsonl",
+      "sha256": "7bab03fdcb1ad2bda3b0f7a9e5eb60ad8af7965c0ffab267791c610d7288f442"
+    },
+    "summary": {
+      "path": "reports/independent-evaluation/2026-09-26-round2/live-oos/run-summary.json",
+      "sha256": "e6772140d9d1b21049a30a2c34162157fc2844c7e2b305814848a6c768d33802"
+    },
+    "targets": {
+      "path": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+      "sha256": "c2cde55bc2bf833c0c30917649b290719327c6fa0f11b12d90303e6d9e717ff9"
+    }
+  },
+  "supersedes": {
+    "manifest": "experiments/meaning-scoring-recorded-v4/input-manifest.json",
+    "reason": "Runtime binding migration to agent contract 0.16 (decisions/0020 number-word and relative-time retention, threshold rule); all original inputs, hashes, review fields, and historical streams are unchanged. This additive offline replay creates no new review or provider evidence."
+  }
+}

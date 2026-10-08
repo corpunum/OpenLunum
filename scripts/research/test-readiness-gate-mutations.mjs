@@ -30,6 +30,10 @@ const cases = [
   { name: 'cross-field-month-date-composition-enabled', source: 'literal-retention.js', test: 'month-name-date-retention.test.js', from: 'const candidateDateParts = strings.map(separateDates);', to: "const candidateDateParts = [separateDates(strings.join(' '))];" },
   { name: 'modal-may-month-guessing-enabled', source: 'literal-retention.js', test: 'month-name-date-retention.test.js', from: "if (key === 'may' && word !== 'May' && word !== 'MAY')", to: 'if (false)' },
   { name: 'greek-month-first-order-enabled', source: 'literal-retention.js', test: 'month-name-date-retention.test.js', from: 'const month = monthNumber(word, period, true);', to: 'const month = monthNumber(word, period);' },
+  { name: 'number-word-retention-disabled', source: 'literal-retention.js', test: 'relative-time-number-word-retention.test.js', from: 'return [...digits, ...numberWordPositions(withoutIds)]', to: 'return [...digits]' },
+  { name: 'relative-time-retention-disabled', source: 'literal-retention.js', test: 'relative-time-number-word-retention.test.js', from: 'const missingRelativeTimes = sourceRelativeTimes.filter((token) => !candidateRelativeTimes.has(token));', to: 'const missingRelativeTimes = [];' },
+  { name: 'discourse-record-literal-gate-disabled', source: 'discourse.js', test: 'discourse.test.js', from: 'const recordText = rendered && retainsLiterals(literals, rendered) && rendered.length < unit.text.length ? rendered : null;', to: 'const recordText = rendered;' },
+  { name: 'discourse-duplicate-dedup-disabled', source: 'discourse.js', test: 'discourse.test.js', from: 'if (seenKeys.has(a.key) || localKeys.has(a.key)) {', to: 'if (false) {' },
 ];
 function run(directory, test, research = false) {
   const result = spawnSync(process.execPath, ['--test', path.join(directory, research ? 'scripts/research' : 'test', test)], { cwd: root, encoding: 'utf8', timeout: 30_000, maxBuffer: 8 * 1024 * 1024 });

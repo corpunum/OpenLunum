@@ -30,18 +30,18 @@ overrun stops remaining launches and invalidates the run. Do not promise a
 hard dollar cap the provider does not enforce. All selected rows, including
 not-run rows, remain in the denominator/run ledger.
 
-Preflight defaults to v17 and its declared iteration6 profile; live requires an
+Preflight defaults to v18 and its declared iteration6 profile; live requires an
 explicit package. Resolved IDs use the `claude-*` form and must exactly match
 both reported usage IDs and the init event; this is not a model-weight hash or
 a claim that the provider exposes immutable weights. All frozen
 served artifacts, task/scorer/profile, AJV version and lockfile are checked
-before and after execution. V17 binds contract0.15's date/evidence retention
-gate with EN/EL month-name dates (ADR 0019), the corrected `lunum_compile_context`
-token report (#713), and the same closed inventory of every
+before and after execution. V18 binds contract0.16's retention gate with EN/EL
+number words and relative times (ADR 0020), the served discourse-record module
+and its two MCP tools (ADR 0021), and the same closed inventory of every
 repository-owned JavaScript file under the served core/MCP trees. An added,
 missing, changed or symlinked artifact invalidates that binding. V14's selected
-files are legacy/partial; v15's and v16's complete older runtime bindings are
-also historical and cannot certify the changed contract0.15 runtime. None
+files are legacy/partial; v15's, v16's and v17's complete older runtime bindings
+are also historical and cannot certify the changed contract0.16 runtime. None
 passes the current live gate. This is not
 operating-system or dependency supply-chain attestation; installed AJV version
 and the dependency lockfile remain separate checks. The actual MCP contract receipt is checked before

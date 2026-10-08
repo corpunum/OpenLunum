@@ -12,8 +12,9 @@
 | Strict identity | `lfp:2.1` |
 | Protocol | `lunum-protocol/0.4`: 46 predicates, with verb aliases |
 | Frames | `lunum-frame/0.5`: 37 framed predicates |
-| Agent contract | `lunum-agent/0.15` |
-| Frozen instruction package | v17 (EN/EL month-name date retention; MCP compile_context token report; complete repository-owned served-JS inventory) |
+| Agent contract | `lunum-agent/0.16` |
+| Frozen instruction package | v18 (EN/EL number words and relative times in source retention; threshold rule; served discourse-record module and MCP tools; complete repository-owned served-JS inventory) |
+| Discourse records | `lunum-discourse/0.1` surface records over source-span units (ADR 0021); no identity |
 
 Other schema and fingerprint contracts, and migration fixtures, coexist. A file named `1.0`, or an internally frozen contract, is not external ratification.
 
@@ -49,7 +50,12 @@ Historical scored MCP runs used Claude Code (`claude-sonnet-5`), one fresh proce
 
 Evaluation has been done by the author and by two other sessions of the same vendor and model family. There has been **no human, native-speaker or cross-vendor review**.
 
-**Current contract 0.15 is not live-qualified.** Deterministic checks correct a
+**Current contract 0.16 is not live-qualified.** Since 0.16, English and Greek
+cardinal number words are numbers and relative times (`by Friday`, `αύριο`,
+`next week`) are literals a candidate must carry; a strict threshold on a role
+is a `below`/`above` condition, inclusive bounds abstain
+([ADR 0020](decisions/0020-number-words-and-relative-times.md)). A replay of the
+221 recorded candidates in the repository changes no identity. Deterministic checks correct a
 false rejection of a dotted German date and block date swaps, quantity/date
 confusion and evidence-only literal laundering. Since 0.15, full English and
 Greek month-name dates (`14 January 2027`, `14 Ιανουαρίου 2027`) are also
@@ -69,7 +75,7 @@ accuracy or trust. Historical 0.13 pilot/reviews remain historical.
 
 ## Next, in order
 
-1. **Complete meaning-level evaluation.** Wire enforcement, builder agreement and date/evidence retention are deterministic-tested (current contract 0.15), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. A [source-only diagnostic review](experiments/meaning-source-review-v3/README.md) rebinds unchanged prior dispositions: 10 unsupported, 2 ambiguous and 2 source-relative representation options pending native review; it does not rewrite expectations or certify gold. The [human source-only packet](experiments/meaning-human-review-packet-v1/README.md) contains those sources with all reviews pending and no previous answers. The [runner](scripts/research/SOURCE_ONLY_RUNNER.md) binds the complete repository-owned served-JS inventory in v17; v14's selected files were partial, and v15 and v16 bind older runtimes. These preflight and requested budget/timeout gates are tested without provider calls. Obtain independent/native source adjudication, freeze fresh protocol-conforming data, then measure the latest contract live under an agreed model and budget.
+1. **Complete meaning-level evaluation.** Wire enforcement, builder agreement and date/evidence retention are deterministic-tested (current contract 0.16), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. A [source-only diagnostic review](experiments/meaning-source-review-v4/README.md) rebinds unchanged prior dispositions: 10 unsupported, 2 ambiguous and 2 source-relative representation options pending native review; it does not rewrite expectations or certify gold. The [human source-only packet](experiments/meaning-human-review-packet-v1/README.md) contains those sources with all reviews pending and no previous answers. The [runner](scripts/research/SOURCE_ONLY_RUNNER.md) binds the complete repository-owned served-JS inventory in v18; v14's selected files were partial, and v15–v17 bind older runtimes. These preflight and requested budget/timeout gates are tested without provider calls. Obtain independent/native source adjudication, freeze fresh protocol-conforming data, then measure the latest contract live under an agreed model and budget.
 2. **Out-of-sample evaluation after each change**, preferably human or cross-vendor.
 3. **Real memory data (owner)** before any token-saving claim.
 4. **Review of unreviewed semantic judgements:**

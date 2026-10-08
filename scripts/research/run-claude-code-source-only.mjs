@@ -39,9 +39,9 @@ if (args.includes('--allow-unbound')) throw new Error('unbound_live_evidence_not
 if (!rederive && !preflightOnly && !flag('requests', null)) throw new Error('explicit_source_requests_required');
 if (!rederive && !preflightOnly && !flag('package', null)) throw new Error('explicit_public_package_required');
 if (rederive && (!flag('from', null) || path.resolve(flag('from')) === outDir)) throw new Error('rederive_requires_distinct_from_directory');
-// Historical replays keep historical inputs; live/preflight selects the frozen v17 profile.
+// Historical replays keep historical inputs; live/preflight selects the frozen v18 profile.
 const REQUESTS = path.resolve(root, flag('requests', path.join(V8, 'extraction/source-only-request.jsonl')));
-const PACKAGE = path.resolve(root, flag('package', path.join(V8, `extraction/public-instruction-package-${rederive ? 'v3' : 'v17'}.json`)));
+const PACKAGE = path.resolve(root, flag('package', path.join(V8, `extraction/public-instruction-package-${rederive ? 'v3' : 'v18'}.json`)));
 
 const sha256 = (value) => crypto.createHash('sha256').update(value).digest('hex');
 const requests = fs.readFileSync(REQUESTS, 'utf8').split('\n').filter(Boolean).map((line) => JSON.parse(line));
