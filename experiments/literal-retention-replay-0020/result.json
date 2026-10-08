@@ -1,0 +1,13 @@
+{
+  "format": "openlunum-literal-retention-replay/0020",
+  "ledgers": 88,
+  "uniqueCandidates": 221,
+  "identitiesBefore": 174,
+  "identitiesAfter": 174,
+  "withdrawn": 0,
+  "gained": 0,
+  "fingerprintChanged": 0,
+  "sourcesWithRelativeTimes": 0,
+  "changes": [],
+  "newModelCalls": 0
+}

@@ -4,9 +4,13 @@
  * A candidate that silently drops a number or identifier stated in its source
  * ("approve invoices under 5,000 euros" -> theme: invoices) must not receive
  * an exact identity: the identity would claim a broader meaning than the
- * source. This check is language-neutral: it compares digit-bearing tokens,
- * not words. Number words ("seven") are not checked. Full dates, including
- * EN/EL month-name dates (decisions/0019), are compared as exact ISO dates.
+ * source. Digit-bearing tokens are compared language-neutrally. Full dates,
+ * including EN/EL month-name dates (decisions/0019), are compared as exact ISO
+ * dates. Since decisions/0020, English and Greek cardinal number words
+ * ("seven times", "επτά φορές") are numbers too, and relative time expressions
+ * ("by Friday", "tomorrow", "next week", "την Παρασκευή", "αύριο") are
+ * deictic literals a candidate must carry: their referent depends on when the
+ * text was said, so a candidate that drops or resolves them is refused.
  */
 import type { LunumSem, LunumTerm, LunumClause } from './types.js';
 
@@ -16,9 +20,12 @@ export interface LiteralRetentionResult {
   sourceIdentifiers: string[];
   /** Unambiguous full calendar dates, compared separately from quantity numbers. */
   sourceDates: string[];
+  /** Canonical relative time expressions (decisions/0020), e.g. `weekday:friday`, `day:tomorrow`, `period:next-week`. */
+  sourceRelativeTimes: string[];
   missingNumbers: number[];
   missingIdentifiers: string[];
   missingDates: string[];
+  missingRelativeTimes: string[];
 }
 
 // Identifier-like tokens: letters, hyphen, digits (B-11, AC-3, ENV-5, U-31).
@@ -140,7 +147,200 @@ function to24Hour(text: string): string {
 
 export function numbersInText(text: string): number[] {
   const withoutIds = to24Hour(text).replace(IDENTIFIER, ' ');
-  return [...withoutIds.matchAll(NUMBER)].map((match) => toNumber(match[0])).filter((value) => Number.isFinite(value));
+  const digits = [...withoutIds.matchAll(NUMBER)]
+    .map((match) => ({ index: match.index, value: toNumber(match[0]) }))
+    .filter((row) => Number.isFinite(row.value));
+  // Source order across digits and number words.
+  return [...digits, ...numberWordPositions(withoutIds)].sort((a, b) => a.index - b.index).map((row) => row.value);
+}
+
+// ---- Cardinal number words (decisions/0020) --------------------------------
+// Keys are folded like month names: lower-case, accent-free, final sigma -> σ.
+// "one", "once" and the Greek ένα/μία/ένας are deliberately absent: they are
+// also articles and pronouns ("the one that failed", "ένα αρχείο"), and a
+// presence floor must not refuse ordinary prose. Ordinals are absent too.
+const UNIT_WORDS: ReadonlyArray<readonly [number, readonly string[]]> = [
+  [0, ['zero']],
+  [2, ['two', 'twice', 'δυο']],
+  [3, ['three', 'thrice', 'τρια', 'τρεισ']],
+  [4, ['four', 'τεσσερα', 'τεσσερισ']],
+  [5, ['five', 'πεντε']],
+  [6, ['six', 'εξι']],
+  [7, ['seven', 'επτα', 'εφτα']],
+  [8, ['eight', 'οκτω', 'οχτω']],
+  [9, ['nine', 'εννεα', 'εννια']],
+  [10, ['ten', 'δεκα']],
+  [11, ['eleven', 'εντεκα', 'ενδεκα']],
+  [12, ['twelve', 'dozen', 'δωδεκα']],
+  [13, ['thirteen', 'δεκατρια', 'δεκατρεισ']],
+  [14, ['fourteen', 'δεκατεσσερα', 'δεκατεσσερισ']],
+  [15, ['fifteen', 'δεκαπεντε']],
+  [16, ['sixteen', 'δεκαεξι']],
+  [17, ['seventeen', 'δεκαεπτα', 'δεκαεφτα']],
+  [18, ['eighteen', 'δεκαοκτω', 'δεκαοχτω']],
+  [19, ['nineteen', 'δεκαεννεα', 'δεκαεννια']],
+  [20, ['twenty', 'εικοσι']],
+  [30, ['thirty', 'τριαντα']],
+  [40, ['forty', 'σαραντα']],
+  [50, ['fifty', 'πενηντα']],
+  [60, ['sixty', 'εξηντα']],
+  [70, ['seventy', 'εβδομηντα']],
+  [80, ['eighty', 'ογδοντα']],
+  [90, ['ninety', 'ενενηντα']],
+  [100, ['εκατο']],
+  [200, ['διακοσια', 'διακοσιοι', 'διακοσιεσ']],
+  [300, ['τριακοσια', 'τριακοσιοι', 'τριακοσιεσ']],
+  [400, ['τετρακοσια', 'τετρακοσιοι', 'τετρακοσιεσ']],
+  [500, ['πεντακοσια', 'πεντακοσιοι', 'πεντακοσιεσ']],
+  [600, ['εξακοσια', 'εξακοσιοι', 'εξακοσιεσ']],
+  [700, ['επτακοσια', 'επτακοσιοι', 'επτακοσιεσ']],
+  [700, ['εφτακοσια', 'εφτακοσιοι', 'εφτακοσιεσ']],
+  [800, ['οκτακοσια', 'οκτακοσιοι', 'οκτακοσιεσ']],
+  [800, ['οχτακοσια', 'οχτακοσιοι', 'οχτακοσιεσ']],
+  [900, ['εννιακοσια', 'εννιακοσιοι', 'εννιακοσιεσ']],
+  [900, ['εννεακοσια', 'εννεακοσιοι', 'εννεακοσιεσ']],
+];
+const MULTIPLIER_WORDS: ReadonlyArray<readonly [number, readonly string[]]> = [
+  [100, ['hundred']],
+  [1000, ['thousand', 'χιλια', 'χιλιαδεσ']],
+  [1_000_000, ['million', 'millions', 'εκατομμυριο', 'εκατομμυρια']],
+];
+const NUMBER_WORD = new Map<string, number>();
+for (const [value, words] of UNIT_WORDS) for (const word of words) NUMBER_WORD.set(word, value);
+const MULTIPLIER_WORD = new Map<string, number>();
+for (const [value, words] of MULTIPLIER_WORDS) for (const word of words) MULTIPLIER_WORD.set(word, value);
+const CONNECTOR_WORDS = new Set(['and', 'και']);
+
+function foldWord(word: string): string {
+  return word.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('el').replace(/ς/gu, 'σ');
+}
+
+/**
+ * Cardinal number words in English and Greek, with compounds read as one
+ * number ("twenty-five", "two hundred and five", "είκοσι πέντε",
+ * "τρεις χιλιάδες"). Returns values in source order.
+ */
+export function numberWordsInText(text: string): number[] {
+  return numberWordPositions(text).map((row) => row.value);
+}
+
+function numberWordPositions(text: string): Array<{ index: number; value: number }> {
+  const out: Array<{ index: number; value: number }> = [];
+  let startIndex = 0;
+  let offset = 0;
+  let total = 0;
+  let current = 0;
+  let open = false;
+  const flush = (): void => {
+    if (open) out.push({ index: startIndex, value: total + current });
+    total = 0; current = 0; open = false;
+  };
+  const canJoin = (unit: number): boolean =>
+    (current >= 20 && current < 100 && current % 10 === 0 && unit < 10) // twenty five, είκοσι πέντε
+    || (current >= 100 && current % 100 === 0 && unit < 100) // two hundred five, εκατό πενήντα
+    || (current === 0 && total > 0 && unit < 1000); // three thousand two hundred
+  // Words, with hyphens, whitespace and "and"/"και" as the only joiners inside a compound.
+  const tokens = text.split(/(\p{L}[\p{L}\p{M}]*)/u);
+  let previous = '';
+  for (let i = 0; i < tokens.length; i += 1) {
+    const token = tokens[i] ?? '';
+    const at = offset;
+    offset += token.length;
+    if (i % 2 === 0) {
+      if (open && !/^[\s-]*$/u.test(token)) flush();
+      continue;
+    }
+    const key = foldWord(token);
+    // "τοις εκατό" is "percent", not the number 100.
+    if (key === 'εκατο' && previous === 'τοισ') { flush(); previous = key; continue; }
+    previous = key;
+    const unit = NUMBER_WORD.get(key);
+    const multiplier = MULTIPLIER_WORD.get(key);
+    if (unit !== undefined) {
+      if (open && !canJoin(unit)) flush();
+      if (!open) startIndex = at;
+      current += unit; open = true;
+    } else if (multiplier !== undefined && open) {
+      if (multiplier === 100) current = current * 100;
+      else { total += current * multiplier; current = 0; }
+    } else if (CONNECTOR_WORDS.has(key) && open) {
+      // keep the compound open: "two hundred and five"
+    } else {
+      flush();
+    }
+  }
+  flush();
+  return out;
+}
+
+// ---- Relative time expressions (decisions/0020) ----------------------------
+// Deictic: the referent depends on the utterance time, so a candidate may not
+// drop them or replace them with a resolved date. Canonical tokens make EN and
+// EL spellings of the same expression compare equal.
+const WEEKDAYS: ReadonlyArray<readonly [string, readonly string[]]> = [
+  ['monday', ['monday', 'δευτερα']],
+  ['tuesday', ['tuesday', 'τριτη']],
+  ['wednesday', ['wednesday', 'τεταρτη']],
+  ['thursday', ['thursday', 'πεμπτη']],
+  ['friday', ['friday', 'παρασκευη']],
+  ['saturday', ['saturday', 'σαββατο']],
+  ['sunday', ['sunday', 'κυριακη']],
+];
+// Greek Τρίτη/Τετάρτη/Πέμπτη are also feminine ordinals (third/fourth/fifth):
+// only the capitalised spelling counts as a weekday.
+const CAPITALISED_ONLY = new Set(['τριτη', 'τεταρτη', 'πεμπτη']);
+const WEEKDAY = new Map<string, string>();
+for (const [canonical, words] of WEEKDAYS) for (const word of words) WEEKDAY.set(word, canonical);
+const DEICTIC_DAYS = new Map<string, string>([
+  ['today', 'today'], ['tonight', 'tonight'], ['tomorrow', 'tomorrow'], ['yesterday', 'yesterday'],
+  ['σημερα', 'today'], ['αποψε', 'tonight'], ['αυριο', 'tomorrow'], ['χθεσ', 'yesterday'], ['χτεσ', 'yesterday'],
+  ['μεθαυριο', 'day-after-tomorrow'], ['προχθεσ', 'day-before-yesterday'], ['προχτεσ', 'day-before-yesterday'],
+]);
+const PERIOD_RE = /\b(next|last|this|coming|following|previous)[\s_-]+(week|weekend|month|quarter|year)\b/giu;
+const END_OF_RE = /\b(?:end[\s_-]+of[\s_-]+(?:the[\s_-]+)?(day|week|month|quarter|year)|(eod|eow|eom))\b/giu;
+const EL_PERIODS: ReadonlyArray<readonly [RegExp, string]> = [
+  [/επομεν[ηοα]σ?\s+(?:εβδομαδα|βδομαδα)/u, 'period:next-week'],
+  [/(?:περασμεν|προηγουμεν)[ηοα]σ?\s+(?:εβδομαδα|βδομαδα)/u, 'period:last-week'],
+  [/αυτη\s+την\s+(?:εβδομαδα|βδομαδα)/u, 'period:this-week'],
+  [/επομενο\s+μηνα/u, 'period:next-month'],
+  [/(?:περασμενο|προηγουμενο)\s+μηνα/u, 'period:last-month'],
+  [/αυτο\s+το\s+μηνα|αυτον\s+το\s+μηνα/u, 'period:this-month'],
+  [/του\s+χρονου/u, 'period:next-year'],
+  [/περσι/u, 'period:last-year'],
+];
+const PERIOD_ALIASES: Record<string, string> = { coming: 'next', following: 'next', previous: 'last' };
+
+/** Canonical relative time expressions in EN/EL text, in source order, de-duplicated. */
+export function relativeTimesInText(text: string): string[] {
+  const found: Array<{ index: number; token: string }> = [];
+  const spaced = text.replace(/_/gu, ' ');
+  for (const match of spaced.matchAll(/\p{L}[\p{L}\p{M}]*/gu)) {
+    const word = match[0];
+    const key = foldWord(word);
+    const weekday = WEEKDAY.get(key);
+    if (weekday) {
+      if (CAPITALISED_ONLY.has(key) && word[0] === word[0]!.toLocaleLowerCase('el')) continue;
+      found.push({ index: match.index, token: `weekday:${weekday}` });
+      continue;
+    }
+    const day = DEICTIC_DAYS.get(key);
+    if (day) found.push({ index: match.index, token: `day:${day}` });
+  }
+  for (const match of spaced.matchAll(PERIOD_RE)) {
+    const which = match[1]!.toLowerCase();
+    found.push({ index: match.index, token: `period:${PERIOD_ALIASES[which] ?? which}-${match[2]!.toLowerCase()}` });
+  }
+  for (const match of spaced.matchAll(END_OF_RE)) {
+    const unit = (match[1] ?? ({ eod: 'day', eow: 'week', eom: 'month' } as Record<string, string>)[match[2]!.toLowerCase()] ?? '').toLowerCase();
+    found.push({ index: match.index, token: `end-of:${unit}` });
+  }
+  const folded = foldWord(spaced);
+  for (const [pattern, token] of EL_PERIODS) {
+    const match = pattern.exec(folded);
+    if (match) found.push({ index: match.index, token });
+  }
+  found.sort((a, b) => a.index - b.index);
+  return [...new Set(found.map((row) => row.token))];
 }
 
 export function identifiersInText(text: string): string[] {
@@ -189,6 +389,9 @@ export function checkLiteralRetention(sourceText: string, sem: LunumSem): Litera
   const missingNumbers = sourceNumbers.filter((value) => !candidateNumbers.has(value));
   const missingIdentifiers = sourceIdentifiers.filter((id) => !candidateIdentifiers.has(id));
   const missingDates = sourceDates.filter((date) => !candidateDates.has(date));
-  return { retained: missingNumbers.length === 0 && missingIdentifiers.length === 0 && missingDates.length === 0,
-    sourceNumbers, sourceIdentifiers, sourceDates, missingNumbers, missingIdentifiers, missingDates };
+  const candidateRelativeTimes = new Set(strings.flatMap(relativeTimesInText));
+  const sourceRelativeTimes = relativeTimesInText(sourceText);
+  const missingRelativeTimes = sourceRelativeTimes.filter((token) => !candidateRelativeTimes.has(token));
+  return { retained: missingNumbers.length === 0 && missingIdentifiers.length === 0 && missingDates.length === 0 && missingRelativeTimes.length === 0,
+    sourceNumbers, sourceIdentifiers, sourceDates, sourceRelativeTimes, missingNumbers, missingIdentifiers, missingDates, missingRelativeTimes };
 }

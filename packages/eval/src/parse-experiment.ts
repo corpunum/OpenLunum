@@ -161,7 +161,7 @@ export interface GoldValidationReport {
   sourceLiteralRetentionChecked: number;
   sourceLiteralRetentionValid: number;
   abstentionCases: number;
-  invalid: Array<{ id: string; stages: string[]; metadataErrors?: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; semanticAtomErrors?: unknown[]; sourceLiteralErrors?: { missingNumbers: number[]; missingIdentifiers: string[]; missingDates?: string[] }; identityError?: string }>;
+  invalid: Array<{ id: string; stages: string[]; metadataErrors?: string[]; transportErrors?: unknown; structuralErrors?: string[]; normalizationIssues?: unknown[]; frameIssues?: unknown[]; semanticAtomErrors?: unknown[]; sourceLiteralErrors?: { missingNumbers: number[]; missingIdentifiers: string[]; missingDates?: string[]; missingRelativeTimes?: string[] }; identityError?: string }>;
 }
 
 /**
@@ -303,7 +303,8 @@ export function validateEvaluationGold(items: readonly DatasetItem[], extraction
           sourceLiteralErrors: {
             missingNumbers: sourceLiteralRetention.missingNumbers,
             missingIdentifiers: sourceLiteralRetention.missingIdentifiers,
-            ...(sourceLiteralRetention.missingDates.length ? { missingDates: sourceLiteralRetention.missingDates } : {})
+            ...(sourceLiteralRetention.missingDates.length ? { missingDates: sourceLiteralRetention.missingDates } : {}),
+            ...(sourceLiteralRetention.missingRelativeTimes.length ? { missingRelativeTimes: sourceLiteralRetention.missingRelativeTimes } : {})
           }
         } : {}),
         ...(identityError ? { identityError } : {})

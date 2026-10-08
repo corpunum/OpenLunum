@@ -28,8 +28,8 @@ import { validateSemanticTransport, SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './s
 export { SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './semantic-transport.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.15' as const;
-export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.5' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.16' as const;
+export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.6' as const;
 
 /** Summary only; schemaHash binds the full authoritative enforced wire schema. */
 const TRANSPORT_SCHEMA_DESCRIPTOR = Object.freeze({
@@ -57,6 +57,8 @@ const CANONICAL_RULES = Object.freeze([
   'conditions and consequences are clause arrays, not role lookalikes.',
   'negated is compositional: lexical prohibit/allow use negated=false; negated=true means NOT that predicate; never infer not prohibited == allowed.',
   'Retain full dates independently of quantities: valid ISO YYYY-MM-DD, unambiguous dotted day>12/month/four-digit-year, and English/Greek month-name dates with an explicit day and four-digit year (14 January 2027, January 14, 2027, 14 Ιανουαρίου 2027) compare as exact ISO dates. Never guess ambiguous, invalid or year-less date spellings; encode Sem date values as ISO. Source evidence, metadata and date components cannot satisfy omitted semantic literals.',
+  'Cardinal number words are numbers (seven times = 7, επτά φορές = 7, twenty-five = 25); one/once and articles are not. Relative times (Friday, tomorrow, next week, end of day, την Παρασκευή, αύριο) must be carried as written in a semantic value, never dropped or resolved to a calendar date.',
+  'A strict threshold that restricts a role (invoices under 5,000 euros, disk usage above 90 percent) is a conditions clause with below/above, roles.subject and a quantity value; the main frame lacking a threshold role is not a reason to abstain. Inclusive bounds (up to, at most, έως) have no registered predicate: abstain rather than encode them as strict.',
 ]);
 const EXTRACTION_SEM_TEMPLATE = `{"schema":"${SEM_SCHEMA}","world":"real","kind":"simple_fact","clauses":[{"predicate":"<registered-predicate>","roles":{},"negated":false}]}`;
 
@@ -293,7 +295,7 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
   const literalRetention = sem && sourceText.trim() !== '' ? checkLiteralRetention(sourceText, sem) : null;
   const literalsRetained = literalRetention?.retained ?? true;
   if (literalRetention && !literalsRetained) {
-    diagnostics.push(`unretained_source_literal: the candidate does not carry ${[...literalRetention.missingNumbers.map(String), ...literalRetention.missingIdentifiers, ...literalRetention.missingDates].join(', ')} from the source; abstain unless a role can hold it`);
+    diagnostics.push(`unretained_source_literal: the candidate does not carry ${[...literalRetention.missingNumbers.map(String), ...literalRetention.missingIdentifiers, ...literalRetention.missingDates, ...literalRetention.missingRelativeTimes].join(', ')} from the source; abstain unless a role can hold it`);
   }
   if (sem && protocolCanonical && frameValid && grounded && literalsRetained) {
     try { identity = semanticFingerprint(sem); } catch (error) { diagnostics.push(error instanceof Error ? error.message : String(error)); }
