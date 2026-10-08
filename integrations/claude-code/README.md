@@ -274,6 +274,42 @@ Compare two Lunum-Sem objects and return detailed metrics: feature recall, preci
 
 ---
 
+### `lunum_analyze_discourse`
+
+Split long or structured text — reports, tool output, plans — into source-span
+units with deterministic **surface** records ([ADR 0021](../../decisions/0021-discourse-records.md)):
+key/value facts, test counts, exit statuses, errors, decisions, commitments,
+open items and each unit's literals, plus a document record. No Sem and no
+identity; `verification` re-checks every span and record against the text.
+
+**When to use:** To see what a long message states (facts, decisions, open
+items, literals) without reading it whole, or before deciding what to keep.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `text` | string | yes | Source text |
+| `scope` | string | no | Fact-key scope, e.g. a tool or session name |
+| `includeUnits` | boolean | no | Return every unit (default true) |
+
+### `lunum_compact_messages`
+
+Plan a compact view of an ordered message list (oldest first). Recent messages
+stay verbatim; in older long messages, units repeated in a newer message are
+dropped, superseded `key: value` facts are marked, over-long units are clipped
+to their head plus every literal they state, and narrative is omitted first
+when over budget. Every compacted message points back to its source. Nothing
+is deleted.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `messages` | array | yes | `{id?, role, content}`, oldest first |
+| `keepVerbatimLast` | number | no | Recent messages kept verbatim (default 4) |
+| `recentMaxChars` | number | no | Budget for a single huge recent message (default 8000) |
+| `minChars` | number | no | Shorter messages stay verbatim (default 1500) |
+| `maxMessageChars` | number | no | Budget per older compacted message (default 6000) |
+
+---
+
 ### `lunum_classify`
 
 Classify content by category and return an eligibility decision — whether Lunum compact representation is safe to use for this content, based on the safety policy.

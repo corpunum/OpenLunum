@@ -13,6 +13,9 @@ import {
   submitCandidateWithGrounding,
   buildCandidateSem,
   getCandidateBuilderSchema,
+  analyzeDiscourse,
+  planDiscourseCompaction,
+  verifyDiscourseAnalysis,
 } from '@corpunum/lunum';
 import type { ContextMode, GroundingProposal, LunumSem, CandidateBuilderInput } from '@corpunum/lunum';
 import { resolveConfig } from './config.js';
@@ -367,6 +370,68 @@ export const classifyTool: LunumToolDefinition = {
   },
 };
 
+export const analyzeDiscourseTool: LunumToolDefinition = {
+  name: 'lunum_analyze_discourse',
+  description: 'Split long or structured text (reports, tool output, plans) into source-span units with deterministic SURFACE records (key/value facts, test counts, exit status, errors, decisions, commitments, open items, literals) and a document record (decisions/0021). No Sem, no identity; every record is checked against its span.',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      text: { type: 'string', description: 'Source text' },
+      scope: { type: 'string', description: 'Optional fact-key scope (e.g. a tool or session name)' },
+      includeUnits: { type: 'boolean', description: 'Return every unit (default true); false returns the document record and counts only', default: true },
+    },
+    required: ['text'],
+  },
+  handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
+    try {
+      if (typeof input.text !== 'string') return err('text is required and must be a string');
+      const analysis = analyzeDiscourse(input.text, typeof input.scope === 'string' ? { scope: input.scope } : {});
+      const verification = verifyDiscourseAnalysis(input.text, analysis);
+      const units = input.includeUnits === false ? undefined : analysis.units.map((a) => ({
+        index: a.unit.index, kind: a.unit.kind, start: a.unit.start, end: a.unit.end, text: a.unit.text,
+        ...(a.unit.parent !== undefined ? { parent: a.unit.parent } : {}),
+        key: a.key, cues: a.cues, records: a.records, recordText: a.recordText, literalCount: a.literalCount, abstained: a.abstained,
+      }));
+      return ok({ success: true, version: analysis.version, semanticIdentity: false, verification, document: analysis.document, ...(units ? { units } : {}) });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
+
+export const compactMessagesTool: LunumToolDefinition = {
+  name: 'lunum_compact_messages',
+  description: 'Plan a compact view of an ordered message list (oldest first): recent messages stay verbatim; older long ones drop units repeated in newer messages, mark superseded key/value facts, clip over-long units to head + literals, and omit narrative first when over budget. Returns the view and stats; never deletes source (decisions/0021).',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      messages: { type: 'array', items: { type: 'object' }, description: 'Messages {id?, role, content}, oldest first' },
+      keepVerbatimLast: { type: 'number', default: 4 },
+      recentMaxChars: { type: 'number', default: 8000 },
+      minChars: { type: 'number', default: 1500 },
+      maxMessageChars: { type: 'number', default: 6000 },
+    },
+    required: ['messages'],
+  },
+  handler: async (input: Record<string, unknown>): Promise<McpToolResponse> => {
+    try {
+      if (!Array.isArray(input.messages)) return err('messages is required and must be an array');
+      const messages = input.messages.map((m) => {
+        const row = (m ?? {}) as Record<string, unknown>;
+        const id = typeof row.id === 'string' || typeof row.id === 'number' ? row.id : null;
+        return { id, role: String(row.role ?? 'user'), content: typeof row.content === 'string' ? row.content : '' };
+      });
+      const num = (key: string): number | undefined => (typeof input[key] === 'number' ? (input[key] as number) : undefined);
+      const options = Object.fromEntries(['keepVerbatimLast', 'recentMaxChars', 'minChars', 'maxMessageChars']
+        .map((key) => [key, num(key)]).filter(([, value]) => value !== undefined));
+      const plan = planDiscourseCompaction(messages, options);
+      return ok({ success: true, version: plan.version, semanticIdentity: false, messages: plan.messages, factHistory: plan.factHistory, stats: plan.stats });
+    } catch (error) {
+      return err((error as Error).message);
+    }
+  },
+};
+
 export const lunumTools: LunumToolDefinition[] = [
   deriveTool,
   extractionContractTool,
@@ -378,4 +443,6 @@ export const lunumTools: LunumToolDefinition[] = [
   renderTool,
   compareTool,
   classifyTool,
+  analyzeDiscourseTool,
+  compactMessagesTool,
 ];
