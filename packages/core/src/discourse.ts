@@ -315,7 +315,10 @@ const CUES: ReadonlyArray<readonly [DiscourseCue, RegExp]> = [
   ['status', /\b(?:passed|passing|pass|ok|green|red|done|merged|pushed|committed|shipped|deployed|succeeded|success|complete[ds]?|incomplete)\b/iu],
 ];
 
-const TEST_COUNTS = /(\d+)\s+(passed|failed|failing|skipped|pending|todo|errors?|tests?|suites?|files?)\b|\b(pass|fail|skipped|todo|tests|suites)\s+(\d+)\b/giu;
+// `(?<!\d)`: start only at the first digit of a run. Without it a long digit
+// run (a dump of numbers) is retried from every position -- quadratic, 36 s on
+// 200k digits. Matches are unchanged: the leftmost match already began there.
+const TEST_COUNTS = /(?<!\d)(\d+)\s+(passed|failed|failing|skipped|pending|todo|errors?|tests?|suites?|files?)\b|\b(pass|fail|skipped|todo|tests|suites)\s+(\d+)\b/giu;
 const EXIT_STATUS = /\b(?:exit(?:ed)?(?:\s+with)?(?:\s+(?:code|status))?|exit_code|exitCode|code|status)\s*[:= ]\s*(-?\d{1,3})\b/iu;
 
 function normaliseKey(key: string): string {

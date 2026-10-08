@@ -43,7 +43,7 @@
       "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
     },
     "servedRuntimeManifestPath": "public-served-runtime-v18.json",
-    "servedRuntimeManifestSha256": "886d4201ce3e35c90764747c8691fd447deda5e748af62c2e18ff1da7787c9bb"
+    "servedRuntimeManifestSha256": "3ff1b9ed0dcc25774741dc6c3919a76129e246853429f54d5bf85732fc759c80"
   },
   "input": [
     "opaque handle",

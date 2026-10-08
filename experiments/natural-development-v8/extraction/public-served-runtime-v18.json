@@ -96,7 +96,7 @@
     },
     {
       "path": "packages/core/dist/src/discourse.js",
-      "sha256": "dc9e50a3091ad6aaaab35a31ad72dd5ccc887b453c132078dfa452cbd8ca6547"
+      "sha256": "fc9d82b160717ac8e7882d52e75f9ed775e0015ca9b6825c9af7509bcbe19327"
     },
     {
       "path": "packages/core/dist/src/downstream-quality.js",

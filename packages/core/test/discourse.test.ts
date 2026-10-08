@@ -174,3 +174,13 @@ test('every non-whitespace character is in exactly one unit (except table separa
     }
   }
 });
+
+test('analysis is linear on long digit runs; test counts read the same', () => {
+  // Was quadratic in TEST_COUNTS: ~36 s on 200k digits, blocking the caller's event loop.
+  const started = performance.now();
+  analyzeDiscourse('1'.repeat(200_000));
+  analyzeDiscourse(`${'7'.repeat(100_000)} passed`);
+  assert.ok(performance.now() - started < 1000, `took ${Math.round(performance.now() - started)} ms`);
+  const records = analyzeDiscourse('Tests: 3 failed | 120 passed (123); build x12 passed').units.flatMap((a) => a.records);
+  assert.deepEqual(records.find((r) => r.type === 'test_result'), { type: 'test_result', counts: { fail: 3, pass: 120 } });
+});
