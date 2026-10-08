@@ -1,7 +1,7 @@
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
 
-export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.5' as const;
+export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.6' as const;
 
 export interface FrameRoleRequirement {
   name: string;
@@ -237,6 +237,25 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'value', required: true }
     ]),
     description: 'A metric or subject is above a threshold or value.'
+  }),
+  // decisions/0022: inclusive bounds (up to, at most, έως / at least,
+  // τουλάχιστον). Distinct predicates, so a strict and an inclusive bound on
+  // the same value never share an identity.
+  at_most: Object.freeze({
+    predicate: 'at_most',
+    roles: Object.freeze([
+      { name: 'subject', required: true },
+      { name: 'value', required: true }
+    ]),
+    description: 'A metric or subject is at most a value (inclusive upper bound: up to, at most, έως).'
+  }),
+  at_least: Object.freeze({
+    predicate: 'at_least',
+    roles: Object.freeze([
+      { name: 'subject', required: true },
+      { name: 'value', required: true }
+    ]),
+    description: 'A metric or subject is at least a value (inclusive lower bound: at least, τουλάχιστον).'
   }),
   before: Object.freeze({
     predicate: 'before',
