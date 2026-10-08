@@ -19,5 +19,6 @@ Status labels:
 | AGY | Native MCP | **Discovery evidence** | AGY 1.2.2 discovered Lunum schemas; headless MCP execution was permission-blocked |
 | Gemini CLI | extension/hooks/MCP | Design | Product surface is evolving; pin tested versions |
 | Generic Node agent | direct `@corpunum/lunum` dependency | Reference | Most complete reusable example after OpenUnum |
+| Source locator (optional) | separate `lunum-locator-mcp` over stdio, backed by an unumsearch daemon | Evaluation-only (diagnostic) | [`source-locator/`](source-locator/README.md); measured in `experiments/source-locator-v1`: grounding precision 0.40, so diagnostic only |
 
 Every product guide must state the tested product version, required permissions, limitations, and removal path before promotion to Verified.

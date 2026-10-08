@@ -1,0 +1,20 @@
+{
+  "name": "@corpunum/lunum-locator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Optional source-locator providers for Lunum (not part of core or the frozen served runtime): ground literal references in an indexed corpus, locate spans, trigram near-duplicate candidates, and an optional lunum-locator-mcp server.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "lunum-locator-mcp": "./dist/mcp.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "Apache-2.0"
+}
