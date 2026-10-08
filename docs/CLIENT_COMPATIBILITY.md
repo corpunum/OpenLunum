@@ -25,7 +25,7 @@ The published evidence is bound to the immutable ref
 `compatibility-2026-09-15-candidate`, which resolves to the exact evidence
 checkout after publication.
 
-The current server exposes ten tools:
+The current server exposes twelve tools:
 
     lunum_derive
     lunum_get_extraction_contract
@@ -37,6 +37,8 @@ The current server exposes ten tools:
     lunum_render
     lunum_compare
     lunum_classify
+    lunum_analyze_discourse
+    lunum_compact_messages
 
 The supplied deterministic fixture used for conformance is:
 

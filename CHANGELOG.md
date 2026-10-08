@@ -1,5 +1,13 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-10-08
+
+### Added
+- Discourse records (`packages/core/src/discourse.ts`, ADR 0021): source-span units for long and structured text (headings, list items, key/value fields, tables, code, sentences, tool-result fields), deterministic surface records (facts, test counts, exit status, errors, decisions, commitments, open items, literals), a per-unit literal gate, a document record and a cross-message compaction plan. Surface only: no Sem, no identity. MCP tools `lunum_analyze_discourse` and `lunum_compact_messages`.
+
+### Changed
+- Contract `lunum-agent/0.16`, instructions 0.6, package v18 (ADR 0020): English/Greek cardinal number words are numbers and relative times are literals in the source-retention gate; strict thresholds on a role are `below`/`above` conditions, inclusive bounds abstain. Replay of 221 recorded candidates: no identity changed. Scoring manifest v5 and source review v4 rebind unchanged historical bytes to 0.16.
+
 ## Unreleased — 2026-09-26 to 2026-09-27
 
 ### Fixed

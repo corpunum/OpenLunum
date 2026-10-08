@@ -90,6 +90,7 @@ test('real stdio MCP handshake, discovery, fixture calls, and fail-closed checks
       'lunum_derive', 'lunum_get_extraction_contract', 'lunum_submit_candidate',
       'lunum_build_candidate', 'lunum_compile_context', 'lunum_fingerprint',
       'lunum_validate', 'lunum_render', 'lunum_compare', 'lunum_classify',
+      'lunum_analyze_discourse', 'lunum_compact_messages',
     ]);
     for (const tool of tools) {
       assert.equal(tool.inputSchema?.type, 'object', `${tool.name} has no object-root schema`);
@@ -103,7 +104,7 @@ test('real stdio MCP handshake, discovery, fixture calls, and fail-closed checks
       name: 'lunum_get_extraction_contract', arguments: {},
     }));
     assert.equal(contract.success, true);
-    assert.equal(contract.contract.contractVersion, 'lunum-agent/0.15');
+    assert.equal(contract.contract.contractVersion, 'lunum-agent/0.16');
     assert.match(contract.contract.protocol.registryHash, /^[0-9a-f]{64}$/u);
 
     const built = textResult(await server.request(4, 'tools/call', {

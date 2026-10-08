@@ -104,15 +104,28 @@ test('public instruction package exposes frozen scoring conventions without gold
   }
   // v17 (decisions/0019, #713): month-name dates and the MCP compile_context
   // token report; schema, vocabulary, frames and task profile are unchanged.
-  const current = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v17.json', 'utf8'));
-  assert.equal(current.supersedes.path, 'public-instruction-package-v16.json');
-  assert.equal(current.freeze.coreContractVersion, 'lunum-agent/0.15');
-  assert.equal(current.freeze.instructionVersion, 'agent-extraction-instructions/0.5');
+  const v17 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v17.json', 'utf8'));
+  assert.equal(v17.supersedes.path, 'public-instruction-package-v16.json');
+  assert.equal(v17.freeze.coreContractVersion, 'lunum-agent/0.15');
+  assert.equal(v17.freeze.instructionVersion, 'agent-extraction-instructions/0.5');
   for (const key of ['schemaHash', 'protocolRegistryHash', 'frameRegistryHash', 'taskProfileSha256']) {
-    assert.equal(current.freeze[key], v16.freeze[key], `${key} unchanged by month-name date retention`);
+    assert.equal(v17.freeze[key], v16.freeze[key], `${key} unchanged by month-name date retention`);
   }
   for (const key of ['literalRetentionArtifactSha256', 'toolImplementationSha256', 'coreContractHash', 'instructionHash', 'servedRuntimeManifestSha256']) {
-    assert.notEqual(current.freeze[key], v16.freeze[key], `${key} changed in v17`);
+    assert.notEqual(v17.freeze[key], v16.freeze[key], `${key} changed in v17`);
+  }
+  // v18 (decisions/0020, 0021): number words and relative times in the
+  // retention gate, the threshold rule, and the served discourse module and
+  // MCP tools; schema, vocabulary, frames and task profile are unchanged.
+  const current = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v18.json', 'utf8'));
+  assert.equal(current.supersedes.path, 'public-instruction-package-v17.json');
+  assert.equal(current.freeze.coreContractVersion, 'lunum-agent/0.16');
+  assert.equal(current.freeze.instructionVersion, 'agent-extraction-instructions/0.6');
+  for (const key of ['schemaHash', 'protocolRegistryHash', 'frameRegistryHash', 'taskProfileSha256']) {
+    assert.equal(current.freeze[key], v17.freeze[key], `${key} unchanged by decisions/0020-0021`);
+  }
+  for (const key of ['literalRetentionArtifactSha256', 'toolImplementationSha256', 'coreContractHash', 'instructionHash', 'servedRuntimeManifestSha256']) {
+    assert.notEqual(current.freeze[key], v17.freeze[key], `${key} changed in v18`);
   }
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
   assert.equal(hash('packages/mcp/dist/src/tools.js'), current.freeze.toolImplementationSha256);

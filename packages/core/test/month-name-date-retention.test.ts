@@ -120,7 +120,8 @@ test('delegated review fixtures: e06 date retained, e11 and g07 partial dates ke
   const e11 = 'Send three reminders before the deadline on 15 March.';
   const e11Dropped = checkLiteralRetention(e11, sem([{ predicate: 'deadline', roles: { subject: 'reminders', time: 'March' } }]));
   assert.equal(e11Dropped.retained, false);
-  assert.deepEqual(e11Dropped.missingNumbers, [15]);
+  // Since decisions/0020 the number word "three" is a number literal too.
+  assert.deepEqual(e11Dropped.missingNumbers, [3, 15]);
   assert.equal(checkLiteralRetention(e11, sem([{ predicate: 'deadline', roles: { subject: 'reminders', time: { type: 'date', value: '--03-15' } } }])).retained, true);
 
   const g07 = 'Αρχειοθέτησε τα 12 παλιά έργα μέχρι τις 31 Δεκεμβρίου.';

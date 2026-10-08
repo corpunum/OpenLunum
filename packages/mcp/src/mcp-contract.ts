@@ -39,6 +39,8 @@ export const MCP_TOOLS: readonly McpToolSpec[] = [
   { name: 'lunum_render', version: '1.0.0', description: 'Render Lunum Sem with a profile', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
   { name: 'lunum_compare', version: '1.0.0', description: 'Compare two semantic candidates diagnostically.', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
   { name: 'lunum_classify', version: '1.0.0', description: 'Classify content for policy eligibility.', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_analyze_discourse', version: '1.0.0', description: 'Split long or structured text into source-span units with deterministic surface records (no identity).', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
+  { name: 'lunum_compact_messages', version: '1.0.0', description: 'Plan a compact, source-pointing view of an ordered message list (no identity, nothing deleted).', requiresAuth: false, rateLimit: MCP_DEFAULT_RATE_LIMIT, maxInputBytes: MCP_MAX_INPUT_BYTES, timeoutMs: MCP_DEFAULT_TIMEOUT_MS },
 ] as const;
 
 export function getMcpContractManifest(): { version: string; tools: readonly McpToolSpec[] } {

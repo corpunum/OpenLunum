@@ -13,7 +13,7 @@ function getText(result: { content: Array<{ text?: string }> }): string {
 }
 
 test('lunumTools has the real agent-native tools', () => {
-  assert.strictEqual(lunumTools.length, 10);
+  assert.strictEqual(lunumTools.length, 12);
   const names = lunumTools.map((t) => t.name);
   assert.ok(names.includes('lunum_derive'));
   assert.ok(names.includes('lunum_compile_context'));
@@ -330,4 +330,32 @@ test('the MCP default context mode is natural (decisions/0013 amendment 1)', asy
   } finally {
     if (saved !== undefined) process.env.LUNUM_CONTEXT_MODE = saved;
   }
+});
+
+test('lunum_analyze_discourse returns verified surface units and a document record', async () => {
+  const text = '## Status\n- Tests: 3 failed | 120 passed\n- PR-54 merged as 0a4ca241\nWe decided to keep the flag off.';
+  const result = JSON.parse(getText(await find('lunum_analyze_discourse').handler({ text })));
+  assert.strictEqual(result.success, true);
+  assert.strictEqual(result.semanticIdentity, false);
+  assert.deepStrictEqual(result.verification, { valid: true, issues: [] });
+  assert.ok(result.units.length >= 4);
+  for (const unit of result.units) assert.strictEqual(text.slice(unit.start, unit.end), unit.text);
+  assert.ok(result.document.decisions.length >= 1);
+  const summary = JSON.parse(getText(await find('lunum_analyze_discourse').handler({ text, includeUnits: false })));
+  assert.strictEqual(summary.units, undefined);
+  assert.strictEqual((await find('lunum_analyze_discourse').handler({})).isError, true);
+});
+
+test('lunum_compact_messages returns a shorter view that points at its source', async () => {
+  const long = Array.from({ length: 60 }, (_, i) => `Narrative line ${i} with no literal at all here.`).join('\n') + '\nThe fix is commit 3465e355.';
+  const result = JSON.parse(getText(await find('lunum_compact_messages').handler({
+    messages: [{ id: 7, role: 'assistant', content: long }, { role: 'user', content: 'ok' }],
+    keepVerbatimLast: 1, maxMessageChars: 500,
+  })));
+  assert.strictEqual(result.success, true);
+  assert.strictEqual(result.messages[0].compacted, true);
+  assert.match(result.messages[0].content, /source: message 7/u);
+  assert.ok(result.messages[0].content.includes('3465e355'));
+  assert.strictEqual(result.messages[1].compacted, false);
+  assert.strictEqual((await find('lunum_compact_messages').handler({ messages: 'x' })).isError, true);
 });
