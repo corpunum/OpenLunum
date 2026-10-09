@@ -1,0 +1,291 @@
+diff --git a/scripts/lunum-discourse-measure.mjs b/scripts/lunum-discourse-measure.mjs
+index 9a7e7f4e..6d7e1f80 100644
+--- a/scripts/lunum-discourse-measure.mjs
++++ b/scripts/lunum-discourse-measure.mjs
+@@ -30,6 +30,16 @@
+  *
+  * Usage: node scripts/lunum-discourse-measure.mjs sessions.json [out.json]
+  *        [--context-limit 65536] [--points 4] [--unit-identity] [--dump-points DIR]
++ *        [--ambient --min-history-tokens 4000 --after ISO]
++ *
++ * --ambient (OpenLunum experiments/ambient-discourse-v1, v2) measures the view
++ * at ordinary turns instead of compaction points: points are user turns whose
++ * loaded history is >= --min-history-tokens (and, with --after, created after
++ * that time); "off" is the live path (discourse view only under pressure),
++ * "on" adds the ambient view (discourseContext.ambient, stepped boundary) and
++ * "v1" is the v1 unstepped view, reported as a diagnostic. It also reports the
++ * share of each point's prompt that the NEXT user turn's prompt reuses as an
++ * unchanged message prefix (a KV prompt-cache proxy).
+  *
+  * --dump-points DIR writes one JSON file per (point, config) with the exact
+  * prompt messages, the wiki page and the point's QA literals (private data:
+@@ -43,19 +53,22 @@ import { ContextPressure } from '../src/core/context-pressure.mjs';
+ import { estimateMessagesTokens } from '../src/core/context-budget.mjs';
+ import { buildCompactionCheckpoint, renderSessionWiki } from '../src/core/session-wiki.mjs';
+ import { applyExactDedup, exactDedupEligible } from '../src/memory/lunum-compaction.mjs';
+-import { applyDiscourseView, DISCOURSE_CONTEXT_DEFAULTS } from '../src/memory/lunum-discourse.mjs';
++import { ambientDiscourseDue, applyDiscourseView, DISCOURSE_CONTEXT_DEFAULTS } from '../src/memory/lunum-discourse.mjs';
+ import { analyzeDiscourse } from '../src/memory/lunum-core/index.js';
+ import { extractShadowIdentity, detectLanguage } from '../src/memory/lunum.mjs';
+ 
+ const args = process.argv.slice(2);
+ const flag = (name, fallback) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : fallback; };
+-const positional = args.filter((a, i) => !a.startsWith('--') && !(args[i - 1]?.startsWith('--') && !['--unit-identity'].includes(args[i - 1])));
++const positional = args.filter((a, i) => !a.startsWith('--') && !(args[i - 1]?.startsWith('--') && !['--unit-identity', '--ambient'].includes(args[i - 1])));
+ const [inPath, outPath] = positional;
+ if (!inPath) throw new Error('usage: lunum-discourse-measure.mjs sessions.json [out.json]');
+ const CONTEXT_LIMIT = Number(flag('context-limit', '65536'));
+ const POINTS = Number(flag('points', '4'));
+ const UNIT_IDENTITY = args.includes('--unit-identity');
+ const DUMP_DIR = flag('dump-points', null);
++const AMBIENT = args.includes('--ambient');
++const MIN_HISTORY_TOKENS = Number(flag('min-history-tokens', '4000'));
++const AFTER = flag('after', null);
+ if (DUMP_DIR) fs.mkdirSync(DUMP_DIR, { recursive: true, mode: 0o700 });
+ const TRIGGER_PCT = 0.7;
+ const TARGET_PCT = 0.4;
+@@ -122,6 +135,8 @@ function promptAt(rawHistory, sessionId, { discourse }) {
+   let history = rawHistory.map((m) => ({ role: m.role, content: m.content }));
+   const report = pressure.getReport(history, { maxTokens: CONTEXT_LIMIT });
+   const pressureOn = report.status !== 'ok';
++  // Exactly the chat-orchestrator decision (ambientDiscourseDue on the loaded history).
++  const ambientOn = discourse ? ambientDiscourseDue(discourse, history, report.status === 'critical' || report.status === 'warning') : false;
+   if (pressureOn && !discourse) history = pressure.compactMessages(history, { aggressive: report.status === 'critical' });
+   const overTrigger = estimateMessagesTokens(history) >= CONTEXT_LIMIT * TRIGGER_PCT
+     || estimateMessagesTokens(rawHistory.map((m) => ({ role: m.role, content: m.content }))) >= CONTEXT_LIMIT * TRIGGER_PCT;
+@@ -147,9 +162,9 @@ function promptAt(rawHistory, sessionId, { discourse }) {
+     wikiPage = ck.wiki ? renderSessionWiki({ ...ck.wiki, createdAt: '' }) : '';
+   }
+   let discoursePlan = null;
+-  if (discourse && pressureOn) {
+-    // Exactly the chat-orchestrator step.
+-    const view = applyDiscourseView({ history, rawHistory, cfg: discourse });
++  if (discourse && (pressureOn || ambientOn)) {
++    // Exactly the chat-orchestrator step. `unstepped` reproduces v1 (diagnostic only).
++    const view = applyDiscourseView({ history, rawHistory, cfg: discourse, stepped: ambientOn && !discourse.unstepped });
+     history = view.history;
+     discoursePlan = view.meta;
+   }
+@@ -159,7 +174,11 @@ function promptAt(rawHistory, sessionId, { discourse }) {
+   return { history, wikiPage, overTrigger, pressureOn, discoursePlan, ms };
+ }
+ 
+-const CONFIGS = [
++const CONFIGS = AMBIENT ? [
++  { name: 'live (discourse under pressure)', discourse: { ...DISCOURSE_CONTEXT_DEFAULTS, enabled: true }, dump: 'off' },
++  { name: 'ambient discourse view (stepped)', discourse: { ...DISCOURSE_CONTEXT_DEFAULTS, enabled: true, ambient: true, ambientMinTokens: MIN_HISTORY_TOKENS }, dump: 'on' },
++  { name: 'ambient v1 (unstepped, diagnostic)', discourse: { ...DISCOURSE_CONTEXT_DEFAULTS, enabled: true, ambient: true, ambientMinTokens: MIN_HISTORY_TOKENS, unstepped: true }, dump: 'v1' }
++] : [
+   { name: 'off (live default)', discourse: null },
+   { name: 'discourseContext on (defaults)', discourse: { ...DISCOURSE_CONTEXT_DEFAULTS, enabled: true, unitIdentity: UNIT_IDENTITY } }
+ ];
+@@ -201,7 +220,10 @@ for (const row of rows) {
+ const results = [];
+ for (const [sessionId, sessionRows] of bySession) {
+   const userIdx = sessionRows.map((r, i) => (r.role === 'user' ? i : -1)).filter((i) => i >= 0);
+-  const firing = userIdx.filter((i) => estimateMessagesTokens(sessionRows.slice(Math.max(0, i + 1 - 1200), i + 1).map((m) => ({ role: m.role, content: m.content }))) >= CONTEXT_LIMIT * TRIGGER_PCT);
++  const loadedTokens = (i) => estimateMessagesTokens(sessionRows.slice(Math.max(0, i + 1 - 1200), i + 1).map((m) => ({ role: m.role, content: m.content })));
++  const firing = AMBIENT
++    ? userIdx.filter((i) => (!AFTER || String(sessionRows[i].created_at || '') > AFTER) && loadedTokens(i) >= MIN_HISTORY_TOKENS)
++    : userIdx.filter((i) => loadedTokens(i) >= CONTEXT_LIMIT * TRIGGER_PCT);
+   const picks = firing.length <= POINTS ? firing : Array.from({ length: POINTS }, (_, k) => firing[Math.round((k * (firing.length - 1)) / (POINTS - 1))]);
+   for (const idx of picks) {
+     const history = sessionRows.slice(Math.max(0, idx + 1 - 1200), idx + 1);
+@@ -217,10 +239,21 @@ for (const [sessionId, sessionRows] of bySession) {
+       const promptText = r.history.map((m) => m.content).join('\n');
+       const tokens = estimateMessagesTokens(r.history);
+       if (DUMP_DIR) {
+-        const file = `${DUMP_DIR}/${String(sessionId).replace(/[^\w.-]/g, '_')}-${idx}-${config.discourse ? 'on' : 'off'}.json`;
++        const file = `${DUMP_DIR}/${String(sessionId).replace(/[^\w.-]/g, '_')}-${idx}-${config.dump || (config.discourse ? 'on' : 'off')}.json`;
+         fs.writeFileSync(file, JSON.stringify({ sessionId, turnIndex: idx, config: config.name, currentMessageId: sessionRows[idx].id ?? null, promptTokens: tokens, qa, messages: r.history.map((m) => ({ role: m.role, content: m.content })), wikiPage: r.wikiPage }), { mode: 0o600 });
+       }
++      let prefixReuse = null;
++      if (AMBIENT) {
++        const nextUser = userIdx.find((i) => i > idx);
++        if (nextUser != null) {
++          const next = promptAt(sessionRows.slice(Math.max(0, nextUser + 1 - 1200), nextUser + 1), sessionId, config).history;
++          let k = 0;
++          while (k < r.history.length && k < next.length && r.history[k].role === next[k].role && r.history[k].content === next[k].content) k += 1;
++          prefixReuse = tokens ? estimateMessagesTokens(r.history.slice(0, k)) / tokens : null;
++        }
++      }
+       results.push({
++        prefixReuse,
+         sessionId,
+         turnIndex: idx,
+         config: config.name,
+@@ -244,8 +277,9 @@ for (const [sessionId, sessionRows] of bySession) {
+ 
+ const agg = {};
+ for (const r of results) {
+-  const a = (agg[r.config] ||= { qaPointRecall: [], qaPointRecallWiki: [], points: 0, preTokens: 0, promptTokens: 0, overContext: 0, overHardLimit: 0, literalRecall: [], qaItems: 0, qaHitsPrompt: 0, qaHitsWithWiki: 0, ms: [], compactedMessages: 0, dispositions: {}, units: 0, semanticIdentities: 0 });
++  const a = (agg[r.config] ||= { prefixReuse: [], qaPointRecall: [], qaPointRecallWiki: [], points: 0, preTokens: 0, promptTokens: 0, overContext: 0, overHardLimit: 0, literalRecall: [], qaItems: 0, qaHitsPrompt: 0, qaHitsWithWiki: 0, ms: [], compactedMessages: 0, dispositions: {}, units: 0, semanticIdentities: 0 });
+   a.points += 1;
++  if (r.prefixReuse != null) a.prefixReuse.push(r.prefixReuse);
+   a.preTokens += r.preTokens;
+   a.promptTokens += r.promptTokens;
+   a.overContext += r.overContext ? 1 : 0;
+@@ -278,6 +312,8 @@ const table = Object.entries(agg).map(([config, a]) => ({
+   qaRecallWithWiki: a.qaItems ? a.qaHitsWithWiki / a.qaItems : null,
+   qaPointMeanRecallPrompt: mean(a.qaPointRecall),
+   qaPointMeanRecallWithWiki: mean(a.qaPointRecallWiki),
++  pointsChanged: a.compactedMessages != null ? results.filter((r) => r.config === config && r.discourse && r.discourse.compactedMessages > 0).length : null,
++  meanPrefixReuse: a.prefixReuse.length ? +mean(a.prefixReuse).toFixed(4) : null,
+   meanMs: +mean(a.ms).toFixed(1),
+   p95Ms: +pct(a.ms, 0.95).toFixed(1),
+   compactedMessages: a.compactedMessages || null,
+diff --git a/src/core/chat-orchestrator.mjs b/src/core/chat-orchestrator.mjs
+index 86742b16..ca4b729e 100644
+--- a/src/core/chat-orchestrator.mjs
++++ b/src/core/chat-orchestrator.mjs
+@@ -43,7 +43,7 @@ import { emitAgentEvent, AGENT_EVENTS, emitTurnStage } from './agent-events.mjs'
+ import { compileLunumShadowContext, compileContext, deriveLunumSidecar, shadowIdentityEnabled } from '../memory/lunum.mjs';
+ import { applyMeaningDedup, applyExactDedup, exactDedupEligible, shadowIdentityOf } from '../memory/lunum-compaction.mjs';
+ import { getRuntimeShadowQueue } from '../memory/lunum-shadow-queue.mjs';
+-import { applyDiscourseView, discourseContextConfig } from '../memory/lunum-discourse.mjs';
++import { ambientDiscourseDue, applyDiscourseView, discourseContextConfig } from '../memory/lunum-discourse.mjs';
+ import { detectPlanApproval, detectPlanRejection, detectPlanResume } from './plan-executor.mjs';
+ import { prepareRoutingDecision } from './routing-decision.mjs';
+ import { resolveExecutionIntent, shouldRouteToPlan, requiresPlanApproval } from './execution-intent.mjs';
+@@ -1093,6 +1093,10 @@ async function runChatTurn(agent, {
+   // last keepVerbatimLast messages unless one alone exceeds recentMaxChars.
+   const discourseCfg = discourseContextConfig(agent.config);
+   let discoursePending = false;
++  // discourseContext.ambient (default off): also at ordinary turns, with a
++  // boundary that moves in steps so the compacted prefix stays cache-stable.
++  const discourseAmbient = ambientDiscourseDue(discourseCfg, history, pressureCheck.status === 'critical' || pressureCheck.status === 'warning');
++  if (discourseAmbient) discoursePending = true;
+   if (pressureCheck.status !== 'ok') {
+     logInfo('context_pressure', pressureCheck);
+     if (pressureCheck.status === 'critical' || pressureCheck.status === 'warning') {
+@@ -1184,7 +1188,7 @@ async function runChatTurn(agent, {
+   }
+   if (discoursePending) {
+     try {
+-      const view = applyDiscourseView({ history, rawHistory, cfg: discourseCfg });
++      const view = applyDiscourseView({ history, rawHistory, cfg: discourseCfg, stepped: discourseAmbient });
+       history = view.history;
+       if (view.meta) {
+         compactionMeta = { ...(compactionMeta || {}), discourse: view.meta };
+diff --git a/src/memory/lunum-discourse.mjs b/src/memory/lunum-discourse.mjs
+index baf572c5..4206a31b 100644
+--- a/src/memory/lunum-discourse.mjs
++++ b/src/memory/lunum-discourse.mjs
+@@ -44,7 +44,16 @@ export const DISCOURSE_CONTEXT_DEFAULTS = Object.freeze({
+   maxOmittedLiterals: 60,
+   // Per-unit lfp:2.1 identities from the deterministic EN/EL extractor for
+   // short sentence units (cost: one extractor call per unit, ~0.3 ms).
+-  unitIdentity: false
++  unitIdentity: false,
++  // Ambient view (OpenLunum experiments/ambient-discourse-v2; default off):
++  // also apply the view at ordinary turns, not only under context pressure,
++  // once the loaded history is at least ambientMinTokens. Away from pressure
++  // the compaction boundary moves in steps of stepMessages (see
++  // compactStepped), so the compacted prefix stays byte-identical between
++  // steps and the server's KV prompt cache keeps reusing it.
++  ambient: false,
++  ambientMinTokens: 4000,
++  stepMessages: 8
+ });
+ 
+ export function discourseContextConfig(config = {}) {
+@@ -152,6 +161,70 @@ export function compactWithDiscourse(messages = [], opts = {}) {
+   return { messages: out, plan, ms: performance.now() - t0 };
+ }
+ 
++/**
++ * Cache-friendly ambient view. The message list (after leading system
++ * messages) is split at a boundary B that moves only in steps:
++ *
++ *   B = floor((n - keepVerbatimLast) / stepMessages) * stepMessages
++ *
++ * Messages before B are planned on their own (keepVerbatimLast 0): their
++ * view depends only on those messages, so it is byte-identical on every
++ * turn until B advances, once per stepMessages new messages. Messages from
++ * B on are verbatim, except that one over recentMaxChars (not the current
++ * turn) is clipped by a plan of that message alone, which is equally stable.
++ * Cost of stability: a unit in the prefix is not dropped as a duplicate of
++ * the same unit in the verbatim tail.
++ */
++export function compactStepped(messages = [], opts = {}) {
++  const t0 = performance.now();
++  const rows = Array.isArray(messages) ? messages : [];
++  let lead = 0;
++  while (lead < rows.length && rows[lead]?.role === 'system') lead += 1;
++  const tail = rows.slice(lead).filter((m) => typeof m?.content === 'string');
++  if (tail.length !== rows.length - lead) return { messages: rows, plan: null, ms: performance.now() - t0 };
++  const cfg = { ...DISCOURSE_CONTEXT_DEFAULTS, ...opts };
++  const step = Math.max(1, Number(cfg.stepMessages) || 1);
++  const boundary = Math.max(0, Math.floor((tail.length - cfg.keepVerbatimLast) / step) * step);
++  let current = -1;
++  for (let i = tail.length - 1; i >= 0; i -= 1) if (tail[i].role === 'user') { current = i; break; }
++  const prefix = boundary > 0 ? compactWithDiscourse(tail.slice(0, boundary), { ...cfg, keepVerbatimLast: 0 }) : null;
++  const stats = { messages: tail.length, boundary, compactedMessages: 0, units: 0, semanticIdentities: 0, dispositions: {} };
++  const add = (plan) => {
++    if (!plan) return;
++    stats.units += plan.stats.units || 0;
++    stats.semanticIdentities += plan.stats.semanticIdentities || 0;
++    for (const [k, v] of Object.entries(plan.stats.dispositions || {})) stats.dispositions[k] = (stats.dispositions[k] || 0) + v;
++  };
++  add(prefix?.plan);
++  const out = [...rows.slice(0, lead)];
++  if (prefix) {
++    for (let i = 0; i < boundary; i += 1) {
++      // The current turn is never inside the prefix (it is the newest user message).
++      const m = prefix.messages[i];
++      if (m.content !== tail[i].content) stats.compactedMessages += 1;
++      out.push(m);
++    }
++  }
++  for (let i = boundary; i < tail.length; i += 1) {
++    const m = tail[i];
++    if (i !== current && m.content.length > cfg.recentMaxChars) {
++      const one = compactWithDiscourse([m], { ...cfg, keepVerbatimLast: 0, maxMessageChars: cfg.recentMaxChars });
++      add(one.plan);
++      if (one.messages[0].content !== m.content) stats.compactedMessages += 1;
++      out.push(one.messages[0]);
++    } else {
++      out.push(m);
++    }
++  }
++  return { messages: out, plan: { stats }, ms: performance.now() - t0 };
++}
++
++/** True when the ambient view should run at this turn (no pressure, enough history). */
++export function ambientDiscourseDue(cfg, history, pressureOn) {
++  if (!cfg?.enabled || !cfg.ambient || pressureOn) return false;
++  return estimateTokens(history) >= (Number(cfg.ambientMinTokens) || 0);
++}
++
+ /**
+  * The prompt-path step (chat-orchestrator): align the post-compaction history
+  * with the id-bearing rawHistory from the end, so compacted messages can point
+@@ -161,9 +234,10 @@ export function compactWithDiscourse(messages = [], opts = {}) {
+  * @param {Array<{role:string, content:string}>} p.history   prompt messages (a leading checkpoint is allowed)
+  * @param {Array<{id?:number, role:string, content:string}>} p.rawHistory  stored rows, oldest first
+  * @param {object} p.cfg   discourseContextConfig(config)
++ * @param {boolean} [p.stepped]  ambient turn: use compactStepped (cache-friendly boundary)
+  * @returns {{ history: Array<{role:string, content:string}>, meta: object|null }}
+  */
+-export function applyDiscourseView({ history = [], rawHistory = [], cfg = DISCOURSE_CONTEXT_DEFAULTS } = {}) {
++export function applyDiscourseView({ history = [], rawHistory = [], cfg = DISCOURSE_CONTEXT_DEFAULTS, stepped = false } = {}) {
+   let lead = 0;
+   while (lead < history.length && history[lead]?.role === 'system' && !rawHistory.some((r) => r.content === history[lead].content)) lead += 1;
+   const tailCount = history.length - lead;
+@@ -173,7 +247,7 @@ export function applyDiscourseView({ history = [], rawHistory = [], cfg = DISCOU
+     return raw && raw.content === m.content && raw.id != null ? { ...m, id: raw.id } : { ...m };
+   });
+   const preTokens = estimateTokens(history);
+-  const { messages, plan, ms } = compactWithDiscourse(withIds, cfg);
++  const { messages, plan, ms } = stepped ? compactStepped(withIds, cfg) : compactWithDiscourse(withIds, cfg);
+   if (!plan) return { history, meta: null };
+   const out = messages.map((m) => ({ role: m.role, content: m.content }));
+   return {
+@@ -182,6 +256,7 @@ export function applyDiscourseView({ history = [], rawHistory = [], cfg = DISCOU
+       preTokens,
+       postTokens: estimateTokens(out),
+       compactedMessages: plan.stats.compactedMessages,
++      ...(stepped ? { ambient: true, boundary: plan.stats.boundary } : {}),
+       units: plan.stats.units,
+       semanticIdentities: plan.stats.semanticIdentities,
+       dispositions: plan.stats.dispositions,

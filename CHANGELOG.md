@@ -1,5 +1,13 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-10-10
+
+### Changed
+- Discourse literal extractor: relative paths of three or more segments without an extension (`propose/check/decide`) and absolute paths after a host prefix (`rig:/srv/app`) are path literals, so a clip keeps the `/word/word` spelling the ambient recall definition counts. Discourse record version unchanged.
+
+### Added
+- Pre-registered ambient discourse view v2 (path literals + stepped compaction boundary): fail on tokens (−13.1% vs the 20% bar) and graded QA (21/42 vs 24/42); QA literal recall 95/95 and reusable prefix 100% (v1: 33%). Not implemented. With the new core, v1's unstepped view keeps 95/95 at −36.5%.
+
 ## Unreleased — 2026-10-09
 
 ### Changed
