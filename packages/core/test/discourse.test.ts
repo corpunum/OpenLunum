@@ -184,3 +184,43 @@ test('analysis is linear on long digit runs; test counts read the same', () => {
   const records = analyzeDiscourse('Tests: 3 failed | 120 passed (123); build x12 passed').units.flatMap((a) => a.records);
   assert.deepEqual(records.find((r) => r.type === 'test_result'), { type: 'test_result', counts: { fail: 3, pass: 120 } });
 });
+
+// ambient-discourse-v1 follow-up: the QA literal definition of the ambient
+// measurement counts any `/seg/seg` spelling, including one inside a
+// relative path or after a host prefix. Core must name a path literal that
+// contains each such spelling, or a clip can drop it (the 1 lost literal).
+test('every two-segment path spelling is inside a path literal', () => {
+  const QA_PATH = /(?:~|\.{1,2})?\/(?:[\w.@+-]+\/)+[\w.@+-]+/gu;
+  const samples = [
+    'no native propose/check/decide run this cycle',
+    'see src/memory/lunum for the view',
+    'copied to rig:/srv/app/current before restart',
+    'GET /api/health returned 200',
+    'path /check/decide was clipped',
+    'the and/or case stays a word',
+    'artifacts in ~/.openunum/worktrees/x and ./dist/test',
+    'branch origin/feat/l3 merged',
+  ];
+  for (const text of samples) {
+    const { analysis } = { analysis: analyzeDiscourse(text) };
+    const paths = analysis.units.flatMap((u) => u.literals.paths);
+    const spellings = literalSpellings(text);
+    for (const m of text.matchAll(QA_PATH)) {
+      assert.ok(paths.some((p) => p.includes(m[0])), `${JSON.stringify(m[0])} not inside a path literal of ${JSON.stringify(text)}: ${JSON.stringify(paths)}`);
+      assert.ok(spellings.some((p) => p.includes(m[0])), `${JSON.stringify(m[0])} not in literalSpellings`);
+    }
+  }
+  // A two-word slash pair is not a path (the QA definition does not count it either).
+  assert.deepEqual(analyzeDiscourse('the and/or case').units[0]!.literals.paths, []);
+});
+
+test('a clip keeps a three-segment relative path spelling', () => {
+  const long = `${'Background sentence that carries no literal at all. '.repeat(12)}Drafts were written to disk only and were not submitted anywhere during this cycle, and no native propose/check/decide run happened this cycle; prior failed assessment kept. ${'More narrative without literals follows here. '.repeat(12)}`;
+  const plan = planDiscourseCompaction([
+    { id: 1, role: 'assistant', content: long },
+    { id: 2, role: 'user', content: 'ok' },
+  ], { keepVerbatimLast: 1, minChars: 100, maxMessageChars: 400, clipChars: 80, maxUnitChars: 120 });
+  assert.ok((plan.messages[0]!.dispositions.clipped ?? 0) >= 1, JSON.stringify(plan.messages[0]!.dispositions));
+  const shown = plan.messages.map((m) => m.content).join('\n');
+  assert.ok(shown.includes('/check/decide'), shown.slice(0, 400));
+});
