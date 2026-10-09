@@ -1,0 +1,386 @@
+{
+  "format": "openlunum-served-runtime-manifest/1",
+  "roots": [
+    "packages/core/dist/src",
+    "packages/mcp/dist/src",
+    "packages/mcp/dist/bin"
+  ],
+  "artifacts": [
+    {
+      "path": "packages/core/dist/src/agent-builder.js",
+      "sha256": "58bf96ec983db307cc2f3634da2645940633629dbfdfe5422c1461291a32c395"
+    },
+    {
+      "path": "packages/core/dist/src/agent-interop.js",
+      "sha256": "4250064979449a81ce974c55d82efbb0e489149e0890ebb29fe84f9b82d529ec"
+    },
+    {
+      "path": "packages/core/dist/src/agent-native.js",
+      "sha256": "f930b4cb199b6d3532859b0c92482a211d2db95ef339d524d3731b3f39dd9152"
+    },
+    {
+      "path": "packages/core/dist/src/agent-state-freeze.js",
+      "sha256": "916a63f061b090f622b6067e1e200e371c74f137d9959ffbba96519f0e9b531e"
+    },
+    {
+      "path": "packages/core/dist/src/agent-state-idempotency.js",
+      "sha256": "67dbe26b90759454af88996dfa8c236dc45c743e9ccfe8aeb6c5e2055db8a2a6"
+    },
+    {
+      "path": "packages/core/dist/src/agent-state-retention.js",
+      "sha256": "d92a94e9c6dbf248f583c3d5db09e610ab36974c33d77625acaf4eb58920e52c"
+    },
+    {
+      "path": "packages/core/dist/src/agent-state-tamper-evidence.js",
+      "sha256": "ce678a023e8b339dd5ad6ce5233da27c81ddbd9a183832951bcba7b7c38ba270"
+    },
+    {
+      "path": "packages/core/dist/src/agent-state.js",
+      "sha256": "24801f9dc036c12dc9298f7f37fc5feae5959c514e7471a3518dfb2e3a727f4b"
+    },
+    {
+      "path": "packages/core/dist/src/backup-restore.js",
+      "sha256": "b0f5104ce669ec5b9f49090e90dfffa5a32f6a02abc0e0d5159cfdd09cb755f4"
+    },
+    {
+      "path": "packages/core/dist/src/canonicalize.js",
+      "sha256": "16498c3cd1e17a2726b205b011d95acd15d867037a6dee555da8b5c53c3c94f5"
+    },
+    {
+      "path": "packages/core/dist/src/compaction-gates.js",
+      "sha256": "b8f0650afa6990c96688c5fe9432c19078e68f4be87867ea0e1bb7f0da072be0"
+    },
+    {
+      "path": "packages/core/dist/src/compare.js",
+      "sha256": "eec3f38c0f57672e88b612081c606bab42956886b665f644d230542de1f5255f"
+    },
+    {
+      "path": "packages/core/dist/src/compatibility-matrix.js",
+      "sha256": "272532fe724cad6b59f411a9cc1c9f4343f8cdcbefd51cb0831a8fa01ed007bc"
+    },
+    {
+      "path": "packages/core/dist/src/conformance-reports.js",
+      "sha256": "737da861057eb7a43708dae67b6720a3bba830e80c969f3ddff91cf89f29e748"
+    },
+    {
+      "path": "packages/core/dist/src/conformance-vectors.js",
+      "sha256": "e15f73b048e48ba2d76a11433839eae0c1f4b09f96bf742fc760155aaff7172c"
+    },
+    {
+      "path": "packages/core/dist/src/constants.js",
+      "sha256": "d81a9cc7691b473b4dab6e7150e6adc288a8e069dcf1ff7e8cf1e704c129ff7f"
+    },
+    {
+      "path": "packages/core/dist/src/context-eligibility.js",
+      "sha256": "6bcf7f0328690fbc4120182c3176fcc22fd12648b25b88a250a0ad8b12fe0711"
+    },
+    {
+      "path": "packages/core/dist/src/context-measurement.js",
+      "sha256": "73d37841772a8b1522080289924c06b47949bdc0afadbf288caa09bc26f5f506"
+    },
+    {
+      "path": "packages/core/dist/src/context-mode-selector.js",
+      "sha256": "76cd6aa81a9d30e0018bf303d4f238dad418261e920d4cd55a7d58857f5fafab"
+    },
+    {
+      "path": "packages/core/dist/src/context.js",
+      "sha256": "d272b03ef684996f061fdc0fa8c743d56dd0dcb0f599767b2742ca91c2a98a9f"
+    },
+    {
+      "path": "packages/core/dist/src/correction-telemetry.js",
+      "sha256": "e975b049721f6dc559586d8586f528395ff41f29e0791a8721414240239702a4"
+    },
+    {
+      "path": "packages/core/dist/src/derive.js",
+      "sha256": "314f824fd09ea69ef2fe61afcead0abfe67126aa8f3e7a527440d8e49b7eb84c"
+    },
+    {
+      "path": "packages/core/dist/src/discourse.js",
+      "sha256": "4113be426e27cd4e568a01450842a02b3e8628d4b61de6d7d786fbbe97bd532e"
+    },
+    {
+      "path": "packages/core/dist/src/downstream-quality.js",
+      "sha256": "c312e75fa59290fcde2cda1633c3772a613602c9833759dd4de3c16f997afb6d"
+    },
+    {
+      "path": "packages/core/dist/src/error-observability.js",
+      "sha256": "7282264dc5670266de8fa04171affce98b1d8f3eba2e2091824416e99fe66e8f"
+    },
+    {
+      "path": "packages/core/dist/src/fallback-policy.js",
+      "sha256": "1e1339dd6ea5d3b3edc57bc065f62ef35dfb8e846d2f9f9c8c313afd074b17ed"
+    },
+    {
+      "path": "packages/core/dist/src/fingerprint-contract.js",
+      "sha256": "63cdf5d039b883b651edb8fade5ebfb4669dafed3d08306fc697a42cb7c68283"
+    },
+    {
+      "path": "packages/core/dist/src/fingerprint-migration.js",
+      "sha256": "9de1bad2c4078666be513c3f83b258340358748c42d9988e6705c19343020c13"
+    },
+    {
+      "path": "packages/core/dist/src/fingerprint-support-contract.js",
+      "sha256": "f7cc324ccd5dc56a26d7920974bfa14f9280cf09dec0c2c65cade6572d6fcb9a"
+    },
+    {
+      "path": "packages/core/dist/src/fingerprint.js",
+      "sha256": "6e99dfdd7a4ec6c997bbdd97d0cca5854b1a831d196abb35a2648c288848bd55"
+    },
+    {
+      "path": "packages/core/dist/src/frame-registry.js",
+      "sha256": "9701a94eca38d882a55586e0db6e38c9fce44b7b4b67634c256d0f812b8fc3f7"
+    },
+    {
+      "path": "packages/core/dist/src/grounding-capability.js",
+      "sha256": "0ee2cef3c2444873e8efa16949e2d939418d3e01218332b05c06d76f50d2e7c0"
+    },
+    {
+      "path": "packages/core/dist/src/grounding-provider.js",
+      "sha256": "d2ec9fe9d19af3abdcc47beb767cc32f88457d7f1656de9266d53e8b27b1e809"
+    },
+    {
+      "path": "packages/core/dist/src/grounding.js",
+      "sha256": "57009a186b560fa1b5b28be77ec4646a8846c82d98d5776f01ff13045434cefe"
+    },
+    {
+      "path": "packages/core/dist/src/hard-gates.js",
+      "sha256": "2fc9fe13daaa978f0d4cc63d3867e4c359bbc7f71b5c9085beb706edbf935acf"
+    },
+    {
+      "path": "packages/core/dist/src/human-review-policy.js",
+      "sha256": "635afd36240602e9fa92c791cd3eb0da2a53dab80e381f8c66dbd0f46d1dd836"
+    },
+    {
+      "path": "packages/core/dist/src/identity-migration.js",
+      "sha256": "0ee09eae9043bfb89b0efe34668a628f5adfb195accf60d4f5b62d16abec65f8"
+    },
+    {
+      "path": "packages/core/dist/src/index.js",
+      "sha256": "b925f298b78c91dd703d2b11e54f5de170e3060eb84ba4407cb6b0b948120371"
+    },
+    {
+      "path": "packages/core/dist/src/literal-retention.js",
+      "sha256": "d8423b0d8787e7f63829bf3666b097be2ff970db949168053af9298ea252c0fe"
+    },
+    {
+      "path": "packages/core/dist/src/llama-tokenizer.js",
+      "sha256": "8e180879ef5a954f27c7fc59ae9bc2334d0360dc40b725eb4131d16bd213edd3"
+    },
+    {
+      "path": "packages/core/dist/src/mixed-context-quality.js",
+      "sha256": "916739bb03866256e3b5253b46723bac808931e0db14723dd5df5c0040403107"
+    },
+    {
+      "path": "packages/core/dist/src/model-identity.js",
+      "sha256": "359cad3ba3dc55ada88e2025fa645597421e7002d8c05e4cc4796d579d8fa03d"
+    },
+    {
+      "path": "packages/core/dist/src/model-renderer-profiles.js",
+      "sha256": "1a97f7d4024623e81a455bbc3bbce40e53a7cdfe04f7f277a5d388ac5f12190d"
+    },
+    {
+      "path": "packages/core/dist/src/multilingual-memory-pilot.js",
+      "sha256": "b5128ef267b0b0d6240de2010370e2d85757167020fa5c3fb73ec31db346adc8"
+    },
+    {
+      "path": "packages/core/dist/src/native-model.js",
+      "sha256": "16157f67ec413bbbbdcb520a720dad1e18bb4a1449ddb3f85314295e8f711332"
+    },
+    {
+      "path": "packages/core/dist/src/near-semantic-fingerprints.js",
+      "sha256": "7ae8d47ab978da994740b0ec3d068233cd3448a0a756578e0c76fe9fd39a366d"
+    },
+    {
+      "path": "packages/core/dist/src/observability.js",
+      "sha256": "69733844b5ecfe47df691a5b8d415cedc835246a0c847e2e2939773fa910a388"
+    },
+    {
+      "path": "packages/core/dist/src/policy-classifier.js",
+      "sha256": "b119520bed39da1156f146c645809d6d603ac2aa7fb0607e4f1658cfc4856b9a"
+    },
+    {
+      "path": "packages/core/dist/src/policy.js",
+      "sha256": "69912d7a62824c1aa39aef73c00f2a0f5a9ca75fcb33363636f837094bdc2d0d"
+    },
+    {
+      "path": "packages/core/dist/src/privacy-audit-map.js",
+      "sha256": "e72ddc05578d853efe2b2cc26611a870d8dfe9ff1e5df62c3af2277640812463"
+    },
+    {
+      "path": "packages/core/dist/src/privacy-derived-lifecycle.js",
+      "sha256": "fc1941b293353db5f9f94700c084a3d0ca755041119a12702dcaf6c28e3eace1"
+    },
+    {
+      "path": "packages/core/dist/src/profile-selector.js",
+      "sha256": "a042cad4762b76edafa4982801a61360e7da52ecf3a7cf204f1fd77b9d504e3c"
+    },
+    {
+      "path": "packages/core/dist/src/profiles.js",
+      "sha256": "11fc0784cbcc4d9357867d1c64aa769a1b3d0dc23c95e30b16071f5dff64761c"
+    },
+    {
+      "path": "packages/core/dist/src/prohibited-domains.js",
+      "sha256": "b822a5e2066f5e624e9dee8208f70de1e699eca01ed8ee26684a965bb85c16c7"
+    },
+    {
+      "path": "packages/core/dist/src/prompt-gates.js",
+      "sha256": "53957986e6ed31e5c43283e71ee13eeb8b33c69c1853b0a4363497f06f47864b"
+    },
+    {
+      "path": "packages/core/dist/src/prompt-injection.js",
+      "sha256": "7742c5b302fc3aa50bd65d92ef4eb90e11f52167052d410305a31e0d2323787b"
+    },
+    {
+      "path": "packages/core/dist/src/protected-literal-registry.js",
+      "sha256": "6d32aab5e873b6101dfb2b555e1035c05c213599528453cd9b07fcf40cdaa537"
+    },
+    {
+      "path": "packages/core/dist/src/quality-gate-ci.js",
+      "sha256": "e1dfa0e6ae174a1f2995596939602b184d0cce889c9e45d4b2feb6ef6fce5c59"
+    },
+    {
+      "path": "packages/core/dist/src/release-governance.js",
+      "sha256": "cccbc1270c8b2b74183325396cc8175273cbf9f33f354c4e125fd3cab55e93de"
+    },
+    {
+      "path": "packages/core/dist/src/release-provenance.js",
+      "sha256": "6d810ab14f71e9fbe0898d74d3639dda5dd37074648588344e440c7a1cdf2f0a"
+    },
+    {
+      "path": "packages/core/dist/src/render.js",
+      "sha256": "fdb75e79129b7c05c85399c370da6bd75a4d37741b90334c2751d621e73f02f4"
+    },
+    {
+      "path": "packages/core/dist/src/renderer-conformance.js",
+      "sha256": "3ec3c1ff1c21c3a9be137a63a4c367b0532a5e08870bd811ef416b49316a24bd"
+    },
+    {
+      "path": "packages/core/dist/src/retention-fallback-rollback.js",
+      "sha256": "e25772ca1b75dfc9360ca8c1fe8a92a8b61f860df5d60dec8b60589daf466a24"
+    },
+    {
+      "path": "packages/core/dist/src/rollback-process.js",
+      "sha256": "ab5d17d23543d510f67384489e7f42258e0cb99eb3c0b8f0b04b648721ec3c0c"
+    },
+    {
+      "path": "packages/core/dist/src/safety-review-policy.js",
+      "sha256": "0ca48d48aced1373564e7f9622745c018462e69378a1ac9fad147a09f503aec9"
+    },
+    {
+      "path": "packages/core/dist/src/schema-conformance-runner.js",
+      "sha256": "c689330026fb51d2528988703d71be499b3aad68573aeaee139090699903a0c8"
+    },
+    {
+      "path": "packages/core/dist/src/schema-freeze.js",
+      "sha256": "3d272e43f99b3c506d502740215acc5e376236eaae7cb3f63ffd6e36cf7cf782"
+    },
+    {
+      "path": "packages/core/dist/src/semantic-invariants.js",
+      "sha256": "de5a507e733b5e9430071667c90f7a85c7de1135857e29ec77a76d686b0c1893"
+    },
+    {
+      "path": "packages/core/dist/src/semantic-ir.js",
+      "sha256": "715c81efec4497bdca5162b85e937714b249548a235adec04f56f80511e2e12c"
+    },
+    {
+      "path": "packages/core/dist/src/semantic-registry.js",
+      "sha256": "3bf6ee41db049b73f58356795343e6f65f5b3de3feab9140e047523f4e9a4a8b"
+    },
+    {
+      "path": "packages/core/dist/src/semantic-transport-schema.js",
+      "sha256": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf"
+    },
+    {
+      "path": "packages/core/dist/src/semantic-transport.js",
+      "sha256": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476"
+    },
+    {
+      "path": "packages/core/dist/src/supply-chain.js",
+      "sha256": "ae3d56041ddfb68bc629494f3771ca2f10cf58efe53280b7d055a26f955f8bfb"
+    },
+    {
+      "path": "packages/core/dist/src/support-contract.js",
+      "sha256": "c6651c14134ef5d822c416629c1a5f1e696c360bc02eb0520045b8eaa0bda9ac"
+    },
+    {
+      "path": "packages/core/dist/src/tenant-isolation.js",
+      "sha256": "7369b85bc2421408c7446b72bdfbba24ecef8e68c1189737eb076416bc1fe79d"
+    },
+    {
+      "path": "packages/core/dist/src/threshold-calibration.js",
+      "sha256": "4f913230816e0678d667db8651c919033dc124b546354d48d9f704a86722f85e"
+    },
+    {
+      "path": "packages/core/dist/src/token-atlas.js",
+      "sha256": "2475abac89b54cfde4eb0ef979c57cd23ca47f5b4c86bf868ccd887394c0fdc8"
+    },
+    {
+      "path": "packages/core/dist/src/token-optimization-compat.js",
+      "sha256": "4afdf38c5d0c99b41504ac4abc0613902b830f6e93eb55b1dc91433dce75e002"
+    },
+    {
+      "path": "packages/core/dist/src/token-optimization.js",
+      "sha256": "c212f989b118b9b1d4b51b15336e54d3b9d891b201d5d6ce8ee4c2ec39c08b8b"
+    },
+    {
+      "path": "packages/core/dist/src/tokenizer-measurement.js",
+      "sha256": "9698f1bc78619a3960671f031a1cdfda4945ac207b8ca2bf368cce801b32efa7"
+    },
+    {
+      "path": "packages/core/dist/src/typed-structures.js",
+      "sha256": "54782d9f08efa7156be77285e792f85b0d0ad67aa5853a6e10ffa84a4dacd744"
+    },
+    {
+      "path": "packages/core/dist/src/types-schema-conformance.js",
+      "sha256": "70a3ac7ce71d3d706b9e797943c1651e7b0a292e846e825957e72db92a4aad31"
+    },
+    {
+      "path": "packages/core/dist/src/types-schema.js",
+      "sha256": "e9e62d18ffaffc002d7dbe44171f5c25b637fe7a27945d4b9593d8f404dc7cbf"
+    },
+    {
+      "path": "packages/core/dist/src/types.js",
+      "sha256": "01ae2a5b120382f9a648ced7ee8507493a134f216d100fc61600c6c9738235d2"
+    },
+    {
+      "path": "packages/core/dist/src/workflow-audit.js",
+      "sha256": "de440997b79a064db0a7d92332388ba67807d16ceae9e9e5ba2a402364beb207"
+    },
+    {
+      "path": "packages/mcp/dist/bin/lunum-mcp.js",
+      "sha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758"
+    },
+    {
+      "path": "packages/mcp/dist/src/config.js",
+      "sha256": "ea88217d73f1e7c4830d50e6243869e57a68f2adf4ded7d952783ee070865afb"
+    },
+    {
+      "path": "packages/mcp/dist/src/context.js",
+      "sha256": "03306af45fa2eb1eaf02f555d8befacdd0bf06e53b946f9214d531ac63b0563b"
+    },
+    {
+      "path": "packages/mcp/dist/src/errors.js",
+      "sha256": "8fa96cf5888983c11fdf64f99ad3b7d9c503dec6dd248359cbb78390d52a58ce"
+    },
+    {
+      "path": "packages/mcp/dist/src/index.js",
+      "sha256": "b7a0f88bfe0424dfeee16ddca2abb408691816ca7eb83a414553262bd5fe5813"
+    },
+    {
+      "path": "packages/mcp/dist/src/mcp-contract.js",
+      "sha256": "44c9c17edc3352e2e36c0b1930fca4deee4990d479c20a3d7295e2d5d6a85ed5"
+    },
+    {
+      "path": "packages/mcp/dist/src/server.js",
+      "sha256": "df1b9f478a13e8b5c5ff6d5a5986fa7d6b53b1655e9ab84dd04436a087c72638"
+    },
+    {
+      "path": "packages/mcp/dist/src/tools.js",
+      "sha256": "d4a62543c5b57f69949a32b13c0bdc88dbeee124bd1851d724b29ed021a2d13c"
+    },
+    {
+      "path": "packages/mcp/dist/src/types.js",
+      "sha256": "3117b5787c8f2272872cc95bfa95cb53665eeb26731c3ec6eb20eb66b26fce42"
+    }
+  ]
+}

@@ -156,6 +156,16 @@ test('public instruction package exposes frozen scoring conventions without gold
   for (const key of ['frameRegistryHash', 'frameValidatorArtifactSha256', 'coreContractHash', 'instructionHash', 'servedRuntimeManifestSha256']) {
     assert.notEqual(v20.freeze[key], v19.freeze[key], `${key} changed in v20`);
   }
+  // v21 (ambient-discourse-v2): the served discourse module changes (path
+  // literals); every contract, frame, tool and retention binding is v20's.
+  const v21 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v21.json', 'utf8'));
+  assert.equal(v21.supersedes.path, 'public-instruction-package-v20.json');
+  for (const [key, value] of Object.entries(v20.freeze)) {
+    if (key === 'servedRuntimeManifestPath' || key === 'servedRuntimeManifestSha256') continue;
+    assert.deepEqual(v21.freeze[key], value, `${key} unchanged in v21`);
+  }
+  assert.notEqual(v21.freeze.servedRuntimeManifestSha256, v20.freeze.servedRuntimeManifestSha256);
+  assert.deepEqual(v21.conventions, v20.conventions);
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
   assert.equal(hash('packages/mcp/dist/src/tools.js'), v20.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
