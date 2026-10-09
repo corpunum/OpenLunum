@@ -1,7 +1,7 @@
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
 
-export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.6' as const;
+export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.7' as const;
 
 export interface FrameRoleRequirement {
   name: string;
@@ -189,13 +189,18 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     distinctRoles: Object.freeze([Object.freeze(['agent', 'recipient'] as const)]),
     description: 'A stated authority (agent) forbids a recipient from performing an action (a registered predicate) and/or from acting on a theme (the object or resource). With no stated authority ("X must not Y"), use negation or modality on Y instead.'
   }),
+  // decisions/0023: imperatives ("Deploy the billing patch by Friday.") name
+  // what is deployed and often no destination; the addressee is the implicit
+  // agent and is left out, as for enable/delete (decisions/0014).
   deploy: Object.freeze({
     predicate: 'deploy',
     roles: Object.freeze([
-      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
-      { name: 'destination', required: true }
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'theme', required: false },
+      { name: 'destination', required: false }
     ]),
-    description: 'An agent deploys to an environment or destination.'
+    atLeastOneOf: Object.freeze(['theme', 'destination']),
+    description: 'An agent (optional in imperatives) deploys a theme (what is deployed) and/or to a destination (an environment).'
   }),
   copy: Object.freeze({
     predicate: 'copy',
@@ -209,10 +214,10 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
   rotate: Object.freeze({
     predicate: 'rotate',
     roles: Object.freeze([
-      { name: 'agent', required: true, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
       { name: 'theme', required: true }
     ]),
-    description: 'An agent rotates a credential or key.'
+    description: 'An agent (optional in imperatives) rotates a credential or key.'
   }),
   deadline: Object.freeze({
     predicate: 'deadline',
@@ -304,7 +309,6 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     ['store', 'stores or saves an item'],
     ['approve', 'approves a request, document or action'],
     ['run', 'runs or executes a job, task or process'],
-    ['restart', 'restarts a system, service or process'],
   ] as const).map(([predicate, gloss]) => [predicate, Object.freeze({
     predicate,
     roles: Object.freeze([
@@ -313,6 +317,17 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     ]),
     description: `An agent ${gloss}.`
   })])),
+  // decisions/0023: restart carries a stated count ("restart S-12 twice /
+  // δύο φορές"), with the same shape as retry; theme stays required.
+  restart: Object.freeze({
+    predicate: 'restart',
+    roles: Object.freeze([
+      { name: 'agent', required: false, allowedTermTypes: ['actor', 'entity', 'system'] },
+      { name: 'theme', required: true },
+      { name: 'count', required: false, allowedTermTypes: ['quantity'] }
+    ]),
+    description: 'An agent restarts a system, service or process, optionally a stated number of times (count).'
+  }),
   share: Object.freeze({
     predicate: 'share',
     roles: Object.freeze([

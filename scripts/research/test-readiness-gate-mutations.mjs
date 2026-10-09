@@ -34,6 +34,7 @@ const cases = [
   { name: 'relative-time-retention-disabled', source: 'literal-retention.js', test: 'relative-time-number-word-retention.test.js', from: 'const missingRelativeTimes = sourceRelativeTimes.filter((token) => !candidateRelativeTimes.has(token));', to: 'const missingRelativeTimes = [];' },
   { name: 'discourse-record-literal-gate-disabled', source: 'discourse.js', test: 'discourse.test.js', from: 'const recordText = rendered && retainsLiterals(literals, rendered) && rendered.length < unit.text.length ? rendered : null;', to: 'const recordText = rendered;' },
   { name: 'inclusive-bound-predicates-unregistered', source: 'semantic-registry.js', test: 'inclusive-bound.test.js', from: "'at_most', 'at_least'", to: "'x_at_most', 'x_at_least'" },
+  { name: 'deploy-target-requirement-dropped', source: 'frame-registry.js', test: 'frame-gaps.test.js', from: "atLeastOneOf: Object.freeze(['theme', 'destination']),", to: '' },
   { name: 'discourse-duplicate-dedup-disabled', source: 'discourse.js', test: 'discourse.test.js', from: 'if (seenKeys.has(a.key) || localKeys.has(a.key)) {', to: 'if (false) {' },
 ];
 function run(directory, test, research = false) {

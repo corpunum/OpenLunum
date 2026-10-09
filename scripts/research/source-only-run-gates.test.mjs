@@ -9,7 +9,7 @@ import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeMan
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
-const packagePath = path.join(packageDirectory, 'public-instruction-package-v19.json');
+const packagePath = path.join(packageDirectory, 'public-instruction-package-v20.json');
 const pkg = JSON.parse(fs.readFileSync(packagePath));
 const legacyPackagePath = path.join(packageDirectory, 'public-instruction-package-v14.json');
 const legacyPkg = JSON.parse(fs.readFileSync(legacyPackagePath));
@@ -21,7 +21,7 @@ const binding = () => artifactBinding(root, packagePath, profilePath, pkg);
 // resolve the real git directory instead of assuming `<root>/.git/`.
 const gitScratch = spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: root, encoding: 'utf8' }).stdout.trim() || path.join(root, '.git');
 
-test('v19 binds every current artifact, dependency and served runtime manifest', () => {
+test('v20 binds every current artifact, dependency and served runtime manifest', () => {
   const result = binding();
   assert.equal(result.match, true);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
@@ -68,7 +68,7 @@ test('v15 remains frozen historical binding and cannot certify current contract0
   assert.equal(checkServedContract(contract, historical).match, false);
 });
 
-test('v17 remains frozen historical binding and cannot certify current contract0.17', () => {
+test('v17 remains frozen historical binding and cannot certify current contract0.18', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v17.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
@@ -89,7 +89,29 @@ test('v17 remains frozen historical binding and cannot certify current contract0
   assert.equal(checkServedContract(contract, pkg).match, true);
 });
 
-test('v18 remains frozen historical binding and cannot certify current contract0.17', () => {
+test('v19 remains frozen historical binding and cannot certify current contract0.18', () => {
+  const historicalPath = path.join(packageDirectory, 'public-instruction-package-v19.json');
+  const historical = JSON.parse(fs.readFileSync(historicalPath));
+  const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
+  const result = artifactBinding(root, historicalPath, profile, historical);
+  assert.equal(result.match, false);
+  // Exactly the artifacts changed by decisions/0023 (contract and frame
+  // registry) drift; protocol vocabulary, literal retention and tools still bind.
+  const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
+  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
+  const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
+  assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
+  assert.deepEqual(runtimeCheck.runtime.errors.sort(), [
+    'served_runtime_changed:packages/core/dist/src/agent-native.js',
+    'served_runtime_changed:packages/core/dist/src/frame-registry.js'
+  ]);
+  const served = checkServedContract(contract, historical);
+  assert.equal(served.match, false);
+  assert.deepEqual(served.mismatches.sort(), ['coreContractHash', 'coreContractJsonSerializationSha256', 'coreContractVersion', 'frameRegistryHash', 'frameRegistryVersion', 'instructionHash', 'instructionVersion']);
+  assert.equal(checkServedContract(contract, pkg).match, true);
+});
+
+test('v18 remains frozen historical binding and cannot certify current contract0.18', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v18.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
@@ -111,7 +133,7 @@ test('v18 remains frozen historical binding and cannot certify current contract0
   assert.deepEqual(served.mismatches.sort(), ['coreContractHash', 'coreContractJsonSerializationSha256', 'coreContractVersion', 'frameRegistryHash', 'frameRegistryVersion', 'instructionHash', 'instructionVersion', 'protocolRegistryHash', 'protocolVersion']);
 });
 
-test('v16 remains frozen historical binding and cannot certify current contract0.17', () => {
+test('v16 remains frozen historical binding and cannot certify current contract0.18', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v16.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);

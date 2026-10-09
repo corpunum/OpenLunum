@@ -3,6 +3,7 @@
 ## Unreleased — 2026-10-09
 
 ### Changed
+- Frames `lunum-frame/0.7`, contract `lunum-agent/0.18`, instructions 0.8, package v20 (ADR 0023): imperative `deploy`/`rotate` need no agent (the addressee is implicit); `deploy` takes an optional theme (at least one of theme/destination); `restart` takes an optional count. Replay of 229 recorded candidates: no identity changed. Scoring manifest v7 and source review v6 rebind unchanged historical bytes.
 - Protocol `lunum-protocol/0.5`, frames `lunum-frame/0.6`, contract `lunum-agent/0.17`, instructions 0.7, package v19 (ADR 0022): inclusive comparison predicates `at_most`/`at_least` (subject, value); inclusive bounds (`up to`, `έως`, `at least`) are conditions instead of abstentions. Replay of 227 recorded candidates: no identity changed. Scoring manifest v6 and source review v5 rebind unchanged historical bytes.
 
 ### Added

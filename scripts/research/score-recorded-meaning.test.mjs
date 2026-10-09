@@ -214,20 +214,20 @@ test('source digit loss and target-source drift are rejected before scoring', ()
 });
 
 test('file-bound replay refuses altered schema/version, dataset, targets, package and raw streams', () => {
-  const manifest = JSON.parse(fs.readFileSync('experiments/meaning-scoring-recorded-v6/input-manifest.json', 'utf8'));
-  const previousManifest = JSON.parse(fs.readFileSync('experiments/meaning-scoring-recorded-v5/input-manifest.json', 'utf8'));
+  const manifest = JSON.parse(fs.readFileSync('experiments/meaning-scoring-recorded-v7/input-manifest.json', 'utf8'));
+  const previousManifest = JSON.parse(fs.readFileSync('experiments/meaning-scoring-recorded-v6/input-manifest.json', 'utf8'));
   const originalManifest = JSON.parse(fs.readFileSync('experiments/meaning-scoring-recorded-v2/input-manifest.json', 'utf8'));
   assert.deepEqual(manifest.inputs, originalManifest.inputs);
-  assert.equal(manifest.supersedes.manifest, 'experiments/meaning-scoring-recorded-v5/input-manifest.json');
-  assert.equal(previousManifest.scoringContract.agent, 'lunum-agent/0.16');
+  assert.equal(manifest.supersedes.manifest, 'experiments/meaning-scoring-recorded-v6/input-manifest.json');
+  assert.equal(previousManifest.scoringContract.agent, 'lunum-agent/0.17');
   assert.deepEqual(manifest.inputs, previousManifest.inputs);
   assert.deepEqual(manifest.review, previousManifest.review);
   const migratedContract = structuredClone(manifest.scoringContract);
   for (const key of ['agent', 'protocol', 'frames']) migratedContract[key] = previousManifest.scoringContract[key];
   assert.deepEqual(migratedContract, previousManifest.scoringContract);
-  assert.equal(manifest.scoringContract.agent, 'lunum-agent/0.17');
+  assert.equal(manifest.scoringContract.agent, 'lunum-agent/0.18');
   assert.equal(manifest.scoringContract.protocol, 'lunum-protocol/0.5');
-  assert.equal(manifest.scoringContract.frames, 'lunum-frame/0.6');
+  assert.equal(manifest.scoringContract.frames, 'lunum-frame/0.7');
   const temp = mkdtempSync(path.join(os.tmpdir(), 'lunum-meaning-test-'));
   try {
     for (const mutate of [x => { x.scoringContract.schemaSha256 = 'a'.repeat(64); },
@@ -243,7 +243,8 @@ test('file-bound replay refuses altered schema/version, dataset, targets, packag
     assert.throws(() => scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v3/input-manifest.json'), /scoring_contract_binding_mismatch/, 'frozen v3 stays bound to 0.14');
     assert.throws(() => scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v4/input-manifest.json'), /scoring_contract_binding_mismatch/, 'frozen v4 stays bound to 0.15');
     assert.throws(() => scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v5/input-manifest.json'), /scoring_contract_binding_mismatch/, 'frozen v5 stays bound to 0.16');
-    assert.equal(scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v6/input-manifest.json').overall.total, 30);
+    assert.throws(() => scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v6/input-manifest.json'), /scoring_contract_binding_mismatch/, 'frozen v6 stays bound to 0.17');
+    assert.equal(scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v7/input-manifest.json').overall.total, 30);
     const changed = structuredClone(manifest);
     const runs = fs.readFileSync(changed.inputs.runs.path, 'utf8').trim().split('\n').map(JSON.parse);
     for (const run of runs) run.rawStream = path.resolve(path.dirname(changed.inputs.runs.path), run.rawStream);
@@ -276,7 +277,7 @@ test('offline replay performs no fetch/model request', () => {
   const previous = globalThis.fetch;
   globalThis.fetch = () => { throw new Error('unexpected_network_call'); };
   try {
-    assert.equal(scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v6/input-manifest.json').newModelCalls, 0);
+    assert.equal(scoreRecordedMeaningFiles('experiments/meaning-scoring-recorded-v7/input-manifest.json').newModelCalls, 0);
   } finally { globalThis.fetch = previous; }
 });
 
