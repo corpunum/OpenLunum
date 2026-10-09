@@ -7,6 +7,7 @@
 - Protocol `lunum-protocol/0.5`, frames `lunum-frame/0.6`, contract `lunum-agent/0.17`, instructions 0.7, package v19 (ADR 0022): inclusive comparison predicates `at_most`/`at_least` (subject, value); inclusive bounds (`up to`, `έως`, `at least`) are conditions instead of abstentions. Replay of 227 recorded candidates: no identity changed. Scoring manifest v6 and source review v5 rebind unchanged historical bytes.
 
 ### Added
+- Pre-registered L2 experiments: frame gaps (landing bar met; v20 live 8/8 probe identities, $1.49) and ambient discourse view on real OpenUnum traffic (fail: −36.6% prompt tokens held out, but QA literal recall 94/95 vs 95/95; not implemented; reusable prompt prefix 33% vs 100%).
 - Pre-registered L1 experiments: Greek diacritic folding for exact recall (pass, shipped in OpenUnum), discourse-unit identities (0 identities; gain bar not met), contract 0.16 live check (e02 pass; 5/8 probes, bar 6), model-graded QA of compacted prompts (non-inferior: 18.0% vs 18.0%).
 
 ## Unreleased — 2026-10-08
