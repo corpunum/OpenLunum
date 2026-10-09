@@ -28,8 +28,8 @@ import { validateSemanticTransport, SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './s
 export { SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './semantic-transport.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.17' as const;
-export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.7' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.18' as const;
+export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.8' as const;
 
 /** Summary only; schemaHash binds the full authoritative enforced wire schema. */
 const TRANSPORT_SCHEMA_DESCRIPTOR = Object.freeze({
@@ -59,6 +59,7 @@ const CANONICAL_RULES = Object.freeze([
   'Retain full dates independently of quantities: valid ISO YYYY-MM-DD, unambiguous dotted day>12/month/four-digit-year, and English/Greek month-name dates with an explicit day and four-digit year (14 January 2027, January 14, 2027, 14 Ιανουαρίου 2027) compare as exact ISO dates. Never guess ambiguous, invalid or year-less date spellings; encode Sem date values as ISO. Source evidence, metadata and date components cannot satisfy omitted semantic literals.',
   'Cardinal number words are numbers (seven times = 7, επτά φορές = 7, twenty-five = 25); one/once and articles are not. Relative times (Friday, tomorrow, next week, end of day, την Παρασκευή, αύριο) must be carried as written in a semantic value, never dropped or resolved to a calendar date.',
   'A strict threshold that restricts a role (invoices under 5,000 euros, disk usage above 90 percent) is a conditions clause with below/above, roles.subject and a quantity value; the main frame lacking a threshold role is not a reason to abstain. An inclusive bound (up to, at most, no more than, έως, το πολύ / at least, no less than, τουλάχιστον) is the same kind of conditions clause with at_most/at_least; never encode an inclusive bound as below/above or a strict one as at_most/at_least.',
+  'An imperative addresses its reader: the addressee is the implicit agent, so leave roles.agent out (deploy, rotate, restart, enable, delete and other frames with an optional agent); never fill it with you, the reader, the user or a placeholder. A repetition count stated with the action (three times, δύο φορές) goes in roles.count where the frame has one (retry, restart).',
 ]);
 const EXTRACTION_SEM_TEMPLATE = `{"schema":"${SEM_SCHEMA}","world":"real","kind":"simple_fact","clauses":[{"predicate":"<registered-predicate>","roles":{},"negated":false}]}`;
 

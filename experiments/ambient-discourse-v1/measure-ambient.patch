@@ -1,0 +1,114 @@
+diff --git a/scripts/lunum-discourse-measure.mjs b/scripts/lunum-discourse-measure.mjs
+index 9a7e7f4e..435715dd 100644
+--- a/scripts/lunum-discourse-measure.mjs
++++ b/scripts/lunum-discourse-measure.mjs
+@@ -30,6 +30,15 @@
+  *
+  * Usage: node scripts/lunum-discourse-measure.mjs sessions.json [out.json]
+  *        [--context-limit 65536] [--points 4] [--unit-identity] [--dump-points DIR]
++ *        [--ambient --min-history-tokens 4000 --after ISO]
++ *
++ * --ambient (OpenLunum experiments/ambient-discourse-v1) measures the view at
++ * ordinary turns instead of compaction points: points are user turns whose
++ * loaded history is >= --min-history-tokens (and, with --after, created after
++ * that time); "off" is the live path (discourse view only under pressure) and
++ * "on" adds the ambient view (discourseContext.ambient). It also reports the
++ * share of each point's prompt that the NEXT user turn's prompt reuses as an
++ * unchanged message prefix (a KV prompt-cache proxy).
+  *
+  * --dump-points DIR writes one JSON file per (point, config) with the exact
+  * prompt messages, the wiki page and the point's QA literals (private data:
+@@ -49,13 +58,16 @@ import { extractShadowIdentity, detectLanguage } from '../src/memory/lunum.mjs';
+ 
+ const args = process.argv.slice(2);
+ const flag = (name, fallback) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : fallback; };
+-const positional = args.filter((a, i) => !a.startsWith('--') && !(args[i - 1]?.startsWith('--') && !['--unit-identity'].includes(args[i - 1])));
++const positional = args.filter((a, i) => !a.startsWith('--') && !(args[i - 1]?.startsWith('--') && !['--unit-identity', '--ambient'].includes(args[i - 1])));
+ const [inPath, outPath] = positional;
+ if (!inPath) throw new Error('usage: lunum-discourse-measure.mjs sessions.json [out.json]');
+ const CONTEXT_LIMIT = Number(flag('context-limit', '65536'));
+ const POINTS = Number(flag('points', '4'));
+ const UNIT_IDENTITY = args.includes('--unit-identity');
+ const DUMP_DIR = flag('dump-points', null);
++const AMBIENT = args.includes('--ambient');
++const MIN_HISTORY_TOKENS = Number(flag('min-history-tokens', '4000'));
++const AFTER = flag('after', null);
+ if (DUMP_DIR) fs.mkdirSync(DUMP_DIR, { recursive: true, mode: 0o700 });
+ const TRIGGER_PCT = 0.7;
+ const TARGET_PCT = 0.4;
+@@ -147,7 +159,7 @@ function promptAt(rawHistory, sessionId, { discourse }) {
+     wikiPage = ck.wiki ? renderSessionWiki({ ...ck.wiki, createdAt: '' }) : '';
+   }
+   let discoursePlan = null;
+-  if (discourse && pressureOn) {
++  if (discourse && (pressureOn || discourse.ambient)) {
+     // Exactly the chat-orchestrator step.
+     const view = applyDiscourseView({ history, rawHistory, cfg: discourse });
+     history = view.history;
+@@ -159,7 +171,10 @@ function promptAt(rawHistory, sessionId, { discourse }) {
+   return { history, wikiPage, overTrigger, pressureOn, discoursePlan, ms };
+ }
+ 
+-const CONFIGS = [
++const CONFIGS = AMBIENT ? [
++  { name: 'live (discourse under pressure)', discourse: { ...DISCOURSE_CONTEXT_DEFAULTS, enabled: true }, dump: 'off' },
++  { name: 'ambient discourse view', discourse: { ...DISCOURSE_CONTEXT_DEFAULTS, enabled: true, ambient: true }, dump: 'on' }
++] : [
+   { name: 'off (live default)', discourse: null },
+   { name: 'discourseContext on (defaults)', discourse: { ...DISCOURSE_CONTEXT_DEFAULTS, enabled: true, unitIdentity: UNIT_IDENTITY } }
+ ];
+@@ -201,7 +216,10 @@ for (const row of rows) {
+ const results = [];
+ for (const [sessionId, sessionRows] of bySession) {
+   const userIdx = sessionRows.map((r, i) => (r.role === 'user' ? i : -1)).filter((i) => i >= 0);
+-  const firing = userIdx.filter((i) => estimateMessagesTokens(sessionRows.slice(Math.max(0, i + 1 - 1200), i + 1).map((m) => ({ role: m.role, content: m.content }))) >= CONTEXT_LIMIT * TRIGGER_PCT);
++  const loadedTokens = (i) => estimateMessagesTokens(sessionRows.slice(Math.max(0, i + 1 - 1200), i + 1).map((m) => ({ role: m.role, content: m.content })));
++  const firing = AMBIENT
++    ? userIdx.filter((i) => (!AFTER || String(sessionRows[i].created_at || '') > AFTER) && loadedTokens(i) >= MIN_HISTORY_TOKENS)
++    : userIdx.filter((i) => loadedTokens(i) >= CONTEXT_LIMIT * TRIGGER_PCT);
+   const picks = firing.length <= POINTS ? firing : Array.from({ length: POINTS }, (_, k) => firing[Math.round((k * (firing.length - 1)) / (POINTS - 1))]);
+   for (const idx of picks) {
+     const history = sessionRows.slice(Math.max(0, idx + 1 - 1200), idx + 1);
+@@ -217,10 +235,21 @@ for (const [sessionId, sessionRows] of bySession) {
+       const promptText = r.history.map((m) => m.content).join('\n');
+       const tokens = estimateMessagesTokens(r.history);
+       if (DUMP_DIR) {
+-        const file = `${DUMP_DIR}/${String(sessionId).replace(/[^\w.-]/g, '_')}-${idx}-${config.discourse ? 'on' : 'off'}.json`;
++        const file = `${DUMP_DIR}/${String(sessionId).replace(/[^\w.-]/g, '_')}-${idx}-${config.dump || (config.discourse ? 'on' : 'off')}.json`;
+         fs.writeFileSync(file, JSON.stringify({ sessionId, turnIndex: idx, config: config.name, currentMessageId: sessionRows[idx].id ?? null, promptTokens: tokens, qa, messages: r.history.map((m) => ({ role: m.role, content: m.content })), wikiPage: r.wikiPage }), { mode: 0o600 });
+       }
++      let prefixReuse = null;
++      if (AMBIENT) {
++        const nextUser = userIdx.find((i) => i > idx);
++        if (nextUser != null) {
++          const next = promptAt(sessionRows.slice(Math.max(0, nextUser + 1 - 1200), nextUser + 1), sessionId, config).history;
++          let k = 0;
++          while (k < r.history.length && k < next.length && r.history[k].role === next[k].role && r.history[k].content === next[k].content) k += 1;
++          prefixReuse = tokens ? estimateMessagesTokens(r.history.slice(0, k)) / tokens : null;
++        }
++      }
+       results.push({
++        prefixReuse,
+         sessionId,
+         turnIndex: idx,
+         config: config.name,
+@@ -244,8 +273,9 @@ for (const [sessionId, sessionRows] of bySession) {
+ 
+ const agg = {};
+ for (const r of results) {
+-  const a = (agg[r.config] ||= { qaPointRecall: [], qaPointRecallWiki: [], points: 0, preTokens: 0, promptTokens: 0, overContext: 0, overHardLimit: 0, literalRecall: [], qaItems: 0, qaHitsPrompt: 0, qaHitsWithWiki: 0, ms: [], compactedMessages: 0, dispositions: {}, units: 0, semanticIdentities: 0 });
++  const a = (agg[r.config] ||= { prefixReuse: [], qaPointRecall: [], qaPointRecallWiki: [], points: 0, preTokens: 0, promptTokens: 0, overContext: 0, overHardLimit: 0, literalRecall: [], qaItems: 0, qaHitsPrompt: 0, qaHitsWithWiki: 0, ms: [], compactedMessages: 0, dispositions: {}, units: 0, semanticIdentities: 0 });
+   a.points += 1;
++  if (r.prefixReuse != null) a.prefixReuse.push(r.prefixReuse);
+   a.preTokens += r.preTokens;
+   a.promptTokens += r.promptTokens;
+   a.overContext += r.overContext ? 1 : 0;
+@@ -278,6 +308,8 @@ const table = Object.entries(agg).map(([config, a]) => ({
+   qaRecallWithWiki: a.qaItems ? a.qaHitsWithWiki / a.qaItems : null,
+   qaPointMeanRecallPrompt: mean(a.qaPointRecall),
+   qaPointMeanRecallWithWiki: mean(a.qaPointRecallWiki),
++  pointsChanged: a.compactedMessages != null ? results.filter((r) => r.config === config && r.discourse && r.discourse.compactedMessages > 0).length : null,
++  meanPrefixReuse: a.prefixReuse.length ? +mean(a.prefixReuse).toFixed(4) : null,
+   meanMs: +mean(a.ms).toFixed(1),
+   p95Ms: +pct(a.ms, 0.95).toFixed(1),
+   compactedMessages: a.compactedMessages || null,

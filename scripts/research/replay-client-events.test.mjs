@@ -141,14 +141,29 @@ test('public instruction package exposes frozen scoring conventions without gold
   for (const key of ['protocolRegistryHash', 'frameRegistryHash', 'coreContractHash', 'instructionHash', 'servedRuntimeManifestSha256']) {
     assert.notEqual(v19.freeze[key], current.freeze[key], `${key} changed in v19`);
   }
+  // v20 (decisions/0023): imperative frames (deploy/rotate agent optional,
+  // deploy theme, restart count). Frames change; vocabulary, schema, literal
+  // retention, tools and task profile do not.
+  const v20 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v20.json', 'utf8'));
+  assert.equal(v20.supersedes.path, 'public-instruction-package-v19.json');
+  assert.equal(v20.freeze.coreContractVersion, 'lunum-agent/0.18');
+  assert.equal(v20.freeze.instructionVersion, 'agent-extraction-instructions/0.8');
+  assert.equal(v20.freeze.protocolVersion, 'lunum-protocol/0.5');
+  assert.equal(v20.freeze.frameRegistryVersion, 'lunum-frame/0.7');
+  for (const key of ['schemaHash', 'taskProfileSha256', 'literalRetentionArtifactSha256', 'toolImplementationSha256', 'protocolRegistryHash']) {
+    assert.equal(v20.freeze[key], v19.freeze[key], `${key} unchanged by decisions/0023`);
+  }
+  for (const key of ['frameRegistryHash', 'frameValidatorArtifactSha256', 'coreContractHash', 'instructionHash', 'servedRuntimeManifestSha256']) {
+    assert.notEqual(v20.freeze[key], v19.freeze[key], `${key} changed in v20`);
+  }
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
-  assert.equal(hash('packages/mcp/dist/src/tools.js'), v19.freeze.toolImplementationSha256);
+  assert.equal(hash('packages/mcp/dist/src/tools.js'), v20.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
-  assert.equal(hash('packages/core/dist/src/agent-native.js'), v19.freeze.coreArtifactSha256);
-  // frame-registry.js was unchanged from v14 to v18; decisions/0022 changes it in v19.
+  assert.equal(hash('packages/core/dist/src/agent-native.js'), v20.freeze.coreArtifactSha256);
+  // frame-registry.js was unchanged from v14 to v18; decisions/0022 changes it in v19, 0023 in v20.
   assert.equal(current.freeze.frameValidatorArtifactSha256, next.freeze.frameValidatorArtifactSha256);
-  assert.equal(hash('packages/core/dist/src/frame-registry.js'), v19.freeze.frameValidatorArtifactSha256);
-  assert.equal(hash('packages/core/dist/src/literal-retention.js'), v19.freeze.literalRetentionArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/frame-registry.js'), v20.freeze.frameValidatorArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/literal-retention.js'), v20.freeze.literalRetentionArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport.js'), next.freeze.transportValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport-schema.js'), next.freeze.transportSchemaArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-builder.js'), next.freeze.builderArtifactSha256);

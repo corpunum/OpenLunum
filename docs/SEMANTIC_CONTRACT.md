@@ -86,7 +86,7 @@ mean `ALLOW(X)`. A negative deontic modality must not be duplicated with
 Surface evidence such as a pronoun token, source language, or provider-added
 reference type remains in the Sem/source artifact but is excluded from exact
 semantic identity. An ungrounded reference cannot establish exact identity.
-Agent contract 0.17 retains 0.13's actual wire-schema enforcement before normalization;
+Agent contract 0.18 retains 0.13's actual wire-schema enforcement before normalization;
 the structural checker alone is not transport validation. Rejections retain
 source evidence and diagnostics, and no normalized identity is issued.
 Its source-retention floor separates unambiguous full calendar dates from

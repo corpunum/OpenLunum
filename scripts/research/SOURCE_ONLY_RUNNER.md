@@ -30,19 +30,19 @@ overrun stops remaining launches and invalidates the run. Do not promise a
 hard dollar cap the provider does not enforce. All selected rows, including
 not-run rows, remain in the denominator/run ledger.
 
-Preflight defaults to v19 and its declared iteration6 profile; live requires an
+Preflight defaults to v20 and its declared iteration6 profile; live requires an
 explicit package. Resolved IDs use the `claude-*` form and must exactly match
 both reported usage IDs and the init event; this is not a model-weight hash or
 a claim that the provider exposes immutable weights. All frozen
 served artifacts, task/scorer/profile, AJV version and lockfile are checked
-before and after execution. V19 binds contract0.17 (inclusive comparison
-predicates, ADR 0022, on top of v18's EN/EL number words and relative times,
+before and after execution. V20 binds contract0.18 (imperative frames, ADR
+0023, on top of v19's inclusive comparison predicates, ADR 0022, on top of v18's EN/EL number words and relative times,
 ADR 0020, and the served discourse-record module and its two MCP tools, ADR
 0021), and the same closed inventory of every
 repository-owned JavaScript file under the served core/MCP trees. An added,
 missing, changed or symlinked artifact invalidates that binding. V14's selected
-files are legacy/partial; v15's to v18's complete older runtime bindings
-are also historical and cannot certify the changed contract0.17 runtime. None
+files are legacy/partial; v15's to v19's complete older runtime bindings
+are also historical and cannot certify the changed contract0.18 runtime. None
 passes the current live gate. This is not
 operating-system or dependency supply-chain attestation; installed AJV version
 and the dependency lockfile remain separate checks. The actual MCP contract receipt is checked before

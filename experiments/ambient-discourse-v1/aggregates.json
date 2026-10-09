@@ -1,0 +1,163 @@
+{
+  "heldout": {
+    "sessions": 66,
+    "messages": 271,
+    "contextLimit": 65536,
+    "table": [
+      {
+        "config": "live (discourse under pressure)",
+        "points": 32,
+        "meanPreTokens": 6696,
+        "meanPromptTokens": 6696,
+        "promptTokenChange": 0,
+        "pointsOverContext": 0,
+        "pointsOverHardLimit": 0,
+        "literalRecall": 1,
+        "qaItems": 95,
+        "qaRecallPrompt": 1,
+        "qaRecallWithWiki": 1,
+        "qaPointMeanRecallPrompt": 1,
+        "qaPointMeanRecallWithWiki": 1,
+        "pointsChanged": 0,
+        "meanPrefixReuse": 1,
+        "meanMs": 0,
+        "p95Ms": 0.1,
+        "compactedMessages": null,
+        "unitDispositions": null,
+        "unitSemanticIdentities": null,
+        "extraModelCalls": 0
+      },
+      {
+        "config": "ambient discourse view",
+        "points": 32,
+        "meanPreTokens": 6696,
+        "meanPromptTokens": 4245,
+        "promptTokenChange": -0.366,
+        "pointsOverContext": 0,
+        "pointsOverHardLimit": 0,
+        "literalRecall": 0.9671308953508783,
+        "qaItems": 95,
+        "qaRecallPrompt": 0.9894736842105263,
+        "qaRecallWithWiki": 0.9894736842105263,
+        "qaPointMeanRecallPrompt": 0.9880952380952381,
+        "qaPointMeanRecallWithWiki": 0.9880952380952381,
+        "pointsChanged": 18,
+        "meanPrefixReuse": 0.3296,
+        "meanMs": 9.4,
+        "p95Ms": 26.1,
+        "compactedMessages": 37,
+        "unitDispositions": {
+          "kept": 1615,
+          "record": 0,
+          "clipped": 36,
+          "duplicate": 2268,
+          "superseded": 8,
+          "omitted": 43
+        },
+        "unitSemanticIdentities": 0,
+        "extraModelCalls": 0
+      }
+    ]
+  },
+  "dev": {
+    "sessions": 15,
+    "messages": 3955,
+    "contextLimit": 65536,
+    "table": [
+      {
+        "config": "live (discourse under pressure)",
+        "points": 56,
+        "meanPreTokens": 130751,
+        "meanPromptTokens": 10872,
+        "promptTokenChange": 0,
+        "pointsOverContext": 1,
+        "pointsOverHardLimit": 1,
+        "literalRecall": 0.6759684067865692,
+        "qaItems": 3324,
+        "qaRecallPrompt": 0.6191335740072202,
+        "qaRecallWithWiki": 0.7614320096269555,
+        "qaPointMeanRecallPrompt": 0.8318186690530256,
+        "qaPointMeanRecallWithWiki": 0.8881685826052204,
+        "pointsChanged": 30,
+        "meanPrefixReuse": 0.4538,
+        "meanMs": 69.7,
+        "p95Ms": 318.3,
+        "compactedMessages": 135,
+        "unitDispositions": {
+          "kept": 2127,
+          "record": 2,
+          "clipped": 299,
+          "duplicate": 12845,
+          "superseded": 388,
+          "omitted": 8868
+        },
+        "unitSemanticIdentities": 0,
+        "extraModelCalls": 0
+      },
+      {
+        "config": "ambient discourse view",
+        "points": 56,
+        "meanPreTokens": 130751,
+        "meanPromptTokens": 9340,
+        "promptTokenChange": -0.1409,
+        "pointsOverContext": 1,
+        "pointsOverHardLimit": 1,
+        "literalRecall": 0.6646106317779841,
+        "qaItems": 3324,
+        "qaRecallPrompt": 0.6125150421179302,
+        "qaRecallWithWiki": 0.7548134777376655,
+        "qaPointMeanRecallPrompt": 0.8227700125533886,
+        "qaPointMeanRecallWithWiki": 0.8791199261055835,
+        "pointsChanged": 45,
+        "meanPrefixReuse": 0.3699,
+        "meanMs": 43.8,
+        "p95Ms": 105.1,
+        "compactedMessages": 215,
+        "unitDispositions": {
+          "kept": 3981,
+          "record": 2,
+          "clipped": 370,
+          "duplicate": 14256,
+          "superseded": 427,
+          "omitted": 9121
+        },
+        "unitSemanticIdentities": 0,
+        "extraModelCalls": 0
+      }
+    ]
+  },
+  "gradedQaHeldout": {
+    "model": "haiku",
+    "resolvedModels": [
+      "claude-haiku-5-5"
+    ],
+    "points": 13,
+    "questions": {
+      "generated": 42,
+      "rejected": 0
+    },
+    "accuracy": {
+      "off": {
+        "n": 42,
+        "correct": 24,
+        "accuracy": 0.5714
+      },
+      "on": {
+        "n": 42,
+        "correct": 27,
+        "accuracy": 0.6429
+      }
+    },
+    "pointsOnWorse": 1,
+    "pointsOnBetter": 2,
+    "meanPromptTokens": {
+      "off": 4881,
+      "on": 4375
+    },
+    "costUsd": {
+      "questions": 0.0114033,
+      "answers": 0.0548
+    },
+    "answerCallsWithMissingAnswers": 1
+  }
+}
