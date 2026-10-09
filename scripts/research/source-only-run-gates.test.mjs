@@ -9,7 +9,7 @@ import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeMan
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
-const packagePath = path.join(packageDirectory, 'public-instruction-package-v20.json');
+const packagePath = path.join(packageDirectory, 'public-instruction-package-v21.json');
 const pkg = JSON.parse(fs.readFileSync(packagePath));
 const legacyPackagePath = path.join(packageDirectory, 'public-instruction-package-v14.json');
 const legacyPkg = JSON.parse(fs.readFileSync(legacyPackagePath));
@@ -21,7 +21,7 @@ const binding = () => artifactBinding(root, packagePath, profilePath, pkg);
 // resolve the real git directory instead of assuming `<root>/.git/`.
 const gitScratch = spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: root, encoding: 'utf8' }).stdout.trim() || path.join(root, '.git');
 
-test('v20 binds every current artifact, dependency and served runtime manifest', () => {
+test('v21 binds every current artifact, dependency and served runtime manifest', () => {
   const result = binding();
   assert.equal(result.match, true);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
@@ -89,6 +89,24 @@ test('v17 remains frozen historical binding and cannot certify current contract0
   assert.equal(checkServedContract(contract, pkg).match, true);
 });
 
+test('v20 remains frozen historical binding; only the served discourse module drifts', () => {
+  const historicalPath = path.join(packageDirectory, 'public-instruction-package-v20.json');
+  const historical = JSON.parse(fs.readFileSync(historicalPath));
+  const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
+  const result = artifactBinding(root, historicalPath, profile, historical);
+  assert.equal(result.match, false);
+  // ambient-discourse-v2 changes discourse.js (path literals) and nothing else:
+  // the contract, frames, tools and literal retention still bind v20's bytes.
+  const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
+  assert.deepEqual(drifted, ['servedRuntimeManifestSha256']);
+  const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
+  assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
+  assert.deepEqual(runtimeCheck.runtime.errors, ['served_runtime_changed:packages/core/dist/src/discourse.js']);
+  // Same contract: v20 still certifies the served contract, only not the runtime bytes.
+  assert.equal(checkServedContract(contract, historical).match, true);
+  assert.equal(checkServedContract(contract, pkg).match, true);
+});
+
 test('v19 remains frozen historical binding and cannot certify current contract0.18', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v19.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
@@ -103,6 +121,7 @@ test('v19 remains frozen historical binding and cannot certify current contract0
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.deepEqual(runtimeCheck.runtime.errors.sort(), [
     'served_runtime_changed:packages/core/dist/src/agent-native.js',
+    'served_runtime_changed:packages/core/dist/src/discourse.js',
     'served_runtime_changed:packages/core/dist/src/frame-registry.js'
   ]);
   const served = checkServedContract(contract, historical);
@@ -125,6 +144,7 @@ test('v18 remains frozen historical binding and cannot certify current contract0
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.deepEqual(runtimeCheck.runtime.errors.sort(), [
     'served_runtime_changed:packages/core/dist/src/agent-native.js',
+    'served_runtime_changed:packages/core/dist/src/discourse.js',
     'served_runtime_changed:packages/core/dist/src/frame-registry.js',
     'served_runtime_changed:packages/core/dist/src/semantic-registry.js'
   ]);

@@ -30,12 +30,14 @@ overrun stops remaining launches and invalidates the run. Do not promise a
 hard dollar cap the provider does not enforce. All selected rows, including
 not-run rows, remain in the denominator/run ledger.
 
-Preflight defaults to v20 and its declared iteration6 profile; live requires an
+Preflight defaults to v21 and its declared iteration6 profile; live requires an
 explicit package. Resolved IDs use the `claude-*` form and must exactly match
 both reported usage IDs and the init event; this is not a model-weight hash or
 a claim that the provider exposes immutable weights. All frozen
 served artifacts, task/scorer/profile, AJV version and lockfile are checked
-before and after execution. V20 binds contract0.18 (imperative frames, ADR
+before and after execution. V21 binds the same contract as v20 with the
+served discourse module after the path-literal fix (experiments/ambient-discourse-v2).
+V20 binds contract0.18 (imperative frames, ADR
 0023, on top of v19's inclusive comparison predicates, ADR 0022, on top of v18's EN/EL number words and relative times,
 ADR 0020, and the served discourse-record module and its two MCP tools, ADR
 0021), and the same closed inventory of every

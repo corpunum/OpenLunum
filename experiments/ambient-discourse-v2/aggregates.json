@@ -1,0 +1,171 @@
+{
+  "primary_v1_heldout": {
+    "sessions": 66,
+    "messages": 271,
+    "contextLimit": 65536,
+    "table": [
+      {
+        "config": "live (discourse under pressure)",
+        "points": 32,
+        "meanPreTokens": 6696,
+        "meanPromptTokens": 6696,
+        "promptTokenChange": 0,
+        "qaItems": 95,
+        "qaRecallPrompt": 1,
+        "literalRecall": 1,
+        "pointsChanged": 0,
+        "meanPrefixReuse": 1,
+        "meanMs": 0,
+        "p95Ms": 0.1,
+        "compactedMessages": null,
+        "unitDispositions": null
+      },
+      {
+        "config": "ambient discourse view (stepped)",
+        "points": 32,
+        "meanPreTokens": 6696,
+        "meanPromptTokens": 5818,
+        "promptTokenChange": -0.1312,
+        "qaItems": 95,
+        "qaRecallPrompt": 1,
+        "literalRecall": 0.9724856727968701,
+        "pointsChanged": 10,
+        "meanPrefixReuse": 1,
+        "meanMs": 1.9,
+        "p95Ms": 12.3,
+        "compactedMessages": 10,
+        "unitDispositions": {
+          "kept": 870,
+          "record": 0,
+          "clipped": 36,
+          "duplicate": 180,
+          "superseded": 0,
+          "omitted": 21
+        }
+      },
+      {
+        "config": "ambient v1 (unstepped, diagnostic)",
+        "points": 32,
+        "meanPreTokens": 6696,
+        "meanPromptTokens": 4252,
+        "promptTokenChange": -0.3651,
+        "qaItems": 95,
+        "qaRecallPrompt": 1,
+        "literalRecall": 0.9724856727968701,
+        "pointsChanged": 18,
+        "meanPrefixReuse": 0.3308,
+        "meanMs": 2.5,
+        "p95Ms": 8.3,
+        "compactedMessages": 37,
+        "unitDispositions": {
+          "kept": 1611,
+          "record": 0,
+          "clipped": 36,
+          "duplicate": 2268,
+          "superseded": 8,
+          "omitted": 47
+        }
+      }
+    ]
+  },
+  "fresh": {
+    "sessions": 15,
+    "messages": 76,
+    "table": [
+      {
+        "config": "live (discourse under pressure)",
+        "points": 20,
+        "meanPreTokens": 7321,
+        "meanPromptTokens": 7321,
+        "promptTokenChange": 0,
+        "qaItems": 91,
+        "qaRecallPrompt": 1,
+        "literalRecall": 1,
+        "pointsChanged": 0,
+        "meanPrefixReuse": 1,
+        "meanMs": 0,
+        "p95Ms": 0.4,
+        "compactedMessages": null,
+        "unitDispositions": null
+      },
+      {
+        "config": "ambient discourse view (stepped)",
+        "points": 20,
+        "meanPreTokens": 7321,
+        "meanPromptTokens": 7068,
+        "promptTokenChange": -0.0345,
+        "qaItems": 91,
+        "qaRecallPrompt": 1,
+        "literalRecall": 1,
+        "pointsChanged": 1,
+        "meanPrefixReuse": 1,
+        "meanMs": 0.2,
+        "p95Ms": 2.3,
+        "compactedMessages": 3,
+        "unitDispositions": {
+          "kept": 137,
+          "record": 0,
+          "clipped": 0,
+          "duplicate": 212,
+          "superseded": 3,
+          "omitted": 25
+        }
+      },
+      {
+        "config": "ambient v1 (unstepped, diagnostic)",
+        "points": 20,
+        "meanPreTokens": 7321,
+        "meanPromptTokens": 5046,
+        "promptTokenChange": -0.3107,
+        "qaItems": 91,
+        "qaRecallPrompt": 1,
+        "literalRecall": 1,
+        "pointsChanged": 12,
+        "meanPrefixReuse": 0.084,
+        "meanMs": 7.1,
+        "p95Ms": 23.7,
+        "compactedMessages": 25,
+        "unitDispositions": {
+          "kept": 238,
+          "record": 0,
+          "clipped": 0,
+          "duplicate": 1929,
+          "superseded": 25,
+          "omitted": 2
+        }
+      }
+    ]
+  },
+  "gradedQA": {
+    "model": "haiku",
+    "resolvedModels": [
+      "claude-haiku-5-5"
+    ],
+    "points": 13,
+    "questions": {
+      "generated": 42,
+      "rejected": 0
+    },
+    "accuracy": {
+      "off": {
+        "n": 42,
+        "correct": 24,
+        "accuracy": 0.5714
+      },
+      "on": {
+        "n": 42,
+        "correct": 21,
+        "accuracy": 0.5
+      }
+    },
+    "answerCallsWithMissingAnswers": 1,
+    "costUsd": {
+      "questions": 0.0114033,
+      "answers": 0.0554
+    },
+    "meanPromptTokens": {
+      "off": 4881,
+      "on": 4661
+    }
+  }
+}

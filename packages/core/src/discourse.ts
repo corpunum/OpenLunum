@@ -267,7 +267,14 @@ export function segmentDiscourse(source: string): DiscourseUnit[] {
 // ---------------------------------------------------------------------------
 // Literals, cues and records
 
-const PATH = /(?<![\w/.:-])(?:~|\.{1,2})?\/(?:[\w.@+-]+\/)*[\w.@+-]+\/?|(?<![\w/.-])[\w-]+(?:\/[\w.@+-]+)+\.[A-Za-z0-9]{1,6}\b|(?<![\w/.-])[\w-]+\.(?:mjs|cjs|js|ts|tsx|jsx|json|jsonl|md|py|sh|ya?ml|toml|sql|db|log|txt|css|html|gguf|service|ini)\b/gu;
+// Paths: absolute or ./~ relative; relative with a file extension; bare file
+// names with a known extension; and (ambient-discourse-v1 follow-up) relative
+// paths of three or more segments without an extension (`src/memory/lunum`,
+// `propose/check/decide`). The last shape contains the two-segment absolute
+// spelling (`/check/decide`) that a reader quoting the path would use; without
+// it a clip could drop that literal while keeping the unit. A host prefix
+// (`rig:/srv/app`) no longer hides an absolute path either.
+const PATH = /(?<![\w/.-])(?:~|\.{1,2})?\/(?:[\w.@+-]+\/)*[\w.@+-]+\/?|(?<![\w/.-])[\w-]+(?:\/[\w.@+-]+)+\.[A-Za-z0-9]{1,6}\b|(?<![\w/.-])[\w-]+\.(?:mjs|cjs|js|ts|tsx|jsx|json|jsonl|md|py|sh|ya?ml|toml|sql|db|log|txt|css|html|gguf|service|ini)\b|(?<![\w/.:@+-])[\w.@+-]+(?:\/[\w.@+-]+){2,}\/?/gu;
 const HASH = /(?<![\w-])(?=[0-9a-f]*[a-f])(?=[0-9a-f]*\d)[0-9a-f]{7,64}(?![\w-])/gu;
 const URL = /\bhttps?:\/\/[^\s<>()"'`]+[^\s<>()"'`.,;:!?]/gu;
 
