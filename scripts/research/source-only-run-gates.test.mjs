@@ -9,7 +9,7 @@ import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeMan
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
-const packagePath = path.join(packageDirectory, 'public-instruction-package-v21.json');
+const packagePath = path.join(packageDirectory, 'public-instruction-package-v22.json');
 const pkg = JSON.parse(fs.readFileSync(packagePath));
 const legacyPackagePath = path.join(packageDirectory, 'public-instruction-package-v14.json');
 const legacyPkg = JSON.parse(fs.readFileSync(legacyPackagePath));
@@ -19,9 +19,19 @@ const plan = budgetPlan({ model: 'claude-test-exact-20261002', totalUsd: '0.20',
 const binding = () => artifactBinding(root, packagePath, profilePath, pkg);
 // Scratch space inside git metadata: `.git` is a file in a linked worktree, so
 // resolve the real git directory instead of assuming `<root>/.git/`.
+// Served modules changed by decisions/0024 (plus the new source-bound.js) relative to any earlier freeze.
+const RUNTIME_DRIFT_0024 = [
+  'served_runtime_changed:packages/core/dist/src/agent-builder.js',
+  'served_runtime_changed:packages/core/dist/src/agent-native.js',
+  'served_runtime_changed:packages/core/dist/src/constants.js',
+  'served_runtime_changed:packages/core/dist/src/frame-registry.js',
+  'served_runtime_changed:packages/core/dist/src/index.js',
+  'served_runtime_changed:packages/core/dist/src/semantic-registry.js',
+  'served_runtime_unlisted:packages/core/dist/src/source-bound.js',
+];
 const gitScratch = spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: root, encoding: 'utf8' }).stdout.trim() || path.join(root, '.git');
 
-test('v21 binds every current artifact, dependency and served runtime manifest', () => {
+test('v22 binds every current artifact, dependency and served runtime manifest', () => {
   const result = binding();
   assert.equal(result.match, true);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
@@ -68,7 +78,7 @@ test('v15 remains frozen historical binding and cannot certify current contract0
   assert.equal(checkServedContract(contract, historical).match, false);
 });
 
-test('v17 remains frozen historical binding and cannot certify current contract0.18', () => {
+test('v17 remains frozen historical binding and cannot certify current contract0.19', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v17.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
@@ -77,7 +87,7 @@ test('v17 remains frozen historical binding and cannot certify current contract0
   // The artifacts changed by decisions/0020-0022 drift; the rest of v17 still
   // binds the current bytes, and its manifest file is unaltered.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'literalRetentionArtifactSha256', 'servedRuntimeManifestSha256', 'toolImplementationSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'literalRetentionArtifactSha256', 'servedRuntimeManifestSha256', 'toolImplementationSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.equal(runtimeCheck.runtime.match, false);
@@ -89,25 +99,44 @@ test('v17 remains frozen historical binding and cannot certify current contract0
   assert.equal(checkServedContract(contract, pkg).match, true);
 });
 
-test('v20 remains frozen historical binding; only the served discourse module drifts', () => {
+test('v21 remains frozen historical binding; the general frames drift the contract and its served modules', () => {
+  const historicalPath = path.join(packageDirectory, 'public-instruction-package-v21.json');
+  const historical = JSON.parse(fs.readFileSync(historicalPath));
+  const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
+  const result = artifactBinding(root, historicalPath, profile, historical);
+  assert.equal(result.match, false);
+  // decisions/0024 changes the contract, the frame and protocol registries and
+  // adds source-bound.js; literal retention, transport, builder and tools still bind.
+  const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
+  const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
+  assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
+  assert.deepEqual(runtimeCheck.runtime.errors.sort(), RUNTIME_DRIFT_0024);
+  const served = checkServedContract(contract, historical);
+  assert.equal(served.match, false);
+  assert.deepEqual(served.mismatches.sort(), ['coreContractHash', 'coreContractJsonSerializationSha256', 'coreContractVersion', 'frameRegistryHash', 'frameRegistryVersion', 'instructionHash', 'instructionVersion', 'protocolRegistryHash', 'protocolVersion']);
+  assert.equal(checkServedContract(contract, pkg).match, true);
+});
+
+test('v20 remains frozen historical binding; the 0.19 contract and the discourse module drift', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v20.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
   const result = artifactBinding(root, historicalPath, profile, historical);
   assert.equal(result.match, false);
-  // ambient-discourse-v2 changes discourse.js (path literals) and nothing else:
-  // the contract, frames, tools and literal retention still bind v20's bytes.
+  // ambient-discourse-v2 changed discourse.js (path literals); decisions/0024 the contract, registries and index.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['servedRuntimeManifestSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
-  assert.deepEqual(runtimeCheck.runtime.errors, ['served_runtime_changed:packages/core/dist/src/discourse.js']);
-  // Same contract: v20 still certifies the served contract, only not the runtime bytes.
-  assert.equal(checkServedContract(contract, historical).match, true);
+  assert.deepEqual(runtimeCheck.runtime.errors.sort(), [...RUNTIME_DRIFT_0024, 'served_runtime_changed:packages/core/dist/src/discourse.js'].sort());
+  const served = checkServedContract(contract, historical);
+  assert.equal(served.match, false);
+  assert.deepEqual(served.mismatches.sort(), ['coreContractHash', 'coreContractJsonSerializationSha256', 'coreContractVersion', 'frameRegistryHash', 'frameRegistryVersion', 'instructionHash', 'instructionVersion', 'protocolRegistryHash', 'protocolVersion']);
   assert.equal(checkServedContract(contract, pkg).match, true);
 });
 
-test('v19 remains frozen historical binding and cannot certify current contract0.18', () => {
+test('v19 remains frozen historical binding and cannot certify current contract0.19', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v19.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
@@ -116,21 +145,19 @@ test('v19 remains frozen historical binding and cannot certify current contract0
   // Exactly the artifacts changed by decisions/0023 (contract and frame
   // registry) drift; protocol vocabulary, literal retention and tools still bind.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.deepEqual(runtimeCheck.runtime.errors.sort(), [
-    'served_runtime_changed:packages/core/dist/src/agent-native.js',
-    'served_runtime_changed:packages/core/dist/src/discourse.js',
-    'served_runtime_changed:packages/core/dist/src/frame-registry.js'
-  ]);
+    ...RUNTIME_DRIFT_0024, 'served_runtime_changed:packages/core/dist/src/discourse.js'
+  ].sort());
   const served = checkServedContract(contract, historical);
   assert.equal(served.match, false);
-  assert.deepEqual(served.mismatches.sort(), ['coreContractHash', 'coreContractJsonSerializationSha256', 'coreContractVersion', 'frameRegistryHash', 'frameRegistryVersion', 'instructionHash', 'instructionVersion']);
+  assert.deepEqual(served.mismatches.sort(), ['coreContractHash', 'coreContractJsonSerializationSha256', 'coreContractVersion', 'frameRegistryHash', 'frameRegistryVersion', 'instructionHash', 'instructionVersion', 'protocolRegistryHash', 'protocolVersion']);
   assert.equal(checkServedContract(contract, pkg).match, true);
 });
 
-test('v18 remains frozen historical binding and cannot certify current contract0.18', () => {
+test('v18 remains frozen historical binding and cannot certify current contract0.19', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v18.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
@@ -139,21 +166,18 @@ test('v18 remains frozen historical binding and cannot certify current contract0
   // Exactly the artifacts changed by decisions/0022 (contract, protocol and
   // frame registries) drift; literal retention, tools and the rest still bind.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.deepEqual(runtimeCheck.runtime.errors.sort(), [
-    'served_runtime_changed:packages/core/dist/src/agent-native.js',
-    'served_runtime_changed:packages/core/dist/src/discourse.js',
-    'served_runtime_changed:packages/core/dist/src/frame-registry.js',
-    'served_runtime_changed:packages/core/dist/src/semantic-registry.js'
-  ]);
+    ...RUNTIME_DRIFT_0024, 'served_runtime_changed:packages/core/dist/src/discourse.js'
+  ].sort());
   const served = checkServedContract(contract, historical);
   assert.equal(served.match, false);
   assert.deepEqual(served.mismatches.sort(), ['coreContractHash', 'coreContractJsonSerializationSha256', 'coreContractVersion', 'frameRegistryHash', 'frameRegistryVersion', 'instructionHash', 'instructionVersion', 'protocolRegistryHash', 'protocolVersion']);
 });
 
-test('v16 remains frozen historical binding and cannot certify current contract0.18', () => {
+test('v16 remains frozen historical binding and cannot certify current contract0.19', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v16.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
@@ -162,7 +186,7 @@ test('v16 remains frozen historical binding and cannot certify current contract0
   // The artifacts changed since v16 (decisions/0019-0022, #713) drift; the rest
   // of v16 still binds the current bytes, and its manifest file is unaltered.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'literalRetentionArtifactSha256', 'servedRuntimeManifestSha256', 'toolImplementationSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'literalRetentionArtifactSha256', 'servedRuntimeManifestSha256', 'toolImplementationSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.equal(runtimeCheck.runtime.match, false);

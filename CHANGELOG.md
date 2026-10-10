@@ -1,5 +1,10 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-10-10 (general frames)
+
+### Added
+- General source-bound frames (ADR 0024): protocol `lunum-protocol/0.6`, frames `lunum-frame/0.8`, contract `lunum-agent/0.19`, instructions 0.9, package v22. Seven predicates for ordinary statements (`define`, `describe`, `assert`, `relate`, `enumerate`, `quantify`, `topic`) with typed open slots, adjunct slots that keep subordinate clauses whole, `also` for compound sentences in the builder, and a deterministic source-bound check in `submitCandidate` (fillers occur in the source; no content word dropped; negation and modality carried; topics are labels; English only). Replay of 391 recorded candidates: no identity changed (experiments/general-frames-v1). Scoring manifest v8 and source review v7 rebind unchanged historical bytes.
+
 ## Unreleased — 2026-10-10
 
 ### Changed
