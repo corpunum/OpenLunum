@@ -116,6 +116,8 @@ test('a topic is a label, not a sentence in disguise', () => {
   accepted('Why does it matter?', topicOf('Why does it matter?'));
   accepted('The Counter: I introduced a counter.', build({ predicate: 'topic', roles: { subject: text('The Counter') }, also: [{ predicate: 'assert', roles: { subject: text('I'), action: text('introduced'), object: text('a counter') } }] }));
   accepted('Your models.', topicOf('Your models')); // a tagline may end with a full stop
+  refused('Grounding: It grounds my autonomy in reality.', topicOf('Grounding: It grounds my autonomy in reality'), 'unbound_source_content');
+  accepted('Why does it matter?', topicOf('Why does it matter?')); // a question is not declarative
   accepted('2026-10-10', topicOf('2026-10-10')); // a bare date or number shown on its own
   refused('2026-10-10', topicOf('2026-10-11'), 'unretained_source_literal');
   const text9 = 'OpenUnum runs on your own hardware every single day.';

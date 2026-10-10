@@ -296,7 +296,7 @@
     },
     {
       "path": "packages/core/dist/src/source-bound.js",
-      "sha256": "b95886f0c52463db6ab7316a24cea97360cdcffb8037101550039500342a24be"
+      "sha256": "e5c97d897d3eb5c03e95e4e89c7f069364eb477fd788caa0ebdbb08aa890b6bf"
     },
     {
       "path": "packages/core/dist/src/supply-chain.js",
