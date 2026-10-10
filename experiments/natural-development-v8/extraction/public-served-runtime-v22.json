@@ -16,7 +16,7 @@
     },
     {
       "path": "packages/core/dist/src/agent-native.js",
-      "sha256": "9124d46070c6d44a83e3ac77617c6558cc1c59215910fd16eede649c912ca1c4"
+      "sha256": "129aae48e4846cd26e0b6b55c9be82ac8fd7c0585cd459ccd5f9015c6a69f258"
     },
     {
       "path": "packages/core/dist/src/agent-state-freeze.js",
@@ -296,7 +296,7 @@
     },
     {
       "path": "packages/core/dist/src/source-bound.js",
-      "sha256": "233c5ec6d8420521c86f8bb265ec18de24d7a4af4c51601d2a2fc891c1b07d6e"
+      "sha256": "b95886f0c52463db6ab7316a24cea97360cdcffb8037101550039500342a24be"
     },
     {
       "path": "packages/core/dist/src/supply-chain.js",

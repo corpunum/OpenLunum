@@ -115,8 +115,10 @@ test('a topic is a label, not a sentence in disguise', () => {
   const topicOf = (value: string) => build({ predicate: 'topic', roles: { subject: text(value) } });
   accepted('Why does it matter?', topicOf('Why does it matter?'));
   accepted('The Counter: I introduced a counter.', build({ predicate: 'topic', roles: { subject: text('The Counter') }, also: [{ predicate: 'assert', roles: { subject: text('I'), action: text('introduced'), object: text('a counter') } }] }));
-  const sentence = refused('OpenUnum runs on your own hardware.', topicOf('OpenUnum runs on your own hardware'), 'unbound_source_content');
-  assert.deepEqual(sentence.sourceBound?.notALabel, ['OpenUnum runs on your own hardware']);
+  accepted('Your models.', topicOf('Your models')); // a tagline may end with a full stop
+  const text9 = 'OpenUnum runs on your own hardware every single day.';
+  const sentence = refused(text9, topicOf('OpenUnum runs on your own hardware every single day'), 'unbound_source_content');
+  assert.deepEqual(sentence.sourceBound?.notALabel, ['OpenUnum runs on your own hardware every single day']);
   accepted('OpenUnum runs on your own hardware', topicOf('OpenUnum runs on your own hardware')); // no sentence punctuation: a label as far as the core can tell
   const long = Array.from({ length: 21 }, (_, i) => `word${i}`).join(' ');
   refused(long, topicOf(long), 'unbound_source_content');

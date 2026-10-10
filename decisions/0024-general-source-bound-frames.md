@@ -72,8 +72,9 @@ its source text:
    Any other word (`also`, `only`, `every`, `all`, `more`, `than`, `or`,
    `because`, `if`, `when`, `without`, ...) was dropped by the candidate, and
    the candidate gets no identity;
-4. a `topic` is a label: its subject may not be longer than 20 words nor end the
-   source sentence when the source ends with `.`, `!` or `;`;
+4. a `topic` is a label: its subject may not be longer than 20 words, nor be more
+   than 8 words that end the source sentence (a short tagline may end with a
+   full stop);
 5. English contractions are expanded (`n't` needs negated, `'ll`/`'d` need a
    modality; possessive `'s`, `'m`, `'re`, `'ve` are free);
 6. the check is English only; another source language fails closed.

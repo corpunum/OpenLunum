@@ -9,15 +9,15 @@
     "sourceSha": null,
     "builtWith": "pnpm --filter @corpunum/lunum-mcp... build (or node scripts/lunum-mcp-launch.mjs)",
     "mcpEntrypoint": "packages/mcp/dist/bin/lunum-mcp.js",
-    "coreArtifactSha256": "9124d46070c6d44a83e3ac77617c6558cc1c59215910fd16eede649c912ca1c4",
+    "coreArtifactSha256": "129aae48e4846cd26e0b6b55c9be82ac8fd7c0585cd459ccd5f9015c6a69f258",
     "mcpArtifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
     "toolImplementationSha256": "d4a62543c5b57f69949a32b13c0bdc88dbeee124bd1851d724b29ed021a2d13c",
     "coreContractVersion": "lunum-agent/0.19",
-    "coreContractHash": "0ea8872c710d7da29610863d7eb039dfb2f4d3fad2b11aa075234563e6c1cecf",
+    "coreContractHash": "926638ae1d17701db629b7c67632da65ddc86717f2b2aae676be22ccc48e8e1e",
     "coreContractHashAlgorithm": "sha256(stableStringify(contract)) using @corpunum/lunum canonicalization",
-    "coreContractJsonSerializationSha256": "4bc6ec1ade56c5d3c30d038ba3d78f420523ac4d68069660cd44cd2ea11aad64",
+    "coreContractJsonSerializationSha256": "55b2f6735d26227c7f20f38cefcda5760ca817f3cac92f018f8a0e50c454f638",
     "instructionVersion": "agent-extraction-instructions/0.9",
-    "instructionHash": "3c24859b704f087f1f76e505871fc1fec1a2c673592873f2288c6945d6b98cf5",
+    "instructionHash": "1c4f42b23f5e3285c3737ffdae6718a6757f6da31ea7ebfcb20be263d576c782",
     "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
     "frameRegistryHash": "db0042c9353bb0c60c81b292d76c97dd46fcb18e144b7abb71bcb266543f93ee",
     "protocolRegistryHash": "8c02a63ca1b414da81b35b81b81e9670054b7d108f470ff3212232fb9dafd825",
@@ -43,7 +43,7 @@
       "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
     },
     "servedRuntimeManifestPath": "public-served-runtime-v22.json",
-    "servedRuntimeManifestSha256": "b9cd019fa74b1b0ebc6f82067f3625bc420c34883ee30adb8d1b3c4f7a133c77"
+    "servedRuntimeManifestSha256": "b09e46117df9feed74a07a4b2c9692d34a74331aa3abdcf99b394cbb25c17c11"
   },
   "input": [
     "opaque handle",

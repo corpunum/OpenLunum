@@ -44,12 +44,14 @@ export interface SourceBoundResult {
   unsourced: string[];
   uncovered: string[];
   pronounFillers: string[];
-  /** A topic frame whose subject is a whole sentence (ends with . ! or ;) or longer than TOPIC_MAX_WORDS. */
+  /** A topic frame whose subject is a whole sentence (more than TOPIC_FRAGMENT_MAX_WORDS words ending with . ! or ;) or longer than TOPIC_MAX_WORDS. */
   notALabel: string[];
 }
 
 /** A topic names a heading, label or title; longer text is a statement. */
 export const TOPIC_MAX_WORDS = 20;
+/** A tagline or fragment may end with a full stop as typography; a longer text that ends a sentence is a statement. */
+export const TOPIC_FRAGMENT_MAX_WORDS = 8;
 
 /** Word tokens: runs of letters or digits, lowercase, NFKC. Markdown and punctuation vanish; English contractions are expanded (n't -> not, 'll -> will, 'd -> would) or dropped (possessive 's, 'm, 're, 've). */
 export function wordTokens(text: string): string[] {
@@ -130,7 +132,7 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
   for (const subject of topicSubjects) {
     const words = wordTokens(subject);
     if (words.length > TOPIC_MAX_WORDS) { notALabel.push(subject); continue; }
-    if (declarative && words.length && occurrences(source, words).some((start) => start + words.length === source.length)) notALabel.push(subject);
+    if (declarative && words.length > TOPIC_FRAGMENT_MAX_WORDS && occurrences(source, words).some((start) => start + words.length === source.length)) notALabel.push(subject);
   }
   const uncovered: string[] = [];
   // A legacy frame names its verb by predicate, not by a source filler, so the
