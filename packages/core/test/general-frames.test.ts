@@ -120,9 +120,10 @@ test('a topic is a label, not a sentence in disguise', () => {
   accepted('Why does it matter?', topicOf('Why does it matter?')); // a question is not declarative
   accepted('2026-10-10', topicOf('2026-10-10')); // a bare date or number shown on its own
   refused('2026-10-10', topicOf('2026-10-11'), 'unretained_source_literal');
-  const text9 = 'OpenUnum runs on your own hardware every single day.';
-  const sentence = refused(text9, topicOf('OpenUnum runs on your own hardware every single day'), 'unbound_source_content');
-  assert.deepEqual(sentence.sourceBound?.notALabel, ['OpenUnum runs on your own hardware every single day']);
+  const text15 = 'Teams ship fewer bugs because tests catch regressions before real users ever see them in production.';
+  const sentence = refused(text15, topicOf('Teams ship fewer bugs because tests catch regressions before real users ever see them in production'), 'unbound_source_content');
+  assert.deepEqual(sentence.sourceBound?.notALabel, ['Teams ship fewer bugs because tests catch regressions before real users ever see them in production']);
+  accepted('The local-first, model-agnostic runtime for user-owned autonomous agents.', topicOf('The local-first, model-agnostic runtime for user-owned autonomous agents'));
   accepted('OpenUnum runs on your own hardware', topicOf('OpenUnum runs on your own hardware')); // no sentence punctuation: a label as far as the core can tell
   const long = Array.from({ length: 21 }, (_, i) => `word${i}`).join(' ');
   refused(long, topicOf(long), 'unbound_source_content');

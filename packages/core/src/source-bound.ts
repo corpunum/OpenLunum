@@ -51,7 +51,7 @@ export interface SourceBoundResult {
 /** A topic names a heading, label or title; longer text is a statement. */
 export const TOPIC_MAX_WORDS = 20;
 /** A tagline or fragment may end with a full stop as typography; a longer text that ends a sentence is a statement. */
-export const TOPIC_FRAGMENT_MAX_WORDS = 8;
+export const TOPIC_FRAGMENT_MAX_WORDS = 14;
 /**
  * Subject pronouns and finite auxiliaries: a short text that ends a declarative sentence and contains one of them is a
  * statement ("It grounds my autonomy in reality."), not a tagline ("Your models.").

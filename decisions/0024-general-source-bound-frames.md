@@ -73,7 +73,7 @@ its source text:
    `because`, `if`, `when`, `without`, ...) was dropped by the candidate, and
    the candidate gets no identity;
 4. a `topic` is a label: its subject may not be longer than 20 words, nor end a
-   declarative source sentence (`.`, `!` or `;`) if it has more than 8 words or
+   declarative source sentence (`.`, `!` or `;`) if it has more than 14 words or
    contains a subject pronoun or finite auxiliary (`it`, `we`, `is`, `does`, ...).
    A short tagline such as "Your models." passes; "It grounds my autonomy." does
    not. A topic with no such marker that is a short statement ("Runs locally.")
