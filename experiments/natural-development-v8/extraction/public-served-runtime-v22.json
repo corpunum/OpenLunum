@@ -16,7 +16,7 @@
     },
     {
       "path": "packages/core/dist/src/agent-native.js",
-      "sha256": "129aae48e4846cd26e0b6b55c9be82ac8fd7c0585cd459ccd5f9015c6a69f258"
+      "sha256": "6e86e67b3068a43e7580a30964bbb63410b4d65a3fde1a7fbc8823494cc32e96"
     },
     {
       "path": "packages/core/dist/src/agent-state-freeze.js",
@@ -128,7 +128,7 @@
     },
     {
       "path": "packages/core/dist/src/frame-registry.js",
-      "sha256": "ef24933447274f39086bcaf1b2e83622b88801bfd8a5f861483b9e0cb580c933"
+      "sha256": "dca04a57045112d64ee1fb5debb926e3c5d47fac55c5f2758fe5fcfcd4daa0e5"
     },
     {
       "path": "packages/core/dist/src/grounding-capability.js",

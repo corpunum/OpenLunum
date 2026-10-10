@@ -40,7 +40,7 @@ of the source, not a closed vocabulary:
 | `relate` | `subject`, `relation`, `object` | `scope` | X is part of Y; X is faster than Y |
 | `enumerate` | `items` (array of at least two terms) | `subject` | a list, with an optional label |
 | `quantify` | `subject`, `amount` (quantity, measure, range or date term) | `scope` | a stated amount with its unit |
-| `topic` | `subject` | | a heading, label or title that makes no statement |
+| `topic` | `subject` | | a heading, label or title that makes no statement; a bare number or date shown on its own; a question that only poses itself |
 
 Adjuncts shared by `define`, `describe`, `assert` and `relate`: `scope`,
 `location`, `reason`, `purpose`, `condition`, `manner`, `result`, `duration` and

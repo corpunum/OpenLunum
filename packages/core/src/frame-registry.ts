@@ -457,7 +457,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     roles: Object.freeze([
       { name: 'subject', required: true }
     ]),
-    description: 'The unit only names a subject or poses a question without asserting anything: a heading, label, title, menu item, caption or question ("Memory and Recall", "Install", "OpenUnum journal", "Why does it matter?").'
+    description: 'The unit only names a subject, shows a bare value or poses a question without asserting anything: a heading, label, title, menu item, caption, number or date shown on its own, or question ("Memory and Recall", "Install", "2026-10-10", "Why does it matter?").'
   })
 });
 
