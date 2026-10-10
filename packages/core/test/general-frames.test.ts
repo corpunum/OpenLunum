@@ -111,6 +111,25 @@ test('words that change meaning cannot hide outside a filler', () => {
   assert.deepEqual(wordTokens('Local-first, **fast**!'), ['local', 'first', 'fast']);
 });
 
+test('a topic is a label, not a sentence in disguise', () => {
+  const topicOf = (value: string) => build({ predicate: 'topic', roles: { subject: text(value) } });
+  accepted('Why does it matter?', topicOf('Why does it matter?'));
+  accepted('The Counter: I introduced a counter.', build({ predicate: 'topic', roles: { subject: text('The Counter') }, also: [{ predicate: 'assert', roles: { subject: text('I'), action: text('introduced'), object: text('a counter') } }] }));
+  const sentence = refused('OpenUnum runs on your own hardware.', topicOf('OpenUnum runs on your own hardware'), 'unbound_source_content');
+  assert.deepEqual(sentence.sourceBound?.notALabel, ['OpenUnum runs on your own hardware']);
+  accepted('OpenUnum runs on your own hardware', topicOf('OpenUnum runs on your own hardware')); // no sentence punctuation: a label as far as the core can tell
+  const long = Array.from({ length: 21 }, (_, i) => `word${i}`).join(' ');
+  refused(long, topicOf(long), 'unbound_source_content');
+});
+
+test('contractions are expanded: n\'t needs negated, \'ll and \'d need a modality, \'s \'m \'re are free', () => {
+  assert.deepEqual(wordTokens("I didn't know it's the lab's rig; we'll can't won't"), ['i', 'did', 'not', 'know', 'it', 'the', 'lab', 'rig', 'we', 'will', 'cannot', 'will', 'not']);
+  const roles = { subject: text('I'), action: text('stop'), object: text('at diagnosis') };
+  refused("I didn't stop at diagnosis.", build({ predicate: 'assert', roles }), 'unbound_source_content');
+  accepted("I didn't stop at diagnosis.", build({ predicate: 'assert', roles, negated: true }));
+  accepted("I'm aware.", build({ predicate: 'describe', roles: { subject: text('I'), attribute: text('aware') } }));
+});
+
 test('pronoun fillers, copula actions and one-item lists are refused by the frame', () => {
   const pronoun = build({ predicate: 'assert', roles: { subject: text('It'), action: text('runs'), location: text('your own hardware') } });
   refused('It runs on your own hardware.', pronoun, 'unbound_source_content');
@@ -142,6 +161,46 @@ test('general frames nest as conditions of other frames, and legacy frames are n
   const legacy = build({ predicate: 'restart', kind: 'command', roles: { theme: { type: 'service', id: 'router' } } });
   assert.equal(submit('Please, when convenient, restart router.', legacy).sourceBound, null);
   assert.equal(submit('Please, when convenient, restart router.', legacy).candidateIdentityAvailable, true);
+});
+
+test('a subordinate clause stays whole in the adjunct role it plays; leaving it out is refused', () => {
+  const source = 'OpenUnum restarts the service when the probe fails.';
+  const roles = { subject: { type: 'project', value: 'OpenUnum' }, action: text('restarts'), object: text('the service') };
+  accepted(source, build({ predicate: 'assert', roles: { ...roles, condition: text('when the probe fails') } }));
+  refused(source, build({ predicate: 'assert', roles }), 'unbound_source_content');
+  const because = 'The router is slow because the cache is cold.';
+  accepted(because, build({ predicate: 'describe', roles: { subject: text('The router'), attribute: text('slow'), reason: text('because the cache is cold') } }));
+});
+
+test('a compound sentence joined by "and" is one candidate with further root clauses; other connectives are refused', () => {
+  const clause = (subject: string, action: string, location: string) => ({ predicate: 'assert', roles: { subject: text(subject), action: text(action), location: text(location) } });
+  const compound = (source: string) => submit(source, build({ ...clause('OpenUnum', 'runs', 'your hardware'), also: [clause('Ollama', 'runs', 'the cloud')] }));
+  const ok = compound('OpenUnum runs on your hardware and Ollama runs in the cloud.');
+  assert.equal(ok.candidateIdentityAvailable, true, ok.diagnostics.join(' | '));
+  assert.equal(ok.sem?.clauses.length, 2);
+  assert.equal(compound('OpenUnum runs on your hardware but Ollama runs in the cloud.').failureClass, 'unbound_source_content');
+  assert.equal(compound('OpenUnum runs on your hardware, then Ollama runs in the cloud.').failureClass, 'unbound_source_content');
+  // A connective is kept as written, in the role of the clause it introduces; it then stays in the identity.
+  const but = submit('OpenUnum runs on your hardware but Ollama runs in the cloud.', build({ ...clause('OpenUnum', 'runs', 'your hardware'), also: [{ ...clause('Ollama', 'runs', 'the cloud'), roles: { connective: text('but'), subject: text('Ollama'), action: text('runs'), location: text('the cloud') } }] }));
+  assert.equal(but.candidateIdentityAvailable, true, but.diagnostics.join(' | '));
+  assert.notEqual(but.semanticFingerprint, ok.semanticFingerprint, 'but and and are different identities');
+  const punct = submit('OpenUnum runs on your hardware; Ollama runs in the cloud.', build({ ...clause('OpenUnum', 'runs', 'your hardware'), also: [clause('Ollama', 'runs', 'the cloud')] }));
+  assert.equal(punct.candidateIdentityAvailable, true);
+  assert.equal(punct.semanticFingerprint, ok.semanticFingerprint, 'punctuation and "and" join the same clauses');
+  const lead = submit('However, OpenUnum runs on your hardware.', build({ predicate: 'assert', roles: { connective: text('However'), subject: text('OpenUnum'), action: text('runs'), location: text('your hardware') } }));
+  assert.equal(lead.candidateIdentityAvailable, true, lead.diagnostics.join(' | '));
+  assert.equal(submit('However, OpenUnum runs on your hardware.', build({ predicate: 'assert', roles: { subject: text('OpenUnum'), action: text('runs'), location: text('your hardware') } })).failureClass, 'unbound_source_content');
+  assert.equal(renderSem(ok.sem as never, { profile: LOSSLESS_RENDERER }).code, 'R assert(subject=OpenUnum, location=your hardware, action=runs) ; assert(subject=Ollama, location=the cloud, action=runs)');
+  const idOrder = semanticFingerprint(build({ ...clause('Ollama', 'runs', 'the cloud'), also: [clause('OpenUnum', 'runs', 'your hardware')] }));
+  assert.notEqual(idOrder, ok.semanticFingerprint, 'clause order is significant');
+});
+
+test('"also" is bounded and clause-shaped', () => {
+  const one = { predicate: 'topic', roles: { subject: text('A') } };
+  assert.doesNotThrow(() => build({ predicate: 'topic', roles: { subject: text('A') }, also: [one, one, one] }));
+  assert.throws(() => build({ predicate: 'topic', roles: { subject: text('A') }, also: [one, one, one, one] }), /invalid_builder_also/u);
+  assert.throws(() => build({ predicate: 'topic', roles: { subject: text('A') }, also: [{ ...one, kind: 'event' } as never] }), /unknown_builder_fields/u);
+  assert.throws(() => build({ predicate: 'topic', roles: { subject: text('A') }, also: [{ predicate: 'topic', roles: {} }] }), /missing_required_role/u);
 });
 
 test('golden vectors of existing frames do not move', () => {

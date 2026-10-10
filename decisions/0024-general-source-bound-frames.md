@@ -42,8 +42,18 @@ of the source, not a closed vocabulary:
 | `quantify` | `subject`, `amount` (quantity, measure, range or date term) | `scope` | a stated amount with its unit |
 | `topic` | `subject` | | a heading, label or title that makes no statement |
 
+Adjuncts shared by `define`, `describe`, `assert` and `relate`: `scope`,
+`location`, `reason`, `purpose`, `condition`, `manner`, `result`, `duration` and
+`connective` (the discourse word that introduces the clause: But, So, However).
+A subordinate clause is kept whole, as words, in the adjunct it plays; it is
+not parsed further.
+
+**Compound sentences.** The builder takes `also`: up to three further root
+clauses of the same statement, for independent clauses joined by "and" or only
+by punctuation. World and kind are shared; clause order is significant.
+
 Protocol 0.6 adds the seven predicates and the roles `relation`, `attribute`,
-`definition` and `items`. `ROLE_ORDER` (rendering) gains those new roles at the
+`definition`, `items` and `connective`. `ROLE_ORDER` (rendering) gains those new roles at the
 end; existing roles keep their order, so existing renders are byte-identical.
 
 **Source-bound check** (`packages/core/src/source-bound.ts`, new gate in
@@ -62,7 +72,11 @@ its source text:
    Any other word (`also`, `only`, `every`, `all`, `more`, `than`, `or`,
    `because`, `if`, `when`, `without`, ...) was dropped by the candidate, and
    the candidate gets no identity;
-4. the check is English only; another source language fails closed.
+4. a `topic` is a label: its subject may not be longer than 20 words nor end the
+   source sentence when the source ends with `.`, `!` or `;`;
+5. English contractions are expanded (`n't` needs negated, `'ll`/`'d` need a
+   modality; possessive `'s`, `'m`, `'re`, `'ve` are free);
+6. the check is English only; another source language fails closed.
 
 A Sem that mixes a legacy frame with a general condition or consequence gets
 checks 1 and 2 only, because a legacy frame names its verb by predicate, not by

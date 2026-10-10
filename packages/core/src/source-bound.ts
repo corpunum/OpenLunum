@@ -44,11 +44,22 @@ export interface SourceBoundResult {
   unsourced: string[];
   uncovered: string[];
   pronounFillers: string[];
+  /** A topic frame whose subject is a whole sentence (ends with . ! or ;) or longer than TOPIC_MAX_WORDS. */
+  notALabel: string[];
 }
 
-/** Word tokens: runs of letters or digits, lowercase, NFKC. Markdown and punctuation vanish. */
+/** A topic names a heading, label or title; longer text is a statement. */
+export const TOPIC_MAX_WORDS = 20;
+
+/** Word tokens: runs of letters or digits, lowercase, NFKC. Markdown and punctuation vanish; English contractions are expanded (n't -> not, 'll -> will, 'd -> would) or dropped (possessive 's, 'm, 're, 've). */
 export function wordTokens(text: string): string[] {
-  return String(text ?? '').normalize('NFKC').toLocaleLowerCase('und').match(/[\p{L}\p{N}]+/gu) ?? [];
+  const expanded = String(text ?? '').normalize('NFKC').toLocaleLowerCase('und')
+    .replace(/\bcan['\u2019]t\b/gu, 'cannot').replace(/\bwon['\u2019]t\b/gu, 'will not')
+    .replace(/n['\u2019]t\b/gu, ' not')
+    .replace(/['\u2019]ll\b/gu, ' will').replace(/['\u2019]d\b/gu, ' would')
+    // 's (possessive or "is"), 'm, 're, 've: the clitic is dropped; the copula or auxiliary is free anyway
+    .replace(/['\u2019](?:s|m|re|ve)\b/gu, ' ');
+  return expanded.match(/[\p{L}\p{N}]+/gu) ?? [];
 }
 
 function fillerStrings(term: LunumTerm | undefined, out: string[]): void {
@@ -88,15 +99,17 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
   let negated = false;
   let modal = false;
   const fillers: string[] = [];
+  const topicSubjects: string[] = [];
   walkClauses(sem.clauses, (clause) => {
+    if (basicIdentifier(clause.predicate) === 'topic') fillerStrings(clause.roles?.subject, topicSubjects);
     if ((GENERAL_FRAME_PREDICATES as readonly string[]).includes(basicIdentifier(clause.predicate))) general = true; else allGeneral = false;
     if (clause.negated === true) negated = true;
     if (clause.modality != null) modal = true;
     for (const term of Object.values(clause.roles ?? {})) fillerStrings(term, fillers);
     fillerStrings(clause.time, fillers);
   });
-  if (!general) return { applies: false, bound: true, unsourced: [], uncovered: [], pronounFillers: [] };
-  if (language && !/^en([-_]|$)/iu.test(language)) return { applies: true, bound: false, unsourced: [], uncovered: ['language_unsupported'], pronounFillers: [] };
+  if (!general) return { applies: false, bound: true, unsourced: [], uncovered: [], pronounFillers: [], notALabel: [] };
+  if (language && !/^en([-_]|$)/iu.test(language)) return { applies: true, bound: false, unsourced: [], uncovered: ['language_unsupported'], pronounFillers: [], notALabel: [] };
 
   const source = wordTokens(sourceText);
   const covered = new Array<boolean>(source.length).fill(false);
@@ -110,6 +123,15 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
     if (!at.length) { unsourced.push(filler); continue; }
     for (const start of at) for (let k = 0; k < words.length; k += 1) covered[start + k] = true;
   }
+  // A topic is a label: its words must not be a whole declarative sentence of the source.
+  const notALabel: string[] = [];
+  const closing = String(sourceText ?? '').replace(/[\s"'\u201d\u2019)\]*_`]+$/u, '').slice(-1);
+  const declarative = closing === '.' || closing === '!' || closing === ';';
+  for (const subject of topicSubjects) {
+    const words = wordTokens(subject);
+    if (words.length > TOPIC_MAX_WORDS) { notALabel.push(subject); continue; }
+    if (declarative && words.length && occurrences(source, words).some((start) => start + words.length === source.length)) notALabel.push(subject);
+  }
   const uncovered: string[] = [];
   // A legacy frame names its verb by predicate, not by a source filler, so the
   // words of a Sem that mixes both kinds cannot be accounted for: only the
@@ -122,7 +144,7 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
     if (modal && MODALS.has(word)) return;
     uncovered.push(word);
   });
-  return { applies: true, bound: !unsourced.length && !uncovered.length && !pronounFillers.length, unsourced, uncovered: [...new Set(uncovered)], pronounFillers };
+  return { applies: true, bound: !unsourced.length && !uncovered.length && !pronounFillers.length && !notALabel.length, unsourced, uncovered: [...new Set(uncovered)], pronounFillers, notALabel };
 }
 
 /** True when a lexical slot is nothing but a copula (use define/describe/relate instead). */

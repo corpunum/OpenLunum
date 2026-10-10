@@ -19,7 +19,18 @@ export interface CandidateBuilderInput {
   time?: LunumTerm;
   conditions?: LunumClause[];
   consequences?: LunumClause[];
+  /**
+   * Further root clauses of the same statement, for a compound sentence whose
+   * parts are joined by "and" (decisions/0024). Each is built with the same
+   * checks as the first; world and kind are shared.
+   */
+  also?: CandidateBuilderClause[];
 }
+
+export type CandidateBuilderClause = Omit<CandidateBuilderInput, 'world' | 'kind' | 'also'>;
+
+/** At most this many root clauses in one candidate (the first plus `also`). */
+export const MAX_BUILDER_CLAUSES = 4;
 
 export interface CandidateBuilderResult {
   sem: LunumSem;
@@ -64,6 +75,7 @@ export function getCandidateBuilderSchema(): Record<string, unknown> {
     time: { $ref: '#/$defs/term' },
     conditions: { type: 'array', items: clauseRef },
     consequences: { type: 'array', items: clauseRef },
+    also: { type: 'array', maxItems: MAX_BUILDER_CLAUSES - 1, items: clauseRef, description: 'Further root clauses of a compound sentence joined by "and"; each is a framed clause like the first.' },
   };
   const variants = Object.values(CANONICAL_SEMANTIC_FRAMES).map((frame) => {
     const roleProperties: Record<string, unknown> = {};
@@ -101,7 +113,7 @@ export function getCandidateBuilderSchema(): Record<string, unknown> {
   });
   // World/kind are envelope fields, never fields of a nested clause.
   const clauseVariants = variants.map(variant => {
-    const { world: _world, kind: _kind, ...properties } = variant.properties as Record<string, unknown>;
+    const { world: _world, kind: _kind, also: _also, ...properties } = variant.properties as Record<string, unknown>;
     return { ...variant, properties: { ...properties, annotations: { type: 'object' } }, required: ['predicate', 'roles'] };
   });
   return {
@@ -136,19 +148,9 @@ function assertNestedFrames(clauses: readonly LunumClause[], field: 'conditions'
  * frames. The returned Sem remains untrusted and must still pass
  * submitCandidate() (including grounding and identity gates).
  */
-export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilderResult {
-  if (!input || typeof input !== 'object') throw new TypeError('builder_input_required');
-  const allowedInputFields = new Set(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences']);
-  const unknownInputFields = Object.keys(input as unknown as Record<string, unknown>).filter((key) => !allowedInputFields.has(key));
-  if (unknownInputFields.length) throw new TypeError(`unknown_builder_fields:${unknownInputFields.sort().join(',')}`);
-  if (typeof input.world !== 'string') throw new TypeError('builder_world_string_required');
-  if (typeof input.kind !== 'string') throw new TypeError('builder_kind_string_required');
+function buildClause(input: CandidateBuilderClause, label: string): { clause: LunumClause; frame: (typeof CANONICAL_SEMANTIC_FRAMES)[string]; predicate: string } {
   if (typeof input.predicate !== 'string') throw new TypeError('builder_predicate_string_required');
-  const world = basicIdentifier(input.world);
-  const kind = basicIdentifier(input.kind);
   const predicate = basicIdentifier(input.predicate);
-  if (!SEMANTIC_PROTOCOL_REGISTRY.worlds.includes(world)) throw new TypeError(`unknown_world:${world}`);
-  if (!SEMANTIC_PROTOCOL_REGISTRY.kinds.includes(kind)) throw new TypeError(`unknown_kind:${kind}`);
   if (!SEMANTIC_PROTOCOL_REGISTRY.predicates.includes(predicate)) throw new TypeError(`unknown_predicate:${predicate}`);
   const frame = CANONICAL_SEMANTIC_FRAMES[predicate];
   if (!frame) throw new TypeError(`unframed_predicate:${predicate}`);
@@ -166,30 +168,58 @@ export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilde
   }
   const allowedRoles = frame.roles.map((role) => role.name);
   const unexpected = Object.keys(roles).filter((role) => !allowedRoles.includes(basicIdentifier(role)));
-  if (unexpected.length) throw new TypeError(`unexpected_frame_roles:${unexpected.join(',')}`);
+  if (unexpected.length) throw new TypeError(`unexpected_frame_roles:${label}${unexpected.join(',')}`);
   const clause: LunumClause = { predicate, roles };
   if (input.negated !== undefined) clause.negated = input.negated;
   if (input.modality !== undefined) clause.modality = input.modality;
   if (input.time !== undefined) clause.time = input.time;
   if (input.conditions !== undefined) clause.conditions = input.conditions;
   if (input.consequences !== undefined) clause.consequences = input.consequences;
-  const sem: LunumSem = { schema: SEM_SCHEMA, world, kind, clauses: [clause] };
+  return { clause, frame, predicate };
+}
+
+export function buildCandidateSem(input: CandidateBuilderInput): CandidateBuilderResult {
+  if (!input || typeof input !== 'object') throw new TypeError('builder_input_required');
+  const allowedInputFields = new Set(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences', 'also']);
+  const unknownInputFields = Object.keys(input as unknown as Record<string, unknown>).filter((key) => !allowedInputFields.has(key));
+  if (unknownInputFields.length) throw new TypeError(`unknown_builder_fields:${unknownInputFields.sort().join(',')}`);
+  if (typeof input.world !== 'string') throw new TypeError('builder_world_string_required');
+  if (typeof input.kind !== 'string') throw new TypeError('builder_kind_string_required');
+  const world = basicIdentifier(input.world);
+  const kind = basicIdentifier(input.kind);
+  if (!SEMANTIC_PROTOCOL_REGISTRY.worlds.includes(world)) throw new TypeError(`unknown_world:${world}`);
+  if (!SEMANTIC_PROTOCOL_REGISTRY.kinds.includes(kind)) throw new TypeError(`unknown_kind:${kind}`);
+  const first = buildClause(input, '');
+  const rest: LunumClause[] = [];
+  if (input.also !== undefined) {
+    if (!Array.isArray(input.also) || input.also.length > MAX_BUILDER_CLAUSES - 1) throw new TypeError(`invalid_builder_also:must be an array of at most ${MAX_BUILDER_CLAUSES - 1} clauses`);
+    for (const [index, extra] of input.also.entries()) {
+      if (!extra || typeof extra !== 'object' || Array.isArray(extra)) throw new TypeError(`invalid_builder_also:${index} must be an object`);
+      const unknownExtra = Object.keys(extra).filter((key) => !allowedInputFields.has(key) || key === 'world' || key === 'kind' || key === 'also');
+      if (unknownExtra.length) throw new TypeError(`unknown_builder_fields:also[${index}].${unknownExtra.sort().join(',')}`);
+      rest.push(buildClause(extra, `also[${index}].`).clause);
+    }
+  }
+  const sem: LunumSem = { schema: SEM_SCHEMA, world, kind, clauses: [first.clause, ...rest] };
   const transport = validateSemanticTransport(sem);
   if (!transport.ok) throw new TypeError(`invalid_builder_candidate:${transport.errors.join('; ')}`);
-  if (input.conditions !== undefined) {
-    if (!Array.isArray(input.conditions)) throw new TypeError('invalid_builder_conditions:must be an array');
-    assertNestedFrames(input.conditions, 'conditions');
-  }
-  if (input.consequences !== undefined) {
-    if (!Array.isArray(input.consequences)) throw new TypeError('invalid_builder_consequences:must be an array');
-    assertNestedFrames(input.consequences, 'consequences');
+  for (const [index, clause] of sem.clauses.entries()) {
+    if (clause.conditions !== undefined) {
+      if (!Array.isArray(clause.conditions)) throw new TypeError(`invalid_builder_conditions:${index} must be an array`);
+      assertNestedFrames(clause.conditions, 'conditions');
+    }
+    if (clause.consequences !== undefined) {
+      if (!Array.isArray(clause.consequences)) throw new TypeError(`invalid_builder_consequences:${index} must be an array`);
+      assertNestedFrames(clause.consequences, 'consequences');
+    }
   }
   const frameValidation = validateSemFrames(sem);
   if (!frameValidation.valid) throw new TypeError(`invalid_builder_frame:${frameValidation.issues.map((issue) => issue.code).join(',')}`);
+  const frame = first.frame;
   return {
     sem,
     frame,
-    allowedRoles: Object.freeze(allowedRoles),
+    allowedRoles: Object.freeze(frame.roles.map((role) => role.name)),
     requiredRoles: Object.freeze(frame.roles.filter((role) => role.required).map((role) => role.name)),
     atLeastOneOf: frame.atLeastOneOf?.length ? Object.freeze([...frame.atLeastOneOf]) : null,
   };

@@ -21,6 +21,7 @@ const binding = () => artifactBinding(root, packagePath, profilePath, pkg);
 // resolve the real git directory instead of assuming `<root>/.git/`.
 // Served modules changed by decisions/0024 (plus the new source-bound.js) relative to any earlier freeze.
 const RUNTIME_DRIFT_0024 = [
+  'served_runtime_changed:packages/core/dist/src/agent-builder.js',
   'served_runtime_changed:packages/core/dist/src/agent-native.js',
   'served_runtime_changed:packages/core/dist/src/constants.js',
   'served_runtime_changed:packages/core/dist/src/frame-registry.js',
@@ -86,7 +87,7 @@ test('v17 remains frozen historical binding and cannot certify current contract0
   // The artifacts changed by decisions/0020-0022 drift; the rest of v17 still
   // binds the current bytes, and its manifest file is unaltered.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'literalRetentionArtifactSha256', 'servedRuntimeManifestSha256', 'toolImplementationSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'literalRetentionArtifactSha256', 'servedRuntimeManifestSha256', 'toolImplementationSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.equal(runtimeCheck.runtime.match, false);
@@ -107,7 +108,7 @@ test('v21 remains frozen historical binding; the general frames drift the contra
   // decisions/0024 changes the contract, the frame and protocol registries and
   // adds source-bound.js; literal retention, transport, builder and tools still bind.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.deepEqual(runtimeCheck.runtime.errors.sort(), RUNTIME_DRIFT_0024);
@@ -125,7 +126,7 @@ test('v20 remains frozen historical binding; the 0.19 contract and the discourse
   assert.equal(result.match, false);
   // ambient-discourse-v2 changed discourse.js (path literals); decisions/0024 the contract, registries and index.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.deepEqual(runtimeCheck.runtime.errors.sort(), [...RUNTIME_DRIFT_0024, 'served_runtime_changed:packages/core/dist/src/discourse.js'].sort());
@@ -144,7 +145,7 @@ test('v19 remains frozen historical binding and cannot certify current contract0
   // Exactly the artifacts changed by decisions/0023 (contract and frame
   // registry) drift; protocol vocabulary, literal retention and tools still bind.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.deepEqual(runtimeCheck.runtime.errors.sort(), [
@@ -165,7 +166,7 @@ test('v18 remains frozen historical binding and cannot certify current contract0
   // Exactly the artifacts changed by decisions/0022 (contract, protocol and
   // frame registries) drift; literal retention, tools and the rest still bind.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.deepEqual(runtimeCheck.runtime.errors.sort(), [
@@ -185,7 +186,7 @@ test('v16 remains frozen historical binding and cannot certify current contract0
   // The artifacts changed since v16 (decisions/0019-0022, #713) drift; the rest
   // of v16 still binds the current bytes, and its manifest file is unaltered.
   const drifted = result.checks.filter(check => !check.match).map(check => check.key).sort();
-  assert.deepEqual(drifted, ['coreArtifactSha256', 'frameValidatorArtifactSha256', 'literalRetentionArtifactSha256', 'servedRuntimeManifestSha256', 'toolImplementationSha256']);
+  assert.deepEqual(drifted, ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'literalRetentionArtifactSha256', 'servedRuntimeManifestSha256', 'toolImplementationSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.equal(runtimeCheck.actual, historical.freeze.servedRuntimeManifestSha256);
   assert.equal(runtimeCheck.runtime.match, false);

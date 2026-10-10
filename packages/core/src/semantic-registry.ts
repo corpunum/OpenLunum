@@ -56,7 +56,7 @@ export const SEMANTIC_PROTOCOL_REGISTRY: ProtocolRegistry = Object.freeze({
     'parallelism', 'result', 'benefit', 'capability', 'from', 'to', 'id', 'issuer', 'terms',
     'role', 'window', 'unit', 'count', 'action',
     // 0.6 (decisions/0024): slots of the general frames.
-    'relation', 'attribute', 'definition', 'items'
+    'relation', 'attribute', 'definition', 'items', 'connective'
   ]),
   termTypes: Object.freeze([
     'actor', 'concept', 'object', 'metric', 'feature', 'project', 'quantity', 'date', 'time',

@@ -175,10 +175,10 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(v22.freeze.instructionVersion, 'agent-extraction-instructions/0.9');
   assert.equal(v22.freeze.protocolVersion, 'lunum-protocol/0.6');
   assert.equal(v22.freeze.frameRegistryVersion, 'lunum-frame/0.8');
-  for (const key of ['schemaHash', 'taskProfileSha256', 'literalRetentionArtifactSha256', 'toolImplementationSha256', 'mcpArtifactSha256', 'builderArtifactSha256', 'transportValidatorArtifactSha256', 'transportSchemaArtifactSha256']) {
+  for (const key of ['schemaHash', 'taskProfileSha256', 'literalRetentionArtifactSha256', 'toolImplementationSha256', 'mcpArtifactSha256', 'transportValidatorArtifactSha256', 'transportSchemaArtifactSha256']) {
     assert.equal(v22.freeze[key], v21.freeze[key], `${key} unchanged by decisions/0024`);
   }
-  for (const key of ['protocolRegistryHash', 'frameRegistryHash', 'frameValidatorArtifactSha256', 'coreArtifactSha256', 'coreContractHash', 'instructionHash', 'servedRuntimeManifestSha256']) {
+  for (const key of ['protocolRegistryHash', 'frameRegistryHash', 'frameValidatorArtifactSha256', 'builderArtifactSha256', 'coreArtifactSha256', 'coreContractHash', 'instructionHash', 'servedRuntimeManifestSha256']) {
     assert.notEqual(v22.freeze[key], v21.freeze[key], `${key} changed in v22`);
   }
   assert.deepEqual(v22.conventions, v21.conventions);
@@ -192,7 +192,7 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.equal(hash('packages/core/dist/src/literal-retention.js'), v22.freeze.literalRetentionArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport.js'), next.freeze.transportValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport-schema.js'), next.freeze.transportSchemaArtifactSha256);
-  assert.equal(hash('packages/core/dist/src/agent-builder.js'), next.freeze.builderArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/agent-builder.js'), v22.freeze.builderArtifactSha256);
   assert.equal(hash('experiments/natural-development-v8/extraction/public-task-profile-iteration6.json'), next.freeze.taskProfileSha256);
   assert.equal(Object.hasOwn(next, 'gold'), false);
 });

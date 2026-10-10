@@ -61,8 +61,8 @@ const CANONICAL_RULES = Object.freeze([
   'Cardinal number words are numbers (seven times = 7, επτά φορές = 7, twenty-five = 25); one/once and articles are not. Relative times (Friday, tomorrow, next week, end of day, την Παρασκευή, αύριο) must be carried as written in a semantic value, never dropped or resolved to a calendar date.',
   'A strict threshold that restricts a role (invoices under 5,000 euros, disk usage above 90 percent) is a conditions clause with below/above, roles.subject and a quantity value; the main frame lacking a threshold role is not a reason to abstain. An inclusive bound (up to, at most, no more than, έως, το πολύ / at least, no less than, τουλάχιστον) is the same kind of conditions clause with at_most/at_least; never encode an inclusive bound as below/above or a strict one as at_most/at_least.',
   'An imperative addresses its reader: the addressee is the implicit agent, so leave roles.agent out (deploy, rotate, restart, enable, delete and other frames with an optional agent); never fill it with you, the reader, the user or a placeholder. A repetition count stated with the action (three times, δύο φορές) goes in roles.count where the frame has one (retry, restart).',
-  'Ordinary statements use the general frames, whose slots are open text copied from the source: define ("X is a Y", "X means Y"), describe ("X is fast", "X has 128 GB"), assert ("X runs on your hardware"; imperatives omit subject), relate ("X is part of Y", "X is faster than Y"), enumerate (a list of at least two items), quantify (a stated amount as a quantity term with its unit) and topic (a heading or label that makes no statement). Pick the one whose shape the sentence has; is/are/has never go in assert.',
-  'A candidate on a general frame is bound to its source: every filler must be words that occur in the source, and every other content word of the source must be inside some filler. Only articles, is/are/was/were/be, do/does/did, the prepositions of, in, on, at, by, for, from, to, with, as, and the word and may be left outside; not/never need negated=true and can/must/should need a modality. Put every other word (also, only, every, all, more, than, or, because, if, when, without) inside the filler of the role that holds it, or abstain. A filler that is only a pronoun (it, this, they) is refused. The check is English-only.',
+  'Ordinary statements use the general frames, whose slots are open text copied from the source: define ("X is a Y", "X means Y"), describe ("X is fast", "X has 128 GB"), assert ("X runs on your hardware"; imperatives omit subject), relate ("X is part of Y", "X is faster than Y"), enumerate (a list of at least two items), quantify (a stated amount as a quantity term with its unit) and topic (a heading or label that makes no statement). Pick the one whose shape the sentence has; is/are/has never go in assert. A subordinate clause (because, so that, to, if, when, unless, by -ing, which) is kept whole, as its own words, in the adjunct role it plays (reason, purpose, condition, manner, result, scope, duration, location), not parsed further. Independent clauses joined by "and" or only by punctuation (comma, semicolon, colon, dash) are one candidate with the further clauses in "also"; a discourse connective that introduces a clause (But, So, However, Furthermore, Then, While, Yet, Or) is kept as written in the connective role of that clause, which is how it stays in the identity.',
+  'A candidate on a general frame is bound to its source: every filler must be words that occur in the source, and every other content word of the source must be inside some filler. Only articles, is/are/was/were/be, do/does/did, the prepositions of, in, on, at, by, for, from, to, with, as, and the word and may be left outside; not/never need negated=true and can/must/should need a modality. Put every other word (also, only, every, all, more, than, or, because, if, when, without) inside the filler of the role that holds it, or abstain. A filler that is only a pronoun (it, this, they) is refused, and a topic may not be a sentence (ending with . ! or ;) or longer than 20 words. The check is English-only.',
 ]);
 const EXTRACTION_SEM_TEMPLATE = `{"schema":"${SEM_SCHEMA}","world":"real","kind":"simple_fact","clauses":[{"predicate":"<registered-predicate>","roles":{},"negated":false}]}`;
 
@@ -130,12 +130,13 @@ export function getExtractionContract(): ExtractionContract {
     },
     frameFirst: {
       mode: 'builder-then-submit',
-      inputFields: Object.freeze(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences']),
+      inputFields: Object.freeze(['world', 'kind', 'predicate', 'roles', 'negated', 'modality', 'time', 'conditions', 'consequences', 'also']),
       fieldSemantics: Object.freeze({
         world: 'semantic world from the protocol registry (for example real); never a language tag',
         kind: 'semantic clause kind from the protocol registry (for example preference)',
         predicate: 'framed predicate identifier',
         roles: 'object mapping canonical role names to typed LunumTerm objects; never a comma-separated list',
+        also: 'optional array (at most 3) of further root clauses {predicate, roles, negated, modality, time, conditions, consequences} for a compound sentence whose independent parts are joined by "and"; world and kind are shared',
       }),
       termShape: Object.freeze({ discriminator: 'type', identifierFields: Object.freeze(['id', 'ref']), literalFields: Object.freeze(['value']) }),
       framePromptBlock: canonicalFramePromptBlock(),
@@ -312,6 +313,7 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
     diagnostics.push(`unbound_source_content: ${[
       ...sourceBound.unsourced.map((x) => `filler "${x}" is not words of the source`),
       ...sourceBound.pronounFillers.map((x) => `filler "${x}" is only a pronoun`),
+      ...sourceBound.notALabel.map((x) => `topic "${x}" is a whole sentence or longer than a label; use define, describe, assert, relate or abstain`),
       ...(sourceBound.uncovered.length ? [`the candidate leaves out: ${sourceBound.uncovered.join(', ')}`] : []),
     ].join('; ')}; copy the source words into the fillers or abstain`);
   }

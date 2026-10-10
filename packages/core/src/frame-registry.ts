@@ -68,6 +68,23 @@ export interface FrameValidationResult {
  *
  * This is NOT a giant domain ontology; it defines the core operational predicate frames.
  */
+/**
+ * Adjunct slots shared by the general predicative frames (decisions/0024). Each
+ * holds the words of a phrase or of a whole subordinate clause, as written.
+ */
+const GENERAL_PHRASE_ROLES = Object.freeze([
+  { name: 'scope', required: false },
+  { name: 'location', required: false },
+  { name: 'reason', required: false },
+  { name: 'purpose', required: false },
+  { name: 'condition', required: false },
+  { name: 'manner', required: false },
+  { name: 'result', required: false },
+  { name: 'duration', required: false },
+  // The discourse word that introduces the clause ("But", "So", "Furthermore", "However"), kept as written.
+  { name: 'connective', required: false }
+]);
+
 export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDefinition>> = Object.freeze({
   prefer: Object.freeze({
     predicate: 'prefer',
@@ -380,21 +397,18 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     roles: Object.freeze([
       { name: 'subject', required: true },
       { name: 'definition', required: true },
-      { name: 'scope', required: false }
+      ...GENERAL_PHRASE_ROLES
     ]),
-    description: 'A subject is defined as, identified as or classified as a definition ("X is a Y", "X means Y", "X stands for Y", "X, also called Y").'
+    description: 'A subject is defined as, identified as or classified as a definition ("X is a Y", "X means Y", "X stands for Y", "X, also called Y"). A subordinate clause stays whole, as words, in the adjunct role it plays (reason, purpose, condition, manner, result, scope).'
   }),
   describe: Object.freeze({
     predicate: 'describe',
     roles: Object.freeze([
       { name: 'subject', required: true },
       { name: 'attribute', required: true },
-      { name: 'scope', required: false },
-      { name: 'location', required: false },
-      { name: 'reason', required: false },
-      { name: 'duration', required: false }
+      ...GENERAL_PHRASE_ROLES
     ]),
-    description: 'A subject has a property, quality or possession ("X is fast", "X has 128 GB of memory", "X is open source", "X is free for personal use"). The attribute is everything the source says about the subject after the copula or have.'
+    description: 'A subject has a property, quality or possession ("X is fast", "X has 128 GB of memory", "X is open source", "X is free for personal use"). The attribute is everything the source says about the subject after the copula or have, except an adjunct phrase that has its own role.'
   }),
   assert: Object.freeze({
     predicate: 'assert',
@@ -404,18 +418,12 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'object', required: false },
       { name: 'recipient', required: false },
       { name: 'instrument', required: false },
-      { name: 'location', required: false },
       { name: 'source', required: false },
       { name: 'destination', required: false },
-      { name: 'manner', required: false },
-      { name: 'reason', required: false },
-      { name: 'purpose', required: false },
-      { name: 'scope', required: false },
-      { name: 'duration', required: false },
-      { name: 'result', required: false }
+      ...GENERAL_PHRASE_ROLES
     ]),
     atLeastOneOf: Object.freeze(['subject', 'object']),
-    description: 'A subject does something, written as the source wrote it ("X runs on your hardware", "X lets you pick a model", "Install the CLI"). The subject is optional in imperatives. For is/are/has statements use define, describe, relate or quantify instead.'
+    description: 'A subject does something, written as the source wrote it ("X runs on your hardware", "X lets you pick a model", "Install the CLI"). The subject is optional in imperatives. For is/are/has statements use define, describe, relate or quantify instead. A subordinate clause stays whole, as words, in the adjunct role it plays (reason: because...; purpose: to.../so that...; condition: if/when/unless...; manner; result; scope).'
   }),
   relate: Object.freeze({
     predicate: 'relate',
@@ -423,7 +431,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'subject', required: true },
       { name: 'relation', required: true },
       { name: 'object', required: true },
-      { name: 'scope', required: false }
+      ...GENERAL_PHRASE_ROLES
     ]),
     description: 'A subject stands in a stated relation to an object ("X is part of Y", "X depends on Y", "X is faster than Y", "X belongs to Y"). The relation is the words between them, as written.'
   }),
@@ -449,7 +457,7 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     roles: Object.freeze([
       { name: 'subject', required: true }
     ]),
-    description: 'The unit only names a subject: a heading, label, title, menu item or caption with no statement ("Memory and Recall", "Install", "OpenUnum journal").'
+    description: 'The unit only names a subject or poses a question without asserting anything: a heading, label, title, menu item, caption or question ("Memory and Recall", "Install", "OpenUnum journal", "Why does it matter?").'
   })
 });
 

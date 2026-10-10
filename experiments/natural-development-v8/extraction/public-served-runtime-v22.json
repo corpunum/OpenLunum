@@ -8,7 +8,7 @@
   "artifacts": [
     {
       "path": "packages/core/dist/src/agent-builder.js",
-      "sha256": "58bf96ec983db307cc2f3634da2645940633629dbfdfe5422c1461291a32c395"
+      "sha256": "75fa09d9643437b7f99735d5081a823d429652f8f365add1cdaf3596143ab983"
     },
     {
       "path": "packages/core/dist/src/agent-interop.js",
@@ -16,7 +16,7 @@
     },
     {
       "path": "packages/core/dist/src/agent-native.js",
-      "sha256": "e2bc3a28a61b3e408c72d77ba6ad30d40138082b544e5f0350944f399633aeeb"
+      "sha256": "9124d46070c6d44a83e3ac77617c6558cc1c59215910fd16eede649c912ca1c4"
     },
     {
       "path": "packages/core/dist/src/agent-state-freeze.js",
@@ -68,7 +68,7 @@
     },
     {
       "path": "packages/core/dist/src/constants.js",
-      "sha256": "6b30ae331c6f8fd9f220e17b0167ad0629023cba9a93081f3c89cf2edea2e341"
+      "sha256": "6dd278b512c810ca31a01e75fa5d4a2e096f6c2e2d6483dd8687dc01466ee7c2"
     },
     {
       "path": "packages/core/dist/src/context-eligibility.js",
@@ -128,7 +128,7 @@
     },
     {
       "path": "packages/core/dist/src/frame-registry.js",
-      "sha256": "4cbc020f8c03a90e56c4d899749f1298e9ce499ba9f5693457ced19a3108b2b7"
+      "sha256": "ef24933447274f39086bcaf1b2e83622b88801bfd8a5f861483b9e0cb580c933"
     },
     {
       "path": "packages/core/dist/src/grounding-capability.js",
@@ -284,7 +284,7 @@
     },
     {
       "path": "packages/core/dist/src/semantic-registry.js",
-      "sha256": "910e0a6ca69be11704399db61ef9aebcfc5d54021b6c7f7a853c4ed82796c291"
+      "sha256": "ce23ed7729c09e8d227b2031bca2b4b2bc9de523a3353cd0ca98b245761cdeb7"
     },
     {
       "path": "packages/core/dist/src/semantic-transport-schema.js",
@@ -296,7 +296,7 @@
     },
     {
       "path": "packages/core/dist/src/source-bound.js",
-      "sha256": "41d2bfeec460e8490c3a27e6a5170b65c3fca1da2ee847fe3e52a00ac5751632"
+      "sha256": "233c5ec6d8420521c86f8bb265ec18de24d7a4af4c51601d2a2fc891c1b07d6e"
     },
     {
       "path": "packages/core/dist/src/supply-chain.js",
