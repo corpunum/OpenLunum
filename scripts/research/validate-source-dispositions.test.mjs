@@ -4,22 +4,22 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import { validateSourceDispositions, validateSourceDispositionFiles } from './validate-source-dispositions.mjs';
 
-const reviewPath = 'experiments/meaning-source-review-v6/review.json';
+const reviewPath = 'experiments/meaning-source-review-v7/review.json';
 const review = JSON.parse(fs.readFileSync(reviewPath));
 const probes = JSON.parse(fs.readFileSync(review.inputs.probes.path));
 const targets = fs.readFileSync(review.inputs.targets.path, 'utf8').split('\n').filter(Boolean).map(JSON.parse);
 
-test('v6 is an additive 0.18 binding migration with byte-identical original review values', () => {
+test('v7 is an additive 0.19 binding migration with byte-identical original review values', () => {
   const oldRaw = fs.readFileSync('experiments/meaning-source-review-v1/review.json');
-  const previousRaw = fs.readFileSync('experiments/meaning-source-review-v5/review.json');
+  const previousRaw = fs.readFileSync('experiments/meaning-source-review-v6/review.json');
   const oldReview = JSON.parse(oldRaw);
   const previous = JSON.parse(previousRaw);
   assert.equal(createHash('sha256').update(oldRaw).digest('hex'), review.supersedes.originalReviewSha256);
   assert.equal(createHash('sha256').update(previousRaw).digest('hex'), review.supersedes.previousReviewSha256);
-  assert.equal(review.supersedes.review, 'experiments/meaning-source-review-v5/review.json');
-  // v5 itself stays the frozen 0.17 migration of v1.
+  assert.equal(review.supersedes.review, 'experiments/meaning-source-review-v6/review.json');
+  // v6 itself stays the frozen 0.18 migration of v1.
   assert.equal(previous.supersedes.originalReviewSha256, review.supersedes.originalReviewSha256);
-  assert.equal(previous.contract.agent, 'lunum-agent/0.17');
+  assert.equal(previous.contract.agent, 'lunum-agent/0.18');
   for (const migratedFrom of [oldReview, previous]) {
     const migrated = structuredClone(review);
     delete migrated.supersedes;
@@ -31,14 +31,15 @@ test('v6 is an additive 0.18 binding migration with byte-identical original revi
   assert.deepEqual(review.inputs, oldReview.inputs);
   assert.deepEqual(review.review, oldReview.review);
   assert.deepEqual(review.items, oldReview.items);
-  assert.equal(review.contract.agent, 'lunum-agent/0.18');
+  assert.equal(review.contract.agent, 'lunum-agent/0.19');
   // decisions/0022 added two predicates (protocol 0.4 -> 0.5); decisions/0023
-  // changes frames only (0.6 -> 0.7).
-  assert.equal(review.contract.protocol, 'lunum-protocol/0.5');
-  assert.equal(review.contract.frames, 'lunum-frame/0.7');
+  // changes frames only (0.6 -> 0.7); decisions/0024 adds seven general
+  // predicates (protocol 0.6) and their frames (0.8).
+  assert.equal(review.contract.protocol, 'lunum-protocol/0.6');
+  assert.equal(review.contract.frames, 'lunum-frame/0.8');
   assert.equal(oldReview.contract.protocol, 'lunum-protocol/0.4');
   assert.equal(review.contract.identity, oldReview.contract.identity);
-  for (const historical of ['v1', 'v2', 'v3', 'v4', 'v5']) {
+  for (const historical of ['v1', 'v2', 'v3', 'v4', 'v5', 'v6']) {
     assert.throws(() => validateSourceDispositionFiles(`experiments/meaning-source-review-${historical}/review.json`), /review_contract_binding_mismatch/, historical);
   }
 });

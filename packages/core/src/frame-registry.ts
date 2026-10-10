@@ -1,7 +1,8 @@
 import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
+import { isCopulaOnly } from './source-bound.js';
 
-export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.7' as const;
+export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.8' as const;
 
 export interface FrameRoleRequirement {
   name: string;
@@ -9,6 +10,10 @@ export interface FrameRoleRequirement {
   allowedTermTypes?: readonly string[];
   /** The filler must be a registered protocol predicate given as a bare identifier (decisions/0008). */
   vocabulary?: 'predicate';
+  /** The filler must be a list of at least two terms (decisions/0024). */
+  list?: boolean;
+  /** The filler is the verb phrase as the source wrote it: a text term that is not only a copula (decisions/0024). */
+  lexicalVerb?: boolean;
   description?: string;
 }
 
@@ -36,7 +41,9 @@ export function canonicalFramePromptBlock(): string {
       ...Object.entries(frame.requiredWith ?? {}).map(([trigger, dependents]) => `${trigger} requires ${dependents.join(', ')}`),
       ...(frame.distinctRoles ?? []).map(([left, right]) => `${left} and ${right} must differ`),
       ...frame.roles.flatMap((role) => role.allowedTermTypes?.length ? [`${role.name}: ${role.allowedTermTypes.join('|')}`] : []),
-      ...frame.roles.flatMap((role) => role.vocabulary === 'predicate' ? [`${role.name}: a registered predicate`] : [])
+      ...frame.roles.flatMap((role) => role.vocabulary === 'predicate' ? [`${role.name}: a registered predicate`] : []),
+      ...frame.roles.flatMap((role) => role.list ? [`${role.name}: an array of at least two terms`] : []),
+      ...frame.roles.flatMap((role) => role.lexicalVerb ? [`${role.name}: the verb phrase as written, not only is/are`] : [])
     ];
     return `${frame.predicate}(${required.length ? required.join(', ') : 'no required roles'}${extras.length ? `; ${extras.join('; ')}` : ''}) — ${frame.description}`;
   }).join('\n');
@@ -45,7 +52,7 @@ export function canonicalFramePromptBlock(): string {
 export interface FrameValidationIssue {
   path: string;
   predicate: string;
-  code: 'missing_required_role' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role' | 'unregistered_action' | 'dependent_role_missing' | 'identical_roles' | 'ambiguous_negated_permission';
+  code: 'missing_required_role' | 'invalid_list_role' | 'copula_action' | 'unregistered_role' | 'disallowed_term_type' | 'role_conflict' | 'unexpected_role' | 'unframed_predicate' | 'duplicate_semantic_channel' | 'placeholder_role' | 'unregistered_action' | 'dependent_role_missing' | 'identical_roles' | 'ambiguous_negated_permission';
   message: string;
 }
 
@@ -363,6 +370,86 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
       { name: 'theme', required: true }
     ]),
     description: 'An agent revokes a theme (access, a role, a credential) from a recipient.'
+  }),
+  // decisions/0024: general frames for ordinary statements. Their slots are
+  // open text, so submitCandidate also requires a candidate for one of them to
+  // be source-bound (source-bound.ts): fillers occur in the source and no
+  // content word is left out.
+  define: Object.freeze({
+    predicate: 'define',
+    roles: Object.freeze([
+      { name: 'subject', required: true },
+      { name: 'definition', required: true },
+      { name: 'scope', required: false }
+    ]),
+    description: 'A subject is defined as, identified as or classified as a definition ("X is a Y", "X means Y", "X stands for Y", "X, also called Y").'
+  }),
+  describe: Object.freeze({
+    predicate: 'describe',
+    roles: Object.freeze([
+      { name: 'subject', required: true },
+      { name: 'attribute', required: true },
+      { name: 'scope', required: false },
+      { name: 'location', required: false },
+      { name: 'reason', required: false },
+      { name: 'duration', required: false }
+    ]),
+    description: 'A subject has a property, quality or possession ("X is fast", "X has 128 GB of memory", "X is open source", "X is free for personal use"). The attribute is everything the source says about the subject after the copula or have.'
+  }),
+  assert: Object.freeze({
+    predicate: 'assert',
+    roles: Object.freeze([
+      { name: 'subject', required: false },
+      { name: 'action', required: true, lexicalVerb: true },
+      { name: 'object', required: false },
+      { name: 'recipient', required: false },
+      { name: 'instrument', required: false },
+      { name: 'location', required: false },
+      { name: 'source', required: false },
+      { name: 'destination', required: false },
+      { name: 'manner', required: false },
+      { name: 'reason', required: false },
+      { name: 'purpose', required: false },
+      { name: 'scope', required: false },
+      { name: 'duration', required: false },
+      { name: 'result', required: false }
+    ]),
+    atLeastOneOf: Object.freeze(['subject', 'object']),
+    description: 'A subject does something, written as the source wrote it ("X runs on your hardware", "X lets you pick a model", "Install the CLI"). The subject is optional in imperatives. For is/are/has statements use define, describe, relate or quantify instead.'
+  }),
+  relate: Object.freeze({
+    predicate: 'relate',
+    roles: Object.freeze([
+      { name: 'subject', required: true },
+      { name: 'relation', required: true },
+      { name: 'object', required: true },
+      { name: 'scope', required: false }
+    ]),
+    description: 'A subject stands in a stated relation to an object ("X is part of Y", "X depends on Y", "X is faster than Y", "X belongs to Y"). The relation is the words between them, as written.'
+  }),
+  enumerate: Object.freeze({
+    predicate: 'enumerate',
+    roles: Object.freeze([
+      { name: 'items', required: true, list: true },
+      { name: 'subject', required: false }
+    ]),
+    description: 'A list of items, optionally under a heading or label ("Linux, macOS and Windows", "Platforms: Linux, macOS"). Each item is a term copied from the source.'
+  }),
+  quantify: Object.freeze({
+    predicate: 'quantify',
+    roles: Object.freeze([
+      { name: 'subject', required: true },
+      { name: 'amount', required: true, allowedTermTypes: ['quantity', 'measure', 'range', 'date'] },
+      { name: 'scope', required: false }
+    ]),
+    description: 'A subject has a stated amount, count, size, price, version or date ("128 GB of unified memory", "3 slots of 87,500 tokens", "Released 2026-10-01"). The amount is a quantity term with its unit.'
+  }),
+  topic: Object.freeze({
+    predicate: 'topic',
+    roles: Object.freeze([
+      { name: 'subject', required: true }
+    ]),
+    description: 'The unit only names a subject: a heading, label, title, menu item or caption with no statement ("Memory and Recall", "Install", "OpenUnum journal").'
   })
 });
 
@@ -491,6 +578,21 @@ export function validateClauseFrame(clause: LunumClause, pathPrefix = 'clause'):
           path: `${pathPrefix}.roles.${req.name}`, predicate, code: 'unregistered_action',
           message: `Role '${req.name}' for predicate '${predicate}' must be a registered predicate identifier (e.g. 'read', 'update'); abstain if the action has no registered predicate`
         });
+      }
+    }
+
+    if (roleMap.has(req.name) && req.list) {
+      const value = roleMap.get(req.name);
+      if (!Array.isArray(value) || value.length < 2 || value.some((item) => isPlaceholderTerm(item as LunumTerm, predicate))) {
+        issues.push({ path: `${pathPrefix}.roles.${req.name}`, predicate, code: 'invalid_list_role', message: `Role '${req.name}' for predicate '${predicate}' must be an array of at least two named terms; a single phrase is not a list` });
+      }
+    }
+
+    if (roleMap.has(req.name) && req.lexicalVerb) {
+      const value = roleMap.get(req.name);
+      const text = typeof value === 'string' ? value : value && typeof value === 'object' && !Array.isArray(value) && typeof (value as Record<string, unknown>).value === 'string' ? String((value as Record<string, unknown>).value) : '';
+      if (!text.trim() || isCopulaOnly(text)) {
+        issues.push({ path: `${pathPrefix}.roles.${req.name}`, predicate, code: 'copula_action', message: `Role '${req.name}' for predicate '${predicate}' must be the verb phrase written in the source and not only is/are; use define, describe or relate for a copular statement` });
       }
     }
 

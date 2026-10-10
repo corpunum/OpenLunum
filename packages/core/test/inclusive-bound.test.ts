@@ -19,9 +19,9 @@ const bound = (predicate: string | null): LunumSem => ({
 const G02 = 'Ο διευθυντής επιτρέπει στον Νίκο να εγκρίνει δαπάνες έως 2.000 ευρώ.';
 
 test('versions', () => {
-  assert.equal(SEMANTIC_PROTOCOL_VERSION, 'lunum-protocol/0.5');
-  assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.7');
-  assert.equal(getExtractionContract().contractVersion, 'lunum-agent/0.18');
+  assert.equal(SEMANTIC_PROTOCOL_VERSION, 'lunum-protocol/0.6');
+  assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.8');
+  assert.equal(getExtractionContract().contractVersion, 'lunum-agent/0.19');
   assert.match(getExtractionContract().frameFirst.framePromptBlock, /at_most\(subject, value/u);
 });
 

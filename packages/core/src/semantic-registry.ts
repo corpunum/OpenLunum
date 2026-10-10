@@ -5,7 +5,7 @@ import { canonicalizeSem, validateSem } from './canonicalize.js';
  * Versioned protocol vocabulary. This is intentionally a protocol registry,
  * not an application ontology: instance identifiers remain open data.
  */
-export const SEMANTIC_PROTOCOL_VERSION = 'lunum-protocol/0.5' as const;
+export const SEMANTIC_PROTOCOL_VERSION = 'lunum-protocol/0.6' as const;
 export type ProtocolField = 'world' | 'kind' | 'predicate' | 'role' | 'term_type' | 'modality';
 
 export interface ProtocolRegistry {
@@ -44,7 +44,9 @@ export const SEMANTIC_PROTOCOL_REGISTRY: ProtocolRegistry = Object.freeze({
     'state', 'approve', 'copy', 'publish', 'restart', 'retry', 'rotate', 'run', 'confirmed',
     'is_healthy', 'keep', 'wait', 'request_extension',
     // 0.5 (decisions/0022): inclusive comparisons. below/above stay strict.
-    'at_most', 'at_least'
+    'at_most', 'at_least',
+    // 0.6 (decisions/0024): general source-bound frames for ordinary statements.
+    'define', 'describe', 'assert', 'relate', 'enumerate', 'quantify', 'topic'
   ]),
   roles: Object.freeze([
     'agent', 'experiencer', 'subject', 'actor', 'recipient', 'object', 'theme', 'patient',
@@ -52,7 +54,9 @@ export const SEMANTIC_PROTOCOL_REGISTRY: ProtocolRegistry = Object.freeze({
     'evidence', 'proposition', 'condition', 'consequence', 'threshold', 'amount', 'scope',
     'purpose', 'audience', 'visibility', 'instrument', 'channel', 'region', 'order', 'duration',
     'parallelism', 'result', 'benefit', 'capability', 'from', 'to', 'id', 'issuer', 'terms',
-    'role', 'window', 'unit', 'count', 'action'
+    'role', 'window', 'unit', 'count', 'action',
+    // 0.6 (decisions/0024): slots of the general frames.
+    'relation', 'attribute', 'definition', 'items'
   ]),
   termTypes: Object.freeze([
     'actor', 'concept', 'object', 'metric', 'feature', 'project', 'quantity', 'date', 'time',

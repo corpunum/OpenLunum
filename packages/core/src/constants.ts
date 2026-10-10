@@ -12,7 +12,9 @@ export const WORLD_MARKERS: Readonly<Record<string, string>> = Object.freeze({
 
 export const ROLE_ORDER: readonly string[] = Object.freeze([
   'agent', 'experiencer', 'subject', 'actor', 'recipient', 'object', 'theme', 'patient',
-  'target', 'source', 'destination', 'location', 'time', 'manner', 'value', 'reason', 'evidence'
+  'target', 'source', 'destination', 'location', 'time', 'manner', 'value', 'reason', 'evidence',
+  // decisions/0024: slots of the general frames (new roles only; existing order is unchanged)
+  'definition', 'relation', 'attribute', 'items'
 ]);
 
 /** All frozen schema versions — field names are locked for these versions. */

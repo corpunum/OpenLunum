@@ -28,9 +28,9 @@ const r6 = (count = true) => sem('command', {
 });
 
 test('versions', () => {
-  assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.7');
+  assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.8');
   const contract = getExtractionContract();
-  assert.equal(contract.contractVersion, 'lunum-agent/0.18');
+  assert.equal(contract.contractVersion, 'lunum-agent/0.19');
   assert.match(contract.frameFirst.framePromptBlock, /^deploy\(no required roles; optional: agent, theme, destination; at least one of: theme\|destination/mu);
   assert.match(contract.frameFirst.framePromptBlock, /^rotate\(theme; optional: agent/mu);
   assert.match(contract.frameFirst.framePromptBlock, /^restart\(theme; optional: agent, count;.*count: quantity/mu);

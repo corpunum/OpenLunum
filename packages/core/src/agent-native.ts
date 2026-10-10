@@ -24,12 +24,13 @@ import type { GroundingProvider, GroundingProviderResult } from './grounding-pro
 import { resolveGroundingCascade, toGroundingResolution } from './grounding-provider.js';
 import type { LunumSem, SemanticTrustDecision } from './types.js';
 import { checkLiteralRetention, type LiteralRetentionResult } from './literal-retention.js';
+import { checkSourceBound, type SourceBoundResult } from './source-bound.js';
 import { validateSemanticTransport, SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './semantic-transport.js';
 export { SEMANTIC_TRANSPORT_SCHEMA_SHA256 } from './semantic-transport.js';
 
 /** Version of the agent-facing contract, separate from the Sem wire schema. */
-export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.18' as const;
-export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.8' as const;
+export const AGENT_NATIVE_CONTRACT_VERSION = 'lunum-agent/0.19' as const;
+export const AGENT_EXTRACTION_INSTRUCTIONS_VERSION = 'agent-extraction-instructions/0.9' as const;
 
 /** Summary only; schemaHash binds the full authoritative enforced wire schema. */
 const TRANSPORT_SCHEMA_DESCRIPTOR = Object.freeze({
@@ -60,6 +61,8 @@ const CANONICAL_RULES = Object.freeze([
   'Cardinal number words are numbers (seven times = 7, επτά φορές = 7, twenty-five = 25); one/once and articles are not. Relative times (Friday, tomorrow, next week, end of day, την Παρασκευή, αύριο) must be carried as written in a semantic value, never dropped or resolved to a calendar date.',
   'A strict threshold that restricts a role (invoices under 5,000 euros, disk usage above 90 percent) is a conditions clause with below/above, roles.subject and a quantity value; the main frame lacking a threshold role is not a reason to abstain. An inclusive bound (up to, at most, no more than, έως, το πολύ / at least, no less than, τουλάχιστον) is the same kind of conditions clause with at_most/at_least; never encode an inclusive bound as below/above or a strict one as at_most/at_least.',
   'An imperative addresses its reader: the addressee is the implicit agent, so leave roles.agent out (deploy, rotate, restart, enable, delete and other frames with an optional agent); never fill it with you, the reader, the user or a placeholder. A repetition count stated with the action (three times, δύο φορές) goes in roles.count where the frame has one (retry, restart).',
+  'Ordinary statements use the general frames, whose slots are open text copied from the source: define ("X is a Y", "X means Y"), describe ("X is fast", "X has 128 GB"), assert ("X runs on your hardware"; imperatives omit subject), relate ("X is part of Y", "X is faster than Y"), enumerate (a list of at least two items), quantify (a stated amount as a quantity term with its unit) and topic (a heading or label that makes no statement). Pick the one whose shape the sentence has; is/are/has never go in assert.',
+  'A candidate on a general frame is bound to its source: every filler must be words that occur in the source, and every other content word of the source must be inside some filler. Only articles, is/are/was/were/be, do/does/did, the prepositions of, in, on, at, by, for, from, to, with, as, and the word and may be left outside; not/never need negated=true and can/must/should need a modality. Put every other word (also, only, every, all, more, than, or, because, if, when, without) inside the filler of the role that holds it, or abstain. A filler that is only a pronoun (it, this, they) is refused. The check is English-only.',
 ]);
 const EXTRACTION_SEM_TEMPLATE = `{"schema":"${SEM_SCHEMA}","world":"real","kind":"simple_fact","clauses":[{"predicate":"<registered-predicate>","roles":{},"negated":false}]}`;
 
@@ -222,6 +225,8 @@ export interface CandidateSubmissionResult {
   sem: LunumSem | null;
   /** Numbers, identifiers and unambiguous full dates carried by semantic fields; null when not checked. */
   literalRetention: LiteralRetentionResult | null;
+  /** General-frame candidates only (decisions/0024): fillers occur in the source and no content word is left out; null when the gate does not apply. */
+  sourceBound: SourceBoundResult | null;
 }
 
 export interface GroundedCandidateSubmissionResult extends CandidateSubmissionResult {
@@ -233,12 +238,13 @@ export interface ProviderGroundedCandidateSubmissionResult extends CandidateSubm
   providerResults: readonly GroundingProviderResult[];
 }
 
-function failureClass(input: { structuralValid: boolean; protocolCanonical: boolean; frameValid: boolean; grounded: boolean; literalsRetained: boolean; candidateIdentityAvailable: boolean; diagnostics: readonly string[] }): string | null {
+function failureClass(input: { structuralValid: boolean; protocolCanonical: boolean; frameValid: boolean; grounded: boolean; literalsRetained: boolean; sourceBound: boolean; candidateIdentityAvailable: boolean; diagnostics: readonly string[] }): string | null {
   if (!input.structuralValid) return 'transport_or_structural_invalid';
   if (!input.protocolCanonical) return 'protocol_noncanonical';
   if (!input.frameValid) return 'frame_noncanonical';
   if (!input.grounded) return 'ungrounded_identity';
   if (!input.literalsRetained) return 'unretained_source_literal';
+  if (!input.sourceBound) return 'unbound_source_content';
   if (!input.candidateIdentityAvailable) return 'semantic_identity_unavailable';
   return null;
 }
@@ -276,7 +282,7 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
       source: { text: sourceText, language: input.sourceLanguage ?? null, sha256: sourceHash }, provenance,
       transportValid, structuralValid: false, protocolCanonical: false, frameValid: false, grounded: false,
       candidateIdentityAvailable: false, semanticFingerprint: null, promotable: false, trust,
-      failureClass: 'transport_or_structural_invalid', diagnostics: errors, sem: null, literalRetention: null,
+      failureClass: 'transport_or_structural_invalid', diagnostics: errors, sem: null, literalRetention: null, sourceBound: null,
     };
   }
 
@@ -298,19 +304,30 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
   if (literalRetention && !literalsRetained) {
     diagnostics.push(`unretained_source_literal: the candidate does not carry ${[...literalRetention.missingNumbers.map(String), ...literalRetention.missingIdentifiers, ...literalRetention.missingDates, ...literalRetention.missingRelativeTimes].join(', ')} from the source; abstain unless a role can hold it`);
   }
-  if (sem && protocolCanonical && frameValid && grounded && literalsRetained) {
+  // General frames have open slots: bind the candidate to its source (decisions/0024).
+  const boundCheck = sem ? checkSourceBound(sourceText, sem, input.sourceLanguage ?? 'en') : null;
+  const sourceBound = boundCheck?.applies ? boundCheck : null;
+  const sourceBoundOk = sourceBound?.bound ?? true;
+  if (sourceBound && !sourceBoundOk) {
+    diagnostics.push(`unbound_source_content: ${[
+      ...sourceBound.unsourced.map((x) => `filler "${x}" is not words of the source`),
+      ...sourceBound.pronounFillers.map((x) => `filler "${x}" is only a pronoun`),
+      ...(sourceBound.uncovered.length ? [`the candidate leaves out: ${sourceBound.uncovered.join(', ')}`] : []),
+    ].join('; ')}; copy the source words into the fillers or abstain`);
+  }
+  if (sem && protocolCanonical && frameValid && grounded && literalsRetained && sourceBoundOk) {
     try { identity = semanticFingerprint(sem); } catch (error) { diagnostics.push(error instanceof Error ? error.message : String(error)); }
   }
   const candidateIdentityAvailable = identity !== null;
   const trust = sem
     ? evaluateSemanticTrust({ sem, sourceText, canonicalProtocol: protocolCanonical, normalizationIssues: normalization.issues, knownPredicates: new Set(SEMANTIC_PROTOCOL_REGISTRY.predicates) })
     : { status: 'abstained' as const, confidence: 0, promoted: false, requiresHumanReview: true, reasons: ['missing_sem'] };
-  const failure = failureClass({ structuralValid: true, protocolCanonical, frameValid, grounded, literalsRetained, candidateIdentityAvailable, diagnostics });
+  const failure = failureClass({ structuralValid: true, protocolCanonical, frameValid, grounded, literalsRetained, sourceBound: sourceBoundOk, candidateIdentityAvailable, diagnostics });
   return {
     source: { text: sourceText, language: input.sourceLanguage ?? null, sha256: sourceHash }, provenance,
     transportValid, structuralValid: true, protocolCanonical, frameValid, grounded,
     candidateIdentityAvailable, semanticFingerprint: identity, promotable: trust.promoted && candidateIdentityAvailable,
-    trust, failureClass: failure, diagnostics, sem, literalRetention,
+    trust, failureClass: failure, diagnostics, sem, literalRetention, sourceBound,
   };
 }
 

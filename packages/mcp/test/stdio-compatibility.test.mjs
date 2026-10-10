@@ -104,7 +104,7 @@ test('real stdio MCP handshake, discovery, fixture calls, and fail-closed checks
       name: 'lunum_get_extraction_contract', arguments: {},
     }));
     assert.equal(contract.success, true);
-    assert.equal(contract.contract.contractVersion, 'lunum-agent/0.18');
+    assert.equal(contract.contract.contractVersion, 'lunum-agent/0.19');
     assert.match(contract.contract.protocol.registryHash, /^[0-9a-f]{64}$/u);
 
     const built = textResult(await server.request(4, 'tools/call', {
