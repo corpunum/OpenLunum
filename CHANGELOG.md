@@ -1,5 +1,28 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-10-16 (review, freeze and scope)
+
+### Added
+- A report for the v17 re-run of the round-2 sentences, with offline scoring (`reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md`):
+  - outcome 21/30 against 27/30 in the original run;
+  - reviewed meaning 9/16 against 13/16;
+  - the same sentence gets the same identity in 7 of 12 cases across two runs.
+- ADR 0025: the contract, frames, protocol and identity projection are frozen until held-out evidence exists.
+- ADR 0026 (proposed): working scope as a checkable memory layer.
+- A same-family review (Fable), with spot-checks and corrections.
+- A core module audit, including OpenUnum (`scripts/research/core-module-audit.mjs`).
+- The owner's review worksheet (Greek naturalness, 14 unresolved meanings, 40 authored EN/EL pairs).
+- A cross-vendor review packet with a bundle builder.
+
+### Changed
+- README and STATUS now reflect the real-data and stability findings.
+- The README diagram no longer claims EN/EL identity convergence.
+- AGENTS.md and the operating model allow same-day pull requests, which matches practice.
+- ADR 0013's title now states its reversal.
+- ADR 0021 has an amendment giving the current −52% figure.
+- ADR 0024 has an amendment noting that the 0.10% figure has no artifact.
+
+
 ## Unreleased — 2026-10-10 (general frames)
 
 ### Added

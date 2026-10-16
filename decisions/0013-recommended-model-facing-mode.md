@@ -1,4 +1,4 @@
-# ADR 0013 — `identity_dedup` is the recommended model-facing context mode
+# ADR 0013 — `identity_dedup` as the recommended model-facing context mode (reversed by amendment 1: the default is `natural`)
 
 **Status:** Implemented 2026-09-26; **corrected the same day by amendment 1** after independent evaluation. The MCP default is now `natural`.
 

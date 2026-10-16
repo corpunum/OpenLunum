@@ -1,6 +1,21 @@
 # Project status
 
-**As of 2026-10-07.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+**As of 2026-10-16.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+
+## Since 2026-10-16
+
+- **Frozen:** protocol 0.6, frames 0.8, contract 0.19, package v22 and identity `lfp:2.1`, until held-out evidence exists ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
+- **Proposed working scope:** a checkable memory layer, with semantic identity claimed only where convergence is measured ([ADR 0026](decisions/0026-working-scope-checkable-memory.md)). It awaits the owner's decision.
+- **The v17 re-run is now scored** ([report](reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md)). Compared with the original run:
+  - outcome 21/30 against 27/30;
+  - reviewed meaning 9/16 against 13/16.
+
+  **The same sentence extracted twice gets the same identity 7 times in 12**, because the identity hashes labels the source does not determine.
+- **Reviews:**
+  - a same-family review ([Fable](reports/independent-evaluation/2026-10-16-fable-review/REPORT.md));
+  - a [core module audit](reports/diagnostic/2026-10-16/core-module-audit/README.md): 38 of 85 modules (49% of lines) are reached only by tests, and none is used by OpenUnum alone;
+  - a [cross-vendor review packet](experiments/cross-vendor-review-v1/README.md);
+  - the [owner's review worksheet](experiments/owner-greek-review-v1/README.md): native Greek, the 14 unresolved meanings, and 40 authored EN/EL pairs.
 
 ## What exists
 
@@ -10,7 +25,7 @@
 |---|---|
 | Candidate schema | `lunum-sem/0.1-draft` |
 | Strict identity | `lfp:2.1` |
-| Protocol | `lunum-protocol/0.5`: 48 predicates (adds inclusive `at_most`/`at_least`, ADR 0022), with verb aliases |
+| Protocol | `lunum-protocol/0.6`: 55 predicates (0.5 added inclusive `at_most`/`at_least`, ADR 0022; 0.6 added seven general predicates, ADR 0024), with verb aliases |
 | Frames | `lunum-frame/0.8`: 46 framed predicates (seven general source-bound frames for ordinary statements, ADR 0024; imperative `deploy`/`rotate` need no agent, `deploy` theme, `restart` count, ADR 0023) |
 | Agent contract | `lunum-agent/0.19` |
 | Frozen instruction package | v22 (general source-bound frames, protocol 0.6, frames 0.8; v20's imperative-agent rule and frames 0.7; v19's inclusive bounds as `at_most`/`at_least` conditions; v18's number-word, relative-time and threshold rules; served discourse-record module and MCP tools; complete repository-owned served-JS inventory) |
@@ -75,13 +90,17 @@ accuracy or trust. Historical 0.13 pilot/reviews remain historical.
 
 ## Next, in order
 
-1. **Complete meaning-level evaluation.** Wire enforcement, builder agreement and date/evidence retention are deterministic-tested (current contract 0.19), not live-qualified. The offline role-bound scorer still has 14/30 unresolved diagnostic sources and self-reviewed targets. A [source-only diagnostic review](experiments/meaning-source-review-v7/README.md) rebinds unchanged prior dispositions: 10 unsupported, 2 ambiguous and 2 source-relative representation options pending native review; it does not rewrite expectations or certify gold. The [human source-only packet](experiments/meaning-human-review-packet-v1/README.md) contains those sources with all reviews pending and no previous answers. The [runner](scripts/research/SOURCE_ONLY_RUNNER.md) binds the complete repository-owned served-JS inventory in v20; v14's selected files were partial, and v15–v19 bind older runtimes. These preflight and requested budget/timeout gates are tested without provider calls. Obtain independent/native source adjudication, freeze fresh protocol-conforming data, then measure the latest contract live under an agreed model and budget.
-2. **Out-of-sample evaluation after each change**, preferably human or cross-vendor.
-3. **Real memory data (owner)** before any token-saving claim.
-4. **Review of unreviewed semantic judgements:**
-   - the alias table (decisions/0011);
-   - the extractor's mapping of use, open and enter to `access`;
-   - the Greek wording: #685 is blocked on a native reviewer.
+1. **Owner review (in progress).** [Worksheet](experiments/owner-greek-review-v1/README.md):
+   - Part A resolves the 14 unscorable targets;
+   - Part B reviews the AI-written Greek;
+   - Part C supplies the 40 held-out EN/EL pairs.
+2. **A cross-vendor review** of the repository ([packet](experiments/cross-vendor-review-v1/README.md)), for example Sol 6.1 or Qwen Flash.
+3. **Pre-register and run the first held-out tests under the freeze** (ADR 0025):
+   - (a) EN/EL convergence on the owner's pairs, run twice, which also measures run-to-run identity stability;
+   - (b) general-frame yield and faithfulness on fresh real OpenUnum text.
+4. **Identity stability.** If 3(a) confirms the 7/12 split, propose an identity projection without source-undetermined labels, as a versioned fingerprint change with goldens and migration.
+5. **Core cleanup.** If the owner agrees, move the 15 "later" modules to a private experimental package and archive the 6 out-of-scope ones ([audit](reports/diagnostic/2026-10-16/core-module-audit/README.md)).
+6. **Real memory data** before any token-saving claim. The recall and discourse work on OpenUnum stays the main product path.
 
 ## Process
 

@@ -88,3 +88,7 @@ original sentence. Model-graded QA is not done.
 Model answer quality on compacted context; languages beyond the EN/EL cue
 lexicons (segmentation and literals are language-neutral, cues are not); text
 shapes other than OpenUnum's (chat, reports, tool dumps).
+
+## Amendment 1 (2026-10-16): the token figure
+
+This record reports −70% mean prompt tokens: 5,860 against 19,586 at 52 points. After the later fix that never shortens the current turn (OpenUnum `cc856b0b`), the current figure is **−52%** (9,310), as measured in [discourse-unit-identity-v1](../experiments/discourse-unit-identity-v1/RESULTS.md). QA recall is unchanged. The −70% figure describes the earlier build only.

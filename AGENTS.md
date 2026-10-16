@@ -15,7 +15,9 @@ Do not build on a failing baseline; fix it first or report why you cannot.
 
 ## Workflow
 
-Trunk-based on `main` (owner-authorized 2026-09-26). No task branches or PRs; push directly to `main` and check the post-push CI run. `pnpm verify` must pass and the tree must be clean before every push. Details and the binding principles are in the operating model.
+Trunk-based on `main` (owner-authorized 2026-09-26). The default is a direct push to `main`. A short-lived branch with a pull request merged the same day is also allowed; the OpenUnum-coordinated work of 2026-10-08 to 2026-10-10 landed this way (PRs #715–#721). Long-lived task, worker or campaign branches are not allowed. Either way, `pnpm verify` must pass and the tree must be clean before the change lands, and the post-push CI run must be checked. Details and the binding principles are in the operating model.
+
+The extraction contract, frames, protocol and identity projection are frozen until held-out evidence exists ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
 
 ## Architecture boundaries
 

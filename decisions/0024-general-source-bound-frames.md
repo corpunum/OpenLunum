@@ -132,3 +132,7 @@ the structure and the anchoring, not the choice of `define` over `describe`.
   is left outside the filler. The contract tells extractors to keep meaningful
   prepositions inside the filler.
 - **Not live-qualified and not pre-registered.** Self-reviewed.
+
+## Amendment 1 (2026-10-16): an unbacked figure
+
+The "0.10%" share of Lunum text units on corpunum.com, given in the Problem section, has no artifact in this repository. It was measured downstream and not committed. Treat it as unverified until the measurement and its data, or an aggregate, are added. The section "What an identity on a general frame means" is unchanged. Until the yield and faithfulness test on fresh real text passes, general-frame identities are source-bound, not semantic ([ADR 0026, proposed](0026-working-scope-checkable-memory.md)).

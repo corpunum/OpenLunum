@@ -1,0 +1,1540 @@
+{
+  "format": "openlunum-core-module-audit/0.1",
+  "openunumCheckout": "openunum",
+  "totals": {
+    "modules": 85,
+    "lines": 26578,
+    "used": 47,
+    "usedLines": 13483,
+    "unusedByAnyConsumer": 38,
+    "unusedLines": 13095,
+    "usedOnlyByOpenUnum": 0,
+    "usedOnlyByScripts": 3
+  },
+  "rows": [
+    {
+      "module": "context-eligibility",
+      "lines": 896,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Context eligibility rules — evidence-backed decision module (R7.6, #482).  This module defines typed eligibility rules that decide when Lunum compact, mixed, or natural-text context is selected.  It integrates with the u",
+      "directConsumers": {}
+    },
+    {
+      "module": "agent-state-retention",
+      "lines": 828,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "observability",
+      "lines": 580,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Structured Observability for Lunum (R12.4 readiness).  Provides observability primitives shared by the API and MCP surfaces: - JSON-structured log output (StructuredLogger) - Request/response metrics: latency, status, si",
+      "directConsumers": {}
+    },
+    {
+      "module": "token-atlas",
+      "lines": 578,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "token-optimization-compat",
+        "token-optimization"
+      ],
+      "header": "Token Atlas — cross-model, cross-profile token measurement  This module provides a TokenAtlas that measures token counts for natural, safe, short, and tight Lunum renderings across multiple named local models.  It is the",
+      "directConsumers": {}
+    },
+    {
+      "module": "agent-state-freeze",
+      "lines": 577,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-interop"
+      ],
+      "header": "Agent-State Frozen Schema (v1.0)  Defines the canonical frozen schema for agent-state/1.0. This schema captures the structure as of the initial freeze and provides validation and migration capabilities.",
+      "directConsumers": {}
+    },
+    {
+      "module": "agent-state-tamper-evidence",
+      "lines": 576,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Agent-State Tamper Evidence System (R10.3)  Provides cryptographic identity and tamper detection for agent state. Maintains SHA-256 hash chain of state transitions, authorization context, and append-only audit log for in",
+      "directConsumers": {}
+    },
+    {
+      "module": "fingerprint-contract",
+      "lines": 567,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Fingerprint Support Contract (R4.6)  This module freezes the compatibility 1.0 fingerprint algorithm contract and declares the versioning, compatibility, and migration guarantees that must hold across all future releases",
+      "directConsumers": {}
+    },
+    {
+      "module": "human-review-policy",
+      "lines": 523,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Human-review triggers and mandatory natural-fallback for high-risk records (R6.5).  Defines when a semantic record must be held for human review before automatic use is permitted. A record is \"high-risk\" when any of:  - ",
+      "directConsumers": {}
+    },
+    {
+      "module": "context-mode-selector",
+      "lines": 509,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "context-eligibility"
+      ],
+      "header": "Context mode selector — evidence-backed eligibility rules for context mode selection (R7.6).  Picks an optimal context mode (`natural` | `lunum` | `mixed`) based on a set of evidence signals:  1. Domain category — known ",
+      "directConsumers": {}
+    },
+    {
+      "module": "retention-fallback-rollback",
+      "lines": 491,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Retention fallback and rollback (R3.7).  Validates fallback and rollback behavior when a parse → realize → parse-back round trip fails or becomes ambiguous:  1. Detection of ambiguous round-trips — independent re-parses ",
+      "directConsumers": {}
+    },
+    {
+      "module": "support-contract",
+      "lines": 471,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "support-contract"
+      ],
+      "header": "Support and Compatibility Contract (R1.6)  This module defines version lifecycle states, support windows, deprecation processes, and compatibility guarantees for OpenLunum.  Architecture: - Version Registry: All known ve",
+      "directConsumers": {}
+    },
+    {
+      "module": "tenant-isolation",
+      "lines": 404,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Tenant isolation, secret detection, and least-privilege roles.  Implements R15.3 for security readiness: typed tenant boundaries, secret scanning for configuration and API payloads, least-privilege API-consumer roles, an",
+      "directConsumers": {}
+    },
+    {
+      "module": "identity-migration",
+      "lines": 395,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "agent-interop",
+      "lines": 368,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Agent-State Interoperability (R10.5)  Demonstrates that the agent-state/1.0 protocol can be consumed and produced by independent agent implementations with validated round-trip fidelity.",
+      "directConsumers": {}
+    },
+    {
+      "module": "fingerprint-support-contract",
+      "lines": 339,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Fingerprint 1.0 Support Contract (R4.6)  This module freezes the 1.0 fingerprint support contract with versioned compatibility guarantees, a deprecation timeline, and migration tooling requirements. It is the operational",
+      "directConsumers": {}
+    },
+    {
+      "module": "token-optimization",
+      "lines": 329,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "token-optimization-compat"
+      ],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "agent-state-idempotency",
+      "lines": 319,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Agent-State Idempotency and Dedup (R10.4)  Defines idempotency and duplicate-delivery behaviour for agent state operations. State transitions are delivered under an at-least-once guarantee (a caller, retry proxy, or queu",
+      "directConsumers": {}
+    },
+    {
+      "module": "multilingual-memory-pilot",
+      "lines": 299,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Multilingual Memory Pilot (R9.7)  Simulates agent-memory store/retrieve/update operations across languages to verify preservation of non-Latin scripts, RTL text, CJK characters, combining marks, and mixed-script content ",
+      "directConsumers": {}
+    },
+    {
+      "module": "model-renderer-profiles",
+      "lines": 297,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "profile-selector"
+      ],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "profile-selector",
+      "lines": 296,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "context-measurement",
+      "lines": 295,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Context quality measurement framework  This module provides measurement functionality for comparing natural, Lunum, and mixed context downstream quality.",
+      "directConsumers": {}
+    },
+    {
+      "module": "workflow-audit",
+      "lines": 273,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Workflow Audit — long-running workflow validation and audit reconstruction.  Provides checkpoint creation, audit-trail building, completeness validation, state reconstruction, and deterministic replay for workflow pipeli",
+      "directConsumers": {}
+    },
+    {
+      "module": "backup-restore",
+      "lines": 271,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "rollback-process",
+      "lines": 269,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "retention-fallback-rollback"
+      ],
+      "header": "Rollback process for Lunum-Sem records.  Given a Lunum-Sem record and its provenance chain, reverts to the original natural-language source with verification. Verifies authenticity and provenance of the original source, ",
+      "directConsumers": {}
+    },
+    {
+      "module": "release-governance",
+      "lines": 242,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "correction-telemetry",
+      "lines": 229,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "User Correction and Fallback Telemetry (R16.4)  Infrastructure for recording, analysing and surfacing telemetry about user corrections (manual overrides of system output) and fallback activations, enabling continuous imp",
+      "directConsumers": {}
+    },
+    {
+      "module": "tokenizer-measurement",
+      "lines": 223,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "profile-selector"
+      ],
+      "header": "Tokenizer measurement framework for generic-en-pivot/0.1  This module provides tokenizer measurement functionality for the generic-en-pivot/0.1 renderer profile.",
+      "directConsumers": {}
+    },
+    {
+      "module": "compatibility-matrix",
+      "lines": 216,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "compatibility-matrix"
+      ],
+      "header": "Compatibility Matrix — schema versions ↔ package versions  This module defines which Lunum-Sem schema versions are compatible with which package versions. It is used by CI to verify that deployed schemas work with the cu",
+      "directConsumers": {}
+    },
+    {
+      "module": "safety-review-policy",
+      "lines": 211,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Safety-review policy: risk classification and human-review / natural-fallback requirements for high-risk semantic records (R6.5).  Provides a rule-based classifier that inspects semantic features (negation, obligation, p",
+      "directConsumers": {}
+    },
+    {
+      "module": "supply-chain",
+      "lines": 209,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "release-provenance",
+      "lines": 186,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Release provenance and artifact signing functionality  This module provides functions for tracking release artifacts and creating signed manifests that can be used to verify the integrity and origin of released packages.",
+      "directConsumers": {}
+    },
+    {
+      "module": "llama-tokenizer",
+      "lines": 181,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "token-atlas",
+        "token-optimization"
+      ],
+      "header": "Llama.cpp-compatible tokenizer counting  This module provides llama.cpp-compatible tokenizer counting for accurate token measurement with local models.",
+      "directConsumers": {}
+    },
+    {
+      "module": "native-model",
+      "lines": 161,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Native Model Protocol types and utilities.  Protocol annotations for Lunum-native model compatibility: - Token mappings for native Lunum tokenizers - Instruction templates for native and non-native models - Fallback prof",
+      "directConsumers": {}
+    },
+    {
+      "module": "threshold-calibration",
+      "lines": 154,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "hard-gates",
+      "lines": 115,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [
+        "compaction-gates",
+        "human-review-policy"
+      ],
+      "header": "Hard product gates (R6.1 #463).  Converts semantic invariants from diagnostics into hard gates that block 'match' verdicts when safety-critical semantic changes are detected.",
+      "directConsumers": {}
+    },
+    {
+      "module": "compaction-gates",
+      "lines": 89,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "types-schema-conformance",
+      "lines": 74,
+      "usedBy": [],
+      "testOnly": false,
+      "unreferenced": true,
+      "importedByCore": [],
+      "header": "Compile-time bidirectional conformance check between public SDK types (packages/core/src/types.ts) and generated schema types (types-schema.ts).  Only checks fields where BOTH a public type and a generated type exist. Re",
+      "directConsumers": {}
+    },
+    {
+      "module": "token-optimization-compat",
+      "lines": 55,
+      "usedBy": [],
+      "testOnly": true,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "privacy-derived-lifecycle",
+      "lines": 562,
+      "usedBy": [
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Source-derived privacy, retention, provenance, and deletion contracts.  This module deliberately has no storage backend.  It is the contract that a backend must use when it materializes semantic records, fingerprint entr",
+      "directConsumers": {
+        "openlunumScripts": [
+          "scripts/research/reproduce-readiness-core-gaps.mjs"
+        ]
+      }
+    },
+    {
+      "module": "fingerprint-migration",
+      "lines": 509,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "identity-migration",
+        "rollback-process"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/cli/src/cli.ts",
+          "packages/eval/src/schema-freeze-conformance.ts"
+        ]
+      }
+    },
+    {
+      "module": "near-semantic-fingerprints",
+      "lines": 457,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/cross-lingual-retrieval.ts",
+          "packages/eval/src/false-positive-review-cli.ts",
+          "packages/eval/src/parse-experiment.ts",
+          "packages/eval/src/raw-text-retrieval.ts",
+          "packages/eval/src/retrieval-strategy-comparison.ts"
+        ]
+      }
+    },
+    {
+      "module": "policy-classifier",
+      "lines": 409,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "context-eligibility",
+        "context-mode-selector"
+      ],
+      "header": "Policy classification utilities for semantic content  This module provides functions for classifying semantic content according to category, risk, and confidence criteria defined in the policy taxonomy.",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts",
+          "packages/cli/src/streaming-jsonl.ts",
+          "packages/eval/src/schema-neutrality-audit.ts",
+          "integrations/pi/lunum-extension.ts"
+        ]
+      }
+    },
+    {
+      "module": "conformance-vectors",
+      "lines": 394,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Canonical conformance vectors for semantic comparison  This module provides canonical vector generation and property-based testing for semantic structures in OpenLunum.",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/schema-freeze-conformance.ts"
+        ]
+      }
+    },
+    {
+      "module": "privacy-audit-map",
+      "lines": 384,
+      "usedBy": [
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "privacy-derived-lifecycle"
+      ],
+      "header": "Privacy, retention, deletion and audit requirement mapping.  Implements R15.7: data sensitivity classification, retention policies, deletion manifests with audit trail for production deployments.  Key concerns: - What is",
+      "directConsumers": {}
+    },
+    {
+      "module": "typed-structures",
+      "lines": 266,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Expanded typed structures for time, quantity, uncertainty, reference, and modality",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/schema-neutrality-audit.ts"
+        ]
+      }
+    },
+    {
+      "module": "schema-freeze",
+      "lines": 232,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/schema-freeze-conformance.ts"
+        ]
+      }
+    },
+    {
+      "module": "schema-conformance-runner",
+      "lines": 227,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Schema conformance runner (R1.7).  Validates that semantic structures conform to the declared 1.0 schema contract by running conformance checks across categories: required fields, type constraints, canonical form, finger",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/schema-freeze-conformance.ts"
+        ]
+      }
+    },
+    {
+      "module": "conformance-reports",
+      "lines": 219,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Conformance reports for hook/plugin/CLI integrations  This module provides conformance reporting functionality for testing and validating integrations.",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/schema-freeze-conformance.ts"
+        ]
+      }
+    },
+    {
+      "module": "agent-state",
+      "lines": 216,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-interop",
+        "agent-state-freeze",
+        "agent-state-idempotency",
+        "agent-state-retention",
+        "agent-state-tamper-evidence"
+      ],
+      "header": "Agent-State Protocol types.  Encodes plans, steps, tool calls, results, constraints, evidence, and inter-agent handoffs in a format that can be validated, versioned, inspected, and rendered.",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/agent-state-replay-tests.ts"
+        ]
+      }
+    },
+    {
+      "module": "error-observability",
+      "lines": 167,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Error Observability types for Lunum.  Supports observable and reversible failure modes: - Error tracking with structured metadata - Circuit-breaker pattern for cascading failure prevention - Revert capability with snapsh",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/error-observability.ts"
+        ]
+      }
+    },
+    {
+      "module": "model-identity",
+      "lines": 97,
+      "usedBy": [
+        "openlunumProduct"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/parse-experiment.ts"
+        ]
+      }
+    },
+    {
+      "module": "semantic-ir",
+      "lines": 70,
+      "usedBy": [
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {
+        "openlunumScripts": [
+          "scripts/research/certify-training-review.mjs",
+          "scripts/research/score-natural-source-only-extraction.mjs"
+        ]
+      }
+    },
+    {
+      "module": "discourse",
+      "lines": 722,
+      "usedBy": [
+        "openlunumProduct",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Discourse records (decisions/0021): long, multi-sentence and structured text as source-span units with deterministic surface records.  Real agent traffic is mostly long messages, assistant reports and tool output, where ",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "integrations/source-locator/src/ground.ts"
+        ],
+        "openunum": [
+          "scripts/eval-lunum-locator.mjs",
+          "scripts/lunum-discourse-measure.mjs",
+          "scripts/lunum-unit-identity-diagnose.mjs",
+          "src/memory/lunum-discourse.mjs",
+          "src/memory/lunum-locator/ground.js"
+        ]
+      }
+    },
+    {
+      "module": "prompt-injection",
+      "lines": 598,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "quality-gate-ci"
+      ],
+      "header": "Prompt-injection resistance tests for Lunum-Sem records.  Crafts 10 adversarial inputs that attempt to corrupt Lunum-Sem records through the parser and verifies that all are detected or rejected.",
+      "directConsumers": {}
+    },
+    {
+      "module": "mixed-context-quality",
+      "lines": 437,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "quality-gate-ci"
+      ],
+      "header": "Mixed-context quality gates.  Measures downstream task accuracy with natural vs Lunum vs mixed context on multiple task types and produces structured quality reports.  This module integrates `context.ts` (compileContext)",
+      "directConsumers": {}
+    },
+    {
+      "module": "quality-gate-ci",
+      "lines": 397,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "Quality Gate CI Integration  Unified quality gate runner for CI pipelines. Wraps existing quality gates (downstream-quality, mixed-context-quality, prompt-gates, prompt-injection, renderer-conformance) into a single runn",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/cli/src/cli.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/run-quality-gates-ci.mjs"
+        ]
+      }
+    },
+    {
+      "module": "protected-literal-registry",
+      "lines": 260,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "semantic-invariants"
+      ],
+      "header": "Protected Literal Registry (R6.2 readiness: expanded literal categories).  Manages detection and preservation of protected literal categories: - Units (5kg, $100, 3L, 20mph) - Dates (ISO 8601: 2026-07-31, 2026-07-31T12:3",
+      "directConsumers": {}
+    },
+    {
+      "module": "semantic-invariants",
+      "lines": 221,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "compare",
+        "hard-gates",
+        "near-semantic-fingerprints"
+      ],
+      "header": "Hard semantic invariants (#370, #462, readiness R5.1 / R5.1a / R6.1 / R6.2).  Invariants implemented:  - role-identity (R5.1a): clause-path role-identity binding  - negation-flip (R6.1): matched clause negation differs  ",
+      "directConsumers": {}
+    },
+    {
+      "module": "renderer-conformance",
+      "lines": 209,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "quality-gate-ci"
+      ],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "prompt-gates",
+      "lines": 173,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "quality-gate-ci"
+      ],
+      "header": "Full-prompt quality gates for local models  This module provides quality gate functionality for validating prompts before sending to local models.",
+      "directConsumers": {}
+    },
+    {
+      "module": "downstream-quality",
+      "lines": 169,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "mixed-context-quality",
+        "quality-gate-ci"
+      ],
+      "header": "Downstream Quality Gates for Lunum.  Task-success metrics and quality gates that verify downstream task quality is preserved when using Lunum context vs raw text.",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/downstream-benchmark.ts"
+        ]
+      }
+    },
+    {
+      "module": "types-schema",
+      "lines": 152,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "types-schema-conformance"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/api/src/server.ts",
+          "packages/api/src/types.ts",
+          "packages/eval/src/abstention-clarification.ts",
+          "packages/eval/src/context-runner.ts",
+          "packages/eval/src/english-greek-baselines.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/consumer-memory-qa.mjs"
+        ]
+      }
+    },
+    {
+      "module": "compare",
+      "lines": 144,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "hard-gates",
+        "retention-fallback-rollback"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/eval/src/cross-lingual-retrieval.ts",
+          "packages/eval/src/false-positive-review-cli.ts",
+          "packages/eval/src/load-soak-testing.ts",
+          "packages/eval/src/parse-experiment.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/score-natural-source-only-extraction.mjs"
+        ]
+      }
+    },
+    {
+      "module": "frame-registry",
+      "lines": 661,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-builder",
+        "agent-native",
+        "derive",
+        "fingerprint"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/parse-experiment.ts",
+          "packages/eval/src/prompts.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/score-recorded-meaning.mjs",
+          "scripts/research/source-only-run-gates.mjs"
+        ]
+      }
+    },
+    {
+      "module": "grounding-provider",
+      "lines": 573,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-native"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumScripts": [
+          "scripts/research/omw-grounding-benchmark.mjs",
+          "scripts/research/unimorph-grounding-probe.mjs",
+          "scripts/research/unimorph-ud-independent-benchmark.mjs",
+          "scripts/research/unimorph-unbiased-benchmark.mjs"
+        ]
+      }
+    },
+    {
+      "module": "prohibited-domains",
+      "lines": 499,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "context-eligibility",
+        "context-mode-selector",
+        "human-review-policy",
+        "policy"
+      ],
+      "header": "Prohibited automatic-use domains (Phase 8 readiness: R6.4, #465).  Defines domains where automatic (unsupervised) use is prohibited until domain-specific evidence of safety/accuracy exists. Initial domains:  - legal_advi",
+      "directConsumers": {}
+    },
+    {
+      "module": "fallback-policy",
+      "lines": 457,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "context-eligibility",
+        "context-mode-selector",
+        "derive",
+        "human-review-policy",
+        "policy"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumScripts": [
+          "scripts/research/reproduce-readiness-core-gaps.mjs"
+        ]
+      }
+    },
+    {
+      "module": "agent-native",
+      "lines": 409,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts",
+          "packages/eval/src/agent-evaluator.ts",
+          "packages/eval/src/raw-text-retrieval.ts",
+          "examples/structured-record-demo.mjs"
+        ],
+        "openlunumScripts": [
+          "scripts/research/consumer-memory-qa.mjs",
+          "scripts/research/development-agent-large-score.mjs",
+          "scripts/research/replay-literal-retention-0020.mjs",
+          "scripts/research/score-natural-source-only-extraction.mjs",
+          "scripts/research/score-recorded-meaning.mjs"
+        ],
+        "openunum": [
+          "src/memory/lunum-sem-extractor.mjs",
+          "src/memory/lunum-sem-model-extractor.mjs",
+          "src/memory/lunum.mjs"
+        ]
+      }
+    },
+    {
+      "module": "literal-retention",
+      "lines": 398,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-native",
+        "derive",
+        "discourse"
+      ],
+      "header": "Source literal retention (decisions/0016).  A candidate that silently drops a number or identifier stated in its source (\"approve invoices under 5,000 euros\" -> theme: invoices) must not receive an exact identity: the id",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/parse-experiment.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/literal-retention-audit.mjs",
+          "scripts/research/score-recorded-meaning.mjs",
+          "scripts/research/source-only-run-gates.mjs"
+        ],
+        "openunum": [
+          "src/memory/lunum-compaction.mjs"
+        ]
+      }
+    },
+    {
+      "module": "grounding",
+      "lines": 334,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-native",
+        "grounding-provider"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts"
+        ]
+      }
+    },
+    {
+      "module": "profiles",
+      "lines": 322,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "model-renderer-profiles",
+        "profile-selector",
+        "renderer-conformance",
+        "token-atlas",
+        "token-optimization"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/current-schema-compaction-benchmark.ts"
+        ],
+        "openunum": [
+          "src/memory/lunum.mjs"
+        ]
+      }
+    },
+    {
+      "module": "semantic-registry",
+      "lines": 301,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-builder",
+        "agent-native",
+        "derive",
+        "fingerprint",
+        "frame-registry",
+        "grounding",
+        "policy",
+        "source-bound"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/blind-agent-ledger.ts",
+          "packages/eval/src/parse-experiment.ts",
+          "packages/eval/src/predicate-vocabulary.ts",
+          "packages/eval/src/prompts.ts",
+          "packages/eval/src/protected-literal-placement.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/raw-text-retrieval-agent-experiment.mjs",
+          "scripts/research/score-recorded-meaning.mjs",
+          "scripts/research/semantic-crosswalk.mjs"
+        ],
+        "openunum": [
+          "src/memory/lunum-sem-model-extractor.mjs"
+        ]
+      }
+    },
+    {
+      "module": "policy",
+      "lines": 285,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-native",
+        "derive"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/blind-agent-ledger.ts",
+          "packages/eval/src/context-runner.ts",
+          "packages/eval/src/current-schema-compaction-benchmark.ts",
+          "packages/eval/src/downstream-benchmark.ts",
+          "packages/eval/src/parse-experiment.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/raw-text-retrieval-agent-experiment.mjs",
+          "scripts/research/score-recorded-meaning.mjs"
+        ],
+        "openunum": [
+          "src/memory/lunum.mjs"
+        ]
+      }
+    },
+    {
+      "module": "derive",
+      "lines": 231,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "context"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts",
+          "packages/api/src/server.ts",
+          "packages/eval/src/context-compaction-benchmark.ts",
+          "packages/eval/src/current-schema-compaction-benchmark.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/reproduce-readiness-core-gaps.mjs",
+          "scripts/run-quality-gates-ci.mjs"
+        ],
+        "openunum": [
+          "scripts/lunum-sem-eval.mjs",
+          "src/memory/lunum-compaction.mjs",
+          "src/memory/lunum.mjs"
+        ]
+      }
+    },
+    {
+      "module": "agent-builder",
+      "lines": 227,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "semantic-ir"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/source-only-run-gates.mjs"
+        ],
+        "openunum": [
+          "src/memory/lunum-sem-extractor.mjs",
+          "src/memory/lunum-sem-model-extractor.mjs"
+        ]
+      }
+    },
+    {
+      "module": "semantic-transport-schema",
+      "lines": 189,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-builder",
+        "semantic-transport"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/eval/src/agent-evaluator.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/source-only-run-gates.mjs",
+          "scripts/research/transport-validation-audit.mjs"
+        ]
+      }
+    },
+    {
+      "module": "fingerprint",
+      "lines": 182,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-native",
+        "compare",
+        "derive",
+        "policy",
+        "retention-fallback-rollback",
+        "tenant-isolation",
+        "token-optimization"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts",
+          "packages/cli/src/streaming-jsonl.ts",
+          "packages/eval/src/agent-evaluator.ts",
+          "packages/eval/src/blind-agent-ledger.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/generate-golden-vectors.mjs",
+          "scripts/generate-golden-vectors.ts",
+          "scripts/research/consumer-memory-qa.mjs",
+          "scripts/research/replay-literal-retention-0020.mjs",
+          "scripts/research/reproduce-readiness-core-gaps.mjs"
+        ],
+        "openunum": [
+          "src/memory/lunum.mjs"
+        ]
+      }
+    },
+    {
+      "module": "types",
+      "lines": 175,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-builder",
+        "agent-native",
+        "canonicalize",
+        "compare",
+        "conformance-vectors",
+        "context-eligibility",
+        "context-measurement",
+        "context-mode-selector",
+        "context",
+        "derive",
+        "fallback-policy",
+        "fingerprint-migration",
+        "fingerprint",
+        "frame-registry",
+        "grounding",
+        "hard-gates",
+        "human-review-policy",
+        "identity-migration",
+        "literal-retention",
+        "mixed-context-quality",
+        "near-semantic-fingerprints",
+        "policy-classifier",
+        "policy",
+        "profile-selector",
+        "profiles",
+        "prompt-gates",
+        "prompt-injection",
+        "protected-literal-registry",
+        "quality-gate-ci",
+        "render",
+        "renderer-conformance",
+        "retention-fallback-rollback",
+        "rollback-process",
+        "semantic-invariants",
+        "semantic-ir",
+        "semantic-registry",
+        "source-bound",
+        "tenant-isolation",
+        "token-atlas",
+        "token-optimization",
+        "tokenizer-measurement",
+        "types-schema-conformance"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts",
+          "packages/cli/src/streaming-jsonl.ts",
+          "packages/api/src/server.ts",
+          "packages/api/src/types.ts"
+        ],
+        "openunum": [
+          "src/memory/lunum-sem-extractor.mjs"
+        ]
+      }
+    },
+    {
+      "module": "source-bound",
+      "lines": 163,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-native",
+        "frame-registry"
+      ],
+      "header": "",
+      "directConsumers": {}
+    },
+    {
+      "module": "canonicalize",
+      "lines": 158,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-native",
+        "compare",
+        "conformance-vectors",
+        "derive",
+        "fingerprint-contract",
+        "fingerprint-migration",
+        "fingerprint",
+        "grounding-provider",
+        "grounding",
+        "policy",
+        "profiles",
+        "prompt-injection",
+        "render",
+        "renderer-conformance",
+        "rollback-process",
+        "semantic-registry",
+        "token-optimization"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts",
+          "packages/cli/src/streaming-jsonl.ts",
+          "packages/eval/src/context-runner.ts",
+          "packages/eval/src/current-schema-compaction-benchmark.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/generate-golden-vectors.mjs",
+          "scripts/generate-golden-vectors.ts",
+          "scripts/research/score-recorded-meaning.mjs",
+          "scripts/research/source-only-run-gates.mjs"
+        ]
+      }
+    },
+    {
+      "module": "context",
+      "lines": 80,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "context-measurement",
+        "mixed-context-quality"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/config.ts",
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts",
+          "packages/api/src/server.ts",
+          "packages/eval/src/context-compaction-benchmark.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/consumer-memory-qa.mjs"
+        ],
+        "openunum": [
+          "src/memory/lunum-compaction.mjs",
+          "src/memory/lunum.mjs"
+        ]
+      }
+    },
+    {
+      "module": "render",
+      "lines": 70,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "derive"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/mcp/src/tools.ts",
+          "packages/cli/src/cli.ts",
+          "packages/eval/src/context-runner.ts",
+          "packages/eval/src/downstream-benchmark.ts",
+          "packages/eval/src/pilot-agent-preference-memory.ts"
+        ],
+        "openlunumScripts": [
+          "scripts/research/consumer-memory-qa.mjs"
+        ]
+      }
+    },
+    {
+      "module": "semantic-transport",
+      "lines": 43,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-builder",
+        "agent-native",
+        "derive"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumScripts": [
+          "scripts/research/source-only-run-gates.mjs",
+          "scripts/research/transport-validation-audit.mjs"
+        ]
+      }
+    },
+    {
+      "module": "constants",
+      "lines": 25,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "agent-builder",
+        "agent-native",
+        "canonicalize",
+        "derive",
+        "fingerprint-migration",
+        "fingerprint",
+        "render",
+        "schema-freeze"
+      ],
+      "header": "",
+      "directConsumers": {
+        "openlunumProduct": [
+          "packages/cli/src/cli.ts",
+          "packages/eval/src/health-probes.ts",
+          "packages/eval/src/pilot-agent-preference-memory.ts",
+          "packages/eval/src/pilot-cli-knowledge-base.ts",
+          "packages/eval/src/schema-freeze-conformance.ts"
+        ]
+      }
+    },
+    {
+      "module": "grounding-capability",
+      "lines": 10,
+      "usedBy": [
+        "openlunumProduct",
+        "openlunumScripts",
+        "openunum"
+      ],
+      "testOnly": false,
+      "unreferenced": false,
+      "importedByCore": [
+        "grounding-provider",
+        "grounding"
+      ],
+      "header": "In-process capabilities for the grounding trust boundary.  This module is intentionally not exported from the package entry point. Capabilities do not survive serialization; persisted evidence must be re-authenticated by",
+      "directConsumers": {}
+    }
+  ]
+}

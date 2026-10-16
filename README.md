@@ -32,36 +32,47 @@ The source text is always kept. When the agent can't represent a sentence faithf
 
 Core cannot tell whether a proposal is *right*. It can refuse proposals that are malformed, that fill roles with placeholders, that are ambiguous by construction, or that drop a number or identifier stated in the source.
 
-## Current status, in one screen (2026-09-27)
+## Current status, in one screen (2026-10-16)
 
-**Works and is tested** (4,315 tests; `pnpm verify`):
-- **Record handling:** Sem types, canonicalization, validation against 37 predicate frames (of 46 registered predicates), and versioned `lfp:2.1` fingerprints.
-- **Agent tools:** an MCP server with the extraction contract, candidate builder, submission and context compilation. It runs in Claude Code from this repository's `.mcp.json`.
-- **Evidence handling:** frozen instruction packages that bind artifact hashes. The live runner refuses to run against a build that differs from the frozen package.
+**Works and is tested** (4,532 tests; `pnpm verify`):
+- **Record handling:** Sem types, canonicalization, validation against 46 predicate frames (of 55 registered predicates; protocol 0.6, frames 0.8, contract 0.19), and versioned `lfp:2.1` fingerprints.
+- **Refusal gates:** core withholds identity from a candidate that:
+  - is malformed;
+  - uses placeholders;
+  - is ambiguous by construction;
+  - drops a number, identifier, date or relative time stated in the source;
+  - (for general frames) uses words that are not in the source.
+- **Agent tools:** an MCP server for Claude Code (`.mcp.json`). It provides the extraction contract, candidate builder, submission, context compilation and discourse records.
+- **Evidence handling:** frozen instruction packages bind the build. Experiments since October are pre-registered, and failures are published.
 
-**Measured live** (Claude Code, `claude-sonnet-5`, one fresh process per sentence, [summary](reports/diagnostic/2026-09-26/EVALUATION.md)):
+**Measured.** Every result below is self-reviewed or reviewed by the same model family:
 
 | What | Result | Caveat |
 |---|---|---|
-| The author's development set (V8, 24 EN/EL sentences) | 19–20/21 source-relative, 16–18 exact, abstentions 3/3 | In-sample: the contract was tuned on it |
-| The author's missing-argument probes v1–v3 | 20/20, 18/18, 16/16 in each of 3 repetitions | Author-written; v3 is not out-of-sample for the alias table |
-| An independent session's fresh sentences ([round 2](reports/independent-evaluation/2026-09-26-round2/REPORT.md)) | **27/30 on outcome, but 20/30 on meaning** | 7 parses dropped thresholds or dates, or used a wrong verb, and still got an identity |
-| Memory QA ([benchmark](reports/diagnostic/2026-09-26/consumer-qa-v1-product-path/README.md)): natural text deduplicated by identity | about **−60% input tokens**; Sonnet 20/20 answers | Haiku answered 1 question wrong in 5 of 9 runs. The corpus is paraphrase-heavy and self-built |
+| Author-written sentences (V8 development set, probes v1–v3) | 19–20/21 on V8; probes 20/20, 18/18, 16/16 | In-sample: the contract was tuned on them |
+| An independent session's fresh sentences ([round 2](reports/independent-evaluation/2026-09-26-round2/REPORT.md)) | 27/30 on outcome; meaning 13/16 on the reviewed targets | 14 of 30 targets are unresolved, pending the [owner's review](experiments/owner-greek-review-v1/README.md) |
+| The same 30 sentences re-run on a later contract ([v17 report](reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md)) | 21/30 on outcome; 9/16 on reviewed meaning | Lower than the first run: the model now over-abstains |
+| **The same sentence, same model, two runs** | **the same identity in only 7 of 12** | The identity hashes `kind` and term-type labels that the source does not determine |
+| **Real agent memory** ([discourse-unit-identity-v1](experiments/discourse-unit-identity-v1/RESULTS.md), 21,291 units of the owner's OpenUnum sessions) | **0 identities**; at most about 3% of tokens could ever be deduplicated | Work logs, status lines and multi-clause instructions do not fit the frames |
+| Exact recall over that memory ([source-locator-v1](experiments/source-locator-v1/RESULTS.md), [greek-fold-recall-v1](experiments/greek-fold-recall-v1/RESULTS.md)) | overall recall@5 rose from 0.41 to 0.80; unaccented Greek queries from 0.28 to 0.99 (composite 0.88) | This comes from search changes, not Lunum-Sem. It is the clearest win so far. |
+| Compressed views of real context ([ambient v1](experiments/ambient-discourse-v1/RESULTS.md), [v2](experiments/ambient-discourse-v2/RESULTS.md)) | **both failed** their pre-registered bars | Not shipped |
+| Memory QA on a self-built paraphrase corpus | about −60% tokens with identity deduplication; Haiku wrong in 5 of 9 runs | It does not carry over to real memory (see above) |
 
-**What we did about the weak spots:**
-- The MCP default context mode is `natural`; `identity_dedup` is opt-in.
-- The default Lunum-Code renderer (0.1) loses meaning. The lossless renderer `generic-en-pivot/0.2` exists but is not the default.
-- Since round 2:
-  - the prohibition encoding is canonical ([0015](decisions/0015-canonical-prohibition-and-imperative-grants.md));
-  - dropped digit literals now block identity ([0016](decisions/0016-source-literal-retention-gate.md)). That gate catches 2 of the 7 meaning losses above; it has not yet been run live.
+**Current policy:**
+- **The extraction contract is frozen at 0.19** until held-out evidence exists ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
+- **Under review:** a narrower working scope ([ADR 0026, proposed](decisions/0026-working-scope-checkable-memory.md)): a checkable memory layer that offers exact literal retention, verified recall and refusal, with semantic identity only where convergence has been measured.
+- **Reviews in progress:**
+  - a cross-vendor review ([packet](experiments/cross-vendor-review-v1/README.md));
+  - the owner's native-Greek review ([worksheet](experiments/owner-greek-review-v1/README.md));
+  - the latest same-family review ([Fable, 2026-10-16](reports/independent-evaluation/2026-10-16-fable-review/REPORT.md)).
 
 **Not established:**
 - general text-to-meaning extraction;
-- broad language support: only English and Greek were tested, and the Greek is AI-written;
-- token savings on real memory data;
-- any human or cross-vendor review. All evaluation so far is by the author or by other sessions of the same model family.
+- identity that converges across paraphrase or language;
+- token savings on real memory;
+- any human or cross-vendor review. Both are now being set up.
 
-Details are in [STATUS.md](STATUS.md) and [docs/LUNUM_READINESS.md](docs/LUNUM_READINESS.md).
+Details are in [STATUS.md](STATUS.md).
 
 ## Try it
 

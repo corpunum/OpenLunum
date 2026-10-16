@@ -6,7 +6,7 @@ The rig services of that model (`openlunum-worker`, `-worker-ally`, `-docs`, `-d
 
 ## How work lands
 
-1. Work on `main`. Do not create task, worker, campaign or status branches.
+1. Work on `main`. Do not create long-lived task, worker, campaign or status branches. A short-lived branch with a pull request merged the same day is allowed (amended 2026-10-16 to match practice; see AGENTS.md).
    - Direct pushes to `main` are enabled (2026-09-26): the branch rule no longer requires a pull request or pre-merge status checks. `ci.yml` runs after every push instead of before it, so local `pnpm verify` is the gate.
 2. Before every push: `pnpm verify` passes locally on the exact tree being pushed, and `git status` is clean afterwards (tests must not rewrite tracked files).
 3. Small, coherent commits with messages that say what changed and why. Push after each coherent step, not in large batches.
