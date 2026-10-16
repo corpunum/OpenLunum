@@ -123,3 +123,23 @@ The run uses v23. Unchanged:
 - the contract, the frames and the identities.
 
 **Consequence beyond this test:** no live run has ever exercised contract 0.19 in Claude Code. ADR 0024's general frames were never delivered to a Claude Code extractor before v23.
+
+## Amendment 3 (2026-10-16): the runner offered tools its gate forbids
+
+**What happened:**
+- The first full S1 run (`…/clc-v1/s1`, $0.60) stopped after 4 items.
+- On item 4, the Greek C2 sentence, the model called `lunum_classify`. The client denied it under `dontAsk`, so no information was gained.
+- The session-integrity gate rejects any tool outside contract/build/submit/validate, so the run halted. That is correct fail-closed behaviour.
+- The S2 run that followed was stopped by hand after 1 item (`…/clc-v1/s2`).
+
+**Cause:** the runner *approved* only the four tools but still *showed* the other eight Lunum tools to the model.
+
+**Fix:** the runner now lists the served tools at preflight and passes every tool outside the four to `--disallowedTools`, recording them in `preflight.json`. This makes the isolation match what the runner already claimed ("only contract/build/submit/validate").
+
+**Unchanged:**
+- the package (v23);
+- the contract;
+- the sentences;
+- the bars.
+
+The stopped runs are kept as evidence and are not scored. The scored runs are `s1v`, `s2v`, `s3v` and `r2v`.

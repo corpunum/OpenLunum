@@ -1,0 +1,212 @@
+{
+  "status": "FINISHED_INVALID_OR_DIAGNOSTIC",
+  "startedAt": "2026-10-16T15:40:46.002Z",
+  "selected": [
+    "clc1-2616103d785e2e47",
+    "clc1-337ea3b8592ee69a",
+    "clc1-9d55a20c8f9c5695",
+    "clc1-5a4fddc395d4d20f",
+    "clc1-91203af5e4103fd9",
+    "clc1-1ee41bc6e5057653",
+    "clc1-4a05a41375d06496",
+    "clc1-09042b3031b74d16",
+    "clc1-2d9fd592f8242510",
+    "clc1-8d22f91d6c9e6960",
+    "clc1-b5474bbe12f0b56c",
+    "clc1-88e609b862f067ea",
+    "clc1-188ca882f0c344ad",
+    "clc1-c4909dcd8c97bbce",
+    "clc1-5b3578b43c34c30d",
+    "clc1-94e043f7ad542c68",
+    "clc1-252faab49acc7362",
+    "clc1-176ecc34080dc2bc",
+    "clc1-83d30c01972ad93b",
+    "clc1-ffd5128658bc385e",
+    "clc1-5dea698d288a4d03",
+    "clc1-a972b719ffc6b7e3",
+    "clc1-1afb2b9f6474e51c",
+    "clc1-ff471410b4d62ba0",
+    "clc1-45a8ad6e12397fbd",
+    "clc1-d50fc81b2a9dfb9b",
+    "clc1-9873e5a83797acc0",
+    "clc1-b5c25431dde944a2",
+    "clc1-817cf5fd0eed7c9b",
+    "clc1-a90b2abdf9702d0f",
+    "clc1-763102bd835b2c28",
+    "clc1-11dfad03303b9e3d",
+    "clc1-e33d8cbbe98bd229",
+    "clc1-c1ac97acef14dd73",
+    "clc1-49c1ba511e1dcef8",
+    "clc1-08f5a8c753cc7f67",
+    "clc1-49feb1496642165c",
+    "clc1-970e17e848a2bdc1",
+    "clc1-2f71fce433cd5073",
+    "clc1-27e4d50883c89034",
+    "clc1-b69d81c09720ea35",
+    "clc1-12a382c092348aa7",
+    "clc1-115775d095a4764d",
+    "clc1-c5d39f69c0fcc16f",
+    "clc1-c533e8bed36bbea8",
+    "clc1-3f77d926821a27ff",
+    "clc1-cdf00dc95ce1d86a",
+    "clc1-1f3fc73eba36672f",
+    "clc1-4677bb0f9525bb86",
+    "clc1-83e9e315a5e4f085",
+    "clc1-dc39814fb510e4fd",
+    "clc1-4fb47131c76a0e8b",
+    "clc1-f38dc2610ff5b508",
+    "clc1-806c88d0b43c339d",
+    "clc1-11af47b46796acc1",
+    "clc1-ec76b77bc1efe31d",
+    "clc1-1ef793a234b61900",
+    "clc1-0fb5a215728f82b5",
+    "clc1-5a3e15c4e74f4dcd",
+    "clc1-32149da401a52e18",
+    "clc1-3a7f1a3f9f144190",
+    "clc1-92da0eff61f09666",
+    "clc1-4639cbb6e4a66623",
+    "clc1-641d81cad4182453",
+    "clc1-2f5d739a7d04fe9f",
+    "clc1-e90500645d237fab",
+    "clc1-a6ee832d06cd80ff",
+    "clc1-baa2208f2b47d4dd",
+    "clc1-b03b549ec348ab40",
+    "clc1-a3ae37c3cdeeb6a6",
+    "clc1-ce14805134a865af",
+    "clc1-a7f6c63183490730",
+    "clc1-98799b6d7577604f",
+    "clc1-d2e28d0a55615b4e",
+    "clc1-6755aa6a844af933",
+    "clc1-37e586f09cfc42c4",
+    "clc1-d456dc48449bb5ef",
+    "clc1-1ea47f0a0c579f04",
+    "clc1-fb47452c364ba8b8",
+    "clc1-551400c0e8bc0d62"
+  ],
+  "completed": [
+    {
+      "handle": "clc1-2616103d785e2e47",
+      "sourceLanguage": "en",
+      "exitCode": 143,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": false,
+        "mismatches": [
+          "MALFORMED_OR_DUPLICATE_TOOL_USE",
+          "UNPAIRED_OR_DUPLICATE_TOOL_RESULT"
+        ]
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_analyze_discourse",
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_classify",
+        "mcp__lunum__lunum_compact_messages",
+        "mcp__lunum__lunum_compare",
+        "mcp__lunum__lunum_compile_context",
+        "mcp__lunum__lunum_derive",
+        "mcp__lunum__lunum_fingerprint",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_render",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_classify",
+          "isError": true,
+          "error": "Permission to use mcp__lunum__lunum_classify has been denied because Claude Code is running in don't ask mode. IMPORTANT: You *may* attempt to accomplish this action using other tools that might naturally be used to accomplish this goal, e.g. using head instead of cat. But you *should not* attempt to work around this denial in malicious ways, e.g. do not use your ability to run tests to execute non-test actions. You should only try to work around this restriction in reasonable ways that do not attempt to bypass the intent behind this denial. If you believe this capability is essential to complete the user's request, STOP and explain to the user what you were trying to do and why you need this permission. Let the user decide how to proceed."
+        }
+      ],
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 19218,
+        "cache_read_input_tokens": 130283,
+        "output_tokens": 1064,
+        "output_tokens_details": {
+          "thinking_tokens": 801
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 19218,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 211,
+            "cache_read_input_tokens": 53918,
+            "cache_creation_input_tokens": 1013,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1013
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1135806,
+      "numTurns": 3,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-2616103d785e2e47.jsonl",
+      "rawStreamSha256": "4ea714baf571eb37a8cfe9fb55831782078baf783ff57d6e759078bd634f7efb",
+      "timedOut": false,
+      "interrupted": true,
+      "signal": null,
+      "evidenceFailures": [
+        "INTERRUPTED",
+        "PROCESS_ERROR",
+        "EVENT_OR_SOURCE_UNBOUND"
+      ],
+      "evidenceValid": false
+    }
+  ],
+  "requestedBudget": {
+    "model": "claude-sonnet-5",
+    "totalUsd": 28,
+    "itemUsd": 0.35,
+    "timeoutMs": 300000,
+    "count": 80,
+    "concurrency": 1,
+    "requestedReservationUsd": 28,
+    "enforcement": "Serial launches; CLI requested per-item ceilings reserved in advance. Billing is provider-controlled, not a hard financial guarantee; unknown or over-ceiling reported cost stops remaining launches and invalidates evidence."
+  }
+}

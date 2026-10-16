@@ -83,6 +83,7 @@ const mcpConfigPath = path.join(outDir, 'mcp-config.json');
 fs.writeFileSync(mcpConfigPath, `${JSON.stringify({ mcpServers: { lunum: { command: 'node', args: [path.join(root, 'scripts/lunum-mcp-launch.mjs')], env: { LUNUM_MCP_SKIP_BUILD: '1', LUNUM_COMPACTION: 'off', LUNUM_MULTILINGUAL: 'on', LUNUM_CONTEXT_MODE: 'mixed' } } } }, null, 2)}\n`);
 
 let preflight = null;
+let servedToolNames = [];
 if (!rederive) {
   const require = createRequire(path.join(root, 'packages/mcp/package.json'));
   const { Client } = await import(pathToFileURL(require.resolve('@modelcontextprotocol/sdk/client/index.js')));
@@ -91,11 +92,14 @@ if (!rederive) {
   const transport = new StdioClientTransport({ command: process.execPath, args: [path.join(root, 'scripts/lunum-mcp-launch.mjs')], env: { ...process.env, LUNUM_MCP_SKIP_BUILD: '1', LUNUM_COMPACTION: 'off' }, stderr: 'inherit' });
   try {
     await client.connect(transport, { timeout: 10000 });
+    // Every other Lunum tool is hidden from the extractor, not merely unapproved:
+    // a visible but denied tool call breaks session integrity (clc-v1 s1, 2026-10-16).
+    servedToolNames = (await client.listTools(undefined, { timeout: 10000 })).tools.map((tool) => `mcp__lunum__${tool.name}`);
     const request = { name: 'lunum_get_extraction_contract', arguments: {} };
     const response = await client.callTool(request, undefined, { timeout: 10000 });
     const result = JSON.parse(response.content?.find(part => part.type === 'text')?.text ?? 'null');
     const binding = checkServedContract(result?.success === true ? result.contract : null, pkg);
-    preflight = { request, response, binding, startedAt, codeCommit: gitHead, workingTreeClean: !gitDirtyAtStart, providerCalls: 0,
+    preflight = { request, response, binding, servedToolNames, hiddenTools: servedToolNames.filter((name) => !ALLOWED_TOOLS.includes(name)), startedAt, codeCommit: gitHead, workingTreeClean: !gitDirtyAtStart, providerCalls: 0,
       runnerSha256: sha256(fs.readFileSync(fileURLToPath(import.meta.url))), gateSha256: sha256(fs.readFileSync(path.join(root, 'scripts/research/source-only-run-gates.mjs'))), artifactBinding: bindingAtStart };
     fs.writeFileSync(path.join(outDir, 'preflight.json'), JSON.stringify(preflight, null, 2) + '\n', { flag: 'wx' });
     if (!binding.match) throw new Error(`served_contract_preflight_mismatch:${binding.mismatches.join(',')}`);
@@ -151,6 +155,7 @@ async function runOne(request) {
     const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'lunum-extract-'));
     const cli = ['-p', prompt(request), '--model', model, '--output-format', 'stream-json', '--verbose',
       '--strict-mcp-config', '--mcp-config', mcpConfigPath, '--tools', '', '--allowedTools', ...ALLOWED_TOOLS,
+      ...(servedToolNames.some((name) => !ALLOWED_TOOLS.includes(name)) ? ['--disallowedTools', ...servedToolNames.filter((name) => !ALLOWED_TOOLS.includes(name))] : []),
       '--permission-mode', 'dontAsk', '--no-session-persistence', '--max-budget-usd', String(plan.itemUsd)];
     fs.writeFileSync(path.join(outDir, 'raw', `${request.handle}.request.json`), JSON.stringify({ request, prompt: prompt(request), promptSha256: sha256(prompt(request)), model, clientVersion: claudeVersionResult.stdout.trim(), itemBudgetUsd: plan.itemUsd, timeoutMs: plan.timeoutMs }, null, 2) + '\n', { flag: 'wx' });
     try {

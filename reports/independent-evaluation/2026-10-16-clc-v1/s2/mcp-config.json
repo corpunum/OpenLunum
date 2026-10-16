@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "lunum": {
+      "command": "node",
+      "args": [
+        "/home/user/OpenLunum/scripts/lunum-mcp-launch.mjs"
+      ],
+      "env": {
+        "LUNUM_MCP_SKIP_BUILD": "1",
+        "LUNUM_COMPACTION": "off",
+        "LUNUM_MULTILINGUAL": "on",
+        "LUNUM_CONTEXT_MODE": "mixed"
+      }
+    }
+  }
+}
