@@ -1,0 +1,14 @@
+{
+  "startedAt": "2026-10-16T19:55:03.880Z",
+  "finishedAt": "2026-10-16T20:06:38.225Z",
+  "model": "supergemma4-Q5_K_M",
+  "endpoint": "http://127.0.0.1:28085/v1",
+  "codeCommit": "91196b57ed1042dd6d4ab5f9773ec2ae7c2de505",
+  "commitUnchanged": true,
+  "artifactsUnchanged": true,
+  "items": 4,
+  "parse": 3,
+  "abstain": 1,
+  "invalid": 0,
+  "costUsd": 0
+}

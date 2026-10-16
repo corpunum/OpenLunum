@@ -1,0 +1,174 @@
+{
+  "startedAt": "2026-10-16T20:03:38.421Z",
+  "codeCommit": "f4e5536ae8858143e2faed512301f46a03cad423",
+  "workingTreeClean": true,
+  "client": "codex-cli 0.160.0",
+  "model": "gpt-6-luna",
+  "effort": "low",
+  "cli": [
+    "exec",
+    "-m",
+    "gpt-6-luna",
+    "-c",
+    "model_reasoning_effort=low",
+    "--skip-git-repo-check",
+    "--ephemeral",
+    "--json",
+    "-s",
+    "read-only",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "browser_use",
+    "--disable",
+    "computer_use",
+    "--disable",
+    "apps",
+    "--disable",
+    "skill_search",
+    "--disable",
+    "goals",
+    "--disable",
+    "image_generation",
+    "--disable",
+    "view_image",
+    "--disable",
+    "plugins",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "include_apply_patch_tool=false",
+    "-c",
+    "mcp_servers.unumsearch.enabled=false",
+    "-c",
+    "mcp_servers.lunum.command=\"node\"",
+    "-c",
+    "mcp_servers.lunum.args=[\"/home/corpunum/OpenLunum-luna/scripts/lunum-mcp-launch.mjs\"]",
+    "-c",
+    "mcp_servers.lunum.env={LUNUM_MCP_SKIP_BUILD=\"1\",LUNUM_COMPACTION=\"off\",LUNUM_MULTILINGUAL=\"on\",LUNUM_CONTEXT_MODE=\"mixed\"}",
+    "-c",
+    "mcp_servers.lunum.enabled_tools=[\"lunum_get_extraction_contract\",\"lunum_build_candidate\",\"lunum_submit_candidate\",\"lunum_validate\"]",
+    "-c",
+    "mcp_servers.lunum.default_tools_approval_mode=\"approve\""
+  ],
+  "modelVerification": "requested-only (codex exec --json does not report the served model)",
+  "package": "experiments/natural-development-v8/extraction/public-instruction-package-v23.json",
+  "timeoutMs": 600000,
+  "runnerSha256": "6a31bc2452f9cd80ff2f2b7226c96062fd22263a0e4f6fa7ae65d6a290178d1a",
+  "artifactBinding": {
+    "match": true,
+    "checks": [
+      {
+        "key": "coreArtifactSha256",
+        "file": "packages/core/dist/src/agent-native.js",
+        "expected": "c15b83c97dc54bff0a6d5a8758b0ed664292631d60ab26209e4e89fa0ead972a",
+        "actual": "c15b83c97dc54bff0a6d5a8758b0ed664292631d60ab26209e4e89fa0ead972a",
+        "match": true
+      },
+      {
+        "key": "frameValidatorArtifactSha256",
+        "file": "packages/core/dist/src/frame-registry.js",
+        "expected": "dca04a57045112d64ee1fb5debb926e3c5d47fac55c5f2758fe5fcfcd4daa0e5",
+        "actual": "dca04a57045112d64ee1fb5debb926e3c5d47fac55c5f2758fe5fcfcd4daa0e5",
+        "match": true
+      },
+      {
+        "key": "toolImplementationSha256",
+        "file": "packages/mcp/dist/src/tools.js",
+        "expected": "0e28bb75eabdd05ca57ccbe586585df7b5b6bf555c7e537f97a765b96502635a",
+        "actual": "0e28bb75eabdd05ca57ccbe586585df7b5b6bf555c7e537f97a765b96502635a",
+        "match": true
+      },
+      {
+        "key": "mcpArtifactSha256",
+        "file": "packages/mcp/dist/bin/lunum-mcp.js",
+        "expected": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+        "actual": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+        "match": true
+      },
+      {
+        "key": "literalRetentionArtifactSha256",
+        "file": "packages/core/dist/src/literal-retention.js",
+        "expected": "d8423b0d8787e7f63829bf3666b097be2ff970db949168053af9298ea252c0fe",
+        "actual": "d8423b0d8787e7f63829bf3666b097be2ff970db949168053af9298ea252c0fe",
+        "match": true
+      },
+      {
+        "key": "builderArtifactSha256",
+        "file": "packages/core/dist/src/agent-builder.js",
+        "expected": "75fa09d9643437b7f99735d5081a823d429652f8f365add1cdaf3596143ab983",
+        "actual": "75fa09d9643437b7f99735d5081a823d429652f8f365add1cdaf3596143ab983",
+        "match": true
+      },
+      {
+        "key": "transportValidatorArtifactSha256",
+        "file": "packages/core/dist/src/semantic-transport.js",
+        "expected": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476",
+        "actual": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476",
+        "match": true
+      },
+      {
+        "key": "transportSchemaArtifactSha256",
+        "file": "packages/core/dist/src/semantic-transport-schema.js",
+        "expected": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+        "actual": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+        "match": true
+      },
+      {
+        "key": "launcherSha256",
+        "file": "scripts/lunum-mcp-launch.mjs",
+        "expected": "9b35bc921abe05369432aa57fa454045b1a8a5c0e2df29d33c5aafc1a424a69d",
+        "actual": "9b35bc921abe05369432aa57fa454045b1a8a5c0e2df29d33c5aafc1a424a69d",
+        "match": true
+      },
+      {
+        "key": "taskContractSha256",
+        "file": "experiments/natural-development-v8/task-contract.json",
+        "expected": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+        "actual": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+        "match": true
+      },
+      {
+        "key": "scorerSha256",
+        "file": "scripts/research/score-natural-source-only-extraction.mjs",
+        "expected": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec",
+        "actual": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec",
+        "match": true
+      },
+      {
+        "key": "taskProfileSha256",
+        "file": "experiments/natural-development-v8/extraction/public-task-profile-iteration6.json",
+        "expected": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+        "actual": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+        "match": true
+      },
+      {
+        "key": "servedRuntimeManifestSha256",
+        "file": "experiments/natural-development-v8/extraction/public-served-runtime-v23.json",
+        "expected": "01ecfb77a85b0cc6830d03d0f013c18864a8d2629865e4958788582c3fd68b37",
+        "actual": "01ecfb77a85b0cc6830d03d0f013c18864a8d2629865e4958788582c3fd68b37",
+        "match": true,
+        "runtime": {
+          "match": true,
+          "errors": [],
+          "artifactCount": 95
+        }
+      },
+      {
+        "key": "transportValidatorDependency",
+        "file": "pnpm-lock.yaml",
+        "expected": {
+          "name": "ajv",
+          "version": "8.20.0",
+          "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
+        },
+        "actual": {
+          "name": "ajv",
+          "version": "8.20.0",
+          "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
+        },
+        "match": true
+      }
+    ]
+  }
+}

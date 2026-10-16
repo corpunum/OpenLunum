@@ -39,3 +39,17 @@ In clc-v1, 8 of the 12 are Greek questions recorded as `topic` with the question
 
 - The runner works for local models and is usable for free extraction. It is slow on this hardware.
 - Pre-registrations that use it must count sentence copies separately, and must not let them carry a stability bar.
+
+## Pilot 2: SuperGemma (Ally) and pilot 3: Luna (Codex), 2026-10-16
+
+Run after the owner withdrew Halogen/Qwen. Pre-registered in [README.md](README.md) before the calls. Harness checks only; no claim.
+
+| Pilot | Items | Valid | Parse / abstain | Got an identity | Time per item | Raw outputs |
+|---|---|---|---|---|---|---|
+| 2: `supergemma4-Q5_K_M`, temporary 64k server on the Ally | 4 | 4 | 3 / 1 | **0** | about 3 minutes (4 in 11.5 min) | [`2026-10-16-pilot-gemma-1`](../../reports/independent-evaluation/2026-10-16-pilot-gemma-1/) |
+| 3, attempt 1: `gpt-6-luna` low | 2 | 0 | — | — | 7–10 s | [`2026-10-16-pilot-luna-1`](../../reports/independent-evaluation/2026-10-16-pilot-luna-1/) |
+| 3, attempt 2 (after the harness fix) | 2 | 2 | 0 / 2 | 0 | 6–11 s, about 92k input tokens each | [`2026-10-16-pilot-luna-2`](../../reports/independent-evaluation/2026-10-16-pilot-luna-2/) |
+
+- **SuperGemma:** the loop works, but its tool arguments are often malformed (one submission carried a broken type string, `"actor\"},theme:{type:"`, and three `null` clauses). Core answered such submissions with `success: true` and `transportValid: false`. `success` means the tool call ran, not that the candidate was valid; the ledger's "parse" means a submission went through and the model declared parse, and the scorers re-validate (identity requires a valid Sem). None of its 3 parses received an identity.
+- **Luna attempt 1** was invalid because of a harness bug (client warnings counted as tool use), fixed before attempt 2. Attempt 2: two honest abstentions (a pronoun-only subject; the Greek sentence).
+- The extraction prompt costs a lot of context on any model: the `lunum_build_candidate` input schema alone is about 132k characters (about 35k tokens), which is why SuperGemma needed a 64k server.
