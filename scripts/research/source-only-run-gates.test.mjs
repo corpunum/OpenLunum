@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { getExtractionContract } from '../../packages/core/dist/src/index.js';
-import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeManifest, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, sha256 } from './source-only-run-gates.mjs';
+import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeManifest, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, sha256, stopsFurtherLaunches } from './source-only-run-gates.mjs';
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
@@ -438,4 +438,14 @@ test('final status: last JSON line wins over leading prose; conflicting declarat
   assert.equal(parseFinalStatus('{"status":"maybe"}'), null);
   assert.equal(parseFinalStatus(''), null);
   assert.equal(parseFinalStatus(undefined), null);
+});
+
+test('only binding failures with known cost let a run continue', () => {
+  assert.equal(stopsFurtherLaunches({ evidenceValid: true, evidenceFailures: [] }), false);
+  assert.equal(stopsFurtherLaunches({ evidenceValid: false, evidenceFailures: ['CONTRACT_UNBOUND'] }), false);
+  assert.equal(stopsFurtherLaunches({ evidenceValid: false, evidenceFailures: ['EVENT_OR_SOURCE_UNBOUND', 'OUTCOME_MISSING'] }), false);
+  for (const failure of ['TIMEOUT', 'INTERRUPTED', 'PROCESS_ERROR', 'PROVIDER_ERROR', 'COST_UNKNOWN', 'ITEM_BUDGET_EXCEEDED', 'MODEL_UNVERIFIED', 'SOMETHING_NEW']) {
+    assert.equal(stopsFurtherLaunches({ evidenceValid: false, evidenceFailures: ['CONTRACT_UNBOUND', failure] }), true, failure);
+  }
+  assert.equal(stopsFurtherLaunches({ evidenceValid: false, evidenceFailures: [] }), true, 'invalid without a stated reason stops');
 });

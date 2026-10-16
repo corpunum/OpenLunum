@@ -19,7 +19,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
-import { artifactBinding as bindArtifacts, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, parseFinalStatus } from './source-only-run-gates.mjs';
+import { artifactBinding as bindArtifacts, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, parseFinalStatus, stopsFurtherLaunches } from './source-only-run-gates.mjs';
 import { replaySession, parseJsonLines } from './replay-client-events.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -245,7 +245,7 @@ await Promise.all(Array.from({ length: rederive ? 1 : Math.min(concurrency, sele
     console.error(`${row.handle} ${row.sourceLanguage} -> ${row.status ?? `FAILED(${row.failure})`} calls=${row.calls.map((c) => `${c.name}${c.isError ? '!' : ''}`).join(',')} $${row.costUsd}`);
     fs.writeFileSync(path.join(outDir, 'raw', `${row.handle}.checkpoint.json`), JSON.stringify(row, null, 2) + '\n', { flag: 'wx' });
     checkpoint();
-    if (!rederive && !row.evidenceValid) break; // Unknown execution/cost cannot authorize another paid launch.
+    if (!rederive && !row.evidenceValid && stopsFurtherLaunches(row)) break; // Unknown execution/cost cannot authorize another paid launch.
   }
 }));
 

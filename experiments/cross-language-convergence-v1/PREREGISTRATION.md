@@ -166,3 +166,16 @@ The stopped runs are kept and not scored. The scored runs are `s1c`, `s2c`, `s3c
 **Change:** the requested item ceiling is now **$0.80**. Earlier runs, such as v17, used $0.60. The expected spend is unchanged at about $0.15 per item; only the reservation grows. The owner approved the full budget.
 
 The stopped run is kept and not scored. The scored runs are `s1d`, `s2d`, `s3d` and `r2d`.
+
+## Amendment 6 (2026-10-16): one item's binding failure no longer stops the set
+
+**What happened:**
+- `s1d` stopped after 7 items, costing $1.19. On item 7 («I'm finished.» C4 EN), the model abstained without calling the contract tool, at $0.03, so the row is `CONTRACT_UNBOUND`.
+- The v17 run stopped on «Revoke.» for the same reason.
+- Short everyday sentences make this common, and the runner stopped all further launches on any invalid item.
+
+**Change:** the runner now stops only when cost or execution is uncertain: timeout, interruption, process or provider error, unknown cost, a budget overrun, an unverified model, or any unknown failure. An item that fails **only** a binding check (`CONTRACT_UNBOUND`, `EVENT_OR_SOURCE_UNBOUND` or `OUTCOME_MISSING`) with known, in-budget cost is recorded as invalid and the run continues.
+
+**Scoring is unchanged.** An invalid item counts as not covered and stays in every denominator. Invalid items are counted in the report.
+
+The stopped runs are kept. The scored runs are `s1e`, `s2e`, `s3e` and `r2e`.

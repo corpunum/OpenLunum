@@ -254,6 +254,19 @@ export function evidenceFailures(row, pkg, model, plan) {
 }
 
 /**
+ * Whether an invalid item stops further paid launches. Only failures that are
+ * pure evidence-binding problems with known, in-budget cost let the run go on
+ * (the item stays invalid and in the denominator). Anything else, including any
+ * unknown failure, stops (fail closed). clc-v1, 2026-10-16.
+ */
+export const CONTINUABLE_FAILURES = Object.freeze(['CONTRACT_UNBOUND', 'EVENT_OR_SOURCE_UNBOUND', 'OUTCOME_MISSING']);
+export function stopsFurtherLaunches(row) {
+  if (row.evidenceValid) return false;
+  const failures = row.evidenceFailures ?? [];
+  return failures.length === 0 || failures.some((failure) => !CONTINUABLE_FAILURES.includes(failure));
+}
+
+/**
  * The declared final status of a source-only session. The prompt asks the
  * model to end with one JSON status line; models often put a sentence of prose
  * before it. Accept the LAST non-empty line as the status, but refuse the
