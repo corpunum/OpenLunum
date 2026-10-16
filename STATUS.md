@@ -27,6 +27,16 @@
   - Preflight passed with 0 provider calls.
   - **It waits for the owner's budget approval** (about $38 estimated).
 
+- **Live results, 2026-10-16:**
+  - **The cross-language convergence test ran:** [results](experiments/cross-language-convergence-v1/RESULTS.md), $41.
+    - English sentences and their human Greek translations got the same identity in **0 of 5** pairs where both sides got one.
+    - Coverage: English about 30%, Greek 5–8%.
+    - Run-to-run stability: **4 of 12**.
+  - **Delivery fix:** contract 0.19 had never reached a Claude Code extractor. The client cut the 60 KB result to a 2 KB preview; v23 delivers it compactly.
+  - **Meaning against the owner's readings:** 16/30 for both earlier runs ([targets](experiments/meaning-targets-owner-v1/README.md)).
+  - **Real work log:** discourse compaction gives −35% characters with 96% of literals kept, and uses 0 semantic identities ([report](experiments/session-transcript-compaction-v1/README.md)).
+  - **Proposed:** ADR 0027, a canonical identity projection (in-sample 4→8 and 7→11 of 12). It is gated on a fresh held-out run.
+
 ## What exists
 
 **Versions:**

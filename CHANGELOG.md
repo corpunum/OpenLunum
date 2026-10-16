@@ -17,6 +17,17 @@
 - The owner review was returned and taken in (Part A meanings, Part B Greek naturalness, Part C sourced pairs), together with the Tatoeba EN–EL dataset.
 - The cross-language convergence v1 pre-registration, with a deterministic selection. No provider calls yet.
 
+- Package v23 delivers the extraction contract as compact JSON. Claude Code persisted the 60 KB contract and showed the model a 2 KB preview.
+- The runner hides non-permitted tools, and continues past items that fail only a binding check.
+- The session gate allows content-free client events after the result.
+- Cross-language convergence v1 ran live, $41:
+  - 0 of 5 cross-language pairs converged;
+  - stability 4 of 12;
+  - coverage: English about 30%, Greek 5–8%.
+- Owner-referenced meaning targets for all 30 round-2 sentences (16/30 for both runs).
+- Discourse compaction on a real session transcript.
+- ADR 0027 (proposed): a canonical identity projection.
+
 ### Changed
 - README and STATUS now reflect the real-data and stability findings.
 - The README diagram no longer claims EN/EL identity convergence.

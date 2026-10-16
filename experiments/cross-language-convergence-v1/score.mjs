@@ -14,9 +14,22 @@ const jsonl = (f) => fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').f
 const pairs = jsonl(`${root}experiments/cross-language-convergence-v1/pairs.jsonl`);
 const requests = new Map(['s1', 's2', 's3'].flatMap((s) => jsonl(`${root}experiments/cross-language-convergence-v1/requests-${s}.jsonl`)).map((r) => [r.handle, r]));
 
-function load(run) {
-  const rows = jsonl(`${runsRoot}/${run}/run-ledger.jsonl`);
-  const summary = fs.existsSync(`${runsRoot}/${run}/run-summary.json`) ? JSON.parse(fs.readFileSync(`${runsRoot}/${run}/run-summary.json`, 'utf8')) : null;
+// A run name may join a run with its continuation, "s2e+s2e-rest" (amendment 7): per
+// handle, the row with an outcome wins; a continuation row replaces only a row without one.
+function load(spec) {
+  const parts = spec.split('+');
+  const merged = new Map();
+  let costUsd = 0;
+  for (const part of parts) for (const row of jsonl(`${runsRoot}/${part}/run-ledger.jsonl`)) {
+    costUsd += Number.isFinite(row.costUsd) ? row.costUsd : 0;
+    const prev = merged.get(row.handle);
+    if (!prev || !['parse', 'abstain'].includes(prev.status)) merged.set(row.handle, row);
+  }
+  const rows = [...merged.values()];
+  const summaries = parts.map((part) => fs.existsSync(`${runsRoot}/${part}/run-summary.json`) ? JSON.parse(fs.readFileSync(`${runsRoot}/${part}/run-summary.json`, 'utf8')) : null);
+  const summary = { completed: rows.filter((r) => ['parse', 'abstain'].includes(r.status)).length, notRun: rows.filter((r) => !['parse', 'abstain'].includes(r.status)).length,
+    evidenceValid: rows.every((r) => r.evidenceValid), invalidItems: rows.filter((r) => !r.evidenceValid).length,
+    totalCostUsd: +costUsd.toFixed(4), costNote: 'sum of per-item reported costs over every row of every part, interrupted rows included where reported', parts };
   const byHandle = new Map();
   for (const row of rows) {
     const req = requests.get(row.handle);
@@ -53,7 +66,7 @@ const verdict = (c) => !c.evaluable ? 'not evaluable (coverage)' : c.rate >= 0.7
 const s1h = pairs.filter((p) => p.set === 'S1').flatMap((p) => [p.a, p.b]);
 const s2h = pairs.filter((p) => p.set === 'S2').flatMap((p) => [p.a, p.b]);
 const s3h = pairs.filter((p) => p.set === 'S3').flatMap((p) => [p.a, p.b]);
-const out = { format: 'openlunum-clc-v1-score/0.1', runs: Object.fromEntries(Object.entries(runs).map(([k, v]) => [k, v.summary && { completed: v.summary.completed, notRun: v.summary.notRun, evidenceValid: v.summary.evidenceValid, totalCostUsd: v.summary.totalCostUsd }])) };
+const out = { format: 'openlunum-clc-v1-score/0.1', runs: Object.fromEntries(Object.entries(runs).map(([k, v]) => [k, v.summary])) };
 if (S1) out.coverage = { S1: coverage(S1, s1h), ...(S2 && { S2: coverage(S2, s2h) }), ...(S3 && { S3: coverage(S3, s3h) }), ...(R2 && { R2: coverage(R2, s1h) }) };
 if (S1) {
   const c1 = convergence('S1', S1), c2 = S2 ? convergence('S2', S2) : null;

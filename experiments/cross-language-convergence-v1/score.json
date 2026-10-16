@@ -1,0 +1,215 @@
+{
+  "format": "openlunum-clc-v1-score/0.1",
+  "runs": {
+    "s1e": {
+      "completed": 80,
+      "notRun": 0,
+      "evidenceValid": false,
+      "invalidItems": 11,
+      "totalCostUsd": 10.8495,
+      "costNote": "sum of per-item reported costs over every row of every part, interrupted rows included where reported",
+      "parts": [
+        "s1e"
+      ]
+    },
+    "s2e+s2e-rest": {
+      "completed": 80,
+      "notRun": 0,
+      "evidenceValid": false,
+      "invalidItems": 9,
+      "totalCostUsd": 10.9925,
+      "costNote": "sum of per-item reported costs over every row of every part, interrupted rows included where reported",
+      "parts": [
+        "s2e",
+        "s2e-rest"
+      ]
+    },
+    "s3e": {
+      "completed": 30,
+      "notRun": 0,
+      "evidenceValid": false,
+      "invalidItems": 1,
+      "totalCostUsd": 4.6203,
+      "costNote": "sum of per-item reported costs over every row of every part, interrupted rows included where reported",
+      "parts": [
+        "s3e"
+      ]
+    },
+    "r2e+r2e-rest": {
+      "completed": 80,
+      "notRun": 0,
+      "evidenceValid": false,
+      "invalidItems": 14,
+      "totalCostUsd": 9.9768,
+      "costNote": "sum of per-item reported costs over every row of every part, interrupted rows included where reported",
+      "parts": [
+        "r2e",
+        "r2e-rest"
+      ]
+    }
+  },
+  "coverage": {
+    "S1": {
+      "covered": 14,
+      "total": 80,
+      "ran": 80,
+      "en": {
+        "covered": 11,
+        "total": 40
+      },
+      "el": {
+        "covered": 3,
+        "total": 40
+      },
+      "invalid": 11
+    },
+    "S2": {
+      "covered": 14,
+      "total": 80,
+      "ran": 80,
+      "en": {
+        "covered": 11,
+        "total": 40
+      },
+      "el": {
+        "covered": 3,
+        "total": 40
+      },
+      "invalid": 9
+    },
+    "S3": {
+      "covered": 2,
+      "total": 30,
+      "ran": 30,
+      "en": {
+        "covered": 0,
+        "total": 0
+      },
+      "el": {
+        "covered": 2,
+        "total": 30
+      },
+      "invalid": 1
+    },
+    "R2": {
+      "covered": 15,
+      "total": 80,
+      "ran": 80,
+      "en": {
+        "covered": 13,
+        "total": 40
+      },
+      "el": {
+        "covered": 2,
+        "total": 40
+      },
+      "invalid": 14
+    }
+  },
+  "crossLanguage": {
+    "S1": {
+      "pairs": 40,
+      "bothCovered": 3,
+      "equal": 0,
+      "rate": 0,
+      "evaluable": false,
+      "abstentionAgreement": 19,
+      "oneSideOnly": 8,
+      "detail": [
+        {
+          "pair": "C30",
+          "equal": false,
+          "predicates": [
+            "prefer",
+            "prefer"
+          ]
+        },
+        {
+          "pair": "C36",
+          "equal": false,
+          "predicates": [
+            "access",
+            "access"
+          ]
+        },
+        {
+          "pair": "C37",
+          "equal": false,
+          "predicates": [
+            "notify",
+            "notify"
+          ]
+        }
+      ]
+    },
+    "S2": {
+      "pairs": 40,
+      "bothCovered": 2,
+      "equal": 0,
+      "rate": 0,
+      "evaluable": false,
+      "abstentionAgreement": 18,
+      "oneSideOnly": 10,
+      "detail": [
+        {
+          "pair": "T6",
+          "equal": false,
+          "predicates": [
+            "prefer",
+            "prefer"
+          ]
+        },
+        {
+          "pair": "T28",
+          "equal": false,
+          "predicates": [
+            "send",
+            "send"
+          ]
+        }
+      ]
+    },
+    "pooled": {
+      "bothCovered": 5,
+      "equal": 0,
+      "rate": 0,
+      "evaluable": false,
+      "verdict": "not evaluable (coverage)"
+    }
+  },
+  "greekParaphrase": {
+    "pairs": 15,
+    "bothCovered": 1,
+    "equal": 1,
+    "rate": 1,
+    "evaluable": false,
+    "abstentionAgreement": 9,
+    "oneSideOnly": 0,
+    "detail": [
+      {
+        "pair": "P5",
+        "equal": true,
+        "predicates": [
+          "read",
+          "read"
+        ]
+      }
+    ],
+    "verdict": "not evaluable (coverage)"
+  },
+  "stability": {
+    "coveredInBothRuns": 12,
+    "sameIdentity": 4,
+    "rate": 0.3333333333333333,
+    "verdict": "CONFIRMS INSTABILITY (<75%)"
+  },
+  "falseMerges": [],
+  "bilingualDedup": {
+    "sentences": 160,
+    "sentencesDropped": 0,
+    "chars": 5201,
+    "charsDropped": 0,
+    "saving": 0
+  },
+  "totalCostUsd": 36.4391
+}

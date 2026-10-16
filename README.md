@@ -50,12 +50,14 @@ Core cannot tell whether a proposal is *right*. It can refuse proposals that are
 | What | Result | Caveat |
 |---|---|---|
 | Author-written sentences (V8 development set, probes v1–v3) | 19–20/21 on V8; probes 20/20, 18/18, 16/16 | In-sample: the contract was tuned on them |
-| An independent session's fresh sentences ([round 2](reports/independent-evaluation/2026-09-26-round2/REPORT.md)) | 27/30 on outcome; meaning 13/16 on the reviewed targets | 14 of 30 targets are unresolved, pending the [owner's review](experiments/owner-greek-review-v1/README.md) |
-| The same 30 sentences re-run on a later contract ([v17 report](reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md)) | 21/30 on outcome; 9/16 on reviewed meaning | Lower than the first run: the model now over-abstains |
-| **The same sentence, same model, two runs** | **the same identity in only 7 of 12** | The identity hashes `kind` and term-type labels that the source does not determine |
+| An independent session's fresh sentences ([round 2](reports/independent-evaluation/2026-09-26-round2/REPORT.md)), scored against the owner's native-checked readings ([targets](experiments/meaning-targets-owner-v1/README.md)) | **16/30 on meaning; Greek 3/10** | 10 of the parses the evaluator counted as correct drop an expiry, recurrence, exception or deadline, or pick one reading of an ambiguous "can" |
+| The same 30 sentences re-run on a later contract ([v17 report](reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md)) | 16/30 on meaning; Greek 4/10 | More correct abstentions, but more mismatches |
+| **The same sentence, same model, two runs** ([v17](reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md); [clc-v1](experiments/cross-language-convergence-v1/RESULTS.md)) | **the same identity in 7/12, then 4/12** | Labels and forms the source does not determine. A candidate canonical projection raises it to 11/12 and 8/12, in-sample ([ADR 0027, proposed](decisions/0027-identity-projection-candidate.md)) |
+| **English sentence and its human Greek translation** ([clc-v1](experiments/cross-language-convergence-v1/RESULTS.md); 80 human EN/EL pairs plus Greek paraphrases; $41 live) | **0 of 5** pairs with an identity on both sides matched; coverage is English about 30%, Greek 5–8% | Open terms stay in their source language, so the identities cannot match. Too few pairs to evaluate under the pre-registered bar; every observed pair diverged |
 | **Real agent memory** ([discourse-unit-identity-v1](experiments/discourse-unit-identity-v1/RESULTS.md), 21,291 units of the owner's OpenUnum sessions) | **0 identities**; at most about 3% of tokens could ever be deduplicated | Work logs, status lines and multi-clause instructions do not fit the frames |
 | Exact recall over that memory ([source-locator-v1](experiments/source-locator-v1/RESULTS.md), [greek-fold-recall-v1](experiments/greek-fold-recall-v1/RESULTS.md)) | overall recall@5 rose from 0.41 to 0.80; unaccented Greek queries from 0.28 to 0.99 (composite 0.88) | This comes from search changes, not Lunum-Sem. It is the clearest win so far. |
 | Compressed views of real context ([ambient v1](experiments/ambient-discourse-v1/RESULTS.md), [v2](experiments/ambient-discourse-v2/RESULTS.md)) | **both failed** their pre-registered bars | Not shipped |
+| Discourse compaction on a real Claude Code work log ([session-transcript-compaction-v1](experiments/session-transcript-compaction-v1/README.md), 1,662 messages) | −35% characters, 96% of literals kept | Surface records only; 0 semantic identities used; no QA check |
 | Memory QA on a self-built paraphrase corpus | about −60% tokens with identity deduplication; Haiku wrong in 5 of 9 runs | It does not carry over to real memory (see above) |
 
 **Current policy:**
@@ -68,7 +70,7 @@ Core cannot tell whether a proposal is *right*. It can refuse proposals that are
 
 **Not established:**
 - general text-to-meaning extraction;
-- identity that converges across paraphrase or language;
+- identity that converges across languages: 0 of 5 observed pairs matched, and paraphrase convergence is untested at scale;
 - token savings on real memory;
 - any human or cross-vendor review. Both are now being set up.
 

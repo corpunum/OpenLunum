@@ -1,0 +1,581 @@
+{
+  "status": "offline, in-sample, self-reviewed; candidate projection is not a core change",
+  "stability_clc_s1_vs_r2": {
+    "both": 12,
+    "lfpEqual": 4,
+    "candEqual": 8
+  },
+  "stability_round2_original_vs_v17": {
+    "both": 12,
+    "lfpEqual": 7,
+    "candEqual": 11
+  },
+  "crossLanguage_S1S2": {
+    "both": 5,
+    "lfpEqual": 0,
+    "candEqual": 0
+  },
+  "greekParaphrase_S3": {
+    "both": 1,
+    "lfpEqual": 1,
+    "candEqual": 1
+  },
+  "repositoryScan": {
+    "identityBearingSem": 2698,
+    "distinctLfp": 407,
+    "candidateCollapses": 47,
+    "collapsedIdentities": 114
+  },
+  "collapses": [
+    [
+      {
+        "file": "datasets/dev/cross-language-retrieval-v1.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"assistant\"},\"object\":{\"type\":\"concept\",\"id\":\"files\"}},\"negated\":true,\"conditions\":[{\"predicate\":\"confirmed\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"user\"}}"
+      },
+      {
+        "file": "reports/experiments/audit-339-remeasure/parse/qwen36-35b/parse-results-el.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"assistant\"},\"object\":{\"type\":\"object\",\"id\":\"files\"}},\"negated\":true,\"conditions\":[{\"predicate\":\"confirmed\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"user\"}},"
+      }
+    ],
+    [
+      {
+        "file": "datasets/dev/cross-language-retrieval-v1.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"theme\":{\"type\":\"feature\",\"id\":\"power_saving\"}},\"negated\":false,\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type\":\"metric\",\"id\""
+      },
+      {
+        "file": "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/parse-results-en.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"theme\":{\"type\":\"concept\",\"id\":\"power_saving\"}},\"negated\":false,\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type\":\"metric\",\"id\""
+      }
+    ],
+    [
+      {
+        "file": "experiments/contract-0.16-live-check-v1/part-a/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"finance lead\"},\"recipient\":{\"type\":\"actor\",\"id\":\"Omar\"},\"action\":\"approve\",\"theme\":{\"type\":\"document\",\"value\":\"invoices\"}},\"conditions\":[{\"predicate\":\"below\",\"roles\":{"
+      },
+      {
+        "file": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"finance_lead\"},\"recipient\":{\"type\":\"actor\",\"id\":\"omar\"},\"action\":\"approve\",\"theme\":{\"type\":\"document\",\"id\":\"invoices\"}},\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"su"
+      }
+    ],
+    [
+      {
+        "file": "experiments/contract-0.16-live-check-v1/part-c/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"command\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"theme\":{\"type\":\"task\",\"value\":\"nightly export job\"},\"count\":{\"type\":\"quantity\",\"value\":3}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/frame-gaps-v1/live-v20/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"instruction\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"theme\":{\"type\":\"task\",\"value\":\"nightly export job\"},\"count\":{\"type\":\"quantity\",\"value\":3}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/contract-0.16-live-check-v1/part-c/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"notify\",\"roles\":{\"recipient\":{\"type\":\"group\",\"id\":\"on-call team\"}},\"conditions\":[{\"predicate\":\"above\",\"roles\":{\"subject\":{\"type\":\"metric\",\"id\":\"error count\"},\"value\":{\"type\":\"quantity\",\"value\":20"
+      },
+      {
+        "file": "experiments/frame-gaps-v1/live-v20/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"notify\",\"roles\":{\"recipient\":{\"type\":\"group\",\"value\":\"on-call team\"}},\"conditions\":[{\"predicate\":\"above\",\"roles\":{\"subject\":{\"type\":\"metric\",\"value\":\"error count\"},\"value\":{\"type\":\"quantity\",\"val"
+      }
+    ],
+    [
+      {
+        "file": "experiments/date-literal-retention-v1/before-after-v2-rerun.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"deadline\",\"roles\":{\"subject\":{\"type\":\"project\",\"id\":\"orion\"},\"time\":{\"type\":\"date\",\"value\":\"2026-11-30\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/gold-metadata-preflight-v1/date-literal-counterexample.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"project_state\",\"clauses\":[{\"predicate\":\"deadline\",\"roles\":{\"subject\":{\"type\":\"project\",\"id\":\"Orion\"},\"time\":{\"type\":\"date\",\"value\":\"2026-11-30\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"traveler\"},\"theme\":{\"type\":\"concept\",\"id\":\"green_tea\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-agent-large-20260907/corpus.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"traveler\"},\"theme\":{\"type\":\"object\",\"id\":\"green_tea\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"receive\",\"roles\":{\"recipient\":{\"type\":\"entity\",\"id\":\"depot\"},\"theme\":{\"type\":\"object\",\"id\":\"ceramic_sample\"},\"source\":{\"type\":\"actor\",\"id\":\"courier\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-agent-large-20260907/corpus.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"receive\",\"roles\":{\"recipient\":{\"type\":\"entity\",\"id\":\"depot\"},\"theme\":{\"type\":\"object\",\"id\":\"ceramic_sample\"},\"source\":{\"type\":\"actor\",\"id\":\"courier\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"analyst\"},\"object\":{\"type\":\"document\",\"id\":\"report\"},\"recipient\":{\"type\":\"actor\",\"id\":\"editor\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-agent-large-20260907/corpus.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"analyst\"},\"object\":{\"type\":\"document\",\"id\":\"report\"},\"recipient\":{\"type\":\"actor\",\"id\":\"editor\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"request\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"analyst\"},\"theme\":{\"type\":\"concept\",\"id\":\"review\"},\"recipient\":{\"type\":\"actor\",\"id\":\"editor\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-grounding-ladder-20260906/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"request\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"analyst\"},\"theme\":{\"type\":\"document\",\"id\":\"review\"},\"recipient\":{\"type\":\"actor\",\"id\":\"editor\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"cleanup_worker\"},\"theme\":{\"type\":\"resource\",\"id\":\"expired_cache\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-grounding-ladder-20260906/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"cleanup_worker\"},\"theme\":{\"type\":\"resource\",\"id\":\"expired_cache\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"deploy\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"release_bot\"},\"destination\":{\"type\":\"environment\",\"id\":\"staging\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-agent-large-20260907/corpus.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"deploy\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"release_bot\"},\"destination\":{\"type\":\"environment\",\"id\":\"staging\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/protected-eval/fresh-v2-20260905/corpus.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"deploy\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"release_bot\"},\"destination\":{\"type\":\"environment\",\"id\":\"staging\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"copy\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"build_agent\"},\"source\":{\"type\":\"location\",\"id\":\"archive\"},\"destination\":{\"type\":\"location\",\"id\":\"workspace\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-grounding-ladder-20260906/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"copy\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"build_agent\"},\"source\":{\"type\":\"resource\",\"id\":\"archive\"},\"destination\":{\"type\":\"environment\",\"id\":\"workspace\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"deadline\",\"roles\":{\"subject\":{\"type\":\"release\",\"id\":\"atlas_launch\"},\"time\":{\"type\":\"date\",\"value\":\"2027-03-18\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-agent-large-20260907/corpus.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"project_state\",\"clauses\":[{\"predicate\":\"deadline\",\"roles\":{\"subject\":{\"type\":\"project\",\"id\":\"atlas_launch\"},\"time\":{\"type\":\"date\",\"value\":\"2027-03-18\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-grounding-ladder-20260906/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"deadline\",\"roles\":{\"subject\":{\"type\":\"project\",\"id\":\"atlas_launch\"},\"time\":{\"type\":\"date\",\"value\":\"2027-03-18\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"request\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"analyst\"},\"theme\":{\"type\":\"concept\",\"id\":\"review\"},\"recipient\":{\"type\":\"actor\",\"id\":\"curator\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-grounding-ladder-20260906/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"request\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"analyst\"},\"theme\":{\"type\":\"document\",\"id\":\"review\"},\"recipient\":{\"type\":\"actor\",\"id\":\"curator\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"deadline\",\"roles\":{\"subject\":{\"type\":\"release\",\"id\":\"atlas_launch\"},\"time\":{\"type\":\"date\",\"value\":\"2027-03-19\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-agent-large-20260907/corpus.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"project_state\",\"clauses\":[{\"predicate\":\"deadline\",\"roles\":{\"subject\":{\"type\":\"project\",\"id\":\"atlas_launch\"},\"time\":{\"type\":\"date\",\"value\":\"2027-03-19\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-grounding-ladder-20260906/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"deadline\",\"roles\":{\"subject\":{\"type\":\"project\",\"id\":\"atlas_launch\"},\"time\":{\"type\":\"date\",\"value\":\"2027-03-19\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/development-agent-large-20260907/candidate-ledger.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"receive\",\"roles\":{\"recipient\":{\"type\":\"entity\",\"id\":\"depot\"},\"theme\":{\"type\":\"object\",\"id\":\"glass_sample\"},\"source\":{\"type\":\"actor\",\"id\":\"courier\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/development-agent-large-20260907/corpus.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"receive\",\"roles\":{\"recipient\":{\"type\":\"entity\",\"id\":\"depot\"},\"theme\":{\"type\":\"object\",\"id\":\"glass_sample\"},\"source\":{\"type\":\"actor\",\"id\":\"courier\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"instruction\",\"clauses\":[{\"predicate\":\"share\",\"negated\":true,\"modality\":\"obligation\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"contractors\"},\"theme\":{\"type\":\"object\",\"id\":\"customer_phone_numbers\"}}}]}"
+      },
+      {
+        "file": "experiments/meaning-targets-owner-v1/meaning-report.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"share\",\"negated\":true,\"modality\":\"obligation\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Contractors\"},\"theme\":{\"type\":\"object\",\"id\":\"customer phone numbers\"}}}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"command\",\"clauses\":[{\"predicate\":\"archive\",\"roles\":{\"theme\":{\"type\":\"collection\",\"value\":\"tickets older than 90 days\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/meaning-targets-owner-v1/meaning-report.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"instruction\",\"clauses\":[{\"predicate\":\"archive\",\"roles\":{\"theme\":{\"type\":\"collection\",\"value\":\"tickets older than 90 days\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"security_team\"},\"recipient\":{\"type\":\"actor\",\"id\":\"lena\"},\"action\":\"revoke\",\"theme\":{\"type\":\"credential\",\"value\":\"expired tokens\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/meaning-targets-owner-v1/meaning-report.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"entity\",\"id\":\"security_team\"},\"recipient\":{\"type\":\"actor\",\"id\":\"lena\"},\"action\":\"revoke\",\"theme\":{\"type\":\"credential\",\"value\":\"expired tokens\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/meaning-scoring-recorded-v1/targets.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"instruction\",\"clauses\":[{\"predicate\":\"approve\",\"negated\":true,\"modality\":\"obligation\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"interns\"},\"theme\":{\"type\":\"document\",\"id\":\"purchase_orders\"}}}]}"
+      },
+      {
+        "file": "experiments/meaning-targets-owner-v1/meaning-report.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"approve\",\"negated\":true,\"modality\":\"obligation\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"interns\"},\"theme\":{\"type\":\"document\",\"id\":\"purchase orders\"}}}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/meaning-targets-owner-v1/meaning-report.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"command\",\"clauses\":[{\"predicate\":\"restart\",\"roles\":{\"theme\":{\"type\":\"system\",\"id\":\"mail_server\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/meaning-targets-owner-v1/meaning-report.json",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"command\",\"clauses\":[{\"predicate\":\"restart\",\"roles\":{\"theme\":{\"type\":\"system\",\"value\":\"mail server\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-initial.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"value\":\"Ari\"},\"object\":{\"type\":\"object\",\"value\":\"P-41\"},\"recipient\":{\"type\":\"actor\",\"value\":\"C-41\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-initial.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"value\":\"Ari\"},\"object\":{\"type\":\"document\",\"value\":\"P-41\"},\"recipient\":{\"type\":\"actor\",\"value\":\"C-41\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-iteration2.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Ari\"},\"object\":{\"type\":\"object\",\"id\":\"P-41\"},\"recipient\":{\"type\":\"actor\",\"id\":\"C-41\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-iteration2.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Ari\"},\"object\":{\"type\":\"document\",\"id\":\"P-41\"},\"recipient\":{\"type\":\"actor\",\"id\":\"C-41\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/natural-development-v8/extraction/candidate-ledger-iteration1.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Ari\"},\"object\":{\"type\":\"document\",\"id\":\"P-41\"},\"recipient\":{\"type\":\"actor\",\"id\":\"C-41\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-initial.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"publish\",\"roles\":{\"agent\":{\"type\":\"actor\",\"value\":\"E-61\"},\"theme\":{\"type\":\"document\",\"value\":\"R-61\"},\"audience\":{\"type\":\"audience\",\"value\":\"A-61\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-iteration2.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"publish\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"E-61\"},\"theme\":{\"type\":\"document\",\"id\":\"R-61\"},\"audience\":{\"type\":\"audience\",\"id\":\"A-61\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/natural-development-v8/extraction/candidate-ledger-iteration1.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"publish\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"E-61\"},\"theme\":{\"type\":\"document\",\"id\":\"R-61\"},\"audience\":{\"type\":\"audience\",\"id\":\"A-61\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-initial.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"publish\",\"roles\":{\"agent\":{\"type\":\"actor\",\"value\":\"E-62\"},\"theme\":{\"type\":\"document\",\"value\":\"R-62\"},\"audience\":{\"type\":\"audience\",\"value\":\"A-62\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-iteration2.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"publish\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"E-62\"},\"theme\":{\"type\":\"document\",\"id\":\"R-62\"},\"audience\":{\"type\":\"audience\",\"id\":\"A-62\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "experiments/natural-development-v8/extraction/candidate-ledger-iteration1.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"publish\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"E-62\"},\"theme\":{\"type\":\"document\",\"id\":\"R-62\"},\"audience\":{\"type\":\"audience\",\"id\":\"A-62\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-iteration2.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Rhea\"},\"count\":{\"type\":\"quantity\",\"value\":7,\"unit\":\"times\"},\"theme\":{\"type\":\"task\",\"id\":\"U-31\"}},\"negated\":false,\"time\":{\"type\":\"date\",\"value\":\"2027-01-14\"}}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v3/candidate-ledger-initial.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Rhea\"},\"theme\":{\"type\":\"entity\",\"id\":\"U-31\"},\"count\":{\"type\":\"quantity\",\"value\":7,\"unit\":\"times\"}},\"time\":{\"type\":\"date\",\"value\":\"2027-01-14\"},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Rhea\"},\"theme\":{\"type\":\"identifier\",\"id\":\"U-31\"},\"count\":{\"type\":\"quantity\",\"value\":7,\"unit\":\"times\"}},\"time\":{\"type\":\"date\",\"value\":\"2027-01-14\"},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/frame-0.2/v8-rep3/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Rhea\"},\"theme\":{\"type\":\"object\",\"id\":\"U-31\"},\"count\":{\"type\":\"quantity\",\"value\":7,\"unit\":\"times\"}},\"time\":{\"type\":\"date\",\"value\":\"2027-01-14\"},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-iteration3.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"modality\":\"obligation\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-11\"},\"theme\":{\"type\":\"feature\",\"id\":\"F-11\"}},\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type\":\"metric\",\"id\":"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-15/client-run/codex-candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-11\"},\"theme\":{\"type\":\"feature\",\"id\":\"F-11\"}},\"negated\":false,\"modality\":\"obligation\",\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type"
+      }
+    ],
+    [
+      {
+        "file": "experiments/natural-development-v7/extraction/candidate-ledger-iteration3.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"modality\":\"permission\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-22\"},\"theme\":{\"type\":\"feature\",\"id\":\"F-22\"}},\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type\":\"metric\",\"id\":"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v3/candidate-ledger-initial.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-22\"},\"theme\":{\"type\":\"feature\",\"id\":\"F-22\"}},\"modality\":\"permission\",\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type\":\"metric\",\"id\":"
+      }
+    ],
+    [
+      {
+        "file": "experiments/natural-development-v8/extraction/candidate-ledger-iteration1.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Rhea\"},\"count\":{\"type\":\"quantity\",\"value\":7},\"theme\":{\"type\":\"task\",\"id\":\"U-31\"}},\"negated\":false,\"time\":{\"type\":\"date\",\"value\":\"2027-01-14\"}}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Rhea\"},\"theme\":{\"type\":\"identifier\",\"id\":\"U-31\"},\"count\":{\"type\":\"quantity\",\"value\":7}},\"time\":{\"type\":\"date\",\"value\":\"2027-01-14\"},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "protected-eval/stage3-superqwen-semantic-contract-20260901/corpus.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"assistant\"},\"object\":{\"type\":\"concept\",\"id\":\"audit_archive\"}},\"negated\":true}]}"
+      },
+      {
+        "file": "protected-eval/stage3-superqwen-semantic-contract-20260901/evidence/parse-full/2026-09-01T10-31-29-151Z/parse-results.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"instruction\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"assistant\"},\"object\":{\"type\":\"concept\",\"id\":\"audit_archive\"}},\"negated\":true}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-15/client-run/codex-candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-11\"},\"theme\":{\"type\":\"feature\",\"id\":\"F-11\"}},\"negated\":false,\"modality\":\"obligation\",\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-15/client-run-v2/codex-candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-11\"},\"theme\":{\"type\":\"feature\",\"id\":\"F-11\"}},\"negated\":false,\"modality\":\"obligation\",\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-15/client-run-v3/codex-candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-11\"},\"theme\":{\"type\":\"feature\",\"id\":\"F-11\"}},\"negated\":false,\"modality\":\"obligation\",\"conditions\":[{\"predicate\":\"below\",\"roles\":{\"subject\":{\"type"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-probes-v1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"deploy\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"B-5\"},\"destination\":{\"type\":\"environment\",\"id\":\"ENV-5\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"deploy\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"B-5\"},\"destination\":{\"type\":\"environment\",\"id\":\"ENV-5\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-probes-v1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Omar\"},\"recipient\":{\"type\":\"actor\",\"id\":\"Priya\"},\"theme\":{\"type\":\"concept\",\"value\":\"see\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Omar\"},\"recipient\":{\"type\":\"actor\",\"id\":\"Priya\"},\"theme\":{\"type\":\"event\",\"value\":\"see\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-probes-v1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-40\"},\"object\":{\"type\":\"document\",\"id\":\"A-40\"},\"recipient\":{\"type\":\"actor\",\"id\":\"O-40\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/probes-v1-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-40\"},\"object\":{\"type\":\"event\",\"id\":\"A-40\"},\"recipient\":{\"type\":\"actor\",\"id\":\"O-40\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/frame-0.2/probes-v1-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-40\"},\"object\":{\"type\":\"signal\",\"id\":\"A-40\"},\"recipient\":{\"type\":\"actor\",\"id\":\"O-40\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/frame-0.2/probes-v1-rep3/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"S-40\"},\"object\":{\"type\":\"object\",\"id\":\"A-40\"},\"recipient\":{\"type\":\"actor\",\"id\":\"O-40\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-probes-v1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Omar\"},\"recipient\":{\"type\":\"actor\",\"id\":\"Priya\"},\"theme\":{\"type\":\"task\",\"value\":\"view\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Omar\"},\"recipient\":{\"type\":\"actor\",\"id\":\"Priya\"},\"theme\":{\"type\":\"event\",\"value\":\"view\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"disable\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"A-3\"},\"theme\":{\"type\":\"access\",\"id\":\"AC-3\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"disable\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"A-3\"},\"theme\":{\"type\":\"credential\",\"id\":\"AC-3\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/probes-v2-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"disable\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"A-3\"},\"theme\":{\"type\":\"identifier\",\"id\":\"AC-3\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/frame-0.2/probes-v2-rep2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"disable\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"A-3\"},\"theme\":{\"type\":\"entity\",\"id\":\"AC-3\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/frame-0.2/probes-v2-rep2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"disable\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"A-3\"},\"theme\":{\"type\":\"resource\",\"id\":\"AC-3\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"receive\",\"roles\":{\"recipient\":{\"type\":\"entity\",\"id\":\"W-6\"},\"theme\":{\"type\":\"object\",\"id\":\"SH-6\"},\"source\":{\"type\":\"entity\",\"id\":\"SP-6\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/probes-v2-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"receive\",\"roles\":{\"recipient\":{\"type\":\"entity\",\"id\":\"W-6\"},\"theme\":{\"type\":\"object\",\"id\":\"SH-6\"},\"source\":{\"type\":\"actor\",\"id\":\"SP-6\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/frame-0.2/probes-v2-rep2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"receive\",\"roles\":{\"recipient\":{\"type\":\"system\",\"id\":\"W-6\"},\"theme\":{\"type\":\"object\",\"id\":\"SH-6\"},\"source\":{\"type\":\"actor\",\"id\":\"SP-6\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/claude-code-v5-probes-v2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"request\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"C-4\"},\"theme\":{\"type\":\"object\",\"id\":\"R-4\"},\"recipient\":{\"type\":\"actor\",\"id\":\"S-4\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/probes-v2-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"request\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"C-4\"},\"theme\":{\"type\":\"transaction\",\"id\":\"R-4\"},\"recipient\":{\"type\":\"actor\",\"id\":\"S-4\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/probes-v2-rep2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"request\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"C-4\"},\"theme\":{\"type\":\"resource\",\"id\":\"R-4\"},\"recipient\":{\"type\":\"actor\",\"id\":\"S-4\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/frame-0.2/probes-v2-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"request\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"C-4\"},\"theme\":{\"type\":\"document\",\"id\":\"R-4\"},\"recipient\":{\"type\":\"actor\",\"id\":\"S-4\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/probes-v3-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"M-8\"},\"recipient\":{\"type\":\"actor\",\"id\":\"Irene\"},\"action\":\"read\",\"theme\":{\"type\":\"document\",\"id\":\"L-8\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/probes-v3-rep2/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"allow\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"M-8\"},\"recipient\":{\"type\":\"actor\",\"id\":\"Irene\"},\"action\":\"read\",\"theme\":{\"type\":\"document\",\"id\":\"L-8\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.8/v8-rep3/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Rhea\"},\"count\":{\"type\":\"quantity\",\"value\":7,\"unit\":\"attempts\"},\"theme\":{\"type\":\"task\",\"id\":\"U-31\"}},\"time\":{\"type\":\"date\",\"value\":\"2027-01-14\"},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/diagnostic/2026-09-26/contract-0.9/v8-rep1/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"retry\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"Rhea\"},\"count\":{\"type\":\"quantity\",\"value\":7,\"unit\":\"attempts\"},\"theme\":{\"type\":\"object\",\"id\":\"U-31\"}},\"time\":{\"type\":\"date\",\"value\":\"2027-01-14\"},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/parse-results-el.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"assistant\"},\"object\":{\"type\":\"object\",\"id\":\"files\"}},\"negated\":true,\"conditions\":[{\"predicate\":\"confirm\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"user\"}},\"n"
+      },
+      {
+        "file": "reports/experiments/multilingual-parse-qwen36-35b/2026-07-21T09-02-50-023Z/parse-results-el.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"assistant\"},\"object\":{\"type\":\"concept\",\"id\":\"files\"}},\"negated\":true,\"conditions\":[{\"predicate\":\"confirm\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"user\"}},\""
+      }
+    ],
+    [
+      {
+        "file": "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/parse-results-en.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"object\":{\"type\":\"concept\",\"id\":\"files\"}},\"negated\":true,\"conditions\":[{\"predicate\":\"confirm\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"user\"}},\"neg"
+      },
+      {
+        "file": "reports/experiments/audit-321/parse/qwen36-35b/2026-07-25T06-09-46-753Z/parse-results-id.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"conditional_instruction\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"object\":{\"type\":\"concept\",\"id\":\"files\"}},\"negated\":true,\"conditions\":[{\"predicate\":\"confirm\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"user\"}"
+      },
+      {
+        "file": "reports/experiments/multilingual-parse-qwen36-35b/2026-07-21T09-02-50-023Z/parse-results-en.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"safety_constraint\",\"clauses\":[{\"predicate\":\"delete\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"object\":{\"type\":\"object\",\"id\":\"files\"}},\"negated\":true,\"conditions\":[{\"predicate\":\"confirm\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"user\"}},\"nega"
+      }
+    ],
+    [
+      {
+        "file": "reports/experiments/codex-agent-protected-v2-20260906/items.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"instruction\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"system\",\"id\":\"system\"},\"object\":{\"type\":\"concept\",\"id\":\"invoice\"},\"destination\":{\"type\":\"concept\",\"id\":\"finance_desk\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/experiments/codex-agent-protected-v2-20260906/run-20260906.private/agent-results.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"instruction\",\"clauses\":[{\"predicate\":\"send\",\"roles\":{\"agent\":{\"type\":\"actor\",\"id\":\"system\"},\"object\":{\"type\":\"concept\",\"id\":\"invoice\"},\"destination\":{\"type\":\"entity\",\"id\":\"finance_desk\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/experiments/codex-agent-protected-v2-20260906/items.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"instruction\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"theme\":{\"type\":\"concept\",\"id\":\"safety_monitor\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/experiments/codex-agent-protected-v2-20260906/run-20260906.private/agent-results.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"command\",\"clauses\":[{\"predicate\":\"enable\",\"roles\":{\"theme\":{\"type\":\"concept\",\"id\":\"safety_monitor\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/experiments/codex-agent-protected-v2-20260906/items.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"before\",\"roles\":{\"subject\":{\"type\":\"concept\",\"id\":\"migration\"},\"object\":{\"type\":\"concept\",\"id\":\"backup\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/experiments/codex-agent-protected-v2-20260906/run-20260906.private/agent-results.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"simple_fact\",\"clauses\":[{\"predicate\":\"before\",\"roles\":{\"subject\":{\"type\":\"event\",\"id\":\"migration\"},\"object\":{\"type\":\"event\",\"id\":\"backup\"}},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/independent-evaluation/2026-10-16-clc-v1/r2e/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"speaker\"},\"theme\":{\"type\":\"concept\",\"value\":\"μιλήσω σε δικηγόρο\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/independent-evaluation/2026-10-16-clc-v1/s1e/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"preference\",\"clauses\":[{\"predicate\":\"prefer\",\"roles\":{\"experiencer\":{\"type\":\"actor\",\"id\":\"speaker\"},\"theme\":\"μιλήσω σε δικηγόρο\"},\"negated\":false}]}"
+      }
+    ],
+    [
+      {
+        "file": "reports/independent-evaluation/2026-10-16-clc-v1/r2e-rest/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"grant\",\"roles\":{\"agent\":{\"type\":\"entity\",\"id\":\"GDPR\"},\"recipient\":{\"type\":\"group\",\"id\":\"EU citizens\"},\"theme\":{\"type\":\"concept\",\"value\":\"more control over their own personal data\"}},\"negated\":false}]}"
+      },
+      {
+        "file": "reports/independent-evaluation/2026-10-16-clc-v1/s1e/candidate-ledger.jsonl",
+        "sem": "{\"schema\":\"lunum-sem/0.1-draft\",\"world\":\"real\",\"kind\":\"event\",\"clauses\":[{\"predicate\":\"grant\",\"roles\":{\"agent\":{\"type\":\"entity\",\"id\":\"GDPR\"},\"recipient\":{\"type\":\"group\",\"value\":\"EU citizens\"},\"theme\":\"more control over their own personal data\"},\"negated\":false}]}"
+      }
+    ]
+  ]
+}
