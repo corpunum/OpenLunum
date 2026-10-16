@@ -1,0 +1,12 @@
+[package]
+name = "pivot-miner"
+version = "0.1.0"
+edition = "2021"
+description = "Pivot-paraphrase mining over sentence-aligned EN/EL corpora (OpenLunum experiments/pivot-paraphrase-v1)"
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+
+[profile.release]
+opt-level = 3
