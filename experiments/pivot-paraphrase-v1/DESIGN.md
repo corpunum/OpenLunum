@@ -17,7 +17,7 @@ A std-only Rust program over OPUS Europarl v8 EL–EN (1,292,180 aligned pairs, 
    - `p(t|q)` = lines with both / lines with the query (how often the translation uses it);
    - `p(q|t)` = lines with both / lines with the candidate (how specific it is to the query);
    - log-likelihood ratio G² against independence (how surprising the co-occurrence is).
-3. **Paraphrase** (`el→en→el` or `en→el→en`): translate the query, take the top pivots, translate each back, and combine `p(t2|q) ≈ Σ_pivot p(t2|pivot) · p(pivot|q)`. The query itself is reported, not dropped, as a sanity check.
+3. **Paraphrase** (`el→en→el` or `en→el→en`): translate the query, keep the top pivots specific to it (`p(q|pivot) ≥ 0.05`), translate each back, and rank by `Σ_pivot w(pivot) · p(t2|pivot) · p(pivot|t2)` with `w ∝ p(pivot|q) · p(q|pivot)`. A ranking score, not a probability (amended 2026-10-16 after the first runs drowned in function words). The pivots are reported; fragments of the query itself are listed apart; candidates made only of very frequent words are dropped.
 4. **Round trip:** for each candidate, translate it back and report the rank at which the original query returns.
 
 Output is JSON lines: phrases, counts, scores and up to three line numbers per candidate as evidence. Line numbers point into the hashed corpus, so anyone with the same OPUS file can check them. Short phrases and counts are published; whole sentences are not.

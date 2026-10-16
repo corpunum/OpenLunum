@@ -1,0 +1,36 @@
+{
+ "status": "exploratory, self-reviewed",
+ "corpus": "OPUS Europarl v8 el-en",
+ "corpusArgs": [],
+ "g2Threshold": 10.83,
+ "modelsFailedToParse": [
+  "qwen:s11",
+  "qwen:s12",
+  "qwen:s13",
+  "qwen:s14",
+  "gemma:s02"
+ ],
+ "summary": {
+  "seed": {
+   "proposals": 20,
+   "attested-exact": 13,
+   "attested-stem": 3,
+   "weak": 0,
+   "not-attested": 4
+  },
+  "qwen": {
+   "proposals": 384,
+   "attested-exact": 111,
+   "attested-stem": 93,
+   "weak": 15,
+   "not-attested": 165
+  },
+  "gemma": {
+   "proposals": 456,
+   "attested-exact": 149,
+   "attested-stem": 119,
+   "weak": 21,
+   "not-attested": 167
+  }
+ }
+}

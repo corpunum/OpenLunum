@@ -1,0 +1,39 @@
+{
+ "status": "exploratory, self-reviewed",
+ "corpus": "OPUS TED2020 v1 el-en",
+ "corpusArgs": [
+  "--prefix",
+  "TED2020.el-en"
+ ],
+ "g2Threshold": 10.83,
+ "modelsFailedToParse": [
+  "qwen:s11",
+  "qwen:s12",
+  "qwen:s13",
+  "qwen:s14",
+  "gemma:s02"
+ ],
+ "summary": {
+  "seed": {
+   "proposals": 20,
+   "attested-exact": 9,
+   "attested-stem": 6,
+   "weak": 0,
+   "not-attested": 5
+  },
+  "qwen": {
+   "proposals": 384,
+   "attested-exact": 64,
+   "attested-stem": 56,
+   "weak": 11,
+   "not-attested": 253
+  },
+  "gemma": {
+   "proposals": 456,
+   "attested-exact": 65,
+   "attested-stem": 85,
+   "weak": 15,
+   "not-attested": 291
+  }
+ }
+}

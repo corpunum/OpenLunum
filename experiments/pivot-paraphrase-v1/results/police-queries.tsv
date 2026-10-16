@@ -1,0 +1,13 @@
+translate	en	call the police
+translate	en	called the police
+paraphrase	en	call the police
+paraphrase	el	κάλεσε την αστυνομία
+paraphrase	el	τηλεφώνησε στην αστυνομία
+paraphrase	el	πάρε την αστυνομία
+translate	el	πάρε το 100
+translate	el	πήρε το 100
+pair	call the police	πάρε το 100
+pair	call the police	πάρε την αστυνομία
+pair	called the police	κάλεσε την αστυνομία
+pair	called the police	τηλεφώνησε στην αστυνομία
+pair	called the police	πήρε την αστυνομία

@@ -1,0 +1,41 @@
+{
+ "status": "exploratory, self-reviewed",
+ "corpus": "OPUS OpenSubtitles v2018 el-en, first 10,000,000 pairs",
+ "corpusArgs": [
+  "--prefix",
+  "OpenSubtitles.el-en",
+  "--max-lines",
+  "10000000"
+ ],
+ "g2Threshold": 10.83,
+ "modelsFailedToParse": [
+  "qwen:s11",
+  "qwen:s12",
+  "qwen:s13",
+  "qwen:s14",
+  "gemma:s02"
+ ],
+ "summary": {
+  "seed": {
+   "proposals": 20,
+   "attested-exact": 15,
+   "attested-stem": 3,
+   "weak": 0,
+   "not-attested": 2
+  },
+  "qwen": {
+   "proposals": 384,
+   "attested-exact": 98,
+   "attested-stem": 76,
+   "weak": 14,
+   "not-attested": 196
+  },
+  "gemma": {
+   "proposals": 456,
+   "attested-exact": 132,
+   "attested-stem": 82,
+   "weak": 16,
+   "not-attested": 226
+  }
+ }
+}
