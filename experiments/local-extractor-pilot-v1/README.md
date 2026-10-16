@@ -32,3 +32,4 @@ The owner withdrew Halogen/Qwen for these runs (2026-10-16) and asked for **Luna
 - `codex exec --json` does not report the served model, so the model is recorded as requested only.
 - Quota, not dollars: a probe call used about 47k input tokens before any extraction work.
 - Items: the first **2** requests of clc-v1 S2 (one EN/EL pair, already published). Purpose: does the loop work, time and tokens per item. No claim.
+- **Pilot 3, attempt 1 (19:5x UTC) was invalid by a harness bug**, not by the model: Codex reports configuration warnings as `error` items, and the runner counted them as disallowed tool use. Fixed (warnings are recorded as client diagnostics; a dead config flag removed), with a test. The same 2 items are rerun as attempt 2; attempt 1's outputs are kept and published with the results.

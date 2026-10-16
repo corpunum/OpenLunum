@@ -29,3 +29,9 @@ test('the CLI switches off shell, web search and the user\'s other MCP servers, 
   for (const s of ['--disable shell_tool', 'web_search="disabled"', 'mcp_servers.unumsearch.enabled=false', '-s read-only', '--ephemeral']) assert.ok(a.includes(s), s);
   assert.match(a, /enabled_tools=\["lunum_get_extraction_contract","lunum_build_candidate","lunum_submit_candidate","lunum_validate"\]/u);
 });
+
+test('client warning items are diagnostics, not tool calls (pilot 3 harness bug)', () => {
+  const out = fromEvents([ev({ type: 'error', message: 'Codex is ignoring 1 unrecognized configuration setting.' }), ev({ type: 'agent_message', text: '{"status":"parse"}' })]);
+  assert.equal(out.calls.length, 0);
+  assert.equal(out.diagnostics.length, 1);
+});

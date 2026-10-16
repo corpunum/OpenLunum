@@ -5,8 +5,9 @@
 //
 // Isolation, stated so results are not over-read:
 //   - a fresh `codex exec --ephemeral` per item in an empty temp directory, read-only sandbox;
-//   - shell, web search, browser, computer use, apps, plugins, goals, image tools, apply_patch and the
-//     user's other MCP servers (unumsearch) are switched off; only the four Lunum tools are enabled;
+//   - shell, web search, browser, computer use, apps, plugins, goals, image tools and the
+//     user's other MCP servers (unumsearch) are switched off; only the four Lunum tools are enabled
+//     (apply_patch cannot be switched off in codex 0.160; the read-only sandbox refuses its writes);
 //   - Codex still offers a few harmless built-ins (e.g. a clock, MCP resource listing); ANY recorded
 //     call that is not one of the four Lunum tools makes the item invalid (DISALLOWED_TOOL);
 //   - `codex exec --json` does not report the served model: the requested model id is recorded and the
@@ -30,7 +31,7 @@ const DISABLED = ['shell_tool', 'browser_use', 'computer_use', 'apps', 'skill_se
 export function codexArgs({ model, effort, launcher }) {
   return ['exec', '-m', model, '-c', `model_reasoning_effort=${effort}`, '--skip-git-repo-check', '--ephemeral', '--json', '-s', 'read-only',
     ...DISABLED.flatMap((f) => ['--disable', f]),
-    '-c', 'web_search="disabled"', '-c', 'include_apply_patch_tool=false', '-c', 'mcp_servers.unumsearch.enabled=false',
+    '-c', 'web_search="disabled"', '-c', 'mcp_servers.unumsearch.enabled=false',
     '-c', 'mcp_servers.lunum.command="node"', '-c', `mcp_servers.lunum.args=[${JSON.stringify(launcher)}]`,
     '-c', 'mcp_servers.lunum.env={LUNUM_MCP_SKIP_BUILD="1",LUNUM_COMPACTION="off",LUNUM_MULTILINGUAL="on",LUNUM_CONTEXT_MODE="mixed"}',
     '-c', `mcp_servers.lunum.enabled_tools=${JSON.stringify(TOOLS)}`,
@@ -39,7 +40,7 @@ export function codexArgs({ model, effort, launcher }) {
 
 /** Calls and final text from `codex exec --json` events. Any non-Lunum tool item is kept under its own name. */
 export function fromEvents(lines) {
-  const calls = []; let finalText = ''; const usage = []; let malformed = 0;
+  const calls = []; let finalText = ''; const usage = []; const diagnostics = []; let malformed = 0;
   for (const line of lines) {
     let e; try { e = JSON.parse(line); } catch { malformed += 1; continue; }
     if (e.type === 'turn.completed') usage.push(e.usage ?? null);
@@ -47,6 +48,7 @@ export function fromEvents(lines) {
     const it = e.item ?? {};
     if (it.type === 'agent_message') { finalText = it.text ?? ''; continue; }
     if (it.type === 'reasoning') continue;
+    if (it.type === 'error') { diagnostics.push(String(it.message ?? '').slice(0, 300)); continue; } // client warnings, not tool use
     if (it.type === 'mcp_tool_call') {
       let input = null; try { input = typeof it.arguments === 'string' ? JSON.parse(it.arguments) : it.arguments; } catch { input = null; }
       const text = it.result?.content?.find?.((p) => p.type === 'text')?.text;
@@ -56,7 +58,7 @@ export function fromEvents(lines) {
     }
     calls.push({ name: `codex:${it.type}`, input: null, result: null, isError: true }); // shell, web search, patch, ...
   }
-  return { calls, finalText, usage, malformed };
+  return { calls, finalText, usage, diagnostics, malformed };
 }
 
 async function main(args) {
@@ -105,7 +107,7 @@ async function main(args) {
     else if (r.status !== 0) failure = /usage limit|rate limit|quota/iu.test(r.stderr ?? '') ? 'QUOTA_EXHAUSTED' : 'PROCESS_ERROR';
     else if (ev.malformed) failure = 'INVALID_PROVIDER_EVENT_STREAM';
     const row = { ...classify({ request, calls: ev.calls, finalText: ev.finalText, failure, pkg, model, reportedModels: [model] }),
-      modelVerification: 'requested-only', usage: ev.usage, seconds: Math.round((Date.now() - t0) / 1000), rawStream: `raw/${request.handle}.jsonl`, rawStreamSha256: sha256(stdout) };
+      modelVerification: 'requested-only', clientDiagnostics: ev.diagnostics, usage: ev.usage, seconds: Math.round((Date.now() - t0) / 1000), rawStream: `raw/${request.handle}.jsonl`, rawStreamSha256: sha256(stdout) };
     fs.writeFileSync(path.join(outDir, row.rawStream), stdout, { flag: 'wx' });
     fs.appendFileSync(ledgerPath, JSON.stringify(row) + '\n');
     console.log(JSON.stringify({ handle: row.handle, status: row.status, valid: row.evidenceValid, failures: row.evidenceFailures, seconds: row.seconds }));
