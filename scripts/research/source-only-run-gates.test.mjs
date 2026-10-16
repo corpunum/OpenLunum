@@ -385,6 +385,10 @@ test('event integrity rejects swapped source/language, unmatched calls, early ex
   assert.equal(checkSessionIntegrity([...events, events[4]], request).match, false);
   assert.equal(checkSessionIntegrity([events[0], events[3], events[4], events[1], events[2], events[5]], request).match, false);
   assert.equal(checkSessionIntegrity([...events, events[5]], request).match, false);
+  // A content-free client system event after the result is allowed (Claude Code 2.1.30x task_summary);
+  // a system event with message content after the result is not.
+  assert.equal(checkSessionIntegrity([...events, { type: 'system', subtype: 'task_summary', session_id: 's' }], request).match, true);
+  assert.equal(checkSessionIntegrity([...events, { type: 'system', subtype: 'task_summary', message: { content: [] } }], request).match, false);
   assert.equal(checkSessionIntegrity([...events, events[1], events[2]], request).match, false);
   const badPayload = structuredClone(events); badPayload[4] = response('s', { success: true });
   assert.equal(checkSessionIntegrity(badPayload, request).match, false);

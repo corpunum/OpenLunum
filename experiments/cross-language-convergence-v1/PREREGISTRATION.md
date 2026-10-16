@@ -143,3 +143,16 @@ The run uses v23. Unchanged:
 - the bars.
 
 The stopped runs are kept as evidence and are not scored. The scored runs are `s1v`, `s2v`, `s3v` and `r2v`.
+
+## Amendment 4 (2026-10-16): the client emits an event after its result
+
+**What happened:**
+- `s1v` stopped after 6 items, costing $1.14. On item 6, Claude Code 2.1.301 emitted a `system`/`task_summary` event after the terminal `result`.
+- The session-integrity gate fails any event after the result (`EVENT_AFTER_TERMINAL_RESULT`), so the run halted.
+- `s2v` was then stopped by hand after 1 item.
+
+**Fix:** the gate now allows only **content-free** `system` events after the result: no `message` and no tool payload. A system event carrying message content after the result still fails, and so does any other event. Tests cover both cases.
+
+**Unchanged:** the package, the contract, the sentences and the bars.
+
+The stopped runs are kept and not scored. The scored runs are `s1c`, `s2c`, `s3c` and `r2c`.

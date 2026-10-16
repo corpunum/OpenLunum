@@ -195,7 +195,9 @@ export function checkSessionIntegrity(events, request) {
   const allowed = new Set(['lunum_get_extraction_contract', 'lunum_build_candidate', 'lunum_submit_candidate', 'lunum_validate'].map(name => `mcp__lunum__${name}`));
   for (const event of events) {
     if (!event || typeof event !== 'object' || Array.isArray(event) || typeof event.type !== 'string' || event.type === 'invalid_provider_json') { failures.push('MALFORMED_PROVIDER_EVENT'); continue; }
-    if (terminal) failures.push('EVENT_AFTER_TERMINAL_RESULT');
+    // Claude Code 2.1.30x emits content-free system events (e.g. task_summary) after
+    // the result. Anything carrying a message, tool block or second result still fails.
+    if (terminal && !(event.type === 'system' && event.message === undefined && !event.tool_use_result)) failures.push('EVENT_AFTER_TERMINAL_RESULT');
     if (event.type === 'system' && event.subtype === 'init') init += 1;
     if (event.type === 'result') { result += 1; terminal = true; }
     if (event.message?.content !== undefined && !Array.isArray(event.message.content)) { failures.push('MALFORMED_MESSAGE_CONTENT'); continue; }

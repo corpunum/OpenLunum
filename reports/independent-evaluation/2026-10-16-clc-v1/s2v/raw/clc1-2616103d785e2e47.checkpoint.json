@@ -1,0 +1,65 @@
+{
+  "handle": "clc1-2616103d785e2e47",
+  "sourceLanguage": "en",
+  "exitCode": 143,
+  "failure": "no_result_event",
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": false,
+    "mismatches": [
+      "INIT_OR_RESULT_EVENT_COUNT"
+    ]
+  },
+  "status": null,
+  "declared": null,
+  "submissionAttempts": [],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    }
+  ],
+  "usage": null,
+  "costUsd": null,
+  "numTurns": null,
+  "abstentionSubmitted": false,
+  "lastSubmission": null,
+  "rawStream": "raw/clc1-2616103d785e2e47.jsonl",
+  "rawStreamSha256": "f684e0b6dbebc461d9207dcfe38de7404ab7855da20528fa65652798a2a1eccf",
+  "timedOut": false,
+  "interrupted": true,
+  "signal": null,
+  "evidenceFailures": [
+    "INTERRUPTED",
+    "no_result_event",
+    "PROCESS_ERROR",
+    "EVENT_OR_SOURCE_UNBOUND",
+    "MODEL_UNVERIFIED",
+    "COST_UNKNOWN",
+    "OUTCOME_MISSING"
+  ],
+  "evidenceValid": false
+}
