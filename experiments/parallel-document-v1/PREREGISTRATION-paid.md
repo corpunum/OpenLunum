@@ -101,3 +101,18 @@ Neither shares a vendor with the extractor (Alibaba) or with this session's auth
 
 ### Prediction update
 In the pilot, 2 of Qwen's 3 parses were sentence copies. I expect few Greek sentences to be covered after copies are excluded, so **Stage 0 is likely to stop the run** ("not evaluable"). That outcome is published like any other.
+
+## Amendment 2 (2026-10-16, before any call on these passages): owner withdrew Halogen/Qwen; SuperGemma and Luna
+
+Supersedes amendment 1's extractor and judges. The owner (2026-10-16): do not use Qwen/Halogen; use **Luna (low)** and **SuperGemma on the ROG Ally**. The Qwen Stage 0 run was stopped before its first item finished: no ledger row, nothing scored.
+
+| Role | Model | Runner | Items |
+|---|---|---|---|
+| **Extractor 1 (main)** | `supergemma4-Q5_K_M` on the Ally, temporary dedicated llama.cpp server at 64k context (`lunum-supergemma-64k`), temperature 0, through an SSH tunnel | [`run-openai-compatible-source-only.mjs`](../../scripts/research/run-openai-compatible-source-only.mjs) | Stage 0, then Stage 1 on a go |
+| **Extractor 2 (comparison)** | `gpt-6-luna`, effort low | [`run-codex-source-only.mjs`](../../scripts/research/run-codex-source-only.mjs) | **Stage 0 only** (32 items): ChatGPT quota, about 90k input tokens per item |
+| **Judge (level b)** | `gpt-6-luna`, effort low, through `codex exec` | [`judge.mjs`](judge.mjs) `--judge luna` | the main extractor's records |
+
+- SuperGemma is no longer a judge: it is the extractor whose records are judged. There is **one** judge; its validity rests on the owner's 20 spot-check pairs (≥ 80% agreement), as before.
+- Luna judges records it did not extract. Luna's own Stage 0 records are scored at levels (a) and (c) only, and reported next to SuperGemma's.
+- Stage 0 go/no-go applies to the main extractor (SuperGemma): at least 4 of 16 Greek sentences covered and at most 8 minutes per item.
+- Pilot evidence (harness only, [local-extractor-pilot-v1](../local-extractor-pilot-v1/RESULTS.md)): SuperGemma about 1.5 to 5 minutes per item, malformed arguments on one item, 0 identities on 3 items; Luna 6 to 11 seconds per item, 2 valid abstentions. **I now expect Stage 0 to stop the run.**

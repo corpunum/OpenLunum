@@ -67,3 +67,11 @@ The runner reserves every item's ceiling against the approved total before launc
 - **Scope of a pass:** it qualifies the projection **for this extractor**. ADR 0027 was designed on Claude outputs; a Claude run would still be needed before claiming it in general, and needs a budget.
 - **Open item 2 (general-frame filter):** not answered yet. The sample is used unfiltered, as proposed, and results carry that caveat.
 - **Prediction unchanged:** bar 1 more likely to fail than pass. New risk: Qwen produces many sentence copies (2 of 3 in the pilot), so "not evaluable" is now the most likely single outcome.
+
+## Amendment 2 (2026-10-16, before any call on these sentences): SuperGemma, conditional on coverage
+
+Supersedes amendment 1's extractor. The owner withdrew Halogen/Qwen and asked for Luna (low) and SuperGemma on the ROG Ally; Luna's quota rules out 240 extractions.
+
+- **Extractor:** `supergemma4-Q5_K_M` on the Ally (temporary 64k server, temperature 0) through [`run-openai-compatible-source-only.mjs`](../../scripts/research/run-openai-compatible-source-only.mjs); the first 120 requests, two runs, as in amendment 1.
+- **Feasibility rule, new, fixed now:** the two runs (about 8 to 20 hours of the Ally) start **only if** SuperGemma covers **at least 5 of the 16 English sentences** of parallel-document Stage 0 (non-copy, with an identity). That is a different, already pre-registered set; this gate's sentences stay unseen. Below that rate, 120 sentences cannot give 20 non-copy pairs covered twice, and the gate is recorded as **"not run: extractor coverage too low"**, which is published.
+- Everything else in amendment 1 stands (bars, copy exclusion, scope: a pass qualifies the projection for this extractor only).
