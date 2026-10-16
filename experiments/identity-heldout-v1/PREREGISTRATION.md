@@ -1,8 +1,8 @@
-# Identity-projection held-out gate (ADR 0027): pre-registration (DRAFT, not yet binding)
+# Identity-projection held-out gate (ADR 0027): pre-registration (binding with amendment 1)
 
 **Drafted 2026-10-16. No model has seen these sentences. Self-reviewed.**
 
-**Status: draft.** It becomes binding when the owner approves the budget and answers the open items, and an amendment commit records them. Nothing is run before that commit. Frozen versions stay frozen ([ADR 0025](../../decisions/0025-contract-freeze-pending-held-out-evidence.md)); this run changes none of them.
+**Status: binding since amendment 1 (below), which replaces the paid extractor with a free one.** Originally: it would become binding when the owner approves the budget and answers the open items, and an amendment commit records them. Nothing is run before that commit. Frozen versions stay frozen ([ADR 0025](../../decisions/0025-contract-freeze-pending-held-out-evidence.md)); this run changes none of them.
 
 ## Question
 
@@ -55,3 +55,15 @@ The runner reserves every item's ceiling against the approved total before launc
 1. **Budget:** approve two runs of 160 with a $128 reservation each (expected spend about $45 in total), or choose a different size.
 2. **ADR 0027 says "English sentences that need no general frame".** Recorded Sem carries no general-frame marker, so this cannot be applied mechanically before the run. I propose the unfiltered sample (all English sentences of 4 to 20 words) and that results are reported with that caveat. Say if you want a different filter.
 3. **Merge review:** if bar 3 has merges, you judge them (a short list of sentence groups).
+
+## Amendment 1 (2026-10-16, committed before any model call on these sentences): free local extractor
+
+**This amendment makes the pre-registration binding.**
+
+- **Extractor:** `openai/qwen3.8-flash-next-uncensored-lean` (local Qwen 3.8 Flash on Halogen), temperature 0, through [`run-openai-compatible-source-only.mjs`](../../scripts/research/run-openai-compatible-source-only.mjs) (the Claude runner's prompt verbatim, package v23, item timeout 900 s). Cost $0. The pilots in "Procedure" are replaced by the harness pilot already done ([local-extractor-pilot-v1](../local-extractor-pilot-v1/RESULTS.md), on clc-v1 items, so no held-out item is spent).
+- **Size:** the **first 120** requests of `requests.jsonl` (fixed now), not 160. Reason: about 5 minutes per item on the shared server, so two runs take about 20 hours instead of 27. The evaluability risk rises; it is accepted and stated here.
+- **Runs:** run A, then run B, one after the other (the server is batch-1), each from a clean clone at the same commit.
+- **Sentence copies:** bar 1 is computed on sentences covered in both runs **where neither parse is a sentence copy** (at least 90% of the source in one filler; [`sentence-copy.mjs`](../../scripts/research/sentence-copy.mjs)). Such a filler is stable by construction and would pass the bar for free. Stability over all pairs and the copy counts are reported as well. The at-least-20 requirement applies to the non-copy pairs. [`score.mjs`](score.mjs) implements this; on the clc-v1 recordings it gives 7/11 non-copy (8/12 over all pairs).
+- **Scope of a pass:** it qualifies the projection **for this extractor**. ADR 0027 was designed on Claude outputs; a Claude run would still be needed before claiming it in general, and needs a budget.
+- **Open item 2 (general-frame filter):** not answered yet. The sample is used unfiltered, as proposed, and results carry that caveat.
+- **Prediction unchanged:** bar 1 more likely to fail than pass. New risk: Qwen produces many sentence copies (2 of 3 in the pilot), so "not evaluable" is now the most likely single outcome.

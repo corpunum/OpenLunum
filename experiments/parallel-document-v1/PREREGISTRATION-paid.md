@@ -1,8 +1,8 @@
-# Parallel documents v1, paid measures: pre-registration (DRAFT, not yet binding)
+# Parallel documents v1, live measures: pre-registration (binding with amendment 1)
 
 **Drafted 2026-10-16. No model has seen any of these passages. Self-reviewed.**
 
-**Status: draft.** It becomes binding when (1) the owner approves a budget for a stage, (2) the owner names the cross-vendor judge and supplies access (open items below), and (3) an amendment commit records both. Nothing is run before that commit. The free anchor measure is already done ([results](RESULTS-anchors.md)).
+**Status: binding since amendment 1 (below), which replaces the paid extractor with a free one.** Originally: it would become binding when (1) the owner approves a budget for a stage, (2) the owner names the cross-vendor judge and supplies access (open items below), and (3) an amendment commit records both. Nothing is run before that commit. The free anchor measure is already done ([results](RESULTS-anchors.md)).
 
 ## Questions
 
@@ -66,3 +66,38 @@ The runner reserves every item's ceiling against the approved total before launc
 
 - Nothing here tests Lunum against the 100 / call / phone-the-police paraphrase example directly: the reference is a translation, which holds meaning fixed across languages, not across paraphrases within one.
 - A passing level (a) result shows that structure agrees, not that the meaning is the same. Only (b) addresses meaning, and only if the judge validates against the owner.
+
+## Amendment 1 (2026-10-16, committed before any model call on these passages): free extractor and judges
+
+**This amendment makes the pre-registration binding.** It replaces the paid extractor with free ones the owner made available on 2026-10-16. Nothing above about the data, the 20 passages, the measures, evaluability or the bars changes, except where stated here.
+
+### Extractor
+- `openai/qwen3.8-flash-next-uncensored-lean` (Qwen 3.8 Flash, local, on Halogen at `http://127.0.0.1:8080/v1`), temperature 0, through [`run-openai-compatible-source-only.mjs`](../../scripts/research/run-openai-compatible-source-only.mjs): the Claude runner's prompt verbatim (test-pinned), package v23, a fresh MCP server per item, item timeout 900 s, `max_tokens` 8192, at most 16 turns. Cost $0.
+- Harness pilot and its speed: [local-extractor-pilot-v1](../local-extractor-pilot-v1/RESULTS.md), about 5 minutes per item.
+- **No Claude extraction is run.** A Claude run needs its own budget approval and amendment.
+- Requests: [`build-requests.mjs`](build-requests.mjs), written outside the repository (Europarl text); the committed [`handles.json`](handles.json) binds them (`requestsSha256 cf269919…140c`, 320 requests, 8 EN then 8 EL per passage).
+
+### Covered
+A sentence is **covered** when it is a valid parse that receives an `lfp:2.1` identity **and is not a sentence copy** (one filler with at least 90% of the folded source, [`sentence-copy.mjs`](../../scripts/research/sentence-copy.mjs)). Sentence copies are counted and reported, never scored as structure or shown to the judges.
+
+### Stages
+- **Stage 0:** the first 32 requests (passages 1 and 2). **Go for Stage 1 only if** at least 4 of the 16 Greek sentences are covered **and** the mean wall time is at most 8 minutes per item. The cost criterion is dropped (cost is 0).
+- **Stage 1:** requests 33 to 320, run only on a go. Wall time about 24 hours on the shared, batch-1 server.
+
+### Scoring code (committed now)
+- Levels (a) and (c): [`score-structure.mjs`](score-structure.mjs).
+- Level (b): [`judge.mjs`](judge.mjs). The prompt, the seeded options (true + 3 mismatches) and the answer format are fixed in the code.
+
+### Judges (level b)
+| Role | Judge | Vendor | Access |
+|---|---|---|---|
+| **Primary** | `gpt-6-luna`, reasoning effort low | OpenAI | `codex exec`, read-only, empty temp directory |
+| Second | `supergemma4-Q5_K_M` | Google lineage (Gemma 4 fine-tune) | llama.cpp on the ROG Ally, through an SSH tunnel, temperature 0 |
+
+Neither shares a vendor with the extractor (Alibaba) or with this session's author (Anthropic).
+- Level (b) **passes** only if the **primary** judge meets the bars (top-1 at least 0.70; "same" for at most 10% of mismatched sets) **and** agrees with the owner on at least 80% of the 20 spot-check pairs (`judge.mjs --owner-sheet`, seeded, 10 matched and 10 mismatched).
+- The second judge is reported with its own bars, its agreement with the owner, and its agreement with the primary judge. It cannot rescue a failing primary.
+- Unparseable judge answers count as wrong.
+
+### Prediction update
+In the pilot, 2 of Qwen's 3 parses were sentence copies. I expect few Greek sentences to be covered after copies are excluded, so **Stage 0 is likely to stop the run** ("not evaluable"). That outcome is published like any other.

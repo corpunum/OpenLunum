@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 import { submitCandidate, stableStringify } from '../../packages/core/dist/src/index.js';
+import { isSentenceCopy } from '../../scripts/research/sentence-copy.mjs';
 const root = new URL('../../', import.meta.url).pathname;
 const J = (f) => fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : [];
 
@@ -42,7 +43,7 @@ const merge = (dirs) => { const m = new Map(); for (const d of dirs.split(',')) 
 const requests = J(arg('--requests'));
 const identity = (run, q) => { const r = run.get(q.handle); if (!(r && r.evidenceValid && r.status === 'parse' && r.candidateSem)) return null;
   const s = submitCandidate({ sourceText: q.sourceText, sourceLanguage: q.sourceLanguage, candidateSem: r.candidateSem, provenance: { extractorType: 'agent' } });
-  return s.semanticFingerprint ? { lfp: s.semanticFingerprint, cand: projectId(s.sem) } : null; };
+  return s.semanticFingerprint ? { lfp: s.semanticFingerprint, cand: projectId(s.sem), copy: isSentenceCopy(q.sourceText, s.sem) } : null; };
 const A = merge(arg('--a')); const B = merge(arg('--b'));
 const ia = requests.map((q) => identity(A, q)); const ib = requests.map((q) => identity(B, q));
 const both = requests.map((q, i) => [q, ia[i], ib[i]]).filter(([, a, b]) => a && b);
@@ -58,14 +59,17 @@ const candidateMerges = [...groups.values()].filter((g) => new Set([...g.values(
 const out = {
   requests: requests.length,
   coverage: { runA: covered(ia), runB: covered(ib), both: both.length },
-  stability: { both: both.length, lfp21Equal: both.filter(([, a, b]) => a.lfp === b.lfp).length, candidateEqual: both.filter(([, a, b]) => a.cand === b.cand).length },
+  // Amendment 1: the bar uses pairs where neither run is a sentence copy; all pairs are reported too.
+  stabilityAllPairs: { both: both.length, lfp21Equal: both.filter(([, a, b]) => a.lfp === b.lfp).length, candidateEqual: both.filter(([, a, b]) => a.cand === b.cand).length },
+  sentenceCopies: { runA: ia.filter((x) => x?.copy).length, runB: ib.filter((x) => x?.copy).length },
+  stability: (() => { const nc = both.filter(([, a, b]) => !a.copy && !b.copy); return { both: nc.length, lfp21Equal: nc.filter(([, a, b]) => a.lfp === b.lfp).length, candidateEqual: nc.filter(([, a, b]) => a.cand === b.cand).length }; })(),
   costUsd: { runA: +cost(A).toFixed(2), runB: +cost(B).toFixed(2) },
   candidateMergesForOwnerReview: candidateMerges,
 };
 out.stability.candidateRate = out.stability.both ? out.stability.candidateEqual / out.stability.both : null;
 out.gate = {
-  evaluable: both.length >= 20,
-  stabilityAtLeast90: both.length >= 20 && out.stability.candidateRate >= 0.9,
+  evaluable: out.stability.both >= 20,
+  stabilityAtLeast90: out.stability.both >= 20 && out.stability.candidateRate >= 0.9,
   ownerMergeReview: candidateMerges.length === 0 ? 'no merges to review' : `${candidateMerges.length} merge groups need the owner's same-meaning judgement`,
   suites: 'rerun experiments/identity-projection-candidate-v1/measure.mjs; any collapse in an adversarial, collision or contrast file fails the gate',
 };
