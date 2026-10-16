@@ -1,0 +1,222 @@
+[
+  {
+    "handle": "e01",
+    "language": "en",
+    "text": "Maria may read the quarterly budget file.",
+    "expectedOutcome": "parse",
+    "reason": "permission with explicit agent and object, standard verb read"
+  },
+  {
+    "handle": "e02",
+    "language": "en",
+    "text": "The finance lead allows Omar to approve invoices under 5,000 euros.",
+    "expectedOutcome": "parse",
+    "reason": "permission with stated permitter plus threshold condition"
+  },
+  {
+    "handle": "e03",
+    "language": "en",
+    "text": "Contractors must not share customer phone numbers.",
+    "expectedOutcome": "parse",
+    "reason": "prohibition, no stated permitter"
+  },
+  {
+    "handle": "e04",
+    "language": "en",
+    "text": "Restart the payment service.",
+    "expectedOutcome": "parse",
+    "reason": "imperative, standard verb restart"
+  },
+  {
+    "handle": "e05",
+    "language": "en",
+    "text": "Please notify the on-call engineer when disk usage goes above 90 percent.",
+    "expectedOutcome": "parse",
+    "reason": "imperative with threshold condition"
+  },
+  {
+    "handle": "e06",
+    "language": "en",
+    "text": "Grant Priya access to the staging database until 30 November 2026.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: \"until 30 November 2026\" is when the access ends (owner), not when it is granted; grant has no expiry role and clause time would mean the act time.",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "e07",
+    "language": "en",
+    "text": "Revoke.",
+    "expectedOutcome": "abstain",
+    "reason": "missing required object and beneficiary"
+  },
+  {
+    "handle": "e08",
+    "language": "en",
+    "text": "Archive the tickets older than 90 days.",
+    "expectedOutcome": "parse",
+    "reason": "imperative with count/date threshold"
+  },
+  {
+    "handle": "e09",
+    "language": "en",
+    "text": "Nobody except the auditor may delete audit logs.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: Prohibition for everyone except the auditor; the exemption is not itself a permission (owner). No exception role exists; allow(auditor, delete) would overstate.",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "e10",
+    "language": "en",
+    "text": "Run the backup script every night at 02:00.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: Recurring order (every night at 02:00, owner). No recurrence role exists.",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "e11",
+    "language": "en",
+    "text": "Send three reminders before the deadline on 15 March.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: Exactly three reminders, all before a deadline that falls on 15 March, year unstated (owner). No role holds \"before the deadline on <date>\" scoped to the sending; clause time would date the sending.",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "e12",
+    "language": "en",
+    "text": "The team is allowed to approve.",
+    "expectedOutcome": "abstain",
+    "reason": "approve with missing required object"
+  },
+  {
+    "handle": "e13",
+    "language": "en",
+    "text": "Jonas should polish the onboarding slides before Friday.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: \"should\" is a recommendation weaker than must (owner); \"polish\" has no registered predicate or alias.",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "e14",
+    "language": "en",
+    "text": "Do not restart the cluster during business hours.",
+    "expectedOutcome": "parse",
+    "reason": "negated imperative with time condition"
+  },
+  {
+    "handle": "e15",
+    "language": "en",
+    "text": "If more than 5 login attempts fail, lock the account.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: Conditional must; more than 5 means at least 6 (owner). \"lock\" has no registered predicate.",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "e16",
+    "language": "en",
+    "text": "Lena is permitted by the security team to revoke expired tokens.",
+    "expectedOutcome": "parse",
+    "reason": "permission with stated permitter, passive"
+  },
+  {
+    "handle": "e17",
+    "language": "en",
+    "text": "Share it with them.",
+    "expectedOutcome": "abstain",
+    "reason": "unresolved pronouns for object and recipient"
+  },
+  {
+    "handle": "e18",
+    "language": "en",
+    "text": "The interns may not approve purchase orders.",
+    "expectedOutcome": "parse",
+    "reason": "prohibition phrased as negated permission"
+  },
+  {
+    "handle": "e19",
+    "language": "en",
+    "text": "Ahmed can view the incident report.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: \"can\" is ambiguous between permission and ability (owner); the contract says abstain when meaning is ambiguous.",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "e20",
+    "language": "en",
+    "text": "Ahmed is allowed to read the incident report.",
+    "expectedOutcome": "parse",
+    "reason": "paraphrase pair P1 of e19; should converge"
+  },
+  {
+    "handle": "g01",
+    "language": "el",
+    "text": "Η Ελένη μπορεί να διαβάσει το αρχείο μισθοδοσίας.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: «μπορεί» is ambiguous between permission, ability and epistemic possibility (owner).",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "g02",
+    "language": "el",
+    "text": "Ο διευθυντής επιτρέπει στον Νίκο να εγκρίνει δαπάνες έως 2.000 ευρώ.",
+    "expectedOutcome": "parse",
+    "reason": "permission with stated permitter and threshold"
+  },
+  {
+    "handle": "g03",
+    "language": "el",
+    "text": "Απαγορεύεται στους επισκέπτες να κοινοποιούν τα προσωπικά δεδομένα.",
+    "expectedOutcome": "parse",
+    "reason": "prohibition without permitter"
+  },
+  {
+    "handle": "g04",
+    "language": "el",
+    "text": "Επανεκκίνησε τον διακομιστή αλληλογραφίας.",
+    "expectedOutcome": "parse",
+    "reason": "imperative restart"
+  },
+  {
+    "handle": "g05",
+    "language": "el",
+    "text": "Ειδοποίησε την ομάδα αν η θερμοκρασία ξεπεράσει τους 40 βαθμούς.",
+    "expectedOutcome": "parse",
+    "reason": "imperative with threshold condition"
+  },
+  {
+    "handle": "g06",
+    "language": "el",
+    "text": "Ανακάλεσε.",
+    "expectedOutcome": "abstain",
+    "reason": "missing required arguments"
+  },
+  {
+    "handle": "g07",
+    "language": "el",
+    "text": "Αρχειοθέτησε τα 12 παλιά έργα μέχρι τις 31 Δεκεμβρίου.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: Exactly these 12 projects, deadline 31 December inclusive, year unstated (owner). No deadline role; clause time would date the act; no year may be invented.",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "g08",
+    "language": "el",
+    "text": "Ο Πέτρος δεν πρέπει να εκτελεί σενάρια στην παραγωγή.",
+    "expectedOutcome": "abstain",
+    "reason": "superseded by owner-referenced review: «δεν πρέπει» is must-not or should-not depending on context (owner), and \"in production\" has no role in the run frame (scope would be dropped).",
+    "previousExpectedOutcome": "parse"
+  },
+  {
+    "handle": "g09",
+    "language": "el",
+    "text": "Η Σοφία έχει δικαίωμα να διαβάζει την αναφορά συμβάντος.",
+    "expectedOutcome": "parse",
+    "reason": "paraphrase pair P2 of g10"
+  },
+  {
+    "handle": "g10",
+    "language": "el",
+    "text": "Επιτρέπεται στη Σοφία να διαβάζει την αναφορά συμβάντος.",
+    "expectedOutcome": "parse",
+    "reason": "paraphrase pair P2 of g09; should converge"
+  }
+]

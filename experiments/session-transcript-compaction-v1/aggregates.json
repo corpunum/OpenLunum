@@ -1,0 +1,516 @@
+{
+  "format": "openlunum-session-compaction/0.1",
+  "transcriptMessages": 1662,
+  "roles": {
+    "user": 25,
+    "assistant": 253,
+    "tool_call": 698,
+    "tool": 686
+  },
+  "points": 24,
+  "meanRatio": 0.6488,
+  "meanLiteralRecall": 0.9643,
+  "meanLiteralRecallCompacted": 0.9512,
+  "last": {
+    "messages": 1489,
+    "sourceChars": 1618880,
+    "outputChars": 1072036,
+    "ratio": 0.662,
+    "compactedMessages": 262,
+    "literals": 3658,
+    "literalRecall": 0.98,
+    "literalsInCompactedMessages": 2755,
+    "literalRecallCompacted": 0.9735,
+    "dispositions": {
+      "kept": 3802,
+      "record": 0,
+      "clipped": 343,
+      "duplicate": 522,
+      "superseded": 87,
+      "omitted": 1022
+    },
+    "semanticIdentities": 0
+  },
+  "rows": [
+    {
+      "messages": 69,
+      "sourceChars": 93189,
+      "outputChars": 53473,
+      "ratio": 0.574,
+      "compactedMessages": 11,
+      "literals": 554,
+      "literalRecall": 0.8971,
+      "literalsInCompactedMessages": 437,
+      "literalRecallCompacted": 0.8696,
+      "dispositions": {
+        "kept": 192,
+        "record": 0,
+        "clipped": 18,
+        "duplicate": 13,
+        "superseded": 0,
+        "omitted": 139
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 77,
+      "sourceChars": 96589,
+      "outputChars": 56873,
+      "ratio": 0.589,
+      "compactedMessages": 11,
+      "literals": 578,
+      "literalRecall": 0.9014,
+      "literalsInCompactedMessages": 437,
+      "literalRecallCompacted": 0.8696,
+      "dispositions": {
+        "kept": 257,
+        "record": 0,
+        "clipped": 18,
+        "duplicate": 15,
+        "superseded": 0,
+        "omitted": 139
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 295,
+      "sourceChars": 310687,
+      "outputChars": 211535,
+      "ratio": 0.681,
+      "compactedMessages": 44,
+      "literals": 1105,
+      "literalRecall": 0.9502,
+      "literalsInCompactedMessages": 758,
+      "literalRecallCompacted": 0.9274,
+      "dispositions": {
+        "kept": 788,
+        "record": 0,
+        "clipped": 58,
+        "duplicate": 58,
+        "superseded": 19,
+        "omitted": 154
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 300,
+      "sourceChars": 312337,
+      "outputChars": 213185,
+      "ratio": 0.683,
+      "compactedMessages": 44,
+      "literals": 1105,
+      "literalRecall": 0.9502,
+      "literalsInCompactedMessages": 758,
+      "literalRecallCompacted": 0.9274,
+      "dispositions": {
+        "kept": 836,
+        "record": 0,
+        "clipped": 58,
+        "duplicate": 62,
+        "superseded": 19,
+        "omitted": 154
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 307,
+      "sourceChars": 314585,
+      "outputChars": 215433,
+      "ratio": 0.685,
+      "compactedMessages": 44,
+      "literals": 1105,
+      "literalRecall": 0.9502,
+      "literalsInCompactedMessages": 758,
+      "literalRecallCompacted": 0.9274,
+      "dispositions": {
+        "kept": 836,
+        "record": 0,
+        "clipped": 58,
+        "duplicate": 62,
+        "superseded": 19,
+        "omitted": 154
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 312,
+      "sourceChars": 315682,
+      "outputChars": 216530,
+      "ratio": 0.686,
+      "compactedMessages": 44,
+      "literals": 1105,
+      "literalRecall": 0.9502,
+      "literalsInCompactedMessages": 758,
+      "literalRecallCompacted": 0.9274,
+      "dispositions": {
+        "kept": 836,
+        "record": 0,
+        "clipped": 58,
+        "duplicate": 62,
+        "superseded": 19,
+        "omitted": 154
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 336,
+      "sourceChars": 329351,
+      "outputChars": 227837,
+      "ratio": 0.692,
+      "compactedMessages": 46,
+      "literals": 1132,
+      "literalRecall": 0.9514,
+      "literalsInCompactedMessages": 775,
+      "literalRecallCompacted": 0.929,
+      "dispositions": {
+        "kept": 847,
+        "record": 0,
+        "clipped": 59,
+        "duplicate": 68,
+        "superseded": 19,
+        "omitted": 154
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 538,
+      "sourceChars": 520358,
+      "outputChars": 343244,
+      "ratio": 0.66,
+      "compactedMessages": 85,
+      "literals": 1591,
+      "literalRecall": 0.9667,
+      "literalsInCompactedMessages": 1164,
+      "literalRecallCompacted": 0.9545,
+      "dispositions": {
+        "kept": 1060,
+        "record": 0,
+        "clipped": 101,
+        "duplicate": 94,
+        "superseded": 22,
+        "omitted": 157
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 701,
+      "sourceChars": 698258,
+      "outputChars": 447829,
+      "ratio": 0.641,
+      "compactedMessages": 122,
+      "literals": 1922,
+      "literalRecall": 0.9719,
+      "literalsInCompactedMessages": 1429,
+      "literalRecallCompacted": 0.9622,
+      "dispositions": {
+        "kept": 1372,
+        "record": 0,
+        "clipped": 150,
+        "duplicate": 122,
+        "superseded": 42,
+        "omitted": 157
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 777,
+      "sourceChars": 773037,
+      "outputChars": 494451,
+      "ratio": 0.64,
+      "compactedMessages": 135,
+      "literals": 2053,
+      "literalRecall": 0.9742,
+      "literalsInCompactedMessages": 1494,
+      "literalRecallCompacted": 0.9645,
+      "dispositions": {
+        "kept": 1566,
+        "record": 0,
+        "clipped": 169,
+        "duplicate": 136,
+        "superseded": 52,
+        "omitted": 157
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 815,
+      "sourceChars": 822809,
+      "outputChars": 528615,
+      "ratio": 0.642,
+      "compactedMessages": 141,
+      "literals": 2149,
+      "literalRecall": 0.9753,
+      "literalsInCompactedMessages": 1556,
+      "literalRecallCompacted": 0.9659,
+      "dispositions": {
+        "kept": 1600,
+        "record": 0,
+        "clipped": 183,
+        "duplicate": 155,
+        "superseded": 55,
+        "omitted": 158
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 931,
+      "sourceChars": 918103,
+      "outputChars": 596523,
+      "ratio": 0.65,
+      "compactedMessages": 160,
+      "literals": 2335,
+      "literalRecall": 0.9773,
+      "literalsInCompactedMessages": 1680,
+      "literalRecallCompacted": 0.9685,
+      "dispositions": {
+        "kept": 1754,
+        "record": 0,
+        "clipped": 210,
+        "duplicate": 177,
+        "superseded": 58,
+        "omitted": 165
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1031,
+      "sourceChars": 1020896,
+      "outputChars": 658721,
+      "ratio": 0.645,
+      "compactedMessages": 174,
+      "literals": 2488,
+      "literalRecall": 0.9787,
+      "literalsInCompactedMessages": 1796,
+      "literalRecallCompacted": 0.9705,
+      "dispositions": {
+        "kept": 1845,
+        "record": 0,
+        "clipped": 236,
+        "duplicate": 185,
+        "superseded": 57,
+        "omitted": 304
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1066,
+      "sourceChars": 1085343,
+      "outputChars": 693526,
+      "ratio": 0.639,
+      "compactedMessages": 181,
+      "literals": 2583,
+      "literalRecall": 0.9795,
+      "literalsInCompactedMessages": 1853,
+      "literalRecallCompacted": 0.9714,
+      "dispositions": {
+        "kept": 1967,
+        "record": 0,
+        "clipped": 246,
+        "duplicate": 207,
+        "superseded": 61,
+        "omitted": 496
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1076,
+      "sourceChars": 1101041,
+      "outputChars": 705783,
+      "ratio": 0.641,
+      "compactedMessages": 184,
+      "literals": 2610,
+      "literalRecall": 0.9801,
+      "literalsInCompactedMessages": 1877,
+      "literalRecallCompacted": 0.9723,
+      "dispositions": {
+        "kept": 2063,
+        "record": 0,
+        "clipped": 250,
+        "duplicate": 217,
+        "superseded": 61,
+        "omitted": 496
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1222,
+      "sourceChars": 1304587,
+      "outputChars": 839013,
+      "ratio": 0.643,
+      "compactedMessages": 215,
+      "literals": 2908,
+      "literalRecall": 0.9749,
+      "literalsInCompactedMessages": 2182,
+      "literalRecallCompacted": 0.9665,
+      "dispositions": {
+        "kept": 2622,
+        "record": 0,
+        "clipped": 286,
+        "duplicate": 396,
+        "superseded": 78,
+        "omitted": 759
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1223,
+      "sourceChars": 1304804,
+      "outputChars": 839230,
+      "ratio": 0.643,
+      "compactedMessages": 215,
+      "literals": 2909,
+      "literalRecall": 0.9749,
+      "literalsInCompactedMessages": 2182,
+      "literalRecallCompacted": 0.9665,
+      "dispositions": {
+        "kept": 2622,
+        "record": 0,
+        "clipped": 286,
+        "duplicate": 396,
+        "superseded": 78,
+        "omitted": 759
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1224,
+      "sourceChars": 1304946,
+      "outputChars": 839372,
+      "ratio": 0.643,
+      "compactedMessages": 215,
+      "literals": 2913,
+      "literalRecall": 0.9749,
+      "literalsInCompactedMessages": 2182,
+      "literalRecallCompacted": 0.9665,
+      "dispositions": {
+        "kept": 2622,
+        "record": 0,
+        "clipped": 286,
+        "duplicate": 396,
+        "superseded": 78,
+        "omitted": 759
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1226,
+      "sourceChars": 1305058,
+      "outputChars": 835806,
+      "ratio": 0.64,
+      "compactedMessages": 216,
+      "literals": 2913,
+      "literalRecall": 0.9749,
+      "literalsInCompactedMessages": 2196,
+      "literalRecallCompacted": 0.9668,
+      "dispositions": {
+        "kept": 2679,
+        "record": 0,
+        "clipped": 290,
+        "duplicate": 396,
+        "superseded": 78,
+        "omitted": 759
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1253,
+      "sourceChars": 1347490,
+      "outputChars": 867347,
+      "ratio": 0.644,
+      "compactedMessages": 220,
+      "literals": 3146,
+      "literalRecall": 0.9768,
+      "literalsInCompactedMessages": 2403,
+      "literalRecallCompacted": 0.9696,
+      "dispositions": {
+        "kept": 2852,
+        "record": 0,
+        "clipped": 293,
+        "duplicate": 435,
+        "superseded": 79,
+        "omitted": 886
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1257,
+      "sourceChars": 1352596,
+      "outputChars": 872453,
+      "ratio": 0.645,
+      "compactedMessages": 220,
+      "literals": 3151,
+      "literalRecall": 0.9768,
+      "literalsInCompactedMessages": 2403,
+      "literalRecallCompacted": 0.9696,
+      "dispositions": {
+        "kept": 2915,
+        "record": 0,
+        "clipped": 293,
+        "duplicate": 440,
+        "superseded": 79,
+        "omitted": 886
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1265,
+      "sourceChars": 1377534,
+      "outputChars": 889748,
+      "ratio": 0.646,
+      "compactedMessages": 222,
+      "literals": 3174,
+      "literalRecall": 0.977,
+      "literalsInCompactedMessages": 2432,
+      "literalRecallCompacted": 0.97,
+      "dispositions": {
+        "kept": 2963,
+        "record": 0,
+        "clipped": 295,
+        "duplicate": 463,
+        "superseded": 79,
+        "omitted": 955
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1436,
+      "sourceChars": 1568192,
+      "outputChars": 1029054,
+      "ratio": 0.656,
+      "compactedMessages": 255,
+      "literals": 3575,
+      "literalRecall": 0.9796,
+      "literalsInCompactedMessages": 2722,
+      "literalRecallCompacted": 0.9732,
+      "dispositions": {
+        "kept": 3541,
+        "record": 0,
+        "clipped": 338,
+        "duplicate": 517,
+        "superseded": 87,
+        "omitted": 1004
+      },
+      "semanticIdentities": 0
+    },
+    {
+      "messages": 1489,
+      "sourceChars": 1618880,
+      "outputChars": 1072036,
+      "ratio": 0.662,
+      "compactedMessages": 262,
+      "literals": 3658,
+      "literalRecall": 0.98,
+      "literalsInCompactedMessages": 2755,
+      "literalRecallCompacted": 0.9735,
+      "dispositions": {
+        "kept": 3802,
+        "record": 0,
+        "clipped": 343,
+        "duplicate": 522,
+        "superseded": 87,
+        "omitted": 1022
+      },
+      "semanticIdentities": 0
+    }
+  ]
+}
