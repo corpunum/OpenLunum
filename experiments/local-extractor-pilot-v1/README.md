@@ -25,3 +25,10 @@ The owner withdrew Halogen/Qwen for these runs (2026-10-16) and asked for **Luna
 - Extractor: `supergemma4-Q5_K_M` (a Gemma 4 fine-tune), llama.cpp b9222 on the ROG Ally, served by a **temporary dedicated server** (`lunum-supergemma-64k`, port 18085, `--ctx-size 65536 --jinja`) because one extraction needs about 50k tokens (the `lunum_build_candidate` input schema alone is about 35k Gemma tokens) and the Ally's shared router runs at 32k. Reached through an SSH tunnel; temperature 0; the same runner and package v23.
 - Items: the same first 4 requests of clc-v1 S2.
 - Purpose: does the loop work on this model, how long an item takes, and how many parses are sentence copies. No claim.
+
+## Pilot 3 (pre-registered 2026-10-16, before its calls): Luna through Codex
+
+- Extractor: `gpt-6-luna`, reasoning effort **low**, through [`run-codex-source-only.mjs`](../../scripts/research/run-codex-source-only.mjs) (`codex exec --ephemeral`, read-only sandbox, empty temp directory; shell, web search, browser, apps, plugins, goals, image tools, apply_patch and the user's other MCP servers switched off; only the four Lunum tools enabled; any other tool use invalidates the item). Same prompt and classification as the other runners.
+- `codex exec --json` does not report the served model, so the model is recorded as requested only.
+- Quota, not dollars: a probe call used about 47k input tokens before any extraction work.
+- Items: the first **2** requests of clc-v1 S2 (one EN/EL pair, already published). Purpose: does the loop work, time and tokens per item. No claim.
