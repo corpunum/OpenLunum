@@ -1,0 +1,286 @@
+{
+  "handle": "clc1-e7fb419fde704a74",
+  "sourceLanguage": "el",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "event",
+    "clauses": [
+      {
+        "predicate": "access",
+        "roles": {
+          "agent": {
+            "type": "actor",
+            "value": "κάθε πρόσωπο"
+          },
+          "theme": {
+            "type": "resource",
+            "value": "τα συλλεγέντα δεδομένα που το αφορούν"
+          }
+        },
+        "modality": "permission"
+      },
+      {
+        "predicate": "update",
+        "roles": {
+          "agent": {
+            "type": "actor",
+            "value": "κάθε πρόσωπο"
+          },
+          "theme": {
+            "type": "resource",
+            "value": "τα συλλεγέντα δεδομένα που το αφορούν"
+          }
+        },
+        "modality": "permission"
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_017Pz2ZHaEvBCnpq4KmfDk93",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "access",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "value": "κάθε πρόσωπο"
+              },
+              "theme": {
+                "type": "resource",
+                "value": "τα συλλεγέντα δεδομένα που το αφορούν"
+              }
+            },
+            "modality": "permission"
+          },
+          {
+            "predicate": "update",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "value": "κάθε πρόσωπο"
+              },
+              "theme": {
+                "type": "resource",
+                "value": "τα συλλεγέντα δεδομένα που το αφορούν"
+              }
+            },
+            "modality": "permission"
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Κάθε πρόσωπο δικαιούται να έχει πρόσβαση στα συλλεγέντα δεδομένα που το αφορούν και να επιτυγχάνει τη διόρθωσή τους.",
+            "language": "el",
+            "sha256": "77d11c4a1038e7b18af5c0e6b4646604d4fa29911787e8d09e5211a7bf564c14"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "77d11c4a1038e7b18af5c0e6b4646604d4fa29911787e8d09e5211a7bf564c14",
+            "timestamp": "2026-10-16T16:44:50.457Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:4e108b3538504167f6bdb399d9cf9e42",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "category_not_auto_promotable:event",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "access",
+                "roles": {
+                  "agent": {
+                    "type": "actor",
+                    "value": "κάθε πρόσωπο"
+                  },
+                  "theme": {
+                    "type": "resource",
+                    "value": "τα συλλεγέντα δεδομένα που το αφορούν"
+                  }
+                },
+                "modality": "permission",
+                "negated": false
+              },
+              {
+                "predicate": "update",
+                "roles": {
+                  "agent": {
+                    "type": "actor",
+                    "value": "κάθε πρόσωπο"
+                  },
+                  "theme": {
+                    "type": "resource",
+                    "value": "τα συλλεγέντα δεδομένα που το αφορούν"
+                  }
+                },
+                "modality": "permission",
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": null
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Κάθε πρόσωπο δικαιούται να έχει πρόσβαση στα συλλεγέντα δεδομένα που το αφορούν και να επιτυγχάνει τη διόρθωσή τους."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 31367,
+    "cache_read_input_tokens": 371822,
+    "output_tokens": 9151,
+    "output_tokens_details": {
+      "thinking_tokens": 7207
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 31367,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 122,
+        "cache_read_input_tokens": 63113,
+        "cache_creation_input_tokens": 2159,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2159
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.29137040000000003,
+  "numTurns": 7,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/clc1-e7fb419fde704a74.jsonl",
+  "rawStreamSha256": "7ec7958b266eed2fd82ab3c5d172399c587604a11ad78bebe214607beb496ce5",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

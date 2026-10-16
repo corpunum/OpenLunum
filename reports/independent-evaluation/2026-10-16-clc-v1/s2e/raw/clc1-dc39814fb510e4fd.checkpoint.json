@@ -1,0 +1,180 @@
+{
+  "handle": "clc1-dc39814fb510e4fd",
+  "sourceLanguage": "en",
+  "exitCode": 143,
+  "failure": "no_result_event",
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": false,
+    "mismatches": [
+      "INIT_OR_RESULT_EVENT_COUNT"
+    ]
+  },
+  "status": null,
+  "declared": null,
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01Fq9Usmp1Xudp3DCAfiXH8x",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "I"
+              },
+              "theme": {
+                "type": "place",
+                "value": "the ruins of Athens"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "I'd like to visit the ruins of Athens.",
+            "language": "en",
+            "sha256": "ecaf9724e4539828ec0175e8d0d66b781d934535511f5d9e982408cdb012b749"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "ecaf9724e4539828ec0175e8d0d66b781d934535511f5d9e982408cdb012b749",
+            "timestamp": "2026-10-16T16:50:25.564Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:33248c899cf14843913129409982cacd",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "preference",
+            "clauses": [
+              {
+                "predicate": "prefer",
+                "roles": {
+                  "experiencer": {
+                    "type": "actor",
+                    "id": "I"
+                  },
+                  "theme": {
+                    "type": "place",
+                    "value": "the ruins of Athens"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": null
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "I'd like to visit the ruins of Athens."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": null,
+  "costUsd": null,
+  "numTurns": null,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/clc1-dc39814fb510e4fd.jsonl",
+  "rawStreamSha256": "664d5fd402e41fa0e526cdffc026955adef2ac45003bc13a8eeed0aee46ccda2",
+  "timedOut": false,
+  "interrupted": true,
+  "signal": null,
+  "evidenceFailures": [
+    "INTERRUPTED",
+    "no_result_event",
+    "PROCESS_ERROR",
+    "EVENT_OR_SOURCE_UNBOUND",
+    "MODEL_UNVERIFIED",
+    "COST_UNKNOWN",
+    "OUTCOME_MISSING"
+  ],
+  "evidenceValid": false
+}

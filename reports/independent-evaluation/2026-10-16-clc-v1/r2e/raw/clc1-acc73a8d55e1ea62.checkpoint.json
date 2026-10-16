@@ -1,0 +1,181 @@
+{
+  "handle": "clc1-acc73a8d55e1ea62",
+  "sourceLanguage": "el",
+  "exitCode": 143,
+  "failure": "no_result_event",
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": false,
+    "mismatches": [
+      "INIT_OR_RESULT_EVENT_COUNT"
+    ]
+  },
+  "status": null,
+  "declared": null,
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01R36eeEAZHPUffY4pH9QZ39",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": "Κάθε πρόσωπο",
+              "attribute": "δικαίωμα στο σεβασμό της ιδιωτικής και οικογενειακής ζωής του, της κατοικίας του και των επικοινωνιών του"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Κάθε πρόσωπο έχει δικαίωμα στο σεβασμό της ιδιωτικής και οικογενειακής ζωής του, της κατοικίας του και των επικοινωνιών του.",
+            "language": "el",
+            "sha256": "1d8e9f903e4f13e597fcccf3e205363ab741f53a878f9db6e3996db3952c8750"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "1d8e9f903e4f13e597fcccf3e205363ab741f53a878f9db6e3996db3952c8750",
+            "timestamp": "2026-10-16T16:50:22.381Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": "unbound_source_content",
+          "diagnostics": [
+            "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+          ],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": "Κάθε πρόσωπο",
+                  "attribute": "δικαίωμα στο σεβασμό της ιδιωτικής και οικογενειακής ζωής του, της κατοικίας του και των επικοινωνιών του"
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": false,
+            "unsourced": [],
+            "uncovered": [
+              "language_unsupported"
+            ],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Κάθε πρόσωπο έχει δικαίωμα στο σεβασμό της ιδιωτικής και οικογενειακής ζωής του, της κατοικίας του και των επικοινωνιών του."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": null,
+  "costUsd": null,
+  "numTurns": null,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": false,
+    "failureClass": "unbound_source_content",
+    "diagnostics": [
+      "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+    ]
+  },
+  "rawStream": "raw/clc1-acc73a8d55e1ea62.jsonl",
+  "rawStreamSha256": "68021321c54fc5b081e1ef67347340928560a11a4c752e8eb67764ef2d43510b",
+  "timedOut": false,
+  "interrupted": true,
+  "signal": null,
+  "evidenceFailures": [
+    "INTERRUPTED",
+    "no_result_event",
+    "PROCESS_ERROR",
+    "EVENT_OR_SOURCE_UNBOUND",
+    "MODEL_UNVERIFIED",
+    "COST_UNKNOWN",
+    "OUTCOME_MISSING"
+  ],
+  "evidenceValid": false
+}

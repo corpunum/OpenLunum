@@ -1,0 +1,234 @@
+{
+  "handle": "clc1-441763c44db84873",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01VHWqwRwohMaXUmyPZHi8Jj",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "id": "I"
+              },
+              "action": "want_to_rent",
+              "object": {
+                "type": "object",
+                "value": "a car"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "I want to rent a car.",
+            "language": "en",
+            "sha256": "ee49a8ac4fbf40d7a87f68e38b9e6c4c0d41d4c910bcf81897344aad71adcdc2"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "ee49a8ac4fbf40d7a87f68e38b9e6c4c0d41d4c910bcf81897344aad71adcdc2",
+            "timestamp": "2026-10-16T16:39:13.451Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'want_to_rent' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "I want to rent a car."
+    },
+    {
+      "eventId": "toolu_01NN1ixMSFX8y15W5LD2cW8X",
+      "agentAction": "explicit-null",
+      "proposedCandidateSem": null,
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "I want to rent a car.",
+            "language": "en",
+            "sha256": "ee49a8ac4fbf40d7a87f68e38b9e6c4c0d41d4c910bcf81897344aad71adcdc2"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "ee49a8ac4fbf40d7a87f68e38b9e6c4c0d41d4c910bcf81897344aad71adcdc2",
+            "timestamp": "2026-10-16T16:39:32.290Z"
+          },
+          "transportValid": false,
+          "structuralValid": false,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": false,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+            ]
+          },
+          "failureClass": "transport_or_structural_invalid",
+          "diagnostics": [
+            "transport:/:type:{\"type\":\"object\"}: must be object"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "not-reached",
+      "sourceText": "I want to rent a car."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 27716,
+    "cache_read_input_tokens": 242409,
+    "output_tokens": 7204,
+    "output_tokens_details": {
+      "thinking_tokens": 6331
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 27716,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 59,
+        "cache_read_input_tokens": 59174,
+        "cache_creation_input_tokens": 2447,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2447
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.23140580000000002,
+  "numTurns": 5,
+  "abstentionSubmitted": true,
+  "lastSubmission": {
+    "frameValid": false,
+    "candidateIdentityAvailable": false,
+    "failureClass": "protocol_noncanonical",
+    "diagnostics": [
+      "predicate 'want_to_rent' is not registered and remains unresolved"
+    ]
+  },
+  "rawStream": "raw/clc1-441763c44db84873.jsonl",
+  "rawStreamSha256": "06f602c9e249ce2c1717155db40c2d164daba839e3f673a63c1c63279105528d",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

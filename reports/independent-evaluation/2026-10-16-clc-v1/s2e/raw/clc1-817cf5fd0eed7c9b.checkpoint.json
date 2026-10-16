@@ -1,0 +1,149 @@
+{
+  "handle": "clc1-817cf5fd0eed7c9b",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01HjWx7hB3UfhZYyGS3aQUoQ",
+      "agentAction": "explicit-null",
+      "proposedCandidateSem": null,
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom will be happy here.",
+            "language": "en",
+            "sha256": "8355c8d770b40c81e059064d3e35cad6d5811b136384a88bf06adefb06f622ff"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "8355c8d770b40c81e059064d3e35cad6d5811b136384a88bf06adefb06f622ff",
+            "timestamp": "2026-10-16T16:36:07.254Z"
+          },
+          "transportValid": false,
+          "structuralValid": false,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": false,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+            ]
+          },
+          "failureClass": "transport_or_structural_invalid",
+          "diagnostics": [
+            "transport:/:type:{\"type\":\"object\"}: must be object"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "not-reached",
+      "sourceText": "Tom will be happy here."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 21450,
+    "cache_read_input_tokens": 125017,
+    "output_tokens": 2657,
+    "output_tokens_details": {
+      "thinking_tokens": 2430
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 21450,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 21,
+        "cache_read_input_tokens": 52266,
+        "cache_creation_input_tokens": 3089,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3089
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.1373854,
+  "numTurns": 3,
+  "abstentionSubmitted": true,
+  "lastSubmission": null,
+  "rawStream": "raw/clc1-817cf5fd0eed7c9b.jsonl",
+  "rawStreamSha256": "ac01bbd9145d10f365925536de83d63bbf67942ce22397bc2109afd723ebb34b",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

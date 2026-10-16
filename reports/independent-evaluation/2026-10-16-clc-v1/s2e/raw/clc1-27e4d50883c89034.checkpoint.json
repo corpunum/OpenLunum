@@ -1,0 +1,228 @@
+{
+  "handle": "clc1-27e4d50883c89034",
+  "sourceLanguage": "el",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01787wTGfHphkPe9zHc72Xc6",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "action": "έλυσε",
+              "object": "το πρόβλημα",
+              "manner": "μόνος του"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Έλυσε το πρόβλημα μόνος του.",
+            "language": "el",
+            "sha256": "50cd4096bfff964fa44334b48286dbcd47b4a1c0c008fdcb98eaf88d64ce1b2d"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "50cd4096bfff964fa44334b48286dbcd47b4a1c0c008fdcb98eaf88d64ce1b2d",
+            "timestamp": "2026-10-16T16:42:54.849Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'έλυσε' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "Έλυσε το πρόβλημα μόνος του."
+    },
+    {
+      "eventId": "toolu_01AYaetCYuNZY18FhefpsH6Q",
+      "agentAction": "explicit-null",
+      "proposedCandidateSem": null,
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Έλυσε το πρόβλημα μόνος του.",
+            "language": "el",
+            "sha256": "50cd4096bfff964fa44334b48286dbcd47b4a1c0c008fdcb98eaf88d64ce1b2d"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "50cd4096bfff964fa44334b48286dbcd47b4a1c0c008fdcb98eaf88d64ce1b2d",
+            "timestamp": "2026-10-16T16:43:01.220Z"
+          },
+          "transportValid": false,
+          "structuralValid": false,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": false,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+            ]
+          },
+          "failureClass": "transport_or_structural_invalid",
+          "diagnostics": [
+            "transport:/:type:{\"type\":\"object\"}: must be object"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "not-reached",
+      "sourceText": "Έλυσε το πρόβλημα μόνος του."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 23000,
+    "cache_read_input_tokens": 235065,
+    "output_tokens": 2327,
+    "output_tokens_details": {
+      "thinking_tokens": 1508
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 23000,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 89,
+        "cache_read_input_tokens": 55593,
+        "cache_creation_input_tokens": 1312,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1312
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.16230300000000003,
+  "numTurns": 5,
+  "abstentionSubmitted": true,
+  "lastSubmission": {
+    "frameValid": false,
+    "candidateIdentityAvailable": false,
+    "failureClass": "protocol_noncanonical",
+    "diagnostics": [
+      "predicate 'έλυσε' is not registered and remains unresolved"
+    ]
+  },
+  "rawStream": "raw/clc1-27e4d50883c89034.jsonl",
+  "rawStreamSha256": "34ee7119d872d6ac2b06d280db69e91931d9b565e9fab26e34f252bd4921414c",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

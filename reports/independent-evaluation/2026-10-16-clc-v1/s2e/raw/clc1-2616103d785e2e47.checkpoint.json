@@ -1,0 +1,287 @@
+{
+  "handle": "clc1-2616103d785e2e47",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unresolved"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01Vz7SjEMztwreQfT8pTyTiq",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "negated": true,
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "value": "He"
+              },
+              "attribute": "at all afraid of snakes"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "He's not at all afraid of snakes.",
+            "language": "en",
+            "sha256": "80cf99aa3ffd5f146aa51fee783a0b61bc095dbe766d445faeb394c0478b2a06"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "80cf99aa3ffd5f146aa51fee783a0b61bc095dbe766d445faeb394c0478b2a06",
+            "timestamp": "2026-10-16T16:21:29.181Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": "unbound_source_content",
+          "diagnostics": [
+            "unbound_source_content: filler \"He\" is only a pronoun; copy the source words into the fillers or abstain"
+          ],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "negated": true,
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "value": "He"
+                  },
+                  "attribute": "at all afraid of snakes"
+                }
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": false,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [
+              "He"
+            ],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "He's not at all afraid of snakes."
+    },
+    {
+      "eventId": "toolu_01AdikpWSK8eTxeAWDbvCMpr",
+      "agentAction": "explicit-null",
+      "proposedCandidateSem": null,
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "He's not at all afraid of snakes.",
+            "language": "en",
+            "sha256": "80cf99aa3ffd5f146aa51fee783a0b61bc095dbe766d445faeb394c0478b2a06"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "80cf99aa3ffd5f146aa51fee783a0b61bc095dbe766d445faeb394c0478b2a06",
+            "timestamp": "2026-10-16T16:21:32.750Z"
+          },
+          "transportValid": false,
+          "structuralValid": false,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": false,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+            ]
+          },
+          "failureClass": "transport_or_structural_invalid",
+          "diagnostics": [
+            "transport:/:type:{\"type\":\"object\"}: must be object"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "not-reached",
+      "sourceText": "He's not at all afraid of snakes."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_validate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 27517,
+    "cache_read_input_tokens": 472351,
+    "output_tokens": 4620,
+    "output_tokens_details": {
+      "thinking_tokens": 3047
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 27517,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 93,
+        "cache_read_input_tokens": 60406,
+        "cache_creation_input_tokens": 1016,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1016
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.25077419999999995,
+  "numTurns": 9,
+  "abstentionSubmitted": true,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": false,
+    "failureClass": "unbound_source_content",
+    "diagnostics": [
+      "unbound_source_content: filler \"He\" is only a pronoun; copy the source words into the fillers or abstain"
+    ]
+  },
+  "rawStream": "raw/clc1-2616103d785e2e47.jsonl",
+  "rawStreamSha256": "70d0444db6e47d99e101fe4e494f0fc00d8a3a187f1e6c336199dc6b75f6bc40",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

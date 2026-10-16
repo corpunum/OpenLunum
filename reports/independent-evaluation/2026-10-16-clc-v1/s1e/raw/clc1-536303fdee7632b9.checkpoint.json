@@ -1,0 +1,265 @@
+{
+  "handle": "clc1-536303fdee7632b9",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "simple_fact",
+    "clauses": [
+      {
+        "predicate": "access",
+        "roles": {
+          "agent": {
+            "type": "actor",
+            "value": "everyone"
+          },
+          "theme": {
+            "type": "object",
+            "value": "data which has been collected concerning him or her"
+          }
+        },
+        "modality": "permission"
+      },
+      {
+        "predicate": "update",
+        "roles": {
+          "theme": {
+            "type": "object",
+            "value": "data which has been collected concerning him or her"
+          }
+        },
+        "modality": "permission"
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_016sm7Di4dpLVweqYt8Vio7A",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "access",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "value": "everyone"
+              },
+              "theme": {
+                "type": "object",
+                "value": "data which has been collected concerning him or her"
+              }
+            },
+            "modality": "permission"
+          },
+          {
+            "predicate": "update",
+            "roles": {
+              "theme": {
+                "type": "object",
+                "value": "data which has been collected concerning him or her"
+              }
+            },
+            "modality": "permission"
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Everyone has the right of access to data which has been collected concerning him or her, and the right to have it rectified.",
+            "language": "en",
+            "sha256": "ecdc1731f13987922e532424ccf7339d6a99085ea0bbfe094b2a678d55c8846e"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "ecdc1731f13987922e532424ccf7339d6a99085ea0bbfe094b2a678d55c8846e",
+            "timestamp": "2026-10-16T16:42:57.236Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:b267bd63d18daafcc9f9014e908df407",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "access",
+                "roles": {
+                  "agent": {
+                    "type": "actor",
+                    "value": "everyone"
+                  },
+                  "theme": {
+                    "type": "object",
+                    "value": "data which has been collected concerning him or her"
+                  }
+                },
+                "modality": "permission",
+                "negated": false
+              },
+              {
+                "predicate": "update",
+                "roles": {
+                  "theme": {
+                    "type": "object",
+                    "value": "data which has been collected concerning him or her"
+                  }
+                },
+                "modality": "permission",
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": null
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Everyone has the right of access to data which has been collected concerning him or her, and the right to have it rectified."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 25160,
+    "cache_read_input_tokens": 238757,
+    "output_tokens": 4984,
+    "output_tokens_details": {
+      "thinking_tokens": 4062
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 25160,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 46,
+        "cache_read_input_tokens": 57506,
+        "cache_creation_input_tokens": 1559,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1559
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.1982514,
+  "numTurns": 5,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/clc1-536303fdee7632b9.jsonl",
+  "rawStreamSha256": "c58a74c0b52575f65c1c968df668b6d7198cd13de88e67cd5ff7b0660115340c",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

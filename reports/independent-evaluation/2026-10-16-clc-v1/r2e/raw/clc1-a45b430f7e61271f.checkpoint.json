@@ -1,0 +1,93 @@
+{
+  "handle": "clc1-a45b430f7e61271f",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": null,
+  "observedContractMatchesPackage": null,
+  "observedContractBinding": {
+    "match": false,
+    "mismatches": [
+      "missing_contract"
+    ]
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [],
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 4933,
+    "cache_read_input_tokens": 33905,
+    "output_tokens": 66,
+    "output_tokens_details": {
+      "thinking_tokens": 0
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 4933,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 66,
+        "cache_read_input_tokens": 33905,
+        "cache_creation_input_tokens": 4933,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4933
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.027177,
+  "numTurns": 1,
+  "abstentionSubmitted": false,
+  "lastSubmission": null,
+  "rawStream": "raw/clc1-a45b430f7e61271f.jsonl",
+  "rawStreamSha256": "dd47c20f7dc99cadb4d7d8312943ef9c7250aabf57a85b7f1bd6bf9146d17e91",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [
+    "CONTRACT_UNBOUND"
+  ],
+  "evidenceValid": false
+}

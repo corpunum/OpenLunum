@@ -1,0 +1,321 @@
+{
+  "handle": "clc1-0ccc0305c448df06",
+  "sourceLanguage": "el",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "simple_fact",
+    "clauses": [
+      {
+        "predicate": "describe",
+        "roles": {
+          "subject": {
+            "type": "concept",
+            "value": "Το δικαίωμα γάμου και το δικαίωμα δημιουργίας οικογένειας"
+          },
+          "attribute": "διασφαλίζονται",
+          "manner": {
+            "type": "concept",
+            "value": "σύμφωνα με τις εθνικές νομοθεσίες που διέπουν την άσκησή τους"
+          }
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_017RWTP9NgxN6joVK37nTdcS",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "concept",
+                "value": "Το δικαίωμα γάμου και το δικαίωμα δημιουργίας οικογένειας"
+              },
+              "action": "διασφαλίζονται",
+              "manner": {
+                "type": "concept",
+                "value": "σύμφωνα με τις εθνικές νομοθεσίες που διέπουν την άσκησή τους"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Το δικαίωμα γάμου και το δικαίωμα δημιουργίας οικογένειας διασφαλίζονται σύμφωνα με τις εθνικές νομοθεσίες που διέπουν την άσκησή τους.",
+            "language": "el",
+            "sha256": "bdf5ca5e5257813bde9b21356b89992ca51b67943e1cf3406f9913c74db1cc2b"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "bdf5ca5e5257813bde9b21356b89992ca51b67943e1cf3406f9913c74db1cc2b",
+            "timestamp": "2026-10-16T16:54:07.890Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'διασφαλίζονται' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "Το δικαίωμα γάμου και το δικαίωμα δημιουργίας οικογένειας διασφαλίζονται σύμφωνα με τις εθνικές νομοθεσίες που διέπουν την άσκησή τους."
+    },
+    {
+      "eventId": "toolu_011wSqAFHXprHYLQzf4oNXWt",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "concept",
+                "value": "Το δικαίωμα γάμου και το δικαίωμα δημιουργίας οικογένειας"
+              },
+              "attribute": "διασφαλίζονται",
+              "manner": {
+                "type": "concept",
+                "value": "σύμφωνα με τις εθνικές νομοθεσίες που διέπουν την άσκησή τους"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Το δικαίωμα γάμου και το δικαίωμα δημιουργίας οικογένειας διασφαλίζονται σύμφωνα με τις εθνικές νομοθεσίες που διέπουν την άσκησή τους.",
+            "language": "el",
+            "sha256": "bdf5ca5e5257813bde9b21356b89992ca51b67943e1cf3406f9913c74db1cc2b"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "bdf5ca5e5257813bde9b21356b89992ca51b67943e1cf3406f9913c74db1cc2b",
+            "timestamp": "2026-10-16T16:55:06.180Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": "unbound_source_content",
+          "diagnostics": [
+            "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+          ],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "concept",
+                    "value": "Το δικαίωμα γάμου και το δικαίωμα δημιουργίας οικογένειας"
+                  },
+                  "attribute": "διασφαλίζονται",
+                  "manner": {
+                    "type": "concept",
+                    "value": "σύμφωνα με τις εθνικές νομοθεσίες που διέπουν την άσκησή τους"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": false,
+            "unsourced": [],
+            "uncovered": [
+              "language_unsupported"
+            ],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Το δικαίωμα γάμου και το δικαίωμα δημιουργίας οικογένειας διασφαλίζονται σύμφωνα με τις εθνικές νομοθεσίες που διέπουν την άσκησή τους."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 32214,
+    "cache_read_input_tokens": 305202,
+    "output_tokens": 9596,
+    "output_tokens_details": {
+      "thinking_tokens": 7041
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 32214,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 524,
+        "cache_read_input_tokens": 63864,
+        "cache_creation_input_tokens": 2255,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2255
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.28588040000000003,
+  "numTurns": 6,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": false,
+    "failureClass": "unbound_source_content",
+    "diagnostics": [
+      "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+    ]
+  },
+  "rawStream": "raw/clc1-0ccc0305c448df06.jsonl",
+  "rawStreamSha256": "b853dd9e09cd8d8287f71245c40f926d67b994304cff687be908cd947cef3112",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

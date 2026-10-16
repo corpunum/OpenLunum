@@ -1,0 +1,571 @@
+{
+  "handle": "clc1-788dc4fad18bc02e",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "event",
+    "clauses": [
+      {
+        "predicate": "grant",
+        "roles": {
+          "agent": {
+            "type": "entity",
+            "id": "GDPR"
+          },
+          "recipient": {
+            "type": "group",
+            "value": "EU citizens"
+          },
+          "theme": "more control over their own personal data"
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01AVGkXJLPZ5Q3FFF5unYQp9",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "concept",
+                "id": "GDPR"
+              },
+              "action": "going_to_give",
+              "recipient": {
+                "type": "group",
+                "value": "EU citizens"
+              },
+              "object": "more control over their own personal data",
+              "result": "improving their security both online and offline"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline.",
+            "language": "en",
+            "sha256": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0",
+            "timestamp": "2026-10-16T16:47:57.500Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'going_to_give' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline."
+    },
+    {
+      "eventId": "toolu_012RLcWNHKhfT98kxTcmeE1h",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "concept",
+                "id": "GDPR"
+              },
+              "action": "going to give",
+              "recipient": {
+                "type": "group",
+                "value": "EU citizens"
+              },
+              "object": "more control over their own personal data",
+              "result": "improving their security both online and offline"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline.",
+            "language": "en",
+            "sha256": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0",
+            "timestamp": "2026-10-16T16:48:11.561Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'going_to_give' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline."
+    },
+    {
+      "eventId": "toolu_01CDuwUrSddcRsUN6R6rg8pu",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "concept",
+                "id": "GDPR"
+              },
+              "action": "give",
+              "recipient": {
+                "type": "group",
+                "value": "EU citizens"
+              },
+              "object": "more control over their own personal data",
+              "result": "improving their security both online and offline"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline.",
+            "language": "en",
+            "sha256": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0",
+            "timestamp": "2026-10-16T16:48:36.102Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'give' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline."
+    },
+    {
+      "eventId": "toolu_01TCWpMVMaUByyfTdpbwWRSN",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "grant",
+            "roles": {
+              "agent": {
+                "type": "concept",
+                "id": "GDPR"
+              },
+              "recipient": {
+                "type": "group",
+                "value": "EU citizens"
+              },
+              "theme": "more control over their own personal data"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline.",
+            "language": "en",
+            "sha256": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0",
+            "timestamp": "2026-10-16T16:48:47.005Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "category_not_auto_promotable:event",
+              "high_risk_semantics:predicate 'grant' is safety-critical",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": "frame_noncanonical",
+          "diagnostics": [
+            "Role 'agent' for predicate 'grant' has disallowed term type 'concept'; expected one of [actor, entity, system]"
+          ],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "grant",
+                "roles": {
+                  "agent": {
+                    "type": "concept",
+                    "id": "GDPR"
+                  },
+                  "recipient": {
+                    "type": "group",
+                    "value": "EU citizens"
+                  },
+                  "theme": "more control over their own personal data"
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": null
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline."
+    },
+    {
+      "eventId": "toolu_01Fo1pb1NAxXg1uEdT7dBcNY",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "grant",
+            "roles": {
+              "agent": {
+                "type": "entity",
+                "id": "GDPR"
+              },
+              "recipient": {
+                "type": "group",
+                "value": "EU citizens"
+              },
+              "theme": "more control over their own personal data"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline.",
+            "language": "en",
+            "sha256": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "e483f3514f0e5d78f8b7da3d4ff004e0fa513f0d25e4c50abc023c4867da36f0",
+            "timestamp": "2026-10-16T16:48:52.335Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:74de1a23e82bdea45d276d921038a441",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "category_not_auto_promotable:event",
+              "high_risk_semantics:predicate 'grant' is safety-critical",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "grant",
+                "roles": {
+                  "agent": {
+                    "type": "entity",
+                    "id": "GDPR"
+                  },
+                  "recipient": {
+                    "type": "group",
+                    "value": "EU citizens"
+                  },
+                  "theme": "more control over their own personal data"
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": null
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "The GDPR is going to give EU citizens more control over their own personal data, improving their security both online and offline."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 33424,
+    "cache_read_input_tokens": 432192,
+    "output_tokens": 9819,
+    "output_tokens_details": {
+      "thinking_tokens": 7806
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 33424,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 129,
+        "cache_read_input_tokens": 65761,
+        "cache_creation_input_tokens": 1568,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1568
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.3183564,
+  "numTurns": 8,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/clc1-788dc4fad18bc02e.jsonl",
+  "rawStreamSha256": "9e6f2c794df60546743eb3c936c81259ab78983d00af2917f06db5e7cef5a3b3",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

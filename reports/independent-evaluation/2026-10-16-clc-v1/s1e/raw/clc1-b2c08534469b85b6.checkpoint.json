@@ -1,0 +1,195 @@
+{
+  "handle": "clc1-b2c08534469b85b6",
+  "sourceLanguage": "el",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01Ap1BYq1xqTS1NapkLV5q6U",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": "Ο γενικός κανονισμός για την προστασία δεδομένων (ΓΚΠΔ)",
+              "action": "εφαρμόζεται",
+              "duration": "2 χρόνια αφότου η ΕΕ δεσμεύτηκε για σημαντική μεταρρύθμιση του πλαισίου προστασίας δεδομένων"
+            },
+            "time": {
+              "type": "date",
+              "value": "2018-05-25"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Ο γενικός κανονισμός για την προστασία δεδομένων (ΓΚΠΔ) εφαρμόζεται από τις 25 Μαΐου 2018, 2 χρόνια αφότου η ΕΕ δεσμεύτηκε για σημαντική μεταρρύθμιση του πλαισίου προστασίας δεδομένων.",
+            "language": "el",
+            "sha256": "76f323d0ca525ddc040671ca581562d022cdcb8350c9222a41618d0f38784644"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "76f323d0ca525ddc040671ca581562d022cdcb8350c9222a41618d0f38784644",
+            "timestamp": "2026-10-16T16:12:42.369Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'εφαρμόζεται' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "Ο γενικός κανονισμός για την προστασία δεδομένων (ΓΚΠΔ) εφαρμόζεται από τις 25 Μαΐου 2018, 2 χρόνια αφότου η ΕΕ δεσμεύτηκε για σημαντική μεταρρύθμιση του πλαισίου προστασίας δεδομένων."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": true,
+      "error": "unexpected_frame_roles:time"
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 33970,
+    "cache_read_input_tokens": 435858,
+    "output_tokens": 10424,
+    "output_tokens_details": {
+      "thinking_tokens": 6576
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 33970,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 1530,
+        "cache_read_input_tokens": 65934,
+        "cache_creation_input_tokens": 1941,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1941
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.32732360000000005,
+  "numTurns": 8,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": false,
+    "candidateIdentityAvailable": false,
+    "failureClass": "protocol_noncanonical",
+    "diagnostics": [
+      "predicate 'εφαρμόζεται' is not registered and remains unresolved"
+    ]
+  },
+  "rawStream": "raw/clc1-b2c08534469b85b6.jsonl",
+  "rawStreamSha256": "2b51c0023b13a373e5ffafc135fa98751e7a5d51ba019a8cc0402368e66b220b",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

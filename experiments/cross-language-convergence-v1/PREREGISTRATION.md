@@ -179,3 +179,21 @@ The stopped run is kept and not scored. The scored runs are `s1d`, `s2d`, `s3d` 
 **Scoring is unchanged.** An invalid item counts as not covered and stays in every denominator. Invalid items are counted in the report.
 
 The stopped runs are kept. The scored runs are `s1e`, `s2e`, `s3e` and `r2e`.
+
+## Amendment 7 (2026-10-16): parallel sets and two interrupted runs
+
+**Parallel runs.** To finish faster, `s2e`, `s3e` and `r2e` ran in parallel, each in a separate clone at the same commit (`e44a300`) as `s1e`. Each clone passed the v23 preflight binding with 0 provider calls before launch. Their outputs were copied unchanged into this repository.
+
+**Interrupted runs.**
+- The session's background-task time limit killed the `s2e` and `r2e` runners mid-run:
+  - `s2e`: 51 of 80 items done;
+  - `r2e`: 66 of 80 items done.
+- In each, the item in flight is recorded as `INTERRUPTED` and has no outcome. Both runs are kept as they are.
+
+**Continuations.** The items with no outcome are run as continuations:
+- `s2e-rest`: 30 items, listed in `requests-s2-rest.jsonl`;
+- `r2e-rest`: 15 items, listed in `requests-r2-rest.jsonl`.
+
+They use the same package, model and ceiling, at the commit that adds these lists. Items that finished, including invalid ones, are **not** re-run.
+
+**Scoring** takes, for each item, the row from the run that gave it an outcome. Interrupted rows count only if their item is not re-run.
