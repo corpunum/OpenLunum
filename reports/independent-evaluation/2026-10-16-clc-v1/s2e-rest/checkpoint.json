@@ -1,0 +1,4873 @@
+{
+  "status": "FINISHED_INVALID_OR_DIAGNOSTIC",
+  "startedAt": "2026-10-16T16:56:42.851Z",
+  "selected": [
+    "clc1-dc39814fb510e4fd",
+    "clc1-4fb47131c76a0e8b",
+    "clc1-f38dc2610ff5b508",
+    "clc1-806c88d0b43c339d",
+    "clc1-11af47b46796acc1",
+    "clc1-ec76b77bc1efe31d",
+    "clc1-1ef793a234b61900",
+    "clc1-0fb5a215728f82b5",
+    "clc1-5a3e15c4e74f4dcd",
+    "clc1-32149da401a52e18",
+    "clc1-3a7f1a3f9f144190",
+    "clc1-92da0eff61f09666",
+    "clc1-4639cbb6e4a66623",
+    "clc1-641d81cad4182453",
+    "clc1-2f5d739a7d04fe9f",
+    "clc1-e90500645d237fab",
+    "clc1-a6ee832d06cd80ff",
+    "clc1-baa2208f2b47d4dd",
+    "clc1-b03b549ec348ab40",
+    "clc1-a3ae37c3cdeeb6a6",
+    "clc1-ce14805134a865af",
+    "clc1-a7f6c63183490730",
+    "clc1-98799b6d7577604f",
+    "clc1-d2e28d0a55615b4e",
+    "clc1-6755aa6a844af933",
+    "clc1-37e586f09cfc42c4",
+    "clc1-d456dc48449bb5ef",
+    "clc1-1ea47f0a0c579f04",
+    "clc1-fb47452c364ba8b8",
+    "clc1-551400c0e8bc0d62"
+  ],
+  "completed": [
+    {
+      "handle": "clc1-dc39814fb510e4fd",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "preference",
+        "clauses": [
+          {
+            "predicate": "prefer",
+            "roles": {
+              "experiencer": {
+                "type": "actor",
+                "id": "I"
+              },
+              "theme": {
+                "type": "text",
+                "value": "visit the ruins of Athens"
+              }
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_0134EzUpWVSjTqhjVbx9jnN1",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "preference",
+            "clauses": [
+              {
+                "predicate": "prefer",
+                "roles": {
+                  "experiencer": {
+                    "type": "actor",
+                    "id": "I"
+                  },
+                  "theme": {
+                    "type": "text",
+                    "value": "visit the ruins of Athens"
+                  }
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "I'd like to visit the ruins of Athens.",
+                "language": "en",
+                "sha256": "ecaf9724e4539828ec0175e8d0d66b781d934535511f5d9e982408cdb012b749"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "ecaf9724e4539828ec0175e8d0d66b781d934535511f5d9e982408cdb012b749",
+                "timestamp": "2026-10-16T16:57:18.009Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:8e9874a86aa1e024d3f4330efab11301",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "preference",
+                "clauses": [
+                  {
+                    "predicate": "prefer",
+                    "roles": {
+                      "experiencer": {
+                        "type": "actor",
+                        "id": "I"
+                      },
+                      "theme": {
+                        "type": "text",
+                        "value": "visit the ruins of Athens"
+                      }
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": null
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "I'd like to visit the ruins of Athens."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 21944,
+        "cache_read_input_tokens": 179851,
+        "output_tokens": 2418,
+        "output_tokens_details": {
+          "thinking_tokens": 1875
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 21944,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 51,
+            "cache_read_input_tokens": 54508,
+            "cache_creation_input_tokens": 1341,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1341
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1479422,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/clc1-dc39814fb510e4fd.jsonl",
+      "rawStreamSha256": "fb2acff546bbb420221ac95a84d2c9a31c2c14644ec9918464e338b15dcf214c",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-4fb47131c76a0e8b",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": true,
+          "error": "invalid_builder_frame:placeholder_role"
+        }
+      ],
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 20199,
+        "cache_read_input_tokens": 125161,
+        "output_tokens": 2817,
+        "output_tokens_details": {
+          "thinking_tokens": 2370
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20199,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 916,
+            "cache_read_input_tokens": 52392,
+            "cache_creation_input_tokens": 1712,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1712
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1340102,
+      "numTurns": 3,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-4fb47131c76a0e8b.jsonl",
+      "rawStreamSha256": "bbfc21d864933126c86bc69de55173714da4b65a9ff901f114c8e7d4f75a7f17",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-f38dc2610ff5b508",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": null,
+      "observedContractMatchesPackage": null,
+      "observedContractBinding": {
+        "match": false,
+        "mismatches": [
+          "missing_contract"
+        ]
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [],
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4938,
+        "cache_read_input_tokens": 33905,
+        "output_tokens": 72,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4938,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 72,
+            "cache_read_input_tokens": 33905,
+            "cache_creation_input_tokens": 4938,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4938
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.027256999999999997,
+      "numTurns": 1,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-f38dc2610ff5b508.jsonl",
+      "rawStreamSha256": "28fd446c1374444102c71fb19c109f05c35551a9ec7c06333b6eea5ba873ecd7",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [
+        "CONTRACT_UNBOUND"
+      ],
+      "evidenceValid": false
+    },
+    {
+      "handle": "clc1-806c88d0b43c339d",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "topic",
+            "roles": {
+              "subject": "Τι εθνικότητας είναι ο Τομ;"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_014D5SqFFqCBZgVJpkQy8Kdj",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "topic",
+                "roles": {
+                  "subject": "Τι εθνικότητας είναι ο Τομ;"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Τι εθνικότητας είναι ο Τομ;",
+                "language": "el",
+                "sha256": "f316125a5af80bbcf7269355642b0824907c586ba14682de74d13637138843aa"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "f316125a5af80bbcf7269355642b0824907c586ba14682de74d13637138843aa",
+                "timestamp": "2026-10-16T16:58:43.313Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "topic",
+                    "roles": {
+                      "subject": "Τι εθνικότητας είναι ο Τομ;"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "language_unsupported"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Τι εθνικότητας είναι ο Τομ;"
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 22500,
+        "cache_read_input_tokens": 179756,
+        "output_tokens": 3117,
+        "output_tokens_details": {
+          "thinking_tokens": 2529
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 22500,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 410,
+            "cache_read_input_tokens": 54935,
+            "cache_creation_input_tokens": 1470,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1470
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.15713719999999998,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": false,
+        "failureClass": "unbound_source_content",
+        "diagnostics": [
+          "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+        ]
+      },
+      "rawStream": "raw/clc1-806c88d0b43c339d.jsonl",
+      "rawStreamSha256": "0a6bc8538f81bef72f99d71a449155aa0b26b39a3b5f579853c61bd9edefeb27",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-11af47b46796acc1",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "send",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Tom"
+              },
+              "object": {
+                "type": "text",
+                "value": "sound advice"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "Mary"
+              }
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_017x2TPMujb3nKKXRwx8KXTm",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "send",
+                "roles": {
+                  "agent": {
+                    "type": "actor",
+                    "id": "Tom"
+                  },
+                  "object": {
+                    "type": "text",
+                    "value": "sound advice"
+                  },
+                  "recipient": {
+                    "type": "actor",
+                    "id": "Mary"
+                  }
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Tom gave Mary sound advice.",
+                "language": "en",
+                "sha256": "9e7059e55f5159eaf78b916bddc328c793c40ad2e2acf01893487f1f64cd797c"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "9e7059e55f5159eaf78b916bddc328c793c40ad2e2acf01893487f1f64cd797c",
+                "timestamp": "2026-10-16T16:59:03.268Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:cffc0334522ba9aee191dbcde1274f51",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "category_not_auto_promotable:event",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "event",
+                "clauses": [
+                  {
+                    "predicate": "send",
+                    "roles": {
+                      "agent": {
+                        "type": "actor",
+                        "id": "Tom"
+                      },
+                      "object": {
+                        "type": "text",
+                        "value": "sound advice"
+                      },
+                      "recipient": {
+                        "type": "actor",
+                        "id": "Mary"
+                      }
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": null
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Tom gave Mary sound advice."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 20391,
+        "cache_read_input_tokens": 177726,
+        "output_tokens": 636,
+        "output_tokens_details": {
+          "thinking_tokens": 55
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20391,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 11,
+            "cache_read_input_tokens": 52905,
+            "cache_creation_input_tokens": 1391,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1391
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.12348519999999999,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/clc1-11af47b46796acc1.jsonl",
+      "rawStreamSha256": "a0617b0caf30c94fde6ebb5213f41de4250502879d46c5ce1041f4f408ac3912",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-ec76b77bc1efe31d",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "send",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "Τομ"
+              },
+              "object": {
+                "type": "concept",
+                "value": "καλή συμβουλή"
+              },
+              "recipient": {
+                "type": "actor",
+                "id": "Μαίρη"
+              }
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_012eFKnUhbje6cijouq2XDjq",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "send",
+                "roles": {
+                  "agent": {
+                    "type": "actor",
+                    "id": "Τομ"
+                  },
+                  "object": {
+                    "type": "concept",
+                    "value": "καλή συμβουλή"
+                  },
+                  "recipient": {
+                    "type": "actor",
+                    "id": "Μαίρη"
+                  }
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Ο Τομ έδωσε καλή συμβουλή στη Μαίρη.",
+                "language": "el",
+                "sha256": "cea632fab203de1a86dd752737c85c2119e4a9ce3ac4198e632a56eb1091af96"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "cea632fab203de1a86dd752737c85c2119e4a9ce3ac4198e632a56eb1091af96",
+                "timestamp": "2026-10-16T16:59:24.622Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:79dc85af8e049cadd44b72f593b3bf7c",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "category_not_auto_promotable:event",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "event",
+                "clauses": [
+                  {
+                    "predicate": "send",
+                    "roles": {
+                      "agent": {
+                        "type": "actor",
+                        "id": "Τομ"
+                      },
+                      "object": {
+                        "type": "concept",
+                        "value": "καλή συμβουλή"
+                      },
+                      "recipient": {
+                        "type": "actor",
+                        "id": "Μαίρη"
+                      }
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": null
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Ο Τομ έδωσε καλή συμβουλή στη Μαίρη."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 20979,
+        "cache_read_input_tokens": 178253,
+        "output_tokens": 1023,
+        "output_tokens_details": {
+          "thinking_tokens": 445
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20979,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 11,
+            "cache_read_input_tokens": 53349,
+            "cache_creation_input_tokens": 1535,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1535
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.12981259999999997,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/clc1-ec76b77bc1efe31d.jsonl",
+      "rawStreamSha256": "c1f6f8aab8dbc56e39309f16cc711b6ba1c11131906642c2a04bfccfe20b1072",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-1ef793a234b61900",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": null,
+      "observedContractMatchesPackage": null,
+      "observedContractBinding": {
+        "match": false,
+        "mismatches": [
+          "missing_contract"
+        ]
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [],
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4939,
+        "cache_read_input_tokens": 33905,
+        "output_tokens": 92,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4939,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 92,
+            "cache_read_input_tokens": 33905,
+            "cache_creation_input_tokens": 4939,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4939
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.027461,
+      "numTurns": 1,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-1ef793a234b61900.jsonl",
+      "rawStreamSha256": "cee91fe9e6ebcf180c733cb166a00d328421fe6fb8ed91ab4ad619ca213f3a11",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [
+        "CONTRACT_UNBOUND"
+      ],
+      "evidenceValid": false
+    },
+    {
+      "handle": "clc1-0fb5a215728f82b5",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18700,
+        "cache_read_input_tokens": 72777,
+        "output_tokens": 1069,
+        "output_tokens_details": {
+          "thinking_tokens": 885
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18700,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 435,
+            "cache_read_input_tokens": 38872,
+            "cache_creation_input_tokens": 13733,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13733
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.10005340000000001,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-0fb5a215728f82b5.jsonl",
+      "rawStreamSha256": "8661360e7c3568f03a28c6a121fea060de688deb1581e6190df779643136d39b",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-5a3e15c4e74f4dcd",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_013oBazCNJdfMbbjvQiaWq2g",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "There was no sign of life in the house.",
+                "language": "en",
+                "sha256": "26cffcd956a036c52e2039839407e6064ebabf03c6dbce35f3dd93afdb797e07"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "26cffcd956a036c52e2039839407e6064ebabf03c6dbce35f3dd93afdb797e07",
+                "timestamp": "2026-10-16T17:00:19.089Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "There was no sign of life in the house."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 20561,
+        "cache_read_input_tokens": 124783,
+        "output_tokens": 1766,
+        "output_tokens_details": {
+          "thinking_tokens": 1371
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20561,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 21,
+            "cache_read_input_tokens": 52031,
+            "cache_creation_input_tokens": 2435,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2435
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1248726,
+      "numTurns": 3,
+      "abstentionSubmitted": true,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-5a3e15c4e74f4dcd.jsonl",
+      "rawStreamSha256": "3c52a726e8bada3392e4bbc9af9a910a68d3653c8c8dd1cb4f5b08fb0e79230b",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-32149da401a52e18",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18382,
+        "cache_read_input_tokens": 72762,
+        "output_tokens": 791,
+        "output_tokens_details": {
+          "thinking_tokens": 632
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18382,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 464,
+            "cache_read_input_tokens": 38857,
+            "cache_creation_input_tokens": 13430,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13430
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0959984,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-32149da401a52e18.jsonl",
+      "rawStreamSha256": "1cdae43846b34d226559299fc64e8efe26a05dce375ccdb4f7fcd8da78b7497d",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-3a7f1a3f9f144190",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "request",
+            "roles": {
+              "agent": {
+                "type": "actor",
+                "id": "I"
+              },
+              "theme": "a lot of questions"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01S51KGJiwcX99tU4akjjK9s",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "request",
+                "roles": {
+                  "agent": {
+                    "type": "actor",
+                    "id": "I"
+                  },
+                  "theme": "a lot of questions"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "I asked a lot of questions.",
+                "language": "en",
+                "sha256": "486ae8e9c8124f1a3711887ba23e6858bd86cb3c0c3e80ce6452ffba7ad638f9"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "486ae8e9c8124f1a3711887ba23e6858bd86cb3c0c3e80ce6452ffba7ad638f9",
+                "timestamp": "2026-10-16T17:01:03.070Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:d2d2fdb2621916d76a56c48326fd476c",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "category_not_auto_promotable:event",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "event",
+                "clauses": [
+                  {
+                    "predicate": "request",
+                    "roles": {
+                      "agent": {
+                        "type": "actor",
+                        "id": "I"
+                      },
+                      "theme": "a lot of questions"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": null
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "I asked a lot of questions."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 21091,
+        "cache_read_input_tokens": 178954,
+        "output_tokens": 1538,
+        "output_tokens_details": {
+          "thinking_tokens": 1026
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 21091,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 45,
+            "cache_read_input_tokens": 53664,
+            "cache_creation_input_tokens": 1332,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1332
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1355508,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/clc1-3a7f1a3f9f144190.jsonl",
+      "rawStreamSha256": "33a92ee69dde4358b2f49634de74c0d8b5a8217c687c77be9358d85aa2b6457f",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-92da0eff61f09666",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unresolved"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01SFp77UG9y7CK19X4MAhFPU",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Έκανα πολλές ερωτήσεις.",
+                "language": "el",
+                "sha256": "4fe890ce5b473902b911c6d20f1f011400cdc5f73b9287ac0adea792c3f5b30d"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "4fe890ce5b473902b911c6d20f1f011400cdc5f73b9287ac0adea792c3f5b30d",
+                "timestamp": "2026-10-16T17:02:13.252Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Έκανα πολλές ερωτήσεις."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": true,
+          "error": "invalid_builder_frame:placeholder_role"
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 24253,
+        "cache_read_input_tokens": 182256,
+        "output_tokens": 5250,
+        "output_tokens_details": {
+          "thinking_tokens": 4720
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 24253,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 21,
+            "cache_read_input_tokens": 56993,
+            "cache_creation_input_tokens": 1165,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1165
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.18597919999999998,
+      "numTurns": 4,
+      "abstentionSubmitted": true,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-92da0eff61f09666.jsonl",
+      "rawStreamSha256": "e6f18f49a3f6946464e12385238becfd0c1962432c59942caee0d4c51ebf6ceb",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-4639cbb6e4a66623",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": null,
+      "observedContractMatchesPackage": null,
+      "observedContractBinding": {
+        "match": false,
+        "mismatches": [
+          "missing_contract"
+        ]
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [],
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4936,
+        "cache_read_input_tokens": 33905,
+        "output_tokens": 66,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4936,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 66,
+            "cache_read_input_tokens": 33905,
+            "cache_creation_input_tokens": 4936,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4936
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.027189,
+      "numTurns": 1,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-4639cbb6e4a66623.jsonl",
+      "rawStreamSha256": "9efd672f1c2f51077fb17e6082d39d3fb2dbe501b1984c73bd2118d7c0e9b4be",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [
+        "CONTRACT_UNBOUND"
+      ],
+      "evidenceValid": false
+    },
+    {
+      "handle": "clc1-641d81cad4182453",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01EFvr2KCesRBbYQjaErJ33X",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "value": "I"
+                  },
+                  "attribute": "νέος και χαζός"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Ήμουν νέος και χαζός.",
+                "language": "el",
+                "sha256": "804b5be461025e4a2ed5fed84cef0e5ae26330d87112d521b624696f2b4f302c"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "804b5be461025e4a2ed5fed84cef0e5ae26330d87112d521b624696f2b4f302c",
+                "timestamp": "2026-10-16T17:03:14.755Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": {
+                        "type": "actor",
+                        "value": "I"
+                      },
+                      "attribute": "νέος και χαζός"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "language_unsupported"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Ήμουν νέος και χαζός."
+        },
+        {
+          "eventId": "toolu_01EegT4yGGLDFQqrUmAjFNhz",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Ήμουν νέος και χαζός.",
+                "language": "el",
+                "sha256": "804b5be461025e4a2ed5fed84cef0e5ae26330d87112d521b624696f2b4f302c"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "804b5be461025e4a2ed5fed84cef0e5ae26330d87112d521b624696f2b4f302c",
+                "timestamp": "2026-10-16T17:03:21.263Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Ήμουν νέος και χαζός."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 10,
+        "cache_creation_input_tokens": 25104,
+        "cache_read_input_tokens": 238854,
+        "output_tokens": 4360,
+        "output_tokens_details": {
+          "thinking_tokens": 3489
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 25104,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 43,
+            "cache_read_input_tokens": 57749,
+            "cache_creation_input_tokens": 1260,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1260
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.19180680000000003,
+      "numTurns": 5,
+      "abstentionSubmitted": true,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": false,
+        "failureClass": "unbound_source_content",
+        "diagnostics": [
+          "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+        ]
+      },
+      "rawStream": "raw/clc1-641d81cad4182453.jsonl",
+      "rawStreamSha256": "35ece6f375df18e6ce58e83ab68e499652bbb123abdcfcb616b31c8130463e31",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-2f5d739a7d04fe9f",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18363,
+        "cache_read_input_tokens": 72749,
+        "output_tokens": 1130,
+        "output_tokens_details": {
+          "thinking_tokens": 977
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18363,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 809,
+            "cache_read_input_tokens": 38844,
+            "cache_creation_input_tokens": 13424,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13424
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0993098,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-2f5d739a7d04fe9f.jsonl",
+      "rawStreamSha256": "7e582acf8dc9417111d9364dfe4bdc2abef5176147059f73564385d11b13e373",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-e90500645d237fab",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01M9HrhiVUTCnjHmnTNCnJUW",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Ο Τομ μου γράφει μια φορά τη βδομάδα.",
+                "language": "el",
+                "sha256": "fd00e5f2c06b8795abd9475c43d17dad583ec3713cd2b009e221720b88efc361"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "fd00e5f2c06b8795abd9475c43d17dad583ec3713cd2b009e221720b88efc361",
+                "timestamp": "2026-10-16T17:04:12.458Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Ο Τομ μου γράφει μια φορά τη βδομάδα."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 20745,
+        "cache_read_input_tokens": 125534,
+        "output_tokens": 1994,
+        "output_tokens_details": {
+          "thinking_tokens": 1683
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20745,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 88,
+            "cache_read_input_tokens": 52774,
+            "cache_creation_input_tokens": 1876,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1876
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1280388,
+      "numTurns": 3,
+      "abstentionSubmitted": true,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-e90500645d237fab.jsonl",
+      "rawStreamSha256": "ed83c95f9a5ed44a272f556714fd8e333e544e34fba41ac2b25af967e6172d34",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-a6ee832d06cd80ff",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_0195ssLTjxmECMTJBfeocgFU",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Tom's mother lives in Boston. His father lives in Chicago.",
+                "language": "en",
+                "sha256": "41c7dd87111d6f66cad004fc2dafe065112ee1cc9c7f4ee83fdcccff10125628"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "41c7dd87111d6f66cad004fc2dafe065112ee1cc9c7f4ee83fdcccff10125628",
+                "timestamp": "2026-10-16T17:04:54.669Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Tom's mother lives in Boston. His father lives in Chicago."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 21876,
+        "cache_read_input_tokens": 125197,
+        "output_tokens": 3050,
+        "output_tokens_details": {
+          "thinking_tokens": 2809
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 21876,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 21,
+            "cache_read_input_tokens": 52435,
+            "cache_creation_input_tokens": 3346,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 3346
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1430554,
+      "numTurns": 3,
+      "abstentionSubmitted": true,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-a6ee832d06cd80ff.jsonl",
+      "rawStreamSha256": "1011c4d91afc83f41682f47cf1625d0d65fd8417dc6d066f3fd3005dd98556b0",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-baa2208f2b47d4dd",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 20214,
+        "cache_read_input_tokens": 72783,
+        "output_tokens": 4241,
+        "output_tokens_details": {
+          "thinking_tokens": 3971
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20214,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2107,
+            "cache_read_input_tokens": 38878,
+            "cache_creation_input_tokens": 15241,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 15241
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1378306,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-baa2208f2b47d4dd.jsonl",
+      "rawStreamSha256": "d736aae5375e058c2f00cd0f4bcece535dc4298efd95f52be3fd95957e347e0f",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-b03b549ec348ab40",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18202,
+        "cache_read_input_tokens": 72742,
+        "output_tokens": 818,
+        "output_tokens_details": {
+          "thinking_tokens": 689
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18202,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 651,
+            "cache_read_input_tokens": 38837,
+            "cache_creation_input_tokens": 13270,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13270
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0955444,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-b03b549ec348ab40.jsonl",
+      "rawStreamSha256": "12b8530214aedf622fc98593102241b7f7f9ab1ade659bdd7adad0f3371d71f9",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-a3ae37c3cdeeb6a6",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_016uAsMJyQq4PRtzp1ZvkK9M",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "action": "μιλήσω",
+                  "object": "Γαλλικά"
+                },
+                "negated": true,
+                "modality": "ability"
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Δεν μπορώ να μιλήσω Γαλλικά.",
+                "language": "el",
+                "sha256": "77340160e7fffd615ef55e197e9470ea9883aabe0b75fdd7a2f768b2e7b5fcc8"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "77340160e7fffd615ef55e197e9470ea9883aabe0b75fdd7a2f768b2e7b5fcc8",
+                "timestamp": "2026-10-16T17:06:35.155Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "missing_sem"
+                ]
+              },
+              "failureClass": "protocol_noncanonical",
+              "diagnostics": [
+                "predicate 'μιλήσω' is not registered and remains unresolved"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "rejected",
+          "sourceText": "Δεν μπορώ να μιλήσω Γαλλικά."
+        },
+        {
+          "eventId": "toolu_01GZRLgJ3rCG6YvBPtphafpw",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Δεν μπορώ να μιλήσω Γαλλικά.",
+                "language": "el",
+                "sha256": "77340160e7fffd615ef55e197e9470ea9883aabe0b75fdd7a2f768b2e7b5fcc8"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "77340160e7fffd615ef55e197e9470ea9883aabe0b75fdd7a2f768b2e7b5fcc8",
+                "timestamp": "2026-10-16T17:06:42.491Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Δεν μπορώ να μιλήσω Γαλλικά."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 10,
+        "cache_creation_input_tokens": 22921,
+        "cache_read_input_tokens": 234799,
+        "output_tokens": 2284,
+        "output_tokens_details": {
+          "thinking_tokens": 1464
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 22921,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 36,
+            "cache_read_input_tokens": 55479,
+            "cache_creation_input_tokens": 1347,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1347
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1615038,
+      "numTurns": 5,
+      "abstentionSubmitted": true,
+      "lastSubmission": {
+        "frameValid": false,
+        "candidateIdentityAvailable": false,
+        "failureClass": "protocol_noncanonical",
+        "diagnostics": [
+          "predicate 'μιλήσω' is not registered and remains unresolved"
+        ]
+      },
+      "rawStream": "raw/clc1-a3ae37c3cdeeb6a6.jsonl",
+      "rawStreamSha256": "a439020c0eda24041742d7be1579d615317a0c00685a0c4fe11740acc2d00533",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-ce14805134a865af",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01L9J5Bmeptqn5EAPaiWJmWx",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": "He",
+                  "action": "plays",
+                  "object": "the piano",
+                  "manner": "very well"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "He plays the piano very well.",
+                "language": "en",
+                "sha256": "a70ee7dd7400c3ff46c42464a36561d2ed74f43e2aba8807f0074f5305aa9148"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "a70ee7dd7400c3ff46c42464a36561d2ed74f43e2aba8807f0074f5305aa9148",
+                "timestamp": "2026-10-16T17:07:05.685Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "missing_sem"
+                ]
+              },
+              "failureClass": "protocol_noncanonical",
+              "diagnostics": [
+                "predicate 'plays' is not registered and remains unresolved"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "rejected",
+          "sourceText": "He plays the piano very well."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 20820,
+        "cache_read_input_tokens": 178639,
+        "output_tokens": 3728,
+        "output_tokens_details": {
+          "thinking_tokens": 3089
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20820,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2638,
+            "cache_read_input_tokens": 53710,
+            "cache_creation_input_tokens": 1015,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1015
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.15630380000000002,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": false,
+        "candidateIdentityAvailable": false,
+        "failureClass": "protocol_noncanonical",
+        "diagnostics": [
+          "predicate 'plays' is not registered and remains unresolved"
+        ]
+      },
+      "rawStream": "raw/clc1-ce14805134a865af.jsonl",
+      "rawStreamSha256": "333aaff2eebdca6a86d562f8e3e13fbaf21432382997b880e18a7b2feb39800c",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-a7f6c63183490730",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18372,
+        "cache_read_input_tokens": 72754,
+        "output_tokens": 802,
+        "output_tokens_details": {
+          "thinking_tokens": 634
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18372,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 477,
+            "cache_read_input_tokens": 38849,
+            "cache_creation_input_tokens": 13428,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13428
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.09606680000000001,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-a7f6c63183490730.jsonl",
+      "rawStreamSha256": "561f14041d3c8695e420c7e59572f1757f77ce471744beca84477a5c7ada1b3b",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-98799b6d7577604f",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01Px6iQBE1srmXHUhxAT8LfL",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "instruction",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "action": "brush",
+                  "object": "your teeth",
+                  "condition": "after each meal"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Brush your teeth after each meal.",
+                "language": "en",
+                "sha256": "153e132a50942ea8702b90172fa93f751a5c50364a57465ab76fd583c3b7d6e0"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "153e132a50942ea8702b90172fa93f751a5c50364a57465ab76fd583c3b7d6e0",
+                "timestamp": "2026-10-16T17:08:41.347Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "missing_sem"
+                ]
+              },
+              "failureClass": "protocol_noncanonical",
+              "diagnostics": [
+                "predicate 'brush' is not registered and remains unresolved"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "rejected",
+          "sourceText": "Brush your teeth after each meal."
+        },
+        {
+          "eventId": "toolu_01Dd5fanfBEvyDy3exmWZSau",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Brush your teeth after each meal.",
+                "language": "en",
+                "sha256": "153e132a50942ea8702b90172fa93f751a5c50364a57465ab76fd583c3b7d6e0"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "153e132a50942ea8702b90172fa93f751a5c50364a57465ab76fd583c3b7d6e0",
+                "timestamp": "2026-10-16T17:08:51.606Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Brush your teeth after each meal."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 14,
+        "cache_creation_input_tokens": 26969,
+        "cache_read_input_tokens": 355016,
+        "output_tokens": 4686,
+        "output_tokens_details": {
+          "thinking_tokens": 3506
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 26969,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 79,
+            "cache_read_input_tokens": 59147,
+            "cache_creation_input_tokens": 1727,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1727
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.22576720000000003,
+      "numTurns": 7,
+      "abstentionSubmitted": true,
+      "lastSubmission": {
+        "frameValid": false,
+        "candidateIdentityAvailable": false,
+        "failureClass": "protocol_noncanonical",
+        "diagnostics": [
+          "predicate 'brush' is not registered and remains unresolved"
+        ]
+      },
+      "rawStream": "raw/clc1-98799b6d7577604f.jsonl",
+      "rawStreamSha256": "b76bcfb3447dae6c0903ea57a5146514a469552ae04679abe889b4e7c891544b",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-d2e28d0a55615b4e",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_019poP8Px7KdUWgHyNy871po",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "instruction",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "action": "βούρτσισε",
+                  "object": "τα δόντια σου",
+                  "duration": "μετά από κάθε γεύμα"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Βούρτσισε τα δόντια σου μετά από κάθε γεύμα.",
+                "language": "el",
+                "sha256": "819b6f5de699bc5fbdc27f4ddda11086f044328042ca2d39e418855f551831cf"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "819b6f5de699bc5fbdc27f4ddda11086f044328042ca2d39e418855f551831cf",
+                "timestamp": "2026-10-16T17:10:10.221Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "missing_sem"
+                ]
+              },
+              "failureClass": "protocol_noncanonical",
+              "diagnostics": [
+                "predicate 'βούρτσισε' is not registered and remains unresolved"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "rejected",
+          "sourceText": "Βούρτσισε τα δόντια σου μετά από κάθε γεύμα."
+        },
+        {
+          "eventId": "toolu_012KPZkVwR3uZxVXwfncD5kM",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Βούρτσισε τα δόντια σου μετά από κάθε γεύμα.",
+                "language": "el",
+                "sha256": "819b6f5de699bc5fbdc27f4ddda11086f044328042ca2d39e418855f551831cf"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "819b6f5de699bc5fbdc27f4ddda11086f044328042ca2d39e418855f551831cf",
+                "timestamp": "2026-10-16T17:10:34.316Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Βούρτσισε τα δόντια σου μετά από κάθε γεύμα."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 18,
+        "cache_creation_input_tokens": 32331,
+        "cache_read_input_tokens": 483619,
+        "output_tokens": 7766,
+        "output_tokens_details": {
+          "thinking_tokens": 5664
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 32331,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 41,
+            "cache_read_input_tokens": 63333,
+            "cache_creation_input_tokens": 2903,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2903
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.3037438,
+      "numTurns": 9,
+      "abstentionSubmitted": true,
+      "lastSubmission": {
+        "frameValid": false,
+        "candidateIdentityAvailable": false,
+        "failureClass": "protocol_noncanonical",
+        "diagnostics": [
+          "predicate 'βούρτσισε' is not registered and remains unresolved"
+        ]
+      },
+      "rawStream": "raw/clc1-d2e28d0a55615b4e.jsonl",
+      "rawStreamSha256": "57c4a0d1e4d4f51546a64e7c4f670a8158a584ed1a7b68e6f63fc4293344052b",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-6755aa6a844af933",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": null,
+      "observedContractMatchesPackage": null,
+      "observedContractBinding": {
+        "match": false,
+        "mismatches": [
+          "missing_contract"
+        ]
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [],
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 4933,
+        "cache_read_input_tokens": 33905,
+        "output_tokens": 71,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 4933,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 71,
+            "cache_read_input_tokens": 33905,
+            "cache_creation_input_tokens": 4933,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 4933
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.027227,
+      "numTurns": 1,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-6755aa6a844af933.jsonl",
+      "rawStreamSha256": "b1206b842f6f42038eee1e17fa2e7e5d50c104c72ef06e1dd4bc0264acd48b10",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [
+        "CONTRACT_UNBOUND"
+      ],
+      "evidenceValid": false
+    },
+    {
+      "handle": "clc1-37e586f09cfc42c4",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18196,
+        "cache_read_input_tokens": 72752,
+        "output_tokens": 2362,
+        "output_tokens_details": {
+          "thinking_tokens": 2150
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18196,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 2211,
+            "cache_read_input_tokens": 38847,
+            "cache_creation_input_tokens": 13254,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13254
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1109624,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-37e586f09cfc42c4.jsonl",
+      "rawStreamSha256": "2db324fc32f63bddad071763a9c39b0dee3da987cb73d3b2e5c0d14a6e65bd34",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-d456dc48449bb5ef",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01QvAqkP8rdVkGDnaxv1BvBn",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "id": "Tom"
+                  },
+                  "action": "speaks",
+                  "object": "French"
+                },
+                "negated": true
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Tom speaks no French.",
+                "language": "en",
+                "sha256": "2e5a30a2c49d5b7b0d882f87e27018a20c13d93d8f2ddddea637f139cf96aa2a"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "2e5a30a2c49d5b7b0d882f87e27018a20c13d93d8f2ddddea637f139cf96aa2a",
+                "timestamp": "2026-10-16T17:12:03.551Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "missing_sem"
+                ]
+              },
+              "failureClass": "protocol_noncanonical",
+              "diagnostics": [
+                "predicate 'speaks' is not registered and remains unresolved"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "rejected",
+          "sourceText": "Tom speaks no French."
+        },
+        {
+          "eventId": "toolu_014VxdnaoMutLtCTzDpFQRpM",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Tom speaks no French.",
+                "language": "en",
+                "sha256": "2e5a30a2c49d5b7b0d882f87e27018a20c13d93d8f2ddddea637f139cf96aa2a"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "2e5a30a2c49d5b7b0d882f87e27018a20c13d93d8f2ddddea637f139cf96aa2a",
+                "timestamp": "2026-10-16T17:12:28.454Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Tom speaks no French."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 26841,
+        "cache_read_input_tokens": 295239,
+        "output_tokens": 5424,
+        "output_tokens_details": {
+          "thinking_tokens": 4404
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 26841,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 82,
+            "cache_read_input_tokens": 57892,
+            "cache_creation_input_tokens": 2854,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2854
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.22067580000000003,
+      "numTurns": 6,
+      "abstentionSubmitted": true,
+      "lastSubmission": {
+        "frameValid": false,
+        "candidateIdentityAvailable": false,
+        "failureClass": "protocol_noncanonical",
+        "diagnostics": [
+          "predicate 'speaks' is not registered and remains unresolved"
+        ]
+      },
+      "rawStream": "raw/clc1-d456dc48449bb5ef.jsonl",
+      "rawStreamSha256": "d43b31b67b7548747f446df4a9d9dd8ce1871dd83cb59e7cea183df64ceef63f",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-1ea47f0a0c579f04",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "id": "Τομ"
+              },
+              "action": {
+                "type": "text",
+                "value": "μιλάει"
+              },
+              "object": {
+                "type": "text",
+                "value": "Γαλλικά"
+              }
+            },
+            "negated": true
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01JkuYypt92Axd9DkpFC4nKz",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "id": "Τομ"
+                  },
+                  "action": {
+                    "type": "text",
+                    "value": "μιλάει"
+                  },
+                  "object": {
+                    "type": "text",
+                    "value": "Γαλλικά"
+                  }
+                },
+                "negated": true
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Ο Τομ δε μιλάει Γαλλικά.",
+                "language": "el",
+                "sha256": "1dee620bbfe882061386f6eacdc9e5b0f17c14d4c2c56a0beef73b1e95be9540"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "1dee620bbfe882061386f6eacdc9e5b0f17c14d4c2c56a0beef73b1e95be9540",
+                "timestamp": "2026-10-16T17:13:05.937Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "assert",
+                    "roles": {
+                      "subject": {
+                        "type": "actor",
+                        "id": "Τομ"
+                      },
+                      "action": {
+                        "type": "text",
+                        "value": "μιλάει"
+                      },
+                      "object": {
+                        "type": "text",
+                        "value": "Γαλλικά"
+                      }
+                    },
+                    "negated": true
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "language_unsupported"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Ο Τομ δε μιλάει Γαλλικά."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 24561,
+        "cache_read_input_tokens": 291113,
+        "output_tokens": 2604,
+        "output_tokens_details": {
+          "thinking_tokens": 1456
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 24561,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 452,
+            "cache_read_input_tokens": 56881,
+            "cache_creation_input_tokens": 1585,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1585
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1825306,
+      "numTurns": 6,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": false,
+        "failureClass": "unbound_source_content",
+        "diagnostics": [
+          "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+        ]
+      },
+      "rawStream": "raw/clc1-1ea47f0a0c579f04.jsonl",
+      "rawStreamSha256": "d5a579ab81f6d0e38ea0d72ab568c8214d19cd0eb47c48dc3e6a7ab7f0a6ac8f",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-fb47452c364ba8b8",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01Qc9DnrcYuDakGQoySvVF2t",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "We'll talk in the morning.",
+                "language": "en",
+                "sha256": "f601fc5a474e55c08bdd3f39e29106e79d4e89baf4c648e88f8ea92a4ae1e212"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "f601fc5a474e55c08bdd3f39e29106e79d4e89baf4c648e88f8ea92a4ae1e212",
+                "timestamp": "2026-10-16T17:13:40.424Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "We'll talk in the morning."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 20621,
+        "cache_read_input_tokens": 125047,
+        "output_tokens": 1821,
+        "output_tokens_details": {
+          "thinking_tokens": 1470
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20621,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 21,
+            "cache_read_input_tokens": 52299,
+            "cache_creation_input_tokens": 2227,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 2227
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1257154,
+      "numTurns": 3,
+      "abstentionSubmitted": true,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-fb47452c364ba8b8.jsonl",
+      "rawStreamSha256": "8a23c8cfa8052a810c6d96d744f7c8f0ce61973bc6d9c28e4694dfe6152314e1",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-551400c0e8bc0d62",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_0177Ux3xGwLuAGDG6ksKJz2a",
+          "agentAction": "explicit-null",
+          "proposedCandidateSem": null,
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Θα μιλήσουμε το πρωί.",
+                "language": "el",
+                "sha256": "5121ef796c1ba134902852f8ccfd43da5cc738d23776f6bc47a278dc71fff86a"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "5121ef796c1ba134902852f8ccfd43da5cc738d23776f6bc47a278dc71fff86a",
+                "timestamp": "2026-10-16T17:14:07.028Z"
+              },
+              "transportValid": false,
+              "structuralValid": false,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": false,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+                ]
+              },
+              "failureClass": "transport_or_structural_invalid",
+              "diagnostics": [
+                "transport:/:type:{\"type\":\"object\"}: must be object"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "not-reached",
+          "sourceText": "Θα μιλήσουμε το πρωί."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 6,
+        "cache_creation_input_tokens": 20316,
+        "cache_read_input_tokens": 125044,
+        "output_tokens": 1514,
+        "output_tokens_details": {
+          "thinking_tokens": 1155
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20316,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 21,
+            "cache_read_input_tokens": 52289,
+            "cache_creation_input_tokens": 1932,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1932
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1214248,
+      "numTurns": 3,
+      "abstentionSubmitted": true,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-551400c0e8bc0d62.jsonl",
+      "rawStreamSha256": "677b90a9336fdd2fffe7b5a9ec58a82b5274b40503d5360d1a43eb24fef71260",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    }
+  ],
+  "requestedBudget": {
+    "model": "claude-sonnet-5",
+    "totalUsd": 24,
+    "itemUsd": 0.8,
+    "timeoutMs": 300000,
+    "count": 30,
+    "concurrency": 1,
+    "requestedReservationUsd": 24,
+    "enforcement": "Serial launches; CLI requested per-item ceilings reserved in advance. Billing is provider-controlled, not a hard financial guarantee; unknown or over-ceiling reported cost stops remaining launches and invalidates evidence."
+  }
+}

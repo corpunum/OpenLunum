@@ -1,0 +1,289 @@
+{
+  "handle": "clc1-90bd762596b15b13",
+  "sourceLanguage": "el",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "event",
+    "clauses": [
+      {
+        "predicate": "assert",
+        "roles": {
+          "subject": {
+            "type": "text",
+            "value": "οι πολίτες της ΕΕ"
+          },
+          "action": {
+            "type": "text",
+            "value": "θα ελέγχουν"
+          },
+          "object": {
+            "type": "text",
+            "value": "τα προσωπικά τους δεδομένα"
+          },
+          "manner": {
+            "type": "text",
+            "value": "καλύτερα"
+          },
+          "reason": {
+            "type": "text",
+            "value": "Χάρη στον ΓΚΠΔ"
+          },
+          "result": {
+            "type": "text",
+            "value": "βελτιώνοντας την ασφάλειά τους τόσο εντός όσο και εκτός του διαδικτύου"
+          }
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01CrWx7Bd9JLfyiJHK7tAaHB",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "text",
+                "value": "οι πολίτες της ΕΕ"
+              },
+              "action": {
+                "type": "text",
+                "value": "θα ελέγχουν"
+              },
+              "object": {
+                "type": "text",
+                "value": "τα προσωπικά τους δεδομένα"
+              },
+              "manner": {
+                "type": "text",
+                "value": "καλύτερα"
+              },
+              "reason": {
+                "type": "text",
+                "value": "Χάρη στον ΓΚΠΔ"
+              },
+              "result": {
+                "type": "text",
+                "value": "βελτιώνοντας την ασφάλειά τους τόσο εντός όσο και εκτός του διαδικτύου"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Χάρη στον ΓΚΠΔ οι πολίτες της ΕΕ θα ελέγχουν καλύτερα τα προσωπικά τους δεδομένα, βελτιώνοντας την ασφάλειά τους τόσο εντός όσο και εκτός του διαδικτύου.",
+            "language": "el",
+            "sha256": "d96afe16881402b53f550ca325918b1765a02e16d3dcd1868cbf315a750e0826"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "d96afe16881402b53f550ca325918b1765a02e16d3dcd1868cbf315a750e0826",
+            "timestamp": "2026-10-16T17:04:58.575Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "category_not_auto_promotable:event",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": "unbound_source_content",
+          "diagnostics": [
+            "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+          ],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": {
+                    "type": "text",
+                    "value": "οι πολίτες της ΕΕ"
+                  },
+                  "action": {
+                    "type": "text",
+                    "value": "θα ελέγχουν"
+                  },
+                  "object": {
+                    "type": "text",
+                    "value": "τα προσωπικά τους δεδομένα"
+                  },
+                  "manner": {
+                    "type": "text",
+                    "value": "καλύτερα"
+                  },
+                  "reason": {
+                    "type": "text",
+                    "value": "Χάρη στον ΓΚΠΔ"
+                  },
+                  "result": {
+                    "type": "text",
+                    "value": "βελτιώνοντας την ασφάλειά τους τόσο εντός όσο και εκτός του διαδικτύου"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": false,
+            "unsourced": [],
+            "uncovered": [
+              "language_unsupported"
+            ],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Χάρη στον ΓΚΠΔ οι πολίτες της ΕΕ θα ελέγχουν καλύτερα τα προσωπικά τους δεδομένα, βελτιώνοντας την ασφάλειά τους τόσο εντός όσο και εκτός του διαδικτύου."
+    }
+  ],
+  "model": {
+    "requested": "claude-sonnet-5",
+    "reported": [
+      "claude-sonnet-5"
+    ],
+    "initModel": "claude-sonnet-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 25435,
+    "cache_read_input_tokens": 182087,
+    "output_tokens": 4280,
+    "output_tokens_details": {
+      "thinking_tokens": 3365
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 25435,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 685,
+        "cache_read_input_tokens": 56809,
+        "cache_creation_input_tokens": 2531,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 2531
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.1809734,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": false,
+    "failureClass": "unbound_source_content",
+    "diagnostics": [
+      "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+    ]
+  },
+  "rawStream": "raw/clc1-90bd762596b15b13.jsonl",
+  "rawStreamSha256": "4ef769989ecaa38df1067049182290e3de8343aa40fa657bf5050914f1f9469e",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}
