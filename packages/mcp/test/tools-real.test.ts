@@ -81,6 +81,15 @@ test('lunum_get_extraction_contract returns registry-derived hashes and frames',
   assert.match(data.contract.frames.registryHash, /^[0-9a-f]{64}$/u);
 });
 
+test('lunum_get_extraction_contract fits under the Claude Code persisted-output limit', async () => {
+  // Claude Code persists MCP results above about 50 KB to a file and shows the
+  // model only a 2 KB preview, so a larger contract never reaches the extractor
+  // (clc-v1 pilot, 2026-10-16). Keep a margin; a contract that outgrows it needs
+  // splitting, not a client setting.
+  const text = getText(await find('lunum_get_extraction_contract').handler({}));
+  assert.ok(Buffer.byteLength(text, 'utf8') < 45_000, `contract response is ${Buffer.byteLength(text, 'utf8')} bytes`);
+});
+
 test('lunum_submit_candidate contains an untrusted candidate', async () => {
   const sem = {
     schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'preference',

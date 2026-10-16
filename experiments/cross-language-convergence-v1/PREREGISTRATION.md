@@ -102,3 +102,24 @@ The first pilot launch was refused by the runner with `request_contract_mismatch
 - `pairs.jsonl`;
 - the order;
 - the bars.
+
+## Amendment 2 (2026-10-16, after two invalid one-item pilots, before any counted item)
+
+**Both one-item pilots on v22 were invalid** (`CONTRACT_UNBOUND`). They are kept in `reports/independent-evaluation/2026-10-16-clc-v1/pilot` and `pilot2`, cost $0.18 and $0.05.
+
+**Cause:**
+- `lunum_get_extraction_contract` returned 60.3 KB of indented JSON.
+- Claude Code 2.1.301 persists MCP results above about 50 KB to a file and shows the model a 2 KB preview.
+- The runner disables file tools, so **the extractor never saw contract 0.19**. Both pilots abstained on the preview.
+- `MAX_MCP_OUTPUT_TOKENS=100000` (pilot2) does not change this; the limit is a separate byte threshold.
+
+**Fix:** package **v23** ([freeze script](../../scripts/research/freeze-instruction-package.mjs)).
+- It binds the same contract 0.19, with the same hash.
+- Only `tools.js` changes: the tool now returns compact JSON of 35.8 KB.
+- A regression test fails if the contract response reaches 45 KB.
+
+The run uses v23. Unchanged:
+- the sentences, the bars and the order;
+- the contract, the frames and the identities.
+
+**Consequence beyond this test:** no live run has ever exercised contract 0.19 in Claude Code. ADR 0024's general frames were never delivered to a Claude Code extractor before v23.

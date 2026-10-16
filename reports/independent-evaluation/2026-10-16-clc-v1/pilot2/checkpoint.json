@@ -1,0 +1,128 @@
+{
+  "status": "FINISHED_INVALID_OR_DIAGNOSTIC",
+  "startedAt": "2026-10-16T15:31:19.705Z",
+  "selected": [
+    "clc1-435eab3598f3bbcb"
+  ],
+  "completed": [
+    {
+      "handle": "clc1-435eab3598f3bbcb",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": null,
+      "observedContractMatchesPackage": null,
+      "observedContractBinding": {
+        "match": false,
+        "mismatches": [
+          "missing_contract"
+        ]
+      },
+      "sessionIntegrity": {
+        "match": false,
+        "mismatches": [
+          "MALFORMED_TOOL_RESPONSE"
+        ]
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_analyze_discourse",
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_classify",
+        "mcp__lunum__lunum_compact_messages",
+        "mcp__lunum__lunum_compare",
+        "mcp__lunum__lunum_compile_context",
+        "mcp__lunum__lunum_derive",
+        "mcp__lunum__lunum_fingerprint",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_render",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6628,
+        "cache_read_input_tokens": 76363,
+        "output_tokens": 909,
+        "output_tokens_details": {
+          "thinking_tokens": 732
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 6628,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 333,
+            "cache_read_input_tokens": 40650,
+            "cache_creation_input_tokens": 1691,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1691
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.05088260000000001,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/clc1-435eab3598f3bbcb.jsonl",
+      "rawStreamSha256": "b22b7caa29980709e21fd5cbebf20f8d132556a7ff1f1c0f54af889acaf5b678",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [
+        "CONTRACT_UNBOUND",
+        "EVENT_OR_SOURCE_UNBOUND"
+      ],
+      "evidenceValid": false
+    }
+  ],
+  "requestedBudget": {
+    "model": "claude-sonnet-5",
+    "totalUsd": 0.35,
+    "itemUsd": 0.35,
+    "timeoutMs": 300000,
+    "count": 1,
+    "concurrency": 1,
+    "requestedReservationUsd": 0.35,
+    "enforcement": "Serial launches; CLI requested per-item ceilings reserved in advance. Billing is provider-controlled, not a hard financial guarantee; unknown or over-ceiling reported cost stops remaining launches and invalidates evidence."
+  }
+}

@@ -182,8 +182,18 @@ test('public instruction package exposes frozen scoring conventions without gold
     assert.notEqual(v22.freeze[key], v21.freeze[key], `${key} changed in v22`);
   }
   assert.deepEqual(v22.conventions, v21.conventions);
+  // v23: the same contract, delivered as compact JSON (Claude Code persists MCP
+  // results above about 50 KB and shows a 2 KB preview). Only tools.js and the
+  // served-runtime manifest change.
+  const v23 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v23.json', 'utf8'));
+  assert.equal(v23.supersedes.path, 'public-instruction-package-v22.json');
+  for (const key of Object.keys(v22.freeze)) {
+    if (['toolImplementationSha256', 'servedRuntimeManifestPath', 'servedRuntimeManifestSha256'].includes(key)) assert.notDeepEqual(v23.freeze[key], v22.freeze[key], `${key} changed in v23`);
+    else assert.deepEqual(v23.freeze[key], v22.freeze[key], `${key} unchanged in v23`);
+  }
+  assert.deepEqual(v23.conventions, v22.conventions);
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
-  assert.equal(hash('packages/mcp/dist/src/tools.js'), v22.freeze.toolImplementationSha256);
+  assert.equal(hash('packages/mcp/dist/src/tools.js'), v23.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-native.js'), v22.freeze.coreArtifactSha256);
   // frame-registry.js was unchanged from v14 to v18; decisions/0022 changes it in v19, 0023 in v20, 0024 in v22.

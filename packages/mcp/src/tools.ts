@@ -30,6 +30,16 @@ function ok(data: unknown): McpToolResponse {
   return { content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] };
 }
 
+/**
+ * Compact JSON for large, machine-read results. Claude Code persists MCP tool
+ * results above roughly 50 KB to a file and shows the model only a 2 KB
+ * preview; contract 0.19 is 56.8 KB indented but 36 KB compact, with the same
+ * content and hash (clc-v1 pilot, 2026-10-16).
+ */
+function okCompact(data: unknown): McpToolResponse {
+  return { content: [{ type: 'text', text: JSON.stringify(data) }] };
+}
+
 function err(message: string): McpToolResponse {
   return { content: [{ type: 'text', text: JSON.stringify({ success: false, error: message }) }], isError: true };
 }
@@ -143,7 +153,7 @@ export const extractionContractTool: LunumToolDefinition = {
   name: 'lunum_get_extraction_contract',
   description: 'Return the machine-readable agent extraction contract generated from the core protocol and canonical frame registries.',
   inputSchema: { type: 'object', properties: {} },
-  handler: async (): Promise<McpToolResponse> => ok({ success: true, contract: getExtractionContract() }),
+  handler: async (): Promise<McpToolResponse> => okCompact({ success: true, contract: getExtractionContract() }),
 };
 
 export const submitCandidateTool: LunumToolDefinition = {
