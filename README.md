@@ -74,7 +74,7 @@ Core cannot tell whether a proposal is *right*. It can refuse proposals that are
 - token savings on real memory;
 - any human or cross-vendor review. Both are now being set up.
 
-Details are in [STATUS.md](STATUS.md).
+Details are in [STATUS.md](STATUS.md). The working plan for the next session is in [HANDOFF.md](HANDOFF.md).
 
 ## Try it
 
