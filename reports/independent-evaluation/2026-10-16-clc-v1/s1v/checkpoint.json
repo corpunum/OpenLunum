@@ -1,0 +1,1524 @@
+{
+  "status": "FINISHED_INVALID_OR_DIAGNOSTIC",
+  "startedAt": "2026-10-16T15:44:19.943Z",
+  "selected": [
+    "clc1-435eab3598f3bbcb",
+    "clc1-042459083d0384b2",
+    "clc1-299b6d14d600c91a",
+    "clc1-4c957d0491088ae4",
+    "clc1-cc155a91868d5dc2",
+    "clc1-b2c08534469b85b6",
+    "clc1-57d74755c3bfb772",
+    "clc1-9b07eb923edd120a",
+    "clc1-f41a3cc1b0b47604",
+    "clc1-8c43b91298ec6dd0",
+    "clc1-08fec86fb88cacb8",
+    "clc1-b887625a4ff05d78",
+    "clc1-94f04a3fe06968fb",
+    "clc1-af9c6227da688bb8",
+    "clc1-228416b917c11227",
+    "clc1-f3fe87569950360a",
+    "clc1-a0fc0d0671a60c0f",
+    "clc1-a0abce3ea5a7ccc3",
+    "clc1-ee735edb21ae96f7",
+    "clc1-b3c5314c41494754",
+    "clc1-b3ea7dc2afa2312f",
+    "clc1-5b71946cc14768cb",
+    "clc1-83aecd79926e2687",
+    "clc1-49e46847e9f0f3f7",
+    "clc1-a45b430f7e61271f",
+    "clc1-29dcf231ec67f32c",
+    "clc1-068e368ed971c5cb",
+    "clc1-f88c767632e17c1a",
+    "clc1-970aa8c26bb81285",
+    "clc1-abf0128d209b38fa",
+    "clc1-c275ed7f7f1ad375",
+    "clc1-a3896f330dffcb90",
+    "clc1-2c3a46b26a0d8dd0",
+    "clc1-0eeb9903a61364e0",
+    "clc1-6bbb83124ba3f764",
+    "clc1-e21fa1cc291f5c91",
+    "clc1-ed76405bcd94ce7a",
+    "clc1-ae8bb3142326f41c",
+    "clc1-fe3b7f60c972fea6",
+    "clc1-d55f1966d43f8d70",
+    "clc1-c0947de1b8c76c0d",
+    "clc1-d176313dee96d435",
+    "clc1-74b5b45eecb94e53",
+    "clc1-c697aca3367126bc",
+    "clc1-22cab3d1429ff1fb",
+    "clc1-37a8f10b5abddb64",
+    "clc1-b14c78156013db07",
+    "clc1-b64e9593eb3d8f28",
+    "clc1-515c1c6d3dcebd01",
+    "clc1-41b6db55f9bcac54",
+    "clc1-b7169f65b478318d",
+    "clc1-29daf0a530583958",
+    "clc1-8322e0b2e07a5314",
+    "clc1-de6cd36d9d39b059",
+    "clc1-1112449a5ce5cd18",
+    "clc1-8530d1a4f145a059",
+    "clc1-aa8db3459e9baef2",
+    "clc1-cf08552dc8dcdfd7",
+    "clc1-7945ba689afded1f",
+    "clc1-2f22b248a6927f1a",
+    "clc1-613462e3a13a349d",
+    "clc1-4f14edb3bbd1802d",
+    "clc1-4e014c3b4830d9dc",
+    "clc1-53b16e45305969e6",
+    "clc1-7318b3c43b5a57f0",
+    "clc1-acc73a8d55e1ea62",
+    "clc1-441763c44db84873",
+    "clc1-6870367ee31904f1",
+    "clc1-652e11089b659e0b",
+    "clc1-8750faf91febb69a",
+    "clc1-536303fdee7632b9",
+    "clc1-e7fb419fde704a74",
+    "clc1-850366f742f47b12",
+    "clc1-6047ace6f8af0ba5",
+    "clc1-788dc4fad18bc02e",
+    "clc1-90bd762596b15b13",
+    "clc1-941ed454a6ed6bdf",
+    "clc1-0ccc0305c448df06",
+    "clc1-302ddf95bf970ade",
+    "clc1-b8fb171bb4ff504a"
+  ],
+  "completed": [
+    {
+      "handle": "clc1-435eab3598f3bbcb",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": "Human dignity",
+              "attribute": "inviolable"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_011bZcPxfSaZMZ5CbTwx12Lg",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": "Human dignity",
+                  "attribute": "inviolable"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Human dignity is inviolable.",
+                "language": "en",
+                "sha256": "79fe498126d2a7f2cebcca76d9f8c55f93c793a792b55c25c7772c4ce947a9c2"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "79fe498126d2a7f2cebcca76d9f8c55f93c793a792b55c25c7772c4ce947a9c2",
+                "timestamp": "2026-10-16T15:44:36.479Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:b7257fc6d60f11651efa27e349e4e47b",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": "Human dignity",
+                      "attribute": "inviolable"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": true,
+                "unsourced": [],
+                "uncovered": [],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Human dignity is inviolable."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 54464,
+        "cache_read_input_tokens": 144087,
+        "output_tokens": 721,
+        "output_tokens_details": {
+          "thinking_tokens": 269
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 54464,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 11,
+            "cache_read_input_tokens": 53120,
+            "cache_creation_input_tokens": 1344,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1344
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.2538994,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/clc1-435eab3598f3bbcb.jsonl",
+      "rawStreamSha256": "97f6553cc2d44a192d6c689d20b0b9c1dc802cc46dc4f62a243f8a23437ca228",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-042459083d0384b2",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "concept",
+                "value": "ανθρώπινη αξιοπρέπεια"
+              },
+              "attribute": {
+                "type": "concept",
+                "value": "απαραβίαστη"
+              }
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01TLpDfauCA8wBwqMZkdd2XH",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "concept",
+                    "value": "ανθρώπινη αξιοπρέπεια"
+                  },
+                  "attribute": {
+                    "type": "concept",
+                    "value": "απαραβίαστη"
+                  }
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Η ανθρώπινη αξιοπρέπεια είναι απαραβίαστη.",
+                "language": "el",
+                "sha256": "d194a06ace0c496d238c2b7ae41ba85f17d69f5f2539f178e9d11c2555db5ebb"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "d194a06ace0c496d238c2b7ae41ba85f17d69f5f2539f178e9d11c2555db5ebb",
+                "timestamp": "2026-10-16T15:44:56.031Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": {
+                        "type": "concept",
+                        "value": "ανθρώπινη αξιοπρέπεια"
+                      },
+                      "attribute": {
+                        "type": "concept",
+                        "value": "απαραβίαστη"
+                      }
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "language_unsupported"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Η ανθρώπινη αξιοπρέπεια είναι απαραβίαστη."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 21211,
+        "cache_read_input_tokens": 178541,
+        "output_tokens": 1193,
+        "output_tokens_details": {
+          "thinking_tokens": 574
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 21211,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 267,
+            "cache_read_input_tokens": 53476,
+            "cache_creation_input_tokens": 1640,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1640
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1324982,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": false,
+        "failureClass": "unbound_source_content",
+        "diagnostics": [
+          "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+        ]
+      },
+      "rawStream": "raw/clc1-042459083d0384b2.jsonl",
+      "rawStreamSha256": "52c8ed2c6ca310501f3eef42f94ed9bf4921c934f42c5024a96c966d0bafe00c",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-299b6d14d600c91a",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": "Everyone",
+              "attribute": "has the right to life"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01TiMdzth5ZQuXPC3WqayBJ3",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": "Everyone",
+                  "attribute": "the right to life"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Everyone has the right to life.",
+                "language": "en",
+                "sha256": "caf42ec1833eb7a20af51de4fa41779caa68c8c5df0d11f4b849cfb1b56139c6"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "caf42ec1833eb7a20af51de4fa41779caa68c8c5df0d11f4b849cfb1b56139c6",
+                "timestamp": "2026-10-16T15:45:15.761Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: has; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": "Everyone",
+                      "attribute": "the right to life"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "has"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Everyone has the right to life."
+        },
+        {
+          "eventId": "toolu_01JGzMyXhS4JPDGJdDhzbXP7",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": "Everyone",
+                  "attribute": "has the right to life"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Everyone has the right to life.",
+                "language": "en",
+                "sha256": "caf42ec1833eb7a20af51de4fa41779caa68c8c5df0d11f4b849cfb1b56139c6"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "caf42ec1833eb7a20af51de4fa41779caa68c8c5df0d11f4b849cfb1b56139c6",
+                "timestamp": "2026-10-16T15:45:23.011Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:77a1f7a063affcaed6442ce9044eaa41",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": "Everyone",
+                      "attribute": "has the right to life"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": true,
+                "unsourced": [],
+                "uncovered": [],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Everyone has the right to life."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 22941,
+        "cache_read_input_tokens": 287941,
+        "output_tokens": 1339,
+        "output_tokens_details": {
+          "thinking_tokens": 396
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 22941,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 51,
+            "cache_read_input_tokens": 55504,
+            "cache_creation_input_tokens": 1342,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1342
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.16276619999999997,
+      "numTurns": 6,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/clc1-299b6d14d600c91a.jsonl",
+      "rawStreamSha256": "4ea0309ff3e2aff5c9c0bafc6d515b11f2380521b4fbb27268acb85044ff9f02",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-4c957d0491088ae4",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": "Κάθε πρόσωπο",
+              "attribute": "δικαίωμα στη ζωή"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_016T3PtkmdVvRzqG4rJty88L",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": "Κάθε πρόσωπο",
+                  "attribute": "δικαίωμα στη ζωή"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Κάθε πρόσωπο έχει δικαίωμα στη ζωή.",
+                "language": "el",
+                "sha256": "e805f4c21cd9108a5f148ac49c6d7f063e783e689b2de899318ba30716c2e3dd"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "e805f4c21cd9108a5f148ac49c6d7f063e783e689b2de899318ba30716c2e3dd",
+                "timestamp": "2026-10-16T15:45:55.891Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": "Κάθε πρόσωπο",
+                      "attribute": "δικαίωμα στη ζωή"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "language_unsupported"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Κάθε πρόσωπο έχει δικαίωμα στη ζωή."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 22222,
+        "cache_read_input_tokens": 179984,
+        "output_tokens": 2748,
+        "output_tokens_details": {
+          "thinking_tokens": 2096
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 22222,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 667,
+            "cache_read_input_tokens": 54586,
+            "cache_creation_input_tokens": 1541,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1541
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1523808,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": false,
+        "failureClass": "unbound_source_content",
+        "diagnostics": [
+          "unbound_source_content: the candidate leaves out: language_unsupported; copy the source words into the fillers or abstain"
+        ]
+      },
+      "rawStream": "raw/clc1-4c957d0491088ae4.jsonl",
+      "rawStreamSha256": "947099ba30250c4d07e02310470c043e28f0e9ff903510ca51f20c21a31e1336",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-cc155a91868d5dc2",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "document",
+                "id": "GDPR",
+                "value": "the general data protection regulation (GDPR)"
+              },
+              "attribute": "applicable from 25 May 2018, 2 years after the EU agreed to a major reform of its data protection framework"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_018wZW9JjT4jkiJ6mmMbKNrW",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "document",
+                    "id": "GDPR",
+                    "value": "the general data protection regulation (GDPR)"
+                  },
+                  "attribute": "applicable from 25 May 2018, 2 years after the EU agreed to a major reform of its data protection framework"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "The general data protection regulation (GDPR) is applicable from 25 May 2018, 2 years after the EU agreed to a major reform of its data protection framework.",
+                "language": "en",
+                "sha256": "470efe060545617a7283fa4a333eb2142b615a5cb4e84f16c700d03d090cdd09"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "470efe060545617a7283fa4a333eb2142b615a5cb4e84f16c700d03d090cdd09",
+                "timestamp": "2026-10-16T15:46:54.222Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:4deedf6c9f33320716831e84c614dd55",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": {
+                        "type": "document",
+                        "id": "GDPR",
+                        "value": "the general data protection regulation (GDPR)"
+                      },
+                      "attribute": "applicable from 25 May 2018, 2 years after the EU agreed to a major reform of its data protection framework"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [
+                  2
+                ],
+                "sourceIdentifiers": [],
+                "sourceDates": [
+                  "2018-05-25"
+                ],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": true,
+                "unsourced": [],
+                "uncovered": [],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "The general data protection regulation (GDPR) is applicable from 25 May 2018, 2 years after the EU agreed to a major reform of its data protection framework."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 23975,
+        "cache_read_input_tokens": 181417,
+        "output_tokens": 3932,
+        "output_tokens_details": {
+          "thinking_tokens": 3284
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 23975,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 33,
+            "cache_read_input_tokens": 56304,
+            "cache_creation_input_tokens": 1576,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1576
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1715194,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/clc1-cc155a91868d5dc2.jsonl",
+      "rawStreamSha256": "3610f7785559908d58eeb46b145efe9d91a036c76aeebbe378fe66c18fb273c5",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "clc1-b2c08534469b85b6",
+      "sourceLanguage": "el",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": false,
+        "mismatches": [
+          "EVENT_AFTER_TERMINAL_RESULT"
+        ]
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01QeQH7Gs1uFHSbmmRamcnHu",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": {
+                    "type": "concept",
+                    "id": "ΓΚΠΔ"
+                  },
+                  "action": "εφαρμόζεται",
+                  "duration": {
+                    "type": "text",
+                    "value": "2 χρόνια αφότου η ΕΕ δεσμεύτηκε για σημαντική μεταρρύθμιση του πλαισίου προστασίας δεδομένων"
+                  }
+                },
+                "time": {
+                  "type": "date",
+                  "value": "2018-05-25"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Ο γενικός κανονισμός για την προστασία δεδομένων (ΓΚΠΔ) εφαρμόζεται από τις 25 Μαΐου 2018, 2 χρόνια αφότου η ΕΕ δεσμεύτηκε για σημαντική μεταρρύθμιση του πλαισίου προστασίας δεδομένων.",
+                "language": "el",
+                "sha256": "76f323d0ca525ddc040671ca581562d022cdcb8350c9222a41618d0f38784644"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "76f323d0ca525ddc040671ca581562d022cdcb8350c9222a41618d0f38784644",
+                "timestamp": "2026-10-16T15:48:19.296Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "missing_sem"
+                ]
+              },
+              "failureClass": "protocol_noncanonical",
+              "diagnostics": [
+                "predicate 'εφαρμόζεται' is not registered and remains unresolved"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "rejected",
+          "sourceText": "Ο γενικός κανονισμός για την προστασία δεδομένων (ΓΚΠΔ) εφαρμόζεται από τις 25 Μαΐου 2018, 2 χρόνια αφότου η ΕΕ δεσμεύτηκε για σημαντική μεταρρύθμιση του πλαισίου προστασίας δεδομένων."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5",
+        "reported": [
+          "claude-sonnet-5"
+        ],
+        "initModel": "claude-sonnet-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 10,
+        "cache_creation_input_tokens": 28850,
+        "cache_read_input_tokens": 245361,
+        "output_tokens": 10710,
+        "output_tokens_details": {
+          "thinking_tokens": 8939
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 28850,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 3787,
+            "cache_read_input_tokens": 60987,
+            "cache_creation_input_tokens": 1768,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1768
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.2715922,
+      "numTurns": 5,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": false,
+        "candidateIdentityAvailable": false,
+        "failureClass": "protocol_noncanonical",
+        "diagnostics": [
+          "predicate 'εφαρμόζεται' is not registered and remains unresolved"
+        ]
+      },
+      "rawStream": "raw/clc1-b2c08534469b85b6.jsonl",
+      "rawStreamSha256": "f606834221a423ca9ff79664fbc82ec6c0ce5457d149cf42cb4c348ee5d3cf0d",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [
+        "EVENT_OR_SOURCE_UNBOUND"
+      ],
+      "evidenceValid": false
+    }
+  ],
+  "requestedBudget": {
+    "model": "claude-sonnet-5",
+    "totalUsd": 28,
+    "itemUsd": 0.35,
+    "timeoutMs": 300000,
+    "count": 80,
+    "concurrency": 1,
+    "requestedReservationUsd": 28,
+    "enforcement": "Serial launches; CLI requested per-item ceilings reserved in advance. Billing is provider-controlled, not a hard financial guarantee; unknown or over-ceiling reported cost stops remaining launches and invalidates evidence."
+  }
+}
