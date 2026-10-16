@@ -116,3 +116,12 @@ Supersedes amendment 1's extractor and judges. The owner (2026-10-16): do not us
 - Luna judges records it did not extract. Luna's own Stage 0 records are scored at levels (a) and (c) only, and reported next to SuperGemma's.
 - Stage 0 go/no-go applies to the main extractor (SuperGemma): at least 4 of 16 Greek sentences covered and at most 8 minutes per item.
 - Pilot evidence (harness only, [local-extractor-pilot-v1](../local-extractor-pilot-v1/RESULTS.md)): SuperGemma about 1.5 to 5 minutes per item, malformed arguments on one item, 0 identities on 3 items; Luna 6 to 11 seconds per item, 2 valid abstentions. **I now expect Stage 0 to stop the run.**
+
+## Amendment 3 (2026-10-16, before any Sol call on these passages): Sol as a third extractor on Stage 0
+
+The owner suggested trying `gpt-6.1-sol` at **medium** effort. It is added as a **comparison extractor on Stage 0 only** (the same 32 requests), through [`run-codex-source-only.mjs`](../../scripts/research/run-codex-source-only.mjs) with `--model gpt-6.1-sol --effort medium`. It changes nothing else: SuperGemma remains the main extractor for the go/no-go, and Luna remains the judge.
+
+- Question it answers: is Stage 0's low coverage (Luna: 4 of 16 English, 1 of 16 Greek) a property of the model, or of the frozen contract? If a stronger model also covers few sentences, the contract is the limit.
+- Reported per extractor, side by side: coverage per language, sentence copies, invalid items, abstention reasons, tokens. Levels (a) and (c) only if a set is evaluable.
+- Quota: Luna used 3.08M input tokens for these 32 items; Sol medium is expected to use at least as many. The runner stops at the first quota error; items not run stay in the denominator as not run.
+- Prediction: Sol covers more than Luna, mostly in English; Greek stays low.
