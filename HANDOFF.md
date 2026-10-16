@@ -63,6 +63,14 @@ Every result reports which of three levels it measures:
    - moving 15 core modules to an experimental package and archiving 6 ([audit](reports/diagnostic/2026-10-16/core-module-audit/README.md));
    - a cross-vendor repository review ([packet](experiments/cross-vendor-review-v1/README.md)).
 
+## Progress since this was written (2026-10-16, later session; self-reviewed)
+
+- **Step 1, free measure: done.** [Results](experiments/parallel-document-v1/RESULTS-anchors.md): Europarl v8 EL-EN, 300 seeded 8-pair passages, 201 informative, matched Jaccard 0.947 against 0.041, top-1 0.817 (0.97+ with two or more anchors). Level below (a); cost $0. The data is in `~/corpora/europarl-opus-v8` (outside the repo; Moses release has no speaker boundaries).
+- **Step 1, paid measures: drafted, not run.** [Draft pre-registration](experiments/parallel-document-v1/PREREGISTRATION-paid.md): a 2-passage pilot first with a go/no-go on Greek coverage. Waiting for the owner: Stage 0 budget ($16 reservation), the cross-vendor judge (vendor and access) and spot-check time.
+- **Step 2, ADR 0027 gate: prepared, not run.** [Draft pre-registration](experiments/identity-heldout-v1/PREREGISTRATION.md), seeded 160-sentence set, scorer validated against the clc-v1 recordings (4/12 to 8/12). Waiting for budget (two runs, $128 reservation each, about $45 expected).
+- **Step 3, concept layer: drafted.** [ADR 0028](decisions/0028-language-neutral-concept-layer.md), design only.
+- No model call has been made in this session. Total spend: $0.
+
 ## Known pitfalls hit on 2026-10-16
 
 - **Claude Code persists MCP results above about 50 KB** and shows the model a 2 KB preview. The contract tool returns compact JSON (36 KB), and a test fails at 45 KB. Keep it that way.
