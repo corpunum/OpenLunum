@@ -85,3 +85,36 @@ The cross-language problem cannot be solved by canonicalisation. It needs a term
 - **Single test set:** one model and one client.
 - **Domain:** the sentences are everyday and legal, not operational traffic.
 - **Harness changes:** the runner and gate were changed during the experiment (amendments 2–6). None changed the contract, the sentences or the bars, and every stopped run is kept.
+
+## Post-hoc: meaning, not words (owner feedback, 2026-10-16)
+
+**The owner's point:** a good translation keeps the meaning, not the words. «κάλεσε την αστυνομία», «πήρε την αστυνομία», «τηλεφώνησε στην αστυνομία» and «πήρε το 100» all mean the same. A test should therefore judge meaning, not exact wording.
+
+**What the pre-registered test measured:** it did not demand particular Greek words. It asked whether Lunum gives the same *identity* to the same meaning, which is Lunum's own claim. It fails because `lfp:2.1` hashes the **filler words**: `police` vs `αστυνομία`, and inside Greek alone `κάλεσε` vs `πήρε`. By the owner's standard, the fault is the identity's word-dependence, not the translations.
+
+**What survives when the words are ignored.** [`structure.mjs`](structure.mjs) compares, without the filler words:
+- the predicate of each clause;
+- the role names;
+- negation and modality;
+- conditions and consequences;
+- the mood (directive or assertive).
+
+This is post-hoc, not pre-registered, and offline.
+
+| | Exact identity | Structure only |
+|---|---|---|
+| English ↔ Greek (S1 + S2) | 0 of 5 | **3 of 5** |
+| Greek ↔ Greek paraphrase (S3) | 1 of 1 | 1 of 1 |
+| Same sentence, two runs (S1 vs R2) | 4 of 12 | **9 of 12** |
+
+**Both structural cross-language misses are a Greek pro-drop effect.** «Θα καλέσω την αστυνομία» has no written subject because the verb ending carries it, so the extractor drops the agent on the Greek side and keeps "I" in English (C37). In C36 an implied agent is filled on one side only. A meaning-based identity needs a rule that a subject recoverable from verb morphology is still the agent.
+
+## What this implies for testing and design
+
+1. **Evaluation in three levels**, from this point on:
+   - **(a) structure agreement:** mechanical and free;
+   - **(b) meaning equivalence:** a bilingual judge (the owner, plus a cross-vendor model with its agreement reported) decides whether the two records mean the same, whatever words they use;
+   - **(c) exact identity:** needed only where deduplication or exact comparison is claimed.
+
+   A result must say which level it reports.
+2. **For identity to follow meaning rather than words**, filler terms need a language-neutral concept layer. «αστυνομία», «police», «το 100» and «πήρε»/«κάλεσε» (in the "phone" sense) would map to shared concept IDs, either through an existing multilingual concept inventory (WordNet/BabelNet-style synsets or Wikidata) or through owner-reviewed mappings, and identity would hash the concept rather than the word. This is design work, not a canonicalisation tweak, and it would need its own pre-registered test.
