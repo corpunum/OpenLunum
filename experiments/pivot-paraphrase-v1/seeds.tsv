@@ -1,0 +1,21 @@
+# id	english	greek (AI-drafted, owner review pending)	note
+s01	call the police	καλώ την αστυνομία	owner's example (κάλεσε / πήρε / τηλεφώνησε / πήρε το 100)
+s02	telephone someone	τηλεφωνώ σε κάποιον	
+s03	at the same time	ταυτόχρονα	
+s04	must	πρέπει να	modality
+s05	human rights	ανθρώπινα δικαιώματα	
+s06	delete the file	διαγράφω το αρχείο	agent domain
+s07	restart the service	επανεκκινώ την υπηρεσία	agent domain
+s08	deadline	προθεσμία	
+s09	approve	εγκρίνω	
+s10	refuse	αρνούμαι	
+s11	in my opinion	κατά τη γνώμη μου	
+s12	as soon as possible	το συντομότερο δυνατό	
+s13	ask for help	ζητώ βοήθεια	
+s14	agree	συμφωνώ	
+s15	postpone	αναβάλλω	
+s16	citizens	πολίτες	
+s17	unemployment	ανεργία	
+s18	inform	ενημερώνω	
+s19	the vote	η ψηφοφορία	
+s20	reject a proposal	απορρίπτω μια πρόταση	

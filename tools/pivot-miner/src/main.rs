@@ -1,8 +1,10 @@
 //! Pivot-paraphrase mining over a sentence-aligned EN/EL corpus (OPUS Moses format).
 //! Design: experiments/pivot-paraphrase-v1/DESIGN.md. Deterministic, std-only, no model calls.
 //!
-//!   pivot-miner <corpus-dir> --queries <file>      # one query per line: "<mode>\t<lang>\t<phrase>"
+//!   pivot-miner <corpus-dir> --queries <file> [--prefix Europarl.el-en] [--max-lines N]
+//!   # one query per line: "<mode>\t<lang>\t<phrase>"
 //!     mode: translate | paraphrase ; lang: en | el (the language of the phrase)
+//!     or "pair\t<english phrase>\t<greek phrase>" to check a proposed equivalence
 //! Output: one JSON object per query on stdout.
 
 use std::cell::RefCell;
@@ -44,11 +46,12 @@ pub struct Side {
     lines: Vec<Vec<u32>>,
     postings: Vec<Vec<u32>>, // word -> sorted, deduplicated line ids
     df_cache: RefCell<HashMap<Vec<u32>, usize>>,
+    sorted_words: Vec<(String, u32)>, // for prefix (stem) lookup
 }
 
 impl Side {
     pub fn build<I: IntoIterator<Item = String>>(raw: I) -> Side {
-        let mut s = Side { vocab: HashMap::new(), words: Vec::new(), lines: Vec::new(), postings: Vec::new(), df_cache: RefCell::new(HashMap::new()) };
+        let mut s = Side { vocab: HashMap::new(), words: Vec::new(), lines: Vec::new(), postings: Vec::new(), df_cache: RefCell::new(HashMap::new()), sorted_words: Vec::new() };
         for (i, line) in raw.into_iter().enumerate() {
             let mut ids = Vec::new();
             for t in tokenize(&line) {
@@ -66,7 +69,29 @@ impl Side {
             }
             s.lines.push(ids);
         }
+        s.sorted_words = s.words.iter().cloned().zip(0u32..).collect();
+        s.sorted_words.sort();
         s
+    }
+
+    /// Lines containing, in any order, a word starting with each stem (crude inflection-tolerant match).
+    /// Stems matching more than `PARAMS.frequent_share` of lines (function words such as «στην») are skipped,
+    /// unless every stem is that frequent.
+    pub fn find_stems(&self, stems: &[String]) -> Vec<u32> {
+        let per: Vec<Vec<u32>> = stems.iter().map(|st| {
+            let from = self.sorted_words.partition_point(|(w, _)| w.as_str() < st.as_str());
+            let mut lines: Vec<u32> = self.sorted_words[from..].iter().take_while(|(w, _)| w.starts_with(st.as_str()))
+                .flat_map(|(_, id)| self.postings[*id as usize].iter().copied()).collect();
+            lines.sort_unstable();
+            lines.dedup();
+            lines
+        }).collect();
+        let limit = PARAMS.frequent_share * self.n_lines() as f64;
+        let content: Vec<&Vec<u32>> = per.iter().filter(|l| (l.len() as f64) <= limit).collect();
+        let used: Vec<&Vec<u32>> = if content.is_empty() { per.iter().collect() } else { content };
+        let mut acc: Option<Vec<u32>> = None;
+        for lines in used { acc = Some(match acc { None => lines.clone(), Some(prev) => intersect(&prev, lines) }); }
+        acc.unwrap_or_default()
     }
 
     pub fn n_lines(&self) -> usize { self.lines.len() }
@@ -88,6 +113,12 @@ impl Side {
         by_len.sort_by_key(|p| p.len());
         let candidates: Vec<u32> = if by_len.len() == 1 { by_len[0].clone() } else { intersect(by_len[0], by_len[1]) };
         candidates.into_iter().filter(|&l| contains(&self.lines[l as usize], ids)).collect()
+    }
+
+    /// True when every word of the phrase occurs in more than `share` of all lines.
+    pub fn all_frequent(&self, ids: &[u32], share: f64) -> bool {
+        let limit = share * self.n_lines() as f64;
+        ids.iter().all(|&w| self.postings[w as usize].len() as f64 > limit)
     }
 
     /// Line-frequency of a phrase (exact; postings length for one word, cached otherwise).
@@ -112,6 +143,27 @@ fn intersect(short: &[u32], long: &[u32]) -> Vec<u32> {
         if lo >= long.len() { break; }
     }
     out
+}
+
+/// Stems for inflection-tolerant matching: words of 3 letters or fewer are dropped (articles, prepositions),
+/// numbers are kept whole; Greek loses up to 3 final vowels/sigma, English a final -ing/-ed/-es/-s,
+/// never below 4 letters. Crude by design; results are labelled stem evidence.
+pub fn stems(phrase: &str) -> Vec<String> {
+    tokenize(phrase).into_iter().filter(|t| t.chars().count() > 3 || t.chars().all(|c| c.is_ascii_digit())).map(|t| {
+        if t.chars().all(|c| c.is_ascii_digit()) { return t; }
+        let mut cs: Vec<char> = t.chars().collect();
+        let greek = cs.iter().any(|c| ('\u{0370}'..='\u{03ff}').contains(c));
+        if greek {
+            let mut cut = 0;
+            while cut < 3 && cs.len() > 4 && "αεηιουωσ".contains(*cs.last().unwrap()) { cs.pop(); cut += 1; }
+        } else {
+            for suf in ["ing", "ed", "es", "s"] {
+                let sc: Vec<char> = suf.chars().collect();
+                if cs.len() >= 4 + sc.len() && cs.ends_with(&sc) { cs.truncate(cs.len() - sc.len()); break; }
+            }
+        }
+        cs.into_iter().collect()
+    }).collect()
 }
 
 fn contains(hay: &[u32], needle: &[u32]) -> bool {
@@ -140,8 +192,9 @@ pub struct Cand {
     pub evidence: Vec<u32>,
 }
 
-pub struct Params { pub max_n: usize, pub min_count: usize, pub scored: usize, pub keep: usize, pub min_p_q_t: f64 }
-pub const PARAMS: Params = Params { max_n: 4, min_count: 3, scored: 300, keep: 25, min_p_q_t: 0.01 };
+/// `frequent_share`: a candidate made only of words found in more than this share of lines (function words) is dropped.
+pub struct Params { pub max_n: usize, pub min_count: usize, pub scored: usize, pub keep: usize, pub min_p_q_t: f64, pub frequent_share: f64 }
+pub const PARAMS: Params = Params { max_n: 4, min_count: 3, scored: 300, keep: 25, min_p_q_t: 0.01, frequent_share: 0.03 };
 
 /// Target-side candidates for a source phrase, ranked by p(t|q)·p(q|t).
 pub fn translate(src: &Side, tgt: &Side, query: &[u32], p: &Params) -> (usize, Vec<Cand>) {
@@ -174,7 +227,7 @@ pub fn translate(src: &Side, tgt: &Side, query: &[u32], p: &Params) -> (usize, V
             let d = (total - a - b - cc).max(0.0);
             Cand { text: tgt.text(&g), ids: g, both: c, df, p_t_q: a / n_q as f64, p_q_t: a / df as f64, g2: g2(a, b, cc, d), evidence }
         })
-        .filter(|c| c.p_q_t >= p.min_p_q_t)
+        .filter(|c| c.p_q_t >= p.min_p_q_t && !tgt.all_frequent(&c.ids, p.frequent_share))
         .collect();
     out.sort_by(|a, b| (b.p_t_q * b.p_q_t).partial_cmp(&(a.p_t_q * a.p_q_t)).unwrap().then_with(|| a.ids.cmp(&b.ids)));
     out.truncate(p.keep);
@@ -183,26 +236,53 @@ pub fn translate(src: &Side, tgt: &Side, query: &[u32], p: &Params) -> (usize, V
 
 /// q (lang A) -> pivots (lang B) -> paraphrases (lang A): score(t2) = Σ_pivot w(pivot|q) · p(t2|pivot) · p(pivot|t2),
 /// w ∝ p(pivot|q)·p(q|pivot) over the top specific pivots. A ranking score, not a probability.
-pub fn paraphrase(a: &Side, b: &Side, query: &[u32], p: &Params, pivots: usize) -> (usize, Vec<(String, f64, Vec<String>)>) {
+pub struct Paraphrases { pub found: usize, pub pivots: Vec<(String, f64)>, pub paraphrases: Vec<(String, f64, Vec<String>)>, pub query_variants: Vec<(String, f64)> }
+
+pub fn paraphrase(a: &Side, b: &Side, query: &[u32], p: &Params, pivots: usize) -> Paraphrases {
     let (n_q, piv) = translate(a, b, query, p);
     // Only pivots specific to the query (p(q|pivot) >= 0.05) carry meaning; "be" for «πρέπει να» does not.
     let piv: Vec<&Cand> = piv.iter().filter(|c| c.p_q_t >= 0.05).take(pivots).collect();
     let norm: f64 = piv.iter().map(|c| c.p_q_t * c.p_t_q).sum();
-    let mut agg: HashMap<String, (f64, Vec<String>)> = HashMap::new();
+    let mut agg: HashMap<Vec<u32>, (f64, Vec<String>)> = HashMap::new();
+    let pivot_list: Vec<(String, f64)> = piv.iter().map(|c| (c.text.clone(), if norm > 0.0 { c.p_q_t * c.p_t_q / norm } else { 0.0 })).collect();
     for pv in piv {
         let w = if norm > 0.0 { pv.p_q_t * pv.p_t_q / norm } else { 0.0 };
         let (_, back) = translate(b, a, &pv.ids, p);
         for t in back {
-            let e = agg.entry(t.text.clone()).or_insert((0.0, Vec::new()));
+            let e = agg.entry(t.ids.clone()).or_insert((0.0, Vec::new()));
             // Specificity on the way back too, so function words that co-occur with everything sink.
             e.0 += w * t.p_t_q * t.p_q_t;
             if e.1.len() < 3 { e.1.push(pv.text.clone()); }
         }
     }
-    let mut out: Vec<(String, f64, Vec<String>)> = agg.into_iter().map(|(k, (s, v))| (k, s, v)).collect();
-    out.sort_by(|x, y| y.1.partial_cmp(&x.1).unwrap().then_with(|| x.0.cmp(&y.0)));
-    out.truncate(p.keep);
-    (n_q, out)
+    // Fragments or extensions of the query itself ("same time" for "at the same time") are listed apart.
+    let overlaps = |g: &[u32]| contains(query, g) || contains(g, query);
+    let mut all: Vec<(Vec<u32>, f64, Vec<String>)> = agg.into_iter().map(|(k, (s, v))| (k, s, v)).collect();
+    all.sort_by(|x, y| y.1.partial_cmp(&x.1).unwrap().then_with(|| x.0.cmp(&y.0)));
+    let query_variants: Vec<(String, f64)> = all.iter().filter(|x| overlaps(&x.0)).take(p.keep).map(|x| (a.text(&x.0), x.1)).collect();
+    let paraphrases: Vec<(String, f64, Vec<String>)> = all.into_iter().filter(|x| !overlaps(&x.0)).take(p.keep).map(|x| (a.text(&x.0), x.1, x.2)).collect();
+    Paraphrases { found: n_q, pivots: pivot_list, paraphrases, query_variants }
+}
+
+/// Stem-level evidence for a proposed equivalence (all stems of each side in the same aligned line).
+pub fn pair_stems(en: &Side, el: &Side, e: &[String], g: &[String]) -> (usize, usize, usize, f64) {
+    if e.is_empty() || g.is_empty() { return (0, 0, 0, 0.0); }
+    let le = en.find_stems(e);
+    let lg = el.find_stems(g);
+    let both = intersect(&le, &lg).len();
+    let n = en.n_lines() as f64;
+    let (a, b, c) = (both as f64, (le.len() - both) as f64, (lg.len() - both) as f64);
+    (le.len(), lg.len(), both, g2(a, b, c, (n - a - b - c).max(0.0)))
+}
+
+/// Evidence for one proposed EN/EL equivalence (for model proposals): line counts and association.
+pub fn pair(en: &Side, el: &Side, e: &[u32], g: &[u32]) -> (usize, usize, usize, f64, Vec<u32>) {
+    let le = en.find(e);
+    let lg: HashSet<u32> = el.find(g).into_iter().collect();
+    let both: Vec<u32> = le.iter().copied().filter(|l| lg.contains(l)).collect();
+    let n = en.n_lines() as f64;
+    let (a, b, c) = (both.len() as f64, (le.len() - both.len()) as f64, (lg.len() - both.len()) as f64);
+    (le.len(), lg.len(), both.len(), g2(a, b, c, (n - a - b - c).max(0.0)), both.into_iter().take(3).collect())
 }
 
 // ---------------------------------------------------------------- JSON output (no dependencies)
@@ -222,25 +302,44 @@ fn js(s: &str) -> String {
     o
 }
 
-fn read_lines(path: &str) -> io::Result<Vec<String>> {
-    io::BufReader::new(fs::File::open(path)?).lines().collect()
+/// The first `max` lines (both sides are capped alike, so alignment is kept).
+fn read_lines(path: &str, max: usize) -> io::Result<Vec<String>> {
+    io::BufReader::new(fs::File::open(path)?).lines().take(max).collect()
 }
 
 fn main() -> io::Result<()> {
     let args: Vec<String> = std::env::args().collect();
     let dir = args.get(1).expect("usage: pivot-miner <corpus-dir> --queries <file>");
     let qpath = args.iter().position(|a| a == "--queries").and_then(|i| args.get(i + 1)).expect("--queries <file>");
+    let flag = |name: &str| args.iter().position(|a| a == name).and_then(|i| args.get(i + 1)).cloned();
+    let prefix = flag("--prefix").unwrap_or_else(|| "Europarl.el-en".to_string());
+    let max_lines: usize = flag("--max-lines").map(|v| v.parse().expect("--max-lines <n>")).unwrap_or(usize::MAX);
     let t0 = std::time::Instant::now();
-    let en = Side::build(read_lines(&format!("{dir}/Europarl.el-en.en"))?);
-    let el = Side::build(read_lines(&format!("{dir}/Europarl.el-en.el"))?);
+    let en = Side::build(read_lines(&format!("{dir}/{prefix}.en"), max_lines)?);
+    let el = Side::build(read_lines(&format!("{dir}/{prefix}.el"), max_lines)?);
     assert_eq!(en.n_lines(), el.n_lines(), "line counts differ");
     eprintln!("indexed {} pairs in {:.1}s", en.n_lines(), t0.elapsed().as_secs_f64());
     let stdout = io::stdout();
     let mut w = stdout.lock();
-    for q in read_lines(qpath)? {
+    for q in read_lines(qpath, usize::MAX)? {
         let parts: Vec<&str> = q.splitn(3, '\t').collect();
         if parts.len() != 3 || q.starts_with('#') { continue; }
         let (mode, lang, phrase) = (parts[0], parts[1], parts[2]);
+        if mode == "pair" {
+            // "pair\t<english phrase>\t<greek phrase>"
+            let exact = match (en.ids(lang), el.ids(phrase)) {
+                (Some(e), Some(g)) => {
+                    let (ne, ng, both, score, ev) = pair(&en, &el, &e, &g);
+                    format!("{{\"enLines\":{},\"elLines\":{},\"both\":{},\"g2\":{:.1},\"evidenceLines\":{:?}}}", ne, ng, both, score, ev)
+                }
+                _ => "null".to_string(),
+            };
+            let (es, gs) = (stems(lang), stems(phrase));
+            let (se, sg, sb, sg2) = pair_stems(&en, &el, &es, &gs);
+            writeln!(w, "{{\"mode\":\"pair\",\"en\":{},\"el\":{},\"exact\":{},\"stem\":{{\"enStems\":[{}],\"elStems\":[{}],\"enLines\":{},\"elLines\":{},\"both\":{},\"g2\":{:.1}}}}}",
+                js(lang), js(phrase), exact, es.iter().map(|x| js(x)).collect::<Vec<_>>().join(","), gs.iter().map(|x| js(x)).collect::<Vec<_>>().join(","), se, sg, sb, sg2)?;
+            continue;
+        }
         let (src, tgt) = if lang == "el" { (&el, &en) } else { (&en, &el) };
         let Some(ids) = src.ids(phrase) else {
             writeln!(w, "{{\"mode\":{},\"lang\":{},\"query\":{},\"found\":0,\"note\":\"a word of the query is not in the corpus\"}}", js(mode), js(lang), js(phrase))?;
@@ -258,9 +357,11 @@ fn main() -> io::Result<()> {
                 writeln!(w, "{{\"mode\":\"translate\",\"lang\":{},\"query\":{},\"found\":{},\"candidates\":[{}]}}", js(lang), js(phrase), n_q, items.join(","))?;
             }
             "paraphrase" => {
-                let (n_q, cands) = paraphrase(src, tgt, &ids, &PARAMS, 10);
-                let items: Vec<String> = cands.iter().map(|(t, s, via)| format!("{{\"text\":{},\"score\":{:.4},\"via\":[{}]}}", js(t), s, via.iter().map(|v| js(v)).collect::<Vec<_>>().join(","))).collect();
-                writeln!(w, "{{\"mode\":\"paraphrase\",\"lang\":{},\"query\":{},\"found\":{},\"candidates\":[{}]}}", js(lang), js(phrase), n_q, items.join(","))?;
+                let r = paraphrase(src, tgt, &ids, &PARAMS, 10);
+                let ts = |v: &[(String, f64)]| v.iter().map(|(t, s)| format!("{{\"text\":{},\"score\":{:.4}}}", js(t), s)).collect::<Vec<_>>().join(",");
+                let items: Vec<String> = r.paraphrases.iter().map(|(t, s, via)| format!("{{\"text\":{},\"score\":{:.4},\"via\":[{}]}}", js(t), s, via.iter().map(|v| js(v)).collect::<Vec<_>>().join(","))).collect();
+                writeln!(w, "{{\"mode\":\"paraphrase\",\"lang\":{},\"query\":{},\"found\":{},\"pivots\":[{}],\"candidates\":[{}],\"queryVariants\":[{}]}}",
+                    js(lang), js(phrase), r.found, ts(&r.pivots), items.join(","), ts(&r.query_variants))?;
             }
             _ => writeln!(w, "{{\"query\":{},\"error\":\"mode must be translate or paraphrase\"}}", js(phrase))?,
         }
@@ -297,7 +398,7 @@ mod tests {
     #[test]
     fn translation_ranks_the_specific_phrase_first() {
         let (en, el) = corpus();
-        let p = Params { max_n: 3, min_count: 1, scored: 100, keep: 10, min_p_q_t: 0.0 };
+        let p = Params { max_n: 3, min_count: 1, scored: 100, keep: 10, min_p_q_t: 0.0, frequent_share: 1.0 };
         let (n, c) = translate(&en, &el, &en.ids("police").unwrap(), &p);
         assert_eq!(n, 4);
         assert_eq!(c[0].text, "αστυνομια"); // in all 4 lines with "police" and only there
@@ -307,11 +408,45 @@ mod tests {
     #[test]
     fn paraphrase_through_english_pivot_reaches_the_other_greek_verb() {
         let (en, el) = corpus();
-        let p = Params { max_n: 3, min_count: 1, scored: 100, keep: 30, min_p_q_t: 0.0 };
-        let (_, c) = paraphrase(&el, &en, &el.ids("αστυνομία").unwrap(), &p, 5);
-        assert!(c.iter().any(|(t, _, _)| t == "αστυνομια"));
-        let (_, v) = paraphrase(&el, &en, &el.ids("κάλεσε").unwrap(), &p, 5);
-        assert!(v.iter().any(|(t, _, _)| t.starts_with("τηλεφωνησε")), "pivot 'called' links κάλεσε and τηλεφώνησε");
+        let p = Params { max_n: 3, min_count: 1, scored: 100, keep: 30, min_p_q_t: 0.0, frequent_share: 1.0 };
+        let r = paraphrase(&el, &en, &el.ids("αστυνομία").unwrap(), &p, 5);
+        assert!(r.query_variants.iter().any(|(t, _)| t == "αστυνομια"), "the query itself is a variant, not a paraphrase");
+        let v = paraphrase(&el, &en, &el.ids("κάλεσε").unwrap(), &p, 5);
+        assert!(v.paraphrases.iter().any(|(t, _, _)| t.starts_with("τηλεφωνησε")), "pivot 'called' links κάλεσε and τηλεφώνησε");
+        assert!(v.pivots.iter().any(|(t, _)| t.contains("called")));
+    }
+
+    #[test]
+    fn pair_counts_co_occurring_lines() {
+        let (en, el) = corpus();
+        let (ne, ng, both, g, ev) = pair(&en, &el, &en.ids("called the police").unwrap(), &el.ids("αστυνομία").unwrap());
+        assert_eq!((ne, ng, both), (3, 4, 3));
+        assert!(g > 0.0);
+        assert_eq!(ev, vec![0, 1, 2]);
+    }
+
+    #[test]
+    fn stems_drop_function_words_and_endings() {
+        assert_eq!(stems("καλώ την αστυνομία"), vec!["καλω", "αστυνομ"]);
+        assert_eq!(stems("Τηλεφώνησε στην αστυνομία"), vec!["τηλεφων", "στην", "αστυνομ"]);
+        assert_eq!(stems("called the police"), vec!["call", "police"]);
+        assert_eq!(stems("πήρε το 100"), vec!["πηρε", "100"]);
+    }
+
+    #[test]
+    fn stem_match_tolerates_inflection() {
+        let (en, el) = corpus();
+        let lines = el.find_stems(&stems("τηλεφωνώ στην αστυνομία"));
+        assert_eq!(lines, vec![1]);
+        let (_, _, both, _) = pair_stems(&en, &el, &stems("call police"), &stems("αστυνομία"));
+        assert_eq!(both, 3);
+    }
+
+    #[test]
+    fn function_word_candidates_are_recognised() {
+        let (en, _) = corpus();
+        assert!(en.all_frequent(&en.ids("the").unwrap(), 0.3));
+        assert!(!en.all_frequent(&en.ids("the weather").unwrap(), 0.3));
     }
 
     #[test]
