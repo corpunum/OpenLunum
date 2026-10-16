@@ -14,6 +14,9 @@
 - The owner's review worksheet (Greek naturalness, 14 unresolved meanings, 40 authored EN/EL pairs).
 - A cross-vendor review packet with a bundle builder.
 
+- The owner review was returned and taken in (Part A meanings, Part B Greek naturalness, Part C sourced pairs), together with the Tatoeba EN–EL dataset.
+- The cross-language convergence v1 pre-registration, with a deterministic selection. No provider calls yet.
+
 ### Changed
 - README and STATUS now reflect the real-data and stability findings.
 - The README diagram no longer claims EN/EL identity convergence.

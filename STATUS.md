@@ -17,6 +17,16 @@
   - a [cross-vendor review packet](experiments/cross-vendor-review-v1/README.md);
   - the [owner's review worksheet](experiments/owner-greek-review-v1/README.md): native Greek, the 14 unresolved meanings, and 40 authored EN/EL pairs.
 
+- **Owner review returned (2026-10-16)** ([intake](experiments/owner-greek-review-v1/INTAKE.md)). It is AI-assisted drafting, checked by the native-speaker owner.
+  - 18 of the 19 AI-written Greek sentences are natural.
+  - V8 merges «στο κοινό» (made available to) with «για το κοινό» (intended for) under one role.
+  - Greek imperative/aorist homography is confirmed by a native speaker.
+  - Modal "can / μπορεί" has two or three readings that a parse silently collapses.
+- **Data:** the Tatoeba EN–EL export (17,599 human pairs, CC BY 2.0 FR) is [added](datasets/third-party/tatoeba-eng-ell-2026-10/README.md).
+- **[Cross-language convergence v1](experiments/cross-language-convergence-v1/PREREGISTRATION.md) is pre-registered** (S1, S2 and S3 plus a repeat run).
+  - Preflight passed with 0 provider calls.
+  - **It waits for the owner's budget approval** (about $38 estimated).
+
 ## What exists
 
 **Versions:**
