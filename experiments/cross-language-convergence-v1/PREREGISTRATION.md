@@ -156,3 +156,13 @@ The stopped runs are kept as evidence and are not scored. The scored runs are `s
 **Unchanged:** the package, the contract, the sentences and the bars.
 
 The stopped runs are kept and not scored. The scored runs are `s1c`, `s2c`, `s3c` and `r2c`.
+
+## Amendment 5 (2026-10-16): the item ceiling was too low
+
+**What happened:** `s1c` stopped after 6 items, costing $1.12.
+- Item 6, the long GDPR sentence (C3 EN), needed 9 turns and $0.36. That exceeded the requested $0.35 ceiling, so the client aborted it with `ITEM_BUDGET_EXCEEDED`, and the runner stops on any overrun.
+- The other items cost $0.13–$0.17.
+
+**Change:** the requested item ceiling is now **$0.80**. Earlier runs, such as v17, used $0.60. The expected spend is unchanged at about $0.15 per item; only the reservation grows. The owner approved the full budget.
+
+The stopped run is kept and not scored. The scored runs are `s1d`, `s2d`, `s3d` and `r2d`.
