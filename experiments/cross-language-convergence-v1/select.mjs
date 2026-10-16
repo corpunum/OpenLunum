@@ -28,7 +28,9 @@ const s2 = eligible.filter((en) => byEn.get(en).length === 1).slice(0, 40).map((
 // S3: 15 Greek paraphrase pairs: two different human Greek translations of one English sentence.
 const s3 = eligible.filter((en) => byEn.get(en).length >= 2).slice(0, 15).map((en, i) => ({ pair: `P${i + 1}`, en, el: byEn.get(en)[0], el2: byEn.get(en)[1] }));
 
-const request = (text, language) => ({ handle: `clc1-${sha(`${language}\n${text}`).slice(0, 16)}`, sourceLanguage: language, sourceText: text, sourceSha256: sha(text) });
+// Each request binds the frozen contract of package v22 (the runner refuses rows without it).
+const contractHash = JSON.parse(fs.readFileSync(`${root}experiments/natural-development-v8/extraction/public-instruction-package-v22.json`, 'utf8')).freeze.coreContractHash;
+const request = (text, language) => ({ handle: `clc1-${sha(`${language}\n${text}`).slice(0, 16)}`, sourceLanguage: language, sourceText: text, sourceSha256: sha(text), contractHash });
 const write = (name, items) => fs.writeFileSync(dir + name, items.map((x) => JSON.stringify(x)).join('\n') + '\n');
 write('requests-s1.jsonl', s1.flatMap((p) => [request(p.en, 'en'), request(p.el, 'el')]));
 write('requests-s2.jsonl', s2.flatMap((p) => [request(p.en, 'en'), request(p.el, 'el')]));

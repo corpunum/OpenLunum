@@ -91,3 +91,14 @@ Per the runner documentation, a live run needs an owner-approved total budget.
 - **Contamination:** Tatoeba and the EU Charter are public and likely in training data.
 - **Domain:** the sentences are mostly short and everyday, not the owner's operational traffic.
 - **S1 curation:** the S1 pairs were AI-selected from existing sources and checked by the owner. They were not written by the owner.
+
+## Amendment 1 (2026-10-16, before any provider call)
+
+The owner approved the full budget, all four sets.
+
+The first pilot launch was refused by the runner with `request_contract_mismatch`, before any provider call. The request rows lacked the `contractHash` binding that the runner requires. `select.mjs` now adds the v22 `coreContractHash` to every request row. Unchanged:
+- the sentences;
+- the handles;
+- `pairs.jsonl`;
+- the order;
+- the bars.
