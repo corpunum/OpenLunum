@@ -44,3 +44,14 @@ test('a submission of a different source text and an unverified model are failur
   assert.ok(row.evidenceFailures.includes('SUBMITTED_SOURCE_MISMATCH'));
   assert.ok(row.evidenceFailures.includes('MODEL_UNVERIFIED'));
 });
+
+test('abstention after a submission core refused identity to is a valid abstention (pilot v1 runner bug)', () => {
+  const contract = { name: 'lunum_get_extraction_contract', input: {}, result: { contract: {} }, isError: false };
+  const refused = { name: 'lunum_submit_candidate', input: { sourceText: 'X.', candidateSem: { clauses: [] } }, result: { success: true, submission: { candidateIdentityAvailable: false } }, isError: false };
+  const row = classify({ request, calls: [contract, refused], finalText: '{"status":"abstain","reason":"unresolved"}', failure: null, pkg, model: 'm', reportedModels: ['m'] });
+  assert.equal(row.status, 'abstain');
+  assert.ok(!row.evidenceFailures.includes('abstain_after_accepted_submission'));
+  const canonical = { ...refused, result: { success: true, submission: { candidateIdentityAvailable: true } } };
+  const bad = classify({ request, calls: [contract, canonical], finalText: '{"status":"abstain","reason":"unresolved"}', failure: null, pkg, model: 'm', reportedModels: ['m'] });
+  assert.ok(bad.evidenceFailures.includes('ABSTAIN_AFTER_CANONICAL_SUBMISSION'));
+});

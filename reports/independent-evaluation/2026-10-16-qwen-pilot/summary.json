@@ -1,0 +1,14 @@
+{
+  "startedAt": "2026-10-16T19:13:55.557Z",
+  "finishedAt": "2026-10-16T19:35:35.801Z",
+  "model": "openai/qwen3.8-flash-next-uncensored-lean",
+  "endpoint": "http://127.0.0.1:8080/v1",
+  "codeCommit": "af0f6657c5ae114ca07c54bea9b3295b044c4333",
+  "commitUnchanged": true,
+  "artifactsUnchanged": true,
+  "items": 4,
+  "parse": 3,
+  "abstain": 0,
+  "invalid": 1,
+  "costUsd": 0
+}

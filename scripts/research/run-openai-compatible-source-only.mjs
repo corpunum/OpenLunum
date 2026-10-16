@@ -59,7 +59,10 @@ export function classify({ request, calls, finalText, failure, pkg, model, repor
   const last = accepted.at(-1) ?? null;
   let status = null; let candidateSem; let fail = failure ?? null;
   if (!fail) {
-    if (declared?.status === 'abstain' && !last) { status = 'abstain'; candidateSem = null; }
+    // As the live Claude runner: a declared abstention is an abstention; only an abstention after an
+    // identity-bearing submission is contradictory (contradictoryAbstention below). A submission that core
+    // accepted but refused identity (e.g. a pronoun-only filler) may honestly be followed by an abstention.
+    if (declared?.status === 'abstain') { status = 'abstain'; candidateSem = null; }
     else if (declared?.status === 'parse' && last) { status = 'parse'; candidateSem = last.input.candidateSem; }
     else fail = !declared ? 'unparseable_final_status' : declared.status === 'parse' ? 'parse_claimed_without_accepted_submission' : 'abstain_after_accepted_submission';
   }
