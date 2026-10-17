@@ -32,10 +32,10 @@ The source text is always kept. When the agent can't represent a sentence faithf
 
 Core cannot tell whether a proposal is *right*. It can refuse proposals that are malformed, that fill roles with placeholders, that are ambiguous by construction, or that drop a number or identifier stated in the source.
 
-## Current status, in one screen (2026-10-16)
+## Current status, in one screen (2026-10-17)
 
 **Works and is tested** (4,532 tests; `pnpm verify`):
-- **Record handling:** Sem types, canonicalization, validation against 46 predicate frames (of 55 registered predicates; protocol 0.6, frames 0.8, contract 0.19), and versioned `lfp:2.1` fingerprints.
+- **Record handling:** Sem types, canonicalization, validation against 46 predicate frames (of 55 registered predicates; protocol 0.6, frames 0.8, contract 0.19), and versioned `lfp:2.1` fingerprints. A Rust crate, `crates/lunum-sem`, reproduces `lfp:2.1` exactly and is checked against the same 7,089-entry golden file as the TypeScript build. Keys named `__proto__`, `constructor` or `prototype` are rejected at every depth.
 - **Refusal gates:** core withholds identity from a candidate that:
   - is malformed;
   - uses placeholders;
@@ -73,6 +73,8 @@ Core cannot tell whether a proposal is *right*. It can refuse proposals that are
 - identity that converges across languages: 0 of 5 observed pairs matched, and paraphrase convergence is untested at scale;
 - token savings on real memory;
 - any human or cross-vendor review. Both are now being set up.
+
+`lfp:2.1` depends on Unicode 17.0 casefold/NFKC, so Node is pinned in `.nvmrc` (22.22.2); a Unicode bump is a deliberate, reviewed change ([contract](docs/SEMANTIC_CONTRACT.md)).
 
 Details are in [STATUS.md](STATUS.md). The working plan for the next session is in [HANDOFF.md](HANDOFF.md).
 
@@ -123,6 +125,7 @@ node scripts/research/literal-retention-audit.mjs
 | Path | What it is |
 |---|---|
 | `packages/core` | Sem types, protocol and frame registries, validation, fingerprints, rendering, context compilation, the extraction contract. No model or product imports. |
+| `crates/lunum-sem` | Rust reproduction of the `lfp:2.1` fingerprint, byte for byte against `semanticFingerprint`; parity test over `eval-results/golden-vectors/lfp21-golden.json`. Standalone crate, not a workspace member. |
 | `packages/mcp` | MCP server exposing core to agents |
 | `packages/cli`, `packages/eval` | Command line; conformance and experiment tooling |
 | `packages/api` | HTTP reference scaffold; several routes are placeholders ([warning](packages/api/README.md)) |

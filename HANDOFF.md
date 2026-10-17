@@ -6,7 +6,7 @@ This is for the next agent session. It works on the owner's computer, which has 
 
 - **Trunk-based on `main`.** Run `pnpm verify` and keep a clean tree before every push, then check the post-push CI run.
 - **Frozen** ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)): protocol 0.6, frames 0.8, contract `lunum-agent/0.19`, `lfp:2.1`.
-  - Instruction package **v23** is the current one.
+  - Instruction package **v24** is the current one (v23 contract text unchanged; v24 added the forbidden-key rejection in the served runtime).
   - No version bump without a pre-registered held-out live result.
 - **Evidence rules:**
   - Never edit frozen evidence; supersede it with a new versioned artifact.
