@@ -21,7 +21,7 @@ The extraction contract, frames, protocol and identity projection are frozen unt
 
 ## Architecture boundaries
 
-- `Lunum-Sem` is language-neutral structured meaning; English-like Lunum-Code is an initial renderer profile, not canonical semantics.
+- `Lunum-Sem` is designed as language-neutral structured meaning (the goal of the representation, not yet a measured property of its identity: see [ADR 0026](decisions/0026-working-scope-checkable-memory.md)); English-like Lunum-Code is an initial renderer profile, not canonical semantics.
 - `packages/core` must not import product integrations or model providers.
 - Product-specific persistence and runtime decisions belong in adapters.
 - Natural source text, language, provenance and protected literals must be retained.

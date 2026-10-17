@@ -1,6 +1,6 @@
-# ADR 0026: Working scope, a checkable memory layer (proposed)
+# ADR 0026: Working scope, a checkable memory layer (accepted with an amendment)
 
-**Status: Proposed 2026-10-16. It needs the owner's acceptance.** Until it is accepted, [VISION.md](../VISION.md) is unchanged, and the binding principles in AGENTS.md still state the long-term goal.
+**Status: Accepted with an amendment, 2026-10-17. The owner delegated the decision** ("your recommendation, recorded as delegated"; relayed by the orchestrating session corpunum-6b, about 10:00 local). Proposed 2026-10-16. The recommendation and the amendment were written by the Claude session that proposed the ADR (self-reviewed).
 
 ## Context
 
@@ -43,3 +43,21 @@ Concretely:
 - If accepted, a follow-up commit:
   - adds a "Current working scope" section to VISION.md that points here;
   - qualifies the AGENTS.md principle "Lunum-Sem is language-neutral structured meaning" as the goal of the representation, not a property the current identity has.
+
+## Decision (2026-10-17, delegated)
+
+**Accepted, with one amendment:** next to the working scope, cross-language meaning is an **explicit research track**, not dropped.
+
+- **Working scope (production claims):** as proposed above. Lunum is described and used as a checkable memory layer; semantic identity is claimed only where convergence is measured.
+- **Research track (no production claim until measured):** meaning preservation across languages:
+  - meaning clusters from professional translations ([pivot-paraphrase-v1](../experiments/pivot-paraphrase-v1/EXPLORATION.md));
+  - Greek frames and the concept layer ([ADR 0028](0028-language-neutral-concept-layer.md), approved by the owner on 2026-10-17 to proceed through ADR 0025's path);
+  - the Rust store and renderers (orchestrator plan, 2026-10-17).
+
+  Results report their level: (a) structure, (b) judged meaning, (c) exact identity.
+
+**Why the amendment:** on 2026-10-17 the owner approved Greek frames and the concept layer. A scope that only names checkable memory would leave that approved work outside the stated scope. The evidence for the scope itself is unchanged and strengthened:
+- Stage 0: the best extractor covers 11 of 16 English and 0 of 16 Greek sentences ([results](../experiments/parallel-document-v1/RESULTS-stage0.md)).
+- 0 identities on the owner's 21,291 memory units.
+
+The follow-up edits named under "What the owner decides" are made in the same commit: a "Current working scope" section in VISION.md, and the AGENTS.md and operating-model principle qualified as the goal of the representation.

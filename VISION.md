@@ -2,6 +2,14 @@
 
 Lunum should let models and agent products exchange structured meaning without forcing every product to store duplicate human-language paraphrases or every model to consume the same compact spelling.
 
+## Current working scope
+
+Since 2026-10-17 ([ADR 0026](decisions/0026-working-scope-checkable-memory.md), accepted with an amendment by owner delegation):
+- **Working scope:** Lunum is a checkable memory layer: deterministic structure over source text, exact literal retention, verified recall, refusal when a representation would lose meaning. Semantic identity is claimed only where convergence is measured.
+- **Research track:** meaning preservation across languages (meaning clusters from professional translations, Greek frames and a concept layer, Rust store and renderers), reported by level: (a) structure, (b) judged meaning, (c) exact identity.
+
+The north star below is the destination, not a description of what the identity does today.
+
 ## North star
 
 A product records meaning once, retains the original evidence, retrieves that meaning across languages, and renders only the representation best suited to the receiving model and task.

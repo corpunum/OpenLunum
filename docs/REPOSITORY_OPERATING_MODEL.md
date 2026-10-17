@@ -17,7 +17,7 @@ The rig services of that model (`openlunum-worker`, `-worker-ally`, `-docs`, `-d
 
 These come from the architecture and the evidence protocol, not from the old process:
 
-- `Lunum-Sem` is language-neutral structured meaning; English-like Lunum-Code is one renderer profile.
+- `Lunum-Sem` is designed as language-neutral structured meaning (the goal, not yet a measured property of its identity; [ADR 0026](../decisions/0026-working-scope-checkable-memory.md)); English-like Lunum-Code is one renderer profile.
 - `packages/core` does not import product integrations or model providers.
 - Natural source text, language, provenance and protected literals are retained.
 - A heuristic surface record is never marked semantic or eligible for compact context.
