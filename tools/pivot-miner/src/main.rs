@@ -41,40 +41,30 @@ pub fn tokenize(line: &str) -> Vec<String> {
 
 // ---------------------------------------------------------------- lemma classes (UniMorph)
 
-/// Folded form -> lemma class, from UniMorph rows `lemma<TAB>form<TAB>features`.
-/// Lemmas of the same part of speech that share a folded form are merged into one class
-/// (τηλεφωνώ / τηλεφωνάω); the class label is its smallest folded lemma. A form with
-/// analyses in several classes gets the smallest label. Deterministic.
+/// Folded form -> lemma label, from UniMorph rows `lemma<TAB>form<TAB>features`.
+/// A form maps to the smallest of ITS OWN lemmas; a lemma maps to itself. No transitive merging:
+/// v1 merged lemmas that shared any form, and chains of shared forms built giant classes in English
+/// ("card", "dance", "strip" all became "aba"), which sank the OMW measurement (2026-10-17).
+/// Greek particle forms («να καλέσω», «θα καλέσουμε») keep the verb.
 pub fn lemma_map<I: IntoIterator<Item = String>>(rows: I) -> HashMap<String, String> {
-    let mut lemma_id: HashMap<(String, String), usize> = HashMap::new();
-    let mut labels: Vec<String> = Vec::new();
-    let mut parent: Vec<usize> = Vec::new();
-    let mut form_lemmas: HashMap<(String, String), Vec<usize>> = HashMap::new();
-    fn find(p: &mut Vec<usize>, x: usize) -> usize { let mut r = x; while p[r] != r { r = p[r]; } let mut y = x; while p[y] != r { let n = p[y]; p[y] = r; y = n; } r }
+    let mut out: HashMap<String, String> = HashMap::new();
+    let mut lemmas: HashSet<String> = HashSet::new();
+    let put = |k: String, v: &String, out: &mut HashMap<String, String>| {
+        let e = out.entry(k).or_insert_with(|| v.clone());
+        if v < e { *e = v.clone(); }
+    };
     for row in rows {
         let f: Vec<&str> = row.split('\t').collect();
         if f.len() < 3 { continue; }
-        // Greek subjunctive/future forms are stored with their particle («να καλέσω», «θα καλέσω»): keep the verb.
         let mut ft = tokenize(f[1]);
         if ft.len() == 2 && ["θα", "να", "ασ"].contains(&ft[0].as_str()) { ft.remove(0); }
         let (lemma, form) = (tokenize(f[0]).join(" "), ft.join(" "));
         if lemma.is_empty() || form.is_empty() || lemma.contains(' ') || form.contains(' ') { continue; }
-        let pos = f[2].split(';').next().unwrap_or("").to_string();
-        let next = labels.len();
-        let id = *lemma_id.entry((pos.clone(), lemma.clone())).or_insert_with(|| { labels.push(lemma.clone()); parent.push(next); next });
-        for key in [(pos.clone(), form), (pos, lemma)] { form_lemmas.entry(key).or_default().push(id); }
+        put(form, &lemma, &mut out);
+        lemmas.insert(lemma);
     }
-    for ids in form_lemmas.values() {
-        for &x in &ids[1..] { let (a, b) = (find(&mut parent, ids[0]), find(&mut parent, x)); if a != b { parent[a.max(b)] = a.min(b); } }
-    }
-    let mut best: HashMap<usize, String> = HashMap::new();
-    for i in 0..labels.len() { let r = find(&mut parent, i); let e = best.entry(r).or_insert_with(|| labels[i].clone()); if labels[i] < *e { *e = labels[i].clone(); } }
-    let mut out: HashMap<String, String> = HashMap::new();
-    for ((_, form), ids) in form_lemmas {
-        let label = ids.iter().map(|&i| { let r = find(&mut parent, i); best[&r].clone() }).min().unwrap();
-        let e = out.entry(form).or_insert_with(|| label.clone());
-        if label < *e { *e = label; }
-    }
+    // A word that is itself a lemma keeps its own label, even when it is also a form of another lemma.
+    for l in lemmas { out.insert(l.clone(), l); }
     out
 }
 
@@ -520,20 +510,19 @@ mod tests {
     }
 
     #[test]
-    fn lemma_classes_merge_variants_and_map_inflections() {
-        let rows = ["καλώ\tκάλεσε\tV;3;SG;PFV;PST", "καλώ\tκάλεσα\tV;1;SG;PFV;PST", "τηλεφωνώ\tτηλεφώνησε\tV;3;SG;PFV;PST",
-            "τηλεφωνάω\tτηλεφώνησε\tV;3;SG;PFV;PST", "τηλεφωνάω\tτηλεφωνάει\tV;3;SG;PRS", "αστυνομία\tαστυνομίας\tN;GEN;SG"];
+    fn lemma_map_maps_inflections_without_transitive_merging() {
+        let rows = ["καλώ\tκάλεσε\tV;3;SG;PFV;PST", "καλώ\tκάλεσα\tV;1;SG;PFV;PST", "αστυνομία\tαστυνομίας\tN;GEN;SG",
+            "καλώ\tνα καλέσω\tV;1;SG;PFV;SBJV", "καλώ\tθα καλέσουμε\tV;1;PL;PFV;FUT",
+            "aba\tcards\tN;PL", "card\tcards\tN;PL", "card\tcard\tN;SG", "dance\tdances\tN;PL", "card\tdances\tN;PL"];
         let m = lemma_map(rows.iter().map(|s| s.to_string()));
         assert_eq!(m["καλεσα"], "καλω");
-        assert_eq!(m["τηλεφωναει"], "τηλεφωναω");
-        assert_eq!(m["τηλεφωνησε"], "τηλεφωναω"); // one class for both variants
+        assert_eq!(m["καλεσω"], "καλω");
+        assert_eq!(m["καλεσουμε"], "καλω");
         assert_eq!(m["αστυνομιασ"], "αστυνομια");
-        let sub = lemma_map(["καλώ\tνα καλέσω\tV;1;SG;PFV;SBJV", "καλώ\tθα καλέσουμε\tV;1;PL;PFV;FUT"].iter().map(|s| s.to_string()));
-        assert_eq!(sub["καλεσω"], "καλω"); // particle forms (pro-drop replay, 2026-10-17)
-        assert_eq!(sub["καλεσουμε"], "καλω");
-        let el = Side::build_with(["Κάλεσα την αστυνομία", "τηλεφώνησε στην αστυνομίας"].iter().map(|s| s.to_string()), Some(std::rc::Rc::new(m)));
-        assert_eq!(el.find(&el.ids("καλώ την αστυνομία").unwrap()), vec![0]);
-        assert_eq!(el.find(&el.ids("τηλεφωνάει").unwrap()), vec![1]);
+        assert_eq!(m["card"], "card", "a lemma keeps its own label");
+        assert_eq!(m["dance"], "dance", "no chain card~aba~dance");
+        let el = Side::build_with(["Κάλεσα την αστυνομία", "θα καλέσουμε την αστυνομίας"].iter().map(|s| s.to_string()), Some(std::rc::Rc::new(m)));
+        assert_eq!(el.find(&el.ids("καλώ την αστυνομία").unwrap()), vec![0, 1]);
     }
 
     #[test]

@@ -48,3 +48,11 @@ The [pro-drop replay](../../../experiments/prodrop-replay-v1/README.md) found th
 - A **second, complete run** (all four configurations, same items, same scorer) uses the fixed binary, built separately: `score.mjs --miner <v2 binary> --out results-v2.json`.
 - **The bars and verdicts stay on the original run** (`results.json`). The v2 run is reported next to it with no bar of its own; the question is only how much the fix moves top-5. Prediction: little, because the items are single dictionary words and subjunctive forms rarely win a top-5 slot.
 - Scheduled with the rig coordinator (corpunum-6b) under `flock ~/.cache/rig-heavy.lock`.
+
+## Amendment 2 (2026-10-17, after the original run's results were seen): the v2 binary also removes a defect
+
+The original run failed both bars ([RESULTS.md](RESULTS.md)). Inspection found the cause in the tool: `lemma_map` merged lemmas that shared any form, transitively, and in UniMorph English the chains built giant classes ("card", "dance", "strip", "game" all became `aba`; "knowledge", "news" became `abgusht`). Those queries then matched a large share of all lines.
+
+- The v2 binary now maps each form to the smallest of **its own** lemmas only; no transitive merging; a lemma keeps its own label. Tested.
+- **This amendment is written after seeing results, so v2 is post-hoc evidence.** The original verdicts (H1 and H2 failed) stand and are not replaced. v2 shows what the corrected tool does on the same items, scored by the same scorer; it is reported as such.
+- Run with `nice -n 10`, without the heavy-job lock (CPU only, ≤ 4 GB; the rig coordinator's instruction).
