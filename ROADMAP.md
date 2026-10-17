@@ -1,5 +1,12 @@
 # Roadmap
 
+## Update — 2026-10-17
+
+- A Rust reproduction of `lfp:2.1` (`crates/lunum-sem`) now matches the TypeScript fingerprint on all 7,089 golden entries, and Node and Unicode are pinned (17.0).
+- ADR 0027 (identity projection) is parked after two failed held-out gates; the open question is frame choice, a contract matter.
+- ADR 0029 (Greek source-bound frames) is proposed; its held-out pre-registration comes first.
+- Details: [STATUS.md](STATUS.md).
+
 ## Current checkpoint — 2026-09-27
 
 The 2026-09-14 checkpoint asked for a frozen successor task, a fresh source-only extraction and an independent evaluation. All three now exist:

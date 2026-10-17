@@ -1,10 +1,18 @@
 # Project status
 
-**As of 2026-10-16.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+**As of 2026-10-17.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
 
-## Since 2026-10-16
+## Since 2026-10-17
 
-- **Frozen:** protocol 0.6, frames 0.8, contract 0.19, package v22 and identity `lfp:2.1`, until held-out evidence exists ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
+- **Rust parity crate:** `crates/lunum-sem` reproduces `lfp:2.1` exactly (#722). It is tested against the golden file `eval-results/golden-vectors/lfp21-golden.json`, which grew from 7,070 to 7,089 entries.
+- **Forbidden keys:** `__proto__`, `constructor` and `prototype` keys are now rejected at every depth (#723), in `packages/core` and the Rust crate. Replay of the old and new builds showed 0 identity movement for inputs without those keys (a bug fix allowed by ADR 0025). The frozen instruction package is now **v24**; contract text is unchanged and v23 stays frozen and is tested as historical.
+- **Unicode pin:** `lfp:2.1` is pinned to Unicode 17.0 with a canary test, and CI pins Node 22.22.2 via `.nvmrc` (#724), so a Unicode change is a deliberate PR.
+- **ADR 0027 (identity projection) is parked.** Two held-out gates failed bar 1 with Sonnet: v1 candidate 23/26 (88.5%), revised v2 candidate 18/22 (81.8%; v1 16/22, `lfp:2.1` 9/22). Bars 2 and 3 passed. The remaining splits are mostly frame choice, a contract question that a projection cannot fold. Not implemented; `lfp:2.1` unchanged.
+- **ADR 0029 (Greek source-bound frames and pro-drop deixis) is proposed**, design only. A held-out pre-registration ([greek-frames-heldout-v1](experiments/greek-frames-heldout-v1/PREREGISTRATION.md)) comes before any code. The ADR is renumbered to package v25; the Greek baseline uses v24, which has the same contract as v23.
+
+## Earlier, 2026-10-16
+
+- **Frozen:** protocol 0.6, frames 0.8, contract 0.19, package v24 and identity `lfp:2.1`, until held-out evidence exists ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
 - **Proposed working scope:** a checkable memory layer, with semantic identity claimed only where convergence is measured ([ADR 0026](decisions/0026-working-scope-checkable-memory.md)). It awaits the owner's decision.
 - **The v17 re-run is now scored** ([report](reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md)). Compared with the original run:
   - outcome 21/30 against 27/30;
@@ -35,7 +43,7 @@
   - **Delivery fix:** contract 0.19 had never reached a Claude Code extractor. The client cut the 60 KB result to a 2 KB preview; v23 delivers it compactly.
   - **Meaning against the owner's readings:** 16/30 for both earlier runs ([targets](experiments/meaning-targets-owner-v1/README.md)).
   - **Real work log:** discourse compaction gives −35% characters with 96% of literals kept, and uses 0 semantic identities ([report](experiments/session-transcript-compaction-v1/README.md)).
-  - **Proposed:** ADR 0027, a canonical identity projection (in-sample 4→8 and 7→11 of 12). It is gated on a fresh held-out run.
+  - **Proposed that day:** ADR 0027, a canonical identity projection (in-sample 4→8 and 7→11 of 12). Its held-out gates then failed; see above.
 
 ## What exists
 
@@ -44,11 +52,11 @@
 | Artifact | Version |
 |---|---|
 | Candidate schema | `lunum-sem/0.1-draft` |
-| Strict identity | `lfp:2.1` |
+| Strict identity | `lfp:2.1` (Unicode 17.0 pinned; Rust reproduction in `crates/lunum-sem`) |
 | Protocol | `lunum-protocol/0.6`: 55 predicates (0.5 added inclusive `at_most`/`at_least`, ADR 0022; 0.6 added seven general predicates, ADR 0024), with verb aliases |
 | Frames | `lunum-frame/0.8`: 46 framed predicates (seven general source-bound frames for ordinary statements, ADR 0024; imperative `deploy`/`rotate` need no agent, `deploy` theme, `restart` count, ADR 0023) |
 | Agent contract | `lunum-agent/0.19` |
-| Frozen instruction package | v22 (general source-bound frames, protocol 0.6, frames 0.8; v20's imperative-agent rule and frames 0.7; v19's inclusive bounds as `at_most`/`at_least` conditions; v18's number-word, relative-time and threshold rules; served discourse-record module and MCP tools; complete repository-owned served-JS inventory) |
+| Frozen instruction package | v24 (served runtime after the forbidden-key change; contract text as v23; v22 was general source-bound frames, protocol 0.6, frames 0.8; v20's imperative-agent rule and frames 0.7; v19's inclusive bounds as `at_most`/`at_least` conditions; v18's number-word, relative-time and threshold rules; served discourse-record module and MCP tools; complete repository-owned served-JS inventory) |
 | Discourse records | `lunum-discourse/0.1` surface records over source-span units (ADR 0021); no identity |
 
 Other schema and fingerprint contracts, and migration fixtures, coexist. A file named `1.0`, or an internally frozen contract, is not external ratification.
