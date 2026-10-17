@@ -1,0 +1,19 @@
+[package]
+name = "lunum-render"
+version = "0.1.0"
+edition = "2021"
+description = "Exact Rust port of the Lunum English renderer generic-en-pivot/0.2 (packages/core/src/render.ts)"
+license = "Apache-2.0"
+publish = false
+
+# Standalone crate: not part of any parent workspace.
+[workspace]
+
+[dependencies]
+lunum-sem = { path = "../lunum-sem" }
+unicode-normalization = "0.1"
+sha2 = "0.10"
+
+[lib]
+name = "lunum_render"
+path = "src/lib.rs"
