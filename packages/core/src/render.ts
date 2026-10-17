@@ -11,7 +11,7 @@ function termText(term: LunumTerm | undefined): string {
 
 function orderedRoles(roles: LunumClause['roles']): Array<[string, LunumTerm]> {
   const rank = new Map<string, number>(ROLE_ORDER.map((role, index) => [role, index]));
-  return Object.entries(roles).sort(([a], [b]) => (rank.get(a) ?? 999) - (rank.get(b) ?? 999) || a.localeCompare(b));
+  return Object.entries(roles).sort(([a], [b]) => (rank.get(a) ?? 999) - (rank.get(b) ?? 999) || (a < b ? -1 : a > b ? 1 : 0));
 }
 
 function renderClause(clause: LunumClause): string {
@@ -44,7 +44,7 @@ function termTextV2(term: LunumTerm | undefined): string {
 }
 
 function renderClauseV2(clause: LunumClause): string {
-  const modality = clause.modality ? (MODALITY_WORDS[clause.modality] ?? clause.modality) : '';
+  const modality = clause.modality ? (Object.hasOwn(MODALITY_WORDS, clause.modality) ? MODALITY_WORDS[clause.modality]! : clause.modality) : '';
   const roles = orderedRoles(clause.roles).map(([role, value]) => `${role}=${termTextV2(value)}`).join(', ');
   const time = clause.time !== undefined ? ` @${termTextV2(clause.time)}` : '';
   const core = [clause.negated ? 'not' : '', modality, `${clause.predicate}(${roles})${time}`].filter(Boolean).join(' ');
@@ -63,7 +63,7 @@ export function renderSem(sem: LunumSem, options: { profile?: string } = {}): Re
   const profile = options.profile ?? DEFAULT_RENDERER;
   if (profile !== DEFAULT_RENDERER && profile !== LOSSLESS_RENDERER) throw new Error(`Renderer profile not installed: ${profile}`);
   const canonical = canonicalizeSem(sem);
-  const marker = WORLD_MARKERS[canonical.world] ?? canonical.world.slice(0, 1).toUpperCase();
+  const marker = (Object.hasOwn(WORLD_MARKERS, canonical.world) ? WORLD_MARKERS[canonical.world]! : canonical.world.slice(0, 1).toUpperCase());
   const render = profile === LOSSLESS_RENDERER ? renderClauseV2 : renderClause;
   return { profile, code: `${marker} ${canonical.clauses.map(render).join(' ; ')}`.trim(), semantic: true };
 }

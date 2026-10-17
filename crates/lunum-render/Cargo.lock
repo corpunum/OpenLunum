@@ -67,8 +67,6 @@ name = "lunum-render"
 version = "0.1.0"
 dependencies = [
  "lunum-sem",
- "sha2",
- "unicode-normalization",
 ]
 
 [[package]]

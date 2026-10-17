@@ -1,4 +1,3 @@
-use crate::collation::locale_compare;
 use lunum_sem::jsstr::{basic_identifier, normalize_text_str, to_js_string, to_js_string_or_empty, trim};
 use lunum_sem::value::{js, JStr, Obj, Value};
 
@@ -317,10 +316,6 @@ fn render_clause(c: &CClause) -> JStr {
                 js("must")
             } else if *m == js("permission") {
                 js("may")
-            } else if *m == js("constructor") {
-                js("function Object() { [native code] }")
-            } else if *m == js("__proto__") {
-                js("[object Object]")
             } else {
                 m.clone()
             }
@@ -333,7 +328,7 @@ fn render_clause(c: &CClause) -> JStr {
         if d != 0 {
             return d.cmp(&0);
         }
-        locale_compare(&a.0, &b.0)
+        a.0.cmp(&b.0)
     });
     let mut roles = Vec::new();
     for (i, (name, value)) in sorted.iter().enumerate() {
@@ -380,12 +375,6 @@ fn marker(world: &JStr) -> JStr {
         if *world == js(w) {
             return js(m);
         }
-    }
-    if *world == js("constructor") {
-        return js("function Object() { [native code] }");
-    }
-    if *world == js("__proto__") {
-        return js("[object Object]");
     }
     // world.slice(0, 1).toUpperCase()
     let first = world[0];

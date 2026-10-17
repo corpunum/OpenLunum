@@ -1,10 +1,8 @@
 //! Parity against eval-results/golden-vectors/render-en-golden.json (generated from the built TypeScript renderer).
 //! Every entry must match exactly: rendered text, or error class (+ message for validation errors).
 
-use lunum_render::collation::{COLLATION_SHA256, COLLATION_TXT};
 use lunum_render::render_sem;
 use lunum_sem::value::{parse_json, Value};
-use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
 
 fn s(v: &Value) -> String {
@@ -12,9 +10,9 @@ fn s(v: &Value) -> String {
 }
 
 #[test]
-fn collation_data_hash() {
-    let h: String = Sha256::digest(COLLATION_TXT.as_bytes()).iter().map(|b| format!("{b:02x}")).collect();
-    assert_eq!(h, COLLATION_SHA256.trim());
+fn unicode_version_pinned() {
+    // world-marker toUpperCase and the lunum-sem tables assume Unicode 17.0 (Node 22.22.2 / ICU 78.2)
+    assert_eq!(char::UNICODE_VERSION, (17, 0, 0));
 }
 
 #[test]

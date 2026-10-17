@@ -11,8 +11,6 @@ publish = false
 
 [dependencies]
 lunum-sem = { path = "../lunum-sem" }
-unicode-normalization = "0.1"
-sha2 = "0.10"
 
 [lib]
 name = "lunum_render"
