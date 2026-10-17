@@ -77,7 +77,11 @@ Every result reports which of three levels it measures:
 - **Stage 0 of parallel-document-v1:** [results](experiments/parallel-document-v1/RESULTS-stage0.md). SuperGemma 1/16 EN, 0/16 EL; Luna 4/1; **Sol 11/16 EN, 0/16 EL (all Greek "unsupported")**. Stage 1 no-go; the ADR 0027 gate was not run (feasibility rule). The Greek limit is the contract's English-only general frames, not the model.
 - **Sentence copies:** 12 of 75 recorded Claude clc-v1 parses are whole-sentence copies ([pilot results](experiments/local-extractor-pilot-v1/RESULTS.md)); scorers now exclude them.
 - **Pivot paraphrase (owner's "meaning, not words"):** [design](experiments/pivot-paraphrase-v1/DESIGN.md), [`tools/pivot-miner`](tools/pivot-miner) (Rust), [exploration](experiments/pivot-paraphrase-v1/EXPLORATION.md). On OpenSubtitles the owner's example is attested: «κάλεσε / πήρε / τηλεφώνησε / φώναξε την αστυνομία» all translate "call(ed) the police", and «πάρε το 100» translates "call 911". Model proposals (Qwen, SuperGemma) are attested 49% when both families agree, 28% when one does.
-- **Next:** owner review of the seed Greek and of the first cluster worksheet; a Greek lemmatiser in pivot-miner; a pre-registered round-trip measurement; a contract decision on Greek frames (needs ADR 0025's held-out path).
+- **10-17, pivot miner:** UniMorph lemma mode added. The pre-registered single-word test against Open Multilingual Wordnet **failed both bars** ([results](experiments/pivot-paraphrase-v1/omw-roundtrip/RESULTS.md)): a defect (transitive class merging built giant English classes) made lemma mode worse; fixed, it ties surface mode on single words (post-hoc). Lemma mode helps phrases (439 vs 9 lines for «καλώ την αστυνομία») but there is no phrase gold yet. Variant lemmas (τηλεφωνώ / τηλεφωνάω) are still split.
+- **10-17, pro-drop:** [diagnostic](experiments/prodrop-replay-v1/README.md): 3 of 9 recorded Greek pro-drop records lack an agent, all first person (incl. C37).
+- **Owner review waiting:** [WORKSHEET-v2.md](experiments/pivot-paraphrase-v1/WORKSHEET-v2.md) (v1 is superseded). 
+- **Next:** a phrase-level gold (from the owner's worksheet answers), variant-lemma merging without chains, a contract decision on Greek frames (needs ADR 0025's held-out path).
+- **Rig protocol:** heavy jobs go through the coordinating session (corpunum-6b): ask for a slot; GPU or > 6 GB under `flock ~/.cache/rig-heavy.lock`; never restart Halogen or OpenUnum.
 
 ## Known pitfalls hit on 2026-10-16
 
