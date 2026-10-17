@@ -121,7 +121,7 @@ export const PRODUCT_FLOW_TEST_CASES: ProductFlowTestCase[] = [
   {
     id: 'SI-001',
     category: 'schema-injection',
-    description: '__proto__ pollution in sem annotations',
+    description: '__proto__ pollution in sem annotations (rejected since validateSem forbids __proto__/constructor/prototype at every depth)',
     input: {
       schema: 'lunum-sem/0.1-draft',
       world: 'test',
@@ -129,7 +129,7 @@ export const PRODUCT_FLOW_TEST_CASES: ProductFlowTestCase[] = [
       clauses: [{ predicate: 'eval', roles: {} }],
       annotations: JSON.parse('{"__proto__": {"isAdmin": true}, "constructor": {"prototype": {"isAdmin": true}}}')
     },
-    expected: 'normalize'
+    expected: 'reject'
   },
   {
     id: 'SI-002',

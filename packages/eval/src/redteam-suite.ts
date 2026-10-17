@@ -126,7 +126,7 @@ export const RED_TEAM_TEST_CASES: RedTeamTestCase[] = [
   {
     id: 'SC-001',
     category: 'semantic-confusion',
-    description: 'Prototype key pollution attempt in annotations',
+    description: 'Prototype key pollution attempt in annotations (rejected: validateSem forbids the key at every depth)',
     input: {
       schema: 'lunum-sem/0.1-draft',
       world: 'test',
@@ -134,7 +134,7 @@ export const RED_TEAM_TEST_CASES: RedTeamTestCase[] = [
       clauses: [{ predicate: 'eval', roles: { code: '1+1' } }],
       annotations: JSON.parse('{"__proto__": {"admin": true}}')
     },
-    expected: 'normalize'
+    expected: 'reject'
   },
   {
     id: 'SC-002',

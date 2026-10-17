@@ -58,11 +58,24 @@ fn truthy_string_of(v: Option<&Value>) -> bool {
     !trim(&to_js_string_or_empty(v)).is_empty()
 }
 
+fn has_forbidden_key(v: &Value) -> bool {
+    match v {
+        Value::Arr(a) => a.iter().any(has_forbidden_key),
+        Value::Obj(o) => o.entries.iter().any(|(k, val)| {
+            [js("__proto__"), js("constructor"), js("prototype")].contains(k) || has_forbidden_key(val)
+        }),
+        _ => false,
+    }
+}
+
 fn validate_sem(v: &Value) -> R<&Obj> {
     let o = match v {
         Value::Obj(o) => o,
         _ => return rej("sem must be an object"),
     };
+    if has_forbidden_key(v) {
+        return rej("forbidden key: __proto__, constructor and prototype are not allowed at any depth");
+    }
     if !matches!(o.get("schema"), Some(Value::Str(s)) if *s == js(SEM_SCHEMA)) {
         return rej("schema must equal lunum-sem/0.1-draft");
     }
