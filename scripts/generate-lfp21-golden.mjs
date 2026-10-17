@@ -237,6 +237,16 @@ rawTheme('proto', '{"__proto__":{"id":"zz"}}');
 rawTheme('proto', '{"id":"a","__proto__":{"unknownField":1}}');
 rawTheme('proto', '{"id":"a","value":{"__proto__":{"id":"in-value"}}}');
 rawTheme('proto', '{"id":"a","__proto__":{"__proto__":{"id":"two-up"}}}');
+// forbidden keys (__proto__, constructor, prototype) are rejected at every depth, including metadata that never reaches the projection
+for (const k of ['__proto__', 'constructor', 'prototype']) {
+  rawTheme('forbidden-keys', `{"type":"concept","id":"a","${k}":{"x":1}}`);
+  rawTheme('forbidden-keys', `{"type":"concept","id":"a","value":[{"type":"concept","id":"b","${k}":1}]}`);
+  rawTheme('forbidden-keys', '"t"', `,"annotations":{"deep":[{"${k}":null}]}`);
+  rawTheme('forbidden-keys', '"t"', `,"provenance":{"${k}":"x"}`);
+  rawTheme('forbidden-keys', '"t"', `,"${k}":1`);
+  rawTheme('forbidden-keys', `{"type":"concept","id":"a","surface":{"${k}":1}}`);
+}
+rawTheme('forbidden-keys', '{"type":"concept","id":"a","Constructor":1,"Prototype":2}');
 R('dup-keys', `${RAWHEAD}"theme":"t"}}],"clauses":[{"predicate":"delete","roles":{"object":"a"}}]}`);
 R('dup-keys', `${RAWHEAD}"theme":"t","theme":"t2"}}]}`);
 R('dup-keys', '{"schema":"lunum-sem/0.1-draft","world":"real","world":"fiction","kind":"preference","clauses":[{"predicate":"prefer","roles":{"experiencer":"a","theme":"t"}}]}');

@@ -79,6 +79,26 @@ function canonicalClause(clause: LunumClause): LunumClause {
   return out;
 }
 
+const FORBIDDEN_KEYS: ReadonlySet<string> = new Set(['__proto__', 'constructor', 'prototype']);
+
+/** Path of the first own key named __proto__/constructor/prototype at any depth, or undefined. */
+function findForbiddenKey(value: unknown, path: string): string | undefined {
+  if (value === null || typeof value !== 'object') return undefined;
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      const hit = findForbiddenKey(value[i], `${path}[${i}]`);
+      if (hit) return hit;
+    }
+    return undefined;
+  }
+  for (const key of Object.keys(value)) {
+    if (FORBIDDEN_KEYS.has(key)) return `${path}.${key}`;
+    const hit = findForbiddenKey((value as Record<string, unknown>)[key], `${path}.${key}`);
+    if (hit) return hit;
+  }
+  return undefined;
+}
+
 /**
  * Validate a Lunum-Sem object before canonicalization.
  * This check ensures the object has the required structure and fields.
@@ -87,6 +107,8 @@ function canonicalClause(clause: LunumClause): LunumClause {
 export function validateSem(value: unknown): ValidationResult {
   const errors: string[] = [];
   if (!isObject(value)) return { ok: false, errors: ['sem must be an object'] };
+  const forbidden = findForbiddenKey(value, 'sem');
+  if (forbidden) return { ok: false, errors: [`forbidden key ${forbidden}: __proto__, constructor and prototype are not allowed at any depth`] };
   if (value.schema !== SEM_SCHEMA) errors.push(`schema must equal ${SEM_SCHEMA}`);
   if (!String(value.world ?? '').trim()) errors.push('world is required');
   if (!String(value.kind ?? '').trim()) errors.push('kind is required');
