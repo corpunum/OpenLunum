@@ -1,5 +1,7 @@
 # Meaning clusters, review worksheet v1
 
+> **Superseded (2026-10-17):** built with a defective lemma mode (transitive class merging; see [omw-roundtrip/RESULTS.md](omw-roundtrip/RESULTS.md)). Use WORKSHEET-v2.md.
+
 Generated 2026-10-17 by [worksheet.mjs](worksheet.mjs) from the lemma-mode evidence (EP, TED, OS: OPUS Europarl v8 el-en, lemma mode; OPUS TED2020 v1 el-en; OPUS OpenSubtitles v2018 el-en, first 10,000,000 pairs, lemma mode). **For the owner.** Pairs were proposed by Qwen and SuperGemma and are listed only when real translations attest them (at least 3 aligned lines with significant association in one corpus). Counts are aligned lines. Nothing here changes Lunum identity.
 
 Mark each pair: **S** same meaning, **B** broader or narrower, **I** implies (for example «πάρε το 100» → "call the police"), **D** different, **X** not natural Greek. Correct the seed Greek where needed.
