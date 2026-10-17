@@ -1,0 +1,461 @@
+{
+ "seed": "greek-frames-heldout-v1:2026-10-17",
+ "requestsSha256": "e97e1fdc5ceb5ae53118dfbb8646319731b892ea694b32158144e352120eee86",
+ "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+ "europarlCandidates": 784281,
+ "tatoebaEligible": 12994,
+ "tatoebaChecked": 23,
+ "deicticFound": 10,
+ "pairs": [
+  {
+   "pair": "E1",
+   "source": "europarl",
+   "line": 205709,
+   "en": "gfh1-323a3e280fd7abc4",
+   "el": "gfh1-cbef12d7b512187b",
+   "enSha256": "7d15a68a98d67c68e9b8cea2b4794deaee6706e64007f1cacc1b5f128f1c4644",
+   "elSha256": "299504f9491325bc2389364d5940e044dffe7c16af8bd9c1d14ad19749c77a82"
+  },
+  {
+   "pair": "E2",
+   "source": "europarl",
+   "line": 169708,
+   "en": "gfh1-9d6757dd85c0f2d2",
+   "el": "gfh1-7c2aeaf71bbb05e8",
+   "enSha256": "6c96f1249dadca5d5ef70e69acc42d8c1a311bfcd174f9a9eb4bdb8c0c07ad9e",
+   "elSha256": "2609fd7ca9e0a152b3fa81bf13335a264a17962fa8fd10c2797c8acc524e341d"
+  },
+  {
+   "pair": "E3",
+   "source": "europarl",
+   "line": 589474,
+   "en": "gfh1-933f04f0f8dbc519",
+   "el": "gfh1-ac24fe95694168f7",
+   "enSha256": "d9eded5d4edf6ac9f01fac070a781653be168bbeee7f8d1c27d56efcd0a34d08",
+   "elSha256": "c82b43005bd012a419df90cf4a9768d687d6bdf316a422767d18ea34f61ed730"
+  },
+  {
+   "pair": "E4",
+   "source": "europarl",
+   "line": 276568,
+   "en": "gfh1-19b3931c84faa623",
+   "el": "gfh1-652742a673d62953",
+   "enSha256": "c02c42fd3e0cd91096a34b96a2f012783df602c9d0b6c363d9cb2652809bf1dc",
+   "elSha256": "4958f4fdc3ae5987c4993803be5a11b4b95320832ba2ce9b7ecf57d07d6cc81c"
+  },
+  {
+   "pair": "E5",
+   "source": "europarl",
+   "line": 315742,
+   "en": "gfh1-5ccc3100093eba30",
+   "el": "gfh1-58aaa55c57d0a315",
+   "enSha256": "1b77f716eb38a405a22d3608f432a6e509fea75cbd88ec9c3ab39d8762417a43",
+   "elSha256": "30548e0b7c7b7ab272cc09953348c6fd92a4151cbdd6685603eec8a69b1d02e6"
+  },
+  {
+   "pair": "E6",
+   "source": "europarl",
+   "line": 975230,
+   "en": "gfh1-f9c9d614d0ff13d8",
+   "el": "gfh1-86088636f01ea450",
+   "enSha256": "04c64c125781441640e216509d864ccc0cd04148ccbace6643382bd7101ceec6",
+   "elSha256": "3ad8a7c4cee5e4d0a4419df97aa9cfd89d77d79f808b36290a4f577bc6af4b88"
+  },
+  {
+   "pair": "E7",
+   "source": "europarl",
+   "line": 254273,
+   "en": "gfh1-52ea188b995dd736",
+   "el": "gfh1-6c0ea391bc9afe5c",
+   "enSha256": "1323811ef3fdcc5415f84d99bbb6c60a3409dc68026738e08faaae80de22e917",
+   "elSha256": "6ac6c144f5c8b0993fd58699f6e36d1fa748602e9d2cfe1ba92ada688fd22e1b"
+  },
+  {
+   "pair": "E8",
+   "source": "europarl",
+   "line": 949395,
+   "en": "gfh1-df6b20b3e7f58976",
+   "el": "gfh1-2ff0e3583a07e283",
+   "enSha256": "f3c7fa0a5a23be50f899c2457a2adaa25561109dfe9078d3641b703fe0a372b5",
+   "elSha256": "3dc6de3806dcacdb8b8442eae942395731cc0641be067755426fb0bc41ae45ae"
+  },
+  {
+   "pair": "E9",
+   "source": "europarl",
+   "line": 1057733,
+   "en": "gfh1-2cf9eb661f9ed7bb",
+   "el": "gfh1-00ce89491dacded6",
+   "enSha256": "ebd3e2b88d00a6fddf0d1e9a5e49ac6ad587ceb7c62c0c7009225b6330cd88c9",
+   "elSha256": "9e1f46b302abfc06b01c1a598f3e79866a6fd211818231cff81fdcc7573a91e0"
+  },
+  {
+   "pair": "E10",
+   "source": "europarl",
+   "line": 832791,
+   "en": "gfh1-7163e6425bedf0a9",
+   "el": "gfh1-3965183a62472703",
+   "enSha256": "31cb3837fc7bbee004699b94e4ab127c8d225defb30b03685c1f315f71e31b92",
+   "elSha256": "2017019a9f2677d2b3ed8f5c2ad8bbf382be6d7ece4c5dcbf290aff3e70608b2"
+  },
+  {
+   "pair": "E11",
+   "source": "europarl",
+   "line": 1122211,
+   "en": "gfh1-ed53daa2f0491ed2",
+   "el": "gfh1-5c3e112458897187",
+   "enSha256": "6f46c2d8f6926f40e58a271e3e26c8199c8e1fa7a1b3d2b137de51c178307685",
+   "elSha256": "dfb54fe3e6c436d3bbcb80c7e167e2f98a89e99d16a12a88e3286dd40a9b8695"
+  },
+  {
+   "pair": "E12",
+   "source": "europarl",
+   "line": 548776,
+   "en": "gfh1-2a49657841c6ce0b",
+   "el": "gfh1-eac90a3882563a9d",
+   "enSha256": "3791f31de6e9b76e3ab866fae15a8a69cb5743f3f326ff3a89ce12d6049cd978",
+   "elSha256": "03605d8d9efd5bc52d05e1597f3aa31069298362eda0f18419847edee27e4f20"
+  },
+  {
+   "pair": "E13",
+   "source": "europarl",
+   "line": 275395,
+   "en": "gfh1-1a4de2f43fa03d18",
+   "el": "gfh1-3c560b546ebf1795",
+   "enSha256": "76a121c63313d4eac8341a58064c11e81f1d240cb5b8053c3d7df7f5285bf362",
+   "elSha256": "b318f1002f05309b75bb2be398381e41246843fdf982fb80347ddcb40437a4d2"
+  },
+  {
+   "pair": "E14",
+   "source": "europarl",
+   "line": 256142,
+   "en": "gfh1-fdc6cf4059d4e76f",
+   "el": "gfh1-e3c65f5ffc39e53d",
+   "enSha256": "94c32309f3c5ea21e3b8fe354f3d1929f8c2c0ba99d8f16bdf70f6a156409061",
+   "elSha256": "967dfd744938a4cac5e5ceb374b13c927b6708c392b0197750a371001838571f"
+  },
+  {
+   "pair": "E15",
+   "source": "europarl",
+   "line": 885353,
+   "en": "gfh1-c3d373f24b26192b",
+   "el": "gfh1-8289c9d26e39f2b3",
+   "enSha256": "9c1a7726799cbf2a51732b3f48a784267aebf544d5e10d3a99fa489367c1709c",
+   "elSha256": "1e525163981225eb5b58cbd144d1e22920d639b7a3e40a41e366150ce241e3b5"
+  },
+  {
+   "pair": "E16",
+   "source": "europarl",
+   "line": 13622,
+   "en": "gfh1-05684033fd0ccb88",
+   "el": "gfh1-1e55cfb89be07127",
+   "enSha256": "9a7d262d1b17abc19b4185e00715c13a33ef5d93e8b5da202dc42821bceb85c0",
+   "elSha256": "c12530997bd418b5cb953750e35bc14f1d2d9b1f901bd12930d623ecacded41b"
+  },
+  {
+   "pair": "E17",
+   "source": "europarl",
+   "line": 840692,
+   "en": "gfh1-84ed08ad8e3828e3",
+   "el": "gfh1-0efd05686176f27e",
+   "enSha256": "20e471dce732a5c8e1b2f9309bbbc7cd4d7554f4168d48ff4afcbc07b00d1c22",
+   "elSha256": "d007ff0b41a398792662b0b6d0c6976cd4e2e1df246fc639dac31471d95c20e8"
+  },
+  {
+   "pair": "E18",
+   "source": "europarl",
+   "line": 169290,
+   "en": "gfh1-b9b9954c5c1db25b",
+   "el": "gfh1-93cbb7af931c041e",
+   "enSha256": "1947eaac882430334f27e4ebd85bfcacffefda0a233f25c47bfb1a0caa098e0e",
+   "elSha256": "5ff36900b3c489fdf172004c157311d66b62306d56ce4c2fb0d9071fb9176047"
+  },
+  {
+   "pair": "E19",
+   "source": "europarl",
+   "line": 369280,
+   "en": "gfh1-4611a0ca57c0bf77",
+   "el": "gfh1-7c5f60bc43a1d102",
+   "enSha256": "d600c0169523923bca58236bc3edcea38c20e70504b79cfd511e92eb2beaa727",
+   "elSha256": "9a451c9e52c15ba549165e4ec92ad0e2b05f145a56737cc769d2d265a1b64d98"
+  },
+  {
+   "pair": "E20",
+   "source": "europarl",
+   "line": 633546,
+   "en": "gfh1-1ef122a1dc860f7c",
+   "el": "gfh1-9899ad769dc23e8d",
+   "enSha256": "456a71c5db6a1e913aae4bf9c46950cfc40bab3ee591d44bcc3ff65c99f37671",
+   "elSha256": "0d5dc56f9bb5cabbc80333510810f47ef7365e94c1913154c93fbc6729fb70b4"
+  },
+  {
+   "pair": "E21",
+   "source": "europarl",
+   "line": 1151298,
+   "en": "gfh1-cba4d7960ab5d87f",
+   "el": "gfh1-d78cf4ed04920a95",
+   "enSha256": "634e330b4b819191a098e3b41aa71ec2a0f5f8fe49bdf7a33a1faee402b2c647",
+   "elSha256": "a88b3bf96a6aae614a52f71a932361baf95d8400dd3d9d1591d2df25cbdc10a3"
+  },
+  {
+   "pair": "E22",
+   "source": "europarl",
+   "line": 925363,
+   "en": "gfh1-00a4e2b004f5a519",
+   "el": "gfh1-58d245853350e065",
+   "enSha256": "93454a7ff94bc0c38550d470ec27654fc9dfa494a8ef806e47059f5b6e9fd88b",
+   "elSha256": "c38baaca7aec05fa93d25c1994fb9e1423e023f5d881c31eeb152139ee66c6ac"
+  },
+  {
+   "pair": "E23",
+   "source": "europarl",
+   "line": 1010999,
+   "en": "gfh1-99e9ba211d35587e",
+   "el": "gfh1-3208387b7e485812",
+   "enSha256": "69461392a48964b0e14409cac55a79f3d8b78211ece55e15f1ab3a37e7744bae",
+   "elSha256": "a25e994fb788453bdb8b5c1f78e8271a9bbfe48fe2780f94b631f4862207d52e"
+  },
+  {
+   "pair": "E24",
+   "source": "europarl",
+   "line": 972235,
+   "en": "gfh1-79b0d973377fc223",
+   "el": "gfh1-b9cac7218a344a04",
+   "enSha256": "dcb8c7279270790057d7d58be107a6b850e55b67b3f30890a042457344662ca3",
+   "elSha256": "b16456a5529b4e321139f05c5ad9d9ad49d73c24b7418742d59be1791d334b57"
+  },
+  {
+   "pair": "E25",
+   "source": "europarl",
+   "line": 409924,
+   "en": "gfh1-dc394aa964769520",
+   "el": "gfh1-f6e56d8e3b86aa1b",
+   "enSha256": "1f703dad13d43ff368cc5d443e8300bb161a6fea26b80e6826d8af0dae346e77",
+   "elSha256": "9430f66ab2795d8267d99d6e4081786bbb8d2c2d802b7e64ea2d7ff54fa38c87"
+  },
+  {
+   "pair": "E26",
+   "source": "europarl",
+   "line": 758180,
+   "en": "gfh1-1d4f66104d1d7360",
+   "el": "gfh1-a75643ae9c9e08c2",
+   "enSha256": "2fbf9d457e9256270f5b4c1f7c00a49ddc85f068cc55dd31db5df2954d89718b",
+   "elSha256": "bdb1ec6ba9d76ad7ec21d40dc1e377bb1d68a15a3975b1c35e50184fb24ee50e"
+  },
+  {
+   "pair": "E27",
+   "source": "europarl",
+   "line": 480213,
+   "en": "gfh1-ac45f192a0d654fa",
+   "el": "gfh1-7d8dd848f8adfe3f",
+   "enSha256": "25740484f3a62f076c9cceced336ac7e54ded09d2f188bf9548d28b50d8a6981",
+   "elSha256": "de4b3e1b59a1122e8d59aaf64b43196ed686db0b6b376421514066f12ec4ba39"
+  },
+  {
+   "pair": "E28",
+   "source": "europarl",
+   "line": 1279147,
+   "en": "gfh1-7711419b312c9e32",
+   "el": "gfh1-9b9ea3f79d793a7f",
+   "enSha256": "96a061543bfc3fe5996db9ca8090e9fb1d88eb23b9fd15ad5b935dfc830a90d2",
+   "elSha256": "cd6e566c87494f17a21bae2da4eef96db74bc7cc9e81aaa5389fe70a079876c1"
+  },
+  {
+   "pair": "E29",
+   "source": "europarl",
+   "line": 138068,
+   "en": "gfh1-f6f8b500f30758fa",
+   "el": "gfh1-16d5f7a39a357145",
+   "enSha256": "14e25236f2e898735a2e5f577b2b67aa4c85cbbb1e129dfebf321c1062bfe2fd",
+   "elSha256": "6b8155db7f6160ab1398addf2a11058fe057d8cf46ecc19b41d79224b2a19c5b"
+  },
+  {
+   "pair": "E30",
+   "source": "europarl",
+   "line": 1238084,
+   "en": "gfh1-78438118d98c534a",
+   "el": "gfh1-03f9d744f48e185d",
+   "enSha256": "f75057c07087cc21168883ecbd6434c09db5d8e2153a62c87dce15c6d5349102",
+   "elSha256": "4cdf45d89fbfd1f3004031a2e63a7ffcb57cfe3d17274fbf79b678618807779e"
+  },
+  {
+   "pair": "T1",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-65701942c8dcbbaf",
+   "el": "gfh1-62524688e877a829",
+   "enText": "I have class tomorrow.",
+   "elText": "Έχω μάθημα αύριο."
+  },
+  {
+   "pair": "T2",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-461fc7579a768008",
+   "el": "gfh1-2f5d28198c902471",
+   "enText": "You need a haircut.",
+   "elText": "Χρειάζεσαι κούρεμα."
+  },
+  {
+   "pair": "T3",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-54e96b5bafa94fbd",
+   "el": "gfh1-de1f789a9a3aafc5",
+   "enText": "You may borrow my car.",
+   "elText": "Μπορείς να δανειστείς τ' αμάξι μου."
+  },
+  {
+   "pair": "T4",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-b45009d04db1722f",
+   "el": "gfh1-b5c5b443fa36fc47",
+   "enText": "We had no secrets.",
+   "elText": "Δεν είχαμε μυστικά."
+  },
+  {
+   "pair": "T5",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-9544189e3226a463",
+   "el": "gfh1-c2c670e7e44d5c87",
+   "enText": "I can't make you any promises.",
+   "elText": "Δεν μπορώ να σου υποσχεθώ τίποτα."
+  },
+  {
+   "pair": "T6",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-db30035f3014bf47",
+   "el": "gfh1-e405226cf45a0d79",
+   "enText": "I would like to get a camera like this.",
+   "elText": "Θα ήθελα να πάρω μια φωτογραφική μηχανή όπως αυτήν."
+  },
+  {
+   "pair": "T7",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-cb012c3797bcb308",
+   "el": "gfh1-e78e34c309bdee06",
+   "enText": "I eat meat three times a week.",
+   "elText": "Τρώω κρέας τρείς φορές την εβδομάδα."
+  },
+  {
+   "pair": "T8",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-4514c8bc9cef13ab",
+   "el": "gfh1-3e55bfbade811461",
+   "enText": "I'm proud of Tom.",
+   "elText": "Είμαι περήφανη για τον Τομ."
+  },
+  {
+   "pair": "T9",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-90e97f0fc30d201f",
+   "el": "gfh1-52ce188e46b753ba",
+   "enText": "We'll talk with Tom on Monday.",
+   "elText": "Θα μιλήσουμε τη Δευτέρα με τον Τομ."
+  },
+  {
+   "pair": "T10",
+   "source": "tatoeba",
+   "group": "deictic",
+   "en": "gfh1-7e190afd47796f32",
+   "el": "gfh1-180888f1e869f53d",
+   "enText": "You'll be all right now.",
+   "elText": "Θα είσαι μία χαρά τώρα."
+  },
+  {
+   "pair": "T11",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-863b77ada27bdc1c",
+   "el": "gfh1-3bde31a2da3f54c9",
+   "enText": "The snow was making it hard to see.",
+   "elText": "Το χιόνι έκανε δύσκολο να δεις."
+  },
+  {
+   "pair": "T12",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-2ac7e67cc53e35f1",
+   "el": "gfh1-357c09d54b768973",
+   "enText": "She comes to school in her car.",
+   "elText": "Αυτή έρχεται στο σχολείο με το δικό της αυτοκίνητο."
+  },
+  {
+   "pair": "T13",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-43310c1d9043b7af",
+   "el": "gfh1-74819104348dac22",
+   "enText": "Prices keep going up.",
+   "elText": "Συνεχίζουν ν' αυξάνονται οι τιμές."
+  },
+  {
+   "pair": "T14",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-0769953cf7f46086",
+   "el": "gfh1-696aa453c79b2369",
+   "enText": "How many pairs of shoes do you have?",
+   "elText": "Πόσα ζευγάρια παπούτσια έχετε;"
+  },
+  {
+   "pair": "T15",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-32247ee889fa854c",
+   "el": "gfh1-597c2988df1d95cf",
+   "enText": "Yesterday was Sunday, so I slept all day.",
+   "elText": "Χτες ήταν Κυριακή, οπότε κοιμήθηκα όλη μέρα."
+  },
+  {
+   "pair": "T16",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-73098d7ed8bcf6e8",
+   "el": "gfh1-89b8cd265660f1a0",
+   "enText": "She's teaching us French.",
+   "elText": "Μας μαθαίνει Γαλλικά."
+  },
+  {
+   "pair": "T17",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-728444ab1887762a",
+   "el": "gfh1-1d5f29085697d5e6",
+   "enText": "Why aren't you doing that?",
+   "elText": "Γιατί δε κάνεις αυτό;"
+  },
+  {
+   "pair": "T18",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-12122b8e2e320ffe",
+   "el": "gfh1-d49bcb20da07a94f",
+   "enText": "That's a good idea.",
+   "elText": "Αυτή είναι καλή ιδέα."
+  },
+  {
+   "pair": "T19",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-c81d3909f0b12410",
+   "el": "gfh1-6abf5148277ba8fd",
+   "enText": "Do you want a beer?",
+   "elText": "Θες μια μπίρα;"
+  },
+  {
+   "pair": "T20",
+   "source": "tatoeba",
+   "group": "other",
+   "en": "gfh1-f59c8f0d633dda08",
+   "el": "gfh1-00f07084ab3dd10c",
+   "enText": "Why are you under the table?",
+   "elText": "Γιατί είσαι κάτω απ' το τραπέζι;"
+  }
+ ]
+}
