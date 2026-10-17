@@ -1,0 +1,35 @@
+{
+  "requests": 160,
+  "coverage": {
+    "runA": 53,
+    "runB": 48,
+    "both": 42
+  },
+  "stabilityAllPairs": {
+    "both": 42,
+    "lfp21Equal": 18,
+    "candidateEqual": 32
+  },
+  "sentenceCopies": {
+    "runA": 21,
+    "runB": 21
+  },
+  "stability": {
+    "both": 22,
+    "lfp21Equal": 9,
+    "candidateV1Equal": 16,
+    "candidateEqual": 18,
+    "candidateRate": 0.8181818181818182
+  },
+  "costUsd": {
+    "runA": 12.18,
+    "runB": 11.83
+  },
+  "candidateMergesForOwnerReview": [],
+  "gate": {
+    "evaluable": true,
+    "stabilityAtLeast90": false,
+    "ownerMergeReview": "no merges to review",
+    "suites": "rerun experiments/identity-projection-candidate-v1/measure.mjs; any collapse in an adversarial, collision or contrast file fails the gate"
+  }
+}

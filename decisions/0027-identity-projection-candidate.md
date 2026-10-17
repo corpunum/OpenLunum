@@ -1,6 +1,6 @@
 # ADR 0027: A canonical identity projection for run-to-run stability (proposed)
 
-**Status: Proposed 2026-10-16. Held-out gate run 2026-10-17 with Sonnet: FAILED bar 1 narrowly (candidate stability 23/26 = 88.5% against 90%; `lfp:2.1` 11/26) — [results](../experiments/identity-heldout-v1/RESULTS.md). Not implemented; `lfp:2.1` unchanged.** Under [ADR 0025](0025-contract-freeze-pending-held-out-evidence.md) it needs a pre-registered held-out live run before it becomes an identity version. Self-reviewed.
+**Status: Proposed 2026-10-16; parked 2026-10-17 after two held-out gates failed bar 1 (Sonnet): v1 candidate 23/26 = 88.5% ([gate v1](../experiments/identity-heldout-v1/RESULTS.md)); revised v2 candidate (leading articles/prepositions stripped) 18/22 = 81.8% ([gate v2](../experiments/identity-heldout-v2/RESULTS.md)). The remaining splits are mostly frame choice, which a projection cannot fold; that is a contract question. Not implemented; `lfp:2.1` unchanged.**
 
 ## Context
 

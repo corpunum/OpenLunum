@@ -1,0 +1,2216 @@
+{
+  "status": "COMPLETE_BOUND_EVIDENCE",
+  "startedAt": "2026-10-17T10:07:52.104Z",
+  "selected": [
+    "idg2-1681c4aae7af60d8",
+    "idg2-7fd767e271049160",
+    "idg2-75701d0771ded480",
+    "idg2-8b74513830dbe08a",
+    "idg2-310665bdfda740eb",
+    "idg2-09230ce018b53356",
+    "idg2-6c6c131588caf30a",
+    "idg2-71ebe4f326cc1da1",
+    "idg2-5d1708a294586e78",
+    "idg2-0a245fa562023f47"
+  ],
+  "completed": [
+    {
+      "handle": "idg2-1681c4aae7af60d8",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "group",
+                "value": "All of my friends"
+              },
+              "attribute": {
+                "type": "concept",
+                "value": "speak French"
+              }
+            },
+            "modality": "ability"
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01V2E2syotiqE1fpzeb8SH3a",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": {
+                    "type": "group",
+                    "value": "All of my friends"
+                  },
+                  "action": "speak",
+                  "object": {
+                    "type": "concept",
+                    "value": "French"
+                  }
+                },
+                "modality": "ability"
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "All of my friends can speak French.",
+                "language": "en",
+                "sha256": "54bff450f98d05077a5dd030f54de6ba98b5b779f9d4dccbbaee5b891d173d4e"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "54bff450f98d05077a5dd030f54de6ba98b5b779f9d4dccbbaee5b891d173d4e",
+                "timestamp": "2026-10-17T10:08:05.604Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": false,
+              "frameValid": false,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "abstained",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "missing_sem"
+                ]
+              },
+              "failureClass": "protocol_noncanonical",
+              "diagnostics": [
+                "predicate 'speak' is not registered and remains unresolved"
+              ],
+              "sem": null,
+              "literalRetention": null,
+              "sourceBound": null
+            }
+          },
+          "validation": "rejected",
+          "sourceText": "All of my friends can speak French."
+        },
+        {
+          "eventId": "toolu_013xKGGFX7CzsvCCjQFNzosu",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "group",
+                    "value": "All of my friends"
+                  },
+                  "attribute": {
+                    "type": "concept",
+                    "value": "speak French"
+                  }
+                },
+                "modality": "ability"
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "All of my friends can speak French.",
+                "language": "en",
+                "sha256": "54bff450f98d05077a5dd030f54de6ba98b5b779f9d4dccbbaee5b891d173d4e"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "54bff450f98d05077a5dd030f54de6ba98b5b779f9d4dccbbaee5b891d173d4e",
+                "timestamp": "2026-10-17T10:08:11.732Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:d74bffdcd78efaf4db67666eec60f60f",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "category_not_auto_promotable:event",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "event",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": {
+                        "type": "group",
+                        "value": "All of my friends"
+                      },
+                      "attribute": {
+                        "type": "concept",
+                        "value": "speak French"
+                      }
+                    },
+                    "modality": "ability",
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": true,
+                "unsourced": [],
+                "uncovered": [],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "All of my friends can speak French."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 53347,
+        "cache_read_input_tokens": 236796,
+        "output_tokens": 1349,
+        "output_tokens_details": {
+          "thinking_tokens": 304
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 53347,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 69,
+            "cache_read_input_tokens": 51930,
+            "cache_creation_input_tokens": 1417,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1417
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.2505816,
+      "numTurns": 6,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/idg2-1681c4aae7af60d8.jsonl",
+      "rawStreamSha256": "615c8160879362211b6d2611c8dddf2bb165f7abbb1d3969f154db22c5e1fe75",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-7fd767e271049160",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unresolved"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18670,
+        "cache_read_input_tokens": 65465,
+        "output_tokens": 251,
+        "output_tokens_details": {
+          "thinking_tokens": 98
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18670,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 109,
+            "cache_read_input_tokens": 35461,
+            "cache_creation_input_tokens": 13213,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13213
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0837445,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/idg2-7fd767e271049160.jsonl",
+      "rawStreamSha256": "e39d2a87ffd7891bf3a0378f45b5ea4091e5bfca1265d046b6cb2821c49e52bf",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-75701d0771ded480",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "receive",
+            "roles": {
+              "recipient": {
+                "type": "actor",
+                "value": "I"
+              },
+              "theme": {
+                "type": "object",
+                "value": "gift"
+              },
+              "source": {
+                "type": "actor",
+                "value": "you"
+              }
+            },
+            "negated": true,
+            "modality": "ability"
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01BVY9c5gNx4pK3i6rbWbjSP",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "receive",
+                "roles": {
+                  "recipient": {
+                    "type": "actor",
+                    "value": "I"
+                  },
+                  "theme": {
+                    "type": "object",
+                    "value": "gift"
+                  },
+                  "source": {
+                    "type": "actor",
+                    "value": "you"
+                  }
+                },
+                "negated": true,
+                "modality": "ability"
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "I can't accept your gift.",
+                "language": "en",
+                "sha256": "722420d8ea38fd628766bdc24c81c671fea3899ae71a13bc86d54081ec2a111f"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "722420d8ea38fd628766bdc24c81c671fea3899ae71a13bc86d54081ec2a111f",
+                "timestamp": "2026-10-17T10:08:29.746Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:1b3fe80de316bab3fb7a7919c756d86a",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "category_not_auto_promotable:event",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "event",
+                "clauses": [
+                  {
+                    "predicate": "receive",
+                    "roles": {
+                      "recipient": {
+                        "type": "actor",
+                        "value": "I"
+                      },
+                      "theme": {
+                        "type": "object",
+                        "value": "gift"
+                      },
+                      "source": {
+                        "type": "actor",
+                        "value": "you"
+                      }
+                    },
+                    "negated": true,
+                    "modality": "ability"
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": null
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "I can't accept your gift."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 20857,
+        "cache_read_input_tokens": 163535,
+        "output_tokens": 773,
+        "output_tokens_details": {
+          "thinking_tokens": 209
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20857,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 11,
+            "cache_read_input_tokens": 49496,
+            "cache_creation_input_tokens": 1365,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1365
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1075275,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/idg2-75701d0771ded480.jsonl",
+      "rawStreamSha256": "ee3a7f32bf08457d6c8d896657496b1970213e4347ab766e4939c0e269791930",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-8b74513830dbe08a",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "relate",
+            "roles": {
+              "subject": "I",
+              "relation": "have a special relationship with",
+              "object": "my aunt"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_0185gpmQR2MiiC7HN9ZzAzga",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": "I",
+                  "attribute": "a special relationship with my aunt"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "I have a special relationship with my aunt.",
+                "language": "en",
+                "sha256": "8d22498d7dab38266a10f4bcc8d0a13b59ea886840b2c4b51e876a9de08cfedb"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "8d22498d7dab38266a10f4bcc8d0a13b59ea886840b2c4b51e876a9de08cfedb",
+                "timestamp": "2026-10-17T10:08:39.824Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: have; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": "I",
+                      "attribute": "a special relationship with my aunt"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "have"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "I have a special relationship with my aunt."
+        },
+        {
+          "eventId": "toolu_01Nrrjna4sFLAQzMvj3A17HH",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "relate",
+                "roles": {
+                  "subject": "I",
+                  "relation": "have a special relationship with",
+                  "object": "my aunt"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "I have a special relationship with my aunt.",
+                "language": "en",
+                "sha256": "8d22498d7dab38266a10f4bcc8d0a13b59ea886840b2c4b51e876a9de08cfedb"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "8d22498d7dab38266a10f4bcc8d0a13b59ea886840b2c4b51e876a9de08cfedb",
+                "timestamp": "2026-10-17T10:08:44.389Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:b8078586bdbc71923bfd596161bba313",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "relate",
+                    "roles": {
+                      "subject": "I",
+                      "relation": "have a special relationship with",
+                      "object": "my aunt"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": true,
+                "unsourced": [],
+                "uncovered": [],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "I have a special relationship with my aunt."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 23179,
+        "cache_read_input_tokens": 266367,
+        "output_tokens": 1197,
+        "output_tokens_details": {
+          "thinking_tokens": 240
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 23179,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 96,
+            "cache_read_input_tokens": 51829,
+            "cache_creation_input_tokens": 1354,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1354
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.13134669999999998,
+      "numTurns": 6,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/idg2-8b74513830dbe08a.jsonl",
+      "rawStreamSha256": "083332cbbb15133751752063b0548ee6af9a967a146a7e5b3d2aad4bc7ba0897",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-310665bdfda740eb",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unsupported"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18567,
+        "cache_read_input_tokens": 65464,
+        "output_tokens": 145,
+        "output_tokens_details": {
+          "thinking_tokens": 81
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18567,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 102,
+            "cache_read_input_tokens": 35460,
+            "cache_creation_input_tokens": 13111,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13111
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0822724,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/idg2-310665bdfda740eb.jsonl",
+      "rawStreamSha256": "9d67edcee7eb6bddbde917a9b5ea627ac70c4008a64646ccc94782b08162dd70",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-09230ce018b53356",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "action": {
+                "type": "text",
+                "value": "There is"
+              },
+              "object": {
+                "type": "object",
+                "value": "a map"
+              },
+              "location": {
+                "type": "location",
+                "value": "on the wall"
+              }
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01DREzBEuT49rATe8SC4KAZ7",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "relate",
+                "roles": {
+                  "subject": {
+                    "type": "object",
+                    "value": "map"
+                  },
+                  "relation": {
+                    "type": "text",
+                    "value": "on"
+                  },
+                  "object": {
+                    "type": "object",
+                    "value": "wall"
+                  }
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "There is a map on the wall.",
+                "language": "en",
+                "sha256": "010ef9c74e124a7dc49cdda86ee8cf19a4e32a74e3e661cc6f448952fcf69f80"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "010ef9c74e124a7dc49cdda86ee8cf19a4e32a74e3e661cc6f448952fcf69f80",
+                "timestamp": "2026-10-17T10:09:02.388Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: there; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "relate",
+                    "roles": {
+                      "subject": {
+                        "type": "object",
+                        "value": "map"
+                      },
+                      "relation": {
+                        "type": "text",
+                        "value": "on"
+                      },
+                      "object": {
+                        "type": "object",
+                        "value": "wall"
+                      }
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "there"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "There is a map on the wall."
+        },
+        {
+          "eventId": "toolu_01DZ4ztBxpoA1XD4rqZzLqwV",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "action": {
+                    "type": "text",
+                    "value": "There is"
+                  },
+                  "object": {
+                    "type": "object",
+                    "value": "a map"
+                  },
+                  "location": {
+                    "type": "location",
+                    "value": "on the wall"
+                  }
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "There is a map on the wall.",
+                "language": "en",
+                "sha256": "010ef9c74e124a7dc49cdda86ee8cf19a4e32a74e3e661cc6f448952fcf69f80"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "010ef9c74e124a7dc49cdda86ee8cf19a4e32a74e3e661cc6f448952fcf69f80",
+                "timestamp": "2026-10-17T10:09:08.487Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:ee82815e55a83ab7b139408dd389bb4c",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "assert",
+                    "roles": {
+                      "action": {
+                        "type": "text",
+                        "value": "There is"
+                      },
+                      "object": {
+                        "type": "object",
+                        "value": "a map"
+                      },
+                      "location": {
+                        "type": "location",
+                        "value": "on the wall"
+                      }
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": true,
+                "unsourced": [],
+                "uncovered": [],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "There is a map on the wall."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 23855,
+        "cache_read_input_tokens": 267272,
+        "output_tokens": 1435,
+        "output_tokens_details": {
+          "thinking_tokens": 384
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 23855,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 84,
+            "cache_read_input_tokens": 52431,
+            "cache_creation_input_tokens": 1428,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1428
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.13652119999999998,
+      "numTurns": 6,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/idg2-09230ce018b53356.jsonl",
+      "rawStreamSha256": "a1be1f9c1310f1b696c6fe5e22ff8bc8de885bc8a8571c2080a9e2fe91e219ce",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-6c6c131588caf30a",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unresolved"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18581,
+        "cache_read_input_tokens": 65478,
+        "output_tokens": 353,
+        "output_tokens_details": {
+          "thinking_tokens": 289
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18581,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 310,
+            "cache_read_input_tokens": 35474,
+            "cache_creation_input_tokens": 13111,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13111
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.08440980000000001,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/idg2-6c6c131588caf30a.jsonl",
+      "rawStreamSha256": "624a36026293baa522c26e92a91ca1f037db1e11bb37aa9649c901c34c452816",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-71ebe4f326cc1da1",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "abstain",
+      "candidateSem": null,
+      "declared": {
+        "status": "abstain",
+        "reason": "unresolved"
+      },
+      "submissionAttempts": [],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 18572,
+        "cache_read_input_tokens": 65469,
+        "output_tokens": 122,
+        "output_tokens_details": {
+          "thinking_tokens": 58
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 18572,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 79,
+            "cache_read_input_tokens": 35465,
+            "cache_creation_input_tokens": 13111,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 13111
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.0820629,
+      "numTurns": 2,
+      "abstentionSubmitted": false,
+      "lastSubmission": null,
+      "rawStream": "raw/idg2-71ebe4f326cc1da1.jsonl",
+      "rawStreamSha256": "bc9a53a2f4f4a53db5c0c5ab25e69e74a2479074e59cf8a0a79b79957b7dcf4b",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-5d1708a294586e78",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "observation",
+        "clauses": [
+          {
+            "predicate": "topic",
+            "roles": {
+              "subject": "What are you doing here?"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_017qCvA3ex2gpYmKSkB5Tghm",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "observation",
+            "clauses": [
+              {
+                "predicate": "topic",
+                "roles": {
+                  "subject": "What are you doing here?"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "What are you doing here?",
+                "language": "en",
+                "sha256": "e67458f612ae601c9954877de0178c3fd47b0237d2b8ca62af443c3b98e59501"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "e67458f612ae601c9954877de0178c3fd47b0237d2b8ca62af443c3b98e59501",
+                "timestamp": "2026-10-17T10:09:32.445Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:5cdb527048c879bcadcb1bfde7b6f196",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "category_not_auto_promotable:observation",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "observation",
+                "clauses": [
+                  {
+                    "predicate": "topic",
+                    "roles": {
+                      "subject": "What are you doing here?"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": true,
+                "unsourced": [],
+                "uncovered": [],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "What are you doing here?"
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 8,
+        "cache_creation_input_tokens": 20471,
+        "cache_read_input_tokens": 163230,
+        "output_tokens": 514,
+        "output_tokens_details": {
+          "thinking_tokens": 91
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 20471,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 11,
+            "cache_read_input_tokens": 49191,
+            "cache_creation_input_tokens": 1284,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1284
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.103363,
+      "numTurns": 4,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/idg2-5d1708a294586e78.jsonl",
+      "rawStreamSha256": "cc890141d19ed750183036a217144c38d6a049db084706f01710bb44968431e2",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    },
+    {
+      "handle": "idg2-0a245fa562023f47",
+      "sourceLanguage": "en",
+      "exitCode": 0,
+      "failure": null,
+      "observedContractVersion": "lunum-agent/0.19",
+      "observedContractMatchesPackage": true,
+      "observedContractBinding": {
+        "match": true,
+        "mismatches": []
+      },
+      "sessionIntegrity": {
+        "match": true,
+        "mismatches": []
+      },
+      "status": "parse",
+      "candidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "id": "Tom"
+              },
+              "attribute": "has a lot of debts"
+            }
+          }
+        ]
+      },
+      "declared": {
+        "status": "parse"
+      },
+      "submissionAttempts": [
+        {
+          "eventId": "toolu_01YZQ2pC3mAoqqFv1AW6Tq5V",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "id": "Tom"
+                  },
+                  "attribute": "a lot of debts"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Tom has a lot of debts.",
+                "language": "en",
+                "sha256": "843e6f75ebba216b833842de6828da28dff84fbc4be7d59ea189550345fc8d85"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "843e6f75ebba216b833842de6828da28dff84fbc4be7d59ea189550345fc8d85",
+                "timestamp": "2026-10-17T10:09:43.112Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": false,
+              "semanticFingerprint": null,
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": "unbound_source_content",
+              "diagnostics": [
+                "unbound_source_content: the candidate leaves out: has; copy the source words into the fillers or abstain"
+              ],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": {
+                        "type": "actor",
+                        "id": "Tom"
+                      },
+                      "attribute": "a lot of debts"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": false,
+                "unsourced": [],
+                "uncovered": [
+                  "has"
+                ],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Tom has a lot of debts."
+        },
+        {
+          "eventId": "toolu_0133twRtmbPy19kqgPbj9bQD",
+          "agentAction": "non-null-submission",
+          "proposedCandidateSem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "id": "Tom"
+                  },
+                  "attribute": "has a lot of debts"
+                }
+              }
+            ]
+          },
+          "response": {
+            "success": true,
+            "submission": {
+              "source": {
+                "text": "Tom has a lot of debts.",
+                "language": "en",
+                "sha256": "843e6f75ebba216b833842de6828da28dff84fbc4be7d59ea189550345fc8d85"
+              },
+              "provenance": {
+                "extractorType": "agent",
+                "contractVersion": "lunum-agent/0.19",
+                "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+                "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+                "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+                "sourceHash": "843e6f75ebba216b833842de6828da28dff84fbc4be7d59ea189550345fc8d85",
+                "timestamp": "2026-10-17T10:09:46.530Z"
+              },
+              "transportValid": true,
+              "structuralValid": true,
+              "protocolCanonical": true,
+              "frameValid": true,
+              "grounded": true,
+              "candidateIdentityAvailable": true,
+              "semanticFingerprint": "lfp:2.1:sha256:abf32600846388087e9a4d84413211c5",
+              "promotable": false,
+              "trust": {
+                "status": "candidate",
+                "confidence": 0,
+                "promoted": false,
+                "requiresHumanReview": true,
+                "reasons": [
+                  "evidence_confidence_below_0.90",
+                  "insufficient_confidence_evidence",
+                  "missing_classification_evidence",
+                  "risk_unknown",
+                  "missing_independent_verification"
+                ]
+              },
+              "failureClass": null,
+              "diagnostics": [],
+              "sem": {
+                "schema": "lunum-sem/0.1-draft",
+                "world": "real",
+                "kind": "simple_fact",
+                "clauses": [
+                  {
+                    "predicate": "describe",
+                    "roles": {
+                      "subject": {
+                        "type": "actor",
+                        "id": "Tom"
+                      },
+                      "attribute": "has a lot of debts"
+                    },
+                    "negated": false
+                  }
+                ]
+              },
+              "literalRetention": {
+                "retained": true,
+                "sourceNumbers": [],
+                "sourceIdentifiers": [],
+                "sourceDates": [],
+                "sourceRelativeTimes": [],
+                "missingNumbers": [],
+                "missingIdentifiers": [],
+                "missingDates": [],
+                "missingRelativeTimes": []
+              },
+              "sourceBound": {
+                "applies": true,
+                "bound": true,
+                "unsourced": [],
+                "uncovered": [],
+                "pronounFillers": [],
+                "notALabel": []
+              }
+            }
+          },
+          "validation": "accepted",
+          "sourceText": "Tom has a lot of debts."
+        }
+      ],
+      "model": {
+        "requested": "claude-sonnet-5-5",
+        "reported": [
+          "claude-sonnet-5-5"
+        ],
+        "initModel": "claude-sonnet-5-5"
+      },
+      "mcpServers": [
+        {
+          "name": "lunum",
+          "status": "connected",
+          "source": "dynamic"
+        }
+      ],
+      "toolsOffered": [
+        "mcp__lunum__lunum_build_candidate",
+        "mcp__lunum__lunum_get_extraction_contract",
+        "mcp__lunum__lunum_submit_candidate",
+        "mcp__lunum__lunum_validate"
+      ],
+      "calls": [
+        {
+          "name": "lunum_get_extraction_contract",
+          "isError": false
+        },
+        {
+          "name": "lunum_build_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        },
+        {
+          "name": "lunum_submit_candidate",
+          "isError": false
+        }
+      ],
+      "usage": {
+        "input_tokens": 10,
+        "cache_creation_input_tokens": 22231,
+        "cache_read_input_tokens": 214464,
+        "output_tokens": 866,
+        "output_tokens_details": {
+          "thinking_tokens": 134
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 22231,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [
+          {
+            "input_tokens": 2,
+            "output_tokens": 11,
+            "cache_read_input_tokens": 50884,
+            "cache_creation_input_tokens": 1351,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 1351
+            },
+            "type": "message"
+          }
+        ],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "costUsd": 0.1190504,
+      "numTurns": 5,
+      "abstentionSubmitted": false,
+      "lastSubmission": {
+        "frameValid": true,
+        "candidateIdentityAvailable": true,
+        "failureClass": null,
+        "diagnostics": []
+      },
+      "rawStream": "raw/idg2-0a245fa562023f47.jsonl",
+      "rawStreamSha256": "12fff4326791605b06f20e2b467194c205b65e7bf27390beda2e869fa65189fd",
+      "timedOut": false,
+      "interrupted": false,
+      "signal": null,
+      "evidenceFailures": [],
+      "evidenceValid": true
+    }
+  ],
+  "requestedBudget": {
+    "model": "claude-sonnet-5-5",
+    "totalUsd": 10,
+    "itemUsd": 1,
+    "timeoutMs": 600000,
+    "count": 10,
+    "concurrency": 1,
+    "requestedReservationUsd": 10,
+    "enforcement": "Serial launches; CLI requested per-item ceilings reserved in advance. Billing is provider-controlled, not a hard financial guarantee; unknown or over-ceiling reported cost stops remaining launches and invalidates evidence."
+  }
+}
