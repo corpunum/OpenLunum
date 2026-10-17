@@ -75,3 +75,15 @@ Supersedes amendment 1's extractor. The owner withdrew Halogen/Qwen and asked fo
 - **Extractor:** `supergemma4-Q5_K_M` on the Ally (temporary 64k server, temperature 0) through [`run-openai-compatible-source-only.mjs`](../../scripts/research/run-openai-compatible-source-only.mjs); the first 120 requests, two runs, as in amendment 1.
 - **Feasibility rule, new, fixed now:** the two runs (about 8 to 20 hours of the Ally) start **only if** SuperGemma covers **at least 5 of the 16 English sentences** of parallel-document Stage 0 (non-copy, with an identity). That is a different, already pre-registered set; this gate's sentences stay unseen. Below that rate, 120 sentences cannot give 20 non-copy pairs covered twice, and the gate is recorded as **"not run: extractor coverage too low"**, which is published.
 - Everything else in amendment 1 stands (bars, copy exclusion, scope: a pass qualifies the projection for this extractor only).
+
+## Amendment 3 (2026-10-17, before any call on these sentences): run the gate with Sol
+
+**Owner decision (2026-10-17, about 10:00 local, relayed by the orchestrating session corpunum-6b):** the gate is approved, run with Sol 6.1 at medium effort (Luna medium if quota bites). Amendment 2's feasibility rule was written for SuperGemma; on parallel-document Stage 0, Sol covered 11 of 16 English sentences, above that rule's threshold of 5.
+
+- **Extractor:** `gpt-6.1-sol`, reasoning effort medium, through [`run-codex-source-only.mjs`](../../scripts/research/run-codex-source-only.mjs) (shell, web search and other MCP servers off; only the four Lunum tools; package v23).
+- **Items:** the first 120 requests of `requests.jsonl`, as in amendment 1. **Run A and run B** in two clean clones at the same commit, at the same time; neither sees the other's output.
+- **One model per gate.** If Sol's quota stops a run, the remaining items are resumed with Sol after the quota resets (a "rest" directory, as clc-v1 did). The gate never mixes extractors; switching to Luna means starting both runs over with Luna and reporting the Sol attempt as stopped.
+- **Bars unchanged:** candidate stability ≥ 90% on at least 20 sentences covered in both runs where neither parse is a sentence copy; 0 merges in the adversarial, collision and contrast suites (rerun `identity-projection-candidate-v1/measure.mjs`); every candidate merge of distinct sentences judged the same meaning by the owner. The owner has delegated judgements of this kind to models (2026-10-17); if merges occur, they are listed for him and the delegated judgement is labelled as such.
+- **Scope of a pass:** qualifies the projection for Sol as extractor; ADR 0027 was designed on Claude outputs, so this is a held-out test on a different extractor, which is stronger evidence against overfitting, not weaker.
+- **Cost:** ChatGPT quota, about 100k input tokens per item, about 24M for 240 items.
+- **Prediction (unchanged):** bar 1 more likely to fail than pass.
