@@ -1,0 +1,2017 @@
+{
+ "seed": "worksheet-v2-fill:2026-10-17",
+ "source": "results/candidates-lemma2.json (WORKSHEET-v2)",
+ "count": 216,
+ "byKind": {
+  "pair": 156,
+  "seed": 20,
+  "control": 40
+ },
+ "items": [
+  {
+   "seed": "s11",
+   "en": "as far as i'm concerned",
+   "el": "όσον αφορά εμένα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w262889d209"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "ενώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w96d6af0d5a"
+  },
+  {
+   "seed": "s01",
+   "en": "phone the police",
+   "el": "καλώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w84c6edd18f"
+  },
+  {
+   "seed": "s10",
+   "en": "decline",
+   "el": "αρνούμαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w9ff62d1273"
+  },
+  {
+   "seed": "s12",
+   "en": "at once",
+   "el": "αμέσως",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w416ed80845"
+  },
+  {
+   "seed": "s13",
+   "en": "ask for help",
+   "el": "ζητώ βοήθεια",
+   "kind": "seed",
+   "id": "w1b6bef5780"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "wc07beff77e"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "εγκρίνω",
+   "kind": "control",
+   "id": "wabab13b25e"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "αναφέρω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w4c62a8dc0c"
+  },
+  {
+   "seed": "s11",
+   "en": "i believe",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wc79dd4dec8"
+  },
+  {
+   "seed": "s11",
+   "en": "i think",
+   "el": "νομίζω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w2ab4f0987b"
+  },
+  {
+   "seed": "s01",
+   "en": "notify the police",
+   "el": "ειδοποιώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w198e09632f"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "το συντομότερο δυνατό",
+   "kind": "control",
+   "id": "wbe45b4ed55"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "δίνω πληροφορίες",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wfdda3be0a0"
+  },
+  {
+   "seed": "s03",
+   "en": "in parallel",
+   "el": "παράλληλα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w6a75f0ced8"
+  },
+  {
+   "seed": "s14",
+   "en": "approve",
+   "el": "εγκρίνουμε",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w5140441435"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "wcd6f7c61fa"
+  },
+  {
+   "seed": "s16",
+   "en": "the people",
+   "el": "ο λαός",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wc796dfd51a"
+  },
+  {
+   "seed": "s02",
+   "en": "telephone someone",
+   "el": "τηλεφωνώ σε κάποιον",
+   "kind": "seed",
+   "id": "w9125e6d373"
+  },
+  {
+   "seed": "s03",
+   "en": "simultaneously",
+   "el": "ταυτόχρονα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wcab1c98a46"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployed",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w55d8412653"
+  },
+  {
+   "seed": "s17",
+   "en": "out of work",
+   "el": "χωρίς δουλειά",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w4566a0586e"
+  },
+  {
+   "seed": "s03",
+   "en": "at once",
+   "el": "άμεσα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w15da8b6a47"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "παίρνω τηλέφωνο την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w5729d26e0b"
+  },
+  {
+   "seed": "s07",
+   "en": "restart the service",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "seed",
+   "id": "wbddf288315"
+  },
+  {
+   "seed": "s02",
+   "en": "call someone",
+   "el": "καλώ κάποιον",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wd6bb76539e"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "συμφωνώ",
+   "kind": "control",
+   "id": "w9f90171b23"
+  },
+  {
+   "seed": "s18",
+   "en": "tell",
+   "el": "ενημερώνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w94c49fad2f"
+  },
+  {
+   "seed": "s06",
+   "en": "delete the file",
+   "el": "πρέπει να",
+   "kind": "control",
+   "id": "wcaeaa737fc"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "ενημερώνω",
+   "kind": "seed",
+   "id": "wa196dcd0fe"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "ζητώ βοήθεια",
+   "kind": "control",
+   "id": "w80fa17db23"
+  },
+  {
+   "seed": "s03",
+   "en": "while",
+   "el": "ταυτόχρονα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w370e5e53fa"
+  },
+  {
+   "seed": "s19",
+   "en": "vote",
+   "el": "η ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wd75286909d"
+  },
+  {
+   "seed": "s06",
+   "en": "delete the file",
+   "el": "καλώ την αστυνομία",
+   "kind": "control",
+   "id": "w4e08630b5d"
+  },
+  {
+   "seed": "s14",
+   "en": "consent",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0b27a2ed10"
+  },
+  {
+   "seed": "s18",
+   "en": "notify",
+   "el": "ειδοποιώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wdd6ea69096"
+  },
+  {
+   "seed": "s19",
+   "en": "voting",
+   "el": "η ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w8bd99dff10"
+  },
+  {
+   "seed": "s16",
+   "en": "the people",
+   "el": "πολίτες",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wf169c399be"
+  },
+  {
+   "seed": "s05",
+   "en": "civil liberties",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w4ff1ef15f3"
+  },
+  {
+   "seed": "s09",
+   "en": "pass",
+   "el": "περνάω",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w52bef493ff"
+  },
+  {
+   "seed": "s12",
+   "en": "without delay",
+   "el": "χωρίς καθυστέρηση",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w912db69d99"
+  },
+  {
+   "seed": "s12",
+   "en": "promptly",
+   "el": "άμεσα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w466501e2b7"
+  },
+  {
+   "seed": "s12",
+   "en": "as quickly as possible",
+   "el": "το συντομότερο δυνατό",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w02bd4a288a"
+  },
+  {
+   "seed": "s16",
+   "en": "the public",
+   "el": "πολίτες",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w61fcfe088d"
+  },
+  {
+   "seed": "s17",
+   "en": "no job",
+   "el": "χωρίς δουλειά",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w4a784f852f"
+  },
+  {
+   "seed": "s14",
+   "en": "approve",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wee40447e20"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "αποδέχομαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w727ea4696d"
+  },
+  {
+   "seed": "s12",
+   "en": "at the earliest opportunity",
+   "el": "το συντομότερο δυνατό",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wc02551e827"
+  },
+  {
+   "seed": "s20",
+   "en": "reject a proposal",
+   "el": "καλώ την αστυνομία",
+   "kind": "control",
+   "id": "w4dea8bbe1a"
+  },
+  {
+   "seed": "s06",
+   "en": "delete the file",
+   "el": "διαγράφω το αρχείο",
+   "kind": "seed",
+   "id": "wce8c1e6d52"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "άμεσα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa423fc2325"
+  },
+  {
+   "seed": "s16",
+   "en": "citizen",
+   "el": "πολίτης",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w13a246d375"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "w8a05eefa74"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "άμεσα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w1ab7b46ff5"
+  },
+  {
+   "seed": "s04",
+   "en": "have to",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w87793a1de9"
+  },
+  {
+   "seed": "s03",
+   "en": "while",
+   "el": "ενώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we7e8607578"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "όσο πιο γρήγορα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wb661e9d162"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "λέω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w9f1b38df71"
+  },
+  {
+   "seed": "s05",
+   "en": "fundamental rights",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wba8c730532"
+  },
+  {
+   "seed": "s19",
+   "en": "the election",
+   "el": "η εκλογή",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w6fad406baf"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "εγκρίνω",
+   "kind": "control",
+   "id": "wb3625ce00d"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "κατά τη γνώμη μου",
+   "kind": "control",
+   "id": "w6ce25ab1b8"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "ειδοποιώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa1f9a8f39a"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "για μένα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w8c550d9875"
+  },
+  {
+   "seed": "s09",
+   "en": "authorize",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w9b46ddbd1d"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "αναβάλλω",
+   "kind": "control",
+   "id": "wcdeae4fda6"
+  },
+  {
+   "seed": "s14",
+   "en": "accept",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w1a54675f7d"
+  },
+  {
+   "seed": "s08",
+   "en": "target date",
+   "el": "προθεσμία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wca5118682e"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wdeb926bfa0"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "αναβάλλω επ' αόριστον",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wabc99c0f31"
+  },
+  {
+   "seed": "s17",
+   "en": "joblessness",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wb4401eb572"
+  },
+  {
+   "seed": "s01",
+   "en": "alert the police",
+   "el": "ειδοποιώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w8dc636452e"
+  },
+  {
+   "seed": "s05",
+   "en": "basic human rights",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wb16aed836e"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "ψήφισμα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wb22dabd28f"
+  },
+  {
+   "seed": "s16",
+   "en": "electorate",
+   "el": "ψηφοφόροι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w73c2e436ca"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "αναβάλλω",
+   "kind": "seed",
+   "id": "waa92a70251"
+  },
+  {
+   "seed": "s10",
+   "en": "reject",
+   "el": "αρνούμαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w7d1ebdcaa0"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "αμέσως",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wc32a459a79"
+  },
+  {
+   "seed": "s17",
+   "en": "without work",
+   "el": "χωρίς εργασία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w81f0ec5fef"
+  },
+  {
+   "seed": "s15",
+   "en": "defer",
+   "el": "αναβάλλω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w9d44f4bed7"
+  },
+  {
+   "seed": "s17",
+   "en": "out of work",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w09937d4a84"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "προθεσμία",
+   "kind": "seed",
+   "id": "w7014bfaa80"
+  },
+  {
+   "seed": "s17",
+   "en": "no job",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wcaab850f0c"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "ανεργία",
+   "kind": "control",
+   "id": "wc31653bd72"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "πολίτες",
+   "kind": "seed",
+   "id": "w10a42a01dc"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "αρνείται",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w5a0d53d1b9"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "πληροφορώ",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w2c5e9aec36"
+  },
+  {
+   "seed": "s03",
+   "en": "in tandem",
+   "el": "παράλληλα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w48ce8e1041"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "χωρίς καθυστέρηση",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0c1eede477"
+  },
+  {
+   "seed": "s14",
+   "en": "see eye to eye",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wec62da31d9"
+  },
+  {
+   "seed": "s03",
+   "en": "in parallel",
+   "el": "ταυτόχρονα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w20ea330b80"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "ανεργία",
+   "kind": "control",
+   "id": "w931a19761b"
+  },
+  {
+   "seed": "s09",
+   "en": "endorse",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w109dded55b"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "w30f2afde24"
+  },
+  {
+   "seed": "s10",
+   "en": "deny",
+   "el": "αρνούμαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w3124c35af7"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "γρήγορα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we5002a7a7d"
+  },
+  {
+   "seed": "s09",
+   "en": "authorize",
+   "el": "εξουσιοδοτώ",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wa98847386d"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "πολίτες",
+   "kind": "control",
+   "id": "w8f88bd1304"
+  },
+  {
+   "seed": "s04",
+   "en": "should",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w5cbe145163"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "πρέπει να",
+   "kind": "control",
+   "id": "w1de86acc93"
+  },
+  {
+   "seed": "s11",
+   "en": "i think",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wbc897838cf"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "κατά τη γνώμη μου",
+   "kind": "seed",
+   "id": "w2be1584ae6"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w67b151d171"
+  },
+  {
+   "seed": "s19",
+   "en": "voting",
+   "el": "ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w1250e5004f"
+  },
+  {
+   "seed": "s07",
+   "en": "restart the service",
+   "el": "διαγράφω το αρχείο",
+   "kind": "control",
+   "id": "w8a313dbcb4"
+  },
+  {
+   "seed": "s09",
+   "en": "accept",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w1bea0b3269"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "να το αναβάλουμε",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w85250233ef"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "τηλεφωνώ σε κάποιον",
+   "kind": "control",
+   "id": "w74d9f1247e"
+  },
+  {
+   "seed": "s19",
+   "en": "vote",
+   "el": "ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wd04eedcd9e"
+  },
+  {
+   "seed": "s11",
+   "en": "in my view",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we5b2344a10"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "νομίζω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wf017c6b1ad"
+  },
+  {
+   "seed": "s09",
+   "en": "accept",
+   "el": "αποδέχομαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w8895356e48"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployment",
+   "el": "προθεσμία",
+   "kind": "control",
+   "id": "w2ef3bb767b"
+  },
+  {
+   "seed": "s15",
+   "en": "put off",
+   "el": "αναβάλλω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w510b9bfc7b"
+  },
+  {
+   "seed": "s05",
+   "en": "rights and freedoms",
+   "el": "δικαιώματα και ελευθερίες",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wd44a7fd06c"
+  },
+  {
+   "seed": "s12",
+   "en": "as quickly as possible",
+   "el": "όσο πιο γρήγορα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wedba556f8e"
+  },
+  {
+   "seed": "s05",
+   "en": "basic rights",
+   "el": "βασικά δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w8f10b6560a"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "καταληκτική ημερομηνία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w842cc0a708"
+  },
+  {
+   "seed": "s17",
+   "en": "without work",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "we1368b1fa7"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "w0acdce2ca7"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "λήξη",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "we228097386"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "δικαιώματα του ανθρώπου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w53d15b4c1f"
+  },
+  {
+   "seed": "s11",
+   "en": "i believe",
+   "el": "εγώ πιστεύω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w4d6afb570a"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "θεμελιώδη δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w2192882596"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "καλώ την αστυνομία",
+   "kind": "seed",
+   "id": "w4862f6426e"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "πρέπει να",
+   "kind": "seed",
+   "id": "w74f76f8323"
+  },
+  {
+   "seed": "s04",
+   "en": "have to",
+   "el": "χρειάζεται να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we67d7aa752"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "εγκρίνω",
+   "kind": "control",
+   "id": "w425f31b3e6"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "wd8de07747b"
+  },
+  {
+   "seed": "s14",
+   "en": "assent",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w499a29c064"
+  },
+  {
+   "seed": "s13",
+   "en": "ask for help",
+   "el": "κατά τη γνώμη μου",
+   "kind": "control",
+   "id": "w4e60e4946b"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "επιτρέπω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wcd18d013ad"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "εγκρίνουμε",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa08823846e"
+  },
+  {
+   "seed": "s09",
+   "en": "sanction",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w26b7eef919"
+  },
+  {
+   "seed": "s05",
+   "en": "civil rights",
+   "el": "πολιτικά δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0cc8cd6e36"
+  },
+  {
+   "seed": "s08",
+   "en": "last day",
+   "el": "τελευταία ημέρα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w1d2c5e7e5b"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "συμφωνώ",
+   "kind": "control",
+   "id": "w960bc1feda"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "αρνιέμαι",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w284870a315"
+  },
+  {
+   "seed": "s16",
+   "en": "resident",
+   "el": "πολίτες",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wf4982e3b40"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "το κοινό",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wcf7b032d89"
+  },
+  {
+   "seed": "s07",
+   "en": "restart the service",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "wf4f38a5331"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "αποδέχομαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w253a1a2027"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "ανακοινώνω",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wf26f4ddf91"
+  },
+  {
+   "seed": "s15",
+   "en": "delay",
+   "el": "αναβάλλω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wbf3e3358ef"
+  },
+  {
+   "seed": "s19",
+   "en": "ballot",
+   "el": "ψηφοδέλτιο",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wa18bef00bf"
+  },
+  {
+   "seed": "s02",
+   "en": "telephone someone",
+   "el": "ταυτόχρονα",
+   "kind": "control",
+   "id": "w4c353287f8"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "το συντομότερο δυνατό",
+   "kind": "seed",
+   "id": "w4ffe4b66f6"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "συμφωνώ",
+   "kind": "seed",
+   "id": "wff04958017"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "παράλληλα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w7c4bee32db"
+  },
+  {
+   "seed": "s04",
+   "en": "must be",
+   "el": "πρέπει να είναι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w170767c025"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "εγκρίνω",
+   "kind": "seed",
+   "id": "wbc3b5316ab"
+  },
+  {
+   "seed": "s16",
+   "en": "the public",
+   "el": "το κοινό",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w932ea53114"
+  },
+  {
+   "seed": "s04",
+   "en": "must be",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wb1420f224f"
+  },
+  {
+   "seed": "s04",
+   "en": "should",
+   "el": "πρέπει",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w69c40eb692"
+  },
+  {
+   "seed": "s11",
+   "en": "personally",
+   "el": "για μένα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wb01c2f13d2"
+  },
+  {
+   "seed": "s09",
+   "en": "endorse",
+   "el": "υποστηρίζω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w6b8e9a4052"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployment",
+   "el": "ανεργία",
+   "kind": "seed",
+   "id": "w7d49a69ab3"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "εγώ πιστεύω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w3713053ed5"
+  },
+  {
+   "seed": "s03",
+   "en": "meanwhile",
+   "el": "εν τω μεταξύ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w6142da22f8"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "w21b09bf937"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "seed",
+   "id": "w840e783d0b"
+  },
+  {
+   "seed": "s04",
+   "en": "need to",
+   "el": "χρειάζεται να",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w5bfcc38d59"
+  },
+  {
+   "seed": "s04",
+   "en": "ought to",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wc2fa97c396"
+  },
+  {
+   "seed": "s03",
+   "en": "at once",
+   "el": "ταυτόχρονα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wafcf37f8b9"
+  },
+  {
+   "seed": "s12",
+   "en": "right away",
+   "el": "γρήγορα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w82956d2fdc"
+  },
+  {
+   "seed": "s08",
+   "en": "final date",
+   "el": "τελική ημερομηνία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wf8afc4290c"
+  },
+  {
+   "seed": "s13",
+   "en": "need assistance",
+   "el": "χρειάζομαι βοήθεια",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wd8717fbb80"
+  },
+  {
+   "seed": "s18",
+   "en": "tell",
+   "el": "λέω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wf9e7100246"
+  },
+  {
+   "seed": "s16",
+   "en": "citizen",
+   "el": "πολίτες",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0f142f8c39"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "ζητώ βοήθεια",
+   "kind": "control",
+   "id": "w4bd9a13d6e"
+  },
+  {
+   "seed": "s02",
+   "en": "telephone someone",
+   "el": "ζητώ βοήθεια",
+   "kind": "control",
+   "id": "w48d4d4fad5"
+  },
+  {
+   "seed": "s13",
+   "en": "ask for help",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "we0db457807"
+  },
+  {
+   "seed": "s08",
+   "en": "time limit",
+   "el": "χρονικό όριο",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w27dc7de3ac"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "αρνούμαι",
+   "kind": "seed",
+   "id": "w635b35373e"
+  },
+  {
+   "seed": "s19",
+   "en": "election",
+   "el": "εκλογές",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w06de93e467"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployment",
+   "el": "απασχόληση",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w813a25d252"
+  },
+  {
+   "seed": "s01",
+   "en": "call the cops",
+   "el": "καλώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wef39cbe4fa"
+  },
+  {
+   "seed": "s18",
+   "en": "advise",
+   "el": "συμβουλεύω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w535f40bd0e"
+  },
+  {
+   "seed": "s10",
+   "en": "reject",
+   "el": "απορρίπτω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wcba4cda27e"
+  },
+  {
+   "seed": "s18",
+   "en": "notify",
+   "el": "ενημερώνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w4e94c74dbf"
+  },
+  {
+   "seed": "s09",
+   "en": "authorize",
+   "el": "επιτρέπω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wd00d86f2cd"
+  },
+  {
+   "seed": "s19",
+   "en": "ballot box",
+   "el": "κάλπη",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w7c473751a9"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "ταυτόχρονα",
+   "kind": "seed",
+   "id": "wae9b770725"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "w23ccb9280a"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "η ψηφοφορία",
+   "kind": "control",
+   "id": "w650ad87739"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "w58ecb97c61"
+  },
+  {
+   "seed": "s04",
+   "en": "should",
+   "el": "θα έπρεπε να",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w837895b6b7"
+  },
+  {
+   "seed": "s05",
+   "en": "fundamental rights",
+   "el": "θεμελιώδη δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "we1d4f17bae"
+  },
+  {
+   "seed": "s10",
+   "en": "deny",
+   "el": "αρνείται",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0e94901faa"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployment",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "we8eb75657a"
+  },
+  {
+   "seed": "s01",
+   "en": "notify the police",
+   "el": "καλώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wc221715231"
+  },
+  {
+   "seed": "s05",
+   "en": "rights and freedoms",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we32ac8efb8"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "εγκρίνω",
+   "kind": "control",
+   "id": "wc0c262c3a8"
+  },
+  {
+   "seed": "s19",
+   "en": "referendum",
+   "el": "δημοψήφισμα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w91eb2ca398"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "θα πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we2b54790e0"
+  },
+  {
+   "seed": "s08",
+   "en": "time limit",
+   "el": "προθεσμία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w19452bdde8"
+  },
+  {
+   "seed": "s14",
+   "en": "concur",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w7ca667811b"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "η ψηφοφορία",
+   "kind": "seed",
+   "id": "w03cebe5281"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "χρονικό όριο",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w7164df3a26"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "ειδοποιώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w2b6c0a0f33"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "πρέπει",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w8627a995ee"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "ψηφοφόροι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w617f4a648a"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "βασικά ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa8bc18564f"
+  },
+  {
+   "seed": "s17",
+   "en": "on the job market",
+   "el": "στην αγορά εργασίας",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w3aa66c85d8"
+  },
+  {
+   "seed": "s11",
+   "en": "as far as i'm concerned",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wd20e0d3e89"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "εκλογές",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w9f62e16088"
+  },
+  {
+   "seed": "s05",
+   "en": "human dignity",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w21a6950a9c"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "πρόσωπο",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wdd91b5ff47"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "ζητώ βοήθεια",
+   "kind": "control",
+   "id": "w2573dc16cc"
+  },
+  {
+   "seed": "s04",
+   "en": "need to",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wcde52122b4"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "πολίτης",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w54aa6a9d23"
+  },
+  {
+   "seed": "s09",
+   "en": "give the go-ahead",
+   "el": "δίνω το πράσινο φως",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa79587871f"
+  },
+  {
+   "seed": "s20",
+   "en": "reject a proposal",
+   "el": "απορρίπτω μια πρόταση",
+   "kind": "seed",
+   "id": "wa3b5a0afeb"
+  },
+  {
+   "seed": "s11",
+   "en": "to my mind",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w7b5562ab41"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "ταυτόχρονα",
+   "kind": "control",
+   "id": "wa037a7ec18"
+  },
+  {
+   "seed": "s20",
+   "en": "reject a proposal",
+   "el": "προθεσμία",
+   "kind": "control",
+   "id": "w173ba0e92e"
+  }
+ ]
+}
