@@ -1,6 +1,6 @@
 # ADR 0028: A language-neutral concept layer, and a pro-drop agent rule (proposed, design only)
 
-**Status: Proposed 2026-10-16. Design only: no code, no contract change, no identity version.** Under [ADR 0025](0025-contract-freeze-pending-held-out-evidence.md) any implementation needs a pre-registered held-out test first. It needs the owner's review of the Greek parts. Self-reviewed.
+**Status: Proposed 2026-10-16; the owner approved proceeding on 2026-10-17 ("do what is better", relayed by the orchestrating session corpunum-6b). The first concrete step is [ADR 0029](0029-greek-source-bound-frames.md) (Greek frames and deixis). Design only here: no code, no contract change, no identity version.** Under [ADR 0025](0025-contract-freeze-pending-held-out-evidence.md) any implementation needs a pre-registered held-out test first. It needs the owner's review of the Greek parts. Self-reviewed.
 
 ## Context
 
