@@ -97,3 +97,14 @@ The runner did not stop, because it looked for quota messages only on stderr whi
 - As amendment 3 fixed beforehand, the remaining items are resumed **with Sol** after the reset, into `idg1-sol-a-rest` and `idg1-sol-b-rest`. They are scored as one run each, with the scorer's existing merge of directories.
 - The ledger rows of the failed calls stay in the published run as `PROCESS_ERROR`; the resumed rows supersede them only by having a valid outcome, as clc-v1's "rest" runs did.
 - The scores computed on the first ~70 items were seen by the author (candidate stability 25/26 on non-copy pairs covered twice). **No verdict is declared before all 120 items of both runs are in.**
+
+## Amendment 5 (2026-10-17, before any Sonnet call): restart with Sonnet as the single extractor (option B)
+
+**Owner decision (2026-10-17, relayed by corpunum-6b): option B.** Restart **both** runs, 2 × 120 items, with Sonnet as the one extractor of this gate. The Sol attempt (amendments 3–4) stays published as a non-verdict and is not merged with this run.
+
+- **Extractor:** `claude-sonnet-5-5` through [`run-claude-code-source-only.mjs`](../../scripts/research/run-claude-code-source-only.mjs) (the original source-only runner: fresh `claude -p` per item in an empty directory, built-in tools off, only the four Lunum MCP tools, package v23, exact model ID checked against the CLI's init and usage events).
+- **Billing route:** the local `claude` CLI login (OAuth subscription), with no `ANTHROPIC_API_KEY` and no base URL set. The pilot's init event (`apiKeySource`) is recorded to show it. The runner's dollar figures are the CLI's notional per-item cost under the subscription. The runner still needs a reservation: item ceiling $1.00, total $120.00 per run, notional.
+- **Pilot first** (the runner's rule): 1 item from clc-v1 S2 (already published, not a gate item), to confirm the exact model ID and the auth source. If the reported ID differs from `claude-sonnet-5-5`, this amendment is corrected before the gate's first call.
+- **Runs:** A and B in two clean clones at the same commit, at the same time; concurrency 1 each (2 in total). The runner stops on any failure that is not a pure evidence-binding problem, which includes a usage-limit error. A stopped run is resumed with Sonnet after the limit resets, into a "rest" directory.
+- **Bars unchanged** (amendment 1, with sentence copies excluded). Bar 2 is the suite scan already done on 2026-10-17 (0 collapses), repeated at the run commit.
+- **Prediction:** bar 1 near the Sol partial (about 90–96%). The candidate was designed on Claude outputs, so a Sonnet pass is the weaker test of the two extractors; this is stated with the result.
