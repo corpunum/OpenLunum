@@ -32,3 +32,18 @@ For many unrelated English words, lemma mode returned the **same** five Greek wo
 ## Limits (as pre-registered)
 
 The wordnet gold is incomplete and sense-fine, so absolute accuracy is a lower bound: «πειθαρχία» for "discipline" and «κόπωση» for "fatigue" count as wrong because the Greek wordnet lists other words.
+
+## v2, corrected lemma mode (post-hoc, amendment 2) — [results-v2.json](results-v2.json)
+
+| Configuration | Top-1 | Top-5 | Paired top-5 (surface-only / lemma-only) |
+|---|---|---|---|
+| Europarl, surface | 0.373 | 0.540 | |
+| Europarl, lemma | 0.367 | **0.540** | 7 / 7 |
+| OpenSubtitles 10M, surface | 0.450 | 0.583 | |
+| OpenSubtitles 10M, lemma | 0.447 | **0.590** | 5 / 7 |
+
+(Surface rows differ by at most one item from the original run because the corrected lemma table also changes how candidates are classified when scored.)
+
+**With the defect removed, lemma mode ties surface mode on single words.** The pre-registered H1 would still fail. Reading, post-hoc: the scorer maps every candidate to its lemma before checking it against the gold, so surface mode already gets lemma credit at scoring time; for single dictionary words lemma indexing can only change counts, not find new words. Lemma mode's benefit shows on phrases (in OpenSubtitles «καλώ την αστυνομία» matches 439 lines in lemma mode against 9 in surface mode), which this single-word test does not measure. A phrase-level gold is needed to measure that, and none exists yet.
+
+Known cost of the fix: without merging, UniMorph's variant lemmas stay apart. «τηλεφώνησε» is filed under τηλεφωνάω, so a query «τηλεφωνώ» no longer meets it. Merging true variants (lemmas sharing most of their forms, without chains) is a design question left open, not tuned on these items.

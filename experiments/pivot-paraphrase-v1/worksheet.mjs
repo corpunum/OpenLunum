@@ -9,7 +9,7 @@ const { corpora, rows } = JSON.parse(fs.readFileSync(arg('--candidates'), 'utf8'
 const short = (c) => c.includes('Europarl') ? 'EP' : c.includes('TED') ? 'TED' : 'OS';
 const lines = (r) => Math.max(0, ...Object.values(r.evidence).map((e) => e.exactLines ?? 0));
 const out = [
-  '# Meaning clusters, review worksheet v1',
+  `# Meaning clusters, review worksheet ${process.argv.includes('--version') ? arg('--version') : 'v1'}`,
   '',
   `Generated ${new Date().toISOString().slice(0, 10)} by [worksheet.mjs](worksheet.mjs) from the lemma-mode evidence (${corpora.map(short).join(', ')}: ${corpora.join('; ')}). **For the owner.** Pairs were proposed by Qwen and SuperGemma and are listed only when real translations attest them (at least 3 aligned lines with significant association in one corpus). Counts are aligned lines. Nothing here changes Lunum identity.`,
   '',

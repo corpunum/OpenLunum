@@ -40,7 +40,7 @@
 "Exact" = the phrase pair co-occurs in at least 3 aligned lines with G² above the p < 0.001 threshold, in at least one corpus. "Stem" = the same test after crude stemming. **Stem evidence is weak**: SuperGemma's non-word «καλέω» stem-matched «καλεί» ("calls on"). It is reported, never trusted alone.
 
 What this shows:
-- **Agreement across model families predicts attestation**: 49% against 28%. That supports the owner's idea of using several families, as a filter, not as a reference.
+- **Agreement across model families predicts attestation**: 49% against 28% (surface mode); 56% against 33% with the corrected lemma mode of 2026-10-17 ([WORKSHEET-v2.md](WORKSHEET-v2.md), [`results/candidates-lemma2.json`](results/candidates-lemma2.json)). That supports the owner's idea of using several families, as a filter, not as a reference.
 - **Verification catches model errors**: «καλέω» (not a Greek form), a Greek–Arabic hybrid «καُلω» from SuperGemma, invented phrases with zero lines.
 - **Base forms hide attestation.** Models answer in dictionary form («τηλεφωνώ στην αστυνομία»); corpora hold inflected forms («τηλεφώνησε», «πάρε»). Lemmatisation (or asking models for inflected forms) is needed before "not attested" means much.
 - Agent-domain seeds ("delete the file", "restart the service") have no attested pairs at all: none of these corpora is about software. Agent traffic needs its own bilingual source (for example, localised software documentation or UI strings via OPUS).
