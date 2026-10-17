@@ -1,8 +1,8 @@
 //! Pivot-paraphrase mining over a sentence-aligned EN/EL corpus (OPUS Moses format).
 //! Design: experiments/pivot-paraphrase-v1/DESIGN.md. Deterministic, std-only, no model calls.
 //!
-//!   pivot-miner <corpus-dir> --queries <file> [--prefix Europarl.el-en] [--max-lines N] [--lemmas-en eng --lemmas-el ell] [--no-roundtrip]
-//!   pivot-miner --classify <unimorph-table> <words-file>   # word -> lemma class, then exit
+//!   pivot-miner <corpus-dir> --queries <file> [--prefix Europarl.el-en] [--max-lines N] [--lemmas-en eng --lemmas-el ell] [--variant-lemmas] [--no-roundtrip]
+//!   pivot-miner --classify <unimorph-table> <words-file> [--variant-lemmas]   # word -> lemma class, then exit
 //!   # one query per line: "<mode>\t<lang>\t<phrase>"
 //!     mode: translate | paraphrase ; lang: en | el (the language of the phrase)
 //!     or "pair\t<english phrase>\t<greek phrase>" to check a proposed equivalence
@@ -66,6 +66,60 @@ pub fn lemma_map<I: IntoIterator<Item = String>>(rows: I) -> HashMap<String, Str
     // A word that is itself a lemma keeps its own label, even when it is also a form of another lemma.
     for l in lemmas { out.insert(l.clone(), l); }
     out
+}
+
+// ---------------------------------------------------------------- variant lemmas (Greek)
+
+/// Ending classes whose members are interchangeable spellings of the SAME lemma:
+/// two lemmas are variants when they are the same stem with one ending swapped for
+/// another member of the class (τηλεφωνώ vs τηλεφωνάω: stem τηλεφων-, endings ω vs αω).
+/// Pinned from the UniMorph Greek table on 2026-10-17: -ώ vs -άω is the only
+/// productive class in the table (82 same-stem pairs); the mechanism accepts any class.
+pub fn variant_classes() -> Vec<Vec<&'static str>> {
+    vec![vec!["ω", "αω"]]
+}
+
+/// Class key of a lemma: when it ends in an ending of a variant class, the key is
+/// the shared stem plus the sorted class id; otherwise the lemma itself. Two lemmas
+/// share a key exactly when they are the same stem with an ending-class swap —
+/// never a transitive chain (v1 merged on any shared form and built giant classes).
+pub fn variant_key(lemma: &str, classes: &[Vec<&'static str>]) -> String {
+    for class in classes {
+        let Some(end) = class.iter().filter(|e| lemma.ends_with(**e)).max_by_key(|e| e.len()) else { continue };
+        let stem = &lemma[..lemma.len() - end.len()];
+        if stem.is_empty() { continue; }
+        let mut id: Vec<&str> = class.to_vec();
+        id.sort_unstable();
+        return format!("{}\u{1f}{}", stem, id.join("+"));
+    }
+    lemma.to_string()
+}
+
+/// Stats of the merge on a built map: (merged classes = groups of 2+ lemmas sharing a
+/// variant key, largest class size). Reported with every run that uses variant mode.
+pub fn variant_stats(map: &HashMap<String, String>, classes: &[Vec<&'static str>]) -> (usize, usize) {
+    let mut sizes: HashMap<String, usize> = HashMap::new();
+    for (k, v) in map.iter().filter(|(k, v)| k == v) {
+        *sizes.entry(variant_key(v, classes)).or_insert(0) += 1;
+    }
+    let merged = sizes.values().filter(|&&n| n >= 2).count();
+    let largest = sizes.values().copied().max().unwrap_or(0);
+    (merged, largest)
+}
+
+/// Merge spelling-variant lemmas into one class: every member of a variant class and
+/// every form mapped to a member is remapped to the smallest member of its class.
+/// Membership is exact (stem, class) equality, so merging never chains: A~B and B~C
+/// does not pull A~C unless A and C are themselves the same stem with swapped endings.
+pub fn variant_merge(map: &mut HashMap<String, String>, classes: &[Vec<&'static str>]) {
+    let lemmas: HashSet<String> = map.iter().filter(|(k, v)| k == v).map(|(k, _)| k.clone()).collect();
+    let mut groups: HashMap<String, Vec<String>> = HashMap::new();
+    for l in lemmas { groups.entry(variant_key(&l, classes)).or_default().push(l); }
+    for (_, group) in groups {
+        if group.len() < 2 { continue; }
+        let target = group.iter().min().cloned().unwrap();
+        for f in map.values_mut() { if group.contains(f) { *f = target.clone(); } }
+    }
 }
 
 // ---------------------------------------------------------------- one side of the corpus
@@ -351,8 +405,17 @@ fn main() -> io::Result<()> {
     let flag = |name: &str| args.iter().position(|a| a == name).and_then(|i| args.get(i + 1)).cloned();
     // `pivot-miner --classify <unimorph-table> <words-file>`: print "word<TAB>class" for each word, then exit.
     // Lets scorers map words to lemma classes with exactly the miner's own rules.
-    if args.get(1).map(|a| a == "--classify").unwrap_or(false) {
+    let variants = args.iter().any(|a| a == "--variant-lemmas");
+    let vc = variant_classes();
+    if args.get(1).map(|a| a == "--variant-stats").unwrap_or(false) {
         let m = lemma_map(read_lines(&args[2], usize::MAX)?);
+        let (merged, largest) = variant_stats(&m, &vc);
+        writeln!(io::stdout().lock(), "{{\"mergedClasses\":{},\"largestClass\":{}}}", merged, largest)?;
+        return Ok(());
+    }
+    if args.get(1).map(|a| a == "--classify").unwrap_or(false) {
+        let mut m = lemma_map(read_lines(&args[2], usize::MAX)?);
+        if variants { variant_merge(&mut m, &vc); }
         let stdout = io::stdout();
         let mut w = stdout.lock();
         for word in read_lines(&args[3], usize::MAX)? {
@@ -368,11 +431,18 @@ fn main() -> io::Result<()> {
     let t0 = std::time::Instant::now();
     // Lemma mode: --lemmas-en / --lemmas-el point at UniMorph tables; both sides and all queries use lemma classes.
     let load = |name: &str| -> io::Result<Option<std::rc::Rc<HashMap<String, String>>>> {
-        Ok(match flag(name) { Some(path) => Some(std::rc::Rc::new(lemma_map(read_lines(&path, usize::MAX)?))), None => None })
+        Ok(match flag(name) {
+            Some(path) => {
+                let mut m = lemma_map(read_lines(&path, usize::MAX)?);
+                if variants { variant_merge(&mut m, &vc); }
+                Some(std::rc::Rc::new(m))
+            }
+            None => None,
+        })
     };
     let (lem_en, lem_el) = (load("--lemmas-en")?, load("--lemmas-el")?);
     let no_roundtrip = args.iter().any(|a| a == "--no-roundtrip");
-    if let (Some(a), Some(b)) = (&lem_en, &lem_el) { eprintln!("lemma mode: {} EN forms, {} EL forms", a.len(), b.len()); }
+    if let (Some(a), Some(b)) = (&lem_en, &lem_el) { eprintln!("lemma mode: {} EN forms, {} EL forms{}", a.len(), b.len(), if variants { " (variant lemmas merged)" } else { "" }); }
     let en = Side::build_with(read_lines(&format!("{dir}/{prefix}.en"), max_lines)?, lem_en);
     let el = Side::build_with(read_lines(&format!("{dir}/{prefix}.el"), max_lines)?, lem_el);
     assert_eq!(en.n_lines(), el.n_lines(), "line counts differ");
@@ -523,6 +593,31 @@ mod tests {
         assert_eq!(m["dance"], "dance", "no chain card~aba~dance");
         let el = Side::build_with(["Κάλεσα την αστυνομία", "θα καλέσουμε την αστυνομίας"].iter().map(|s| s.to_string()), Some(std::rc::Rc::new(m)));
         assert_eq!(el.find(&el.ids("καλώ την αστυνομία").unwrap()), vec![0, 1]);
+    }
+
+    #[test]
+    fn variant_lemmas_share_a_class_same_stem_only() {
+        let classes = variant_classes();
+        let k = |s: &str| variant_key(s, &classes);
+        assert_eq!(k("τηλεφωνω"), k("τηλεφωναω"), "τηλεφωνώ and τηλεφωνάω are one class");
+        assert_eq!(k("αγαπω"), k("αγαπαω"), "αγαπώ and αγαπάω are one class");
+        assert_ne!(k("καλω"), k("τηλεφωνω"), "different stems stay different classes");
+        assert_ne!(k("βλεπω"), k("τηλεφωνω"), "same ending class, different stems: βλεπ- and τηλεφων- stay apart");
+        assert_eq!(k("καλημερα"), "καλημερα", "a lemma outside any class is its own key");
+    }
+
+    #[test]
+    fn variant_merge_never_chains() {
+        let classes = variant_classes();
+        let rows = ["τηλεφωνώ\tτηλεφωνώ\tV;1;SG;IPRV;PRS", "τηλεφωνάω\tτηλεφωνάω\tV;1;SG;IPRV;PRS",
+            "αγαπώ\tαγαπώ\tV;1;SG;IPRV;PRS", "αγαπάω\tαγαπάω\tV;1;SG;IPRV;PRS",
+            "καλώ\tκαλώ\tV;1;SG;IPRV;PRS", "καλώ\tκαλείς\tV;2;SG;IPRV;PRS"];
+        let mut m = lemma_map(rows.iter().map(|s| s.to_string()));
+        variant_merge(&mut m, &classes);
+        assert_eq!(m["τηλεφωνω"], m["τηλεφωναω"], "τηλεφωνώ and τηλεφωνάω collapse to one class");
+        assert_eq!(m["αγαπω"], m["αγαπαω"], "αγαπώ and αγαπάω collapse to one class");
+        assert_eq!(m["καλεισ"], "καλω", "καλώ is not a variant of anything: its forms keep its label (final sigma folds to σ)");
+        assert_ne!(m["τηλεφωνω"], m["καλω"], "no chain: different stems never merge");
     }
 
     #[test]
