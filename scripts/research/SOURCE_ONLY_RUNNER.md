@@ -79,3 +79,17 @@ No targets, expected outcomes, semantic groups or review data may be included
 in source-only request rows. The runner does not certify that a source set is
 protected, independently authored, human-reviewed, or semantically complete.
 Freeze and validate those artifacts separately before making quality claims.
+
+## One retry when the contract was never fetched (2026-10-17)
+
+The model sometimes abstains without calling `lunum_get_extraction_contract`. That happened on 4 of about 300 Sonnet items on 2026-10-17, and each case needed its own pre-registration amendment (greek-frames amendment 3, R4 amendment 1). The runner now gives such an item **one** fresh retry with the same prompt, inside the same item, when all of these hold (`contractRetryAllowed` in `source-only-run-gates.mjs`):
+- `CONTRACT_UNBOUND` is the item's only evidence failure;
+- nothing was submitted, so no candidate is ever replaced;
+- the first attempt's cost is known and leaves at least $0.05 of the item budget.
+
+How the retry works:
+- **Budget:** the retry's `--max-budget-usd` is the item budget left. The item's `costUsd` is the sum of both attempts, so the item ceiling still holds.
+- **Raw streams:** the first attempt's stream is kept as `raw/<handle>.attempt1.jsonl`, described in the row's `contractRetry`. The run summary lists every retried item and whether it recovered (`contractRetries`).
+- **One retry only.** If the retry is invalid too, the item stays invalid and in the denominator, as before.
+
+Runs started before this rule are unchanged. A run using it must name the runner commit in its pre-registration, as every run does.

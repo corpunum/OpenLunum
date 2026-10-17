@@ -267,6 +267,22 @@ export function stopsFurtherLaunches(row) {
 }
 
 /**
+ * Whether an item gets ONE fresh retry because the model never fetched the contract.
+ * Only when CONTRACT_UNBOUND is the sole failure, nothing was submitted (so no
+ * candidate is being replaced), and the known first-attempt cost leaves item
+ * budget for the retry, which is capped at the remainder so the item total
+ * stays within the item ceiling. Seen on 4 of ~300 Sonnet items on 2026-10-17
+ * (greek-frames amendment 3, R4 amendment 1); before this rule each case needed an amendment.
+ */
+export function contractRetryAllowed(row, plan) {
+  const failures = row.evidenceFailures ?? [];
+  if (failures.length !== 1 || failures[0] !== 'CONTRACT_UNBOUND') return false;
+  if ((row.calls ?? []).some((call) => call.name === 'lunum_submit_candidate')) return false;
+  if ((row.submissionAttempts ?? []).length) return false;
+  return Number.isFinite(row.costUsd) && row.costUsd >= 0 && plan.itemUsd - row.costUsd >= 0.05;
+}
+
+/**
  * The declared final status of a source-only session. The prompt asks the
  * model to end with one JSON status line; models often put a sentence of prose
  * before it. Accept the LAST non-empty line as the status, but refuse the

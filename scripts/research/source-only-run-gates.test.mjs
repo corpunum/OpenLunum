@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { getExtractionContract } from '../../packages/core/dist/src/index.js';
-import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeManifest, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, sha256, stopsFurtherLaunches } from './source-only-run-gates.mjs';
+import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeManifest, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, sha256, stopsFurtherLaunches, contractRetryAllowed } from './source-only-run-gates.mjs';
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
@@ -478,4 +478,17 @@ test('v24 remains frozen historical binding; only the renderer fix drifts its se
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
   assert.deepEqual(runtimeCheck.runtime.errors, ['served_runtime_changed:packages/core/dist/src/render.js']);
   assert.equal(checkServedContract(contract, historical).match, true);
+});
+
+test('contract retry: only a lone CONTRACT_UNBOUND with no submission and item budget left', () => {
+  const plan = { itemUsd: 1 };
+  const base = { evidenceFailures: ['CONTRACT_UNBOUND'], calls: [], submissionAttempts: [], costUsd: 0.03 };
+  assert.equal(contractRetryAllowed(base, plan), true);
+  assert.equal(contractRetryAllowed({ ...base, calls: [{ name: 'lunum_get_extraction_contract' }] }, plan), true, 'a failed contract fetch is retried too');
+  assert.equal(contractRetryAllowed({ ...base, evidenceFailures: ['CONTRACT_UNBOUND', 'TIMEOUT'] }, plan), false, 'another failure: no retry');
+  assert.equal(contractRetryAllowed({ ...base, evidenceFailures: [] }, plan), false, 'valid rows are never retried');
+  assert.equal(contractRetryAllowed({ ...base, calls: [{ name: 'lunum_submit_candidate' }] }, plan), false, 'a submission is never replaced');
+  assert.equal(contractRetryAllowed({ ...base, submissionAttempts: [{}] }, plan), false);
+  assert.equal(contractRetryAllowed({ ...base, costUsd: null }, plan), false, 'unknown cost: no retry');
+  assert.equal(contractRetryAllowed({ ...base, costUsd: 0.97 }, plan), false, 'less than $0.05 of item budget left');
 });

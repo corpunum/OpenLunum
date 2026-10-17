@@ -19,7 +19,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
-import { artifactBinding as bindArtifacts, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, parseFinalStatus, stopsFurtherLaunches } from './source-only-run-gates.mjs';
+import { artifactBinding as bindArtifacts, checkServedContract, checkObservedContracts, checkSessionIntegrity, contradictoryAbstention, budgetPlan, validateRequests, evidenceFailures, runCaptured, parseFinalStatus, stopsFurtherLaunches, contractRetryAllowed } from './source-only-run-gates.mjs';
 import { replaySession, parseJsonLines } from './replay-client-events.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -151,13 +151,32 @@ function toolUses(events) {
 // earlier line may declare a second one (see parseFinalStatus).
 const finalStatus = parseFinalStatus;
 
+// One item. If the model never fetched the contract and nothing else went wrong
+// (contractRetryAllowed), the item gets ONE fresh retry with the same prompt,
+// capped at the item budget left; the first attempt's raw stream is kept as
+// <handle>.attempt1.jsonl and its cost counts toward the item.
 async function runOne(request) {
+  fs.writeFileSync(path.join(outDir, 'raw', `${request.handle}.request.json`), JSON.stringify({ request, prompt: prompt(request), promptSha256: sha256(prompt(request)), model, clientVersion: claudeVersionResult.stdout.trim(), itemBudgetUsd: plan.itemUsd, timeoutMs: plan.timeoutMs }, null, 2) + '\n', { flag: 'wx' });
+  const first = await attemptOne(request, plan.itemUsd);
+  if (!contractRetryAllowed(first, plan)) return first;
+  for (const ext of ['jsonl', 'stderr']) {
+    const from = path.join(outDir, 'raw', `${request.handle}.${ext}`);
+    if (fs.existsSync(from)) fs.renameSync(from, path.join(outDir, 'raw', `${request.handle}.attempt1.${ext}`));
+  }
+  const row = await attemptOne(request, Math.floor((plan.itemUsd - first.costUsd) * 100) / 100);
+  row.contractRetry = { attempt1: { rawStream: `raw/${request.handle}.attempt1.jsonl`, rawStreamSha256: first.rawStreamSha256, costUsd: first.costUsd, evidenceFailures: first.evidenceFailures, calls: first.calls } };
+  if (Number.isFinite(row.costUsd)) row.costUsd = Number((row.costUsd + first.costUsd).toFixed(7));
+  row.evidenceFailures = evidenceFailures(row, pkg, model, plan);
+  row.evidenceValid = row.evidenceFailures.length === 0;
+  return row;
+}
+
+async function attemptOne(request, budgetUsd) {
     const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'lunum-extract-'));
     const cli = ['-p', prompt(request), '--model', model, '--output-format', 'stream-json', '--verbose',
       '--strict-mcp-config', '--mcp-config', mcpConfigPath, '--tools', '', '--allowedTools', ...ALLOWED_TOOLS,
       ...(servedToolNames.some((name) => !ALLOWED_TOOLS.includes(name)) ? ['--disallowedTools', ...servedToolNames.filter((name) => !ALLOWED_TOOLS.includes(name))] : []),
-      '--permission-mode', 'dontAsk', '--no-session-persistence', '--max-budget-usd', String(plan.itemUsd)];
-    fs.writeFileSync(path.join(outDir, 'raw', `${request.handle}.request.json`), JSON.stringify({ request, prompt: prompt(request), promptSha256: sha256(prompt(request)), model, clientVersion: claudeVersionResult.stdout.trim(), itemBudgetUsd: plan.itemUsd, timeoutMs: plan.timeoutMs }, null, 2) + '\n', { flag: 'wx' });
+      '--permission-mode', 'dontAsk', '--no-session-persistence', '--max-budget-usd', String(budgetUsd)];
     try {
       const captured = await runCaptured({ executable: 'claude', args: cli, cwd: workdir, stdoutPath: path.join(outDir, 'raw', `${request.handle}.jsonl`), stderrPath: path.join(outDir, 'raw', `${request.handle}.stderr`), timeoutMs: plan.timeoutMs, publicJsonEvents: true });
       let row;
@@ -284,6 +303,7 @@ const summary = {
   servedArtifactBinding: rederive ? 'not-checked (rederive)' : { atStart: bindingAtStart.match, atEnd: artifactBinding().match, checks: bindingAtStart.checks },
   observedContractVersions: [...new Set(completed.map((row) => row.observedContractVersion).filter(Boolean))],
   itemsWithoutObservedContract: completed.filter((row) => !row.observedContractVersion).length,
+  contractRetries: completed.filter((row) => row.contractRetry).map((row) => ({ handle: row.handle, recovered: row.evidenceValid })),
   evidenceValid: !rederive && completed.length === selected.length && completed.every(row => row.evidenceValid) && artifactBinding().match && gitHeadAtEnd === gitHead && !trackedDirtyAtEnd,
 };
 fs.writeFileSync(path.join(outDir, 'run-summary.json'), `${JSON.stringify(summary, null, 2)}\n`);
