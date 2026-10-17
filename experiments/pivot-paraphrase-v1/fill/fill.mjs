@@ -104,7 +104,10 @@ async function main() {
   if (process.argv.includes('--only')) { const keep = new Set(JSON.parse(fs.readFileSync(arg('--only'), 'utf8'))); items = items.filter((i) => keep.has(i.id)); }
   const BATCH = 10;
   const labels = {}; const raw = [];
+  // Halogen is shared with the live operator: no Qwen call during its busy minutes (:00-:10, :30-:40 UTC).
+  const busy = () => { const m = new Date().getUTCMinutes(); return m < 10 || (m >= 30 && m < 40); };
   for (let k = 0; k < items.length; k += BATCH) {
+    while (judge === 'qwen' && busy()) await new Promise((r) => setTimeout(r, 30000));
     const batch = items.slice(k, k + BATCH);
     const text = prompt(batch);
     const r = await ask(judge, text);
