@@ -27,6 +27,10 @@ fn golden_parity() {
     assert_eq!(sha_hex(PROTOCOL_JSON), s(meta.get_own("protocolRegistrySha256").unwrap()), "embedded protocol registry hash");
     assert_eq!(sha_hex(FRAME_JSON), s(meta.get_own("frameRegistrySha256").unwrap()), "embedded frame registry hash");
 
+    // lfp:2.1 = Unicode 17.0 casefold/NFKC: the golden marker, the generated tables and the pin must agree.
+    assert_eq!(s(meta.get_own("unicode").unwrap()), "17.0", "golden meta Unicode marker");
+    assert_eq!(lunum_sem::unicode_tables::UNICODE_VERSION, "17.0", "generated tables Unicode version");
+
     let lengths: Vec<(String, f64)> = match meta.get_own("lengths").unwrap() {
         Value::Arr(a) => a.iter().map(|x| if let Value::Num(n) = x { (number_to_string(*n), *n) } else { panic!() }).collect(),
         _ => panic!(),
