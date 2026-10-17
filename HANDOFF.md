@@ -71,6 +71,14 @@ Every result reports which of three levels it measures:
 - **Step 3, concept layer: drafted.** [ADR 0028](decisions/0028-language-neutral-concept-layer.md), design only.
 - No model call has been made in this session. Total spend: $0.
 
+## Progress, 2026-10-16/17 (later session, continued; self-reviewed)
+
+- **Owner instruction:** no paid Claude runs and no Qwen/Halogen extraction; use Luna (low), Sol 6.1 (medium) and SuperGemma on the ROG Ally. Runners: [`run-openai-compatible-source-only.mjs`](scripts/research/run-openai-compatible-source-only.mjs), [`run-codex-source-only.mjs`](scripts/research/run-codex-source-only.mjs).
+- **Stage 0 of parallel-document-v1:** [results](experiments/parallel-document-v1/RESULTS-stage0.md). SuperGemma 1/16 EN, 0/16 EL; Luna 4/1; **Sol 11/16 EN, 0/16 EL (all Greek "unsupported")**. Stage 1 no-go; the ADR 0027 gate was not run (feasibility rule). The Greek limit is the contract's English-only general frames, not the model.
+- **Sentence copies:** 12 of 75 recorded Claude clc-v1 parses are whole-sentence copies ([pilot results](experiments/local-extractor-pilot-v1/RESULTS.md)); scorers now exclude them.
+- **Pivot paraphrase (owner's "meaning, not words"):** [design](experiments/pivot-paraphrase-v1/DESIGN.md), [`tools/pivot-miner`](tools/pivot-miner) (Rust), [exploration](experiments/pivot-paraphrase-v1/EXPLORATION.md). On OpenSubtitles the owner's example is attested: «κάλεσε / πήρε / τηλεφώνησε / φώναξε την αστυνομία» all translate "call(ed) the police", and «πάρε το 100» translates "call 911". Model proposals (Qwen, SuperGemma) are attested 49% when both families agree, 28% when one does.
+- **Next:** owner review of the seed Greek and of the first cluster worksheet; a Greek lemmatiser in pivot-miner; a pre-registered round-trip measurement; a contract decision on Greek frames (needs ADR 0025's held-out path).
+
 ## Known pitfalls hit on 2026-10-16
 
 - **Claude Code persists MCP results above about 50 KB** and shows the model a 2 KB preview. The contract tool returns compact JSON (36 KB), and a test fails at 45 KB. Keep it that way.
