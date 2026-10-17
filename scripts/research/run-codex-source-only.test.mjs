@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { fromEvents, codexArgs } from './run-codex-source-only.mjs';
+import { fromEvents, codexArgs, isQuotaError } from './run-codex-source-only.mjs';
 import { classify } from './run-openai-compatible-source-only.mjs';
 
 const ev = (item) => JSON.stringify({ type: 'item.completed', item });
@@ -34,4 +34,10 @@ test('client warning items are diagnostics, not tool calls (pilot 3 harness bug)
   const out = fromEvents([ev({ type: 'error', message: 'Codex is ignoring 1 unrecognized configuration setting.' }), ev({ type: 'agent_message', text: '{"status":"parse"}' })]);
   assert.equal(out.calls.length, 0);
   assert.equal(out.diagnostics.length, 1);
+});
+
+test('a usage-limit event on stdout is recognised as quota exhaustion (gate run 2026-10-17)', () => {
+  const stdout = '{"type":"error","message":"You\u2019ve hit your usage limit. Upgrade to Pro ... or try again at 2:49 PM."}';
+  assert.equal(isQuotaError(stdout), true);
+  assert.equal(isQuotaError('{"type":"turn.completed"}'), false);
 });

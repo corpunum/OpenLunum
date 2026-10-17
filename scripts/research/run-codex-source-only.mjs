@@ -38,6 +38,8 @@ export function codexArgs({ model, effort, launcher }) {
     '-c', 'mcp_servers.lunum.default_tools_approval_mode="approve"'];
 }
 
+export const isQuotaError = (text) => /usage limit|rate limit|quota|try again at/iu.test(text);
+
 /** Calls and final text from `codex exec --json` events. Any non-Lunum tool item is kept under its own name. */
 export function fromEvents(lines) {
   const calls = []; let finalText = ''; const usage = []; const diagnostics = []; let malformed = 0;
@@ -104,7 +106,8 @@ async function main(args) {
     const ev = fromEvents(stdout.split('\n').filter(Boolean));
     let failure = null;
     if (r.error?.code === 'ETIMEDOUT' || r.signal) failure = 'TIMEOUT';
-    else if (r.status !== 0) failure = /usage limit|rate limit|quota/iu.test(r.stderr ?? '') ? 'QUOTA_EXHAUSTED' : 'PROCESS_ERROR';
+    // Codex reports a usage limit as an `error` / `turn.failed` event on stdout, not on stderr (gate run 2026-10-17).
+    else if (r.status !== 0) failure = isQuotaError(`${r.stderr ?? ''}\n${stdout}`) ? 'QUOTA_EXHAUSTED' : 'PROCESS_ERROR';
     else if (ev.malformed) failure = 'INVALID_PROVIDER_EVENT_STREAM';
     const row = { ...classify({ request, calls: ev.calls, finalText: ev.finalText, failure, pkg, model, reportedModels: [model] }),
       modelVerification: 'requested-only', clientDiagnostics: ev.diagnostics, usage: ev.usage, seconds: Math.round((Date.now() - t0) / 1000), rawStream: `raw/${request.handle}.jsonl`, rawStreamSha256: sha256(stdout) };

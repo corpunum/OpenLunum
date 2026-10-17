@@ -87,3 +87,13 @@ Supersedes amendment 1's extractor. The owner withdrew Halogen/Qwen and asked fo
 - **Scope of a pass:** qualifies the projection for Sol as extractor; ADR 0027 was designed on Claude outputs, so this is a held-out test on a different extractor, which is stronger evidence against overfitting, not weaker.
 - **Cost:** ChatGPT quota, about 100k input tokens per item, about 24M for 240 items.
 - **Prediction (unchanged):** bar 1 more likely to fail than pass.
+
+## Amendment 4 (2026-10-17, after runs A and B, before any resumed call): resume after the quota reset
+
+The ChatGPT quota ran out during both runs: from item 72 of run A and a similar point in run B, every call returned "You've hit your usage limit … try again at 2:49 PM". 49 (A) and 53 (B) items were therefore **never extracted**.
+
+The runner did not stop, because it looked for quota messages only on stderr while Codex reports them as events on stdout. That is fixed, with a test, and the runner now stops at the first quota error.
+
+- As amendment 3 fixed beforehand, the remaining items are resumed **with Sol** after the reset, into `idg1-sol-a-rest` and `idg1-sol-b-rest`. They are scored as one run each, with the scorer's existing merge of directories.
+- The ledger rows of the failed calls stay in the published run as `PROCESS_ERROR`; the resumed rows supersede them only by having a valid outcome, as clc-v1's "rest" runs did.
+- The scores computed on the first ~70 items were seen by the author (candidate stability 25/26 on non-copy pairs covered twice). **No verdict is declared before all 120 items of both runs are in.**
