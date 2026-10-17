@@ -35,3 +35,10 @@ Agreement around 0.6 to 0.7 (five labels, S versus B is subjective). Sol passes 
 ## Use
 
 The consensus gold feeds a later pre-registered phrase round-trip test and the Greek lexicon of the renderer, always labelled level (b), model consensus. Unresolved items wait for the owner.
+
+## Amendment 1 (2026-10-17, before any SuperGemma label was produced): token budget
+
+The first SuperGemma pass returned **no labels**: the Ally router serves SuperGemma with reasoning on, and `max_tokens: 600` was spent entirely on hidden reasoning (`finish_reason: length`, empty content) for every batch. That pass was stopped after 3 batches; it produced nothing to see or compare.
+
+- `max_tokens` for SuperGemma is now 6000. One diagnostic call on batch 0 confirmed it then answers in the required format (its labels were seen by the author; the full pass recomputes batch 0 at temperature 0 and its result is the one used).
+- The full SuperGemma pass is rerun from the start. Nothing else changes. The Sol pass was not affected (Codex has its own budget).

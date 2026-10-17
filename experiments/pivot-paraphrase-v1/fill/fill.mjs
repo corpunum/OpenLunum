@@ -64,7 +64,7 @@ export const JUDGES = Object.freeze({
 async function ask(judge, text) {
   if (judge === 'gemma') {
     const res = await fetch('http://127.0.0.1:28084/v1/chat/completions', { method: 'POST', headers: { 'content-type': 'application/json' }, signal: AbortSignal.timeout(600000),
-      body: JSON.stringify({ model: 'supergemma4-Q5_K_M', messages: [{ role: 'user', content: text }], temperature: 0, max_tokens: 600 }) });
+      body: JSON.stringify({ model: 'supergemma4-Q5_K_M', messages: [{ role: 'user', content: text }], temperature: 0, max_tokens: 6000 }) }); // amendment 1: the router serves SuperGemma with reasoning on
     const body = await res.json();
     return { answer: body.choices?.[0]?.message?.content ?? '', servedModel: body.model ?? null };
   }
