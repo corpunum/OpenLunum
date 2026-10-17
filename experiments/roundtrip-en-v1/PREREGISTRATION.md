@@ -43,3 +43,10 @@ Scorer smoke test (in-sample, a spent set): on the ADR 0027 v2 gate's Sonnet run
 ## Cost
 
 About 200 Sonnet items on the Max subscription (notional ~$0.10 per item, ~$20 notional, no API charge). SuperGemma: about 1 hour on the Ally (slot from the rig coordinator). Qwen: about 1 hour on Halogen outside its busy minutes. No GPU on the rig.
+
+## Amendment 1 (2026-10-17, after extraction, before rendering, judging or scoring): three invalid items are re-run
+
+The extraction (`claude-sonnet-5-5`, package v25, commit `c381be98`, 200 items, notional cost $19.79) completed all 200 items. The runner marked it **invalid** because three items never fetched the contract (`CONTRACT_UNBOUND`): `rt1-6de44c2049c9ca0a`, `rt1-3e51c1c7a0689ca9` and `rt1-82c61fa5322209c0`. The other 197 rows are valid evidence.
+- **Those three items are re-run once each**, with the same model, package and requests, from a clean clone at this amendment's commit (the contract hash is unchanged). If an item is invalid again, it is reported as not run, and the denominators say so.
+- **Scorer:** [`score.mjs`](score.mjs) already replaces a row with invalid evidence by a valid row from a later directory (this rule was in the committed scorer; the same rule as greek-frames amendment 3).
+- Nothing was rendered, judged or scored before this amendment. Bars, data and predictions are unchanged.
