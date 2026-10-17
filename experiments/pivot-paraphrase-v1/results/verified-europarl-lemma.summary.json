@@ -1,0 +1,41 @@
+{
+ "status": "exploratory, self-reviewed",
+ "corpus": "OPUS Europarl v8 el-en, lemma mode",
+ "corpusArgs": [
+  "--lemmas-en",
+  "/home/corpunum/corpora/unimorph-eng/src/eng",
+  "--lemmas-el",
+  "/home/corpunum/corpora/unimorph-ell/src/ell"
+ ],
+ "g2Threshold": 10.83,
+ "modelsFailedToParse": [
+  "qwen:s11",
+  "qwen:s12",
+  "qwen:s13",
+  "qwen:s14",
+  "gemma:s02"
+ ],
+ "summary": {
+  "seed": {
+   "proposals": 20,
+   "attested-exact": 15,
+   "attested-stem": 2,
+   "weak": 0,
+   "not-attested": 3
+  },
+  "qwen": {
+   "proposals": 384,
+   "attested-exact": 132,
+   "attested-stem": 78,
+   "weak": 23,
+   "not-attested": 151
+  },
+  "gemma": {
+   "proposals": 456,
+   "attested-exact": 176,
+   "attested-stem": 84,
+   "weak": 37,
+   "not-attested": 159
+  }
+ }
+}

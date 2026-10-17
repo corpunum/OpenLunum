@@ -1,0 +1,45 @@
+{
+ "status": "exploratory, self-reviewed",
+ "corpus": "OPUS OpenSubtitles v2018 el-en, first 10,000,000 pairs, lemma mode",
+ "corpusArgs": [
+  "--prefix",
+  "OpenSubtitles.el-en",
+  "--max-lines",
+  "10000000",
+  "--lemmas-en",
+  "/home/corpunum/corpora/unimorph-eng/src/eng",
+  "--lemmas-el",
+  "/home/corpunum/corpora/unimorph-ell/src/ell"
+ ],
+ "g2Threshold": 10.83,
+ "modelsFailedToParse": [
+  "qwen:s11",
+  "qwen:s12",
+  "qwen:s13",
+  "qwen:s14",
+  "gemma:s02"
+ ],
+ "summary": {
+  "seed": {
+   "proposals": 20,
+   "attested-exact": 16,
+   "attested-stem": 2,
+   "weak": 0,
+   "not-attested": 2
+  },
+  "qwen": {
+   "proposals": 384,
+   "attested-exact": 127,
+   "attested-stem": 50,
+   "weak": 25,
+   "not-attested": 182
+  },
+  "gemma": {
+   "proposals": 456,
+   "attested-exact": 156,
+   "attested-stem": 57,
+   "weak": 30,
+   "not-attested": 213
+  }
+ }
+}

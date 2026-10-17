@@ -2,7 +2,7 @@
 // Model layer, step 2: check every model proposal against Europarl with `pivot-miner pair`.
 // Pairs checked: the model's explicit pairs, seed-English x each proposed Greek phrase, and each proposed
 // English phrase x seed-Greek. Exploratory; Europarl is parliamentary, so "not attested" does not mean wrong.
-//   node verify.mjs <corpus-dir> --proposals a.jsonl,b.jsonl --out verified.json [--prefix TED2020.el-en] [--max-lines N] [--label name]
+//   node verify.mjs <corpus-dir> --proposals a.jsonl,b.jsonl --out verified.json [--prefix TED2020.el-en] [--max-lines N] [--lemmas-en eng --lemmas-el ell] [--label name]
 import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { join, dirname, resolve } from 'node:path';
@@ -42,7 +42,7 @@ async function main() {
   const queries = [...wanted.keys()].map((k) => `pair\t${k}`).join('\n') + '\n';
   const qfile = join(fs.mkdtempSync('/tmp/pivot-verify-'), 'q.tsv');
   fs.writeFileSync(qfile, queries);
-  const extra = ['--prefix', '--max-lines'].flatMap((k) => (process.argv.includes(k) ? [k, arg(k)] : []));
+  const extra = ['--prefix', '--max-lines', '--lemmas-en', '--lemmas-el'].flatMap((k) => (process.argv.includes(k) ? [k, arg(k)] : []));
   const run = spawnSync(miner, [dir, '--queries', qfile, ...extra], { encoding: 'utf8', maxBuffer: 1 << 28 });
   if (run.status !== 0) throw new Error(run.stderr);
   const results = run.stdout.split('\n').filter(Boolean).map((l) => JSON.parse(l));
