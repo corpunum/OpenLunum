@@ -1,0 +1,18 @@
+[package]
+name = "lunum-sem"
+version = "0.1.0"
+edition = "2021"
+description = "Exact Rust reproduction of the Lunum lfp:2.1 semantic fingerprint (packages/core/src/fingerprint.ts)"
+license = "Apache-2.0"
+publish = false
+
+# Standalone crate: not part of any parent workspace.
+[workspace]
+
+[dependencies]
+sha2 = "0.10"
+unicode-normalization = "0.1"
+
+[lib]
+name = "lunum_sem"
+path = "src/lib.rs"

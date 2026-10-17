@@ -1,0 +1,1186 @@
+{
+  "version": "lunum-frame/0.8",
+  "frames": {
+    "prefer": {
+      "predicate": "prefer",
+      "roles": [
+        {
+          "name": "experiencer",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An experiencer has a preference for a theme."
+    },
+    "send": {
+      "predicate": "send",
+      "roles": [
+        {
+          "name": "agent",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "object",
+          "required": true
+        },
+        {
+          "name": "recipient",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "destination",
+          "required": false
+        }
+      ],
+      "exclusiveGroups": [
+        [
+          "recipient",
+          "destination"
+        ]
+      ],
+      "description": "An agent transmits an object to a recipient or destination."
+    },
+    "receive": {
+      "predicate": "receive",
+      "roles": [
+        {
+          "name": "recipient",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        },
+        {
+          "name": "source",
+          "required": false
+        }
+      ],
+      "description": "A recipient accepts or receives a theme from a source."
+    },
+    "believe": {
+      "predicate": "believe",
+      "roles": [
+        {
+          "name": "experiencer",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An experiencer holds a belief regarding a theme or proposition."
+    },
+    "publish": {
+      "predicate": "publish",
+      "roles": [
+        {
+          "name": "agent",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        },
+        {
+          "name": "audience",
+          "required": false
+        }
+      ],
+      "description": "An agent makes a theme available to an audience or public."
+    },
+    "retry": {
+      "predicate": "retry",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "count",
+          "required": false,
+          "allowedTermTypes": [
+            "quantity"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        }
+      ],
+      "atLeastOneOf": [
+        "count",
+        "theme"
+      ],
+      "description": "An agent (optional in imperatives) attempts an action again, with a count or action theme."
+    },
+    "request": {
+      "predicate": "request",
+      "roles": [
+        {
+          "name": "agent",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        },
+        {
+          "name": "recipient",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        }
+      ],
+      "description": "An agent requests a theme or action from an optional recipient."
+    },
+    "keep": {
+      "predicate": "keep",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        },
+        {
+          "name": "visibility",
+          "required": false
+        }
+      ],
+      "atLeastOneOf": [
+        "theme",
+        "visibility"
+      ],
+      "description": "An agent retains a theme, optionally with an explicit visibility."
+    },
+    "delete": {
+      "predicate": "delete",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        },
+        {
+          "name": "object",
+          "required": false
+        },
+        {
+          "name": "target",
+          "required": false
+        }
+      ],
+      "exclusiveGroups": [
+        [
+          "theme",
+          "object",
+          "target"
+        ]
+      ],
+      "description": "An agent removes or deletes an object/theme/target."
+    },
+    "enable": {
+      "predicate": "enable",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent enables a feature, system, or capability."
+    },
+    "disable": {
+      "predicate": "disable",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent disables a feature, system, or capability."
+    },
+    "allow": {
+      "predicate": "allow",
+      "roles": [
+        {
+          "name": "agent",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "recipient",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        },
+        {
+          "name": "action",
+          "required": false,
+          "vocabulary": "predicate"
+        }
+      ],
+      "atLeastOneOf": [
+        "theme",
+        "action"
+      ],
+      "requiredWith": {
+        "action": [
+          "recipient"
+        ]
+      },
+      "distinctRoles": [
+        [
+          "agent",
+          "recipient"
+        ]
+      ],
+      "description": "A stated permitter (agent) permits a recipient to perform an action (a registered predicate) and/or to act on a theme (the object or resource). With no stated permitter (\"X is permitted to Y\"), use modality permission on Y instead."
+    },
+    "prohibit": {
+      "predicate": "prohibit",
+      "roles": [
+        {
+          "name": "agent",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "recipient",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        },
+        {
+          "name": "action",
+          "required": false,
+          "vocabulary": "predicate"
+        }
+      ],
+      "atLeastOneOf": [
+        "theme",
+        "action"
+      ],
+      "requiredWith": {
+        "action": [
+          "recipient"
+        ]
+      },
+      "distinctRoles": [
+        [
+          "agent",
+          "recipient"
+        ]
+      ],
+      "description": "A stated authority (agent) forbids a recipient from performing an action (a registered predicate) and/or from acting on a theme (the object or resource). With no stated authority (\"X must not Y\"), use negation or modality on Y instead."
+    },
+    "deploy": {
+      "predicate": "deploy",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        },
+        {
+          "name": "destination",
+          "required": false
+        }
+      ],
+      "atLeastOneOf": [
+        "theme",
+        "destination"
+      ],
+      "description": "An agent (optional in imperatives) deploys a theme (what is deployed) and/or to a destination (an environment)."
+    },
+    "copy": {
+      "predicate": "copy",
+      "roles": [
+        {
+          "name": "agent",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "source",
+          "required": true
+        },
+        {
+          "name": "destination",
+          "required": true
+        }
+      ],
+      "description": "An agent copies a resource from source to destination."
+    },
+    "rotate": {
+      "predicate": "rotate",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent (optional in imperatives) rotates a credential or key."
+    },
+    "deadline": {
+      "predicate": "deadline",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "time",
+          "required": true
+        }
+      ],
+      "description": "A subject has a deadline at time."
+    },
+    "below": {
+      "predicate": "below",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "value",
+          "required": true
+        }
+      ],
+      "description": "A metric or subject is below a threshold or value."
+    },
+    "above": {
+      "predicate": "above",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "value",
+          "required": true
+        }
+      ],
+      "description": "A metric or subject is above a threshold or value."
+    },
+    "at_most": {
+      "predicate": "at_most",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "value",
+          "required": true
+        }
+      ],
+      "description": "A metric or subject is at most a value (inclusive upper bound: up to, at most, έως)."
+    },
+    "at_least": {
+      "predicate": "at_least",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "value",
+          "required": true
+        }
+      ],
+      "description": "A metric or subject is at least a value (inclusive lower bound: at least, τουλάχιστον)."
+    },
+    "before": {
+      "predicate": "before",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "object",
+          "required": true
+        }
+      ],
+      "description": "A subject event precedes an object event."
+    },
+    "after": {
+      "predicate": "after",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "object",
+          "required": true
+        }
+      ],
+      "description": "A subject event follows an object event."
+    },
+    "confirmed": {
+      "predicate": "confirmed",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        }
+      ],
+      "atLeastOneOf": [
+        "agent",
+        "theme"
+      ],
+      "description": "An action or transaction is confirmed by an agent or for a theme."
+    },
+    "confirm": {
+      "predicate": "confirm",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        }
+      ],
+      "atLeastOneOf": [
+        "agent",
+        "theme"
+      ],
+      "description": "An agent confirms an action or transaction."
+    },
+    "read": {
+      "predicate": "read",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent reads a document, record or resource."
+    },
+    "write": {
+      "predicate": "write",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent writes to a document, record or resource."
+    },
+    "update": {
+      "predicate": "update",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent updates or edits a document, record or resource."
+    },
+    "create": {
+      "predicate": "create",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent creates a document, record or resource."
+    },
+    "access": {
+      "predicate": "access",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent accesses a resource or place."
+    },
+    "archive": {
+      "predicate": "archive",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent archives a document, record or resource."
+    },
+    "store": {
+      "predicate": "store",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent stores or saves an item."
+    },
+    "approve": {
+      "predicate": "approve",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent approves a request, document or action."
+    },
+    "run": {
+      "predicate": "run",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent runs or executes a job, task or process."
+    },
+    "restart": {
+      "predicate": "restart",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        },
+        {
+          "name": "count",
+          "required": false,
+          "allowedTermTypes": [
+            "quantity"
+          ]
+        }
+      ],
+      "description": "An agent restarts a system, service or process, optionally a stated number of times (count)."
+    },
+    "share": {
+      "predicate": "share",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        },
+        {
+          "name": "recipient",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system",
+            "group",
+            "audience"
+          ]
+        }
+      ],
+      "description": "An agent shares a theme, optionally with a recipient."
+    },
+    "notify": {
+      "predicate": "notify",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "recipient",
+          "required": true,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system",
+            "group",
+            "audience"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": false
+        }
+      ],
+      "description": "An agent notifies a recipient, optionally about a theme."
+    },
+    "grant": {
+      "predicate": "grant",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "recipient",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system",
+            "group"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent grants a theme (access, a role, a credential) to a recipient."
+    },
+    "revoke": {
+      "predicate": "revoke",
+      "roles": [
+        {
+          "name": "agent",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system"
+          ]
+        },
+        {
+          "name": "recipient",
+          "required": false,
+          "allowedTermTypes": [
+            "actor",
+            "entity",
+            "system",
+            "group"
+          ]
+        },
+        {
+          "name": "theme",
+          "required": true
+        }
+      ],
+      "description": "An agent revokes a theme (access, a role, a credential) from a recipient."
+    },
+    "define": {
+      "predicate": "define",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "definition",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "required": false
+        },
+        {
+          "name": "location",
+          "required": false
+        },
+        {
+          "name": "reason",
+          "required": false
+        },
+        {
+          "name": "purpose",
+          "required": false
+        },
+        {
+          "name": "condition",
+          "required": false
+        },
+        {
+          "name": "manner",
+          "required": false
+        },
+        {
+          "name": "result",
+          "required": false
+        },
+        {
+          "name": "duration",
+          "required": false
+        },
+        {
+          "name": "connective",
+          "required": false
+        }
+      ],
+      "description": "A subject is defined as, identified as or classified as a definition (\"X is a Y\", \"X means Y\", \"X stands for Y\", \"X, also called Y\"). A subordinate clause stays whole, as words, in the adjunct role it plays (reason, purpose, condition, manner, result, scope)."
+    },
+    "describe": {
+      "predicate": "describe",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "attribute",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "required": false
+        },
+        {
+          "name": "location",
+          "required": false
+        },
+        {
+          "name": "reason",
+          "required": false
+        },
+        {
+          "name": "purpose",
+          "required": false
+        },
+        {
+          "name": "condition",
+          "required": false
+        },
+        {
+          "name": "manner",
+          "required": false
+        },
+        {
+          "name": "result",
+          "required": false
+        },
+        {
+          "name": "duration",
+          "required": false
+        },
+        {
+          "name": "connective",
+          "required": false
+        }
+      ],
+      "description": "A subject has a property, quality or possession (\"X is fast\", \"X has 128 GB of memory\", \"X is open source\", \"X is free for personal use\"). The attribute is everything the source says about the subject after the copula or have, except an adjunct phrase that has its own role."
+    },
+    "assert": {
+      "predicate": "assert",
+      "roles": [
+        {
+          "name": "subject",
+          "required": false
+        },
+        {
+          "name": "action",
+          "required": true,
+          "lexicalVerb": true
+        },
+        {
+          "name": "object",
+          "required": false
+        },
+        {
+          "name": "recipient",
+          "required": false
+        },
+        {
+          "name": "instrument",
+          "required": false
+        },
+        {
+          "name": "source",
+          "required": false
+        },
+        {
+          "name": "destination",
+          "required": false
+        },
+        {
+          "name": "scope",
+          "required": false
+        },
+        {
+          "name": "location",
+          "required": false
+        },
+        {
+          "name": "reason",
+          "required": false
+        },
+        {
+          "name": "purpose",
+          "required": false
+        },
+        {
+          "name": "condition",
+          "required": false
+        },
+        {
+          "name": "manner",
+          "required": false
+        },
+        {
+          "name": "result",
+          "required": false
+        },
+        {
+          "name": "duration",
+          "required": false
+        },
+        {
+          "name": "connective",
+          "required": false
+        }
+      ],
+      "atLeastOneOf": [
+        "subject",
+        "object"
+      ],
+      "description": "A subject does something, written as the source wrote it (\"X runs on your hardware\", \"X lets you pick a model\", \"Install the CLI\"). The subject is optional in imperatives. For is/are/has statements use define, describe, relate or quantify instead. A subordinate clause stays whole, as words, in the adjunct role it plays (reason: because...; purpose: to.../so that...; condition: if/when/unless...; manner; result; scope)."
+    },
+    "relate": {
+      "predicate": "relate",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "relation",
+          "required": true
+        },
+        {
+          "name": "object",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "required": false
+        },
+        {
+          "name": "location",
+          "required": false
+        },
+        {
+          "name": "reason",
+          "required": false
+        },
+        {
+          "name": "purpose",
+          "required": false
+        },
+        {
+          "name": "condition",
+          "required": false
+        },
+        {
+          "name": "manner",
+          "required": false
+        },
+        {
+          "name": "result",
+          "required": false
+        },
+        {
+          "name": "duration",
+          "required": false
+        },
+        {
+          "name": "connective",
+          "required": false
+        }
+      ],
+      "description": "A subject stands in a stated relation to an object (\"X is part of Y\", \"X depends on Y\", \"X is faster than Y\", \"X belongs to Y\"). The relation is the words between them, as written."
+    },
+    "enumerate": {
+      "predicate": "enumerate",
+      "roles": [
+        {
+          "name": "items",
+          "required": true,
+          "list": true
+        },
+        {
+          "name": "subject",
+          "required": false
+        }
+      ],
+      "description": "A list of items, optionally under a heading or label (\"Linux, macOS and Windows\", \"Platforms: Linux, macOS\"). Each item is a term copied from the source."
+    },
+    "quantify": {
+      "predicate": "quantify",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        },
+        {
+          "name": "amount",
+          "required": true,
+          "allowedTermTypes": [
+            "quantity",
+            "measure",
+            "range",
+            "date"
+          ]
+        },
+        {
+          "name": "scope",
+          "required": false
+        }
+      ],
+      "description": "A subject has a stated amount, count, size, price, version or date (\"128 GB of unified memory\", \"3 slots of 87,500 tokens\", \"Released 2026-10-01\"). The amount is a quantity term with its unit."
+    },
+    "topic": {
+      "predicate": "topic",
+      "roles": [
+        {
+          "name": "subject",
+          "required": true
+        }
+      ],
+      "description": "The unit only names a subject, shows a bare value or poses a question without asserting anything: a heading, label, title, menu item, caption, number or date shown on its own, or question (\"Memory and Recall\", \"Install\", \"2026-10-10\", \"Why does it matter?\")."
+    }
+  }
+}
