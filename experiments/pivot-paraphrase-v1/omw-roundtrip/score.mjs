@@ -2,7 +2,7 @@
 // OMW round-trip measurement: does pivot-miner (translate EN -> EL) rank a wordnet translation of the
 // English word among its top-5 single-word Greek candidates? Surface vs lemma mode, Europarl (primary)
 // and OpenSubtitles first 10M pairs (secondary). See PREREGISTRATION.md. No model calls.
-//   node score.mjs --corpora <dir> --out results.json
+//   node score.mjs --corpora <dir> --out results.json [--miner <binary>]
 import fs from 'node:fs';
 import os from 'node:os';
 import { spawnSync } from 'node:child_process';
@@ -10,8 +10,9 @@ import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const miner = resolve(here, '../../../tools/pivot-miner/target/release/pivot-miner');
 const arg = (k) => process.argv[process.argv.indexOf(k) + 1];
+// --miner: an explicit binary (amendment 1 reruns with the particle-form fix built separately).
+const miner = process.argv.includes('--miner') ? resolve(arg('--miner')) : resolve(here, '../../../tools/pivot-miner/target/release/pivot-miner');
 const C = arg('--corpora');
 const { items } = JSON.parse(fs.readFileSync(join(here, 'items.json'), 'utf8'));
 const tmp = fs.mkdtempSync(join(os.tmpdir(), 'omw-rt-'));

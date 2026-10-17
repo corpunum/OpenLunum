@@ -40,3 +40,11 @@ This is a measurement of the tool, the corpus layer under the owner's "meaning, 
 ## Prediction (written before running)
 
 Surface top-5 around 0.45, lemma top-5 around 0.60: H1 passes, H2 is a coin flip because of the gold's gaps. OpenSubtitles lower than Europarl for this parliamentary-frequency sample.
+
+## Amendment 1 (2026-10-17, while the original run was in progress and before any of its results were seen): particle-form rerun
+
+The [pro-drop replay](../../../experiments/prodrop-replay-v1/README.md) found that UniMorph Greek stores subjunctive and future forms with their particle («να καλέσω», «θα καλέσουμε»), and the miner's lemma loader skipped every such two-word form. Fixed in `lemma_map` (keep the verb after «θα / να / ας»), with a test. The original run continues unchanged, with the binary built at commit `26c1e3c`.
+
+- A **second, complete run** (all four configurations, same items, same scorer) uses the fixed binary, built separately: `score.mjs --miner <v2 binary> --out results-v2.json`.
+- **The bars and verdicts stay on the original run** (`results.json`). The v2 run is reported next to it with no bar of its own; the question is only how much the fix moves top-5. Prediction: little, because the items are single dictionary words and subjunctive forms rarely win a top-5 slot.
+- Scheduled with the rig coordinator (corpunum-6b) under `flock ~/.cache/rig-heavy.lock`.

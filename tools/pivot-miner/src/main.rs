@@ -54,7 +54,10 @@ pub fn lemma_map<I: IntoIterator<Item = String>>(rows: I) -> HashMap<String, Str
     for row in rows {
         let f: Vec<&str> = row.split('\t').collect();
         if f.len() < 3 { continue; }
-        let (lemma, form) = (tokenize(f[0]).join(" "), tokenize(f[1]).join(" "));
+        // Greek subjunctive/future forms are stored with their particle («να καλέσω», «θα καλέσω»): keep the verb.
+        let mut ft = tokenize(f[1]);
+        if ft.len() == 2 && ["θα", "να", "ασ"].contains(&ft[0].as_str()) { ft.remove(0); }
+        let (lemma, form) = (tokenize(f[0]).join(" "), ft.join(" "));
         if lemma.is_empty() || form.is_empty() || lemma.contains(' ') || form.contains(' ') { continue; }
         let pos = f[2].split(';').next().unwrap_or("").to_string();
         let next = labels.len();
@@ -525,6 +528,9 @@ mod tests {
         assert_eq!(m["τηλεφωναει"], "τηλεφωναω");
         assert_eq!(m["τηλεφωνησε"], "τηλεφωναω"); // one class for both variants
         assert_eq!(m["αστυνομιασ"], "αστυνομια");
+        let sub = lemma_map(["καλώ\tνα καλέσω\tV;1;SG;PFV;SBJV", "καλώ\tθα καλέσουμε\tV;1;PL;PFV;FUT"].iter().map(|s| s.to_string()));
+        assert_eq!(sub["καλεσω"], "καλω"); // particle forms (pro-drop replay, 2026-10-17)
+        assert_eq!(sub["καλεσουμε"], "καλω");
         let el = Side::build_with(["Κάλεσα την αστυνομία", "τηλεφώνησε στην αστυνομίας"].iter().map(|s| s.to_string()), Some(std::rc::Rc::new(m)));
         assert_eq!(el.find(&el.ids("καλώ την αστυνομία").unwrap()), vec![0]);
         assert_eq!(el.find(&el.ids("τηλεφωνάει").unwrap()), vec![1]);
