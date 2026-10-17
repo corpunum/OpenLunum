@@ -1,0 +1,49 @@
+{"handle":"rt1-21ee8c3c73c438c5","code":"R send(agent=tom, recipient=his dog, object=a bone)"}
+{"handle":"rt1-80fff37760ddb1f7","code":"R not describe(subject=French, attribute=easy language)"}
+{"handle":"rt1-ef42e8f2ea46b931","code":"R define(subject=My hobby, definition=stamp collecting)"}
+{"handle":"rt1-145ed0f688085a63","code":"R describe(subject=tom, attribute=swims very fast)"}
+{"handle":"rt1-e6fa9096b36b1cb7","code":"R describe(subject=Many inhabitants of the United States, attribute=speak Spanish)"}
+{"handle":"rt1-e45500e37df4fcab","code":"R describe(subject=tom, attribute=kind to me)"}
+{"handle":"rt1-8585c49041465b2f","code":"R describe(subject=tom, attribute=has relatives in Boston)"}
+{"handle":"rt1-ec5d665cf46af17c","code":"R describe(subject=tom, location=third floor, attribute=lives)"}
+{"handle":"rt1-dca84bc54d48ba77","code":"R describe(subject=This bread, attribute=hard as a rock)"}
+{"handle":"rt1-0465c71e7bf5b17a","code":"R describe(subject=the earth, attribute=round, connective=It is true that)"}
+{"handle":"rt1-719b23f93d324ff2","code":"R describe(subject=Tom, attribute=has good teachers)"}
+{"handle":"rt1-07caec7e176c1b1a","code":"R define(subject=Tom, definition=murderer)"}
+{"handle":"rt1-a33c946ed5f5333f","code":"R describe(subject=This room, attribute=has three windows)"}
+{"handle":"rt1-2f9f04665331ab23","code":"R describe(subject=Tom, attribute=proud of Mary)"}
+{"handle":"rt1-141f350018b96aef","code":"R describe(subject=Breakfast, attribute=very good)"}
+{"handle":"rt1-81ffbf8dbaecd91e","code":"R describe(subject=Tom's house, attribute=very big)"}
+{"handle":"rt1-270d0d6f09fe3a31","code":"R notify(recipient=tom, theme=he can't go to Mary's party)"}
+{"handle":"rt1-827d403c27a3daa1","code":"R request(agent=tom, theme=if I were hungry)"}
+{"handle":"rt1-83f9d84b12757ca3","code":"R define(subject=Tom, definition=my oldest brother)"}
+{"handle":"rt1-0da5c0bc435a3921","code":"R relate(subject=That girl over there, object=someone I used to know, relation=reminds me of)"}
+{"handle":"rt1-8764585aa9e7be16","code":"R topic(subject=you like cheese)"}
+{"handle":"rt1-e7fc32d7711d4823","code":"R describe(subject=The old man, attribute=lives by himself)"}
+{"handle":"rt1-1a4f8c889e2a130b","code":"R describe(subject=Several candles, attribute=burning)"}
+{"handle":"rt1-967475f5097f8d1b","code":"R prefer(experiencer=tom, theme=become rich)"}
+{"handle":"rt1-0b9239b32d1dc232","code":"R assert(subject=Our dog, object=a skull, action=dug up)"}
+{"handle":"rt1-b20e4389061cb5e9","code":"R describe(subject=the park, attribute=There were a lot of people)"}
+{"handle":"rt1-0118786791ee79b6","code":"R define(subject=Mary, definition=my wife)"}
+{"handle":"rt1-fa3a72de2e1ddad8","code":"R describe(subject=case, attribute=closed)"}
+{"handle":"rt1-dcb1fe91d24cece8","code":"R describe(subject=room, attribute=warm)"}
+{"handle":"rt1-d2e087f546c5ca6a","code":"B believe(experiencer=I, theme=Tom is fair)"}
+{"handle":"rt1-fd6c490e14a7e61a","code":"R assert(subject=tom, location=through the back door, action=left)"}
+{"handle":"rt1-88e18f2aaab98cd0","code":"R define(subject=Tom, definition=my husband)"}
+{"handle":"rt1-836a32b287788036","code":"R intention describe(subject=tom, attribute=ready in October)"}
+{"handle":"rt1-6ad294f1a7ad590c","code":"R prefer(experiencer=I, theme=live in the city)"}
+{"handle":"rt1-7c5da79c1b7db828","code":"R relate(subject=Mary, object=Tom, relation=wife)"}
+{"handle":"rt1-7fc7259dfbac19a7","code":"R not assert(subject=tom, object=red meat, action=eat)"}
+{"handle":"rt1-69694cdab834b080","code":"B believe(experiencer=tom, theme=he's right)"}
+{"handle":"rt1-525715f9de9ae696","code":"R above(subject=tom, value=80 kilos)"}
+{"handle":"rt1-46d4866a101586b2","code":"R define(subject=United States of America, definition=democratic country)"}
+{"handle":"rt1-6fa0a95f0e056061","code":"R describe(subject=I, attribute=have a cat)"}
+{"handle":"rt1-debe2408a81a527f","code":"R define(subject=Amsterdam, definition=capital of the Netherlands)"}
+{"handle":"rt1-291a2fc27caff8b8","code":"R read(agent=tom, theme=newspaper)"}
+{"handle":"rt1-f21c46a4224de44c","code":"R not read(agent=tom, theme=mary)"}
+{"handle":"rt1-53544f7e465c7787","code":"R describe(subject=My name, location=my country, attribute=very rare)"}
+{"handle":"rt1-b0a498df4b48a2fd","code":"R describe(subject=pen, attribute=broken)"}
+{"handle":"rt1-041cdd0efc38b373","code":"R prefer(experiencer=tom, theme=study in Boston)"}
+{"handle":"rt1-e81b3b628aa29a40","code":"R describe(subject=My sons, attribute=have grown up)"}
+{"handle":"rt1-87f723ec77ba62d4","code":"R send(agent=tom, recipient=mary, object=gift)"}
+{"handle":"rt1-35faed4ed3edbccb","code":"R relate(subject=Tom, object=Mary, relation=was with, duration=all afternoon)"}

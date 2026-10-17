@@ -1,0 +1,267 @@
+{
+ "profile": "generic-en-pivot/0.2",
+ "tally": {
+  "items": 200,
+  "ran": 200,
+  "parse": 78,
+  "abstain": 122,
+  "failed": 0,
+  "invalid": 1,
+  "copy": 29,
+  "covered": 49
+ },
+ "bar1": {
+  "covered": 49,
+  "equal": 49,
+  "pass": true,
+  "mismatches": []
+ },
+ "verdictPossible": true,
+ "renders": [
+  {
+   "handle": "rt1-21ee8c3c73c438c5",
+   "lfp": "lfp:2.1:sha256:c329b9357b672df8bb3d4f2d5c254f8d",
+   "code": "R send(agent=tom, recipient=his dog, object=a bone)"
+  },
+  {
+   "handle": "rt1-80fff37760ddb1f7",
+   "lfp": "lfp:2.1:sha256:17f76aaeb5f6dee0b8f58ae312255a0e",
+   "code": "R not describe(subject=French, attribute=easy language)"
+  },
+  {
+   "handle": "rt1-ef42e8f2ea46b931",
+   "lfp": "lfp:2.1:sha256:37be4222756eb12a68c55b00d183b3cd",
+   "code": "R define(subject=My hobby, definition=stamp collecting)"
+  },
+  {
+   "handle": "rt1-145ed0f688085a63",
+   "lfp": "lfp:2.1:sha256:a65792dff3ed560e6099068e9569cb1d",
+   "code": "R describe(subject=tom, attribute=swims very fast)"
+  },
+  {
+   "handle": "rt1-e6fa9096b36b1cb7",
+   "lfp": "lfp:2.1:sha256:df486fa2bd93fa948b86ddabe736186c",
+   "code": "R describe(subject=Many inhabitants of the United States, attribute=speak Spanish)"
+  },
+  {
+   "handle": "rt1-e45500e37df4fcab",
+   "lfp": "lfp:2.1:sha256:1852c4412d736b6cb0f2edbe0b34bf3a",
+   "code": "R describe(subject=tom, attribute=kind to me)"
+  },
+  {
+   "handle": "rt1-8585c49041465b2f",
+   "lfp": "lfp:2.1:sha256:24bdc36cb789f4d1e67dbc744986a01f",
+   "code": "R describe(subject=tom, attribute=has relatives in Boston)"
+  },
+  {
+   "handle": "rt1-ec5d665cf46af17c",
+   "lfp": "lfp:2.1:sha256:a57a22077a204f853b14e6a6411091d4",
+   "code": "R describe(subject=tom, location=third floor, attribute=lives)"
+  },
+  {
+   "handle": "rt1-dca84bc54d48ba77",
+   "lfp": "lfp:2.1:sha256:b6a3d2c7dd88dc59b156545e8bc96a6f",
+   "code": "R describe(subject=This bread, attribute=hard as a rock)"
+  },
+  {
+   "handle": "rt1-0465c71e7bf5b17a",
+   "lfp": "lfp:2.1:sha256:ff63dd3bea32a9b397e4c6d71e96c1d3",
+   "code": "R describe(subject=the earth, attribute=round, connective=It is true that)"
+  },
+  {
+   "handle": "rt1-719b23f93d324ff2",
+   "lfp": "lfp:2.1:sha256:098a8f002a07b4f4f202ecf1001c80d8",
+   "code": "R describe(subject=Tom, attribute=has good teachers)"
+  },
+  {
+   "handle": "rt1-07caec7e176c1b1a",
+   "lfp": "lfp:2.1:sha256:26d5a0985f902e7f97628f01e77eb070",
+   "code": "R define(subject=Tom, definition=murderer)"
+  },
+  {
+   "handle": "rt1-a33c946ed5f5333f",
+   "lfp": "lfp:2.1:sha256:b3cd5f8fbcc2f620e1d8974b40adbf36",
+   "code": "R describe(subject=This room, attribute=has three windows)"
+  },
+  {
+   "handle": "rt1-2f9f04665331ab23",
+   "lfp": "lfp:2.1:sha256:15616a3d131d378d059bb1803a8b511d",
+   "code": "R describe(subject=Tom, attribute=proud of Mary)"
+  },
+  {
+   "handle": "rt1-141f350018b96aef",
+   "lfp": "lfp:2.1:sha256:522e9fcc17de2101a6812bd7074545cd",
+   "code": "R describe(subject=Breakfast, attribute=very good)"
+  },
+  {
+   "handle": "rt1-81ffbf8dbaecd91e",
+   "lfp": "lfp:2.1:sha256:e4cee5bc6522c0daf0caaf0ea47a4bb7",
+   "code": "R describe(subject=Tom's house, attribute=very big)"
+  },
+  {
+   "handle": "rt1-270d0d6f09fe3a31",
+   "lfp": "lfp:2.1:sha256:35560310c310df9af3d7db7c12b4aacd",
+   "code": "R notify(recipient=tom, theme=he can't go to Mary's party)"
+  },
+  {
+   "handle": "rt1-827d403c27a3daa1",
+   "lfp": "lfp:2.1:sha256:6faa75580ef4555f3cd0990ca03fc64c",
+   "code": "R request(agent=tom, theme=if I were hungry)"
+  },
+  {
+   "handle": "rt1-83f9d84b12757ca3",
+   "lfp": "lfp:2.1:sha256:e424ba0925349cb751f15aec0e7863f0",
+   "code": "R define(subject=Tom, definition=my oldest brother)"
+  },
+  {
+   "handle": "rt1-0da5c0bc435a3921",
+   "lfp": "lfp:2.1:sha256:5e81fe59d03f4b9b650bc8493f96ff7e",
+   "code": "R relate(subject=That girl over there, object=someone I used to know, relation=reminds me of)"
+  },
+  {
+   "handle": "rt1-8764585aa9e7be16",
+   "lfp": "lfp:2.1:sha256:034d4ebe15a591e70360c05997bef111",
+   "code": "R topic(subject=you like cheese)"
+  },
+  {
+   "handle": "rt1-e7fc32d7711d4823",
+   "lfp": "lfp:2.1:sha256:2c2ceb0757b75876030fa3d742a4fa9b",
+   "code": "R describe(subject=The old man, attribute=lives by himself)"
+  },
+  {
+   "handle": "rt1-1a4f8c889e2a130b",
+   "lfp": "lfp:2.1:sha256:6b694bb528d04cd17dca3ee6b46d06eb",
+   "code": "R describe(subject=Several candles, attribute=burning)"
+  },
+  {
+   "handle": "rt1-967475f5097f8d1b",
+   "lfp": "lfp:2.1:sha256:addc0f17173e90870db313cd85b082d3",
+   "code": "R prefer(experiencer=tom, theme=become rich)"
+  },
+  {
+   "handle": "rt1-0b9239b32d1dc232",
+   "lfp": "lfp:2.1:sha256:07e20b64c7962ec91f6f12aa0b0d21a4",
+   "code": "R assert(subject=Our dog, object=a skull, action=dug up)"
+  },
+  {
+   "handle": "rt1-b20e4389061cb5e9",
+   "lfp": "lfp:2.1:sha256:0f77b03a1c90729ab94273e5483563c9",
+   "code": "R describe(subject=the park, attribute=There were a lot of people)"
+  },
+  {
+   "handle": "rt1-0118786791ee79b6",
+   "lfp": "lfp:2.1:sha256:e89afacfb9371832175b369196281fb2",
+   "code": "R define(subject=Mary, definition=my wife)"
+  },
+  {
+   "handle": "rt1-fa3a72de2e1ddad8",
+   "lfp": "lfp:2.1:sha256:3e24935736a4c71591e0cee7d005f9b2",
+   "code": "R describe(subject=case, attribute=closed)"
+  },
+  {
+   "handle": "rt1-dcb1fe91d24cece8",
+   "lfp": "lfp:2.1:sha256:4e7f55dda4cea898826268ebe4b7d6a7",
+   "code": "R describe(subject=room, attribute=warm)"
+  },
+  {
+   "handle": "rt1-d2e087f546c5ca6a",
+   "lfp": "lfp:2.1:sha256:aeaadf82032fda043b3b959e08967424",
+   "code": "B believe(experiencer=I, theme=Tom is fair)"
+  },
+  {
+   "handle": "rt1-fd6c490e14a7e61a",
+   "lfp": "lfp:2.1:sha256:5483f288612a12ef972624563ed745a7",
+   "code": "R assert(subject=tom, location=through the back door, action=left)"
+  },
+  {
+   "handle": "rt1-88e18f2aaab98cd0",
+   "lfp": "lfp:2.1:sha256:23d639ac65fd408f68633dd46403a49a",
+   "code": "R define(subject=Tom, definition=my husband)"
+  },
+  {
+   "handle": "rt1-836a32b287788036",
+   "lfp": "lfp:2.1:sha256:2f699fc925846479365f3ab1449766c3",
+   "code": "R intention describe(subject=tom, attribute=ready in October)"
+  },
+  {
+   "handle": "rt1-6ad294f1a7ad590c",
+   "lfp": "lfp:2.1:sha256:3db410bd1c3b11a3d549d91f9eb38dae",
+   "code": "R prefer(experiencer=I, theme=live in the city)"
+  },
+  {
+   "handle": "rt1-7c5da79c1b7db828",
+   "lfp": "lfp:2.1:sha256:da24365797d4c5ab2a828db51db06841",
+   "code": "R relate(subject=Mary, object=Tom, relation=wife)"
+  },
+  {
+   "handle": "rt1-7fc7259dfbac19a7",
+   "lfp": "lfp:2.1:sha256:3d932b11277e1be86b0e9b582e2112dd",
+   "code": "R not assert(subject=tom, object=red meat, action=eat)"
+  },
+  {
+   "handle": "rt1-69694cdab834b080",
+   "lfp": "lfp:2.1:sha256:f56785e116e258010e1b6f6a0ebde54a",
+   "code": "B believe(experiencer=tom, theme=he's right)"
+  },
+  {
+   "handle": "rt1-525715f9de9ae696",
+   "lfp": "lfp:2.1:sha256:3f8b02d376b343dc39a0d5734bc4f346",
+   "code": "R above(subject=tom, value=80 kilos)"
+  },
+  {
+   "handle": "rt1-46d4866a101586b2",
+   "lfp": "lfp:2.1:sha256:09f0bb59f2fd399dd5f203ee0596dad7",
+   "code": "R define(subject=United States of America, definition=democratic country)"
+  },
+  {
+   "handle": "rt1-6fa0a95f0e056061",
+   "lfp": "lfp:2.1:sha256:490609eecd4decda0bba48fac2822a7b",
+   "code": "R describe(subject=I, attribute=have a cat)"
+  },
+  {
+   "handle": "rt1-debe2408a81a527f",
+   "lfp": "lfp:2.1:sha256:011d12d9d46824ac4b4e91fd009ceb6c",
+   "code": "R define(subject=Amsterdam, definition=capital of the Netherlands)"
+  },
+  {
+   "handle": "rt1-291a2fc27caff8b8",
+   "lfp": "lfp:2.1:sha256:86524b1b9abb745b9c388a4922ef5541",
+   "code": "R read(agent=tom, theme=newspaper)"
+  },
+  {
+   "handle": "rt1-f21c46a4224de44c",
+   "lfp": "lfp:2.1:sha256:2057c1517515bc694bf79a292ac4706e",
+   "code": "R not read(agent=tom, theme=mary)"
+  },
+  {
+   "handle": "rt1-53544f7e465c7787",
+   "lfp": "lfp:2.1:sha256:57a9f6e8aefa42fa46741a33178c45df",
+   "code": "R describe(subject=My name, location=my country, attribute=very rare)"
+  },
+  {
+   "handle": "rt1-b0a498df4b48a2fd",
+   "lfp": "lfp:2.1:sha256:e01d6aa962d1d2ece22456fa70f62833",
+   "code": "R describe(subject=pen, attribute=broken)"
+  },
+  {
+   "handle": "rt1-041cdd0efc38b373",
+   "lfp": "lfp:2.1:sha256:30eb483526ef5166d7e17bbfb5c85a19",
+   "code": "R prefer(experiencer=tom, theme=study in Boston)"
+  },
+  {
+   "handle": "rt1-e81b3b628aa29a40",
+   "lfp": "lfp:2.1:sha256:b2a7f74871b966a62f51d8de151eec44",
+   "code": "R describe(subject=My sons, attribute=have grown up)"
+  },
+  {
+   "handle": "rt1-87f723ec77ba62d4",
+   "lfp": "lfp:2.1:sha256:b47750bb9da0380c528eb2520d7e2321",
+   "code": "R send(agent=tom, recipient=mary, object=gift)"
+  },
+  {
+   "handle": "rt1-35faed4ed3edbccb",
+   "lfp": "lfp:2.1:sha256:83b77b07972f30cb73f342350dbf129d",
+   "code": "R relate(subject=Tom, object=Mary, relation=was with, duration=all afternoon)"
+  }
+ ]
+}
