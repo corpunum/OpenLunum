@@ -1,0 +1,2616 @@
+{
+ "seed": "pivot-omw-roundtrip-v1:2026-10-17",
+ "n": 300,
+ "band": [
+  20,
+  20000
+ ],
+ "omwArchiveSha256": "c369a2ad773a31e182ac4cc753132fa7c31ad423586d6783bacce08090cb8d7d",
+ "englishWithGreek": 13931,
+ "eligible": 4893,
+ "items": [
+  {
+   "en": "better",
+   "europarlLines": 14095,
+   "gold": [
+    "βελτιωνομαι",
+    "βελτιωνω"
+   ]
+  },
+  {
+   "en": "importing",
+   "europarlLines": 281,
+   "gold": [
+    "εισαγωγη"
+   ]
+  },
+  {
+   "en": "island",
+   "europarlLines": 1214,
+   "gold": [
+    "νησι",
+    "νησιδα"
+   ]
+  },
+  {
+   "en": "announcement",
+   "europarlLines": 636,
+   "gold": [
+    "ανακοινωση",
+    "ευαγγελισμοσ"
+   ]
+  },
+  {
+   "en": "sing",
+   "europarlLines": 42,
+   "gold": [
+    "σφυριζω",
+    "τραγουδω"
+   ]
+  },
+  {
+   "en": "shoes",
+   "europarlLines": 118,
+   "gold": [
+    "θεση"
+   ]
+  },
+  {
+   "en": "completion",
+   "europarlLines": 710,
+   "gold": [
+    "αποτελειωμα",
+    "περατωση",
+    "συμπληρωση"
+   ]
+  },
+  {
+   "en": "calamity",
+   "europarlLines": 29,
+   "gold": [
+    "δραμα",
+    "τραγωδια"
+   ]
+  },
+  {
+   "en": "calendar",
+   "europarlLines": 270,
+   "gold": [
+    "ημερολογιο"
+   ]
+  },
+  {
+   "en": "mistrust",
+   "europarlLines": 189,
+   "gold": [
+    "αμφιβαλλω",
+    "δυσπιστια",
+    "δυσπιστω",
+    "καχυποψια"
+   ]
+  },
+  {
+   "en": "prudence",
+   "europarlLines": 138,
+   "gold": [
+    "προνοητικοτητα",
+    "προνοια"
+   ]
+  },
+  {
+   "en": "penultimate",
+   "europarlLines": 23,
+   "gold": [
+    "παραληγουσα"
+   ]
+  },
+  {
+   "en": "brazil",
+   "europarlLines": 986,
+   "gold": [
+    "βραζιλια"
+   ]
+  },
+  {
+   "en": "plunder",
+   "europarlLines": 43,
+   "gold": [
+    "απογυμνωνω",
+    "λεηλατω",
+    "λεια"
+   ]
+  },
+  {
+   "en": "deprivation",
+   "europarlLines": 99,
+   "gold": [
+    "απωλεια"
+   ]
+  },
+  {
+   "en": "fake",
+   "europarlLines": 92,
+   "gold": [
+    "πλανη",
+    "πλαστογραφω"
+   ]
+  },
+  {
+   "en": "final",
+   "europarlLines": 6175,
+   "gold": [
+    "τελικοσ"
+   ]
+  },
+  {
+   "en": "lessen",
+   "europarlLines": 85,
+   "gold": [
+    "ελαττωνω",
+    "μειωνω",
+    "περιοριζω"
+   ]
+  },
+  {
+   "en": "shorten",
+   "europarlLines": 78,
+   "gold": [
+    "κονταινω",
+    "μικραινω"
+   ]
+  },
+  {
+   "en": "territory",
+   "europarlLines": 2491,
+   "gold": [
+    "κλαδοσ",
+    "περιφερεια",
+    "τομεασ"
+   ]
+  },
+  {
+   "en": "negotiate",
+   "europarlLines": 1166,
+   "gold": [
+    "διαπραγματευομαι"
+   ]
+  },
+  {
+   "en": "cat",
+   "europarlLines": 114,
+   "gold": [
+    "αιλουροειδεσ",
+    "γατα",
+    "γατι",
+    "εξεμω",
+    "ξερνω"
+   ]
+  },
+  {
+   "en": "candle",
+   "europarlLines": 23,
+   "gold": [
+    "κερι"
+   ]
+  },
+  {
+   "en": "focussing",
+   "europarlLines": 48,
+   "gold": [
+    "επικεντρο",
+    "κεντρο"
+   ]
+  },
+  {
+   "en": "discipline",
+   "europarlLines": 697,
+   "gold": [
+    "2υποταγη",
+    "εκπαιδευω",
+    "ευπειθεια",
+    "κλαδοσ",
+    "πειθαρχια",
+    "πειθαρχω",
+    "υπακοη"
+   ]
+  },
+  {
+   "en": "lawmaking",
+   "europarlLines": 145,
+   "gold": [
+    "θεσμοθεσια",
+    "νομοθεσια",
+    "νομοθετηση"
+   ]
+  },
+  {
+   "en": "assure",
+   "europarlLines": 1750,
+   "gold": [
+    "διαβεβαιωνω",
+    "εξασφαλιζω",
+    "σιγουρευω",
+    "υποσχομαι"
+   ]
+  },
+  {
+   "en": "compatibility",
+   "europarlLines": 324,
+   "gold": [
+    "συμβατοτητα"
+   ]
+  },
+  {
+   "en": "pioneer",
+   "europarlLines": 65,
+   "gold": [
+    "πρωτοπορω"
+   ]
+  },
+  {
+   "en": "displace",
+   "europarlLines": 22,
+   "gold": [
+    "απολυω",
+    "μετακινω",
+    "μετατοπιζω"
+   ]
+  },
+  {
+   "en": "crossing",
+   "europarlLines": 375,
+   "gold": [
+    "διασταυρωση"
+   ]
+  },
+  {
+   "en": "pass",
+   "europarlLines": 1626,
+   "gold": [
+    "ανακοινωνω",
+    "απεκκρινω",
+    "αχνοσβηνω",
+    "γινεται",
+    "δερβενι",
+    "διαπερνω",
+    "δινω",
+    "δοκιμη",
+    "δυσκολια",
+    "δυσχερεια",
+    "εξουσιοδοτω",
+    "θεσμοθετω",
+    "καταλαμβανω",
+    "κλεισουρα",
+    "ξεθωριαζω",
+    "παρερχομαι",
+    "πασαρω",
+    "πεθαινω",
+    "περασμα",
+    "περιερχομαι",
+    "περνω",
+    "πραγματοποιειται",
+    "προσπερνω",
+    "προχωρω",
+    "στενο",
+    "στριμωγμα",
+    "συμβαινει",
+    "ψοφαω"
+   ]
+  },
+  {
+   "en": "separate",
+   "europarlLines": 1825,
+   "gold": [
+    "διαφοροποιω",
+    "διαχωριζω",
+    "κινουμαι",
+    "ξεχωριζω",
+    "σπαζω",
+    "τακτοποιω",
+    "τεμαχιζω",
+    "χωριζομαι",
+    "χωριζω"
+   ]
+  },
+  {
+   "en": "sinking",
+   "europarlLines": 112,
+   "gold": [
+    "καταρρευση",
+    "πτωση",
+    "σωριασμα"
+   ]
+  },
+  {
+   "en": "authorization",
+   "europarlLines": 158,
+   "gold": [
+    "εξουσια",
+    "εξουσιοδοτηση"
+   ]
+  },
+  {
+   "en": "academic",
+   "europarlLines": 417,
+   "gold": [
+    "ακαδημαικοσ"
+   ]
+  },
+  {
+   "en": "dump",
+   "europarlLines": 68,
+   "gold": [
+    "αδειαζω",
+    "απορριπτω",
+    "βουτω",
+    "νταμπ",
+    "πετω",
+    "πεφτω"
+   ]
+  },
+  {
+   "en": "resultant",
+   "europarlLines": 58,
+   "gold": [
+    "αποληξη",
+    "αποτελεσμα",
+    "εκβαση",
+    "επακολουθο",
+    "καταληξη"
+   ]
+  },
+  {
+   "en": "expect",
+   "europarlLines": 3982,
+   "gold": [
+    "αναμενω",
+    "απαιτω",
+    "εγκυμονω",
+    "κυοφορω",
+    "περιμενω",
+    "προβλεπω",
+    "προσδοκω",
+    "προσμενω"
+   ]
+  },
+  {
+   "en": "objectivity",
+   "europarlLines": 139,
+   "gold": [
+    "αντικειμενικοτητα"
+   ]
+  },
+  {
+   "en": "saying",
+   "europarlLines": 5295,
+   "gold": [
+    "εκφραση"
+   ]
+  },
+  {
+   "en": "depart",
+   "europarlLines": 110,
+   "gold": [
+    "αναχωρω",
+    "αποσυρομαι",
+    "αφηνω",
+    "εγκαταλειπω",
+    "ξεκινω",
+    "φευγω"
+   ]
+  },
+  {
+   "en": "rely",
+   "europarlLines": 857,
+   "gold": [
+    "εμπιστευομαι",
+    "πιστευω"
+   ]
+  },
+  {
+   "en": "calm",
+   "europarlLines": 371,
+   "gold": [
+    "γαληνευω",
+    "ηρεμω",
+    "ησυχαζω",
+    "καθησυχαζω",
+    "καλμαρω",
+    "καταλαγιαζω",
+    "καταπραυνω",
+    "κατευναζω"
+   ]
+  },
+  {
+   "en": "incorporation",
+   "europarlLines": 291,
+   "gold": [
+    "ενσωματωση",
+    "ενταξη"
+   ]
+  },
+  {
+   "en": "czechoslovakia",
+   "europarlLines": 54,
+   "gold": [
+    "τσεχοσλοβακια"
+   ]
+  },
+  {
+   "en": "direction",
+   "europarlLines": 4699,
+   "gold": [
+    "διοικηση",
+    "επικεντρο",
+    "καθοδηγηση",
+    "κατευθυνση",
+    "κεντρο",
+    "οδηγια",
+    "οδηγιεσ",
+    "συμβουλη"
+   ]
+  },
+  {
+   "en": "predict",
+   "europarlLines": 265,
+   "gold": [
+    "προβλεπω",
+    "προλεγω",
+    "προμαντευω",
+    "προφητευω"
+   ]
+  },
+  {
+   "en": "statistics",
+   "europarlLines": 2000,
+   "gold": [
+    "στατιστικη"
+   ]
+  },
+  {
+   "en": "stuff",
+   "europarlLines": 71,
+   "gold": [
+    "αντικειμενο",
+    "μικροαντικειμενα",
+    "πραγμα",
+    "υλικο",
+    "χοντραινω"
+   ]
+  },
+  {
+   "en": "suspension",
+   "europarlLines": 565,
+   "gold": [
+    "αιωρημα",
+    "αναβολη",
+    "αναπαυλα",
+    "διαλειμμα",
+    "εναιωρηση",
+    "σταματημα"
+   ]
+  },
+  {
+   "en": "uruguay",
+   "europarlLines": 127,
+   "gold": [
+    "ουρουγουαη"
+   ]
+  },
+  {
+   "en": "race",
+   "europarlLines": 665,
+   "gold": [
+    "αγωνασ",
+    "ρατσα",
+    "τρεχω"
+   ]
+  },
+  {
+   "en": "uncover",
+   "europarlLines": 42,
+   "gold": [
+    "αποκαλυπτω",
+    "εκθετω",
+    "εμφανιζω",
+    "ξεσκεπαζω",
+    "φανερωνω"
+   ]
+  },
+  {
+   "en": "function",
+   "europarlLines": 1638,
+   "gold": [
+    "αντιστοιχηση",
+    "απεικονιση",
+    "εκδηλωση",
+    "εξυπηρετω",
+    "λειτουργημα",
+    "λειτουργια",
+    "λειτουργω",
+    "συμβαν"
+   ]
+  },
+  {
+   "en": "welsh",
+   "europarlLines": 69,
+   "gold": [
+    "φεσωνω"
+   ]
+  },
+  {
+   "en": "invoke",
+   "europarlLines": 128,
+   "gold": [
+    "επικαλουμαι"
+   ]
+  },
+  {
+   "en": "bavaria",
+   "europarlLines": 98,
+   "gold": [
+    "βαβαρια",
+    "βαυαρια"
+   ]
+  },
+  {
+   "en": "insecurity",
+   "europarlLines": 491,
+   "gold": [
+    "ανασφαλεια"
+   ]
+  },
+  {
+   "en": "horse",
+   "europarlLines": 270,
+   "gold": [
+    "αλογο",
+    "ιπποσ"
+   ]
+  },
+  {
+   "en": "reputation",
+   "europarlLines": 437,
+   "gold": [
+    "φημη"
+   ]
+  },
+  {
+   "en": "segment",
+   "europarlLines": 88,
+   "gold": [
+    "τμημα"
+   ]
+  },
+  {
+   "en": "potato",
+   "europarlLines": 136,
+   "gold": [
+    "πατατα"
+   ]
+  },
+  {
+   "en": "delude",
+   "europarlLines": 68,
+   "gold": [
+    "εξαπατω"
+   ]
+  },
+  {
+   "en": "italy",
+   "europarlLines": 3228,
+   "gold": [
+    "ιταλια"
+   ]
+  },
+  {
+   "en": "vanity",
+   "europarlLines": 28,
+   "gold": [
+    "κενοδοξια",
+    "ματαιοδοξια",
+    "ματαιοφροσυνη"
+   ]
+  },
+  {
+   "en": "andalusia",
+   "europarlLines": 80,
+   "gold": [
+    "ανδαλουσια"
+   ]
+  },
+  {
+   "en": "hormone",
+   "europarlLines": 161,
+   "gold": [
+    "ορμονη"
+   ]
+  },
+  {
+   "en": "distribute",
+   "europarlLines": 213,
+   "gold": [
+    "διαδιδω",
+    "διανεμω",
+    "κατανεμω",
+    "κοινολογω",
+    "μοιραζω",
+    "προσφερω",
+    "σκορπω"
+   ]
+  },
+  {
+   "en": "sword",
+   "europarlLines": 46,
+   "gold": [
+    "ξιφοσ",
+    "σπαθι"
+   ]
+  },
+  {
+   "en": "mozambique",
+   "europarlLines": 143,
+   "gold": [
+    "μοζαμβικη"
+   ]
+  },
+  {
+   "en": "descent",
+   "europarlLines": 37,
+   "gold": [
+    "καταβαση",
+    "καταγωγη",
+    "κατεβασμα",
+    "κατηφορα",
+    "προγονοι"
+   ]
+  },
+  {
+   "en": "convening",
+   "europarlLines": 79,
+   "gold": [
+    "συνδιασκεψη",
+    "συνεδριο"
+   ]
+  },
+  {
+   "en": "determination",
+   "europarlLines": 2006,
+   "gold": [
+    "αποφαση",
+    "αποφασιστικοτητα",
+    "καθορισμοσ",
+    "προσδιορισμοσ",
+    "συμπερασμα"
+   ]
+  },
+  {
+   "en": "transform",
+   "europarlLines": 272,
+   "gold": [
+    "μεταλλασσω",
+    "μεταμορφωνω",
+    "μεταπλαθω",
+    "μεταρρυθμιζω",
+    "μετασκευαζω",
+    "μετασχηματιζω"
+   ]
+  },
+  {
+   "en": "morning",
+   "europarlLines": 2782,
+   "gold": [
+    "ανατολη",
+    "αρχη",
+    "αυγη",
+    "καλημερα",
+    "ξεκινημα",
+    "πρωι"
+   ]
+  },
+  {
+   "en": "leaders",
+   "europarlLines": 2502,
+   "gold": [
+    "αρχηγοι"
+   ]
+  },
+  {
+   "en": "suffrage",
+   "europarlLines": 138,
+   "gold": [
+    "ψηφοσ"
+   ]
+  },
+  {
+   "en": "deterrent",
+   "europarlLines": 195,
+   "gold": [
+    "εμποδιο"
+   ]
+  },
+  {
+   "en": "hinge",
+   "europarlLines": 27,
+   "gold": [
+    "μεντεσεσ"
+   ]
+  },
+  {
+   "en": "card",
+   "europarlLines": 1087,
+   "gold": [
+    "καρτα",
+    "μενου",
+    "χαρτι"
+   ]
+  },
+  {
+   "en": "thumb",
+   "europarlLines": 24,
+   "gold": [
+    "αντιχειρασ",
+    "κανω",
+    "πασπατευω",
+    "ταξιδευω",
+    "ψαυω",
+    "ψαχουλευω",
+    "ψηλαφιζω",
+    "ψηλαφω"
+   ]
+  },
+  {
+   "en": "bureau",
+   "europarlLines": 1093,
+   "gold": [
+    "κομο",
+    "κομοσ"
+   ]
+  },
+  {
+   "en": "compact",
+   "europarlLines": 39,
+   "gold": [
+    "συμπιεζω",
+    "σφιγγω"
+   ]
+  },
+  {
+   "en": "legalization",
+   "europarlLines": 22,
+   "gold": [
+    "νομιμοποιηση"
+   ]
+  },
+  {
+   "en": "manager",
+   "europarlLines": 92,
+   "gold": [
+    "διευθυντησ",
+    "μανατζερ"
+   ]
+  },
+  {
+   "en": "board",
+   "europarlLines": 2533,
+   "gold": [
+    "επιβιβαζομαι",
+    "πινακασ",
+    "τεμαχιο"
+   ]
+  },
+  {
+   "en": "inertia",
+   "europarlLines": 101,
+   "gold": [
+    "αδρανεια"
+   ]
+  },
+  {
+   "en": "hazard",
+   "europarlLines": 151,
+   "gold": [
+    "διακινδυνευω",
+    "ρισκαρω",
+    "ριψοκινδυνευω",
+    "τυχη"
+   ]
+  },
+  {
+   "en": "booth",
+   "europarlLines": 20,
+   "gold": [
+    "θαλαμοσ",
+    "κιοσκι",
+    "περιπτερο"
+   ]
+  },
+  {
+   "en": "andorra",
+   "europarlLines": 81,
+   "gold": [
+    "ανδορρα"
+   ]
+  },
+  {
+   "en": "dispense",
+   "europarlLines": 94,
+   "gold": [
+    "διανεμω",
+    "μοιραζω",
+    "παρεχω",
+    "χορηγω"
+   ]
+  },
+  {
+   "en": "spectrum",
+   "europarlLines": 613,
+   "gold": [
+    "φασμα"
+   ]
+  },
+  {
+   "en": "modify",
+   "europarlLines": 265,
+   "gold": [
+    "αλλαζω",
+    "μετατρεπω"
+   ]
+  },
+  {
+   "en": "mood",
+   "europarlLines": 162,
+   "gold": [
+    "διαθεση",
+    "εγκλιση"
+   ]
+  },
+  {
+   "en": "aggregate",
+   "europarlLines": 44,
+   "gold": [
+    "αθροισμα",
+    "συνολο"
+   ]
+  },
+  {
+   "en": "dreaming",
+   "europarlLines": 47,
+   "gold": [
+    "ονειρο"
+   ]
+  },
+  {
+   "en": "torture",
+   "europarlLines": 831,
+   "gold": [
+    "πληγωνω",
+    "τραυματιζω"
+   ]
+  },
+  {
+   "en": "philosopher",
+   "europarlLines": 80,
+   "gold": [
+    "φιλοσοφοσ"
+   ]
+  },
+  {
+   "en": "strip",
+   "europarlLines": 282,
+   "gold": [
+    "απογυμνωνω",
+    "αφαιρω",
+    "γδυνομαι",
+    "γδυνω",
+    "λαμακι",
+    "λωριδα",
+    "ξεγυμνωνω",
+    "ξεντυνομαι",
+    "ξεντυνω",
+    "ξεφλουδιζω"
+   ]
+  },
+  {
+   "en": "gender",
+   "europarlLines": 2554,
+   "gold": [
+    "γενοσ",
+    "φυλετικοτητα",
+    "φυλο"
+   ]
+  },
+  {
+   "en": "arena",
+   "europarlLines": 321,
+   "gold": [
+    "πεδιο",
+    "σταδιο"
+   ]
+  },
+  {
+   "en": "inception",
+   "europarlLines": 68,
+   "gold": [
+    "αρχη",
+    "προελευση"
+   ]
+  },
+  {
+   "en": "motorway",
+   "europarlLines": 138,
+   "gold": [
+    "αυτοκινητοδρομοσ"
+   ]
+  },
+  {
+   "en": "dance",
+   "europarlLines": 51,
+   "gold": [
+    "αναπηδω",
+    "χορευω",
+    "χοροπηδω",
+    "χοροσ"
+   ]
+  },
+  {
+   "en": "furtherance",
+   "europarlLines": 20,
+   "gold": [
+    "προαγωγη"
+   ]
+  },
+  {
+   "en": "religious",
+   "europarlLines": 2136,
+   "gold": [
+    "μοναχη"
+   ]
+  },
+  {
+   "en": "credentials",
+   "europarlLines": 288,
+   "gold": [
+    "πιστοποιητικο"
+   ]
+  },
+  {
+   "en": "fatigue",
+   "europarlLines": 51,
+   "gold": [
+    "εξαντλω",
+    "κουραζομαι",
+    "κουραση"
+   ]
+  },
+  {
+   "en": "hesitate",
+   "europarlLines": 272,
+   "gold": [
+    "κομπιαζω",
+    "κοντοστεκομαι",
+    "σταματω"
+   ]
+  },
+  {
+   "en": "stiff",
+   "europarlLines": 32,
+   "gold": [
+    "λειψανο",
+    "πτωμα"
+   ]
+  },
+  {
+   "en": "wrestling",
+   "europarlLines": 25,
+   "gold": [
+    "παλη"
+   ]
+  },
+  {
+   "en": "lorry",
+   "europarlLines": 183,
+   "gold": [
+    "φορτηγο"
+   ]
+  },
+  {
+   "en": "dispose",
+   "europarlLines": 99,
+   "gold": [
+    "αποβαλλω"
+   ]
+  },
+  {
+   "en": "wing",
+   "europarlLines": 591,
+   "gold": [
+    "παρασκηνιο",
+    "πετω",
+    "προσαρτημα",
+    "προφυλακτηρασ",
+    "πτερυγα",
+    "πτερυξ",
+    "φτερο",
+    "φτερουγα",
+    "φτερουγιζω"
+   ]
+  },
+  {
+   "en": "missionary",
+   "europarlLines": 21,
+   "gold": [
+    "ιεραποστολοσ"
+   ]
+  },
+  {
+   "en": "commonwealth",
+   "europarlLines": 82,
+   "gold": [
+    "δημοκρατια",
+    "κοινοπολιτεια",
+    "κρατοσ",
+    "πολιτεια"
+   ]
+  },
+  {
+   "en": "dancing",
+   "europarlLines": 24,
+   "gold": [
+    "χοροσ"
+   ]
+  },
+  {
+   "en": "olympics",
+   "europarlLines": 141,
+   "gold": [
+    "ολυμπιαδα"
+   ]
+  },
+  {
+   "en": "knowledge",
+   "europarlLines": 3853,
+   "gold": [
+    "γνωση"
+   ]
+  },
+  {
+   "en": "kohl",
+   "europarlLines": 115,
+   "gold": [
+    "κολ",
+    "ριμελ"
+   ]
+  },
+  {
+   "en": "valencia",
+   "europarlLines": 88,
+   "gold": [
+    "βαλενθια"
+   ]
+  },
+  {
+   "en": "administrator",
+   "europarlLines": 26,
+   "gold": [
+    "διαχειριστησ",
+    "διευθυντησ",
+    "διοικητησ"
+   ]
+  },
+  {
+   "en": "woman",
+   "europarlLines": 792,
+   "gold": [
+    "γυναικα"
+   ]
+  },
+  {
+   "en": "ljubljana",
+   "europarlLines": 63,
+   "gold": [
+    "λιουμπλιανα"
+   ]
+  },
+  {
+   "en": "monument",
+   "europarlLines": 47,
+   "gold": [
+    "μνημειο"
+   ]
+  },
+  {
+   "en": "bidding",
+   "europarlLines": 44,
+   "gold": [
+    "διαταγη",
+    "προσκληση"
+   ]
+  },
+  {
+   "en": "playing",
+   "europarlLines": 1454,
+   "gold": [
+    "ηθοποιια",
+    "παιχνιδι",
+    "υποκριτικη"
+   ]
+  },
+  {
+   "en": "refer",
+   "europarlLines": 3044,
+   "gold": [
+    "αναφερομαι",
+    "μνημονευω",
+    "σημαινω"
+   ]
+  },
+  {
+   "en": "governing",
+   "europarlLines": 1423,
+   "gold": [
+    "διακυβερνηση"
+   ]
+  },
+  {
+   "en": "tidy",
+   "europarlLines": 23,
+   "gold": [
+    "τακτοποιω"
+   ]
+  },
+  {
+   "en": "decay",
+   "europarlLines": 24,
+   "gold": [
+    "αλλοιωση",
+    "αποσυντιθεμαι",
+    "καταρρεω",
+    "παρακμη",
+    "σαπιζω",
+    "σηπομαι"
+   ]
+  },
+  {
+   "en": "corrupt",
+   "europarlLines": 282,
+   "gold": [
+    "διαστρεφω",
+    "διαφθειρω",
+    "δωροδοκω",
+    "εξαχρειωνω",
+    "λαδωνω"
+   ]
+  },
+  {
+   "en": "glass",
+   "europarlLines": 224,
+   "gold": [
+    "γυαλι",
+    "ποτηρι"
+   ]
+  },
+  {
+   "en": "seed",
+   "europarlLines": 187,
+   "gold": [
+    "κοκκοσ",
+    "σπερμα",
+    "σπερνω",
+    "σποροσ"
+   ]
+  },
+  {
+   "en": "sub",
+   "europarlLines": 709,
+   "gold": [
+    "υποβρυχιο"
+   ]
+  },
+  {
+   "en": "description",
+   "europarlLines": 358,
+   "gold": [
+    "περιγραφη"
+   ]
+  },
+  {
+   "en": "budapest",
+   "europarlLines": 182,
+   "gold": [
+    "βουδαπεστη"
+   ]
+  },
+  {
+   "en": "maize",
+   "europarlLines": 319,
+   "gold": [
+    "αραβοσιτοσ",
+    "καλαμποκι",
+    "καλαμποκια"
+   ]
+  },
+  {
+   "en": "mercury",
+   "europarlLines": 542,
+   "gold": [
+    "υδραργυροσ"
+   ]
+  },
+  {
+   "en": "schooling",
+   "europarlLines": 94,
+   "gold": [
+    "σχολειο"
+   ]
+  },
+  {
+   "en": "fostering",
+   "europarlLines": 303,
+   "gold": [
+    "ανατροφη"
+   ]
+  },
+  {
+   "en": "intelligence",
+   "europarlLines": 477,
+   "gold": [
+    "ειδησεισ",
+    "εξυπναδα",
+    "κατασκοπια",
+    "μαντατα",
+    "νεα",
+    "πληροφορια"
+   ]
+  },
+  {
+   "en": "long",
+   "europarlLines": 16833,
+   "gold": [
+    "λαχταρω",
+    "ποθω"
+   ]
+  },
+  {
+   "en": "dread",
+   "europarlLines": 24,
+   "gold": [
+    "σκιαζομαι",
+    "τρομαζω",
+    "φοβαμαι",
+    "φοβουμαι"
+   ]
+  },
+  {
+   "en": "orange",
+   "europarlLines": 99,
+   "gold": [
+    "πορτοκαλι",
+    "πορτοκαλια"
+   ]
+  },
+  {
+   "en": "magazine",
+   "europarlLines": 85,
+   "gold": [
+    "περιοδικο",
+    "πυριτιδαποθηκη"
+   ]
+  },
+  {
+   "en": "plus",
+   "europarlLines": 639,
+   "gold": [
+    "προσθεση",
+    "προσον"
+   ]
+  },
+  {
+   "en": "ambition",
+   "europarlLines": 995,
+   "gold": [
+    "ονειρο",
+    "φιλοδοξια"
+   ]
+  },
+  {
+   "en": "redirect",
+   "europarlLines": 39,
+   "gold": [
+    "ανακατευθυνω"
+   ]
+  },
+  {
+   "en": "vicinity",
+   "europarlLines": 142,
+   "gold": [
+    "γειτνιαση",
+    "γειτονια",
+    "εγγυτητα"
+   ]
+  },
+  {
+   "en": "grass",
+   "europarlLines": 267,
+   "gold": [
+    "γρασιδι"
+   ]
+  },
+  {
+   "en": "delivery",
+   "europarlLines": 482,
+   "gold": [
+    "διανομη",
+    "διασωση",
+    "παραδοση",
+    "σωτηρια",
+    "τροποσ"
+   ]
+  },
+  {
+   "en": "hospital",
+   "europarlLines": 377,
+   "gold": [
+    "νοσοκομειο"
+   ]
+  },
+  {
+   "en": "news",
+   "europarlLines": 1470,
+   "gold": [
+    "ειδησεισ",
+    "ειδηση",
+    "μαντατα",
+    "νεα",
+    "πληροφορια"
+   ]
+  },
+  {
+   "en": "harmony",
+   "europarlLines": 312,
+   "gold": [
+    "αρμονια",
+    "ομοφωνια",
+    "συμπνοια",
+    "συμφωνια"
+   ]
+  },
+  {
+   "en": "bribery",
+   "europarlLines": 47,
+   "gold": [
+    "δωροδοκια",
+    "εξαγορα",
+    "λαδωμα"
+   ]
+  },
+  {
+   "en": "disappearance",
+   "europarlLines": 265,
+   "gold": [
+    "εξαφανιση"
+   ]
+  },
+  {
+   "en": "celebration",
+   "europarlLines": 144,
+   "gold": [
+    "γιορτη",
+    "εορτασμοσ",
+    "πανηγυρι"
+   ]
+  },
+  {
+   "en": "victimisation",
+   "europarlLines": 27,
+   "gold": [
+    "εκμεταλλευση",
+    "κακομεταχειριση"
+   ]
+  },
+  {
+   "en": "bid",
+   "europarlLines": 326,
+   "gold": [
+    "αποπειρα",
+    "διαταγη",
+    "ευχομαι",
+    "προσκαλω",
+    "προσπαθεια",
+    "προσφερω"
+   ]
+  },
+  {
+   "en": "dose",
+   "europarlLines": 81,
+   "gold": [
+    "δοση"
+   ]
+  },
+  {
+   "en": "photo",
+   "europarlLines": 34,
+   "gold": [
+    "εικονα",
+    "φωτογραφια"
+   ]
+  },
+  {
+   "en": "raft",
+   "europarlLines": 148,
+   "gold": [
+    "σχεδια",
+    "φουρνια"
+   ]
+  },
+  {
+   "en": "aeronautics",
+   "europarlLines": 27,
+   "gold": [
+    "αεροναυτικη",
+    "αστροναυτικη"
+   ]
+  },
+  {
+   "en": "armenia",
+   "europarlLines": 441,
+   "gold": [
+    "αρμενια"
+   ]
+  },
+  {
+   "en": "accompany",
+   "europarlLines": 215,
+   "gold": [
+    "ακολουθω",
+    "ακομπανιαρω",
+    "συνοδευω",
+    "συνταξιδευω",
+    "συντροφευω"
+   ]
+  },
+  {
+   "en": "prospect",
+   "europarlLines": 960,
+   "gold": [
+    "αποψη",
+    "θεα",
+    "υποψηφιοσ"
+   ]
+  },
+  {
+   "en": "child",
+   "europarlLines": 2864,
+   "gold": [
+    "μωρο",
+    "παιδι",
+    "τεκνο"
+   ]
+  },
+  {
+   "en": "expand",
+   "europarlLines": 582,
+   "gold": [
+    "ακμαζω",
+    "εκθετω",
+    "εκτεινω",
+    "εξαπλωνομαι",
+    "επεκτεινομαι",
+    "επεκτεινω",
+    "ευδοκιμω",
+    "ευημερω",
+    "ογκουμαι"
+   ]
+  },
+  {
+   "en": "policeman",
+   "europarlLines": 61,
+   "gold": [
+    "αστυνομικοσ",
+    "οργανο"
+   ]
+  },
+  {
+   "en": "detain",
+   "europarlLines": 49,
+   "gold": [
+    "εγκλειω",
+    "καθυστερω"
+   ]
+  },
+  {
+   "en": "tear",
+   "europarlLines": 72,
+   "gold": [
+    "αποσπω",
+    "δακρυ",
+    "δακρυζω",
+    "ορμω",
+    "σκισιμο",
+    "σπαζω",
+    "σπαω"
+   ]
+  },
+  {
+   "en": "funeral",
+   "europarlLines": 44,
+   "gold": [
+    "κηδεια"
+   ]
+  },
+  {
+   "en": "compliance",
+   "europarlLines": 2294,
+   "gold": [
+    "συγκαταβατικοτητα",
+    "συμμορφωση",
+    "υποταγη"
+   ]
+  },
+  {
+   "en": "dark",
+   "europarlLines": 291,
+   "gold": [
+    "ανηθικοτητα",
+    "νυχτα",
+    "σκοταδι"
+   ]
+  },
+  {
+   "en": "pot",
+   "europarlLines": 96,
+   "gold": [
+    "γλαστρα",
+    "κανατα",
+    "φουρνια"
+   ]
+  },
+  {
+   "en": "thin",
+   "europarlLines": 125,
+   "gold": [
+    "αδυνατιζω",
+    "λεπταινω"
+   ]
+  },
+  {
+   "en": "explosive",
+   "europarlLines": 202,
+   "gold": [
+    "εκρηκτικα"
+   ]
+  },
+  {
+   "en": "avalanche",
+   "europarlLines": 42,
+   "gold": [
+    "κατρακυλω",
+    "χιονοστιβαδα"
+   ]
+  },
+  {
+   "en": "preventative",
+   "europarlLines": 207,
+   "gold": [
+    "εμποδιο",
+    "επιβαρυνση",
+    "κωλισιεργια",
+    "κωλυμα"
+   ]
+  },
+  {
+   "en": "landmark",
+   "europarlLines": 63,
+   "gold": [
+    "οροσημο",
+    "σταθμοσ"
+   ]
+  },
+  {
+   "en": "cardiff",
+   "europarlLines": 277,
+   "gold": [
+    "καρντιφ"
+   ]
+  },
+  {
+   "en": "bravery",
+   "europarlLines": 26,
+   "gold": [
+    "αφοβια",
+    "κουραγιο",
+    "σθενοσ"
+   ]
+  },
+  {
+   "en": "kyrgyzstan",
+   "europarlLines": 151,
+   "gold": [
+    "κιργιζια",
+    "κιργισταν"
+   ]
+  },
+  {
+   "en": "petroleum",
+   "europarlLines": 67,
+   "gold": [
+    "πετρελαιο"
+   ]
+  },
+  {
+   "en": "contradiction",
+   "europarlLines": 606,
+   "gold": [
+    "αντιθεση"
+   ]
+  },
+  {
+   "en": "update",
+   "europarlLines": 465,
+   "gold": [
+    "εκσυγχρονιζω",
+    "ενημερωση"
+   ]
+  },
+  {
+   "en": "stomach",
+   "europarlLines": 24,
+   "gold": [
+    "ανεχομαι",
+    "κοιλια",
+    "στομαχι"
+   ]
+  },
+  {
+   "en": "aggression",
+   "europarlLines": 332,
+   "gold": [
+    "επιθεση",
+    "εχθρικοτητα",
+    "εχθροπραξια"
+   ]
+  },
+  {
+   "en": "en",
+   "europarlLines": 245,
+   "gold": [
+    "εν"
+   ]
+  },
+  {
+   "en": "thirst",
+   "europarlLines": 44,
+   "gold": [
+    "διψα",
+    "λιγουρευομαι",
+    "λιμπιζομαι"
+   ]
+  },
+  {
+   "en": "threshold",
+   "europarlLines": 843,
+   "gold": [
+    "κατωφλι"
+   ]
+  },
+  {
+   "en": "reign",
+   "europarlLines": 82,
+   "gold": [
+    "κυβερνω",
+    "κυριαρχω"
+   ]
+  },
+  {
+   "en": "internationalisation",
+   "europarlLines": 45,
+   "gold": [
+    "διεθνοποιηση"
+   ]
+  },
+  {
+   "en": "opinion",
+   "europarlLines": 13600,
+   "gold": [
+    "αισθηση",
+    "αποψη",
+    "γνωμη"
+   ]
+  },
+  {
+   "en": "dwell",
+   "europarlLines": 218,
+   "gold": [
+    "ζω",
+    "καταλαμβανω",
+    "κολλαω",
+    "μενω"
+   ]
+  },
+  {
+   "en": "valve",
+   "europarlLines": 22,
+   "gold": [
+    "βαλβιδα"
+   ]
+  },
+  {
+   "en": "cable",
+   "europarlLines": 82,
+   "gold": [
+    "τηλεγραφω"
+   ]
+  },
+  {
+   "en": "fever",
+   "europarlLines": 89,
+   "gold": [
+    "πυρετοσ"
+   ]
+  },
+  {
+   "en": "driver",
+   "europarlLines": 343,
+   "gold": [
+    "οδηγοσ"
+   ]
+  },
+  {
+   "en": "civilisation",
+   "europarlLines": 534,
+   "gold": [
+    "πολιτισμοσ"
+   ]
+  },
+  {
+   "en": "fate",
+   "europarlLines": 721,
+   "gold": [
+    "μοιρα",
+    "πεπρωμενο",
+    "περισταση",
+    "τυχη"
+   ]
+  },
+  {
+   "en": "striving",
+   "europarlLines": 343,
+   "gold": [
+    "πασχισμα"
+   ]
+  },
+  {
+   "en": "valley",
+   "europarlLines": 138,
+   "gold": [
+    "κοιλαδα"
+   ]
+  },
+  {
+   "en": "interpreter",
+   "europarlLines": 46,
+   "gold": [
+    "διερμηνεασ",
+    "μεταφραστησ"
+   ]
+  },
+  {
+   "en": "focusing",
+   "europarlLines": 815,
+   "gold": [
+    "επικεντρο",
+    "κεντρο"
+   ]
+  },
+  {
+   "en": "month",
+   "europarlLines": 2254,
+   "gold": [
+    "μηνασ"
+   ]
+  },
+  {
+   "en": "worship",
+   "europarlLines": 82,
+   "gold": [
+    "λατρεια"
+   ]
+  },
+  {
+   "en": "rejection",
+   "europarlLines": 851,
+   "gold": [
+    "απορριψη"
+   ]
+  },
+  {
+   "en": "begin",
+   "europarlLines": 4038,
+   "gold": [
+    "ανοιγω",
+    "αρχιζω",
+    "αρχομαι",
+    "ξεκινω",
+    "πιανω"
+   ]
+  },
+  {
+   "en": "liberty",
+   "europarlLines": 433,
+   "gold": [
+    "αυτονομια",
+    "ελευθερια",
+    "οικοιοτητεσ"
+   ]
+  },
+  {
+   "en": "minority",
+   "europarlLines": 2275,
+   "gold": [
+    "μειονοτητα",
+    "μειοψηφια"
+   ]
+  },
+  {
+   "en": "lenin",
+   "europarlLines": 34,
+   "gold": [
+    "λενιν"
+   ]
+  },
+  {
+   "en": "amazement",
+   "europarlLines": 49,
+   "gold": [
+    "εκπληξη"
+   ]
+  },
+  {
+   "en": "comply",
+   "europarlLines": 2196,
+   "gold": [
+    "συμμορφωνομαι"
+   ]
+  },
+  {
+   "en": "scot",
+   "europarlLines": 34,
+   "gold": [
+    "σκωτσεζοσ"
+   ]
+  },
+  {
+   "en": "sacking",
+   "europarlLines": 21,
+   "gold": [
+    "απολυση",
+    "σχολασμα"
+   ]
+  },
+  {
+   "en": "impartiality",
+   "europarlLines": 140,
+   "gold": [
+    "αμεροληψια",
+    "αντικειμενικοτητα"
+   ]
+  },
+  {
+   "en": "boost",
+   "europarlLines": 1120,
+   "gold": [
+    "ενθαρρυνση",
+    "ενθαρρυνω",
+    "προαγω",
+    "προωθω"
+   ]
+  },
+  {
+   "en": "exploration",
+   "europarlLines": 114,
+   "gold": [
+    "εξερευνηση"
+   ]
+  },
+  {
+   "en": "victim",
+   "europarlLines": 867,
+   "gold": [
+    "θυμα"
+   ]
+  },
+  {
+   "en": "advantage",
+   "europarlLines": 2366,
+   "gold": [
+    "αβανταζ",
+    "πλεονεκτημα"
+   ]
+  },
+  {
+   "en": "estimation",
+   "europarlLines": 43,
+   "gold": [
+    "εκτιμηση",
+    "κριση"
+   ]
+  },
+  {
+   "en": "chaos",
+   "europarlLines": 337,
+   "gold": [
+    "χαοσ"
+   ]
+  },
+  {
+   "en": "sec",
+   "europarlLines": 141,
+   "gold": [
+    "δευτερολεπτο"
+   ]
+  },
+  {
+   "en": "mission",
+   "europarlLines": 1924,
+   "gold": [
+    "επιτροπη",
+    "ιεραποστολη",
+    "υποχρεωση"
+   ]
+  },
+  {
+   "en": "haiti",
+   "europarlLines": 626,
+   "gold": [
+    "αιτη",
+    "ισπανιολα"
+   ]
+  },
+  {
+   "en": "perform",
+   "europarlLines": 548,
+   "gold": [
+    "εκτελω",
+    "κανω"
+   ]
+  },
+  {
+   "en": "execute",
+   "europarlLines": 87,
+   "gold": [
+    "εκπληρωνω",
+    "εκτελω",
+    "θανατωνω",
+    "πραγματωνω",
+    "σκοτωνω"
+   ]
+  },
+  {
+   "en": "rehabilitate",
+   "europarlLines": 35,
+   "gold": [
+    "αναμορφωνω",
+    "αποκαθιστω"
+   ]
+  },
+  {
+   "en": "fragility",
+   "europarlLines": 124,
+   "gold": [
+    "ευθραυστοτητα"
+   ]
+  },
+  {
+   "en": "examine",
+   "europarlLines": 1960,
+   "gold": [
+    "αναλυω",
+    "βολιδοσκοπω",
+    "δοκιμαζω",
+    "εξεταζω"
+   ]
+  },
+  {
+   "en": "clock",
+   "europarlLines": 213,
+   "gold": [
+    "ρολοι",
+    "χρονομετρω"
+   ]
+  },
+  {
+   "en": "reactor",
+   "europarlLines": 217,
+   "gold": [
+    "αντιδραστηρασ"
+   ]
+  },
+  {
+   "en": "population",
+   "europarlLines": 6081,
+   "gold": [
+    "πληθυσμοσ"
+   ]
+  },
+  {
+   "en": "labyrinth",
+   "europarlLines": 20,
+   "gold": [
+    "λαβυρινθοσ"
+   ]
+  },
+  {
+   "en": "repatriate",
+   "europarlLines": 34,
+   "gold": [
+    "επαναπατριζομαι",
+    "επαναπατρισμενοσ"
+   ]
+  },
+  {
+   "en": "t",
+   "europarlLines": 786,
+   "gold": [
+    "τονοσ"
+   ]
+  },
+  {
+   "en": "gather",
+   "europarlLines": 291,
+   "gold": [
+    "επισσωρευομαι",
+    "μαζευω",
+    "περισυλλογη",
+    "συγκεντρωνω",
+    "συσσωρευομαι"
+   ]
+  },
+  {
+   "en": "performing",
+   "europarlLines": 305,
+   "gold": [
+    "ηθοποιια",
+    "υποκριτικη"
+   ]
+  },
+  {
+   "en": "case",
+   "europarlLines": 19573,
+   "gold": [
+    "βιτρινα",
+    "ενδεχομενο",
+    "θηκη",
+    "καλυπτω",
+    "κασα",
+    "κατασκοπευω",
+    "μαξιλαροθηκη",
+    "περιβλημα",
+    "περιπτωση",
+    "περιστατικο",
+    "πραγμα",
+    "προσωπικοτητα",
+    "πτωση"
+   ]
+  },
+  {
+   "en": "shift",
+   "europarlLines": 716,
+   "gold": [
+    "αλλαγη",
+    "αλλαζω",
+    "βαρδια",
+    "κομπινεζον",
+    "μετακινουμαι",
+    "μεταλλαγη",
+    "μεταμορφωση",
+    "μετασχηματισμοσ",
+    "μετατροπη",
+    "μεταφερω"
+   ]
+  },
+  {
+   "en": "capture",
+   "europarlLines": 235,
+   "gold": [
+    "αρπαγη",
+    "γοητευω",
+    "θηρευω",
+    "κατακτω",
+    "κυριευω",
+    "μαγευω",
+    "παρασυρω",
+    "πιανω",
+    "προσελκυω",
+    "συλληψη"
+   ]
+  },
+  {
+   "en": "firing",
+   "europarlLines": 81,
+   "gold": [
+    "αναφλεξη",
+    "απολυση",
+    "βολη",
+    "πυρα",
+    "πυροβολισμοσ",
+    "σχολασμα"
+   ]
+  },
+  {
+   "en": "contract",
+   "europarlLines": 1031,
+   "gold": [
+    "μικραινω",
+    "συμβαλλομαι",
+    "συμβολαιο",
+    "συμπιεζω",
+    "συρρικνωνομαι",
+    "σφιγγω"
+   ]
+  },
+  {
+   "en": "afternoon",
+   "europarlLines": 1256,
+   "gold": [
+    "απογευμα"
+   ]
+  },
+  {
+   "en": "zambia",
+   "europarlLines": 23,
+   "gold": [
+    "ζαμπια"
+   ]
+  },
+  {
+   "en": "believer",
+   "europarlLines": 36,
+   "gold": [
+    "οπαδοσ",
+    "πιστοσ"
+   ]
+  },
+  {
+   "en": "escape",
+   "europarlLines": 483,
+   "gold": [
+    "διαφευγω",
+    "διαφυγη",
+    "δραπετευση",
+    "δραπετευω",
+    "τρεχω",
+    "φυγη"
+   ]
+  },
+  {
+   "en": "induce",
+   "europarlLines": 67,
+   "gold": [
+    "προκαλω"
+   ]
+  },
+  {
+   "en": "tissue",
+   "europarlLines": 62,
+   "gold": [
+    "ιστοσ",
+    "πλεκω"
+   ]
+  },
+  {
+   "en": "reiterate",
+   "europarlLines": 1091,
+   "gold": [
+    "επαναλαμβανω"
+   ]
+  },
+  {
+   "en": "planting",
+   "europarlLines": 141,
+   "gold": [
+    "φυτεμα"
+   ]
+  },
+  {
+   "en": "egotism",
+   "europarlLines": 24,
+   "gold": [
+    "αλαζονεια",
+    "κομπασμοσ",
+    "ξυπασια",
+    "υπεροψια"
+   ]
+  },
+  {
+   "en": "shelter",
+   "europarlLines": 199,
+   "gold": [
+    "καταφυγιο",
+    "προστασια",
+    "σκεπαστρο",
+    "στεγαζω"
+   ]
+  },
+  {
+   "en": "aftermath",
+   "europarlLines": 166,
+   "gold": [
+    "επακολουθο",
+    "συνεπεια"
+   ]
+  },
+  {
+   "en": "undertaking",
+   "europarlLines": 1172,
+   "gold": [
+    "εργο"
+   ]
+  },
+  {
+   "en": "margin",
+   "europarlLines": 457,
+   "gold": [
+    "ακρη",
+    "περιθωριο",
+    "χασμα"
+   ]
+  },
+  {
+   "en": "deposit",
+   "europarlLines": 138,
+   "gold": [
+    "αποθετω",
+    "αποθηκη",
+    "αποταμιευση",
+    "αποταμιευω",
+    "εγγυηση",
+    "εναποθετω",
+    "εναποθηκευω",
+    "ιζημα",
+    "καταθεση",
+    "καταθετω",
+    "προκαταβολη",
+    "προπληρωμη",
+    "συγκεντρωνω",
+    "ταμιευση"
+   ]
+  },
+  {
+   "en": "personnel",
+   "europarlLines": 960,
+   "gold": [
+    "προσωπικο"
+   ]
+  },
+  {
+   "en": "joint",
+   "europarlLines": 8115,
+   "gold": [
+    "αρθρωση",
+    "αρμοσ",
+    "συνδεσμοσ",
+    "τσιγαριλικι"
+   ]
+  },
+  {
+   "en": "remember",
+   "europarlLines": 3202,
+   "gold": [
+    "αναπολω",
+    "θυμαμαι",
+    "μνημονευω"
+   ]
+  },
+  {
+   "en": "bill",
+   "europarlLines": 624,
+   "gold": [
+    "γεισο",
+    "χρεωνω"
+   ]
+  },
+  {
+   "en": "slow",
+   "europarlLines": 987,
+   "gold": [
+    "επιβραδυνω"
+   ]
+  },
+  {
+   "en": "indignation",
+   "europarlLines": 205,
+   "gold": [
+    "αγανακτηση"
+   ]
+  },
+  {
+   "en": "religion",
+   "europarlLines": 1175,
+   "gold": [
+    "εκκλησια",
+    "πιστη"
+   ]
+  },
+  {
+   "en": "premier",
+   "europarlLines": 80,
+   "gold": [
+    "γραμματεασ",
+    "πρωθυπουργοσ"
+   ]
+  },
+  {
+   "en": "incitement",
+   "europarlLines": 154,
+   "gold": [
+    "παρακινηση",
+    "παρωθηση",
+    "προτροπη"
+   ]
+  },
+  {
+   "en": "condition",
+   "europarlLines": 1517,
+   "gold": [
+    "εκπαιδευω",
+    "κα8εστωσ",
+    "κατασταση",
+    "πειθαρχω",
+    "προυποθεση",
+    "συμφωνια",
+    "συνθηκεσ"
+   ]
+  },
+  {
+   "en": "quantify",
+   "europarlLines": 67,
+   "gold": [
+    "καταμετρω"
+   ]
+  },
+  {
+   "en": "glance",
+   "europarlLines": 113,
+   "gold": [
+    "βλεμμα",
+    "ματια"
+   ]
+  },
+  {
+   "en": "saw",
+   "europarlLines": 1307,
+   "gold": [
+    "πριονι",
+    "πριονιζω"
+   ]
+  },
+  {
+   "en": "bug",
+   "europarlLines": 34,
+   "gold": [
+    "ενοχλω",
+    "ζαλιζω",
+    "ημιπτερα",
+    "κοριοσ",
+    "μικροβιο",
+    "σκοτιζω"
+   ]
+  },
+  {
+   "en": "weakening",
+   "europarlLines": 292,
+   "gold": [
+    "αδυνατισμα",
+    "αποδυναμωση",
+    "εξασθενηση"
+   ]
+  },
+  {
+   "en": "reason",
+   "europarlLines": 10468,
+   "gold": [
+    "αιτιο",
+    "επιχειρηματολογω",
+    "νοηση",
+    "σκεφτομαι",
+    "συμπεραινω"
+   ]
+  },
+  {
+   "en": "maturity",
+   "europarlLines": 172,
+   "gold": [
+    "ωριμοτητα"
+   ]
+  },
+  {
+   "en": "portrayal",
+   "europarlLines": 20,
+   "gold": [
+    "αναπαρασταση"
+   ]
+  },
+  {
+   "en": "lid",
+   "europarlLines": 20,
+   "gold": [
+    "βλεφαρο",
+    "καπακι",
+    "καπελο",
+    "ματοφυλλο"
+   ]
+  },
+  {
+   "en": "identity",
+   "europarlLines": 1563,
+   "gold": [
+    "οντοτητα",
+    "ταυτοσημια",
+    "ταυτοτητα"
+   ]
+  },
+  {
+   "en": "spite",
+   "europarlLines": 1353,
+   "gold": [
+    "πληγωνω"
+   ]
+  },
+  {
+   "en": "liberalise",
+   "europarlLines": 204,
+   "gold": [
+    "φιλελευθεροποιω"
+   ]
+  },
+  {
+   "en": "wife",
+   "europarlLines": 177,
+   "gold": [
+    "γυναικα",
+    "συμβια"
+   ]
+  },
+  {
+   "en": "fertilisation",
+   "europarlLines": 20,
+   "gold": [
+    "γονιμοποιηση"
+   ]
+  },
+  {
+   "en": "joy",
+   "europarlLines": 174,
+   "gold": [
+    "χαιρομαι",
+    "χαρα"
+   ]
+  },
+  {
+   "en": "getting",
+   "europarlLines": 2438,
+   "gold": [
+    "αποκτηση"
+   ]
+  },
+  {
+   "en": "modernize",
+   "europarlLines": 51,
+   "gold": [
+    "αναπτυσσομαι",
+    "εκσυγχρονιζομαι"
+   ]
+  },
+  {
+   "en": "dare",
+   "europarlLines": 438,
+   "gold": [
+    "αψηφω",
+    "τολμω"
+   ]
+  },
+  {
+   "en": "leverage",
+   "europarlLines": 200,
+   "gold": [
+    "ισχυσ"
+   ]
+  },
+  {
+   "en": "waiver",
+   "europarlLines": 510,
+   "gold": [
+    "παραιτηση"
+   ]
+  },
+  {
+   "en": "composite",
+   "europarlLines": 34,
+   "gold": [
+    "συμπλοκο"
+   ]
+  },
+  {
+   "en": "join",
+   "europarlLines": 3105,
+   "gold": [
+    "ενωνω",
+    "ενωση",
+    "οργανωνομαι",
+    "συναντω",
+    "συναψη",
+    "συνδεσμοσ",
+    "συνενωση"
+   ]
+  },
+  {
+   "en": "approximate",
+   "europarlLines": 57,
+   "gold": [
+    "πλησιαζω",
+    "προσεγγιζω",
+    "υπολογιζω"
+   ]
+  },
+  {
+   "en": "hero",
+   "europarlLines": 43,
+   "gold": [
+    "ηρωασ"
+   ]
+  },
+  {
+   "en": "impotence",
+   "europarlLines": 63,
+   "gold": [
+    "αδυναμια",
+    "ανημπορια",
+    "ανικανοτητα"
+   ]
+  },
+  {
+   "en": "disposal",
+   "europarlLines": 1522,
+   "gold": [
+    "απαλλαγη",
+    "διαχειριση"
+   ]
+  },
+  {
+   "en": "game",
+   "europarlLines": 680,
+   "gold": [
+    "επιχειρησεισ",
+    "θηραμα",
+    "κυνηγι",
+    "παιχνιδι"
+   ]
+  },
+  {
+   "en": "bankruptcy",
+   "europarlLines": 271,
+   "gold": [
+    "πτωχευση"
+   ]
+  },
+  {
+   "en": "ransom",
+   "europarlLines": 51,
+   "gold": [
+    "λυτρα"
+   ]
+  },
+  {
+   "en": "divide",
+   "europarlLines": 584,
+   "gold": [
+    "διαιρω",
+    "διαχωριζω",
+    "ξεχωριζω",
+    "τεμαχιζω",
+    "χωριζομαι",
+    "χωριζω"
+   ]
+  }
+ ]
+}

@@ -1,7 +1,8 @@
 //! Pivot-paraphrase mining over a sentence-aligned EN/EL corpus (OPUS Moses format).
 //! Design: experiments/pivot-paraphrase-v1/DESIGN.md. Deterministic, std-only, no model calls.
 //!
-//!   pivot-miner <corpus-dir> --queries <file> [--prefix Europarl.el-en] [--max-lines N]
+//!   pivot-miner <corpus-dir> --queries <file> [--prefix Europarl.el-en] [--max-lines N] [--lemmas-en eng --lemmas-el ell] [--no-roundtrip]
+//!   pivot-miner --classify <unimorph-table> <words-file>   # word -> lemma class, then exit
 //!   # one query per line: "<mode>\t<lang>\t<phrase>"
 //!     mode: translate | paraphrase ; lang: en | el (the language of the phrase)
 //!     or "pair\t<english phrase>\t<greek phrase>" to check a proposed equivalence
@@ -38,6 +39,42 @@ pub fn tokenize(line: &str) -> Vec<String> {
     out
 }
 
+// ---------------------------------------------------------------- lemma classes (UniMorph)
+
+/// Folded form -> lemma class, from UniMorph rows `lemma<TAB>form<TAB>features`.
+/// Lemmas of the same part of speech that share a folded form are merged into one class
+/// (τηλεφωνώ / τηλεφωνάω); the class label is its smallest folded lemma. A form with
+/// analyses in several classes gets the smallest label. Deterministic.
+pub fn lemma_map<I: IntoIterator<Item = String>>(rows: I) -> HashMap<String, String> {
+    let mut lemma_id: HashMap<(String, String), usize> = HashMap::new();
+    let mut labels: Vec<String> = Vec::new();
+    let mut parent: Vec<usize> = Vec::new();
+    let mut form_lemmas: HashMap<(String, String), Vec<usize>> = HashMap::new();
+    fn find(p: &mut Vec<usize>, x: usize) -> usize { let mut r = x; while p[r] != r { r = p[r]; } let mut y = x; while p[y] != r { let n = p[y]; p[y] = r; y = n; } r }
+    for row in rows {
+        let f: Vec<&str> = row.split('\t').collect();
+        if f.len() < 3 { continue; }
+        let (lemma, form) = (tokenize(f[0]).join(" "), tokenize(f[1]).join(" "));
+        if lemma.is_empty() || form.is_empty() || lemma.contains(' ') || form.contains(' ') { continue; }
+        let pos = f[2].split(';').next().unwrap_or("").to_string();
+        let next = labels.len();
+        let id = *lemma_id.entry((pos.clone(), lemma.clone())).or_insert_with(|| { labels.push(lemma.clone()); parent.push(next); next });
+        for key in [(pos.clone(), form), (pos, lemma)] { form_lemmas.entry(key).or_default().push(id); }
+    }
+    for ids in form_lemmas.values() {
+        for &x in &ids[1..] { let (a, b) = (find(&mut parent, ids[0]), find(&mut parent, x)); if a != b { parent[a.max(b)] = a.min(b); } }
+    }
+    let mut best: HashMap<usize, String> = HashMap::new();
+    for i in 0..labels.len() { let r = find(&mut parent, i); let e = best.entry(r).or_insert_with(|| labels[i].clone()); if labels[i] < *e { *e = labels[i].clone(); } }
+    let mut out: HashMap<String, String> = HashMap::new();
+    for ((_, form), ids) in form_lemmas {
+        let label = ids.iter().map(|&i| { let r = find(&mut parent, i); best[&r].clone() }).min().unwrap();
+        let e = out.entry(form).or_insert_with(|| label.clone());
+        if label < *e { *e = label; }
+    }
+    out
+}
+
 // ---------------------------------------------------------------- one side of the corpus
 
 pub struct Side {
@@ -47,14 +84,23 @@ pub struct Side {
     postings: Vec<Vec<u32>>, // word -> sorted, deduplicated line ids
     df_cache: RefCell<HashMap<Vec<u32>, usize>>,
     sorted_words: Vec<(String, u32)>, // for prefix (stem) lookup
+    lemmas: Option<std::rc::Rc<HashMap<String, String>>>, // folded form -> lemma class (lemma mode)
 }
 
 impl Side {
-    pub fn build<I: IntoIterator<Item = String>>(raw: I) -> Side {
-        let mut s = Side { vocab: HashMap::new(), words: Vec::new(), lines: Vec::new(), postings: Vec::new(), df_cache: RefCell::new(HashMap::new()), sorted_words: Vec::new() };
+    pub fn build<I: IntoIterator<Item = String>>(raw: I) -> Side { Side::build_with(raw, None) }
+
+    /// Tokens of a text in this side's mode: surface forms, or lemma classes when a lemma map is set.
+    pub fn tokens(&self, text: &str) -> Vec<String> {
+        let t = tokenize(text);
+        match &self.lemmas { None => t, Some(m) => t.into_iter().map(|w| m.get(&w).cloned().unwrap_or(w)).collect() }
+    }
+
+    pub fn build_with<I: IntoIterator<Item = String>>(raw: I, lemmas: Option<std::rc::Rc<HashMap<String, String>>>) -> Side {
+        let mut s = Side { vocab: HashMap::new(), words: Vec::new(), lines: Vec::new(), postings: Vec::new(), df_cache: RefCell::new(HashMap::new()), sorted_words: Vec::new(), lemmas };
         for (i, line) in raw.into_iter().enumerate() {
             let mut ids = Vec::new();
-            for t in tokenize(&line) {
+            for t in s.tokens(&line) {
                 let next = s.words.len() as u32;
                 let id = *s.vocab.entry(t.clone()).or_insert_with(|| {
                     s.words.push(t);
@@ -97,7 +143,7 @@ impl Side {
     pub fn n_lines(&self) -> usize { self.lines.len() }
 
     pub fn ids(&self, phrase: &str) -> Option<Vec<u32>> {
-        let toks = tokenize(phrase);
+        let toks = self.tokens(phrase);
         if toks.is_empty() { return None; }
         toks.iter().map(|t| self.vocab.get(t).copied()).collect()
     }
@@ -309,14 +355,33 @@ fn read_lines(path: &str, max: usize) -> io::Result<Vec<String>> {
 
 fn main() -> io::Result<()> {
     let args: Vec<String> = std::env::args().collect();
+    let flag = |name: &str| args.iter().position(|a| a == name).and_then(|i| args.get(i + 1)).cloned();
+    // `pivot-miner --classify <unimorph-table> <words-file>`: print "word<TAB>class" for each word, then exit.
+    // Lets scorers map words to lemma classes with exactly the miner's own rules.
+    if args.get(1).map(|a| a == "--classify").unwrap_or(false) {
+        let m = lemma_map(read_lines(&args[2], usize::MAX)?);
+        let stdout = io::stdout();
+        let mut w = stdout.lock();
+        for word in read_lines(&args[3], usize::MAX)? {
+            let toks: Vec<String> = tokenize(&word).into_iter().map(|t| m.get(&t).cloned().unwrap_or(t)).collect();
+            writeln!(w, "{}\t{}", word, toks.join(" "))?;
+        }
+        return Ok(());
+    }
     let dir = args.get(1).expect("usage: pivot-miner <corpus-dir> --queries <file>");
     let qpath = args.iter().position(|a| a == "--queries").and_then(|i| args.get(i + 1)).expect("--queries <file>");
-    let flag = |name: &str| args.iter().position(|a| a == name).and_then(|i| args.get(i + 1)).cloned();
     let prefix = flag("--prefix").unwrap_or_else(|| "Europarl.el-en".to_string());
     let max_lines: usize = flag("--max-lines").map(|v| v.parse().expect("--max-lines <n>")).unwrap_or(usize::MAX);
     let t0 = std::time::Instant::now();
-    let en = Side::build(read_lines(&format!("{dir}/{prefix}.en"), max_lines)?);
-    let el = Side::build(read_lines(&format!("{dir}/{prefix}.el"), max_lines)?);
+    // Lemma mode: --lemmas-en / --lemmas-el point at UniMorph tables; both sides and all queries use lemma classes.
+    let load = |name: &str| -> io::Result<Option<std::rc::Rc<HashMap<String, String>>>> {
+        Ok(match flag(name) { Some(path) => Some(std::rc::Rc::new(lemma_map(read_lines(&path, usize::MAX)?))), None => None })
+    };
+    let (lem_en, lem_el) = (load("--lemmas-en")?, load("--lemmas-el")?);
+    let no_roundtrip = args.iter().any(|a| a == "--no-roundtrip");
+    if let (Some(a), Some(b)) = (&lem_en, &lem_el) { eprintln!("lemma mode: {} EN forms, {} EL forms", a.len(), b.len()); }
+    let en = Side::build_with(read_lines(&format!("{dir}/{prefix}.en"), max_lines)?, lem_en);
+    let el = Side::build_with(read_lines(&format!("{dir}/{prefix}.el"), max_lines)?, lem_el);
     assert_eq!(en.n_lines(), el.n_lines(), "line counts differ");
     eprintln!("indexed {} pairs in {:.1}s", en.n_lines(), t0.elapsed().as_secs_f64());
     let stdout = io::stdout();
@@ -349,8 +414,10 @@ fn main() -> io::Result<()> {
             "translate" => {
                 let (n_q, cands) = translate(src, tgt, &ids, &PARAMS);
                 let items: Vec<String> = cands.iter().map(|c| {
-                    let (_, back) = translate(tgt, src, &c.ids, &PARAMS);
-                    let rt = back.iter().position(|b| b.ids == ids).map(|r| (r + 1).to_string()).unwrap_or_else(|| "null".into());
+                    let rt = if no_roundtrip { "null".to_string() } else {
+                        let (_, back) = translate(tgt, src, &c.ids, &PARAMS);
+                        back.iter().position(|b| b.ids == ids).map(|r| (r + 1).to_string()).unwrap_or_else(|| "null".into())
+                    };
                     format!("{{\"text\":{},\"both\":{},\"df\":{},\"pTgivenQ\":{:.4},\"pQgivenT\":{:.4},\"g2\":{:.1},\"roundTripRank\":{},\"evidenceLines\":{:?}}}",
                         js(&c.text), c.both, c.df, c.p_t_q, c.p_q_t, c.g2, rt, c.evidence)
                 }).collect();
@@ -447,6 +514,20 @@ mod tests {
         let (en, _) = corpus();
         assert!(en.all_frequent(&en.ids("the").unwrap(), 0.3));
         assert!(!en.all_frequent(&en.ids("the weather").unwrap(), 0.3));
+    }
+
+    #[test]
+    fn lemma_classes_merge_variants_and_map_inflections() {
+        let rows = ["καλώ\tκάλεσε\tV;3;SG;PFV;PST", "καλώ\tκάλεσα\tV;1;SG;PFV;PST", "τηλεφωνώ\tτηλεφώνησε\tV;3;SG;PFV;PST",
+            "τηλεφωνάω\tτηλεφώνησε\tV;3;SG;PFV;PST", "τηλεφωνάω\tτηλεφωνάει\tV;3;SG;PRS", "αστυνομία\tαστυνομίας\tN;GEN;SG"];
+        let m = lemma_map(rows.iter().map(|s| s.to_string()));
+        assert_eq!(m["καλεσα"], "καλω");
+        assert_eq!(m["τηλεφωναει"], "τηλεφωναω");
+        assert_eq!(m["τηλεφωνησε"], "τηλεφωναω"); // one class for both variants
+        assert_eq!(m["αστυνομιασ"], "αστυνομια");
+        let el = Side::build_with(["Κάλεσα την αστυνομία", "τηλεφώνησε στην αστυνομίας"].iter().map(|s| s.to_string()), Some(std::rc::Rc::new(m)));
+        assert_eq!(el.find(&el.ids("καλώ την αστυνομία").unwrap()), vec![0]);
+        assert_eq!(el.find(&el.ids("τηλεφωνάει").unwrap()), vec![1]);
     }
 
     #[test]
