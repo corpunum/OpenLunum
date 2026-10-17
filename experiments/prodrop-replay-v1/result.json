@@ -1,0 +1,199 @@
+{
+ "status": "diagnostic, offline, self-reviewed; ADR 0028 §6 pro-drop replay; Claude clc-v1 recordings only (Tatoeba/owner sentences already public)",
+ "greekParsesWithIdentity": 10,
+ "withFiniteVerbNoOvertPronoun": 9,
+ "ofThoseAgentMissing": 3,
+ "rows": [
+  {
+   "run": "s1e",
+   "handle": "clc1-2f22b248a6927f1a",
+   "source": "Θέλω να μιλήσω σε δικηγόρο.",
+   "finiteVerbs": [
+    {
+     "form": "μιλησω",
+     "analyses": [
+      "1;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "prefer",
+   "agentRole": "experiencer",
+   "proDropCandidate": true,
+   "agentMissing": false
+  },
+  {
+   "run": "s1e",
+   "handle": "clc1-e7fb419fde704a74",
+   "source": "Κάθε πρόσωπο δικαιούται να έχει πρόσβαση στα συλλεγέντα δεδομένα που το αφορούν και να επιτυγχάνει τη διόρθωσή τους.",
+   "finiteVerbs": [
+    {
+     "form": "εχει",
+     "analyses": [
+      "3;SG"
+     ]
+    },
+    {
+     "form": "επιτυγχανει",
+     "analyses": [
+      "3;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "access",
+   "agentRole": "agent",
+   "proDropCandidate": true,
+   "agentMissing": false
+  },
+  {
+   "run": "s1e",
+   "handle": "clc1-6047ace6f8af0ba5",
+   "source": "Θα καλέσω την αστυνομία.",
+   "finiteVerbs": [
+    {
+     "form": "καλεσω",
+     "analyses": [
+      "1;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "notify",
+   "agentRole": null,
+   "proDropCandidate": true,
+   "agentMissing": true
+  },
+  {
+   "run": "s2e",
+   "handle": "clc1-1ee41bc6e5057653",
+   "source": "Σκεφτόμουν τα αεροπλάνα.",
+   "finiteVerbs": [],
+   "overtPronoun": false,
+   "predicate": "believe",
+   "agentRole": "experiencer",
+   "proDropCandidate": false,
+   "agentMissing": false
+  },
+  {
+   "run": "s2e",
+   "handle": "clc1-88e609b862f067ea",
+   "source": "Δε μ' αρέσει να μαθαίνω ανώμαλα ρήματα.",
+   "finiteVerbs": [
+    {
+     "form": "αρεσει",
+     "analyses": [
+      "3;SG"
+     ]
+    },
+    {
+     "form": "μαθαινω",
+     "analyses": [
+      "1;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "prefer",
+   "agentRole": "experiencer",
+   "proDropCandidate": true,
+   "agentMissing": false
+  },
+  {
+   "run": "s2e-rest",
+   "handle": "clc1-ec76b77bc1efe31d",
+   "source": "Ο Τομ έδωσε καλή συμβουλή στη Μαίρη.",
+   "finiteVerbs": [
+    {
+     "form": "εδωσε",
+     "analyses": [
+      "3;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "send",
+   "agentRole": "agent",
+   "proDropCandidate": true,
+   "agentMissing": false
+  },
+  {
+   "run": "s3e",
+   "handle": "clc1-aa5bb9329a22849d",
+   "source": "Διαβάζω το βιβλίο σου.",
+   "finiteVerbs": [
+    {
+     "form": "διαβαζω",
+     "analyses": [
+      "1;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "read",
+   "agentRole": null,
+   "proDropCandidate": true,
+   "agentMissing": true
+  },
+  {
+   "run": "s3e",
+   "handle": "clc1-25bb564e57ac340f",
+   "source": "Διαβάζω το βιβλίο σας.",
+   "finiteVerbs": [
+    {
+     "form": "διαβαζω",
+     "analyses": [
+      "1;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "read",
+   "agentRole": null,
+   "proDropCandidate": true,
+   "agentMissing": true
+  },
+  {
+   "run": "r2e",
+   "handle": "clc1-2f22b248a6927f1a",
+   "source": "Θέλω να μιλήσω σε δικηγόρο.",
+   "finiteVerbs": [
+    {
+     "form": "μιλησω",
+     "analyses": [
+      "1;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "prefer",
+   "agentRole": "experiencer",
+   "proDropCandidate": true,
+   "agentMissing": false
+  },
+  {
+   "run": "r2e-rest",
+   "handle": "clc1-e7fb419fde704a74",
+   "source": "Κάθε πρόσωπο δικαιούται να έχει πρόσβαση στα συλλεγέντα δεδομένα που το αφορούν και να επιτυγχάνει τη διόρθωσή τους.",
+   "finiteVerbs": [
+    {
+     "form": "εχει",
+     "analyses": [
+      "3;SG"
+     ]
+    },
+    {
+     "form": "επιτυγχανει",
+     "analyses": [
+      "3;SG"
+     ]
+    }
+   ],
+   "overtPronoun": false,
+   "predicate": "access",
+   "agentRole": "agent",
+   "proDropCandidate": true,
+   "agentMissing": false
+  }
+ ]
+}
