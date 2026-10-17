@@ -14,8 +14,8 @@
 
 | Run | Contract | Extractor |
 |---|---|---|
-| **Baseline** | frozen: `lunum-agent/0.19`, package v23 | `gpt-6.1-sol`, effort medium, [`run-codex-source-only.mjs`](../../scripts/research/run-codex-source-only.mjs) |
-| **Change** | ADR 0029: package v24, contract 0.20 (written after the baseline) | the same |
+| **Baseline** | frozen: `lunum-agent/0.19`, package v23 → **v24** (amendment 1) | `gpt-6.1-sol`, effort medium, [`run-codex-source-only.mjs`](../../scripts/research/run-codex-source-only.mjs) |
+| **Change** | ADR 0029: package v24 → **v25** (amendment 1), contract 0.20 (written after the baseline) | the same |
 
 Both runs use all 100 requests. A run stopped by quota is resumed with the same model after the reset; models are never mixed.
 
@@ -43,3 +43,11 @@ All five must hold for ADR 0029 to be merged. The scorer is committed before the
 ## Cost
 
 ChatGPT quota, about 100k input tokens per item: about 10M per run, 20M for both. SuperGemma judge: about 1 hour on the Ally (coordinated with the rig coordinator).
+
+## Amendment 1 (2026-10-17, before any baseline call): package numbers
+
+On 2026-10-17 the `__proto__` bug fix (PR #723, an allowed bug fix under ADR 0025) refroze the instruction package as **v24**. Its contract is identical to v23 (`lunum-agent/0.19`, contract hash `b6fdda4c…`, instructions, frames 0.8 and protocol 0.6 all unchanged); only the served-runtime manifest differs. Main no longer serves v23's runtime, so:
+- **Baseline:** package **v24** (the frozen contract 0.19, with the bug fix). The requests in `pairs.json` stay valid, because their contract hash is unchanged.
+- **Change:** ADR 0029's package becomes **v25** (contract 0.20).
+
+Nothing else changes.
