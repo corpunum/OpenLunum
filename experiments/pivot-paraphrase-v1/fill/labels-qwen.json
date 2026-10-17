@@ -1,0 +1,137 @@
+{
+ "judge": {
+  "vendor": "Alibaba (Qwen)",
+  "model": "openai/qwen3.8-flash-next-uncensored-lean",
+  "via": "Halogen on the rig, 127.0.0.1:8080, temperature 0, one request at a time, max_tokens 2000 (third pass, amendment 2)"
+ },
+ "labels": {
+  "w9ff62d1273": "S",
+  "w4c62a8dc0c": "D",
+  "w5140441435": "S",
+  "w55d8412653": "D",
+  "w5729d26e0b": "S",
+  "w370e5e53fa": "B",
+  "wee40447e20": "B",
+  "w727ea4696d": "B",
+  "wba8c730532": "B",
+  "w1a54675f7d": "B",
+  "wca5118682e": "B",
+  "wdeb926bfa0": "D",
+  "wb16aed836e": "B",
+  "wb22dabd28f": "D",
+  "w73c2e436ca": "S",
+  "wc32a459a79": "B",
+  "we5002a7a7d": "D",
+  "w67b151d171": "S",
+  "wd04eedcd9e": "B",
+  "we1368b1fa7": "S",
+  "we228097386": "B",
+  "w4862f6426e": "S",
+  "wcd18d013ad": "D",
+  "wa08823846e": "D",
+  "w0cc8cd6e36": "B",
+  "wf4982e3b40": "B",
+  "w253a1a2027": "D",
+  "wf26f4ddf91": "B",
+  "wbf3e3358ef": "D",
+  "wa18bef00bf": "S",
+  "wb1420f224f": "D",
+  "w69c40eb692": "S",
+  "wb01c2f13d2": "I",
+  "w5bfcc38d59": "S",
+  "wafcf37f8b9": "D",
+  "w82956d2fdc": "D",
+  "wd8717fbb80": "S",
+  "wf9e7100246": "B",
+  "w0f142f8c39": "B",
+  "w7c473751a9": "S",
+  "we32ac8efb8": "B",
+  "w2b6c0a0f33": "D",
+  "wdd91b5ff47": "D"
+ },
+ "raw": [
+  {
+   "batch": [
+    "w9ff62d1273",
+    "w4c62a8dc0c",
+    "w5140441435",
+    "w55d8412653",
+    "w5729d26e0b",
+    "w370e5e53fa",
+    "wee40447e20",
+    "w727ea4696d",
+    "wba8c730532",
+    "w1a54675f7d"
+   ],
+   "promptSha256": "4693eed2edd2f7fe03b94abcddb93c5aefecdb088c0cdd707e89eb27b752114c",
+   "answer": "{\"labels\": [\"S\", \"D\", \"S\", \"D\", \"S\", \"B\", \"B\", \"B\", \"B\", \"B\"]}",
+   "servedModel": "openai/qwen3.8-flash-next-uncensored-lean",
+   "parsed": true
+  },
+  {
+   "batch": [
+    "wca5118682e",
+    "wdeb926bfa0",
+    "wb16aed836e",
+    "wb22dabd28f",
+    "w73c2e436ca",
+    "wc32a459a79",
+    "we5002a7a7d",
+    "w67b151d171",
+    "wd04eedcd9e",
+    "we1368b1fa7"
+   ],
+   "promptSha256": "42bc90856e1272fbeda499ba80c557d20e3163ff7d7f5b6c5f4bd6aad8bf3e27",
+   "answer": "{\"labels\": [\"B\", \"D\", \"B\", \"D\", \"S\", \"B\", \"D\", \"S\", \"B\", \"S\"]}",
+   "servedModel": "openai/qwen3.8-flash-next-uncensored-lean",
+   "parsed": true
+  },
+  {
+   "batch": [
+    "we228097386",
+    "w4862f6426e",
+    "wcd18d013ad",
+    "wa08823846e",
+    "w0cc8cd6e36",
+    "wf4982e3b40",
+    "w253a1a2027",
+    "wf26f4ddf91",
+    "wbf3e3358ef",
+    "wa18bef00bf"
+   ],
+   "promptSha256": "2305dc0fc6ac6ccfd3fcab4eb6314d7ef73454da2c95daf185edc5bd0d3495e4",
+   "answer": "{\"labels\": [\"B\", \"S\", \"D\", \"D\", \"B\", \"B\", \"D\", \"B\", \"D\", \"S\"]}",
+   "servedModel": "openai/qwen3.8-flash-next-uncensored-lean",
+   "parsed": true
+  },
+  {
+   "batch": [
+    "wb1420f224f",
+    "w69c40eb692",
+    "wb01c2f13d2",
+    "w5bfcc38d59",
+    "wafcf37f8b9",
+    "w82956d2fdc",
+    "wd8717fbb80",
+    "wf9e7100246",
+    "w0f142f8c39",
+    "w7c473751a9"
+   ],
+   "promptSha256": "fcf10456d366d63e492b48cc6d856bb63e5674466328f5b2bc52e4df37f09ace",
+   "answer": "{\"labels\": [\"D\", \"S\", \"I\", \"S\", \"D\", \"D\", \"S\", \"B\", \"B\", \"S\"]}",
+   "servedModel": "openai/qwen3.8-flash-next-uncensored-lean",
+   "parsed": true
+  },
+  {
+   "batch": [
+    "we32ac8efb8",
+    "w2b6c0a0f33",
+    "wdd91b5ff47"
+   ],
+   "promptSha256": "c4c5f9c18d4e1246b086aaf57fa63a6c18b5e93c77f97573993cf9bf395e1f40",
+   "answer": "{\"labels\": [\"B\", \"D\", \"D\"]}",
+   "servedModel": "openai/qwen3.8-flash-next-uncensored-lean",
+   "parsed": true
+  }
+ ]
+}

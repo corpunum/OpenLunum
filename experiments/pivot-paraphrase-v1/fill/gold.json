@@ -1,0 +1,3119 @@
+{
+ "summary": {
+  "level": "b (model consensus, owner-delegated 2026-10-17); not owner gold",
+  "items": 216,
+  "pairsAndSeeds": 176,
+  "controls": 40,
+  "agreementAB": 0.801,
+  "kappaAB": 0.634,
+  "controlFalseSame": {
+   "a": 0,
+   "b": 0,
+   "c": null
+  },
+  "controlsLabelledDifferentByGold": 40,
+  "goldDistribution": {
+   "S": 128,
+   "B": 27,
+   "I": 0,
+   "D": 8,
+   "X": 0,
+   "unresolved": 13
+  },
+  "selfProposedBySuperGemma": {
+   "items": 112,
+   "agree": 81
+  },
+  "judgesValid": {
+   "a": true,
+   "b": true
+  }
+ },
+ "rows": [
+  {
+   "seed": "s11",
+   "en": "as far as i'm concerned",
+   "el": "όσον αφορά εμένα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w262889d209",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "ενώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w96d6af0d5a",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "phone the police",
+   "el": "καλώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w84c6edd18f",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "decline",
+   "el": "αρνούμαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w9ff62d1273",
+   "a": "B",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s12",
+   "en": "at once",
+   "el": "αμέσως",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w416ed80845",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s13",
+   "en": "ask for help",
+   "el": "ζητώ βοήθεια",
+   "kind": "seed",
+   "id": "w1b6bef5780",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "wc07beff77e",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "εγκρίνω",
+   "kind": "control",
+   "id": "wabab13b25e",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "αναφέρω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w4c62a8dc0c",
+   "a": "S",
+   "b": "B",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s11",
+   "en": "i believe",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wc79dd4dec8",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "i think",
+   "el": "νομίζω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w2ab4f0987b",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "notify the police",
+   "el": "ειδοποιώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w198e09632f",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "το συντομότερο δυνατό",
+   "kind": "control",
+   "id": "wbe45b4ed55",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "δίνω πληροφορίες",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wfdda3be0a0",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "in parallel",
+   "el": "παράλληλα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w6a75f0ced8",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "approve",
+   "el": "εγκρίνουμε",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w5140441435",
+   "a": "S",
+   "b": "B",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "wcd6f7c61fa",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "the people",
+   "el": "ο λαός",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wc796dfd51a",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s02",
+   "en": "telephone someone",
+   "el": "τηλεφωνώ σε κάποιον",
+   "kind": "seed",
+   "id": "w9125e6d373",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "simultaneously",
+   "el": "ταυτόχρονα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wcab1c98a46",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployed",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w55d8412653",
+   "a": "S",
+   "b": "D",
+   "c": "D",
+   "gold": "D",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s17",
+   "en": "out of work",
+   "el": "χωρίς δουλειά",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w4566a0586e",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "at once",
+   "el": "άμεσα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w15da8b6a47",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "παίρνω τηλέφωνο την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w5729d26e0b",
+   "a": "X",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s07",
+   "en": "restart the service",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "seed",
+   "id": "wbddf288315",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s02",
+   "en": "call someone",
+   "el": "καλώ κάποιον",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wd6bb76539e",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "συμφωνώ",
+   "kind": "control",
+   "id": "w9f90171b23",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "tell",
+   "el": "ενημερώνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w94c49fad2f",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s06",
+   "en": "delete the file",
+   "el": "πρέπει να",
+   "kind": "control",
+   "id": "wcaeaa737fc",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "ενημερώνω",
+   "kind": "seed",
+   "id": "wa196dcd0fe",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "ζητώ βοήθεια",
+   "kind": "control",
+   "id": "w80fa17db23",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "while",
+   "el": "ταυτόχρονα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w370e5e53fa",
+   "a": "S",
+   "b": "B",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s19",
+   "en": "vote",
+   "el": "η ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wd75286909d",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s06",
+   "en": "delete the file",
+   "el": "καλώ την αστυνομία",
+   "kind": "control",
+   "id": "w4e08630b5d",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "consent",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0b27a2ed10",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "notify",
+   "el": "ειδοποιώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wdd6ea69096",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "voting",
+   "el": "η ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w8bd99dff10",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "the people",
+   "el": "πολίτες",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wf169c399be",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "civil liberties",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w4ff1ef15f3",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "pass",
+   "el": "περνάω",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w52bef493ff",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "without delay",
+   "el": "χωρίς καθυστέρηση",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w912db69d99",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "promptly",
+   "el": "άμεσα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w466501e2b7",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as quickly as possible",
+   "el": "το συντομότερο δυνατό",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w02bd4a288a",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "the public",
+   "el": "πολίτες",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w61fcfe088d",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "no job",
+   "el": "χωρίς δουλειά",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w4a784f852f",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "approve",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wee40447e20",
+   "a": "S",
+   "b": "I",
+   "c": "B",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "αποδέχομαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w727ea4696d",
+   "a": "D",
+   "b": "I",
+   "c": "B",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s12",
+   "en": "at the earliest opportunity",
+   "el": "το συντομότερο δυνατό",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wc02551e827",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s20",
+   "en": "reject a proposal",
+   "el": "καλώ την αστυνομία",
+   "kind": "control",
+   "id": "w4dea8bbe1a",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s06",
+   "en": "delete the file",
+   "el": "διαγράφω το αρχείο",
+   "kind": "seed",
+   "id": "wce8c1e6d52",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "άμεσα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa423fc2325",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "citizen",
+   "el": "πολίτης",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w13a246d375",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "w8a05eefa74",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "άμεσα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w1ab7b46ff5",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "have to",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w87793a1de9",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "while",
+   "el": "ενώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we7e8607578",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "όσο πιο γρήγορα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wb661e9d162",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "λέω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w9f1b38df71",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "fundamental rights",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wba8c730532",
+   "a": "S",
+   "b": "B",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s19",
+   "en": "the election",
+   "el": "η εκλογή",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w6fad406baf",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "εγκρίνω",
+   "kind": "control",
+   "id": "wb3625ce00d",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "κατά τη γνώμη μου",
+   "kind": "control",
+   "id": "w6ce25ab1b8",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "ειδοποιώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa1f9a8f39a",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "για μένα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w8c550d9875",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "authorize",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w9b46ddbd1d",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "αναβάλλω",
+   "kind": "control",
+   "id": "wcdeae4fda6",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "accept",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w1a54675f7d",
+   "a": "B",
+   "b": "I",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s08",
+   "en": "target date",
+   "el": "προθεσμία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wca5118682e",
+   "a": "S",
+   "b": "B",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wdeb926bfa0",
+   "a": "S",
+   "b": "I",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "αναβάλλω επ' αόριστον",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wabc99c0f31",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "joblessness",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wb4401eb572",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "alert the police",
+   "el": "ειδοποιώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w8dc636452e",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "basic human rights",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wb16aed836e",
+   "a": "S",
+   "b": "B",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "ψήφισμα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wb22dabd28f",
+   "a": "S",
+   "b": "D",
+   "c": "D",
+   "gold": "D",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s16",
+   "en": "electorate",
+   "el": "ψηφοφόροι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w73c2e436ca",
+   "a": "B",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "αναβάλλω",
+   "kind": "seed",
+   "id": "waa92a70251",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "reject",
+   "el": "αρνούμαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w7d1ebdcaa0",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "αμέσως",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wc32a459a79",
+   "a": "S",
+   "b": "B",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s17",
+   "en": "without work",
+   "el": "χωρίς εργασία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w81f0ec5fef",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s15",
+   "en": "defer",
+   "el": "αναβάλλω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w9d44f4bed7",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "out of work",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w09937d4a84",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "προθεσμία",
+   "kind": "seed",
+   "id": "w7014bfaa80",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "no job",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wcaab850f0c",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "ανεργία",
+   "kind": "control",
+   "id": "wc31653bd72",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "πολίτες",
+   "kind": "seed",
+   "id": "w10a42a01dc",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "αρνείται",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w5a0d53d1b9",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "πληροφορώ",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w2c5e9aec36",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "in tandem",
+   "el": "παράλληλα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w48ce8e1041",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "χωρίς καθυστέρηση",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0c1eede477",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "see eye to eye",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wec62da31d9",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "in parallel",
+   "el": "ταυτόχρονα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w20ea330b80",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "ανεργία",
+   "kind": "control",
+   "id": "w931a19761b",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "endorse",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w109dded55b",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "w30f2afde24",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "deny",
+   "el": "αρνούμαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w3124c35af7",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "γρήγορα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we5002a7a7d",
+   "a": "S",
+   "b": "B",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s09",
+   "en": "authorize",
+   "el": "εξουσιοδοτώ",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wa98847386d",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "πολίτες",
+   "kind": "control",
+   "id": "w8f88bd1304",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "should",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w5cbe145163",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "πρέπει να",
+   "kind": "control",
+   "id": "w1de86acc93",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "i think",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wbc897838cf",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "κατά τη γνώμη μου",
+   "kind": "seed",
+   "id": "w2be1584ae6",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w67b151d171",
+   "a": "B",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s19",
+   "en": "voting",
+   "el": "ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w1250e5004f",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s07",
+   "en": "restart the service",
+   "el": "διαγράφω το αρχείο",
+   "kind": "control",
+   "id": "w8a313dbcb4",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "accept",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w1bea0b3269",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "να το αναβάλουμε",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w85250233ef",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "τηλεφωνώ σε κάποιον",
+   "kind": "control",
+   "id": "w74d9f1247e",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "vote",
+   "el": "ψηφοφορία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wd04eedcd9e",
+   "a": "B",
+   "b": "S",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s11",
+   "en": "in my view",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we5b2344a10",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "νομίζω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wf017c6b1ad",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "accept",
+   "el": "αποδέχομαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w8895356e48",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployment",
+   "el": "προθεσμία",
+   "kind": "control",
+   "id": "w2ef3bb767b",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s15",
+   "en": "put off",
+   "el": "αναβάλλω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w510b9bfc7b",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "rights and freedoms",
+   "el": "δικαιώματα και ελευθερίες",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wd44a7fd06c",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as quickly as possible",
+   "el": "όσο πιο γρήγορα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wedba556f8e",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "basic rights",
+   "el": "βασικά δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w8f10b6560a",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "καταληκτική ημερομηνία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w842cc0a708",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "without work",
+   "el": "ανεργία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "we1368b1fa7",
+   "a": "S",
+   "b": "B",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "w0acdce2ca7",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "λήξη",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "we228097386",
+   "a": "S",
+   "b": "B",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "δικαιώματα του ανθρώπου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w53d15b4c1f",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "i believe",
+   "el": "εγώ πιστεύω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w4d6afb570a",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "θεμελιώδη δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w2192882596",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "καλώ την αστυνομία",
+   "kind": "seed",
+   "id": "w4862f6426e",
+   "a": "S",
+   "b": "D",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "πρέπει να",
+   "kind": "seed",
+   "id": "w74f76f8323",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "have to",
+   "el": "χρειάζεται να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we67d7aa752",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "εγκρίνω",
+   "kind": "control",
+   "id": "w425f31b3e6",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "wd8de07747b",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "assent",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w499a29c064",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s13",
+   "en": "ask for help",
+   "el": "κατά τη γνώμη μου",
+   "kind": "control",
+   "id": "w4e60e4946b",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "επιτρέπω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wcd18d013ad",
+   "a": "S",
+   "b": "I",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "εγκρίνουμε",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa08823846e",
+   "a": "B",
+   "b": "I",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s09",
+   "en": "sanction",
+   "el": "εγκρίνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w26b7eef919",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "civil rights",
+   "el": "πολιτικά δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0cc8cd6e36",
+   "a": "B",
+   "b": "S",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s08",
+   "en": "last day",
+   "el": "τελευταία ημέρα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w1d2c5e7e5b",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "συμφωνώ",
+   "kind": "control",
+   "id": "w960bc1feda",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "αρνιέμαι",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w284870a315",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "resident",
+   "el": "πολίτες",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wf4982e3b40",
+   "a": "B",
+   "b": "D",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "το κοινό",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wcf7b032d89",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s07",
+   "en": "restart the service",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "wf4f38a5331",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "αποδέχομαι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w253a1a2027",
+   "a": "S",
+   "b": "B",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "ανακοινώνω",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wf26f4ddf91",
+   "a": "S",
+   "b": "B",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s15",
+   "en": "delay",
+   "el": "αναβάλλω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wbf3e3358ef",
+   "a": "S",
+   "b": "B",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s19",
+   "en": "ballot",
+   "el": "ψηφοδέλτιο",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wa18bef00bf",
+   "a": "B",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s02",
+   "en": "telephone someone",
+   "el": "ταυτόχρονα",
+   "kind": "control",
+   "id": "w4c353287f8",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s12",
+   "en": "as soon as possible",
+   "el": "το συντομότερο δυνατό",
+   "kind": "seed",
+   "id": "w4ffe4b66f6",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "agree",
+   "el": "συμφωνώ",
+   "kind": "seed",
+   "id": "wff04958017",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "παράλληλα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w7c4bee32db",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "must be",
+   "el": "πρέπει να είναι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w170767c025",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "approve",
+   "el": "εγκρίνω",
+   "kind": "seed",
+   "id": "wbc3b5316ab",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "the public",
+   "el": "το κοινό",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w932ea53114",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "must be",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wb1420f224f",
+   "a": "S",
+   "b": "B",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s04",
+   "en": "should",
+   "el": "πρέπει",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w69c40eb692",
+   "a": "B",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s11",
+   "en": "personally",
+   "el": "για μένα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wb01c2f13d2",
+   "a": "S",
+   "b": "B",
+   "c": "I",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s09",
+   "en": "endorse",
+   "el": "υποστηρίζω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w6b8e9a4052",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployment",
+   "el": "ανεργία",
+   "kind": "seed",
+   "id": "w7d49a69ab3",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "εγώ πιστεύω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w3713053ed5",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "meanwhile",
+   "el": "εν τω μεταξύ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w6142da22f8",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "w21b09bf937",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "seed",
+   "id": "w840e783d0b",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "need to",
+   "el": "χρειάζεται να",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w5bfcc38d59",
+   "a": "B",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s04",
+   "en": "ought to",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wc2fa97c396",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "at once",
+   "el": "ταυτόχρονα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wafcf37f8b9",
+   "a": "D",
+   "b": "S",
+   "c": "D",
+   "gold": "D",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s12",
+   "en": "right away",
+   "el": "γρήγορα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w82956d2fdc",
+   "a": "S",
+   "b": "D",
+   "c": "D",
+   "gold": "D",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s08",
+   "en": "final date",
+   "el": "τελική ημερομηνία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wf8afc4290c",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s13",
+   "en": "need assistance",
+   "el": "χρειάζομαι βοήθεια",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wd8717fbb80",
+   "a": "B",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s18",
+   "en": "tell",
+   "el": "λέω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wf9e7100246",
+   "a": "D",
+   "b": "S",
+   "c": "B",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s16",
+   "en": "citizen",
+   "el": "πολίτες",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0f142f8c39",
+   "a": "B",
+   "b": "D",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s18",
+   "en": "inform",
+   "el": "ζητώ βοήθεια",
+   "kind": "control",
+   "id": "w4bd9a13d6e",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s02",
+   "en": "telephone someone",
+   "el": "ζητώ βοήθεια",
+   "kind": "control",
+   "id": "w48d4d4fad5",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s13",
+   "en": "ask for help",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "we0db457807",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s08",
+   "en": "time limit",
+   "el": "χρονικό όριο",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w27dc7de3ac",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "refuse",
+   "el": "αρνούμαι",
+   "kind": "seed",
+   "id": "w635b35373e",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "election",
+   "el": "εκλογές",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w06de93e467",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployment",
+   "el": "απασχόληση",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w813a25d252",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "call the cops",
+   "el": "καλώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wef39cbe4fa",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "advise",
+   "el": "συμβουλεύω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w535f40bd0e",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "reject",
+   "el": "απορρίπτω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wcba4cda27e",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s18",
+   "en": "notify",
+   "el": "ενημερώνω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w4e94c74dbf",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "authorize",
+   "el": "επιτρέπω",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wd00d86f2cd",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "ballot box",
+   "el": "κάλπη",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w7c473751a9",
+   "a": "B",
+   "b": "S",
+   "c": "S",
+   "gold": "S",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "ταυτόχρονα",
+   "kind": "seed",
+   "id": "wae9b770725",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "w23ccb9280a",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s15",
+   "en": "postpone",
+   "el": "η ψηφοφορία",
+   "kind": "control",
+   "id": "w650ad87739",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s03",
+   "en": "at the same time",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "control",
+   "id": "w58ecb97c61",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "should",
+   "el": "θα έπρεπε να",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w837895b6b7",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "fundamental rights",
+   "el": "θεμελιώδη δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "we1d4f17bae",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s10",
+   "en": "deny",
+   "el": "αρνείται",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w0e94901faa",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "unemployment",
+   "el": "επανεκκινώ την υπηρεσία",
+   "kind": "control",
+   "id": "we8eb75657a",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "notify the police",
+   "el": "καλώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "wc221715231",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "rights and freedoms",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we32ac8efb8",
+   "a": "S",
+   "b": "B",
+   "c": "B",
+   "gold": "B",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "εγκρίνω",
+   "kind": "control",
+   "id": "wc0c262c3a8",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "referendum",
+   "el": "δημοψήφισμα",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w91eb2ca398",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "θα πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "we2b54790e0",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s08",
+   "en": "time limit",
+   "el": "προθεσμία",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w19452bdde8",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s14",
+   "en": "concur",
+   "el": "συμφωνώ",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w7ca667811b",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "η ψηφοφορία",
+   "kind": "seed",
+   "id": "w03cebe5281",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s08",
+   "en": "deadline",
+   "el": "χρονικό όριο",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "w7164df3a26",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s01",
+   "en": "call the police",
+   "el": "ειδοποιώ την αστυνομία",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w2b6c0a0f33",
+   "a": "B",
+   "b": "S",
+   "c": "D",
+   "gold": null,
+   "basis": "unresolved"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "πρέπει",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w8627a995ee",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "ψηφοφόροι",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w617f4a648a",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "human rights",
+   "el": "βασικά ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa8bc18564f",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s17",
+   "en": "on the job market",
+   "el": "στην αγορά εργασίας",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w3aa66c85d8",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "as far as i'm concerned",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wd20e0d3e89",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s19",
+   "en": "the vote",
+   "el": "εκλογές",
+   "kind": "pair",
+   "proposedBy": [
+    "qwen"
+   ],
+   "id": "w9f62e16088",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s05",
+   "en": "human dignity",
+   "el": "ανθρώπινα δικαιώματα",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w21a6950a9c",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "πρόσωπο",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wdd91b5ff47",
+   "a": "B",
+   "b": "D",
+   "c": "D",
+   "gold": "D",
+   "basis": "third judge breaks the tie"
+  },
+  {
+   "seed": "s11",
+   "en": "in my opinion",
+   "el": "ζητώ βοήθεια",
+   "kind": "control",
+   "id": "w2573dc16cc",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "need to",
+   "el": "πρέπει να",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma",
+    "qwen"
+   ],
+   "id": "wcde52122b4",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s16",
+   "en": "citizens",
+   "el": "πολίτης",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w54aa6a9d23",
+   "a": "B",
+   "b": "B",
+   "c": null,
+   "gold": "B",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s09",
+   "en": "give the go-ahead",
+   "el": "δίνω το πράσινο φως",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "wa79587871f",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s20",
+   "en": "reject a proposal",
+   "el": "απορρίπτω μια πρόταση",
+   "kind": "seed",
+   "id": "wa3b5a0afeb",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s11",
+   "en": "to my mind",
+   "el": "κατά τη γνώμη μου",
+   "kind": "pair",
+   "proposedBy": [
+    "gemma"
+   ],
+   "id": "w7b5562ab41",
+   "a": "S",
+   "b": "S",
+   "c": null,
+   "gold": "S",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s04",
+   "en": "must",
+   "el": "ταυτόχρονα",
+   "kind": "control",
+   "id": "wa037a7ec18",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  },
+  {
+   "seed": "s20",
+   "en": "reject a proposal",
+   "el": "προθεσμία",
+   "kind": "control",
+   "id": "w173ba0e92e",
+   "a": "D",
+   "b": "D",
+   "c": null,
+   "gold": "D",
+   "basis": "two judges agree"
+  }
+ ]
+}
