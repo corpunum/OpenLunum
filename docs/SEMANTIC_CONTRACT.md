@@ -57,6 +57,16 @@ OpenLunum keeps three distinct representations:
 - legacy `fingerprint` (`lfp:0.1`) for compatibility and migration;
 - `semanticFingerprint` (`lfp:2.1`) for validated protocol-canonical identity.
 
+**Unicode pin: `lfp:2.1` = Unicode 17.0 casefold/NFKC.** Identifiers and
+reference keys go through `normalize('NFKC')` and `toLocaleLowerCase('und')`, so
+the Unicode data of the runtime is part of the identity. Implementations must
+use Unicode 17.0 tables (Node 22 with ICU 78). The TypeScript test
+`lfp21-unicode-pin.test.ts` asserts `process.versions.unicode === '17.0'` and
+canaries the code points whose lowercase differs from older tables; the Rust
+crate `lunum-sem` reads the same marker from the golden file meta and asserts
+its generated tables match. Moving to another Unicode version is an identity
+change and follows ADR 0025.
+
 Near-semantic fingerprints are similarity features, not semantic identity.
 They apply hard gates to schema/world/kind, control flow, critical literals,
 actor authority, and critical role/term shapes before scoring softer features.
