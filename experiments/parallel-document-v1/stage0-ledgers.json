@@ -1,0 +1,851 @@
+{
+ "gemma": {
+  "summary": {
+   "startedAt": "2026-10-16T20:08:48.188Z",
+   "finishedAt": "2026-10-16T23:07:02.081Z",
+   "model": "supergemma4-Q5_K_M",
+   "codeCommit": "9cbe06abf28868798e890baa93f3bf611dcd9742",
+   "commitUnchanged": true,
+   "artifactsUnchanged": true,
+   "items": 32,
+   "parse": 21,
+   "abstain": 1,
+   "invalid": 10,
+   "costUsd": 0
+  },
+  "items": [
+   {
+    "handle": "pd1-a32c0ccbaf145496",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-9ccf97995eaf0e7e",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-a441659c94eeaba7",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-851f9151ae64844b",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-15786ad99ee26ae6",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-a6b85a673a746753",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-7604de3f5d2b1f6c",
+    "lang": "en",
+    "status": null,
+    "valid": false,
+    "failures": [
+     "parse_claimed_without_accepted_submission",
+     "SUBMITTED_SOURCE_MISMATCH"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-8b3443169403503a",
+    "lang": "en",
+    "status": null,
+    "valid": false,
+    "failures": [
+     "TIMEOUT"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-d9b585ead2601978",
+    "lang": "el",
+    "status": null,
+    "valid": false,
+    "failures": [
+     "HTTP_ERROR"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-8f6bf3a5d9687026",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-8a7223bd745697bf",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-be1e65de8b2a97e8",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-8f12808458d03644",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-ebe84554a10a5d6d",
+    "lang": "el",
+    "status": null,
+    "valid": false,
+    "failures": [
+     "parse_claimed_without_accepted_submission",
+     "SUBMITTED_SOURCE_MISMATCH"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-c1cec523c2764642",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-ba59df9c01b715d2",
+    "lang": "el",
+    "status": null,
+    "valid": false,
+    "failures": [
+     "TIMEOUT"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-9244d03cba00bfc4",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-7d5684413d12478e",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-367a899e51408097",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-5449170b785d924c",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-7857cd031cd8fa89",
+    "lang": "en",
+    "status": null,
+    "valid": false,
+    "failures": [
+     "TIMEOUT"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-b5f16433e05a1385",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-3088d020b3dc9532",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-6ec5fe76b50edf01",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-65918568a6e89677",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-a7f598e275aac8a1",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-ca93225232e3c585",
+    "lang": "el",
+    "status": "parse",
+    "valid": false,
+    "failures": [
+     "SUBMITTED_SOURCE_MISMATCH"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-c6b244af2d38db46",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-49f0682ce0c20bca",
+    "lang": "el",
+    "status": "parse",
+    "valid": false,
+    "failures": [
+     "SUBMITTED_SOURCE_MISMATCH"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-68cc1c73e0552fb8",
+    "lang": "el",
+    "status": null,
+    "valid": false,
+    "failures": [
+     "HTTP_ERROR"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-b54aaf7180d34bc8",
+    "lang": "el",
+    "status": "parse",
+    "valid": false,
+    "failures": [
+     "SUBMITTED_SOURCE_MISMATCH"
+    ],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-62a253a22a16a48b",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   }
+  ]
+ },
+ "luna": {
+  "summary": {
+   "startedAt": "2026-10-16T20:08:47.919Z",
+   "finishedAt": "2026-10-16T20:14:12.434Z",
+   "model": "gpt-6-luna",
+   "effort": "low",
+   "client": "codex-cli 0.160.0",
+   "codeCommit": "9cbe06abf28868798e890baa93f3bf611dcd9742",
+   "commitUnchanged": true,
+   "artifactsUnchanged": true,
+   "selected": 32,
+   "items": 32,
+   "parse": 7,
+   "abstain": 25,
+   "invalid": 0,
+   "inputTokens": 3080883,
+   "costUsd": 0
+  },
+  "items": [
+   {
+    "handle": "pd1-a32c0ccbaf145496",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-9ccf97995eaf0e7e",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-a441659c94eeaba7",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-851f9151ae64844b",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-15786ad99ee26ae6",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-a6b85a673a746753",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-7604de3f5d2b1f6c",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-8b3443169403503a",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-d9b585ead2601978",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-8f6bf3a5d9687026",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-8a7223bd745697bf",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-be1e65de8b2a97e8",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-8f12808458d03644",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-ebe84554a10a5d6d",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-c1cec523c2764642",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-ba59df9c01b715d2",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-9244d03cba00bfc4",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-7d5684413d12478e",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-367a899e51408097",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-5449170b785d924c",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-7857cd031cd8fa89",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-b5f16433e05a1385",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-3088d020b3dc9532",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-6ec5fe76b50edf01",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-65918568a6e89677",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-a7f598e275aac8a1",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-ca93225232e3c585",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-c6b244af2d38db46",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-49f0682ce0c20bca",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-68cc1c73e0552fb8",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-b54aaf7180d34bc8",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-62a253a22a16a48b",
+    "lang": "el",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   }
+  ]
+ },
+ "sol": {
+  "summary": {
+   "startedAt": "2026-10-16T20:35:37.682Z",
+   "finishedAt": "2026-10-16T20:45:05.582Z",
+   "model": "gpt-6.1-sol",
+   "effort": "medium",
+   "client": "codex-cli 0.160.0",
+   "codeCommit": "f41d61f20979407b62c0eee12ad213ae7ae6d088",
+   "commitUnchanged": true,
+   "artifactsUnchanged": true,
+   "selected": 32,
+   "items": 32,
+   "parse": 11,
+   "abstain": 21,
+   "invalid": 0,
+   "inputTokens": 3303716,
+   "costUsd": 0
+  },
+  "items": [
+   {
+    "handle": "pd1-a32c0ccbaf145496",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-9ccf97995eaf0e7e",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-a441659c94eeaba7",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-851f9151ae64844b",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-15786ad99ee26ae6",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-a6b85a673a746753",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-7604de3f5d2b1f6c",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-8b3443169403503a",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-d9b585ead2601978",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-8f6bf3a5d9687026",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-8a7223bd745697bf",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-be1e65de8b2a97e8",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-8f12808458d03644",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-ebe84554a10a5d6d",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-c1cec523c2764642",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-ba59df9c01b715d2",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-9244d03cba00bfc4",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-7d5684413d12478e",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-367a899e51408097",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unresolved"
+   },
+   {
+    "handle": "pd1-5449170b785d924c",
+    "lang": "en",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-7857cd031cd8fa89",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-b5f16433e05a1385",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-3088d020b3dc9532",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-6ec5fe76b50edf01",
+    "lang": "en",
+    "status": "parse",
+    "valid": true,
+    "failures": [],
+    "abstainReason": null
+   },
+   {
+    "handle": "pd1-65918568a6e89677",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-a7f598e275aac8a1",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-ca93225232e3c585",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-c6b244af2d38db46",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-49f0682ce0c20bca",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-68cc1c73e0552fb8",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-b54aaf7180d34bc8",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   },
+   {
+    "handle": "pd1-62a253a22a16a48b",
+    "lang": "el",
+    "status": "abstain",
+    "valid": true,
+    "failures": [],
+    "abstainReason": "unsupported"
+   }
+  ]
+ }
+}

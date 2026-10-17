@@ -1,0 +1,149 @@
+{
+ "gemma": {
+  "level": {
+   "a": "structure (predicate, role names, negation, modality, mood, conditions/consequences)",
+   "c": "exact lfp:2.1 identity"
+  },
+  "itemsRun": 32,
+  "coverage": {
+   "en": {
+    "items": 16,
+    "parse": 12,
+    "copy": 0,
+    "covered": 1,
+    "invalid": 3
+   },
+   "el": {
+    "items": 16,
+    "parse": 9,
+    "copy": 0,
+    "covered": 0,
+    "invalid": 7
+   }
+  },
+  "evaluable": false,
+  "levelA": {
+   "passages": 0,
+   "matchedMean": 0,
+   "mismatchedMean": 0,
+   "top1": 0,
+   "pass": false
+  },
+  "levelC": {
+   "passages": 0,
+   "matchedMean": 0,
+   "mismatchedMean": 0,
+   "top1": 0
+  },
+  "perPassage": [
+   {
+    "passage": 1,
+    "enCovered": 1,
+    "elCovered": 0
+   },
+   {
+    "passage": 2,
+    "enCovered": 0,
+    "elCovered": 0
+   }
+  ]
+ },
+ "luna": {
+  "level": {
+   "a": "structure (predicate, role names, negation, modality, mood, conditions/consequences)",
+   "c": "exact lfp:2.1 identity"
+  },
+  "itemsRun": 32,
+  "coverage": {
+   "en": {
+    "items": 16,
+    "parse": 4,
+    "copy": 0,
+    "covered": 4,
+    "invalid": 0
+   },
+   "el": {
+    "items": 16,
+    "parse": 3,
+    "copy": 0,
+    "covered": 1,
+    "invalid": 0
+   }
+  },
+  "evaluable": false,
+  "levelA": {
+   "passages": 0,
+   "matchedMean": 0,
+   "mismatchedMean": 0,
+   "top1": 0,
+   "pass": false
+  },
+  "levelC": {
+   "passages": 0,
+   "matchedMean": 0,
+   "mismatchedMean": 0,
+   "top1": 0
+  },
+  "perPassage": [
+   {
+    "passage": 1,
+    "enCovered": 1,
+    "elCovered": 1
+   },
+   {
+    "passage": 2,
+    "enCovered": 3,
+    "elCovered": 0
+   }
+  ]
+ },
+ "sol": {
+  "level": {
+   "a": "structure (predicate, role names, negation, modality, mood, conditions/consequences)",
+   "c": "exact lfp:2.1 identity"
+  },
+  "itemsRun": 32,
+  "coverage": {
+   "en": {
+    "items": 16,
+    "parse": 11,
+    "copy": 0,
+    "covered": 11,
+    "invalid": 0
+   },
+   "el": {
+    "items": 16,
+    "parse": 0,
+    "copy": 0,
+    "covered": 0,
+    "invalid": 0
+   }
+  },
+  "evaluable": false,
+  "levelA": {
+   "passages": 0,
+   "matchedMean": 0,
+   "mismatchedMean": 0,
+   "top1": 0,
+   "pass": false
+  },
+  "levelC": {
+   "passages": 0,
+   "matchedMean": 0,
+   "mismatchedMean": 0,
+   "top1": 0
+  },
+  "perPassage": [
+   {
+    "passage": 1,
+    "enCovered": 6,
+    "elCovered": 0
+   },
+   {
+    "passage": 2,
+    "enCovered": 5,
+    "elCovered": 0
+   }
+  ]
+ }
+}
