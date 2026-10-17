@@ -51,3 +51,15 @@ On 2026-10-17 the `__proto__` bug fix (PR #723, an allowed bug fix under ADR 002
 - **Change:** ADR 0029's package becomes **v25** (contract 0.20).
 
 Nothing else changes.
+
+## Amendment 2 (2026-10-17, before any baseline call): package numbers again, and the extractor
+
+**Package numbers.** PR #729 (the Rust renderer port) fixed two renderer defects: the role tie-break now uses code-unit order instead of host-locale `localeCompare`, and world/modality lookups no longer read `Object.prototype`. That changed the served runtime and refroze the instruction package as **v25** (merged at `5f6570bf`). The contract text is identical: v23, v24 and v25 all carry contract hash `b6fdda4c…`, so the requests in `pairs.json` stay valid. Rendering does not feed `lfp:2.1`. Therefore:
+- **Baseline:** package **v25** (frozen contract 0.19).
+- **Change:** ADR 0029's package becomes **v26** (contract 0.20). [ADR 0029](../../decisions/0029-greek-source-bound-frames.md) is renumbered in the same commit.
+
+**Extractor.** Sol's ChatGPT quota was exhausted on 2026-10-17 by the ADR 0027 gate runs, and that gate moved to Sonnet. This test does the same: both runs use **`claude-sonnet-5-5`** through [`run-claude-code-source-only.mjs`](../../scripts/research/run-claude-code-source-only.mjs) on the local CLI subscription login (no API key; the item ceiling is $1.00 and the total $120.00 per run, notional reservation). Models are never mixed between or within runs; a run stopped by a usage limit resumes with Sonnet after the reset.
+- The judge for bar 3 stays SuperGemma (Google lineage). It is still a different vendor from the extractor (now Anthropic), which is what bar 3 requires. `judge.mjs`'s header comment still names Sol; the code is unchanged.
+- The cost moves from ChatGPT quota to Max-plan usage: about 100 items per run, 200 for both.
+
+Bars, data, scorers and predictions are unchanged.

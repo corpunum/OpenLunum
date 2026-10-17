@@ -1,6 +1,6 @@
 # ADR 0029: Greek source-bound general frames, with deixis for pro-drop (proposed)
 
-**Status: Proposed 2026-10-17. Design; no code yet.** It implements part of [ADR 0028](0028-language-neutral-concept-layer.md) (§6 pro-drop, and the Greek half of "language-neutral"), which the owner approved on 2026-10-17 ("do what is better", relayed by the orchestrating session corpunum-6b). It is a contract change, so it follows [ADR 0025](0025-contract-freeze-pending-held-out-evidence.md): a held-out pre-registration and a baseline live run come **before** the change is written. Self-reviewed.
+**Status: Proposed 2026-10-17. Design; no code yet. Renumbered to package v26 on 2026-10-17 (greek-frames amendment 2).** It implements part of [ADR 0028](0028-language-neutral-concept-layer.md) (§6 pro-drop, and the Greek half of "language-neutral"), which the owner approved on 2026-10-17 ("do what is better", relayed by the orchestrating session corpunum-6b). It is a contract change, so it follows [ADR 0025](0025-contract-freeze-pending-held-out-evidence.md): a held-out pre-registration and a baseline live run come **before** the change is written. Self-reviewed.
 
 ## Problem
 
@@ -43,14 +43,14 @@ The same rules as ADR 0024, with Greek lists. Language is chosen by `sourceLangu
 ### 3. Versions
 
 - **Identity:** `lfp:2.1` unchanged. Existing records do not move; the Sem shapes are already valid, and only which candidates are accepted changes. A replay of every recorded candidate must show 0 identity movement for English.
-- **Contract:** `lunum-agent/0.20`, instructions `0.10`, package **v25** (v24 was taken on 2026-10-17 by the `__proto__` bug-fix refreeze, same contract text): Greek allowed for general frames, the deixis convention, and Greek examples. Frames 0.8 and protocol 0.6 are unchanged (no new predicate or role).
-- **English extraction changes too:** "I" becomes `speaker` when a new extractor follows the v24 instructions. New English records of first-person sentences therefore differ from old ones; old records keep their identities. This is stated in the migration note, and it is the price of cross-language convergence.
+- **Contract:** `lunum-agent/0.20`, instructions `0.10`, package **v26** (v24 and v25 were taken on 2026-10-17 by bug-fix refreezes with the same contract text: the `__proto__` fix, #723, and the renderer tie-break and prototype-lookup fix, #729): Greek allowed for general frames, the deixis convention, and Greek examples. Frames 0.8 and protocol 0.6 are unchanged (no new predicate or role).
+- **English extraction changes too:** "I" becomes `speaker` when a new extractor follows the v26 instructions. New English records of first-person sentences therefore differ from old ones; old records keep their identities. This is stated in the migration note, and it is the price of cross-language convergence.
 
 ## Evidence plan (ADR 0025 order; to be pre-registered before any code)
 
 1. **Held-out set, committed first:** a fresh seeded selection of professionally translated EN/EL sentence pairs (Europarl, a new seed, excluding every line already selected by parallel-document-v1), plus fresh Tatoeba Greek sentences never used in the repository, weighted towards first and second person.
-2. **Baseline:** Sol 6.1 medium on that set under the frozen contract (package v23). Greek coverage is expected near 0.
-3. **The change, then the same run under package v25.** Bars, fixed in the pre-registration:
+2. **Baseline:** the extractor named in the [pre-registration](../experiments/greek-frames-heldout-v1/PREREGISTRATION.md) on that set under the frozen contract (package v25, contract 0.19). Greek coverage is expected near 0.
+3. **The change, then the same run under package v26.** Bars, fixed in the pre-registration:
    - Greek coverage rises to at least half of English coverage on the same pairs;
    - level (a): on pairs where both sides are covered, structure agreement EN↔EL at least 60%, with pro-drop pairs reported separately;
    - level (b): a cross-vendor judge (not OpenAI, since the extractor is Sol: SuperGemma, validated on controls) finds the Greek record states the source's content on at least 80% of covered Greek sentences;
