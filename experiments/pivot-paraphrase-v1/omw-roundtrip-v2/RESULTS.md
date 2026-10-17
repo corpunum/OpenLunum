@@ -26,8 +26,9 @@ in code (same stem, ending-class swap only).
 
 ## Reading
 
-The merge behaves exactly as specified — and is **rank-neutral** on a fresh held-out set: variant
-pairs are rare among the top-5 candidates of these items, and where present they do not change
-rank. Honest conclusion: variant-lemma merging is *safe* (never worse than plain lemma mode, 0/0
-discordants) but does **not** clear the pre-registered +0.03 bar on fresh data. The v1 win was
-in-sample; on a fresh set the effect is zero.
+**Untested on this set: exposure 0/300.** The lemma and lemma+variant candidate classes in
+results.json are identical on all 300 items, so the variant merge never touched a single item.
+The "0/0 discordants" therefore means the test had zero power: it is **not** evidence that the
+merge is safe or rank-neutral. **H1 FAIL** (margin 0.000 vs the +0.03 bar). Safety rests only
+on the unit tests (same stem, ending-class swap only, no chains; 82 merged classes, all pairs).
+The feature stays opt-in (`--variant-lemmas`, off by default). The v1 effect was in-sample.
