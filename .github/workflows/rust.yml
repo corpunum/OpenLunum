@@ -40,6 +40,7 @@ jobs:
             ~/.cargo/git
             crates/lunum-sem/target
             crates/lunum-store/target
+            crates/lunum-render/target
             tools/pivot-miner/target
           key: cargo-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml', 'crates/*/Cargo.lock', 'tools/pivot-miner/Cargo.lock') }}
           restore-keys: |
@@ -47,7 +48,7 @@ jobs:
       - name: cargo test --locked (each crate; benches stay ignored)
         run: |
           set -e
-          for dir in crates/lunum-sem crates/lunum-store tools/pivot-miner; do
+          for dir in crates/lunum-sem crates/lunum-store crates/lunum-render tools/pivot-miner; do
             echo "::group::$dir"
             (cd "$dir" && cargo test --locked)
             echo "::endgroup::"

@@ -15,3 +15,7 @@ lunum-sem = { path = "../lunum-sem" }
 [lib]
 name = "lunum_render"
 path = "src/lib.rs"
+
+[[bin]]
+name = "lunum-render"
+path = "src/bin/lunum-render.rs"
