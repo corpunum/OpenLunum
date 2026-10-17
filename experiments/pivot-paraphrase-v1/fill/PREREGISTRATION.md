@@ -42,3 +42,9 @@ The first SuperGemma pass returned **no labels**: the Ally router serves SuperGe
 
 - `max_tokens` for SuperGemma is now 6000. One diagnostic call on batch 0 confirmed it then answers in the required format (its labels were seen by the author; the full pass recomputes batch 0 at temperature 0 and its result is the one used).
 - The full SuperGemma pass is rerun from the start. Nothing else changes. The Sol pass was not affected (Codex has its own budget).
+
+## Amendment 2 (2026-10-17, before any third-pass call): Qwen replaces Luna as judge C
+
+The ChatGPT quota is exhausted and the owner re-routed OpenAI work (relayed by corpunum-6b). Judge C, for the 43 A/B disagreements only, is now **Qwen 3.8 Flash** (Alibaba; local Halogen; temperature 0; one request at a time; `max_tokens` 2000). The gold rule is unchanged: C breaks a tie only when it matches A or B. Qwen proposed some of the pairs (as SuperGemma did), so agreement on Qwen-proposed pairs is reported too. Run outside the live operator's busy minutes (:00–:10 and :30–:40 UTC), as the rig coordinator asked.
+
+Scores so far (A = SuperGemma, B = Sol, seen before this amendment): A–B agreement 0.801, kappa 0.634; false "same" on controls 0 for both; gold 116 S, 14 B, 3 D, 43 unresolved.

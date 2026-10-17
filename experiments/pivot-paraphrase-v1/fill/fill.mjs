@@ -3,7 +3,7 @@
 // blind (no counts, no proposer, seeded order), plus seeded CONTROL pairs that must be "different".
 // Disagreements go to a third judge. See PREREGISTRATION.md (this directory).
 //   node fill.mjs items                       -> items.json (deterministic; no model)
-//   node fill.mjs judge --judge gemma|sol|luna [--only disagreements.json] --out labels-<judge>.json
+//   node fill.mjs judge --judge gemma|sol|luna|qwen [--only disagreements.json] --out labels-<judge>.json
 import fs from 'node:fs';
 import os from 'node:os';
 import { spawnSync } from 'node:child_process';
@@ -59,9 +59,16 @@ export const JUDGES = Object.freeze({
   gemma: { vendor: 'Google lineage', model: 'supergemma4-Q5_K_M', via: 'llama.cpp router on the ROG Ally, 127.0.0.1:18084 through an SSH tunnel to local 28084, temperature 0' },
   sol: { vendor: 'OpenAI', model: 'gpt-6.1-sol', effort: 'medium', via: 'codex exec, read-only, empty temp dir, tools off' },
   luna: { vendor: 'OpenAI', model: 'gpt-6-luna', effort: 'medium', via: 'codex exec, read-only, empty temp dir, tools off (third pass only)' },
+  qwen: { vendor: 'Alibaba (Qwen)', model: 'openai/qwen3.8-flash-next-uncensored-lean', via: 'Halogen on the rig, 127.0.0.1:8080, temperature 0, one request at a time, max_tokens 2000 (third pass, amendment 2)' },
 });
 
 async function ask(judge, text) {
+  if (judge === 'qwen') {
+    const res = await fetch('http://127.0.0.1:8080/v1/chat/completions', { method: 'POST', headers: { 'content-type': 'application/json' }, signal: AbortSignal.timeout(600000),
+      body: JSON.stringify({ model: JUDGES.qwen.model, messages: [{ role: 'user', content: text }], temperature: 0, max_tokens: 2000 }) });
+    const body = await res.json();
+    return { answer: body.choices?.[0]?.message?.content ?? '', servedModel: body.model ?? null };
+  }
   if (judge === 'gemma') {
     const res = await fetch('http://127.0.0.1:28084/v1/chat/completions', { method: 'POST', headers: { 'content-type': 'application/json' }, signal: AbortSignal.timeout(600000),
       body: JSON.stringify({ model: 'supergemma4-Q5_K_M', messages: [{ role: 'user', content: text }], temperature: 0, max_tokens: 6000 }) }); // amendment 1: the router serves SuperGemma with reasoning on
@@ -92,7 +99,7 @@ async function main() {
     return;
   }
   const judge = arg('--judge');
-  if (!JUDGES[judge]) throw new Error('--judge gemma|sol|luna');
+  if (!JUDGES[judge]) throw new Error('--judge gemma|sol|luna|qwen');
   let { items } = JSON.parse(fs.readFileSync(join(here, 'items.json'), 'utf8'));
   if (process.argv.includes('--only')) { const keep = new Set(JSON.parse(fs.readFileSync(arg('--only'), 'utf8'))); items = items.filter((i) => keep.has(i.id)); }
   const BATCH = 10;
