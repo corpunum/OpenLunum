@@ -9,7 +9,7 @@ import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeMan
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
-const packagePath = path.join(packageDirectory, 'public-instruction-package-v23.json');
+const packagePath = path.join(packageDirectory, 'public-instruction-package-v24.json');
 const pkg = JSON.parse(fs.readFileSync(packagePath));
 const legacyPackagePath = path.join(packageDirectory, 'public-instruction-package-v14.json');
 const legacyPkg = JSON.parse(fs.readFileSync(legacyPackagePath));
@@ -23,6 +23,8 @@ const binding = () => artifactBinding(root, packagePath, profilePath, pkg);
 const RUNTIME_DRIFT_0024 = [
   'served_runtime_changed:packages/core/dist/src/agent-builder.js',
   'served_runtime_changed:packages/core/dist/src/agent-native.js',
+  // v24: validateSem forbids __proto__/constructor/prototype keys (see docs/FINGERPRINT_MIGRATION.md).
+  'served_runtime_changed:packages/core/dist/src/canonicalize.js',
   'served_runtime_changed:packages/core/dist/src/constants.js',
   'served_runtime_changed:packages/core/dist/src/frame-registry.js',
   'served_runtime_changed:packages/core/dist/src/index.js',
@@ -33,7 +35,7 @@ const RUNTIME_DRIFT_0024 = [
 ];
 const gitScratch = spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: root, encoding: 'utf8' }).stdout.trim() || path.join(root, '.git');
 
-test('v23 binds every current artifact, dependency and served runtime manifest', () => {
+test('v24 binds every current artifact, dependency and served runtime manifest', () => {
   const result = binding();
   assert.equal(result.match, true);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
@@ -448,4 +450,18 @@ test('only binding failures with known cost let a run continue', () => {
     assert.equal(stopsFurtherLaunches({ evidenceValid: false, evidenceFailures: ['CONTRACT_UNBOUND', failure] }), true, failure);
   }
   assert.equal(stopsFurtherLaunches({ evidenceValid: false, evidenceFailures: [] }), true, 'invalid without a stated reason stops');
+});
+
+test('v23 remains frozen historical binding; only the proto-key validateSem change drifts its served runtime', () => {
+  const historicalPath = path.join(packageDirectory, 'public-instruction-package-v23.json');
+  const historical = JSON.parse(fs.readFileSync(historicalPath));
+  const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
+  const result = artifactBinding(root, historicalPath, profile, historical);
+  assert.equal(result.match, false);
+  const drifted = result.checks.filter(check => !check.match).map(check => check.key);
+  assert.deepEqual(drifted, ['servedRuntimeManifestSha256']);
+  const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
+  assert.deepEqual(runtimeCheck.runtime.errors, ['served_runtime_changed:packages/core/dist/src/canonicalize.js']);
+  // The contract text is unchanged, so v23 still certifies the served contract.
+  assert.equal(checkServedContract(contract, historical).match, true);
 });
