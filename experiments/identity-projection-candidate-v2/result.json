@@ -1,0 +1,57 @@
+{
+ "status": "IN-SAMPLE, offline, self-reviewed; not a core change",
+ "stability": {
+  "clc-v1 S1 vs R2 (Claude)": {
+   "pairs": 11,
+   "lfp21": 3,
+   "v1": 7,
+   "v2strip": 8,
+   "v2fold": 8,
+   "stillSplitV2fold": [
+    "Compliance with these rules shall be subject to control by an independent authority.",
+    "Everyone has the right of access to data which has been collected concerning him or her, and the right to have it rectified.",
+    "The right to marry and the right to found a family shall be guaranteed in accordance with the national laws governing the exercise of these rights."
+   ]
+  },
+  "round2 original vs v17 (Claude)": {
+   "pairs": 12,
+   "lfp21": 7,
+   "v1": 11,
+   "v2strip": 11,
+   "v2fold": 11,
+   "stillSplitV2fold": [
+    "Do not restart the cluster during business hours."
+   ]
+  },
+  "identity-heldout-v1 A vs B (Sonnet, spent)": {
+   "pairs": 26,
+   "lfp21": 11,
+   "v1": 23,
+   "v2strip": 25,
+   "v2fold": 26,
+   "stillSplitV2fold": []
+  },
+  "identity-heldout-v1 A vs B (Sol partial, spent)": {
+   "pairs": 26,
+   "lfp21": 21,
+   "v1": 25,
+   "v2strip": 26,
+   "v2fold": 26,
+   "stillSplitV2fold": []
+  }
+ },
+ "scan": {
+  "v1": {
+   "collapseGroups": 56,
+   "touchingSuites": []
+  },
+  "v2strip": {
+   "collapseGroups": 56,
+   "touchingSuites": []
+  },
+  "v2fold": {
+   "collapseGroups": 56,
+   "touchingSuites": []
+  }
+ }
+}
