@@ -63,3 +63,13 @@ Nothing else changes.
 - The cost moves from ChatGPT quota to Max-plan usage: about 100 items per run, 200 for both.
 
 Bars, data, scorers and predictions are unchanged.
+
+## Amendment 3 (2026-10-17, after the baseline run, before it is scored): one invalid item is re-run
+
+The baseline (`claude-sonnet-5-5`, package v25, commit `9fae0a7a`, 100 items, notional cost $9.69) completed all 100 items, but the runner marked the run **invalid**: one item, `gfh1-e405226cf45a0d79` (Greek), abstained without ever fetching the contract (`CONTRACT_UNBOUND`). The other 99 rows are valid evidence; the runner never counts an unbound row.
+- **Re-run that one item only**, with the same model, package and requests file, from a clean clone at this amendment's commit. The contract hash and package are unchanged, so the commit difference does not touch extraction. It is not re-run more than once: if it is invalid again, the baseline reports 99 items and says so.
+- **Scorer:** a row with invalid evidence is now replaced by a valid row from a later directory (`score.mjs` and `judge.mjs`, one condition each). Before this, an invalid abstain would have shadowed the re-run.
+- The same rule applies to the change run.
+- The raw stream of the invalid row stays archived with the run.
+
+Bars, data and predictions are unchanged. Nothing from the baseline was scored before this amendment.

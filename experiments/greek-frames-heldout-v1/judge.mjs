@@ -40,7 +40,7 @@ async function ask(text) {
 async function main() {
   const requests = new Map(J(arg('--requests')).map((r) => [r.handle, r]));
   const rows = new Map();
-  for (const d of arg('--runs').split(',')) for (const r of J(`${d}/run-ledger.jsonl`)) if (!rows.has(r.handle) || !['parse', 'abstain'].includes(rows.get(r.handle).status)) rows.set(r.handle, r);
+  for (const d of arg('--runs').split(',')) for (const r of J(`${d}/run-ledger.jsonl`)) if (!rows.has(r.handle) || !rows.get(r.handle).evidenceValid || !['parse', 'abstain'].includes(rows.get(r.handle).status)) rows.set(r.handle, r);
   const { pairs } = JSON.parse(fs.readFileSync(join(here, 'pairs.json'), 'utf8'));
   const covered = pairs.map((p) => ({ pair: p.pair, handle: p.el, rec: record(requests.get(p.el), rows.get(p.el)) })).filter((x) => x.rec && !x.rec.copy);
   const items = covered.map((x) => ({ kind: 'own', pair: x.pair, sentence: requests.get(x.handle).sourceText, rec: x.rec }));

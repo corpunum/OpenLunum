@@ -47,7 +47,7 @@ export function score(pairs, requests, rows) {
 async function main() {
   const requests = new Map(J(arg('--requests')).map((r) => [r.handle, r]));
   const rows = new Map();
-  for (const d of arg('--runs').split(',')) for (const r of J(`${d}/run-ledger.jsonl`)) if (!rows.has(r.handle) || !['parse', 'abstain'].includes(rows.get(r.handle).status)) rows.set(r.handle, r);
+  for (const d of arg('--runs').split(',')) for (const r of J(`${d}/run-ledger.jsonl`)) if (!rows.has(r.handle) || !rows.get(r.handle).evidenceValid || !['parse', 'abstain'].includes(rows.get(r.handle).status)) rows.set(r.handle, r);
   const { pairs } = JSON.parse(fs.readFileSync(join(here, 'pairs.json'), 'utf8'));
   const out = score(pairs, requests, rows);
   fs.writeFileSync(arg('--out', '/dev/stdout'), JSON.stringify(out, null, 1) + '\n');
