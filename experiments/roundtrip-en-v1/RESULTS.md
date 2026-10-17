@@ -37,7 +37,7 @@ As predicted (20 to 30%), but it is the main limit: three quarters of plain Engl
 
 | Reading | Count | Items |
 |---|---|---|
-| Real errors | 6 | "Tom asked **me** if I were hungry" drops "me"; "Do you like cheese?" → `topic(subject=you like cheese)` (the question is lost: `generic-en-pivot/0.2` does not render `kind`); "There were a lot of people in the park" → `describe(subject=the park, attribute=There were a lot of people)` (roles garbled); "Tom **will** be ready" → modality `intention` (future, not intention); "Tom **knows** …" → `believe` (factive lost); "Tom never **saw** Mary" → `read` (wrong predicate; SuperGemma's only "no") |
+| Real errors | 6 | "Tom asked **me** if I were hungry" drops "me"; "Do you like cheese?" → `topic(subject=you like cheese)` (the question is lost: the extractor gave it `kind: simple_fact`); "There were a lot of people in the park" → `describe(subject=the park, attribute=There were a lot of people)` (roles garbled); "Tom **will** be ready" → modality `intention` (future, not intention); "Tom **knows** …" → `believe` (factive lost); "Tom never **saw** Mary" → `read` (wrong predicate; SuperGemma's only "no") |
 | Approximations | 2 | "gave" and "brought" → `send` |
 | Content kept | 8 | `describe` records whose filler holds the predicate words, e.g. `describe(subject=tom, attribute=swims very fast)`. Qwen rejects the frame; the content is there |
 
@@ -47,7 +47,7 @@ On that reading, 41 to 43 of 49 (84 to 88%) state the content, still above 80%, 
 
 - **The Rust path works.** Rust store, identity and rendering reproduce the TypeScript output exactly on fresh live records.
 - **Where a record exists, it mostly keeps the meaning.** The failures come from the extractor, not the renderer: a wrong predicate (saw → read), a wrong modality (will → intention), a lost participant. The validator accepts all of them, because each word is in the source or the frame allows it.
-- **The renderer drops the clause kind.** A question renders like a statement. That is a `generic-en-pivot/0.2` property, not a port error.
+- **The renderer does not show `kind`.** That is how `generic-en-pivot/0.2` is designed, and it is not a port error. It did not cause any failure here: the one question that lost its mood was already a `simple_fact` in the record (corrected on 2026-10-17; the first version of this file blamed the renderer).
 - **What was not measured:** level (c), and any English rendering for people to read. The code is a pivot notation.
 
 ## Against the predictions
