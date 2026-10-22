@@ -1,0 +1,16 @@
+{
+  "greekItems": 40,
+  "greekControls": 8,
+  "ownerLabels": {
+    "same": 27,
+    "mostly_same": 2,
+    "different": 2,
+    "cant_tell": 1,
+    "unlabelled": 0
+  },
+  "ownerControlsCaught": 8,
+  "a3Controls": 20,
+  "renderer": "generic-en-pivot/0.3",
+  "rustTsParity": "121/121",
+  "itemsSha256": "56f786f30b51fdfd17ef44b1cc8bbfe1ab643a16f0396a4891b0c4f90b64fb31"
+}

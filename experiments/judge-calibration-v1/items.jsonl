@@ -1,0 +1,60 @@
+{"set":"greek","id":"el-1","original":"Έχω ήδη μιλήσει στον Τομ γι' αυτό.","after":"Μίλησα ήδη με τον Τομ για αυτό.","isControl":false,"controlKind":null,"owner":"mostly_same"}
+{"set":"greek","id":"el-2","original":"Είναι μαύρο τ' αμάξι σου;","after":"Είναι μαύρο το αυτοκίνητό σου;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-3","original":"Ποιά είναι τα ισχυρά σου σημεία;","after":"Ποια είναι τα δυνατά σου σημεία;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-4","original":"Το φαγητό ήταν πολύ καλό τη τελευταία φορά που ήμουν εδώ.","after":"Το φαγητό ήταν πολύ καλό την τελευταία φορά που ήμουν εδώ.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-5","original":"Ο Ιανουάριος είναι ο πρώτος μήνας του χρόνου.","after":"Ο Ιανουάριος είναι ο πρώτος μήνας του έτους.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-6","original":"Χρωστάω λεφτά στον Τομ.","after":"Χρωστάω χρήματα στον Τομ.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-7","original":"Μπορώ να πάρω αυτό το βιβλίο για σένα.","after":"Πρέπει να πάρω αυτό το βιβλίο για εσένα.","isControl":true,"controlKind":"may_to_must","owner":"different"}
+{"set":"greek","id":"el-8","original":"Θα σας δω αργότερα.","after":"Θα σας δω αργότερα.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-9","original":"Είσαι κλεισμένος για την άλλη Δευτέρα;","after":"Είσαι κλεισμένος για την επόμενη Δευτέρα;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-10","original":"Μην πας στη Βοστώνη.","after":"Εσύ μην πας στη Βοστώνη.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-11","original":"Ο Τομ ήταν ένα απ' αυτά.","after":"Ο Τομ ήταν ένας από αυτούς.","isControl":false,"controlKind":null,"owner":"cant_tell"}
+{"set":"greek","id":"el-12","original":"Κλείσε το παράθυρο πριν βγεις έξω.","after":"Εσύ κλείσε το παράθυρο πριν βγεις έξω.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-13","original":"Ποιοί είναι οι γονείς σου;","after":"Ποιοι είναι οι γονείς σου;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-14","original":"Πάρε τηλέφωνο τον Τομ στις 2:30.","after":"Κάλεσε τον Τομ στις 4:30.","isControl":true,"controlKind":"number_change","owner":"different"}
+{"set":"greek","id":"el-15","original":"Ο Τομ είχε τρεις σκύλους.","after":"Ο Τομ είχε τρία σκυλιά.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-16","original":"Χτενίζω τα μαλλιά μου.","after":"Χτενίζω τα μαλλιά μου.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-17","original":"Τους είπα να μου στείλουν ένα άλλο εισητήριο.","after":"Τους είπα να μου στείλουν άλλο εισιτήριο.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-18","original":"Είσαι σίγουρη ότι δε θυμάσαι;","after":"Είσαι σίγουρη ότι δεν θυμάσαι;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-19","original":"Τι έκανες όταν αυτοί οι άνδρες σου επιτέθηκαν;","after":"Τι έκανες όταν αυτοί οι άντρες σε επιτέθηκαν;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-20","original":"Πού θα πας τα Χριστούγεννα;","after":"Πού πας τα Χριστούγεννα;","isControl":false,"controlKind":null,"owner":"mostly_same"}
+{"set":"greek","id":"el-21","original":"Ο Τομ θα είναι έτοιμος.","after":"Ο Τομ θα είναι έτοιμος.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-22","original":"Πρέπει να βοηθήσεις τους φίλους σου.","after":"Μπορεί να βοηθήσεις τους φίλους σου.","isControl":true,"controlKind":"must_to_may","owner":"different"}
+{"set":"greek","id":"el-23","original":"Πείτε μου για τον γιο σας.","after":"Πείτε μου για τον γιο σας.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-24","original":"Δεν είναι μόνο έξυπνη αλλά και όμορφη.","after":"Είναι μόνο έξυπνη αλλά και όμορφη.","isControl":true,"controlKind":"negation_flip","owner":"different"}
+{"set":"greek","id":"el-25","original":"Ο Θωμάς έπρεπε να είχε αγοράσει το ακρυβότερο.","after":"Ο Θωμάς πρέπει να αγόρασε τον πιο ακριβό.","isControl":false,"controlKind":null,"owner":"different"}
+{"set":"greek","id":"el-26","original":"Θέλω να μείνω λίγο μόνος μου.","after":"Θέλω να μείνω μόνος μου για λίγο.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-27","original":"Τι θα ήθελες για πρωινό;","after":"Τι θα ήθελες για πρωινό;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-28","original":"Είναι εύκολο γι' αυτούς.","after":"Είναι εύκολο γι' αυτούς.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-29","original":"Πρέπει να υπάρχει λόγος.","after":"Μπορεί να υπάρχει κάποιος λόγος.","isControl":true,"controlKind":"must_to_may","owner":"different"}
+{"set":"greek","id":"el-30","original":"Ζήτησα απ' τον Τομ ν' ανοίξει το παράθυρο.","after":"Ζήτησα από τον Τομ να ανοίξει το παράθυρο.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-31","original":"Διψούσαμε και οι δύο πολύ.","after":"Ήμασταν και οι δύο πολύ διψασμένοι.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-32","original":"Ο Θωμάς δεν ήξερε πού είναι η ομπρέλα του.","after":"Ο Θωμάς ήξερε πού είναι η ομπρέλα του.","isControl":true,"controlKind":"negation_flip","owner":"different"}
+{"set":"greek","id":"el-33","original":"Ο Τομ σας έστειλε;","after":"Σας έστειλε ο Τομ;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-34","original":"Μπορώ να μείνω στ' αμάξι;","after":"Πρέπει να μείνω στο αυτοκίνητο;","isControl":true,"controlKind":"may_to_must","owner":"different"}
+{"set":"greek","id":"el-35","original":"Ο Τομ φίλησε τη Μαίρη κι έφυγε.","after":"Ο Τομ φίλησε τη Μαρία και έφυγε.","isControl":false,"controlKind":null,"owner":"different"}
+{"set":"greek","id":"el-36","original":"Κοιμάται τη μέρα και δουλεύει τη νύχτα.","after":"Κοιμάται την ημέρα και δουλεύει τη νύχτα.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-37","original":"Δεν είπα ότι ήταν εύκολο.","after":"Είπα ότι ήταν εύκολο.","isControl":true,"controlKind":"negation_flip","owner":"different"}
+{"set":"greek","id":"el-38","original":"Δώσ' μου τον στυλό.","after":"Εσύ δώσε μου τον στυλογράφο.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-39","original":"Τι θα κάνατε, αν ήσαστε στη θέση μου;","after":"Τι θα κάνατε αν ήσασταν στη θέση μου;","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"greek","id":"el-40","original":"Είμαι πολύ εξαντλημένη να σκεφτώ, πόσο μάλλον να διαβάσω.","after":"Είμαι πολύ εξαντλημένη για να σκεφτώ, πόσο μάλλον να διαβάσω.","isControl":false,"controlKind":null,"owner":"same"}
+{"set":"a3-control","id":"a3c1-8bfb09246411262b~a3c1-807b27f9b0dc17c9","sentence":"Tom's room is full of toys.","code":"R describe(subject=tom, attribute=gone, condition=When I woke up)","isControl":true}
+{"set":"a3-control","id":"a3c1-807b27f9b0dc17c9~a3c1-62cf55d6af39f8c0","sentence":"When I woke up, Tom was gone.","code":"R intention send(agent=I, recipient=you, object=a book)","isControl":true}
+{"set":"a3-control","id":"a3c1-62cf55d6af39f8c0~a3c1-740611a303b03756","sentence":"I'll give you a book.","code":"R imperative to you: assert(object=me, action=Stop looking)","isControl":true}
+{"set":"a3-control","id":"a3c1-740611a303b03756~a3c1-3f59535ba217aacf","sentence":"Stop looking at me.","code":"R assert(subject=We, object=many mistakes, action=made)","isControl":true}
+{"set":"a3-control","id":"a3c1-3f59535ba217aacf~a3c1-4e2356ce463141b4","sentence":"We've made many mistakes.","code":"R describe(subject=I, attribute=afraid to go in there)","isControl":true}
+{"set":"a3-control","id":"a3c1-4e2356ce463141b4~a3c1-77d2ee208618c856","sentence":"I'm afraid to go in there.","code":"R not assert(subject=We, manner=without you, action=leaving)","isControl":true}
+{"set":"a3-control","id":"a3c1-77d2ee208618c856~a3c1-e2f40075ff3c2a5e","sentence":"We're not leaving without you.","code":"R not describe(subject=I, attribute=have a cat)","isControl":true}
+{"set":"a3-control","id":"a3c1-e2f40075ff3c2a5e~a3c1-b69ae38a60059919","sentence":"I don't have a cat.","code":"R assert(subject=I, object=my eyes, action=closed)","isControl":true}
+{"set":"a3-control","id":"a3c1-b69ae38a60059919~a3c1-0b0aba38f9f5bd6e","sentence":"I closed my eyes.","code":"R question: assert(object=my red tie, action=Have you seen)?","isControl":true}
+{"set":"a3-control","id":"a3c1-0b0aba38f9f5bd6e~a3c1-a4e51c783d4bd089","sentence":"Have you seen my red tie?","code":"R must assert(subject=You, object=this movie, action=have to see)","isControl":true}
+{"set":"a3-control","id":"a3c1-a4e51c783d4bd089~a3c1-482cc0820bebd15a","sentence":"You have to see this movie.","code":"R must assert(subject=You, action=have to study much more)","isControl":true}
+{"set":"a3-control","id":"a3c1-482cc0820bebd15a~a3c1-47ba41dfebe0bc12","sentence":"You have to study much more.","code":"R assert(subject=Tom, action=left) @about thirty minutes ago","isControl":true}
+{"set":"a3-control","id":"a3c1-47ba41dfebe0bc12~a3c1-28a1a96c3f319962","sentence":"Tom left about thirty minutes ago.","code":"R define(subject=You, definition=my friend)","isControl":true}
+{"set":"a3-control","id":"a3c1-28a1a96c3f319962~a3c1-325f86ec04c89735","sentence":"You are my friend.","code":"R describe(subject=I, attribute=from Russia)","isControl":true}
+{"set":"a3-control","id":"a3c1-325f86ec04c89735~a3c1-19bc7305ecc9872c","sentence":"I am from Russia.","code":"R assert(subject=We, action=drank, duration=all night)","isControl":true}
+{"set":"a3-control","id":"a3c1-19bc7305ecc9872c~a3c1-2fe5b07ec78baf88","sentence":"We drank all night.","code":"R imperative to you: assert(object=both of your hands, location=on the steering wheel, action=Keep)","isControl":true}
+{"set":"a3-control","id":"a3c1-2fe5b07ec78baf88~a3c1-1c66a6a595cbf7d3","sentence":"Keep both of your hands on the steering wheel.","code":"R define(subject=Tom, definition=a good coach)","isControl":true}
+{"set":"a3-control","id":"a3c1-1c66a6a595cbf7d3~a3c1-b0c9d77d97d9fab6","sentence":"Tom is a good coach.","code":"R imperative to you: assert(recipient=me, object=your opinion, manner=Please, action=tell)","isControl":true}
+{"set":"a3-control","id":"a3c1-b0c9d77d97d9fab6~a3c1-c8ab7f07a49c29e0","sentence":"Please tell me your opinion.","code":"R intention assert(subject=I, object=some cheese, action=like to buy)","isControl":true}
+{"set":"a3-control","id":"a3c1-c8ab7f07a49c29e0~a3c1-535d6cde87f695de","sentence":"I'd like to buy some cheese.","code":"R assert(subject=tom, location=boston, action=was born and raised)","isControl":true}
