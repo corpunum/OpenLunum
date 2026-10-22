@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420" font-family="ui-sans-serif, -apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <title>OpenLunum: an AI agent turns a sentence into a small Lunum record, core code checks it against the source and gives it an identity, and the Rust engine writes it back out. English works today; Greek and English-Greek are the next stages.</title>
+  <style>
+    .h { font-size: 11.5px; font-weight: 800; letter-spacing: .12em; fill: #93a1bd; }
+    .t { font-size: 17px; fill: #e8edf7; font-weight: 600; }
+    .s { font-size: 11.5px; fill: #93a1bd; }
+    .m { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px; fill: #e8edf7; }
+    .kw { fill: #f5c542; }
+    .ok { font-size: 12.5px; fill: #e8edf7; }
+    .g { fill: #30a46c; font-weight: 800; }
+    .arr { font-size: 11px; fill: #93a1bd; font-style: italic; }
+    /* 12 s loop: source, proposal, three checks, identity, render back, one after another */
+    .k1 { animation: k1 12s infinite; } .k2 { animation: k2 12s infinite; } .k3 { animation: k3 12s infinite; }
+    .k4 { animation: k4 12s infinite; } .k5 { animation: k5 12s infinite; } .k6 { animation: k6 12s infinite; }
+    .k7 { animation: k7 12s infinite; } .k8 { animation: k8 12s infinite; }
+    @keyframes k1 { 0%,1% { opacity: .15 } 3%,95% { opacity: 1 } 99%,100% { opacity: .15 } }
+    @keyframes k2 { 0%,10% { opacity: .15 } 13%,95% { opacity: 1 } 99%,100% { opacity: .15 } }
+    @keyframes k3 { 0%,22% { opacity: .15 } 25%,95% { opacity: 1 } 99%,100% { opacity: .15 } }
+    @keyframes k4 { 0%,30% { opacity: .15 } 33%,95% { opacity: 1 } 99%,100% { opacity: .15 } }
+    @keyframes k5 { 0%,38% { opacity: .15 } 41%,95% { opacity: 1 } 99%,100% { opacity: .15 } }
+    @keyframes k6 { 0%,48% { opacity: .15 } 51%,95% { opacity: 1 } 99%,100% { opacity: .15 } }
+    @keyframes k7 { 0%,60% { opacity: .15 } 63%,95% { opacity: 1 } 99%,100% { opacity: .15 } }
+    @keyframes k8 { 0%,70% { opacity: .15 } 73%,95% { opacity: 1 } 99%,100% { opacity: .15 } }
+    @media (prefers-reduced-motion: reduce) { .k1,.k2,.k3,.k4,.k5,.k6,.k7,.k8 { animation: none; opacity: 1; } }
+  </style>
+  <rect width="900" height="420" rx="18" fill="#0b1020"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#93a1bd"/></marker>
+  </defs>
+
+  <!-- column 1: the source -->
+  <text x="30" y="40" class="h">1 · A SENTENCE</text>
+  <g class="k1">
+    <rect x="30" y="54" width="220" height="96" rx="12" fill="#1c2540" stroke="#3a4a78" stroke-width="2"/>
+    <text x="46" y="78" class="s">English source</text>
+    <text x="46" y="106" class="t">Tom doesn't eat</text>
+    <text x="46" y="130" class="t">red meat.</text>
+  </g>
+  <g opacity=".55">
+    <rect x="30" y="176" width="220" height="96" rx="12" fill="none" stroke="#3a4a78" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="46" y="200" class="s">its human Greek translation</text>
+    <text x="46" y="228" class="t">Ο Τομ δεν τρώει</text>
+    <text x="46" y="252" class="t">κόκκινο κρέας.</text>
+  </g>
+  <text x="46" y="292" class="s" opacity=".8">Greek is refused by today's</text>
+  <text x="46" y="308" class="s" opacity=".8">contract: next stage of the plan</text>
+
+  <!-- arrow 1 -->
+  <g class="k2">
+    <line x1="256" y1="102" x2="318" y2="102" stroke="#93a1bd" stroke-width="2" marker-end="url(#a)"/>
+    <text x="287" y="92" text-anchor="middle" class="arr">an agent</text>
+    <text x="287" y="120" text-anchor="middle" class="arr">proposes</text>
+  </g>
+
+  <!-- column 2: the record and the checks -->
+  <text x="326" y="40" class="h">2 · A LUNUM RECORD</text>
+  <g class="k2">
+    <rect x="326" y="54" width="282" height="118" rx="12" fill="#121a33" stroke="#3a4a78" stroke-width="2"/>
+    <text x="342" y="82" class="m"><tspan class="kw">not</tspan> assert(</text>
+    <text x="358" y="104" class="m">subject = tom</text>
+    <text x="358" y="126" class="m">action  = eat</text>
+    <text x="358" y="148" class="m">object  = red meat )</text>
+  </g>
+  <text x="326" y="200" class="h">CORE CHECKS IT</text>
+  <g class="k3"><text x="326" y="224" class="ok"><tspan class="g">✓</tspan>  valid record, fits the frame</text></g>
+  <g class="k4"><text x="326" y="248" class="ok"><tspan class="g">✓</tspan>  every word comes from the source</text></g>
+  <g class="k5"><text x="326" y="272" class="ok"><tspan class="g">✓</tspan>  no number, date or ID dropped</text></g>
+  <g class="k6">
+    <rect x="326" y="288" width="282" height="34" rx="17" fill="#0f6b45"/>
+    <text x="467" y="310" text-anchor="middle" class="m" style="font-size:12px">lfp:2.1:sha256:3d932b11…</text>
+  </g>
+  <g class="k6"><text x="326" y="342" class="s">identity: the same record always gets this ID</text></g>
+
+  <!-- arrow 2 -->
+  <g class="k7">
+    <line x1="612" y1="102" x2="662" y2="102" stroke="#93a1bd" stroke-width="2" marker-end="url(#a)"/>
+    <text x="637" y="92" text-anchor="middle" class="arr">Rust</text>
+    <text x="637" y="120" text-anchor="middle" class="arr">renders</text>
+  </g>
+
+  <!-- column 3: back out -->
+  <text x="668" y="40" class="h">3 · BACK OUT</text>
+  <g class="k7">
+    <rect x="668" y="54" width="204" height="118" rx="12" fill="#1c2540" stroke="#30a46c" stroke-width="2"/>
+    <text x="684" y="78" class="s">English, today (pivot code)</text>
+    <text x="684" y="102" class="m" style="font-size:12px">R not assert(</text>
+    <text x="692" y="120" class="m" style="font-size:12px">subject=tom,</text>
+    <text x="692" y="138" class="m" style="font-size:12px">object=red meat,</text>
+    <text x="692" y="156" class="m" style="font-size:12px">action=eat)</text>
+  </g>
+  <g class="k8">
+    <text x="668" y="196" class="h">MEASURED · R4 RUN</text>
+    <text x="668" y="218" class="ok"><tspan class="g">49/49</tspan> Rust = TypeScript output</text>
+    <text x="668" y="238" class="ok"><tspan class="g">48/49</tspan> meaning kept, lenient judge</text>
+    <text x="668" y="258" class="ok"><tspan fill="#f5c542" font-weight="800">33/49</tspan> meaning kept, strict judge</text>
+    <text x="668" y="278" class="ok"><tspan fill="#e5484d" font-weight="800">49/200</tspan> sentences get a record</text>
+  </g>
+  <g opacity=".55">
+    <rect x="668" y="294" width="204" height="50" rx="12" fill="none" stroke="#3a4a78" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="684" y="314" class="s">next: a real English sentence,</text>
+    <text x="684" y="332" class="s">then Greek, then EN ↔ EL</text>
+  </g>
+
+  <!-- footer -->
+  <line x1="30" y1="362" x2="872" y2="362" stroke="#3a4a78" stroke-width="1"/>
+  <text x="30" y="388" class="ok">Drop a number, a date or an ID, or invent a word, and core refuses the record.</text>
+  <text x="30" y="406" class="s">The original text is always kept. When the agent cannot say it faithfully, the right answer is to abstain.</text>
+</svg>

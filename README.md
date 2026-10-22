@@ -1,154 +1,167 @@
-# OpenLunum
+<div align="center">
 
-**An experimental toolkit that lets an AI agent write down what a sentence means as a structured, checkable record, and gives that meaning a stable identity.**
+# 🌙 OpenLunum
 
-It is Apache-2.0 ([LICENSE](LICENSE), [scope and third-party terms](LICENSE.md)) and pre-1.0: a research repository, not a production dependency.
+**Write down what a sentence means, once, in a small language a machine can check. Then say it again, in any language.**
 
-OpenLunum develops **Lunum**, an intermediate representation for agent memory and context. The agent reads source text and proposes a structured meaning, a *Lunum-Sem* record. Core code then decides whether that proposal deserves an identity:
+[![CI](https://github.com/corpunum/OpenLunum/actions/workflows/ci.yml/badge.svg)](https://github.com/corpunum/OpenLunum/actions/workflows/ci.yml) [![rust](https://github.com/corpunum/OpenLunum/actions/workflows/rust.yml/badge.svg)](https://github.com/corpunum/OpenLunum/actions/workflows/rust.yml) [![license](https://img.shields.io/badge/license-Apache--2.0-3e63dd)](LICENSE) ![status](https://img.shields.io/badge/status-research-f5c542)
 
-```text
-source text ──► agent proposes Sem ──► core: schema, frames, placeholders, literal retention
-                                          │
-                     rejected ◄───────────┴───────────► accepted
-            (keep natural text; no identity)            versioned identity  lfp:2.1:…
-                                                        (same meaning in EN / EL → same identity)
-```
+<img src="docs/media/hero.svg" alt="An English sentence, 'Tom doesn't eat red meat', becomes a Lunum record: not assert(subject = tom, action = eat, object = red meat). Core checks that the record fits its frame, that every word comes from the source and that no number, date or ID was dropped, then gives it the identity lfp:2.1:sha256:3d932b11…. The Rust engine writes it back out. Measured on 200 sentences: 49/49 Rust output equals TypeScript, 48/49 keep the meaning by a lenient judge and 33/49 by a strict one, and only 49/200 sentences get a record. Greek is the next stage." width="900">
 
-Where identities hold, they allow two things:
-- **deduplicating memory** across paraphrases and languages;
-- **comparing claims** exactly, without a model.
+</div>
 
-The source text is always kept. When the agent can't represent a sentence faithfully, the right answer is to **abstain**, not to guess.
+## The story
 
-## A concrete example
+I don't write code. I had a question: AI agents pass huge amounts of text to each other and to
+themselves, as memory and context. What if they could write down **what a sentence means** once,
+in a small, strict language, so that the same meaning gets the same identity, whatever the words
+and whatever the human language? Then memory could be checked, deduplicated and carried from
+English to Greek without trusting a model's paraphrase.
 
-"The finance lead allows Omar to approve invoices under 5,000 euros."
+That language is **Lunum**, and AI agents built this repository through my framework
+[OpenUnum](https://corpunum.com): coding agents (Claude Code, Codex, and local models in a worker
+loop) wrote the code and ran the experiments, and other models (GPT Sol and Luna, local Qwen and
+SuperGemma) extracted sentences and judged the results. The
+rules are strict on purpose. Every experiment is **pre-registered before a model sees the data**,
+results are never edited after the fact, and the failures are published next to the wins. Most of
+the table below is failures. That is the point: it says exactly where the idea stands.
 
-| Agent proposal | Core decision |
-|---|---|
-| `allow(agent: finance_lead, recipient: omar, action: approve, theme: invoices)` with condition `below(invoices, 5000 euro)` | identity `lfp:2.1:…` |
-| the same, **without** the threshold condition | **no identity**: `unretained_source_literal: … 5000` |
-| for "Omar *may* approve invoices under 5,000 euros" (no permitter stated): `allow(recipient: omar, action: approve, …)` | **no identity**: `frame_noncanonical` ("Predicate 'allow' requires role 'agent'"). The canonical form is `approve(agent: omar, theme: invoices)` with modality `permission` and the same condition, which gets an identity. |
+## The idea in 30 seconds
 
-Core cannot tell whether a proposal is *right*. It can refuse proposals that are malformed, that fill roles with placeholders, that are ambiguous by construction, or that drop a number or identifier stated in the source.
+An agent reads a sentence and proposes a **record**: a predicate, its roles, negation, modality,
+conditions. Core code (no model) then decides whether the record deserves an **identity**:
 
-## Current status, in one screen (2026-10-17)
-
-**Works and is tested** (4,532 tests; `pnpm verify`):
-- **Record handling:** Sem types, canonicalization, validation against 46 predicate frames (of 55 registered predicates; protocol 0.6, frames 0.8, contract 0.19), and versioned `lfp:2.1` fingerprints. A Rust crate, `crates/lunum-sem`, reproduces `lfp:2.1` exactly and is checked against the same 7,089-entry golden file as the TypeScript build. Keys named `__proto__`, `constructor` or `prototype` are rejected at every depth.
-- **Refusal gates:** core withholds identity from a candidate that:
-  - is malformed;
-  - uses placeholders;
-  - is ambiguous by construction;
-  - drops a number, identifier, date or relative time stated in the source;
-  - (for general frames) uses words that are not in the source.
-- **Agent tools:** an MCP server for Claude Code (`.mcp.json`). It provides the extraction contract, candidate builder, submission, context compilation and discourse records.
-- **Evidence handling:** frozen instruction packages bind the build. Experiments since October are pre-registered, and failures are published.
-
-**Measured.** Every result below is self-reviewed or reviewed by the same model family:
-
-| What | Result | Caveat |
+| Sentence | Agent proposes | Core decides |
 |---|---|---|
-| Author-written sentences (V8 development set, probes v1–v3) | 19–20/21 on V8; probes 20/20, 18/18, 16/16 | In-sample: the contract was tuned on them |
-| An independent session's fresh sentences ([round 2](reports/independent-evaluation/2026-09-26-round2/REPORT.md)), scored against the owner's native-checked readings ([targets](experiments/meaning-targets-owner-v1/README.md)) | **16/30 on meaning; Greek 3/10** | 10 of the parses the evaluator counted as correct drop an expiry, recurrence, exception or deadline, or pick one reading of an ambiguous "can" |
-| The same 30 sentences re-run on a later contract ([v17 report](reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md)) | 16/30 on meaning; Greek 4/10 | More correct abstentions, but more mismatches |
-| **The same sentence, same model, two runs** ([v17](reports/independent-evaluation/2026-10-07-round2-v17-live/REPORT.md); [clc-v1](experiments/cross-language-convergence-v1/RESULTS.md)) | **the same identity in 7/12, then 4/12** | Labels and forms the source does not determine. A candidate canonical projection raises it to 11/12 and 8/12, in-sample ([ADR 0027, proposed](decisions/0027-identity-projection-candidate.md)) |
-| **English sentence and its human Greek translation** ([clc-v1](experiments/cross-language-convergence-v1/RESULTS.md); 80 human EN/EL pairs plus Greek paraphrases; $41 live) | **0 of 5** pairs with an identity on both sides matched; coverage is English about 30%, Greek 5–8% | Open terms stay in their source language, so the identities cannot match. Too few pairs to evaluate under the pre-registered bar; every observed pair diverged |
-| **Real agent memory** ([discourse-unit-identity-v1](experiments/discourse-unit-identity-v1/RESULTS.md), 21,291 units of the owner's OpenUnum sessions) | **0 identities**; at most about 3% of tokens could ever be deduplicated | Work logs, status lines and multi-clause instructions do not fit the frames |
-| Exact recall over that memory ([source-locator-v1](experiments/source-locator-v1/RESULTS.md), [greek-fold-recall-v1](experiments/greek-fold-recall-v1/RESULTS.md)) | overall recall@5 rose from 0.41 to 0.80; unaccented Greek queries from 0.28 to 0.99 (composite 0.88) | This comes from search changes, not Lunum-Sem. It is the clearest win so far. |
-| Compressed views of real context ([ambient v1](experiments/ambient-discourse-v1/RESULTS.md), [v2](experiments/ambient-discourse-v2/RESULTS.md)) | **both failed** their pre-registered bars | Not shipped |
-| Discourse compaction on a real Claude Code work log ([session-transcript-compaction-v1](experiments/session-transcript-compaction-v1/README.md), 1,662 messages) | −35% characters, 96% of literals kept | Surface records only; 0 semantic identities used; no QA check |
-| Memory QA on a self-built paraphrase corpus | about −60% tokens with identity deduplication; Haiku wrong in 5 of 9 runs | It does not carry over to real memory (see above) |
+| "The finance lead allows Omar to approve invoices under 5,000 euros." | `allow(agent: finance_lead, recipient: omar, action: approve, theme: invoices)` if `below(invoices, 5000 euro)` | identity `lfp:2.1:…` |
+| the same | the same, **without** the 5,000 condition | **refused**: `unretained_source_literal` |
+| "Omar *may* approve invoices under 5,000 euros." | `allow(recipient: omar, …)`, no permitter in the source | **refused**: `frame_noncanonical`; the right record is `approve(agent: omar, …)` with modality `permission` |
 
-**Current policy:**
-- **The extraction contract is frozen at 0.19** until held-out evidence exists ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
-- **Under review:** a narrower working scope ([ADR 0026, proposed](decisions/0026-working-scope-checkable-memory.md)): a checkable memory layer that offers exact literal retention, verified recall and refusal, with semantic identity only where convergence has been measured.
-- **Reviews in progress:**
-  - a cross-vendor review ([packet](experiments/cross-vendor-review-v1/README.md));
-  - the owner's native-Greek review ([worksheet](experiments/owner-greek-review-v1/README.md));
-  - the latest same-family review ([Fable, 2026-10-16](reports/independent-evaluation/2026-10-16-fable-review/REPORT.md)).
+Core cannot tell whether a record is *right*. It can refuse records that are malformed, use
+placeholders, are ambiguous by construction, drop a number, date or identifier, or (for general
+frames) use words that are not in the source. The source text is always kept, and when the agent
+cannot say a sentence faithfully, the right answer is to **abstain**.
 
-**Not established:**
-- general text-to-meaning extraction;
-- identity that converges across languages: 0 of 5 observed pairs matched, and paraphrase convergence is untested at scale;
-- token savings on real memory;
-- any human or cross-vendor review. Both are now being set up.
+## What works, and what doesn't (yet)
 
-`lfp:2.1` depends on Unicode 17.0 casefold/NFKC, so Node is pinned in `.nvmrc` (22.22.2); a Unicode bump is a deliberate, reviewed change ([contract](docs/SEMANTIC_CONTRACT.md)).
+| | | Evidence |
+|---|---|---|
+| ✅ **Identity engine, TypeScript and Rust** | The Rust crates reproduce the TypeScript identity on **7,089 / 7,089** golden records and the renderer on **10,522 / 10,522**; on fresh live records, **49 / 49** | [`lfp21-golden.json`](eval-results/golden-vectors/lfp21-golden.json), [`render-en-golden.json`](eval-results/golden-vectors/render-en-golden.json), [R4](experiments/roundtrip-en-v1/RESULTS.md) |
+| ✅ **Refusal gates** | Dropped numbers, dates, IDs, relative times; placeholders; invented words in general frames: refused, with the reason | [ADRs 0016–0024](decisions/README.md) |
+| ✅ **Exact recall over real agent memory** | recall@5 **0.41 → 0.80**; unaccented Greek queries **0.283 → 0.992**. This is search work around Lunum, not Lunum records, and the clearest win so far | [source-locator-v1](experiments/source-locator-v1/RESULTS.md), [greek-fold-recall-v1](experiments/greek-fold-recall-v1/RESULTS.md) |
+| 🟡 **English → Lunum → English** | Where a record exists, it mostly keeps the meaning: **48 / 49** by a lenient judge, **33 / 49** by a strict one (the two agree poorly, kappa 0.08). But only **49 / 200** sentences get a record, and the way back is a notation, not an English sentence | [R4 results](experiments/roundtrip-en-v1/RESULTS.md) |
+| 🟡 **Compacting a real agent work log** | **−35%** characters with **96.4%** of literals kept, but from surface handling: 0 Lunum identities used, no question-answering check | [session-transcript-compaction-v1](experiments/session-transcript-compaction-v1/README.md) |
+| 🟡 **Meaning on fresh sentences** | **16 / 30** against the owner's readings; Greek **3 / 10** | [meaning-targets-owner-v1](experiments/meaning-targets-owner-v1/README.md) |
+| ❌ **Greek** | **0 / 50** Greek sentences get a record (English 9 / 50 on the same pairs): today's contract refuses Greek general frames by design. The fix is designed, not built | [baseline](experiments/greek-frames-heldout-v1/RESULTS-baseline.md), [ADR 0029](decisions/0029-greek-source-bound-frames.md) |
+| ❌ **Same meaning in English and Greek → same identity** | **0 of 5** pairs; the structure alone agrees in 3 of 5. Open words stay in their language: `police` ≠ «αστυνομία» | [clc-v1](experiments/cross-language-convergence-v1/RESULTS.md) |
+| ❌ **Same sentence, two runs → same identity** | **9 / 22**; a canonical projection reached 18 / 22, short of its 90% bar | [identity gate v2](experiments/identity-heldout-v2/RESULTS.md) |
+| ❌ **Identities on real agent memory** | **0** over 21,291 units of the owner's sessions: work logs and instructions do not fit the frames | [discourse-unit-identity-v1](experiments/discourse-unit-identity-v1/RESULTS.md) |
+| ❌ **Compressed views of real context** | both versions failed their pre-registered bars; not shipped | [ambient v1](experiments/ambient-discourse-v1/RESULTS.md), [v2](experiments/ambient-discourse-v2/RESULTS.md) |
 
-Details are in [STATUS.md](STATUS.md). The working plan for the next session is in [HANDOFF.md](research/archive/handoffs/HANDOFF-2026-10-16.md).
+Every review so far is self-review or same-vendor review, labelled as such. More detail:
+[STATUS.md](STATUS.md). The sentence in the picture and its Greek translation are from
+[Tatoeba](https://tatoeba.org) (#3170652 by CK, #5586411 by Zeus; CC BY 2.0 FR), as used in the R4 run.
+
+## Where it goes next
+
+The [plan](docs/PLAN-rust-engine-language-pairs.md), in the owner's order, on the Rust engine:
+
+1. **English → Lunum → English**: the acceptance gates in Rust, a real English sentence on the way
+   back (not a notation), more sentences covered, and a closed loop: the English we write back must
+   be extracted to the same identity again.
+2. **Greek → Lunum → Greek**: Greek frames and pro-drop (Greek drops "I": «Θα καλέσω την
+   αστυνομία»), then a Greek writer.
+3. **English → Lunum → Greek and back**: a phrase lexicon mined from professional translations,
+   then language-neutral concepts, so `police` and «αστυνομία» get one identity.
+
+It is a plan for review, with pre-registered bars; nothing in it has run yet.
 
 ## Try it
 
-You need Node.js 22+ and pnpm 10.13.1. No model or API key is needed for the first two steps.
+Node.js 22 and pnpm 10.13.1. No model or API key needed:
 
 ```bash
 git clone https://github.com/corpunum/OpenLunum.git && cd OpenLunum
 corepack enable && pnpm install --frozen-lockfile
-pnpm demo:core     # validate, fingerprint, contrast a negation, render: no model involved
-pnpm verify        # typecheck, all tests, smoke evaluation
+pnpm demo:core     # validate, fingerprint, contrast a negation, render (the demo supplies its own record)
+pnpm verify        # typecheck, every test, smoke evaluation
 ```
 
-The demo supplies its own Sem. It shows the checking and identity machinery, not language understanding.
-
-**With an agent:** open the repository in Claude Code. `.mcp.json` starts the Lunum MCP server through `scripts/lunum-mcp-launch.mjs`, which installs and builds on first use. Then ask the agent to call:
-1. `lunum_get_extraction_contract`;
-2. `lunum_build_candidate`;
-3. `lunum_submit_candidate` on a sentence.
-
-See [packages/mcp/README.md](packages/mcp/README.md).
-
-## Reproduce the evaluations
-
-The live scripts spend model credits; each report lists its cost. Everything under `reports/` keeps raw streams, ledgers and the exact package it was bound to.
+The Rust engine (toolchain pinned in `rust-toolchain.toml`), with the record from the picture:
 
 ```bash
-# Live extraction: one fresh `claude -p` per sentence, Lunum MCP tools only
-node scripts/research/run-claude-code-source-only.mjs <outDir> \
-  --package experiments/natural-development-v8/extraction/public-instruction-package-v13.json \
-  --profile experiments/natural-development-v8/extraction/public-task-profile-iteration6.json \
-  [--requests experiments/probes-v4/requests.jsonl]
-
-# Score (no model calls)
-node scripts/research/score-natural-source-only-extraction.mjs experiments/natural-development-v8/frame-0.2-successor <outDir>/results.json <ledger>
-node scripts/research/score-probe-outcomes.mjs <private-expectations.jsonl> <outDir>/run-ledger.jsonl
-
-# Memory QA benchmark on an extraction ledger
-node scripts/research/consumer-memory-qa.mjs <outDir> --ledger <candidate-ledger.jsonl> --reps 3
-
-# Meaning-loss audit of the literal gate on recorded runs (no model calls)
-node scripts/research/literal-retention-audit.mjs
+cd crates/lunum-render
+echo '{"handle":"tom","sem":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"event","clauses":[{"predicate":"assert","roles":{"subject":{"type":"actor","id":"Tom"},"action":{"type":"text","value":"eat"},"object":{"type":"concept","value":"red meat"}},"negated":true}]}}' \
+  | cargo run -q --bin lunum-render
+# {"handle":"tom","code":"R not assert(subject=tom, object=red meat, action=eat)"}
 ```
 
-## Repository map
+**With an agent:** open the repository in Claude Code. `.mcp.json` starts the Lunum MCP server
+(it builds itself on first use); ask the agent to call `lunum_get_extraction_contract`, then
+`lunum_build_candidate` and `lunum_submit_candidate` on a sentence. See
+[packages/mcp/README.md](packages/mcp/README.md). To re-run the evaluations:
+[docs/REPRODUCING.md](docs/REPRODUCING.md).
+
+## Honest limits
+
+- **Pre-1.0 research, not a dependency.** The extraction contract is frozen at `lunum-agent/0.19`
+  until held-out evidence justifies a change ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
+- **Coverage is the main limit:** 18–25% of plain English sentences get a record with Sonnet, and
+  it depends strongly on the model (1, 4 and 11 of 16 English sentences for three models,
+  [Stage 0](experiments/parallel-document-v1/RESULTS-stage0.md)).
+- **The validator checks form, not truth.** In R4 it accepted "Tom never saw Mary" as
+  `not read(agent=tom, theme=mary)`.
+- **No token savings on real memory are claimed.** The working scope is a checkable memory layer;
+  semantic identity is claimed only where convergence has been measured
+  ([ADR 0026](decisions/0026-working-scope-checkable-memory.md)).
+- Identity depends on Unicode 17.0 case folding; Node is pinned in `.nvmrc`.
+
+## Contributions welcome
+
+Open an [issue](https://github.com/corpunum/OpenLunum/issues) or a PR; [CONTRIBUTING.md](CONTRIBUTING.md)
+is short. The most useful help right now:
+
+- **Native Greek speakers:** review the Greek word lists and person endings in
+  [ADR 0029](decisions/0029-greek-source-bound-frames.md), or check a few judged sentences.
+- **A review from outside:** someone who is neither the author nor the same model family
+  ([review packet](experiments/cross-vendor-review-v1/README.md)).
+- **Rust:** the acceptance gates and the English/Greek writers in the [plan](docs/PLAN-rust-engine-language-pairs.md).
+- **Real memory data** that may be published, to test identity and compaction on real text.
+
+<details>
+<summary><b>📦 What is in this repository</b></summary>
 
 | Path | What it is |
 |---|---|
-| `packages/core` | Sem types, protocol and frame registries, validation, fingerprints, rendering, context compilation, the extraction contract. No model or product imports. |
-| `crates/lunum-sem` | Rust reproduction of the `lfp:2.1` fingerprint, byte for byte against `semanticFingerprint`; parity test over `eval-results/golden-vectors/lfp21-golden.json`. Standalone crate, not a workspace member. |
-| `packages/mcp` | MCP server exposing core to agents |
-| `packages/cli`, `packages/eval` | Command line; conformance and experiment tooling |
-| `packages/api` | HTTP reference scaffold; several routes are placeholders ([warning](packages/api/README.md)) |
-| `packages/adapter-openunum` | In-tree compatibility adapter; not a deployed integration |
-| `decisions/` | Numbered design decisions (ADRs), each with its costs and limits |
-| `experiments/` | Frozen inputs: V8 development set, probe sets, instruction packages, QA questions |
-| `reports/diagnostic/`, `reports/independent-evaluation/` | Run records and third-party-session audits, corrections included |
-| `research/archive/` | Superseded material, kept rather than deleted |
+| `packages/core` | Records, frames, validation, identity, rendering, the extraction contract (TypeScript reference) |
+| `crates/lunum-sem`, `lunum-store`, `lunum-render` | The Rust engine: identity, an append-only record store, the renderer |
+| `tools/pivot-miner` | Rust miner of phrase translations and paraphrases from aligned corpora |
+| `packages/mcp`, `packages/cli`, `packages/eval` | MCP server for agents; command line; experiment and scoring tools |
+| `packages/api`, `packages/adapter-openunum` | HTTP scaffold (several routes are placeholders); an in-tree OpenUnum adapter (not a deployment) |
+| `decisions/` | Design decisions (ADRs) with their costs; [index](decisions/README.md) |
+| `experiments/` | Pre-registrations, frozen inputs, scorers and results |
+| `reports/` | Raw run records and reviews, kept as recorded |
+| `docs/` | Contract, protocols and the plan; [index](docs/README.md) |
+| `research/archive/` | Superseded material, kept rather than deleted; [index](research/archive/README.md) |
 
-## How the project works
+</details>
 
-- **Trunk-based on `main`.** `pnpm verify` must pass before every push; CI re-runs after the push ([operating model](docs/REPOSITORY_OPERATING_MODEL.md)).
-- **Evidence rules** ([AGENTS.md](AGENTS.md)):
-  - frozen evidence is never edited, only superseded;
-  - failures, abstentions and costs are published with results;
-  - self-reviewed work is labelled as such.
-- **Identity changes** (fingerprint or canonicalization) need a new version, golden vectors and migration notes.
-- **Contributing:** open an issue; see [CONTRIBUTING.md](CONTRIBUTING.md) and [START_HERE.md](START_HERE.md).
+<details>
+<summary><b>⚖️ How the project works</b></summary>
 
-**What would move the project forward most:**
-- real memory data;
-- meaning-level scoring (target meanings for probe sets);
-- review by someone who is neither the author nor the same model family;
-- a native-speaker check of the Greek.
+- **Trunk-based on `main`.** `pnpm verify` passes before every push; CI re-runs after it
+  ([operating model](docs/REPOSITORY_OPERATING_MODEL.md)).
+- **Evidence rules** ([AGENTS.md](AGENTS.md)): frozen evidence is never edited, only superseded;
+  failures, abstentions and costs are published with results; self-review is labelled.
+- **Identity changes** need a new version, golden vectors and migration notes.
+- Apache-2.0 ([LICENSE](LICENSE), [scope and third-party terms](LICENSE.md)). The long-term aim is
+  in [VISION.md](VISION.md): a goal, not a result.
 
-The long-term aim, meaning that survives across languages at lower context cost, is described in [VISION.md](VISION.md). It is a goal, not a result.
+</details>
+
+---
+
+<sub>Built by AI agents with [OpenUnum](https://corpunum.com) · sibling projects:
+[UnumPingPong](https://github.com/corpunum/unumpingpong) (agents rally, a referee scores),
+[UnumSearch](https://github.com/corpunum/unumsearch) (fast code search for agents) and
+[unumS22linux](https://github.com/corpunum/unumS22linux) (a Galaxy S22 that boots its own Linux)</sub>

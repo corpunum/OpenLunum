@@ -1,5 +1,16 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-10-22 (README, tidy-up, plan)
+
+### Changed
+- README rewritten story-first, with an SVG hero (`docs/media/hero.svg`) and a "what works / what doesn't (yet)" table; every number links to its result file. Reproduction commands moved to `docs/REPRODUCING.md`.
+- ADRs 0001–0005 moved from `docs/decisions/` to `decisions/`, with an index (`decisions/README.md`).
+- 38 unreferenced July–September design notes and feature specs, the 2026-10-16 `HANDOFF.md`, the historical `eval/` folder and the empty `python/` workspace moved to `research/archive/` (index: `research/archive/README.md`). Nothing was deleted except `reports/pi-docs/last-docs-sha`, runtime state of the retired Pi loop that `.gitignore` already excluded.
+- `docs/README.md` indexes the remaining docs.
+
+### Added
+- `docs/PLAN-rust-engine-language-pairs.md`: the plan for EN → Lunum → EN, EL → Lunum → EL, then EN ↔ EL on the Rust engine (for owner review; nothing run).
+
 ## Unreleased — 2026-10-16 (review, freeze and scope)
 
 ### Added
