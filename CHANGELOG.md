@@ -3,7 +3,7 @@
 ## Unreleased — 2026-10-22 (A3 candidate: contract 0.21; pivot v2 pre-registration)
 
 ### Changed
-- **Contract `lunum-agent/0.21`** (A3, a candidate under ADR 0025 until [coverage-a3-v1](experiments/coverage-a3-v1/PREREGISTRATION.md) is scored; it is reverted if the bars fail):
+- **Contract `lunum-agent/0.21`** (A3, an **unreleased candidate** under ADR 0025: in [coverage-a3-v1](experiments/coverage-a3-v1/RESULTS.md) bar 1 passed (coverage 27 % → 60.5 %), bar 3 passed, and **bar 2 (level b) failed**: one of the two judges accepted only 46 %. The owner decides between reverting it and pre-registering a new bar 2):
   - a bare string on `assert.action` becomes a text term;
   - questions take a general frame with kind `question` and are no longer a `topic` (protocol 0.7 adds the kind; frames 0.9 edit the `topic` description; the source-bound check refuses a whole question filed as a topic);
   - `I`, `you` and `we` are valid general-frame fillers.

@@ -1,0 +1,24 @@
+{
+ "baseline": {
+  "questions": 35,
+  "questionsCovered": 0,
+  "questionKindCovered": 0,
+  "coveredWithDeicticFiller": 5,
+  "deicticSentences": 113,
+  "deicticCovered": 14,
+  "thirdPersonSentences": 38,
+  "thirdPersonAbstains": 29,
+  "copies": 1
+ },
+ "change": {
+  "questions": 35,
+  "questionsCovered": 17,
+  "questionKindCovered": 17,
+  "coveredWithDeicticFiller": 44,
+  "deicticSentences": 113,
+  "deicticCovered": 68,
+  "thirdPersonSentences": 38,
+  "thirdPersonAbstains": 32,
+  "copies": 5
+ }
+}

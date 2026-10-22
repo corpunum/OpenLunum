@@ -96,7 +96,7 @@ mean `ALLOW(X)`. A negative deontic modality must not be duplicated with
 Surface evidence such as a pronoun token, source language, or provider-added
 reference type remains in the Sem/source artifact but is excluded from exact
 semantic identity. An ungrounded reference cannot establish exact identity.
-Agent contract 0.21 (A3, [experiments/coverage-a3-v1](../experiments/coverage-a3-v1/PREREGISTRATION.md); a candidate until its pre-registered bars are scored) changes three things:
+Agent contract 0.21 (A3, [experiments/coverage-a3-v1](../experiments/coverage-a3-v1/PREREGISTRATION.md); an unreleased candidate: bar 1 (coverage) and bar 3 (safety) passed, bar 2 (level-b meaning) failed; see [RESULTS](../experiments/coverage-a3-v1/RESULTS.md)) changes three things:
 - `lunum_build_candidate` writes a plain string on `assert.action` as a text term (underscores read as spaces);
 - a whole question takes the general frame its words have, with kind `question` (protocol 0.7), and is no longer accepted as a `topic` (frames 0.9);
 - `I`, `you` and `we` as written are valid fillers of a general frame (the rule against filling `agent` with "you" stays for operational frames).

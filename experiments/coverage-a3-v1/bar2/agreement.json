@@ -1,0 +1,21 @@
+{
+  "each": [
+    {
+      "judge": "supergemma4-Q5_K_M (Ally, temperature 0)",
+      "rate": 0.9421487603305785,
+      "judgeValid": true,
+      "covered": 121
+    },
+    {
+      "judge": "nemotron-3-ultra-550b-a55b (NVIDIA NIM free tier, temperature 0)",
+      "rate": 0.4628099173553719,
+      "judgeValid": true,
+      "covered": 121
+    }
+  ],
+  "both": 121,
+  "agree": 61,
+  "agreement": 0.5041322314049587,
+  "verdictPossible": true,
+  "pass": false
+}
