@@ -1,0 +1,745 @@
+{
+ "items": 200,
+ "baseline": {
+  "tally": {
+   "items": 200,
+   "ran": 200,
+   "parse": 78,
+   "abstain": 122,
+   "failed": 0,
+   "invalid": 0,
+   "copy": 1,
+   "covered": 54
+  },
+  "coverage": 0.27,
+  "copiesOfParses": 0.01282051282051282,
+  "abstainsWithBareStringActionAttempt": 12,
+  "covered": [
+   {
+    "handle": "a3c1-81fee35d582703aa",
+    "lfp": "lfp:2.1:sha256:ee7cf86626514f7973f33cb1218c8ef6"
+   },
+   {
+    "handle": "a3c1-1c66a6a595cbf7d3",
+    "lfp": "lfp:2.1:sha256:0d37f10481a4e1c6e88fee2b73b38491"
+   },
+   {
+    "handle": "a3c1-b69ae38a60059919",
+    "lfp": "lfp:2.1:sha256:de72b1238fc6d091a50f275fbe2d8799"
+   },
+   {
+    "handle": "a3c1-5a4b07b8e80910f3",
+    "lfp": "lfp:2.1:sha256:b7e111f3720cef96c32594e5af5e6050"
+   },
+   {
+    "handle": "a3c1-2fe5b07ec78baf88",
+    "lfp": "lfp:2.1:sha256:fd0447931510e5dbd693d9dcd62af1ae"
+   },
+   {
+    "handle": "a3c1-acc6ff0b1560e4f5",
+    "lfp": "lfp:2.1:sha256:dd658a272754afe2f8393067796fa5db"
+   },
+   {
+    "handle": "a3c1-119c18e93ee9a690",
+    "lfp": "lfp:2.1:sha256:053cbdf249ec3eb9cbaa17dd04aa900f"
+   },
+   {
+    "handle": "a3c1-6584b6246aa28365",
+    "lfp": "lfp:2.1:sha256:1e3a53d6c0de05cba857fc1656013b9f"
+   },
+   {
+    "handle": "a3c1-35d17e97683d67e1",
+    "lfp": "lfp:2.1:sha256:42f550b73e2d2f75be8ea525104b3b55"
+   },
+   {
+    "handle": "a3c1-67216a65d8b15c6f",
+    "lfp": "lfp:2.1:sha256:99ca0fca4f187a1c9d012be836fa5c3b"
+   },
+   {
+    "handle": "a3c1-5002f0223d84ebc7",
+    "lfp": "lfp:2.1:sha256:cc700d73933cf5f7be880ece33786874"
+   },
+   {
+    "handle": "a3c1-40882db77f8a8950",
+    "lfp": "lfp:2.1:sha256:cba58bef3723a6be58b767d8f039cbb8"
+   },
+   {
+    "handle": "a3c1-1eafec6a58d252ba",
+    "lfp": "lfp:2.1:sha256:a9325bf2ba13a96c1c545c96c235aade"
+   },
+   {
+    "handle": "a3c1-8362c02716df23c5",
+    "lfp": "lfp:2.1:sha256:1f20e4ae93f1213bf76a3a91ec76a3b8"
+   },
+   {
+    "handle": "a3c1-b21d92749036640a",
+    "lfp": "lfp:2.1:sha256:a0c096cbbcbd1363435d50d70bd63f3f"
+   },
+   {
+    "handle": "a3c1-60861686a7920a93",
+    "lfp": "lfp:2.1:sha256:d61003bee81740a73cb3d7f539da4006"
+   },
+   {
+    "handle": "a3c1-1e8cd050104d14ba",
+    "lfp": "lfp:2.1:sha256:948e6f1c54f8e995219e5a9dd42a667f"
+   },
+   {
+    "handle": "a3c1-c1c7887b72b46a8d",
+    "lfp": "lfp:2.1:sha256:e962315f270b030bd7b8d743cd1331ff"
+   },
+   {
+    "handle": "a3c1-535d6cde87f695de",
+    "lfp": "lfp:2.1:sha256:1b13683b66ade5750cea9e0a1657f0ea"
+   },
+   {
+    "handle": "a3c1-377069a118d104d2",
+    "lfp": "lfp:2.1:sha256:e30dcacc75651ed95ca58992eb300cf9"
+   },
+   {
+    "handle": "a3c1-59a26d42cdc6aeb7",
+    "lfp": "lfp:2.1:sha256:d8a28dc4d16bcb20ace3ffcb555c7026"
+   },
+   {
+    "handle": "a3c1-7f41ff5f93c9ea1b",
+    "lfp": "lfp:2.1:sha256:95d43101f81f52c6247065ac21a207dd"
+   },
+   {
+    "handle": "a3c1-e7a651e5e7a10f4a",
+    "lfp": "lfp:2.1:sha256:fd8e2f16f403c57d5a6adbd17bbc4441"
+   },
+   {
+    "handle": "a3c1-9c6db32e8c72abbb",
+    "lfp": "lfp:2.1:sha256:af749fa76e71f55a6f430b8f4c957f79"
+   },
+   {
+    "handle": "a3c1-c80ffbf5e6c6b3a3",
+    "lfp": "lfp:2.1:sha256:823aa065257dc7d5ec5a8d6463764b45"
+   },
+   {
+    "handle": "a3c1-9833bdc1c209ad4e",
+    "lfp": "lfp:2.1:sha256:ea2c4a6880f6002e10179e1d058628e7"
+   },
+   {
+    "handle": "a3c1-4f803ca2b4a86c3b",
+    "lfp": "lfp:2.1:sha256:1f83f4495d213dd3bee3e753e30c07d1"
+   },
+   {
+    "handle": "a3c1-1f08af26db96968d",
+    "lfp": "lfp:2.1:sha256:257731950825332c1e3a303f5fc41c1d"
+   },
+   {
+    "handle": "a3c1-a306dadb66d2d193",
+    "lfp": "lfp:2.1:sha256:5b9cd235695d37c847027f98cb705c43"
+   },
+   {
+    "handle": "a3c1-794c2925c1768edf",
+    "lfp": "lfp:2.1:sha256:444d3dd2d25a8ef5def1f4124fed1936"
+   },
+   {
+    "handle": "a3c1-ed1b25e977ff16a5",
+    "lfp": "lfp:2.1:sha256:f54d2f2595f48168dc59d5462cfeb94d"
+   },
+   {
+    "handle": "a3c1-a7eea7af0c29c681",
+    "lfp": "lfp:2.1:sha256:faa4110fc43fbce83e9135672c1d182e"
+   },
+   {
+    "handle": "a3c1-85eaaebf932390c1",
+    "lfp": "lfp:2.1:sha256:f2fae67af8002a98ca23432183edda70"
+   },
+   {
+    "handle": "a3c1-5a9dd47a3c227d34",
+    "lfp": "lfp:2.1:sha256:5e7cd30aab2a9032b3f62e6082a3e0b1"
+   },
+   {
+    "handle": "a3c1-a91a7f1e3a678fe2",
+    "lfp": "lfp:2.1:sha256:950d0a1025d25ee7019c78f2ff6f2183"
+   },
+   {
+    "handle": "a3c1-68252e0227bf2cd1",
+    "lfp": "lfp:2.1:sha256:a44676b8831a11068ef1a4ba1f69430a"
+   },
+   {
+    "handle": "a3c1-a4e51c783d4bd089",
+    "lfp": "lfp:2.1:sha256:557ddecad48ae79544dd6cf49eae35d1"
+   },
+   {
+    "handle": "a3c1-b0e74d68790369c4",
+    "lfp": "lfp:2.1:sha256:13aec285b8c2cf1dba7dd89d49ea912f"
+   },
+   {
+    "handle": "a3c1-90a0604ccc7a9641",
+    "lfp": "lfp:2.1:sha256:b2213149cfb68971136036caa4e42a74"
+   },
+   {
+    "handle": "a3c1-93e03ab7c12ae1be",
+    "lfp": "lfp:2.1:sha256:38fb2b707e0986dd37cbb547fcf30581"
+   },
+   {
+    "handle": "a3c1-a3f5a2a56dbba2a6",
+    "lfp": "lfp:2.1:sha256:7fa2b1bcda399e0301dfd4f00d902523"
+   },
+   {
+    "handle": "a3c1-2b8507352b834828",
+    "lfp": "lfp:2.1:sha256:7e8f3f4b45c48e086119cfaf9cbcb3df"
+   },
+   {
+    "handle": "a3c1-d51399cd4b1660f0",
+    "lfp": "lfp:2.1:sha256:3dc5633503ce661a44656324daf7853b"
+   },
+   {
+    "handle": "a3c1-f33f9aabc8b14f18",
+    "lfp": "lfp:2.1:sha256:0bba20a1b7d2cce3a7dec39b58a797a5"
+   },
+   {
+    "handle": "a3c1-9cb235fcfadf69b2",
+    "lfp": "lfp:2.1:sha256:a649a8631c2b489ae81220c052567416"
+   },
+   {
+    "handle": "a3c1-8bfb09246411262b",
+    "lfp": "lfp:2.1:sha256:8d29c8cbda6d00f28a7958da9d0e6125"
+   },
+   {
+    "handle": "a3c1-af0b2662cdd0d050",
+    "lfp": "lfp:2.1:sha256:8cf0106aa956654a5f0289bd8a010e0c"
+   },
+   {
+    "handle": "a3c1-47ba41dfebe0bc12",
+    "lfp": "lfp:2.1:sha256:11b693648b176458d839a722a4f8209b"
+   },
+   {
+    "handle": "a3c1-c8ab7f07a49c29e0",
+    "lfp": "lfp:2.1:sha256:9a7a305e2358053878af07424c66fc22"
+   },
+   {
+    "handle": "a3c1-2f6bf379c0bacd11",
+    "lfp": "lfp:2.1:sha256:2e3200e19343ae2cf8c8be55ce0aa2d1"
+   },
+   {
+    "handle": "a3c1-9eb9f83792942e89",
+    "lfp": "lfp:2.1:sha256:fd49932198c7a2a60eebf16be4b5b14c"
+   },
+   {
+    "handle": "a3c1-c22d50c14d2e3693",
+    "lfp": "lfp:2.1:sha256:75b33695e78aa713d7895d230ffda9be"
+   },
+   {
+    "handle": "a3c1-cb70a25df10357a4",
+    "lfp": "lfp:2.1:sha256:93d11635acffaa1fe5bcf9b0aad47793"
+   },
+   {
+    "handle": "a3c1-4c4602b595517a9c",
+    "lfp": "lfp:2.1:sha256:66a0624587a9eb8cd92a968695cb6549"
+   }
+  ]
+ },
+ "change": {
+  "tally": {
+   "items": 200,
+   "ran": 200,
+   "parse": 126,
+   "abstain": 74,
+   "failed": 0,
+   "invalid": 0,
+   "copy": 5,
+   "covered": 121
+  },
+  "coverage": 0.605,
+  "copiesOfParses": 0.03968253968253968,
+  "abstainsWithBareStringActionAttempt": 0,
+  "covered": [
+   {
+    "handle": "a3c1-81fee35d582703aa",
+    "lfp": "lfp:2.1:sha256:71516d5967a2376ef136aa1994fc70b8"
+   },
+   {
+    "handle": "a3c1-3f59535ba217aacf",
+    "lfp": "lfp:2.1:sha256:fccc041d652005027cdaa99042929489"
+   },
+   {
+    "handle": "a3c1-b0c9d77d97d9fab6",
+    "lfp": "lfp:2.1:sha256:dac306123b9a27ab55e106c503ed0bf4"
+   },
+   {
+    "handle": "a3c1-1c66a6a595cbf7d3",
+    "lfp": "lfp:2.1:sha256:31fde42b1216ed51f1727bf1e5fecacd"
+   },
+   {
+    "handle": "a3c1-97442374b2cf5dbc",
+    "lfp": "lfp:2.1:sha256:13b9ec58021bdd7cc819bc9d1926ac34"
+   },
+   {
+    "handle": "a3c1-2f94e4013d60519d",
+    "lfp": "lfp:2.1:sha256:397b5a99b10a3da2197873a08499b92b"
+   },
+   {
+    "handle": "a3c1-9d058de5535e3f37",
+    "lfp": "lfp:2.1:sha256:c20bdae4be6e6dd22c977566409a59d5"
+   },
+   {
+    "handle": "a3c1-4caa4cfc62c7970c",
+    "lfp": "lfp:2.1:sha256:6277a45ef7ba422e4209f9aa5c438dee"
+   },
+   {
+    "handle": "a3c1-b69ae38a60059919",
+    "lfp": "lfp:2.1:sha256:de72b1238fc6d091a50f275fbe2d8799"
+   },
+   {
+    "handle": "a3c1-3c35a78d429e37bc",
+    "lfp": "lfp:2.1:sha256:040e866bfd2a41d3cdbcfbb09603395b"
+   },
+   {
+    "handle": "a3c1-740611a303b03756",
+    "lfp": "lfp:2.1:sha256:526aaa4baa4de0d9a7761b290478b983"
+   },
+   {
+    "handle": "a3c1-5a4b07b8e80910f3",
+    "lfp": "lfp:2.1:sha256:3850380b881b7580e1d76d177760ae38"
+   },
+   {
+    "handle": "a3c1-77d2ee208618c856",
+    "lfp": "lfp:2.1:sha256:1cd5e21f4f8c3a1d825acb1fab5dfc48"
+   },
+   {
+    "handle": "a3c1-7ae8937235d3bd6b",
+    "lfp": "lfp:2.1:sha256:80dbc8835a6ee12aee9cd1f91a09151c"
+   },
+   {
+    "handle": "a3c1-4e2356ce463141b4",
+    "lfp": "lfp:2.1:sha256:6fe575a379a6b62b98bd8d4889668e4e"
+   },
+   {
+    "handle": "a3c1-2fe5b07ec78baf88",
+    "lfp": "lfp:2.1:sha256:27b88a3f989a922ca89805170d612925"
+   },
+   {
+    "handle": "a3c1-b4a5b6c1615f15d7",
+    "lfp": "lfp:2.1:sha256:4569d2a24a2948f2743836d5b708dfb5"
+   },
+   {
+    "handle": "a3c1-acc6ff0b1560e4f5",
+    "lfp": "lfp:2.1:sha256:133621b92c998b1ab052198a74e26f2c"
+   },
+   {
+    "handle": "a3c1-119c18e93ee9a690",
+    "lfp": "lfp:2.1:sha256:053cbdf249ec3eb9cbaa17dd04aa900f"
+   },
+   {
+    "handle": "a3c1-091a4212d66bebcf",
+    "lfp": "lfp:2.1:sha256:ae09a2aaef6f2d4c399ef6e302a6e35a"
+   },
+   {
+    "handle": "a3c1-6584b6246aa28365",
+    "lfp": "lfp:2.1:sha256:2ff811c5910339aee03ab80b6d1e042f"
+   },
+   {
+    "handle": "a3c1-35d17e97683d67e1",
+    "lfp": "lfp:2.1:sha256:eec23bf886c6a44fb148c5c5f6d73902"
+   },
+   {
+    "handle": "a3c1-bc9824da019c46eb",
+    "lfp": "lfp:2.1:sha256:d75184211df65df052f91fb0dcefa360"
+   },
+   {
+    "handle": "a3c1-283ddea2c38aa334",
+    "lfp": "lfp:2.1:sha256:6ab99bc62b20d26fe21f3cb9e39c88d9"
+   },
+   {
+    "handle": "a3c1-67216a65d8b15c6f",
+    "lfp": "lfp:2.1:sha256:ce7ac7400c711484be6b007e14b13247"
+   },
+   {
+    "handle": "a3c1-561d81f259fb2471",
+    "lfp": "lfp:2.1:sha256:a7dd9ea3c51a654b178e5ef61ab2fdbf"
+   },
+   {
+    "handle": "a3c1-5002f0223d84ebc7",
+    "lfp": "lfp:2.1:sha256:a5728b2533029ffcd424caac2a5310ac"
+   },
+   {
+    "handle": "a3c1-8274df3d3058827c",
+    "lfp": "lfp:2.1:sha256:8fcc8e83058bf42179d7b006ed7c5038"
+   },
+   {
+    "handle": "a3c1-832ea7df5332b4dc",
+    "lfp": "lfp:2.1:sha256:25bb1c331be7c8e3aee1e00e2212d25b"
+   },
+   {
+    "handle": "a3c1-430ff7bdc2e29ac3",
+    "lfp": "lfp:2.1:sha256:41a97a3e909d56e6f15e7828d71da8ce"
+   },
+   {
+    "handle": "a3c1-7c393be342e7ea8c",
+    "lfp": "lfp:2.1:sha256:614c16be2ceecb1d1948876dd4f852e0"
+   },
+   {
+    "handle": "a3c1-1eafec6a58d252ba",
+    "lfp": "lfp:2.1:sha256:08118ac83fce0a6b84ba72255add3730"
+   },
+   {
+    "handle": "a3c1-b309483961da9692",
+    "lfp": "lfp:2.1:sha256:e8ea2eea9caaa32a89132428c6c470fc"
+   },
+   {
+    "handle": "a3c1-f4a313c977404118",
+    "lfp": "lfp:2.1:sha256:69e521c665cb663003dcf363b6f32586"
+   },
+   {
+    "handle": "a3c1-4d26d21c93682bcf",
+    "lfp": "lfp:2.1:sha256:39211197445cf633ce2c41e5b5bb741d"
+   },
+   {
+    "handle": "a3c1-8362c02716df23c5",
+    "lfp": "lfp:2.1:sha256:ac64027b7d9fb0e5a07a824270572ada"
+   },
+   {
+    "handle": "a3c1-c61d9324a27994eb",
+    "lfp": "lfp:2.1:sha256:f020f5a37ecde5d6ab5a11064d5ee8f0"
+   },
+   {
+    "handle": "a3c1-b21d92749036640a",
+    "lfp": "lfp:2.1:sha256:f50e47c942950cb0a820fd9f8ee50d16"
+   },
+   {
+    "handle": "a3c1-60861686a7920a93",
+    "lfp": "lfp:2.1:sha256:50d264552735967d2223956618724343"
+   },
+   {
+    "handle": "a3c1-1e8cd050104d14ba",
+    "lfp": "lfp:2.1:sha256:0383b03e88a65cd142c45912652fab90"
+   },
+   {
+    "handle": "a3c1-afe1ba60c96ee05c",
+    "lfp": "lfp:2.1:sha256:94860a7ef8c1c9119e10901774c59ee5"
+   },
+   {
+    "handle": "a3c1-0b0aba38f9f5bd6e",
+    "lfp": "lfp:2.1:sha256:58957fdfd579266d776061b20b6fa69d"
+   },
+   {
+    "handle": "a3c1-c1c7887b72b46a8d",
+    "lfp": "lfp:2.1:sha256:c4c0c2221807811b6a61da5e126fdff3"
+   },
+   {
+    "handle": "a3c1-8496a1cd3d9f15e5",
+    "lfp": "lfp:2.1:sha256:0e98f3855af66629ccf9aed67080d8ea"
+   },
+   {
+    "handle": "a3c1-b821656394dc65e8",
+    "lfp": "lfp:2.1:sha256:fcd2089e26b002b45dbf0e7933e48960"
+   },
+   {
+    "handle": "a3c1-535d6cde87f695de",
+    "lfp": "lfp:2.1:sha256:667765658db2a271e27a80fc791095ce"
+   },
+   {
+    "handle": "a3c1-8f8fc3ba6fe888a8",
+    "lfp": "lfp:2.1:sha256:daede3e359821c04e349ae36659425ec"
+   },
+   {
+    "handle": "a3c1-28a1a96c3f319962",
+    "lfp": "lfp:2.1:sha256:042d067e010f577f389cbbf3de44001b"
+   },
+   {
+    "handle": "a3c1-67b93500cbd30362",
+    "lfp": "lfp:2.1:sha256:7df4ef24c44196f3e48966269f4482cd"
+   },
+   {
+    "handle": "a3c1-7f41ff5f93c9ea1b",
+    "lfp": "lfp:2.1:sha256:95d43101f81f52c6247065ac21a207dd"
+   },
+   {
+    "handle": "a3c1-e7a651e5e7a10f4a",
+    "lfp": "lfp:2.1:sha256:fd8e2f16f403c57d5a6adbd17bbc4441"
+   },
+   {
+    "handle": "a3c1-1cc391ae98be8a64",
+    "lfp": "lfp:2.1:sha256:1a36d5c6ed7e542f10f7283720259796"
+   },
+   {
+    "handle": "a3c1-bc227f829048d1fe",
+    "lfp": "lfp:2.1:sha256:9f5379e6eb66feba6cf833e1e740678d"
+   },
+   {
+    "handle": "a3c1-c80ffbf5e6c6b3a3",
+    "lfp": "lfp:2.1:sha256:a35ba3b18e78d58eab334a6e105a6c96"
+   },
+   {
+    "handle": "a3c1-9833bdc1c209ad4e",
+    "lfp": "lfp:2.1:sha256:a53cce912e3f77c372a6b495c289501c"
+   },
+   {
+    "handle": "a3c1-d3822f613c83fd95",
+    "lfp": "lfp:2.1:sha256:c9eda7b6c341d0f30eabd0057f7d9030"
+   },
+   {
+    "handle": "a3c1-4f803ca2b4a86c3b",
+    "lfp": "lfp:2.1:sha256:a14174207d16d826e7c98b5f4f859576"
+   },
+   {
+    "handle": "a3c1-c30b00261ec8e7e9",
+    "lfp": "lfp:2.1:sha256:325aab743f20123b7128514b509ed035"
+   },
+   {
+    "handle": "a3c1-62940b3e5d758a85",
+    "lfp": "lfp:2.1:sha256:6e1e3c2a97bd876305e067d299c2eba8"
+   },
+   {
+    "handle": "a3c1-19bc7305ecc9872c",
+    "lfp": "lfp:2.1:sha256:94a022e311e9c3b7601920338952b005"
+   },
+   {
+    "handle": "a3c1-794c2925c1768edf",
+    "lfp": "lfp:2.1:sha256:10269ef6bfbd51ac19fc86303b75c0ba"
+   },
+   {
+    "handle": "a3c1-303bd9a1835b0e7c",
+    "lfp": "lfp:2.1:sha256:6a6b339a90984f37a561a5a5b6801c59"
+   },
+   {
+    "handle": "a3c1-ed1b25e977ff16a5",
+    "lfp": "lfp:2.1:sha256:f54d2f2595f48168dc59d5462cfeb94d"
+   },
+   {
+    "handle": "a3c1-ce5bb0f9a5b8b7ef",
+    "lfp": "lfp:2.1:sha256:63443f500f92acba5a822005b18cbce1"
+   },
+   {
+    "handle": "a3c1-48d5c5fd1c7fd4a2",
+    "lfp": "lfp:2.1:sha256:4211d459d2895d96d000b15944aa284e"
+   },
+   {
+    "handle": "a3c1-30e586fa8fba991b",
+    "lfp": "lfp:2.1:sha256:37a87c35610dc279f83b8b0fe629a222"
+   },
+   {
+    "handle": "a3c1-a7eea7af0c29c681",
+    "lfp": "lfp:2.1:sha256:37ee6bdedb2a26d5355567a579cac6ee"
+   },
+   {
+    "handle": "a3c1-85eaaebf932390c1",
+    "lfp": "lfp:2.1:sha256:c34a96dd6994bc4f67198d2065ba9894"
+   },
+   {
+    "handle": "a3c1-a91a7f1e3a678fe2",
+    "lfp": "lfp:2.1:sha256:95a1bbeddb61325504f2ed2269479f07"
+   },
+   {
+    "handle": "a3c1-68252e0227bf2cd1",
+    "lfp": "lfp:2.1:sha256:8cbb9b987f79bff32e40869b78d7fe37"
+   },
+   {
+    "handle": "a3c1-a4e51c783d4bd089",
+    "lfp": "lfp:2.1:sha256:49ac40824340404aa7c71f009fb860e7"
+   },
+   {
+    "handle": "a3c1-b0e74d68790369c4",
+    "lfp": "lfp:2.1:sha256:d86079f233641d05d1a1ecd63e3adcf6"
+   },
+   {
+    "handle": "a3c1-4b5b66400edcaa6e",
+    "lfp": "lfp:2.1:sha256:610aafe1893f88be02726566eb5359ea"
+   },
+   {
+    "handle": "a3c1-391d5fdc73a7a0ca",
+    "lfp": "lfp:2.1:sha256:9cf838e96c9e09517e95905a6128001b"
+   },
+   {
+    "handle": "a3c1-a63e96920007dd13",
+    "lfp": "lfp:2.1:sha256:947b24c164b25bbf3b3ba51baba94e34"
+   },
+   {
+    "handle": "a3c1-c47202da4e524aa2",
+    "lfp": "lfp:2.1:sha256:c8bb2e2998e1ee7904fdd1cc23c91a7e"
+   },
+   {
+    "handle": "a3c1-90a0604ccc7a9641",
+    "lfp": "lfp:2.1:sha256:607f1485e91f63e82419572d0ebb155f"
+   },
+   {
+    "handle": "a3c1-47976ec079bca06a",
+    "lfp": "lfp:2.1:sha256:2a1c2687ca248dad191c9f2a83bef018"
+   },
+   {
+    "handle": "a3c1-93e03ab7c12ae1be",
+    "lfp": "lfp:2.1:sha256:3ba6d9e159358d3f5dff12fd0c419995"
+   },
+   {
+    "handle": "a3c1-80c0b1ba131ac50c",
+    "lfp": "lfp:2.1:sha256:0059ad47d4bac922d9a180731bf685cd"
+   },
+   {
+    "handle": "a3c1-a3f5a2a56dbba2a6",
+    "lfp": "lfp:2.1:sha256:7fa2b1bcda399e0301dfd4f00d902523"
+   },
+   {
+    "handle": "a3c1-2b8507352b834828",
+    "lfp": "lfp:2.1:sha256:84a50ce1c9a18170644ac775120ea3ae"
+   },
+   {
+    "handle": "a3c1-d51399cd4b1660f0",
+    "lfp": "lfp:2.1:sha256:df3d06bc2af8f81dbffe32a1bc2a9a22"
+   },
+   {
+    "handle": "a3c1-36edbc6fd37cf4b8",
+    "lfp": "lfp:2.1:sha256:b8e2d44a19b16655c2d1b026373c4ee1"
+   },
+   {
+    "handle": "a3c1-62cf55d6af39f8c0",
+    "lfp": "lfp:2.1:sha256:6a9bc6c5dc150b79ffb6838a1e1923b1"
+   },
+   {
+    "handle": "a3c1-efbd0768367be460",
+    "lfp": "lfp:2.1:sha256:568678297e90c4f3b06e9a0ea4481941"
+   },
+   {
+    "handle": "a3c1-eb33013a28107af4",
+    "lfp": "lfp:2.1:sha256:1b253a27b75a93fba0c852cf3fb2809e"
+   },
+   {
+    "handle": "a3c1-f33f9aabc8b14f18",
+    "lfp": "lfp:2.1:sha256:2772d17397968e6f46f75b378cb738bb"
+   },
+   {
+    "handle": "a3c1-e2f40075ff3c2a5e",
+    "lfp": "lfp:2.1:sha256:0c300c44982b627d2847fd9d28fc0fdb"
+   },
+   {
+    "handle": "a3c1-325f86ec04c89735",
+    "lfp": "lfp:2.1:sha256:bded4adefbff48000ef723ffba01e33d"
+   },
+   {
+    "handle": "a3c1-8300eff0fd3b3a42",
+    "lfp": "lfp:2.1:sha256:cbb80c0c37965901355c8c49d8cc33e9"
+   },
+   {
+    "handle": "a3c1-9cb235fcfadf69b2",
+    "lfp": "lfp:2.1:sha256:e72ce00e9830511733f8cc6632a10291"
+   },
+   {
+    "handle": "a3c1-e40ff78a9951d637",
+    "lfp": "lfp:2.1:sha256:07d4d73468866f6342cc43897a9c8c39"
+   },
+   {
+    "handle": "a3c1-87123fe7d53eaa61",
+    "lfp": "lfp:2.1:sha256:b7cab1e198ad79145818cb705efbccd6"
+   },
+   {
+    "handle": "a3c1-87f4355fdbcb2fe8",
+    "lfp": "lfp:2.1:sha256:d9c943fc57c6d2573975201b2ba207c5"
+   },
+   {
+    "handle": "a3c1-f368c6557ba64dad",
+    "lfp": "lfp:2.1:sha256:694c8013ff629b3bf8d6c688321d4ded"
+   },
+   {
+    "handle": "a3c1-8bfb09246411262b",
+    "lfp": "lfp:2.1:sha256:8d29c8cbda6d00f28a7958da9d0e6125"
+   },
+   {
+    "handle": "a3c1-482cc0820bebd15a",
+    "lfp": "lfp:2.1:sha256:299468ef2b9c7a8fc62048a95c8c81c3"
+   },
+   {
+    "handle": "a3c1-8a93564bcc2d1a97",
+    "lfp": "lfp:2.1:sha256:97fec41b6c2ab1490a19513eb7cce35d"
+   },
+   {
+    "handle": "a3c1-4a7148b7df2e89a1",
+    "lfp": "lfp:2.1:sha256:f089237cb3d38c311ddd8dc9c9978ac3"
+   },
+   {
+    "handle": "a3c1-af0b2662cdd0d050",
+    "lfp": "lfp:2.1:sha256:6284e854f555c3d66efa19bffa8632a6"
+   },
+   {
+    "handle": "a3c1-47ba41dfebe0bc12",
+    "lfp": "lfp:2.1:sha256:ff77af508579aeaa61024bd260b3ac91"
+   },
+   {
+    "handle": "a3c1-27a9620007b9bf0b",
+    "lfp": "lfp:2.1:sha256:e130d0474193976be4249ba8b5865867"
+   },
+   {
+    "handle": "a3c1-f55d0eb411d77e9e",
+    "lfp": "lfp:2.1:sha256:8201b774c25c938784514774d5a9bc3c"
+   },
+   {
+    "handle": "a3c1-c8ab7f07a49c29e0",
+    "lfp": "lfp:2.1:sha256:696d7fd7872e64c497192b2897c211dd"
+   },
+   {
+    "handle": "a3c1-9d1eee06993fa46c",
+    "lfp": "lfp:2.1:sha256:1a22e914922a63172d7660dfe38fd76b"
+   },
+   {
+    "handle": "a3c1-f7c6ae7228e04ea5",
+    "lfp": "lfp:2.1:sha256:f5f48b6725033b3c5b8db49955aa4c59"
+   },
+   {
+    "handle": "a3c1-2f6bf379c0bacd11",
+    "lfp": "lfp:2.1:sha256:248d44feaa9356f7a3dae994712a148d"
+   },
+   {
+    "handle": "a3c1-807b27f9b0dc17c9",
+    "lfp": "lfp:2.1:sha256:0ec0a1ce9ef59c0bfba3a5d478971924"
+   },
+   {
+    "handle": "a3c1-416ce2d591ef5051",
+    "lfp": "lfp:2.1:sha256:73bb7c5d8e4c009fd0ab0216c9300ac4"
+   },
+   {
+    "handle": "a3c1-f337534b74a30dd5",
+    "lfp": "lfp:2.1:sha256:f2a998cdc072a0dc50b0656997ac6f42"
+   },
+   {
+    "handle": "a3c1-9674dd3363809099",
+    "lfp": "lfp:2.1:sha256:f07b5ff897b343b548a8fd7c0b2b467e"
+   },
+   {
+    "handle": "a3c1-6165de094fbf1feb",
+    "lfp": "lfp:2.1:sha256:20f03ad443bc6ef41285806fa7a6edb1"
+   },
+   {
+    "handle": "a3c1-c22d50c14d2e3693",
+    "lfp": "lfp:2.1:sha256:490389d6c1a6161f4a1ae87233999a09"
+   },
+   {
+    "handle": "a3c1-7030b3facbd3183e",
+    "lfp": "lfp:2.1:sha256:17521c8e3da97b9bdbc35f98b26f50c1"
+   },
+   {
+    "handle": "a3c1-e1bd7c6a7923efd1",
+    "lfp": "lfp:2.1:sha256:dd2634837ac4c4ff52011a3cdbb2b7f6"
+   },
+   {
+    "handle": "a3c1-20539e498478bed5",
+    "lfp": "lfp:2.1:sha256:ef77ec75ce541c21eb80c538a84cd859"
+   },
+   {
+    "handle": "a3c1-cb70a25df10357a4",
+    "lfp": "lfp:2.1:sha256:0ed96af0f1ae2cf261e55640278a190d"
+   },
+   {
+    "handle": "a3c1-c390582eb63ea14b",
+    "lfp": "lfp:2.1:sha256:bf16f025851cd5b56317563cad43b20b"
+   },
+   {
+    "handle": "a3c1-4c4602b595517a9c",
+    "lfp": "lfp:2.1:sha256:21a12c8b75c3be80cc91642fe0cd5309"
+   },
+   {
+    "handle": "a3c1-44ecf24ce376ba3c",
+    "lfp": "lfp:2.1:sha256:75f6ece31c6db9ac611ef5d9c45d51b7"
+   }
+  ]
+ },
+ "bar1": {
+  "coverage": 0.605,
+  "copiesOfParses": 0.03968253968253968,
+  "absolute": true,
+  "gainPp": 33.5,
+  "gain": true,
+  "pass": true
+ }
+}
