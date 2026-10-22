@@ -9,7 +9,8 @@
 //         a fresh process per item in an empty temp cwd, --json-schema = MEANING_FLAGS_JSON_SCHEMA.
 // luna:   `codex exec` on the rig's ChatGPT login, gpt-6-luna, model_reasoning_effort=low, read-only sandbox, empty temp cwd,
 //         --ephemeral, --ignore-user-config, --output-schema = MEANING_FLAGS_JSON_SCHEMA. Added by AMENDMENT-1 (owner, 2026-10-22).
-//         No retries: a failed call is recorded as a failed row (counts as a guard failure), never re-asked.
+//         No retries on a reply: any reply from the model is final. AMENDMENT-2: calls are paced 20 s apart, and a 429
+//         (rate limit, no reply) writes no row; the same pair is re-asked after 10 min, at most 6 times, then the run stops.
 // Needs packages/core and packages/eval built. Requires a clean tracked tree for --part heldout (the run is bound to a commit).
 import fs from 'node:fs';
 import os from 'node:os';
@@ -30,6 +31,7 @@ export const TRANSLATORS = {
   sonnet: { family: 'anthropic', model: 'claude-sonnet-5-5' },
   luna: { family: 'openai', model: 'gpt-6-luna', effort: 'low' },
 };
+const LUNA_GAP_MS = 20000; const LUNA_429_WAIT_MS = 600000; // AMENDMENT-2 pacing
 const SYSTEM = 'You are a careful translator inside a meaning-checking system. Follow the rules exactly. Reply with the requested JSON object only.';
 
 const busyWindow = () => { const m = new Date().getUTCMinutes(); return m < 10 || (m >= 30 && m < 40); };
@@ -79,8 +81,9 @@ function askLuna(prompt) {
       '--ignore-user-config', '--ignore-rules', '--color', 'never', '--output-schema', schemaFile, '-o', outFile, '-'],
     { cwd, input: `${SYSTEM}\n\n${prompt}`, encoding: 'utf8', timeout: 300000, maxBuffer: 1 << 24 });
     const text = fs.existsSync(outFile) ? fs.readFileSync(outFile, 'utf8').trim() : '';
+    const rateLimited = !text && /\b429\b|Too Many Requests/u.test(`${r.stdout}\n${r.stderr}`);
     const tokens = /tokens used\s+([\d,]+)/u.exec(`${r.stdout}\n${r.stderr}`)?.[1]?.replace(/,/gu, '') ?? null;
-    return { text, reportedModel: /model:\s*(\S+)/u.exec(r.stderr ?? '')?.[1] ?? null, ms: Date.now() - started, tokens: tokens === null ? null : Number(tokens),
+    return { text, rateLimited, reportedModel: /model:\s*(\S+)/u.exec(r.stderr ?? '')?.[1] ?? null, ms: Date.now() - started, tokens: tokens === null ? null : Number(tokens),
       error: r.status === 0 && text ? null : `exit=${r.status} ${(r.stderr || r.stdout || '').slice(-500)}` };
   } finally { fs.rmSync(cwd, { recursive: true, force: true }); }
 }
@@ -101,7 +104,18 @@ async function main() {
     n += 1;
     const prompt = buildPivotPrompt(p.el, 'el');
     const started = Date.now();
-    const reply = name === 'qwen' ? await askQwen(prompt, maxInFlight) : name === 'luna' ? askLuna(prompt) : askSonnet(prompt);
+    let reply;
+    if (name === 'luna') {
+      // AMENDMENT-2: a 429 (no reply from the model) is not a translation: no row, wait, re-ask the same pair; give up the run after 6 waits.
+      for (let wait = 0; ; wait += 1) {
+        await sleep(LUNA_GAP_MS);
+        reply = askLuna(prompt);
+        if (!reply.rateLimited) break;
+        if (wait >= 6) throw new Error(`luna_rate_limited_giving_up_at_${p.pair}`);
+        console.log(JSON.stringify({ pair: p.pair, rateLimited: true, waitMs: LUNA_429_WAIT_MS }));
+        await sleep(LUNA_429_WAIT_MS);
+      }
+    } else reply = name === 'qwen' ? await askQwen(prompt, maxInFlight) : askSonnet(prompt);
     const parsed = parsePivotTranslation(reply.text);
     const row = { pair: p.pair, elHandle: p.elHandle, translator: name, family: TRANSLATORS[name].family, model: TRANSLATORS[name].model, reportedModel: reply.reportedModel,
       promptVersion: PIVOT_PROMPT_VERSION, promptSha256: sha(prompt), commit: head, ms: reply.ms ?? Date.now() - started, costUsd: reply.costUsd ?? 0, tokens: reply.tokens ?? null, error: reply.error,

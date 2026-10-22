@@ -101,3 +101,11 @@ node experiments/pivot-el-en-v1/score.mjs --part heldout --qwen experiments/pivo
   --pivot-requests experiments/pivot-el-en-v1/requests-en-pivot.jsonl \
   --runs reports/independent-evaluation/2026-10-22-pv1-human-haiku,reports/independent-evaluation/2026-10-22-pv1-pivot-haiku --out experiments/pivot-el-en-v1/score.json
 ```
+
+## Amendment 2 (2026-10-22, during the run): Luna rate limits are not translations
+
+**Committed after the held-out run had started**, so stated with what had happened: Qwen had translated P1 (it runs on, unaffected), and Luna had answered P1–P5 (all parsed) when every call from P6 to P12 came back `429 Too Many Requests` from the ChatGPT backend with **no reply from the model** (calls were back to back, about 3 s apart). A single probe a minute later succeeded, so this is a burst limit, not the quota. Amendment 1's "no retries, a failed call is a failed row" would have turned an infrastructure limit into guard failures, which says nothing about the pivot.
+
+- A **429 with no model output** is not a translation: no row is written and the same pair is re-asked after 10 minutes, at most 6 times; after that the run stops (no retry storm). The seven 429 rows are kept for audit in `translations-luna.rate-limited.jsonl`, not scored.
+- Luna calls are paced 20 s apart.
+- **Any reply from the model stays final**, including a malformed one; nothing else changes. The 429 rule is decided by the transport status alone, before any output exists, so it cannot select on content. Rows written before this commit carry commit `22177b8d`, later rows this commit.
