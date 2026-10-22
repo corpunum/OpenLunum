@@ -23,6 +23,7 @@ const JUDGES = {
   nim: { url: 'https://integrate.api.nvidia.com/v1/chat/completions', model: 'nvidia/nemotron-3-ultra-550b-a55b', label: 'nemotron-3-ultra-550b-a55b (NVIDIA NIM free tier, temperature 0)', max: 6000, key: nimKey, gapMs: 3000 },
   qwen: { url: 'http://127.0.0.1:8080/v1/chat/completions', model: 'openai/qwen3.8-flash-next-uncensored-lean', label: 'qwen3.8-flash (Halogen, temperature 0)', max: 2000, rig: true },
 };
+const halogenIdle = async () => { try { const h = await (await fetch('http://127.0.0.1:8080/health', { signal: AbortSignal.timeout(5000) })).json(); return (h.in_flight ?? 0) <= 1 && (h.queued ?? 0) === 0; } catch { return false; } };
 const busy = () => { const m = new Date().getUTCMinutes(); return m < 10 || (m >= 30 && m < 40); };
 
 async function ask(j, text) {
@@ -65,7 +66,8 @@ async function main() {
   const done = new Map(J(partial).map((r) => [`${r.kind}|${r.id}`, r]));
   for (const it of items) {
     if (done.has(`${it.kind}|${it.id}`)) continue;
-    while (j.rig && busy()) await sleep(30000);
+    // Rig protocol: not in :00-:10 / :30-:40 UTC, and wait while Halogen has more than one request in flight or any queued.
+    while (j.rig && (busy() || !(await halogenIdle()))) await sleep(30000);
     const p = prompt(it.sentence, it.code);
     const states = await ask(j, p);
     const row = { kind: it.kind, id: it.id, promptSha256: sha(p), states };

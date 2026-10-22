@@ -44,7 +44,7 @@ The gain comes mostly from **step 3**, not step 1: deictic sentences went from 1
   - "Have you seen my red tie?" → `action=Have you seen`, with the subject inside the action;
   - "What's your favorite music?" → `define(subject=your favorite music, definition=What)`.
   The contract asks for the question word in the role it asks about, but `define` with `definition=What` is a weak reading.
-- **Not judged.** The Qwen tie-break (reported only) needs Halogen, which was busy with the pivot-el-en-v2 translations under the rig protocol. It was not run.
+- **Qwen tie-break (reported only, partial).** It ran after the pivot translations, under the rig protocol: it waited while Halogen had more than one request in flight, and Halogen was busy with live traffic. It was stopped after **56 of 121** items (no controls reached; log in [`bar2/judgements-qwen.json.partial.jsonl`](bar2/judgements-qwen.json.partial.jsonl)). On those 56 items Qwen said "states the content" on 45 (80 %). It agreed with SuperGemma on 49 and with Nemotron on 38. These are not a verdict, but they point the same way as SuperGemma.
 
 ## Costs
 
