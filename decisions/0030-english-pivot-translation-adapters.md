@@ -60,3 +60,12 @@ Meanwhile every model the project uses translates Greek ↔ English well, and En
 
 - Unit tests: [`packages/eval/test/pivot-adapter.test.ts`](../packages/eval/test/pivot-adapter.test.ts).
 - Measurement plan and bars: stage P of the [plan](../docs/PLAN-rust-engine-language-pairs.md); pre-registration of P1/P2/P4 in [`experiments/pivot-el-en-v1/PREREGISTRATION.md`](../experiments/pivot-el-en-v1/PREREGISTRATION.md).
+
+## Update 2026-10-22: guards 0.2 and structure agreement (pre-registered, not yet measured)
+
+[pivot-el-en-v1](../experiments/pivot-el-en-v1/RESULTS.md) failed P1 (0.61 × human coverage). Losses came from guard false positives (Greek nationality and language words read as undeclared names, possessive names) and from exact-identity agreement on paraphrases. Two changes are pre-registered in [pivot-el-en-v2](../experiments/pivot-el-en-v2/PREREGISTRATION.md) and measured there, on fresh pairs:
+
+- **`pivot-guards/0.2`** (`PIVOT_GUARDS_VERSION`). A capitalised Greek nationality, language or country word is not an undeclared name if the English carries one of its English forms. A declared name inside an English possessive counts as present.
+- **`agreePivotStructure`**. Both translations must pass the guards and their records must have the same structure (predicates, role names, negation, modality, mood). The primary translator's identity is accepted. Exact identity (`agreePivotIdentity`) stays available and is reported.
+
+Until v2 is scored, rule 5 above (exact identity) is the adapter's rule.

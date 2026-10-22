@@ -120,7 +120,7 @@ async function main() {
     const row = { pair: p.pair, elHandle: p.elHandle, translator: name, family: TRANSLATORS[name].family, model: TRANSLATORS[name].model, reportedModel: reply.reportedModel,
       promptVersion: PIVOT_PROMPT_VERSION, promptSha256: sha(prompt), commit: head, ms: reply.ms ?? Date.now() - started, costUsd: reply.costUsd ?? 0, tokens: reply.tokens ?? null, error: reply.error,
       raw: reply.text, parsed: parsed.ok ? parsed.value : null, parseErrors: parsed.ok ? [] : parsed.errors,
-      guards: parsed.ok ? checkPivotGuards(p.el, 'el', parsed.value, 'en') : null };
+      guards: parsed.ok ? checkPivotGuards(p.el, 'el', parsed.value, 'en', { version: 'pivot-guards/0.1' }) : null };
     fs.appendFileSync(outFile, JSON.stringify(row) + '\n');
     console.log(JSON.stringify({ pair: p.pair, ok: parsed.ok, pass: row.guards?.pass ?? false, failures: row.guards?.failures ?? row.parseErrors, ms: row.ms }));
   }

@@ -27,11 +27,11 @@ const done = new Set(fs.existsSync(out) ? fs.readFileSync(out, 'utf8').split('\n
 for (const it of [...c.normal, ...c.control]) {
   if (done.has(it.cand)) continue;
   const r1 = parsePivotTranslation(await ask(buildPivotPrompt(it.el, 'el')));
-  let row = { cand: it.cand, el: it.el, promptVersion: PIVOT_PROMPT_VERSION, model: t.model, hop1: r1.ok ? r1.value : null, hop1Errors: r1.ok ? [] : r1.errors, hop1Guards: r1.ok ? checkPivotGuards(it.el, 'el', r1.value, 'en') : null, hop2: null, hop2Errors: [], hop2Guards: null };
+  let row = { cand: it.cand, el: it.el, promptVersion: PIVOT_PROMPT_VERSION, model: t.model, hop1: r1.ok ? r1.value : null, hop1Errors: r1.ok ? [] : r1.errors, hop1Guards: r1.ok ? checkPivotGuards(it.el, 'el', r1.value, 'en', { version: 'pivot-guards/0.1' }) : null, hop2: null, hop2Errors: [], hop2Guards: null };
   if (r1.ok) {
     const r2 = parsePivotTranslation(await ask(buildRenderPrompt(r1.value.translation, r1.value.flags, 'el')));
     row.hop2 = r2.ok ? r2.value : null; row.hop2Errors = r2.ok ? [] : r2.errors;
-    row.hop2Guards = r2.ok ? checkPivotGuards(r1.value.translation, 'en', r2.value, 'el') : null;
+    row.hop2Guards = r2.ok ? checkPivotGuards(r1.value.translation, 'en', r2.value, 'el', { version: 'pivot-guards/0.1' }) : null;
   }
   fs.appendFileSync(out, JSON.stringify(row) + '\n'); console.log(it.cand, row.hop1?.translation, '|', row.hop2?.translation);
 }

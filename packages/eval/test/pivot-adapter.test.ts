@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  MEANING_FLAGS_JSON_SCHEMA, agreePivotIdentity, buildPivotPrompt, buildRenderPrompt, checkPivotGuards,
+  MEANING_FLAGS_JSON_SCHEMA, PIVOT_GUARDS_VERSION, agreePivotIdentity, agreePivotStructure, isCarriedNationalityOrLanguage, buildPivotPrompt, buildRenderPrompt, checkPivotGuards,
   parsePivotTranslation, pivotMarkers, type PivotLeg, type PivotTranslation,
 } from '../src/pivot-adapter.js';
 
@@ -93,4 +93,46 @@ test('dual agreement: two families, both pass, same identity', () => {
   assert.deepEqual(agreePivotIdentity([leg('qwen/a', 'lfp:x'), leg('anthropic/b', 'lfp:x', fail)], family), { accepted: false, reason: 'guard_failed' });
   assert.deepEqual(agreePivotIdentity([leg('qwen/a', null), leg('anthropic/b', 'lfp:x')], family), { accepted: false, reason: 'no_identity' });
   assert.deepEqual(agreePivotIdentity([leg('qwen/a', 'lfp:x')], family), { accepted: false, reason: 'too_few_translators' });
+});
+
+test('pivot-guards/0.2: nationality and language words are not undeclared names when the English carries them', () => {
+  assert.equal(PIVOT_GUARDS_VERSION, 'pivot-guards/0.2');
+  const tom = [{ source: 'Τομ', target: 'Tom', kind: 'name' as const }];
+  // The four pivot-el-en-v1 shapes (Καναδή, Καναδέζος, Γαλλικά), written fresh.
+  assert.deepEqual(el('Η Νίκη μαθαίνει Γαλλικά.', tr('Niki is learning French.', { literals: [{ source: 'Νίκη', target: 'Niki', kind: 'name' }] })).failures, []);
+  assert.deepEqual(el('Ο Τομ είναι Καναδέζος.', tr('Tom is Canadian.', { literals: tom })).failures, []);
+  assert.deepEqual(el('Ο Τομ παντρεύτηκε μια Καναδή.', tr('Tom married a Canadian woman.', { literals: tom })).failures, []);
+  assert.deepEqual(el('Ο Τομ μιλάει Ελληνικά και Ισπανικά.', tr('Tom speaks Greek and Spanish.', { literals: tom })).failures, []);
+  // The meaning is still checked: the English must carry the nationality.
+  assert.deepEqual(el('Ο Τομ είναι Καναδέζος.', tr('Tom is American.', { literals: tom })).failures, ['undeclared_name']);
+  assert.deepEqual(el('Η Νίκη μαθαίνει Γαλλικά.', tr('Niki is learning German.', { literals: [{ source: 'Νίκη', target: 'Niki', kind: 'name' }] })).failures, ['undeclared_name']);
+  // A real name is still a name, even if it shares a prefix with a stem («Ινδ-», «Ρωσ-»).
+  assert.deepEqual(el('Είδα τη Ρωξάνη.', tr('I saw Roxani.')).failures, ['undeclared_name']);
+  assert.equal(isCarriedNationalityOrLanguage('Ρωξάνη', 'I saw Roxani in Russia.'), false);
+  assert.equal(isCarriedNationalityOrLanguage('Ρώσος', 'He is Russian.'), true);
+  // 0.1 behaviour is reproducible.
+  assert.deepEqual(checkPivotGuards('Ο Τομ είναι Καναδέζος.', 'el', tr('Tom is Canadian.', { literals: tom }), 'en', { version: 'pivot-guards/0.1' }).failures, ['undeclared_name']);
+});
+
+test('pivot-guards/0.2: a declared name inside an English possessive is carried', () => {
+  const mary = [{ source: 'Τομ', target: 'Tom', kind: 'name' as const }, { source: 'Μαίρης', target: 'Mary', kind: 'name' as const }];
+  assert.deepEqual(el('Ο Τομ αγνόησε τη συμβουλή της Μαίρης.', tr("Tom ignored Mary's advice.", { literals: mary })).failures, []);
+  assert.deepEqual(el('Ο Τομ αγνόησε τη συμβουλή της Μαίρης.', tr('Tom ignored Mary’s advice.', { literals: mary })).failures, []);
+  assert.deepEqual(el('Ο Τομ αγνόησε τη συμβουλή της Μαίρης.', tr("Tom ignored Maria's advice.", { literals: mary })).failures, ['declared_literal_not_in_translation']);
+  assert.deepEqual(checkPivotGuards('Ο Τομ αγνόησε τη συμβουλή της Μαίρης.', 'el', tr("Tom ignored Mary's advice.", { literals: mary }), 'en', { version: 'pivot-guards/0.1' }).failures, ['declared_literal_not_in_translation']);
+});
+
+test('structure agreement: same structure accepts the first leg\'s identity and reports exact agreement', () => {
+  const pass = el('Θα φύγω.', tr("I'll leave."));
+  const fail = el('Θα φύγω.', tr('I leave.'));
+  const leg = (translator: string, identity: string | null, structure: string | null, guards = pass): PivotLeg => ({ translator, translation: tr("I'll leave."), guards, identity, structure });
+  const family = (t: string) => t.split('/')[0]!;
+  assert.deepEqual(agreePivotStructure([leg('qwen/a', 'lfp:x', 's1'), leg('openai/b', 'lfp:x', 's1')], family), { accepted: true, identity: 'lfp:x', identitiesEqual: true });
+  assert.deepEqual(agreePivotStructure([leg('qwen/a', 'lfp:x', 's1'), leg('openai/b', 'lfp:y', 's1')], family), { accepted: true, identity: 'lfp:x', identitiesEqual: false });
+  assert.deepEqual(agreePivotStructure([leg('openai/b', 'lfp:y', 's1'), leg('qwen/a', 'lfp:x', 's1')], family), { accepted: true, identity: 'lfp:y', identitiesEqual: false });
+  assert.deepEqual(agreePivotStructure([leg('qwen/a', 'lfp:x', 's1'), leg('openai/b', 'lfp:y', 's2')], family), { accepted: false, reason: 'structures_differ' });
+  assert.deepEqual(agreePivotStructure([leg('qwen/a', 'lfp:x', 's1'), leg('qwen/b', 'lfp:x', 's1')], family), { accepted: false, reason: 'same_family' });
+  assert.deepEqual(agreePivotStructure([leg('qwen/a', 'lfp:x', 's1'), leg('openai/b', 'lfp:x', 's1', fail)], family), { accepted: false, reason: 'guard_failed' });
+  assert.deepEqual(agreePivotStructure([leg('qwen/a', 'lfp:x', null), leg('openai/b', 'lfp:x', 's1')], family), { accepted: false, reason: 'no_identity' });
+  assert.deepEqual(agreePivotStructure([leg('qwen/a', 'lfp:x', 's1')], family), { accepted: false, reason: 'too_few_translators' });
 });

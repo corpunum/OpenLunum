@@ -194,10 +194,13 @@ export function foldPivotText(text: string): string {
   return text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('el').replace(/ς/gu, 'σ').replace(/[’‘`´]/gu, "'");
 }
 const wordsOf = (text: string): string[] => foldPivotText(text).match(/[\p{L}\p{N}']+/gu) ?? [];
-const containsPhrase = (haystack: string, needle: string): boolean => {
-  const h = ` ${wordsOf(haystack).join(' ')} `;
+const containsPhrase = (haystack: string, needle: string, possessive = false): boolean => {
   const n = wordsOf(needle).join(' ');
-  return n !== '' && h.includes(` ${n} `);
+  if (n === '') return false;
+  const words = wordsOf(haystack);
+  if (` ${words.join(' ')} `.includes(` ${n} `)) return true;
+  // pivot-guards/0.2: an English possessive ("Mary's", "James'") contains the name it is built on.
+  return possessive && ` ${words.map((w) => w.replace(/'s?$/u, '')).join(' ')} `.includes(` ${n} `);
 };
 
 export interface PivotMarkers { negation: boolean; necessity: boolean; possibility: boolean; future: boolean }
@@ -257,6 +260,85 @@ function midSentenceCapitalised(text: string): string[] {
   return out;
 }
 
+/** Version of the deterministic guards. 0.2 (pivot-el-en-v2): nationality and language words, possessive names. */
+export const PIVOT_GUARDS_VERSION = 'pivot-guards/0.2' as const;
+export type PivotGuardsVersion = 'pivot-guards/0.1' | 'pivot-guards/0.2';
+
+/**
+ * Greek nationality, language and country words (folded stems, matched as prefixes of a capitalised source word)
+ * with the English forms that carry them. Greek capitalises demonyms («Καναδός», «Καναδή») and often language
+ * names («Γαλλικά»); they are not names a translator declares as literals. Under pivot-guards/0.2 such a word is
+ * not an undeclared name **if the translation contains one of its English forms**, so the meaning is still checked
+ * (a «Γάλλος» translated without French/France still fails). A stem matches only a capitalised word, so first names
+ * that share a prefix with a stem are still flagged unless the English happens to contain the nationality word.
+ */
+const EL_NATIONALITY_LANGUAGE: ReadonlyArray<readonly [readonly string[], RegExp]> = [
+  [['καναδ'], /\bcanad(a|ian|ians)\b/u],
+  [['γαλλ'], /\b(french|frenchm[ae]n|frenchwom[ae]n|france)\b/u],
+  [['αγγλ'], /\b(english|englishm[ae]n|englishwom[ae]n|england)\b/u],
+  [['βρεταν', 'βρετανν'], /\b(british|britain|briton|britons)\b/u],
+  [['ελλην', 'ελλαδ'], /\b(greek|greeks|greece|hellenic)\b/u],
+  [['γερμαν'], /\b(german|germans|germany)\b/u],
+  [['ιταλ'], /\b(italian|italians|italy)\b/u],
+  [['ισπαν'], /\b(spanish|spaniard|spaniards|spain)\b/u],
+  [['πορτογαλ'], /\b(portuguese|portugal)\b/u],
+  [['ρωσ'], /\b(russian|russians|russia)\b/u],
+  [['κινεζ', 'κινα'], /\b(chinese|china)\b/u],
+  [['ιαπων', 'γιαπων'], /\b(japanese|japan)\b/u],
+  [['αμερικ'], /\b(american|americans|america)\b/u],
+  [['αυστραλ'], /\b(australian|australians|australia)\b/u],
+  [['αυστρι'], /\b(austrian|austrians|austria)\b/u],
+  [['ελβετ'], /\b(swiss|switzerland)\b/u],
+  [['ολλανδ'], /\b(dutch|dutchm[ae]n|holland|netherlands)\b/u],
+  [['βελγ'], /\b(belgian|belgians|belgium)\b/u],
+  [['τουρκ'], /\b(turkish|turk|turks|turkey)\b/u],
+  [['πολων'], /\b(polish|pole|poles|poland)\b/u],
+  [['σουηδ'], /\b(swedish|swede|swedes|sweden)\b/u],
+  [['νορβηγ'], /\b(norwegian|norwegians|norway)\b/u],
+  [['δανοσ', 'δανη', 'δανεζ', 'δανια', 'δανικ'], /\b(danish|dane|danes|denmark)\b/u],
+  [['φινλανδ', 'φιλανδ'], /\b(finnish|finn|finns|finland)\b/u],
+  [['ιρλανδ'], /\b(irish|irishm[ae]n|ireland)\b/u],
+  [['σκωτσεζ', 'σκωτ'], /\b(scottish|scot|scots|scotsm[ae]n|scotland)\b/u],
+  [['ουαλ'], /\b(welsh|wales)\b/u],
+  [['μεξικ'], /\b(mexican|mexicans|mexico)\b/u],
+  [['βραζιλ'], /\b(brazilian|brazilians|brazil)\b/u],
+  [['αργεντιν'], /\b(argentinian|argentinians|argentine|argentina)\b/u],
+  [['αιγυπτ'], /\b(egyptian|egyptians|egypt)\b/u],
+  [['ινδονησ'], /\b(indonesian|indonesians|indonesia)\b/u],
+  [['ινδ'], /\b(indian|indians|india|hindi)\b/u],
+  [['κορε'], /\b(korean|koreans|korea)\b/u],
+  [['ουγγρ'], /\b(hungarian|hungarians|hungary)\b/u],
+  [['τσεχ'], /\b(czech|czechs|czechia)\b/u],
+  [['βουλγαρ'], /\b(bulgarian|bulgarians|bulgaria)\b/u],
+  [['ρουμαν'], /\b(romanian|romanians|romania)\b/u],
+  [['σερβ'], /\b(serbian|serbians|serb|serbs|serbia)\b/u],
+  [['κροατ'], /\b(croatian|croatians|croat|croats|croatia)\b/u],
+  [['αλβαν'], /\b(albanian|albanians|albania)\b/u],
+  [['κυπρ', 'κυπριακ'], /\b(cypriot|cypriots|cyprus)\b/u],
+  [['ισραηλ'], /\b(israeli|israelis|israel)\b/u],
+  [['αραβ', 'αραβικ'], /\b(arab|arabs|arabic|arabian)\b/u],
+  [['περσ'], /\b(persian|persians|persia|farsi)\b/u],
+  [['εβραι'], /\b(hebrew|jew|jews|jewish)\b/u],
+  [['λατιν'], /\b(latin)\b/u],
+  [['εσπεραντο'], /\b(esperanto)\b/u],
+  [['μπερμπερ', 'βερβερ'], /\b(berber|berbers)\b/u],
+  [['ευρωπ'], /\b(european|europeans|europe)\b/u],
+  [['αφρικ'], /\b(african|africans|africa)\b/u],
+  [['ασια', 'ασιατ'], /\b(asian|asians|asia)\b/u],
+  [['ουκραν'], /\b(ukrainian|ukrainians|ukraine)\b/u],
+  [['βιετναμ'], /\b(vietnamese|vietnam)\b/u],
+  [['ταιλανδ'], /\b(thai|thailand)\b/u],
+  [['ισλανδ'], /\b(icelandic|icelander|icelanders|iceland)\b/u],
+  [['νεοζηλανδ'], /\b(new zealand|new zealander|new zealanders)\b/u],
+];
+
+/** True if a capitalised Greek source word is a nationality, language or country word whose English form is in the translation. */
+export function isCarriedNationalityOrLanguage(sourceWord: string, translation: string): boolean {
+  const w = foldPivotText(sourceWord);
+  const t = ` ${wordsOf(translation).join(' ')} `;
+  return EL_NATIONALITY_LANGUAGE.some(([stems, english]) => stems.some((s) => w.startsWith(s)) && english.test(t));
+}
+
 export type PivotGuardFailure =
   | 'unsupported_language' | 'ambiguous'
   | 'number_not_carried' | 'date_not_carried' | 'relative_time_not_carried' | 'identifier_not_carried'
@@ -276,7 +358,9 @@ export interface PivotGuardResult {
  * Literals use core's EN/EL literal-retention readers, so "τρία" and "three" or
  * «αύριο» and "tomorrow" compare equal.
  */
-export function checkPivotGuards(sourceText: string, sourceLanguage: string, translation: PivotTranslation, targetLanguage: string): PivotGuardResult {
+export function checkPivotGuards(sourceText: string, sourceLanguage: string, translation: PivotTranslation, targetLanguage: string,
+  options: { version?: PivotGuardsVersion } = {}): PivotGuardResult {
+  const v02 = (options.version ?? PIVOT_GUARDS_VERSION) === 'pivot-guards/0.2';
   const failures = new Set<PivotGuardFailure>(); const details: string[] = [];
   const target = translation.translation;
   const sourceMarkers = pivotMarkers(sourceText, sourceLanguage);
@@ -295,14 +379,15 @@ export function checkPivotGuards(sourceText: string, sourceLanguage: string, tra
   const srcLang = sourceLanguage.toLowerCase().split(/[-_]/u)[0];
   if (srcLang !== 'en') {
     // Latin-script words in a non-English source (names, brands, code) must survive verbatim.
-    const latin = (sourceText.match(/[A-Za-z][A-Za-z0-9_.-]*/gu) ?? []).filter((w) => !containsPhrase(target, w));
+    const latin = (sourceText.match(/[A-Za-z][A-Za-z0-9_.-]*/gu) ?? []).filter((w) => !containsPhrase(target, w, v02));
     if (latin.length) { failures.add('latin_word_not_carried'); details.push(`latin_word_not_carried: ${latin.join(', ')}`); }
   }
   // Names: every mid-sentence capitalised source word must be inside a declared literal, and every declared literal must be in the translation.
   const declaredSources = translation.literals.map((l) => l.source);
-  const undeclared = midSentenceCapitalised(sourceText).filter((w) => !declaredSources.some((s) => containsPhrase(s, w)) && !(srcLang !== 'en' && /^[A-Za-z]/u.test(w) && containsPhrase(target, w)));
+  const undeclared = midSentenceCapitalised(sourceText).filter((w) => !declaredSources.some((s) => containsPhrase(s, w)) && !(srcLang !== 'en' && /^[A-Za-z]/u.test(w) && containsPhrase(target, w))
+    && !(v02 && srcLang === 'el' && isCarriedNationalityOrLanguage(w, target)));
   if (undeclared.length) { failures.add('undeclared_name'); details.push(`undeclared_name: ${undeclared.join(', ')}`); }
-  const absent = translation.literals.filter((l) => !containsPhrase(target, l.target));
+  const absent = translation.literals.filter((l) => !containsPhrase(target, l.target, v02));
   if (absent.length) { failures.add('declared_literal_not_in_translation'); details.push(`declared_literal_not_in_translation: ${absent.map((l) => l.target).join(', ')}`); }
 
   if (sourceMarkers && targetMarkers) {
@@ -322,6 +407,11 @@ export interface PivotLeg {
   guards: PivotGuardResult;
   /** lfp identity of the English translation's record, or null (abstain, refusal, or sentence copy). */
   identity: string | null;
+  /**
+   * Canonical structure of that record (predicate, role names, negation, modality and mood of each clause, with
+   * conditions and consequences; fillers left out), or null. Used by agreePivotStructure only.
+   */
+  structure?: string | null;
 }
 
 export type PivotAgreement =
@@ -340,6 +430,26 @@ export function agreePivotIdentity(legs: readonly PivotLeg[], familyOf: (transla
   const ids = new Set(legs.map((l) => l.identity));
   if (ids.size !== 1) return { accepted: false, reason: 'identities_differ' };
   return { accepted: true, identity: legs[0]!.identity! };
+}
+
+export type PivotStructureAgreement =
+  | { accepted: true; identity: string; identitiesEqual: boolean }
+  | { accepted: false; reason: 'too_few_translators' | 'guard_failed' | 'no_identity' | 'structures_differ' | 'same_family' };
+
+/**
+ * Relaxed agreement (pivot-el-en-v2): at least two translators from different families pass the guards, each
+ * English gets a record, and the records have the same **structure** (same predicates and role names, negation,
+ * modality and mood after canonicalisation), though the fillers' wording may differ ("buys" / "is buying").
+ * The accepted identity is the **first leg's** (the primary translator's, by the caller's order), so it is fixed
+ * before anything is compared with a reference; `identitiesEqual` says whether exact agreement would also hold.
+ */
+export function agreePivotStructure(legs: readonly PivotLeg[], familyOf: (translator: string) => string): PivotStructureAgreement {
+  if (legs.length < 2) return { accepted: false, reason: 'too_few_translators' };
+  if (new Set(legs.map((l) => familyOf(l.translator))).size < 2) return { accepted: false, reason: 'same_family' };
+  if (legs.some((l) => !l.guards.pass)) return { accepted: false, reason: 'guard_failed' };
+  if (legs.some((l) => l.identity === null || !l.structure)) return { accepted: false, reason: 'no_identity' };
+  if (new Set(legs.map((l) => l.structure)).size !== 1) return { accepted: false, reason: 'structures_differ' };
+  return { accepted: true, identity: legs[0]!.identity!, identitiesEqual: new Set(legs.map((l) => l.identity)).size === 1 };
 }
 
 /** What is stored: the language-neutral record and the meaning flags; source and translations only as provenance. */
