@@ -217,10 +217,12 @@ const EL_POSSIBILITY = new Set(['ισωσ', 'πιθανον', 'πιθανωσ', 
 const EL_FUTURE = new Set(['θα']);
 
 /** Negation and modality markers of a text, by closed word lists; null for a language without lists (fail closed). */
-export function pivotMarkers(text: string, language: string): PivotMarkers | null {
+export function pivotMarkers(text: string, language: string, options: { version?: PivotGuardsVersion } = {}): PivotMarkers | null {
   const lang = language.toLowerCase().split(/[-_]/u)[0];
   if (lang === 'en') {
-    const t = ` ${wordsOf(text).join(' ')} `;
+    // pivot-guards/0.3: a capitalised "May" that does not start a sentence is the month, not the modal.
+    const month = (options.version ?? PIVOT_GUARDS_VERSION) === 'pivot-guards/0.3' ? text.replace(/(?<!(?:^|[.!?:;"“«(])\s*)\bMay\b/gu, ' ') : text;
+    const t = ` ${wordsOf(month).join(' ')} `;
     return { negation: EN_NEGATION.test(t), necessity: EN_NECESSITY.test(t), possibility: EN_POSSIBILITY.test(t), future: EN_FUTURE.test(t) };
   }
   if (lang === 'el') {
@@ -260,9 +262,48 @@ function midSentenceCapitalised(text: string): string[] {
   return out;
 }
 
-/** Version of the deterministic guards. 0.2 (pivot-el-en-v2): nationality and language words, possessive names. */
-export const PIVOT_GUARDS_VERSION = 'pivot-guards/0.2' as const;
-export type PivotGuardsVersion = 'pivot-guards/0.1' | 'pivot-guards/0.2';
+/**
+ * Version of the deterministic guards. 0.2 (pivot-el-en-v2): nationality and language words, possessive names.
+ * 0.3 (decisions/0031): Greek weekday and month names (capitalised in Greek: «Κυριακές», «Μαΐου») are not undeclared
+ * names when the translation has the matching English word, and an English mid-sentence "May" is the month, not a modal.
+ */
+export const PIVOT_GUARDS_VERSION = 'pivot-guards/0.3' as const;
+export type PivotGuardsVersion = 'pivot-guards/0.1' | 'pivot-guards/0.2' | 'pivot-guards/0.3';
+
+/**
+ * Greek weekday and month names, as whole folded words (every inflected form listed; no prefixes, so names such as
+ * «Μαίρη», «Σάββας» or «Μάρτιν» never match), with the English word that carries each. As for nationality words, the
+ * exemption needs the English word in the translation: «Κυριακή» translated without "Sunday" is still flagged.
+ */
+const EL_WEEKDAY_MONTH: ReadonlyArray<readonly [RegExp, RegExp]> = [
+  [/^δευτερ(α|ασ|εσ|ων)$/u, /\bmondays?\b/u],
+  [/^τριτ(η|ησ|εσ|ων)$/u, /\btuesdays?\b/u],
+  [/^τεταρτ(η|ησ|εσ|ων)$/u, /\bwednesdays?\b/u],
+  [/^πεμπτ(η|ησ|εσ|ων)$/u, /\bthursdays?\b/u],
+  [/^παρασκευ(η|ησ|εσ|ων)$/u, /\bfridays?\b/u],
+  [/^σαββατ(ο|ου|α|ων)$/u, /\bsaturdays?\b/u],
+  [/^σαββατοκυριακ(ο|ου|α|ων)$/u, /\bweekends?\b/u],
+  [/^κυριακ(η|ησ|εσ|ων)$/u, /\bsundays?\b/u],
+  [/^ιανουαρ(ιοσ|ιου|ιο|η)$/u, /\bjanuary\b/u],
+  [/^φεβρουαρ(ιοσ|ιου|ιο|η)$/u, /\bfebruary\b/u],
+  [/^μαρτ(ιοσ|ιου|ιο|η)$/u, /\bmarch\b/u],
+  [/^απριλ(ιοσ|ιου|ιο|η)$/u, /\bapril\b/u],
+  [/^(μαιοσ|μαιου|μαιο|μαη)$/u, /\bmay\b/u],
+  [/^ιουν(ιοσ|ιου|ιο|η)$/u, /\bjune\b/u],
+  [/^ιουλ(ιοσ|ιου|ιο|η)$/u, /\bjuly\b/u],
+  [/^αυγουστ(οσ|ου|ο)$/u, /\baugust\b/u],
+  [/^σεπτεμβρ(ιοσ|ιου|ιο|η)$/u, /\bseptember\b/u],
+  [/^οκτωβρ(ιοσ|ιου|ιο|η)$/u, /\boctober\b/u],
+  [/^νοεμβρ(ιοσ|ιου|ιο|η)$/u, /\bnovember\b/u],
+  [/^δεκεμβρ(ιοσ|ιου|ιο|η)$/u, /\bdecember\b/u],
+];
+
+/** True if a capitalised Greek source word is a weekday or month name whose English word is in the translation (pivot-guards/0.3). */
+export function isCarriedWeekdayOrMonth(sourceWord: string, translation: string): boolean {
+  const w = foldPivotText(sourceWord);
+  const t = ` ${wordsOf(translation).join(' ')} `;
+  return EL_WEEKDAY_MONTH.some(([greek, english]) => greek.test(w) && english.test(t));
+}
 
 /**
  * Greek nationality, language and country words (folded stems, matched as prefixes of a capitalised source word)
@@ -360,11 +401,13 @@ export interface PivotGuardResult {
  */
 export function checkPivotGuards(sourceText: string, sourceLanguage: string, translation: PivotTranslation, targetLanguage: string,
   options: { version?: PivotGuardsVersion } = {}): PivotGuardResult {
-  const v02 = (options.version ?? PIVOT_GUARDS_VERSION) === 'pivot-guards/0.2';
+  const version = options.version ?? PIVOT_GUARDS_VERSION;
+  const v02 = version === 'pivot-guards/0.2' || version === 'pivot-guards/0.3';
+  const v03 = version === 'pivot-guards/0.3';
   const failures = new Set<PivotGuardFailure>(); const details: string[] = [];
   const target = translation.translation;
-  const sourceMarkers = pivotMarkers(sourceText, sourceLanguage);
-  const targetMarkers = pivotMarkers(target, targetLanguage);
+  const sourceMarkers = pivotMarkers(sourceText, sourceLanguage, { version });
+  const targetMarkers = pivotMarkers(target, targetLanguage, { version });
   if (!sourceMarkers || !targetMarkers) failures.add('unsupported_language');
   if (translation.ambiguous) { failures.add('ambiguous'); details.push(`ambiguous: ${translation.ambiguityNote ?? ''}`); }
 
@@ -385,7 +428,8 @@ export function checkPivotGuards(sourceText: string, sourceLanguage: string, tra
   // Names: every mid-sentence capitalised source word must be inside a declared literal, and every declared literal must be in the translation.
   const declaredSources = translation.literals.map((l) => l.source);
   const undeclared = midSentenceCapitalised(sourceText).filter((w) => !declaredSources.some((s) => containsPhrase(s, w)) && !(srcLang !== 'en' && /^[A-Za-z]/u.test(w) && containsPhrase(target, w))
-    && !(v02 && srcLang === 'el' && isCarriedNationalityOrLanguage(w, target)));
+    && !(v02 && srcLang === 'el' && isCarriedNationalityOrLanguage(w, target))
+    && !(v03 && srcLang === 'el' && isCarriedWeekdayOrMonth(w, target)));
   if (undeclared.length) { failures.add('undeclared_name'); details.push(`undeclared_name: ${undeclared.join(', ')}`); }
   const absent = translation.literals.filter((l) => !containsPhrase(target, l.target, v02));
   if (absent.length) { failures.add('declared_literal_not_in_translation'); details.push(`declared_literal_not_in_translation: ${absent.map((l) => l.target).join(', ')}`); }

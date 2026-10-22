@@ -29,6 +29,6 @@ test('a string action on a predicate-vocabulary role (prohibit) is still a predi
 
 test('the contract is 0.21 and its assert line says a plain string becomes a text term', () => {
   const contract = getExtractionContract();
-  assert.equal(contract.contractVersion, 'lunum-agent/0.21');
+  assert.equal(contract.contractVersion, 'lunum-agent/0.22');
   assert.match(JSON.stringify(contract), /action: the verb phrase as written, not only is\/are, as a text term/u);
 });

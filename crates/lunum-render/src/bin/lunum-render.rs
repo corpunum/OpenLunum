@@ -1,4 +1,5 @@
-//! `lunum-render`: stdin JSONL -> stdout JSONL renderer CLI (profile generic-en-pivot/0.2).
+//! `lunum-render`: stdin JSONL -> stdout JSONL renderer CLI (profile generic-en-pivot/0.2 by default;
+//! `--profile generic-en-pivot/0.3` adds mood, decisions/0031; an unknown profile exits 2).
 //!
 //! Input, one JSON object per line: `{"handle": <string>, "sem": <Lunum-Sem>}`.
 //! Output, one line per non-blank input line, in order: `{"handle","code"}` on success or
@@ -6,7 +7,7 @@
 //! and a `sem` member yields `{"handle":<handle or null>,"error":"malformed: ..."}`; the stream continues.
 //! Pure stdin -> stdout, no network, deterministic. Exit 0 once stdin is consumed; 2 on an I/O failure.
 
-use lunum_render::render_sem;
+use lunum_render::{render_sem_profile, Profile};
 use lunum_sem::value::{parse_json, JStr, Value};
 use std::io::{BufRead, Write};
 
@@ -44,7 +45,7 @@ fn line_out(handle: Option<&JStr>, key: &str, val: &[u16]) -> String {
     format!("{{\"handle\":{h},\"{key}\":{}}}", quote(val))
 }
 
-fn process(line: &str) -> String {
+fn process(line: &str, profile: Profile) -> String {
     let v = match parse_json(line) {
         Ok(v) => v,
         Err(e) => return line_out(None, "error", &lunum_sem::value::js(&format!("malformed: invalid JSON ({e})"))),
@@ -60,7 +61,7 @@ fn process(line: &str) -> String {
     let Some(sem) = obj.get_own("sem") else {
         return line_out(Some(handle), "error", &lunum_sem::value::js("malformed: missing \"sem\""));
     };
-    match render_sem(sem) {
+    match render_sem_profile(sem, profile) {
         Ok(code) => line_out(Some(handle), "code", &code),
         Err(e) => {
             let mut m: JStr = lunum_sem::value::js(&format!("{}: ", e.class));
@@ -70,7 +71,7 @@ fn process(line: &str) -> String {
     }
 }
 
-fn run() -> std::io::Result<()> {
+fn run(profile: Profile) -> std::io::Result<()> {
     let stdin = std::io::stdin();
     let mut out = std::io::BufWriter::new(std::io::stdout().lock());
     let mut buf = Vec::new();
@@ -82,7 +83,7 @@ fn run() -> std::io::Result<()> {
         }
         let res = match std::str::from_utf8(&buf) {
             Ok(t) if t.trim().is_empty() => continue,
-            Ok(t) => process(t.trim_end_matches(['\n', '\r'])),
+            Ok(t) => process(t.trim_end_matches(['\n', '\r']), profile),
             Err(_) => line_out(None, "error", &lunum_sem::value::js("malformed: invalid UTF-8")),
         };
         writeln!(out, "{res}")?;
@@ -91,7 +92,22 @@ fn run() -> std::io::Result<()> {
 }
 
 fn main() {
-    if let Err(e) = run() {
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    let profile = match args.as_slice() {
+        [] => Profile::V02,
+        [flag, name] if flag == "--profile" => match Profile::parse(name) {
+            Some(p) => p,
+            None => {
+                eprintln!("lunum-render: renderer profile not installed: {name}");
+                std::process::exit(2);
+            }
+        },
+        _ => {
+            eprintln!("usage: lunum-render [--profile generic-en-pivot/0.2|generic-en-pivot/0.3] < in.jsonl > out.jsonl");
+            std::process::exit(2);
+        }
+    };
+    if let Err(e) = run(profile) {
         eprintln!("lunum-render: I/O error: {e}");
         std::process::exit(2);
     }

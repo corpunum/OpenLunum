@@ -34,3 +34,4 @@ Every design decision that changes what Lunum accepts, how identity is computed 
 | [0028](0028-language-neutral-concept-layer.md) | A language-neutral concept layer, and a pro-drop agent rule | Proposed; its cross-language part is off the critical path since 0030 |
 | [0029](0029-greek-source-bound-frames.md) | Greek source-bound general frames, with deixis for pro-drop | Proposed; parked as optional research by 0030 |
 | [0030](0030-english-pivot-translation-adapters.md) | English as the pivot, with translation adapters at the edges | Accepted |
+| [0031](0031-mood-renderer-and-imperative-frames.md) | Mood in the English renderer (0.3), imperatives in contract 0.22, weekday/month guards | Implemented; unreleased candidate |

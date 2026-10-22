@@ -53,6 +53,25 @@ function renderClauseV2(clause: LunumClause): string {
   return `if ${clause.conditions.map(renderClauseV2).join(' and ')} then ${[core, ...consequences].join(' ; ')}`;
 }
 
+/**
+ * generic-en-pivot/0.3: 0.2 plus mood (decisions/0031). 0.2 drops `kind`, so a question record reads as a statement.
+ * 0.3 marks the two non-declarative moods from the record's kind and is otherwise byte-identical to 0.2:
+ *   kind question            -> "R question: assert(subject=you, manner=at all, action=sleep)?"
+ *   kind instruction/command -> "R imperative: ..."; when the first clause has no agent, subject, actor or experiencer,
+ *                               the implicit addressee is shown: "R imperative to you: assert(action=stop, object=looking at me)"
+ * Every other kind renders exactly as 0.2.
+ */
+export const MOOD_RENDERER = 'generic-en-pivot/0.3' as const;
+const IMPERATIVE_KINDS: ReadonlySet<string> = new Set(['instruction', 'command']);
+const ADDRESSEE_ROLES: readonly string[] = ['agent', 'subject', 'actor', 'experiencer'];
+
+function moodWrap(kind: string, first: LunumClause, body: string): string {
+  if (kind === 'question') return `question: ${body}?`;
+  if (!IMPERATIVE_KINDS.has(kind)) return body;
+  const hasAddressee = ADDRESSEE_ROLES.some((role) => Object.hasOwn(first.roles, role));
+  return `${hasAddressee ? 'imperative' : 'imperative to you'}: ${body}`;
+}
+
 export interface RenderResult {
   profile: string;
   code: string;
@@ -61,9 +80,11 @@ export interface RenderResult {
 
 export function renderSem(sem: LunumSem, options: { profile?: string } = {}): RenderResult {
   const profile = options.profile ?? DEFAULT_RENDERER;
-  if (profile !== DEFAULT_RENDERER && profile !== LOSSLESS_RENDERER) throw new Error(`Renderer profile not installed: ${profile}`);
+  if (profile !== DEFAULT_RENDERER && profile !== LOSSLESS_RENDERER && profile !== MOOD_RENDERER) throw new Error(`Renderer profile not installed: ${profile}`);
   const canonical = canonicalizeSem(sem);
   const marker = (Object.hasOwn(WORLD_MARKERS, canonical.world) ? WORLD_MARKERS[canonical.world]! : canonical.world.slice(0, 1).toUpperCase());
-  const render = profile === LOSSLESS_RENDERER ? renderClauseV2 : renderClause;
-  return { profile, code: `${marker} ${canonical.clauses.map(render).join(' ; ')}`.trim(), semantic: true };
+  const render = profile === DEFAULT_RENDERER ? renderClause : renderClauseV2;
+  const body = canonical.clauses.map(render).join(' ; ');
+  const code = profile === MOOD_RENDERER ? moodWrap(canonical.kind, canonical.clauses[0]!, body) : body;
+  return { profile, code: `${marker} ${code}`.trim(), semantic: true };
 }

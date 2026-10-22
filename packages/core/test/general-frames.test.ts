@@ -33,7 +33,7 @@ test('versions and the prompt block list the seven general frames', () => {
   assert.equal(SEMANTIC_PROTOCOL_VERSION, 'lunum-protocol/0.7');
   assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.9');
   const contract = getExtractionContract();
-  assert.equal(contract.contractVersion, 'lunum-agent/0.21');
+  assert.equal(contract.contractVersion, 'lunum-agent/0.22');
   for (const name of ['define', 'describe', 'assert', 'relate', 'enumerate', 'quantify', 'topic']) {
     assert.ok(contract.frames.framedPredicates.includes(name), name);
     assert.ok(contract.protocol.registry.predicates.includes(name), name);

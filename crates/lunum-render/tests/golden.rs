@@ -1,7 +1,7 @@
 //! Parity against eval-results/golden-vectors/render-en-golden.json (generated from the built TypeScript renderer).
 //! Every entry must match exactly: rendered text, or error class (+ message for validation errors).
 
-use lunum_render::render_sem;
+use lunum_render::{render_sem, render_sem_profile, Profile};
 use lunum_sem::value::{parse_json, Value};
 use std::collections::BTreeMap;
 
@@ -22,6 +22,7 @@ fn golden_parity() {
     let g = golden.as_obj().unwrap();
     let meta = g.get_own("meta").unwrap().as_obj().unwrap();
     assert_eq!(s(meta.get_own("renderer").unwrap()), lunum_render::RENDERER);
+    assert_eq!(s(meta.get_own("moodRenderer").unwrap()), lunum_render::MOOD_RENDERER);
     let entries = match g.get_own("entries").unwrap() {
         Value::Arr(a) => a,
         _ => panic!(),
@@ -57,6 +58,24 @@ fn golden_parity() {
                 Err(err) => Some(format!("unexpected {} error: {}", err.class, String::from_utf16_lossy(&err.message))),
             }
         };
+        // generic-en-pivot/0.3 (mood): `rendered_en_mood` when it differs from 0.2, else the 0.2 text; errors are the same.
+        let mood = render_sem_profile(&input, Profile::V03);
+        let problem = problem.or_else(|| {
+            if matches!(eo.get_own("error"), Some(Value::Bool(true))) {
+                let class = s(eo.get_own("errorClass").unwrap());
+                return match mood {
+                    Ok(r) => Some(format!("0.3: expected {class} error, got {:?}", String::from_utf16_lossy(&r))),
+                    Err(err) if err.class != class => Some(format!("0.3: error class want {class} got {}", err.class)),
+                    Err(_) => None,
+                };
+            }
+            let want = eo.get_own("rendered_en_mood").or_else(|| eo.get_own("rendered_en")).unwrap().as_str().unwrap();
+            match mood {
+                Ok(r) if &r == want => None,
+                Ok(r) => Some(format!("0.3 render differs\n  want {:?}\n  got  {:?}", String::from_utf16_lossy(want), String::from_utf16_lossy(&r))),
+                Err(err) => Some(format!("0.3: unexpected {} error: {}", err.class, String::from_utf16_lossy(&err.message))),
+            }
+        });
         let slot = by_cat.entry(cat.clone()).or_insert((0, 0));
         match problem {
             None => slot.0 += 1,

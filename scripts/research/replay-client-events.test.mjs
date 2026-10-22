@@ -209,7 +209,17 @@ test('public instruction package exposes frozen scoring conventions without gold
   for (const key of ['coreContractHash', 'instructionHash', 'protocolRegistryHash', 'frameRegistryHash', 'coreArtifactSha256', 'builderArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']) {
     assert.notEqual(v27.freeze[key], v25.freeze[key], `${key} changed in v27`);
   }
-  assert.equal(hash('packages/core/dist/src/agent-native.js'), v27.freeze.coreArtifactSha256);
+  // v28 (lunum-agent/0.22, decisions/0031): only the contract text (imperatives), the instruction version and the served
+  // agent-native and render modules change; v27's hash of agent-native.js is history from here on.
+  const v28 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v28.json', 'utf8'));
+  assert.equal(v28.supersedes.path, 'public-instruction-package-v27.json');
+  assert.equal(v28.freeze.coreContractVersion, 'lunum-agent/0.22');
+  assert.equal(v28.freeze.instructionVersion, 'agent-extraction-instructions/0.10');
+  for (const key of Object.keys(v27.freeze)) {
+    if (['coreArtifactSha256', 'coreContractVersion', 'coreContractHash', 'coreContractJsonSerializationSha256', 'instructionVersion', 'instructionHash', 'servedRuntimeManifestPath', 'servedRuntimeManifestSha256'].includes(key)) assert.notDeepEqual(v28.freeze[key], v27.freeze[key], `${key} changed in v28`);
+    else assert.deepEqual(v28.freeze[key], v27.freeze[key], `${key} unchanged in v28`);
+  }
+  assert.equal(hash('packages/core/dist/src/agent-native.js'), v28.freeze.coreArtifactSha256);
   // frame-registry.js was unchanged from v14 to v18; decisions/0022 changes it in v19, 0023 in v20, 0024 in v22.
   assert.equal(current.freeze.frameValidatorArtifactSha256, next.freeze.frameValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/frame-registry.js'), v27.freeze.frameValidatorArtifactSha256);

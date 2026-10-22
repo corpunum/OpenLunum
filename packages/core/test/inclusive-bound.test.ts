@@ -21,7 +21,7 @@ const G02 = 'Ο διευθυντής επιτρέπει στον Νίκο να �
 test('versions', () => {
   assert.equal(SEMANTIC_PROTOCOL_VERSION, 'lunum-protocol/0.7');
   assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.9');
-  assert.equal(getExtractionContract().contractVersion, 'lunum-agent/0.21');
+  assert.equal(getExtractionContract().contractVersion, 'lunum-agent/0.22');
   assert.match(getExtractionContract().frameFirst.framePromptBlock, /at_most\(subject, value/u);
 });
 

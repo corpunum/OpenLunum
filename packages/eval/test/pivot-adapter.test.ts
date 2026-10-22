@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  MEANING_FLAGS_JSON_SCHEMA, PIVOT_GUARDS_VERSION, agreePivotIdentity, agreePivotStructure, isCarriedNationalityOrLanguage, buildPivotPrompt, buildRenderPrompt, checkPivotGuards,
+  MEANING_FLAGS_JSON_SCHEMA, PIVOT_GUARDS_VERSION, agreePivotIdentity, agreePivotStructure, isCarriedNationalityOrLanguage, isCarriedWeekdayOrMonth, buildPivotPrompt, buildRenderPrompt, checkPivotGuards,
   parsePivotTranslation, pivotMarkers, type PivotLeg, type PivotTranslation,
 } from '../src/pivot-adapter.js';
 
@@ -96,7 +96,6 @@ test('dual agreement: two families, both pass, same identity', () => {
 });
 
 test('pivot-guards/0.2: nationality and language words are not undeclared names when the English carries them', () => {
-  assert.equal(PIVOT_GUARDS_VERSION, 'pivot-guards/0.2');
   const tom = [{ source: 'Τομ', target: 'Tom', kind: 'name' as const }];
   // The four pivot-el-en-v1 shapes (Καναδή, Καναδέζος, Γαλλικά), written fresh.
   assert.deepEqual(el('Η Νίκη μαθαίνει Γαλλικά.', tr('Niki is learning French.', { literals: [{ source: 'Νίκη', target: 'Niki', kind: 'name' }] })).failures, []);
@@ -112,6 +111,36 @@ test('pivot-guards/0.2: nationality and language words are not undeclared names 
   assert.equal(isCarriedNationalityOrLanguage('Ρώσος', 'He is Russian.'), true);
   // 0.1 behaviour is reproducible.
   assert.deepEqual(checkPivotGuards('Ο Τομ είναι Καναδέζος.', 'el', tr('Tom is Canadian.', { literals: tom }), 'en', { version: 'pivot-guards/0.1' }).failures, ['undeclared_name']);
+});
+
+test('pivot-guards/0.3: Greek weekday and month names are not undeclared names when the English has the matching word', () => {
+  assert.equal(PIVOT_GUARDS_VERSION, 'pivot-guards/0.3');
+  const nikos = [{ source: 'Νίκος', target: 'Nikos', kind: 'name' as const }];
+  // The pivot-el-en-v2 shape (Q64, «Κυριακές»), written fresh, plus the other inflections and the months.
+  assert.deepEqual(el('Το μουσείο κλείνει τις Κυριακές.', tr('The museum closes on Sundays.')).failures, []);
+  assert.deepEqual(el('Ο Νίκος έφυγε την Παρασκευή.', tr('Nikos left on Friday.', { literals: nikos })).failures, []);
+  assert.deepEqual(el('Θα σε δω το Σάββατο.', tr('I will see you on Saturday.')).failures, []);
+  assert.deepEqual(el('Πάμε για ψάρεμα κάθε Σαββατοκύριακο.', tr('We go fishing every weekend.')).failures, []);
+  assert.deepEqual(el('Τα γενέθλιά μου είναι τον Μάιο, όχι τον Ιούνιο.', tr('My birthday is in May, not in June.')).failures, []);
+  assert.deepEqual(el('Το σχολείο ανοίγει στις αρχές Σεπτεμβρίου.', tr('School opens in early September.')).failures, []);
+  // The meaning is still checked: a different day or month is still flagged.
+  assert.deepEqual(el('Το μουσείο κλείνει τις Κυριακές.', tr('The museum closes on Mondays.')).failures, ['undeclared_name']);
+  assert.deepEqual(el('Τα γενέθλιά μου είναι τον Μάιο.', tr('My birthday is in March.')).failures, ['undeclared_name']);
+  // Whole words only: names that share letters with a day or month stay names, even when the English has the word.
+  assert.equal(isCarriedWeekdayOrMonth('Μαίρη', 'Mary may come.'), false);
+  assert.equal(isCarriedWeekdayOrMonth('Σάββας', 'Savvas left on Saturday.'), false);
+  assert.equal(isCarriedWeekdayOrMonth('Μάρτιν', 'Martin came in March.'), false);
+  assert.equal(isCarriedWeekdayOrMonth('Μαΐου', 'the first of May'), true);
+  const mary = el('Είδα τη Μαίρη τον Μάιο.', tr('I saw Mary in May.'));
+  assert.deepEqual([mary.failures, mary.details], [['undeclared_name'], ['undeclared_name: Μαίρη']]);
+  // The month May is not the modal may; a sentence-initial May still is.
+  assert.equal(pivotMarkers('My birthday is in May.', 'en')!.possibility, false);
+  assert.equal(pivotMarkers('May I come in?', 'en')!.possibility, true);
+  assert.equal(pivotMarkers('Fine. May I come in?', 'en')!.possibility, true);
+  assert.equal(pivotMarkers('Tom may come.', 'en')!.possibility, true);
+  assert.equal(pivotMarkers('My birthday is in May.', 'en', { version: 'pivot-guards/0.2' })!.possibility, true);
+  // 0.2 behaviour is reproducible.
+  assert.deepEqual(checkPivotGuards('Το μουσείο κλείνει τις Κυριακές.', 'el', tr('The museum closes on Sundays.'), 'en', { version: 'pivot-guards/0.2' }).failures, ['undeclared_name']);
 });
 
 test('pivot-guards/0.2: a declared name inside an English possessive is carried', () => {

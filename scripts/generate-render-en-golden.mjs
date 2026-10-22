@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Emits the frozen generic-en-pivot/0.2 renderer parity goldens from the BUILT TS dist.
+// Emits the frozen generic-en-pivot/0.2 renderer parity goldens from the BUILT TS dist, and the generic-en-pivot/0.3
+// (mood, decisions/0031) render of the same inputs as `rendered_en_mood` where it differs from 0.2 (absent = identical).
 //   node_modules/.bin/tsc -p packages/core/tsconfig.json; node scripts/generate-render-en-golden.mjs
 // Input corpus: every entry of eval-results/golden-vectors/lfp21-golden.json (accepted AND rejected Sems; the
 // renderer has its own, weaker validation, so many "rejected" Sems still render) plus crafted render edge cases.
@@ -7,7 +8,7 @@
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { renderSem, LOSSLESS_RENDERER } from '../packages/core/dist/src/render.js';
+import { renderSem, LOSSLESS_RENDERER, MOOD_RENDERER } from '../packages/core/dist/src/render.js';
 import { CANONICAL_SEMANTIC_FRAMES, SEMANTIC_FRAME_REGISTRY_VERSION } from '../packages/core/dist/src/frame-registry.js';
 
 const root = new URL('../', import.meta.url).pathname;
@@ -32,6 +33,8 @@ function emit(category, source, input, raw) {
   }
   try {
     entry.rendered_en = renderSem(value, { profile: LOSSLESS_RENDERER }).code;
+    const mood = renderSem(value, { profile: MOOD_RENDERER }).code;
+    if (mood !== entry.rendered_en) entry.rendered_en_mood = mood;
   } catch (e) {
     entry.error = true;
     entry.errorClass = e instanceof TypeError && String(e.message).startsWith('Invalid Lunum-Sem:') ? 'validation' : `js-${e?.constructor?.name ?? 'Error'}`;
@@ -184,16 +187,36 @@ emit('dup-keys', 'crafted-raw', undefined, '{"schema":"lunum-sem/0.1-draft","wor
 emit('dup-keys', 'crafted-raw', undefined, `${RAWHEAD}"theme":{"type":"concept","id":"x","id":"y"}}}]}`);
 emit('lone-surrogate-keys', 'crafted-raw', undefined, `${RAWHEAD}"theme":"t","x-\\ud800":"a","x-\\udc00":"b"}}]}`);
 
+// mood (generic-en-pivot/0.3): kinds, addressee roles, case/space normalisation, multi-clause, conditionals
+{
+  const Y = { type: 'text', value: 'you' };
+  for (const kind of ['question', 'instruction', 'command', 'Question', ' QUESTION ', 'INSTRUCTION', 'Command ', 'directive', 'conditional_instruction', 'plan_instruction', 'event', 'simple_fact', 'x-question', 'question?', 5, true, ['question']]) {
+    for (const roles of [{}, { action: { type: 'text', value: 'stop' }, object: { type: 'text', value: 'looking at me' } }, { subject: Y, action: 'sleep' }, { agent: A, theme: 'x' }, { actor: 'a' }, { experiencer: 'e', theme: 't' },
+      { AGENT: 'a' }, { ' Subject ': 's' }, { recipient: 'r' }, { agent: null }, { subject: '' }, { agents: 'a' }]) {
+      emit('mood', 'crafted', base([cl('assert', roles)], { kind }));
+      emit('mood', 'crafted', base([cl('assert', roles, { negated: true, modality: 'necessity', time: 'today' })], { kind }));
+    }
+    emit('mood', 'crafted', base([cl('assert', { action: 'go' }), cl('assert', { subject: Y, action: 'stay' })], { kind }));
+    emit('mood', 'crafted', base([cl('assert', { subject: Y, action: 'go' }), cl('assert', { action: 'stay' })], { kind }));
+    emit('mood', 'crafted', base([cl('enable', { theme: 'x' }, { conditions: [cl('below', { subject: 'b' })], consequences: [cl('notify', { agent: A })] })], { kind }));
+    emit('mood', 'crafted', base([cl('enable', { theme: 'x' })], { kind, world: 'tool' }));
+  }
+  emit('mood', 'crafted-raw', undefined, '{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"assert","roles":{"__proto__":{"id":"x"},"action":"go"}}]}');
+  emit('mood', 'crafted-raw', undefined, '{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"assert","roles":{"agent":"a","agent":"b"}}]}');
+  emit('mood', 'crafted-raw', undefined, '{"schema":"lunum-sem/0.1-draft","world":"real","kind":"command","clauses":[{"predicate":"assert","roles":["agent","x"]}]}');
+}
+
 const meta = {
   generator: 'scripts/generate-render-en-golden.mjs',
   renderer: LOSSLESS_RENDERER,
+  moodRenderer: MOOD_RENDERER,
   node: process.version, icu: process.versions.icu, unicode: process.versions.unicode,
   defaultLocale: new Intl.Collator().resolvedOptions().locale,
   sourceGitSha: execSync('git rev-parse HEAD', { cwd: root }).toString().trim(),
   sourceGoldenSha256: sha(fs.readFileSync(`${root}eval-results/golden-vectors/lfp21-golden.json`)),
   frameRegistryVersion: SEMANTIC_FRAME_REGISTRY_VERSION,
   frameCount: Object.keys(CANONICAL_SEMANTIC_FRAMES).length,
-  counts: { total: entries.length, rendered: entries.filter((e) => !e.error).length, error: entries.filter((e) => e.error).length },
+  counts: { total: entries.length, rendered: entries.filter((e) => !e.error).length, error: entries.filter((e) => e.error).length, moodDiffers: entries.filter((e) => e.rendered_en_mood !== undefined).length },
   byCategory: {}
 };
 for (const e of entries) { const m = (meta.byCategory[e.category] ??= { rendered: 0, error: 0 }); m[e.error ? 'error' : 'rendered']++; }

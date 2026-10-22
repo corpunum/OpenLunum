@@ -1,5 +1,14 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-10-23 (A3 bar-2 fixes: contract 0.22 candidate, renderer 0.3, guards 0.3)
+
+### Changed
+- **Contract `lunum-agent/0.22`** ([ADR 0031](decisions/0031-mood-renderer-and-imperative-frames.md), an unreleased candidate like 0.21): imperatives take kind `instruction`, no subject, the imperative verb alone in `action` and what it governs whole in `object`. A refusal for an inserted "you" in an imperative names the fix. Instructions 0.10; package **v28** frozen (v27 stays the A3 binding). Scoring manifest v10 and source review v9 rebind unchanged bytes. No identity moves.
+- **Pivot guards `pivot-guards/0.3`**: Greek weekday and month names are not undeclared names when the English has the matching word; a mid-sentence "May" is the month, not a modal.
+
+### Added
+- **Renderer profile `generic-en-pivot/0.3`** (TS and Rust, byte parity on 12,030 golden inputs): 0.2 plus mood, `R question: …?` and `R imperative [to you]: …`. `lunum-render --profile`.
+
 ## Unreleased — 2026-10-22 (A3 candidate: contract 0.21; pivot v2 pre-registration)
 
 ### Changed

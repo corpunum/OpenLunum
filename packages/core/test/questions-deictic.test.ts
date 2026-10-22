@@ -18,7 +18,7 @@ const ok = (sourceText: string, sem: unknown) => {
   return r.semanticFingerprint!;
 };
 
-test('versions: protocol 0.7 adds kind question; frames 0.9; contract 0.21', () => {
+test('versions: protocol 0.7 adds kind question; frames 0.9; contract 0.21 and later', () => {
   assert.equal(SEMANTIC_PROTOCOL_VERSION, 'lunum-protocol/0.7');
   assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.9');
   assert.ok(SEMANTIC_PROTOCOL_REGISTRY.kinds.includes('question'));

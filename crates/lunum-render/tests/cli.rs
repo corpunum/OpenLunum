@@ -128,3 +128,27 @@ fn deterministic() {
     let input = r#"{"handle":"x","sem":{"schema":"lunum-sem/1"}}"#.to_string() + "\n";
     assert_eq!(run(input.as_bytes()), run(input.as_bytes()));
 }
+
+fn run_args(args: &[&str], input: &[u8]) -> (String, Option<i32>) {
+    let mut c = Command::new(env!("CARGO_BIN_EXE_lunum-render")).args(args).stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped()).spawn().unwrap();
+    let _ = c.stdin.take().unwrap().write_all(input); // an early exit (bad flag) closes stdin
+    let o = c.wait_with_output().unwrap();
+    (String::from_utf8(o.stdout).unwrap(), o.status.code())
+}
+
+#[test]
+fn profile_flag_selects_mood_renderer() {
+    let q = r#"{"handle":"q","sem":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"question","clauses":[{"predicate":"assert","roles":{"subject":"you","action":"sleep"}}]}}"#;
+    let i = r#"{"handle":"i","sem":{"schema":"lunum-sem/0.1-draft","world":"real","kind":"instruction","clauses":[{"predicate":"assert","roles":{"action":"stop","object":"looking at me"}}]}}"#;
+    let input = format!("{q}\n{i}\n");
+    let (out, code) = run_args(&["--profile", "generic-en-pivot/0.3"], input.as_bytes());
+    assert_eq!(code, Some(0));
+    assert_eq!(out, "{\"handle\":\"q\",\"code\":\"R question: assert(subject=you, action=sleep)?\"}\n{\"handle\":\"i\",\"code\":\"R imperative to you: assert(object=looking at me, action=stop)\"}\n");
+    let (out, code) = run_args(&["--profile", "generic-en-pivot/0.2"], input.as_bytes());
+    assert_eq!(code, Some(0));
+    assert_eq!(out, "{\"handle\":\"q\",\"code\":\"R assert(subject=you, action=sleep)\"}\n{\"handle\":\"i\",\"code\":\"R assert(object=looking at me, action=stop)\"}\n");
+    let (out, code) = run_args(&["--profile", "generic-en-pivot/9.9"], input.as_bytes());
+    assert_eq!((out.as_str(), code), ("", Some(2)));
+    let (_, code) = run_args(&["--bogus"], input.as_bytes());
+    assert_eq!(code, Some(2));
+}

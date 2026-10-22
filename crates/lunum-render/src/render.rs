@@ -2,6 +2,31 @@ use lunum_sem::jsstr::{basic_identifier, normalize_text_str, to_js_string, to_js
 use lunum_sem::value::{js, JStr, Obj, Value};
 
 pub const RENDERER: &str = "generic-en-pivot/0.2";
+/// generic-en-pivot/0.3 (decisions/0031): 0.2 plus mood from `kind` (question, imperative). `MOOD_RENDERER` in render.ts.
+pub const MOOD_RENDERER: &str = "generic-en-pivot/0.3";
+
+/// The installed lossless profiles.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Profile {
+    V02,
+    V03,
+}
+
+impl Profile {
+    pub fn parse(name: &str) -> Option<Profile> {
+        match name {
+            "generic-en-pivot/0.2" => Some(Profile::V02),
+            "generic-en-pivot/0.3" => Some(Profile::V03),
+            _ => None,
+        }
+    }
+    pub fn name(self) -> &'static str {
+        match self {
+            Profile::V02 => RENDERER,
+            Profile::V03 => MOOD_RENDERER,
+        }
+    }
+}
 
 const ROLE_ORDER: &[&str] = &[
     "agent", "experiencer", "subject", "actor", "recipient", "object", "theme", "patient", "target", "source", "destination", "location", "time",
@@ -386,19 +411,48 @@ fn marker(world: &JStr) -> JStr {
 
 /// `renderSem(sem, { profile: 'generic-en-pivot/0.2' }).code` as UTF-16 code units.
 pub fn render_sem(sem: &Value) -> Result<JStr, RenderError> {
+    render_sem_profile(sem, Profile::V02)
+}
+
+/// `renderSem(sem, { profile }).code` for an installed lossless profile.
+pub fn render_sem_profile(sem: &Value, profile: Profile) -> Result<JStr, RenderError> {
     let o = validate(sem)?;
     let world = ident(o.get_own("world"));
+    let kind = ident(o.get_own("kind"));
     let clauses = match o.get_own("clauses") {
         Some(Value::Arr(a)) => a,
         _ => unreachable!("validated"),
     };
-    let mut rendered = Vec::new();
+    let mut canon = Vec::new();
     for c in clauses {
-        rendered.push(render_clause(&canonical_clause(c)?));
+        canon.push(canonical_clause(c)?);
     }
+    let rendered: Vec<JStr> = canon.iter().map(render_clause).collect();
+    let body = rendered.join(&js(" ; ")[..]);
     let mut code = marker(&world);
     code.push(b' ' as u16);
-    code.extend(rendered.join(&js(" ; ")[..]));
+    match profile {
+        Profile::V02 => code.extend(body),
+        Profile::V03 => code.extend(mood_wrap(&kind, &canon[0], body)),
+    }
     Ok(trim(&code))
+}
+
+/// `moodWrap` in render.ts: question -> "question: ...?"; instruction/command -> "imperative: ..." (or
+/// "imperative to you: ..." when the first clause has no agent, subject, actor or experiencer); otherwise unchanged.
+fn mood_wrap(kind: &JStr, first: &CClause, body: JStr) -> JStr {
+    if *kind == js("question") {
+        let mut out = js("question: ");
+        out.extend(body);
+        out.push(b'?' as u16);
+        return out;
+    }
+    if *kind != js("instruction") && *kind != js("command") {
+        return body;
+    }
+    let has_addressee = ["agent", "subject", "actor", "experiencer"].iter().any(|r| first.roles.iter().any(|(k, _)| *k == js(r)));
+    let mut out = js(if has_addressee { "imperative: " } else { "imperative to you: " });
+    out.extend(body);
+    out
 }
 

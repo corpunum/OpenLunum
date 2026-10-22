@@ -102,7 +102,8 @@ Agent contract 0.21 (A3, [experiments/coverage-a3-v1](../experiments/coverage-a3
 - `I`, `you` and `we` as written are valid fillers of a general frame (the rule against filling `agent` with "you" stays for operational frames).
 
 No identity accepted under 0.19 moves.
-Agent contract 0.21, like 0.19, retains 0.13's actual wire-schema enforcement before normalization;
+Agent contract 0.22 ([ADR 0031](../decisions/0031-mood-renderer-and-imperative-frames.md), also an unreleased candidate) changes one thing: an imperative takes kind `instruction` with the subject left out (the kind carries the addressee), `action` holds the imperative verb alone with its particle, and what the verb governs stays whole in `object` ("Stop looking at me." → `assert(action: Stop, object: looking at me)`). The renderer profile `generic-en-pivot/0.3` shows this mood (and `question`); no identity moves.
+Agent contract 0.22, like 0.19, retains 0.13's actual wire-schema enforcement before normalization;
 the structural checker alone is not transport validation. Rejections retain
 source evidence and diagnostics, and no normalized identity is issued.
 Its source-retention floor separates unambiguous full calendar dates from
