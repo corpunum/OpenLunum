@@ -89,3 +89,17 @@ Step 3 is one contract sentence, as pre-registered. The operational-frame rule (
 - **Identity replay** ([`scripts/replay-lfp21-identity.mjs`](../../scripts/replay-lfp21-identity.mjs), 0.19 dist against 0.21 dist): 11,731 distinct recorded Sems. **All 3,186 identities accepted under 0.19 are unchanged.** 0 Sems went from accepted to rejected. 2 Sems moved the other way: golden mutants with `kind: "question"` that 0.19 rejected as an unknown kind now get an identity. They are new identities, not moved ones.
 - **Rust parity:** `lunum-sem`, `lunum-render` and `lunum-store` tests pass against the regenerated registry data and goldens.
 - **Merges in the adversarial, collision and contrast suites:** checked by `pnpm verify` (`eval:smoke` and the core suites) at the freeze commit.
+
+## Amendment 2 (2026-10-22, during the change run, before any judging): the judges and the bar 2 pipeline
+
+This amendment was committed while the change run was extracting. No record of it had been rendered or judged.
+
+- **Hosted judge: Nemotron 3 Ultra** (`nvidia/nemotron-3-ultra-550b-a55b`, NVIDIA NIM free tier, NVIDIA lineage), temperature 0. A one-line probe answered in 2 s, so it was chosen over opencode's free models. **SuperGemma** (`supergemma4-Q5_K_M`) runs on the ROG Ally through an ssh tunnel. **Qwen** on Halogen is the tie-breaker, reported only, and runs under the rig protocol.
+- **Pipeline:**
+  1. [`../roundtrip-en-v1/score.mjs`](../roundtrip-en-v1/score.mjs) `--emit` writes the change run's covered records.
+  2. `lunum-render` (Rust, `generic-en-pivot/0.2`) renders them.
+  3. `score.mjs --rust` checks Rust–TS render parity, which must be exact before any judging.
+  4. [`judge.mjs`](judge.mjs) judges each item with R4's prompt, plus 20 seeded controls (seed `coverage-a3-v1-judge:2026-10-22`).
+- **The verdict follows the bar as written.** Each judge is valid only with at most 2 of 20 controls answered "yes". Bar 2 passes if each valid judge says "states the content" on at least 80 % of the covered items and the two judges agree on at least 75 %. It needs at least 30 covered items.
+- **Calls with no reply are re-asked.** A 429, a 5xx or a network failure is re-asked after a minute, at most 6 times. A reply that does not parse counts as "no".
+- **Known limit, stated now.** R4's prompt asks about participants, negation and modality, not mood. `generic-en-pivot/0.2` does not render `kind`. So a question record that states its content is judged on its content, and the judges are not asked whether the rendering is a question. Bar 2 is therefore weaker on mood than the bar's wording ("negation, modality, mood"). The judges are not changed to fix this, because the prompt was pre-registered.
