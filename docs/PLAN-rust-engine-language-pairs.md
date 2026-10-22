@@ -234,4 +234,11 @@ Pre-registered on R4's 49 covered records (in-sample for the templates, so this 
 4. **Calibration.** 20 minutes of native-speaker checking for a 40-item Greek judge-calibration set would make P3 stronger; the owner delegated Greek judgements to models on 2026-10-17, so this asks for an exception.
 5. **Contract 0.21.** Accept that A3 is a contract change under ADR 0025, with its own pre-registration, and that its first item is the string-`action` repair?
 
+**The owner's answers (2026-10-22):**
+1. **Run P1/P2/P4 now**, on the frozen contract, with **Haiku (`claude-haiku-5-5`) as the extractor** instead of Sonnet, for cost. Recorded as [Amendment 1](../experiments/pivot-el-en-v1/PREREGISTRATION.md#amendment-1-2026-10-22-haiku-extracts-luna-low-is-the-second-translator) before any held-out call; bars unchanged.
+2. **Second translator: Luna at low effort** (`gpt-6-luna`, `codex exec` on the ChatGPT login, `model_reasoning_effort="low"`, no retries; Codex quota is scarce). Qwen on Halogen stays the first translator.
+3. **P3 judges: SuperGemma on the ROG Ally** (`supergemma4-Q5_K_M` on the Ally's llama.cpp router, `http://127.0.0.1:18084/v1` on the Ally, reached through an SSH tunnel as in [`judge.mjs`](../experiments/parallel-document-v1/judge.mjs)) **plus a free hosted model from another vendor**: NVIDIA NIM free endpoints (`nemotron-super-49b`, key already configured) or opencode's free tier (`opencode run --auto -m opencode/nemotron-3-ultra-free`, one session at a time). This replaces "SuperGemma + Sol" for P3; both judges must first pass the 20 seeded controls, and Qwen stays the tie-breaker. P3 is not run until A2 exists.
+4. **Calibration: yes.** The owner hand-labels a 40-item Greek judge-calibration worksheet (`experiments/pivot-el-en-v1/calibration/`, produced separately); P3's judges are checked against it.
+5. **A3 approved as contract 0.21 under ADR 0025**, in this order: the bare-string `action` repair, then questions, then `I` / `you` / `we` as fillers.
+
 **Total, if every step runs once:** about 14 to 18 agent sessions and about $175 notional (Max-plan usage, no API charge), plus judge time on the Ally and ChatGPT quota. Each step stops at its own verdict; a failed bar is published and the next step is re-planned, not forced.

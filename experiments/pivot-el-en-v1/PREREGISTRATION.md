@@ -69,3 +69,35 @@ node experiments/pivot-el-en-v1/score.mjs --part heldout --qwen experiments/pivo
   --pivot-requests experiments/pivot-el-en-v1/requests-en-pivot.jsonl \
   --runs reports/independent-evaluation/2026-10-XX-pv1-human,reports/independent-evaluation/2026-10-XX-pv1-pivot --out experiments/pivot-el-en-v1/score.json
 ```
+
+## Amendment 1 (2026-10-22): Haiku extracts, Luna-low is the second translator
+
+**Committed 2026-10-22, before any model call on the held-out pairs** (no held-out translation or extraction exists at this commit; the only new model calls were on dev pair D1). Reason: **the owner's cost decision of 2026-10-22**, not anything measured. **Bars, data, prompt (`pivot-translate/0.1`), guards, agreement rule, package v25 and the scoring rules are unchanged.**
+
+| | Original | Amended |
+|---|---|---|
+| Second translator | Sonnet (`claude-sonnet-5-5`, Anthropic) | **Luna** (`gpt-6-luna`, family OpenAI) through `codex exec` on the rig's ChatGPT login, `model_reasoning_effort="low"`, read-only sandbox, empty temp cwd, `--ephemeral --ignore-user-config --ignore-rules`, `--output-schema` = `MEANING_FLAGS_JSON_SCHEMA`; the system line is prepended to the prompt (codex has no system-prompt flag). **No retries**: a failed call is a failed row (not parsed → the pivot abstains on that pair) |
+| Extractor (human and pivot requests) | `claude-sonnet-5-5` | **`claude-haiku-5-5`**, same runner, same flags, item ceiling $1.00; still one model for every extraction, never mixed |
+
+Code changes in this commit, all outside the measured path: `translate.mjs` gains the `luna` translator (and records codex's reported token count per row); `score.mjs` takes `--second luna --luna <file>` in place of `--sonnet <file>` (default unchanged). Dev smoke test: D1 through Luna parsed and passed the guards ("I need your car.", 14,470 codex tokens, 6 s; file not committed).
+
+**What this changes in the reading of the results.**
+- The family pair is now Alibaba/Qwen + OpenAI; the extractor (Anthropic) is no longer the same vendor as a translator, which removes the overlap the plan flagged.
+- **Haiku is not Sonnet.** Coverage moves with the model ([Stage 0](../parallel-document-v1/RESULTS-stage0.md): 1, 4 and 11 of 16 by model), so the "about 39 human-covered" expectation (from Sonnet's 24.5% on R4) may not hold. If Haiku covers fewer than 30 human sentences, P1 is a **non-verdict** as pre-registered, and P2 (≥ 20 both-covered) likely too; that is published as such, not repaired by switching extractor. Results are comparable to each other (same extractor on both sides), **not** to R4 or other Sonnet runs.
+- Haiku's same-sentence identity stability is unmeasured (the 9 / 22 figure is Sonnet's).
+
+**Amended prediction.** P1: 30% to pass, and about 35% that it is a non-verdict for lack of human coverage. P2: about 45%. P4: passes on few items.
+
+**Amended cost.** Luna: 160 calls, about 14.5k codex tokens each (mostly the CLI's own instructions), ChatGPT Plus quota, no API charge. Haiku extraction: about 160 + 250 items, estimated **$8–15 notional** (subscription, no API charge).
+
+**Amended commands** (step 1 Qwen and step 4 unchanged except the flags shown):
+
+```bash
+node experiments/pivot-el-en-v1/translate.mjs --part heldout --translator luna --out experiments/pivot-el-en-v1/translations-luna.jsonl
+node experiments/pivot-el-en-v1/score.mjs --part heldout --qwen experiments/pivot-el-en-v1/translations-qwen.jsonl --second luna --luna experiments/pivot-el-en-v1/translations-luna.jsonl \
+  --emit-requests experiments/pivot-el-en-v1/requests-en-pivot.jsonl
+# extraction: as step 2, with --model claude-haiku-5-5 and run directories 2026-10-22-pv1-human-haiku / 2026-10-22-pv1-pivot-haiku
+node experiments/pivot-el-en-v1/score.mjs --part heldout --qwen experiments/pivot-el-en-v1/translations-qwen.jsonl --second luna --luna experiments/pivot-el-en-v1/translations-luna.jsonl \
+  --pivot-requests experiments/pivot-el-en-v1/requests-en-pivot.jsonl \
+  --runs reports/independent-evaluation/2026-10-22-pv1-human-haiku,reports/independent-evaluation/2026-10-22-pv1-pivot-haiku --out experiments/pivot-el-en-v1/score.json
+```

@@ -8,6 +8,7 @@
 //   identical string is one request and one extraction (memoisation, decisions/0030).
 // Step B, after the extractor ran on requests-en-human.jsonl and requests-en-pivot.jsonl:
 //   node score.mjs --part heldout --qwen ... --sonnet ... --pivot-requests <requests-en-pivot.jsonl> --runs dir[,dir...] [--out score.json]
+// AMENDMENT-1 (2026-10-22): the second translator is named by --second (default sonnet); with --second luna the file is --luna.
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -21,17 +22,20 @@ const arg = (k, d) => (process.argv.includes(k) ? process.argv[process.argv.inde
 const J = (f) => (f && fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
 const sha = (s) => createHash('sha256').update(s).digest('hex');
 export const enHandle = (text) => `pv1-en-${sha(`en\n${text}`).slice(0, 16)}`;
-const FAMILY = { qwen: 'alibaba-qwen', sonnet: 'anthropic' };
+const FAMILY = { qwen: 'alibaba-qwen', sonnet: 'anthropic', luna: 'openai' };
+const second = arg('--second', 'sonnet');
+if (!FAMILY[second] || second === 'qwen') throw new Error('--second must be sonnet or luna');
+const T = ['qwen', second];
 
 const pairsFile = JSON.parse(fs.readFileSync(path.join(here, 'pairs.json'), 'utf8'));
 const part = arg('--part', 'heldout');
 const pairs = pairsFile[part];
 const human = J(path.join(here, 'requests-en-human.jsonl'));
-const legsOf = { qwen: new Map(J(arg('--qwen')).map((r) => [r.pair, r])), sonnet: new Map(J(arg('--sonnet')).map((r) => [r.pair, r])) };
+const legsOf = { qwen: new Map(J(arg('--qwen')).map((r) => [r.pair, r])), [second]: new Map(J(arg(`--${second}`)).map((r) => [r.pair, r])) };
 
 if (arg('--emit-requests')) {
   const have = new Set(human.map((r) => r.handle)); const out = new Map();
-  for (const p of pairs) for (const t of ['qwen', 'sonnet']) {
+  for (const p of pairs) for (const t of T) {
     const leg = legsOf[t].get(p.pair); if (!leg?.guards?.pass) continue;
     const text = leg.parsed.translation; const handle = enHandle(text);
     if (!have.has(handle) && !out.has(handle)) out.set(handle, { handle, sourceLanguage: 'en', sourceText: text, sourceSha256: sha(text), contractHash: pairsFile.contractHash });
@@ -52,7 +56,7 @@ const covered = (handle) => { const req = requests.get(handle); if (!req) return
 
 const items = pairs.map((p) => {
   const h = covered(p.enHandle);
-  const legs = ['qwen', 'sonnet'].map((t) => {
+  const legs = T.map((t) => {
     const leg = legsOf[t].get(p.pair);
     const text = leg?.parsed?.translation ?? null;
     const c = text && leg.guards?.pass ? covered(enHandle(text)) : { ran: false };
@@ -89,7 +93,7 @@ const single = (t) => items.filter((x) => x.legs.find((l) => l.translator === t)
 const flagAgree = (k) => { const xs = items.filter((x) => x.legs.every((l) => l.flags)); return { of: xs.length, agree: xs.filter((x) => JSON.stringify(x.legs[0].flags[k]) === JSON.stringify(x.legs[1].flags[k])).length }; };
 
 const summary = {
-  part, pairs: n,
+  part, pairs: n, translators: T,
   P1: { humanCovered: humanCov, pivotCovered: pivotCov, humanRate: humanCov / n, pivotRate: pivotCov / n, ratio: humanCov ? pivotCov / humanCov : null,
     verdictPossible: humanCov >= 30, pass: humanCov >= 30 ? pivotCov >= 0.8 * humanCov : null },
   P2: { bothCovered: both.length, sameIdentity: same.length, rate: both.length ? same.length / both.length : null, verdictPossible: both.length >= 20,
@@ -100,12 +104,12 @@ const summary = {
     pass: p4Items.length ? p4Items.every((x) => x.p4.retained) : null, failures: p4Items.filter((x) => !x.p4.retained).map((x) => ({ pair: x.pair, ...x.p4 })) },
   reported: {
     agreementOutcome: tally((x) => [x.agreement.accepted ? 'accepted' : x.agreement.reason]),
-    guardFailures: { qwen: tally((x) => x.legs[0].guards?.failures ?? ['no_parse']), sonnet: tally((x) => x.legs[1].guards?.failures ?? ['no_parse']) },
-    singleTranslatorCoverage: { qwen: single('qwen'), sonnet: single('sonnet') },
-    exactStringEqualsHuman: { qwen: items.filter((x) => x.legs[0].sameStringAsHuman).length, sonnet: items.filter((x) => x.legs[1].sameStringAsHuman).length },
+    guardFailures: { qwen: tally((x) => x.legs[0].guards?.failures ?? ['no_parse']), [second]: tally((x) => x.legs[1].guards?.failures ?? ['no_parse']) },
+    singleTranslatorCoverage: { qwen: single('qwen'), [second]: single(second) },
+    exactStringEqualsHuman: { qwen: items.filter((x) => x.legs[0].sameStringAsHuman).length, [second]: items.filter((x) => x.legs[1].sameStringAsHuman).length },
     translatorsSameString: items.filter((x) => x.legs[0].text && x.legs[0].text === x.legs[1].text).length,
     flagAgreement: Object.fromEntries(['aspect', 'formality', 'addresseeNumber', 'evidentiality', 'droppedSubject', 'gender'].map((k) => [k, flagAgree(k)])),
-    droppedSubject: { qwen: items.filter((x) => x.legs[0].flags?.droppedSubject).length, sonnet: items.filter((x) => x.legs[1].flags?.droppedSubject).length },
+    droppedSubject: { qwen: items.filter((x) => x.legs[0].flags?.droppedSubject).length, [second]: items.filter((x) => x.legs[1].flags?.droppedSubject).length },
     humanSentenceCopies: items.filter((x) => x.humanCopy).length,
   },
 };
