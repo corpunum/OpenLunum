@@ -8,7 +8,7 @@
   - questions take a general frame with kind `question` and are no longer a `topic` (protocol 0.7 adds the kind; frames 0.9 edit the `topic` description; the source-bound check refuses a whole question filed as a topic);
   - `I`, `you` and `we` are valid general-frame fillers.
   The replay of 11,731 recorded Sems moves no accepted identity. Rust registry data and goldens are regenerated, and the parity tests pass. Instruction package **v27** is frozen. The scoring manifest v9 and source review v8 rebind unchanged bytes.
-- Pivot guards **`pivot-guards/0.2`** (nationality and language words; possessive names) and **`agreePivotStructure`** (agreement on record structure), pre-registered in [pivot-el-en-v2](experiments/pivot-el-en-v2/PREREGISTRATION.md).
+- Pivot guards **`pivot-guards/0.2`** (nationality and language words; possessive names) and **`agreePivotStructure`** (agreement on record structure), pre-registered in [pivot-el-en-v2](experiments/pivot-el-en-v2/PREREGISTRATION.md). Results: P1 PASS (41 / 41 = 1.00 × human coverage, against 0.61 × in v1), P2 PASS but carried by memoised strings, P4 PASS.
 
 ## Unreleased — 2026-10-22 (README, tidy-up, plan)
 
