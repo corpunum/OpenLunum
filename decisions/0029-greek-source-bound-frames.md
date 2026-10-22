@@ -1,5 +1,7 @@
 # ADR 0029: Greek source-bound general frames, with deixis for pro-drop (proposed)
 
+> **2026-10-22: parked as optional research** by [ADR 0030](0030-english-pivot-translation-adapters.md) (English as the pivot). Its pre-registration and baseline stay valid if anyone runs it.
+
 **Status: Proposed 2026-10-17. Design; no code yet. Renumbered to package v26 on 2026-10-17 (greek-frames amendment 2).** It implements part of [ADR 0028](0028-language-neutral-concept-layer.md) (§6 pro-drop, and the Greek half of "language-neutral"), which the owner approved on 2026-10-17 ("do what is better", relayed by the orchestrating session corpunum-6b). It is a contract change, so it follows [ADR 0025](0025-contract-freeze-pending-held-out-evidence.md): a held-out pre-registration and a baseline live run come **before** the change is written. Self-reviewed.
 
 ## Problem

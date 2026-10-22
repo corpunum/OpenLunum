@@ -52,7 +52,7 @@ cannot say a sentence faithfully, the right answer is to **abstain**.
 | 🟡 **English → Lunum → English** | Where a record exists, it mostly keeps the meaning: **48 / 49** by a lenient judge, **33 / 49** by a strict one (the two agree poorly, kappa 0.08). But only **49 / 200** sentences get a record, and the way back is a notation, not an English sentence | [R4 results](experiments/roundtrip-en-v1/RESULTS.md) |
 | 🟡 **Compacting a real agent work log** | **−35%** characters with **96.4%** of literals kept, but from surface handling: 0 Lunum identities used, no question-answering check | [session-transcript-compaction-v1](experiments/session-transcript-compaction-v1/README.md) |
 | 🟡 **Meaning on fresh sentences** | **16 / 30** against the owner's readings; Greek **3 / 10** | [meaning-targets-owner-v1](experiments/meaning-targets-owner-v1/README.md) |
-| ❌ **Greek** | **0 / 50** Greek sentences get a record (English 9 / 50 on the same pairs): today's contract refuses Greek general frames by design. The fix is designed, not built | [baseline](experiments/greek-frames-heldout-v1/RESULTS-baseline.md), [ADR 0029](decisions/0029-greek-source-bound-frames.md) |
+| ❌ **Greek** | **0 / 50** Greek sentences get a record (English 9 / 50 on the same pairs): today's contract refuses Greek general frames by design. Next: Greek through an English pivot, not native Greek frames | [baseline](experiments/greek-frames-heldout-v1/RESULTS-baseline.md), [ADR 0030](decisions/0030-english-pivot-translation-adapters.md) |
 | ❌ **Same meaning in English and Greek → same identity** | **0 of 5** pairs; the structure alone agrees in 3 of 5. Open words stay in their language: `police` ≠ «αστυνομία» | [clc-v1](experiments/cross-language-convergence-v1/RESULTS.md) |
 | ❌ **Same sentence, two runs → same identity** | **9 / 22**; a canonical projection reached 18 / 22, short of its 90% bar | [identity gate v2](experiments/identity-heldout-v2/RESULTS.md) |
 | ❌ **Identities on real agent memory** | **0** over 21,291 units of the owner's sessions: work logs and instructions do not fit the frames | [discourse-unit-identity-v1](experiments/discourse-unit-identity-v1/RESULTS.md) |
@@ -64,17 +64,23 @@ Every review so far is self-review or same-vendor review, labelled as such. More
 
 ## Where it goes next
 
-The [plan](docs/PLAN-rust-engine-language-pairs.md), in the owner's order, on the Rust engine:
+The [plan](docs/PLAN-rust-engine-language-pairs.md): **English is the pivot**
+([ADR 0030](decisions/0030-english-pivot-translation-adapters.md)). Lunum and the Rust engine
+deal only with English; other languages connect through a model translation at the edges.
 
-1. **English → Lunum → English**: the acceptance gates in Rust, a real English sentence on the way
-   back (not a notation), more sentences covered, and a closed loop: the English we write back must
-   be extracted to the same identity again.
-2. **Greek → Lunum → Greek**: Greek frames and pro-drop (Greek drops "I": «Θα καλέσω την
-   αστυνομία»), then a Greek writer.
-3. **English → Lunum → Greek and back**: a phrase lexicon mined from professional translations,
-   then language-neutral concepts, so `police` and «αστυνομία» get one identity.
+1. **English → Lunum → English** (the critical path): the acceptance gates in Rust, a real
+   English sentence on the way back (not a notation), more sentences covered, and a closed loop:
+   the English we write back must be extracted to the same identity again. The first step is
+   done: [why three quarters of English sentences abstain](experiments/abstention-shapes-v1/RESULTS.md)
+   (37 of 200 failed on one mechanical mistake that a builder fix would remove).
+2. **Greek through the pivot:** a model translates Greek into English under a strict prompt and
+   reports what English drops (aspect, formality, gender, pro-drop); deterministic guards abstain
+   if a number, date or name goes missing or a negation or modal changes; two translators from
+   different model families must land on the same identity. The way back is the English writer,
+   then a model translation that uses those flags.
 
-It is a plan for review, with pre-registered bars; nothing in it has run yet.
+Each step has pre-registered bars; the Greek measurement
+([pre-registration](experiments/pivot-el-en-v1/PREREGISTRATION.md)) has not run yet.
 
 ## Try it
 
@@ -121,11 +127,12 @@ echo '{"handle":"tom","sem":{"schema":"lunum-sem/0.1-draft","world":"real","kind
 Open an [issue](https://github.com/corpunum/OpenLunum/issues) or a PR; [CONTRIBUTING.md](CONTRIBUTING.md)
 is short. The most useful help right now:
 
-- **Native Greek speakers:** review the Greek word lists and person endings in
-  [ADR 0029](decisions/0029-greek-source-bound-frames.md), or check a few judged sentences.
+- **Native Greek speakers:** check the translation prompt, the meaning flags and the Greek
+  negation/modality lists of the pivot adapter ([ADR 0030](decisions/0030-english-pivot-translation-adapters.md)),
+  or a few judged sentences.
 - **A review from outside:** someone who is neither the author nor the same model family
   ([review packet](experiments/cross-vendor-review-v1/README.md)).
-- **Rust:** the acceptance gates and the English/Greek writers in the [plan](docs/PLAN-rust-engine-language-pairs.md).
+- **Rust:** the acceptance gates and the English writer in the [plan](docs/PLAN-rust-engine-language-pairs.md).
 - **Real memory data** that may be published, to test identity and compaction on real text.
 
 <details>

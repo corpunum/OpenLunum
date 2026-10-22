@@ -31,5 +31,6 @@ Every design decision that changes what Lunum accepts, how identity is computed 
 | [0025](0025-contract-freeze-pending-held-out-evidence.md) | Freeze the extraction contract until held-out evidence exists | Accepted |
 | [0026](0026-working-scope-checkable-memory.md) | Working scope, a checkable memory layer | Accepted with an amendment |
 | [0027](0027-identity-projection-candidate.md) | A canonical identity projection for run-to-run stability | Proposed, parked |
-| [0028](0028-language-neutral-concept-layer.md) | A language-neutral concept layer, and a pro-drop agent rule | Proposed |
-| [0029](0029-greek-source-bound-frames.md) | Greek source-bound general frames, with deixis for pro-drop | Proposed |
+| [0028](0028-language-neutral-concept-layer.md) | A language-neutral concept layer, and a pro-drop agent rule | Proposed; its cross-language part is off the critical path since 0030 |
+| [0029](0029-greek-source-bound-frames.md) | Greek source-bound general frames, with deixis for pro-drop | Proposed; parked as optional research by 0030 |
+| [0030](0030-english-pivot-translation-adapters.md) | English as the pivot, with translation adapters at the edges | Accepted |

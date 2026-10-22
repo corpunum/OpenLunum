@@ -1,13 +1,22 @@
-# Plan: language pairs on the Rust engine
+# Plan: language pairs on the Rust engine, with English as the pivot
 
-**Drafted 2026-10-22 for the owner's review. Nothing in this plan has been run; no model was called to write it. Self-reviewed.** Every "today" number links to the file it comes from. Nothing here changes the freeze ([ADR 0025](../decisions/0025-contract-freeze-pending-held-out-evidence.md)): each contract or identity change still needs a pre-registration, a baseline run and a change run, in that order.
+**Drafted 2026-10-22; revised the same day after the owner approved English as the pivot ([ADR 0030](../decisions/0030-english-pivot-translation-adapters.md)). Self-reviewed.** Every "today" number links to the file it comes from. Nothing here changes the freeze ([ADR 0025](../decisions/0025-contract-freeze-pending-held-out-evidence.md)): each contract or identity change still needs a pre-registration, a baseline run and a change run, in that order. The first version of this plan (stages B and C: a native Greek pipeline, then a mined lexicon and a concept layer) is in the git history at `14db0979`.
 
-**The owner's order:**
-1. **Stage A:** English → Lunum → English.
-2. **Stage B:** Greek → Lunum → Greek.
-3. **Stage C:** English → Lunum → Greek, and Greek → Lunum → English.
+**The strategy: English is the pivot.** Lunum and the Rust engine deal only with English. Other languages connect through a model translation adapter at the edges:
 
-Each stage below gives what exists today, the gap, milestones with pre-registered bars, the data, who does what, the risks and an estimate. Stage B can start its free work while Stage A runs; Stage C needs A and B.
+```
+EL text ─► model translates to EN (strict prompt + meaning flags) ─► guards ─► Rust gates + identity on EN
+                                                                                   │
+EL text ◄─ model translates EN to EL (uses the flags) ◄─ Rust writes English ◄─────┘
+```
+
+A record stores the language-neutral Lunum record, the meaning flags, and the source text and language as optional provenance, **not** English text as the stored meaning. The guards are deterministic and abstain on any doubt: every literal of the source must reach the English, negation and modality must not change, and two translators from different model families must land on the same identity. No parallel lexicon is needed to run this; a small held-out test set is needed to measure it. Native Greek ([ADR 0029](../decisions/0029-greek-source-bound-frames.md)) is parked as optional research.
+
+**Order of work:**
+1. **Stage A (critical path):** English → Lunum → English. Unchanged in spirit.
+2. **Stage P:** the pivot adapter: Greek → English → Lunum, and back. P0 and P1 can start now; P3 needs A2.
+
+Each stage below gives what exists today, the gap, milestones with pre-registered bars, the data, who does what, the risks and an estimate.
 
 ## The Rust engine today
 
@@ -19,7 +28,7 @@ The Rust track so far is R1 to R4, approved by the owner on 2026-10-17 ([R4 pre-
 | R2 | [`crates/lunum-store`](../crates/lunum-store) | Append-only SQLite store keyed by identity; CLI `put` / `get` / `lang` / `stats` | crate tests |
 | R3 | [`crates/lunum-render`](../crates/lunum-render) | Renders a record as `generic-en-pivot/0.2` code; stdin/stdout JSONL CLI | 10,522 of 10,522 golden entries ([`render-en-golden.json`](../eval-results/golden-vectors/render-en-golden.json)) |
 | R4 | (experiment) | English round trip, rendered in Rust | **PASS** by its bars ([results](../experiments/roundtrip-en-v1/RESULTS.md)) |
-| — | [`tools/pivot-miner`](../tools/pivot-miner) | Phrase translations and paraphrases mined from aligned corpora (Europarl, OpenSubtitles) | [exploration](../experiments/pivot-paraphrase-v1/EXPLORATION.md) |
+| — | [`tools/pivot-miner`](../tools/pivot-miner) | Phrase translations and paraphrases mined from aligned corpora (Europarl, OpenSubtitles); not needed by the English pivot, kept as research | [exploration](../experiments/pivot-paraphrase-v1/EXPLORATION.md) |
 
 **What the Rust engine cannot do yet:**
 - It cannot decide acceptance on its own. The source-bound check ([`source-bound.ts`](../packages/core/src/source-bound.ts)), the literal-retention gate ([`literal-retention.ts`](../packages/core/src/literal-retention.ts)) and transport validation are TypeScript only.
@@ -32,8 +41,9 @@ The Rust track so far is R1 to R4, approved by the owner on 2026-10-17 ([R4 pre-
 |---|---|---|
 | Extraction (text → record) | `claude-sonnet-5-5` through [`run-claude-code-source-only.mjs`](../scripts/research/run-claude-code-source-only.mjs), subscription login | R4, the Greek-frames baseline and both ADR 0027 gates used it, so the baselines are comparable. About $0.10 per item notional (R4: $19.79 for 200). |
 | Second extractor family | `gpt-6.1-sol` (medium) through [`run-codex-source-only.mjs`](../scripts/research/run-codex-source-only.mjs), when ChatGPT quota allows | Coverage depends strongly on the model (Sol 11/16 English, Luna 4/16, SuperGemma 1/16 in [Stage 0](../experiments/parallel-document-v1/RESULTS-stage0.md)); one extractor describes Lunum *with that extractor*. |
+| Translation at the edges (stage P) | **Qwen** on Halogen (bulk, local, rig protocol) and **Sonnet** (`claude -p`, subscription) as the second family; Sol may replace Sonnet when quota allows | Two families, so a shared mistranslation is less likely; the two must agree on the identity ([ADR 0030](../decisions/0030-english-pivot-translation-adapters.md)) |
 | Not an extractor | SuperGemma (Ally), Qwen (Halogen) | SuperGemma cannot follow the contract (1/16 English, 0/16 Greek); the owner ruled out Qwen/Halogen extraction on 2026-10-16. |
-| Rendering (record → text) | **Deterministic Rust only** (`lunum-render`, and the new realizers below). No model in the rendering path. | A failure is then the extractor's or the realizer's, never a model's paraphrase. |
+| Rendering (record → English) | **Deterministic Rust only** (`lunum-render`, and the English writer of A2). No model writes English from a record. Only the last hop into another language is a model, under the adapter's guards. | A failure in English is then the extractor's or the writer's, never a model's paraphrase. |
 | Judging, level (b) | Two judges from vendors other than the extractor: **SuperGemma + Sol** | This pair reached kappa 0.634 on the [phrase worksheet](../experiments/pivot-paraphrase-v1/WORKSHEET-v2-filled.md); SuperGemma + Qwen reached kappa 0.08 on R4. Qwen stays as the tie-breaker. |
 | Heavy local jobs | Rig protocol: ask the coordinating session for a slot, run under `flock ~/.cache/rig-heavy.lock`, never restart Halogen or OpenUnum | as in R4 |
 
@@ -70,7 +80,18 @@ The extraction errors in R4 were a wrong predicate (saw → `read`), a wrong mod
 
 ### Milestones
 
-**A0. Why it abstains (free, no model calls).** Classify the 122 R4 abstains, the 36 English abstains of the Greek-frames baseline and the ADR 0027 gate abstains by declared reason and by sentence shape (question, existential "there is", possession "have", copula with a prepositional phrase, multi-clause). Output: a table of the shapes worth a frame. *Deliverable:* `experiments/abstention-shapes-v1/README.md`. No bar; this is a diagnostic.
+**A0. Why it abstains (free, no model calls). Done 2026-10-22: [results](../experiments/abstention-shapes-v1/RESULTS.md).** The 151 uncovered R4 items, classified from the run ledgers (declared reason, every refused attempt, a counterfactual replay through today's core) and by sentence shape:
+
+| Primary cause | Items |
+|---|---|
+| First- or second-person subject (`I`, `you`, `we`); core accepts them, but the contract's "never fill it with you" seems to deter the extractor | 42 |
+| `assert.action` written as a bare string, read as an unregistered predicate; **37 get an identity once the action is a text term** | 37 |
+| Questions parsed as a `topic` label (all 29 sentence copies are questions) | 29 |
+| Third-person pronoun as a whole argument (refused filler, cannot be left out) | 25 |
+| Questions that abstained | 4 |
+| Other (imperative, multi-clause, existential, modal, complement) | 14 |
+
+The string-`action` repair alone would have taken R4 from 49 to 86 of 200 covered (43%), if the repaired parses are right; the same mistake ends 33 and 41 abstains in the two ADR 0027 gate runs. This changes A3's candidate list (below).
 
 **A1. The acceptance gates in Rust (R5).** Port the source-bound check, the literal-retention gate and transport validation to `lunum-sem` (or a new `lunum-accept` crate), so the Rust engine alone decides accept or refuse.
 
@@ -89,7 +110,7 @@ Pre-registered on R4's 49 covered records (in-sample for the templates, so this 
 | 2 | Every number, identifier and date in the source appears in the sentence (the literal gate, applied to the output) |
 | 3 | No question rendered as a statement, and no negation lost: 0 cases |
 
-**A3. Coverage change (contract 0.21 candidate).** From A0's table, propose the smallest set of frame or contract changes that covers the commonest abstain shapes: questions keep `kind`; existential and possession frames; copula + prepositional phrase. Follow ADR 0025: pre-register, run a baseline on fresh sentences, change, run again.
+**A3. Coverage change (contract 0.21 candidate).** From A0, the smallest set of changes that covers the commonest causes, in order: (1) a string `action` on a general frame is written as a text term by the builder, or refused with a message that names the fix; (2) a question form of the general frames (`kind` carries the mood; `topic` keeps only headings and labels); (3) one contract sentence saying that `I`, `you`, `we` as written are valid fillers of a general frame. Third-person pronouns stay abstains. Follow ADR 0025: pre-register, run a baseline on fresh sentences, change, run again. Cause 3 matters twice: English produced from Greek starts with `I`, `you` and `we` more often than Tatoeba English (Greek is pro-drop).
 - **Data:** 200 fresh Tatoeba English sentences, new seed, excluding R4 and every earlier set.
 
 | # | Measure | Bar |
@@ -113,170 +134,104 @@ Pre-registered on R4's 49 covered records (in-sample for the templates, so this 
 - **The bottleneck is extraction, not the engine.** A1 and A2 can pass while A3 fails. Coverage and errors move with the model ([Stage 0](../experiments/parallel-document-v1/RESULTS-stage0.md): 1, 4 and 11 of 16 by model).
 - **Template English sounds stiff.** That is accepted: the bar is meaning, not style. A model "polish" pass would hide realizer errors, so it stays outside the bars.
 - **`describe` and `define` absorb a lot.** `describe(subject=tom, attribute=swims very fast)` realizes back to the source almost word for word, which flatters level (b). Report level (b) per frame, and A4's closure separately for general frames and framed predicates.
-- **Judges.** If SuperGemma + Sol disagree as much as SuperGemma + Qwen did, level (b) stays weak. A 40-item judge-calibration set checked by the owner would fix this at small cost (decision 3 below).
+- **Judges.** If SuperGemma + Sol disagree as much as SuperGemma + Qwen did, level (b) stays weak. A 40-item judge-calibration set checked by the owner would fix this at small cost (decision 4 below).
 
 ### Estimate
 
 | Milestone | Work | Model cost (notional) |
 |---|---|---|
-| A0 | 1 session | $0 |
+| A0 | 1 session (done) | $0 |
 | A1 | 2–3 sessions (Rust port + goldens) | $0 |
 | A2 | 2 sessions | $0 |
 | A3 | 2 sessions + 2 runs of 200 | about $40, plus judge hours on the Ally and ChatGPT quota |
 | A4 | 1 session + 1 run of about 300 extractions (200 + re-extractions) | about $30 |
 
-## Stage B: Greek → Lunum → Greek
+## Stage P: the pivot adapter (Greek ↔ English at the edges)
 
 ### Today
 
 | Measure | Result | Source |
 |---|---|---|
-| Greek coverage, general frames, Sonnet | **0 / 50** (43 declared "unsupported") | [Greek-frames baseline](../experiments/greek-frames-heldout-v1/RESULTS-baseline.md) |
-| Greek coverage, Europarl, three extractors | 0 / 16 (SuperGemma), 1 / 16 (Luna), 0 / 16 (Sol) | [Stage 0](../experiments/parallel-document-v1/RESULTS-stage0.md) |
-| Greek coverage, framed predicates (clc-v1) | 3 / 40 on two sets, 2 / 40 on the repeat | [clc-v1](../experiments/cross-language-convergence-v1/RESULTS.md) |
-| Meaning against the owner's readings, Greek | 3 / 10 and 4 / 10 | [meaning targets](../experiments/meaning-targets-owner-v1/README.md) |
-| Greek pro-drop records without an agent | 3 of 9, all first person | [pro-drop replay](../experiments/prodrop-replay-v1/README.md) |
-| Exact recall over unaccented Greek queries | 0.283 → 0.992 recall@5 with Greek folding | [greek-fold-recall-v1](../experiments/greek-fold-recall-v1/RESULTS.md) |
-
-**The known Stage-0 contract limit.** Greek is refused by design, not by the model: [`source-bound.ts`](../packages/core/src/source-bound.ts) returns `language_unsupported` for any non-English source using a general frame ([ADR 0024](../decisions/0024-general-source-bound-frames.md), rule 6), because the source-bound check needs closed-class word lists and only English has them. [ADR 0029](../decisions/0029-greek-source-bound-frames.md) designs the Greek lists and a deixis rule for pro-drop; its [pre-registration](../experiments/greek-frames-heldout-v1/PREREGISTRATION.md) and baseline exist; the change run does not.
+| Greek coverage, native route, frozen contract | **0 / 50** (Sonnet), 0–1 / 16 (three extractors): non-English general frames fail closed by design | [Greek-frames baseline](../experiments/greek-frames-heldout-v1/RESULTS-baseline.md), [Stage 0](../experiments/parallel-document-v1/RESULTS-stage0.md) |
+| English and its human Greek translation get the same identity, native route | **0 of 5** both-covered pairs | [clc-v1](../experiments/cross-language-convergence-v1/RESULTS.md) |
+| Same English sentence, two extractions, same identity | 9 / 22 (`lfp:2.1`) | [ADR 0027 gate v2](../experiments/identity-heldout-v2/RESULTS.md) |
+| Literal readers for English and Greek (numbers and number words, month-name dates, relative times, identifiers) | implemented in core | [ADR 0016](../decisions/0016-source-literal-retention-gate.md), [0019](../decisions/0019-month-name-date-retention.md), [0020](../decisions/0020-number-words-and-relative-times.md) |
+| Adapter: prompt `pivot-translate/0.1`, meaning-flags schema, guards, dual agreement | implemented, unit-tested; **not yet measured** | [`pivot-adapter.ts`](../packages/eval/src/pivot-adapter.ts), [ADR 0030](../decisions/0030-english-pivot-translation-adapters.md) |
 
 ### Gap
 
-1. ADR 0029 is not implemented, in TypeScript or in Rust.
-2. There is no Greek realizer.
-3. No judge has been checked for Greek competence on this task.
+1. Nothing has measured what the translation hop costs in coverage, identity and literals.
+2. The way back (EN → EL) needs a real English sentence first (A2).
+3. No judge has been checked on Greek output (needed for P3).
 
 ### Milestones
 
-**B0. Implement ADR 0029 in TypeScript, then Rust (R8).** The Greek closed class, elision expansion and the person-ending table go into `source-bound.ts` (contract 0.20, package v26), then into the Rust acceptance gates from A1, with the same parity bars as A1. The Greek lists are AI-drafted; the ADR asks for a model-consensus review before merging (SuperGemma + Sol, as for the phrase worksheet), and the owner's native check if he has the time.
+**P0. The adapter (done 2026-10-22, no model calls in the guards).** [ADR 0030](../decisions/0030-english-pivot-translation-adapters.md) and [`packages/eval/src/pivot-adapter.ts`](../packages/eval/src/pivot-adapter.ts):
+- **Translation prompts** for both hops (`buildPivotPrompt`, `buildRenderPrompt`): keep numbers, dates, names and identifiers exactly; never change negation or modality (may / must / can / will); keep mood; flag ambiguity instead of resolving it silently.
+- **Meaning flags** (`MEANING_FLAGS_JSON_SCHEMA`, kept to the subset constrained decoding enforces): aspect (perfective / imperfective), formality (T / V), addressee number, gender of referents, evidentiality, dropped subject (pro-drop), the translator's literal map, and an ambiguity flag with a note.
+- **Guards** (`checkPivotGuards`, deterministic, abstain on failure): literal carry-through with core's EN/EL literal readers; Latin-script words verbatim; every mid-sentence name declared and present; negation and necessity/possibility markers unchanged in both directions; future «θα» not dropped; ambiguity abstains.
+- **Dual agreement** (`agreePivotIdentity`): two families, both pass, same identity; extraction memoised per exact English string.
+- **Stored record** (`PivotRecord`): identity, Sem, meaning flags; source text and translations only as provenance.
+- The guards stay in TypeScript at the edge, next to the runners; porting them to Rust is not on the critical path (A1 ports the acceptance gates, which decide identity).
+- Translator runner [`translate.mjs`](../experiments/pivot-el-en-v1/translate.mjs) (Qwen through Halogen's OpenAI-compatible endpoint with schema-constrained output; Sonnet through `claude -p` with `--json-schema`), smoke-tested on dev pairs only.
 
-**B1. Run the Greek-frames change run as pre-registered.** The data (50 EN/EL pairs), the bars (5) and the scorer are committed. Run it unchanged.
-- **A known problem to state first, without changing the bar:** bar 1 asks for Greek coverage of at least half the English coverage *and* at least 15 Greek sentences. The baseline covered only 9 English sentences, so 15 Greek would be more than English itself. Bar 1 will probably fail on the "15" clause even if Greek works. The plan is to run it as registered, publish the verdict, and then pre-register a v2 with a larger set (B3), not to amend the bar after seeing the baseline.
-
-**B2. A Greek realizer, `el-natural/0.1` (R9).** Same crate as A2. The insight that keeps this small: in a **same-language** round trip the fillers are Greek words copied from the Greek source, already inflected. The realizer only needs the closed-class glue (articles that are not in fillers, «δεν»/«μην», «θα»/«να», «αν», prepositions and their contractions), word order, the Greek question mark `;`, and for deixis one rule: a `speaker`/`addressee` agent is not written as a pronoun when the verb filler already carries the person (pro-drop).
-
-| # | Bar (development, on B1's covered records) |
-|---|---|
-| 1 | Every covered record renders (0 errors) |
-| 2 | Literal retention 100%, with Greek numerals, dates («14 Ιανουαρίου 2027») and relative times («αύριο») |
-| 3 | 0 lost negations, 0 questions rendered as statements |
-
-**B3. The Greek round trip, held out.** EL → record → `el-natural` Greek → judged, plus the closure loop as in A4.
-- **Data:** 200 fresh Greek Tatoeba sentences, weighted towards first and second person, plus 100 Europarl Greek sentences (text outside the repository, handles and hashes committed). Exclude everything earlier.
+**P1. Coverage through the pivot.** Greek via the pivot gets records about as often as the human English side of the same Tatoeba pairs. **P2. Identity agreement.** The Greek sentence lands on the same identity as its human English translation. **P4. Literals.** Every literal survives into the stored record. One run measures all three; pre-registered in [`experiments/pivot-el-en-v1/PREREGISTRATION.md`](../experiments/pivot-el-en-v1/PREREGISTRATION.md).
+- **Data:** 160 held-out Tatoeba EN–EL pairs (seeded, neither side found anywhere else in the repository), plus 20 disjoint dev pairs for smoke tests.
 
 | # | Measure | Bar |
 |---|---|---|
-| 1 | Greek coverage | ≥ 25% of items, and at least 50 covered |
-| 2 | Level (b), both judges first validated on a 40-item Greek calibration set (≥ 85% against the gold) | ≥ 80% by each judge; agreement ≥ 75%; controls ≤ 10% |
-| 3 | Level (c), closure | ≥ the Greek same-sentence stability measured in the same run |
-| 4 | Pro-drop | of covered first/second-person items, ≥ 80% carry a deictic agent |
-| 5 | Safety | as A3 bar 3, plus 0 identity movement on English replays |
+| P1 | Pivot-covered Greek sentences against human-English-covered | ≥ **0.8 ×** human coverage; verdict needs ≥ 30 human-covered |
+| P2 | Same identity as the human English, over pairs covered on both sides | ≥ **50%** over ≥ 20 pairs (native baseline 0 / 5; the extractor's own same-sentence stability is 9 / 22 = 41%, so 50% asks the translation not to be the bottleneck), and 0 collisions with other pairs |
+| P4 | Literal carry-through into the stored record (numbers, dates, relative times, identifiers, declared names) | **100%** |
+
+*Reported, not bars:* guard failures by kind and translator, single-translator coverage, how often a translation reproduces the human English string, flag agreement between the translators, dropped subjects.
+
+**P3. The Greek round trip (needs A2).** EL → pivot → record → `en-natural` English (A2) → model translates to Greek using the stored flags (`buildRenderPrompt`), with the guards applied to the outbound hop as well (English → Greek). Pre-registered on a fresh held-out set after A2 exists.
+
+| # | Measure | Bar |
+|---|---|---|
+| 1 | Level (b): the final Greek states the Greek source's content (who did what to whom, negation, modality, mood), judged by **SuperGemma + Sol**, both first valid on 20 seeded controls (≤ 10% "yes") | within **10 percentage points** of the English round trip (A4 level (b)) measured by the same judges, and ≥ 30 covered |
+| 2 | Judge agreement | ≥ 75% |
+| 3 | Literal retention across both hops | 100% (as P4) |
+
+*Reported:* flag-preservation per flag (aspect, formality, gender) read by the judges; items where the round trip is fine but a flag was lost.
+
+**P4** is measured inside P1/P2 for the inbound hop and inside P3 for the outbound hop.
 
 ### Risks
 
-- **Morphology.** Greek inflects for case, gender and number. Same-language rendering avoids the problem by reusing source forms; any filler the realizer must *change* (an agent moved to a different case, for instance) is out of scope for `el-natural/0.1` and is reported as a realizer limit.
-- **Article/clitic homography.** «τον, την, το, του, της» are articles and object clitics. ADR 0029 keeps them free words, so a dropped clitic object («τον είδα») is not caught by word coverage; only frames with a required object catch it.
-- **Imperative/aorist homography and person endings.** Confirmed by the owner ([intake](../experiments/owner-greek-review-v1/INTAKE.md)). The ending table applies only inside `action` or predicate fillers; «-α» is ambiguous between nouns and past verbs.
-- **Modal «μπορεί».** It has two or three readings that a parse silently collapses (same intake). Report modal items separately.
-- **Tokenisation and folding.** Identity folds case, accents and final sigma under the pinned Unicode 17.0 (Node 22.22.2); the Rust crate must reproduce the same folding for Greek (covered by A1's parity bar, with a Greek-only slice of the goldens). Greek costs more tokens than English on most tokenizers, so token counts must name the tokenizer and never compare languages raw.
-- **Judges' Greek.** No judge's Greek has been measured on this task. The phrase worksheet (SuperGemma + Sol, kappa 0.634) is the best evidence so far, and it is about phrases, not sentences. Hence the calibration set in B3 bar 2.
-- **Extractor.** Sonnet abstained on all Greek under the frozen contract; whether it covers Greek once allowed is the open question of B1.
+- **Dual agreement costs coverage.** Two translators that word a sentence differently produce different fillers, so different identities: the pivot then abstains. Single-translator coverage is reported so the cost is visible. If P1 fails on this alone, the honest next step is a pre-registered relaxation (for example, agreement on the record's structure plus identical fillers after a deterministic normalisation), not a quiet one.
+- **Extraction is not deterministic.** Even identical English extracted twice agrees 9 / 22 times; memoisation per exact string removes this for identical translations only.
+- **The translator joins the evidence chain.** A fluent mistranslation that keeps every literal and every negation passes the guards; two families make a shared error less likely, not impossible.
+- **Training-data contamination.** Tatoeba is probably in both translators' training data, which flatters P2 (a model may reproduce the human English). Europarl or the owner's own text would be the follow-up test.
+- **Pro-drop.** English from Greek starts with `I`, `you`, `we` more often; A0 found these subjects to be the commonest no-attempt abstain, so A3's cause 3 matters for P1.
+- **Guard lists are conservative.** Greek «κανείς», «ποτέ», «τίποτα» are not counted as negators (they also mean anyone, ever, anything); a Greek perception verb translated with "can" ("I can't hear you") trips the possibility check. Both abstain: lost coverage, not safety. Reported by kind.
+- **Names across scripts** are checked through the translators' declared literals and their agreement, not a transliteration table.
 
 ### Estimate
 
 | Milestone | Work | Model cost (notional) |
 |---|---|---|
-| B0 | 2–3 sessions (TS + Rust + goldens + model-consensus review of the lists) | judge quota only |
-| B1 | 1 session + 1 run of 100 | about $10 |
-| B2 | 2 sessions | $0 |
-| B3 | 2 sessions + 1 run of about 450 extractions | about $45, plus judge hours |
-
-## Stage C: English → Lunum → Greek, and Greek → Lunum → English
-
-### Today
-
-| Measure | Result | Source |
-|---|---|---|
-| English and its human Greek translation get the same identity | **0 of 5** both-covered pairs | [clc-v1](../experiments/cross-language-convergence-v1/RESULTS.md) |
-| Same pairs, structure only (predicate, roles, negation, modality, mood) | **3 of 5**; both misses are Greek pro-drop | same, post-hoc |
-| Single-word EN → EL translation from mined corpora, against wordnet | top-5 0.500 (lemma) and 0.540 (surface) on Europarl; both pre-registered bars failed | [OMW round trip](../experiments/pivot-paraphrase-v1/omw-roundtrip/RESULTS.md) |
-| Model-proposed Greek phrasings attested in human translations | 49% when two families agree, 28% when one does | [exploration](../experiments/pivot-paraphrase-v1/EXPLORATION.md) |
-| Phrase-level EN–EL gold | 176 pairs labelled by model consensus (128 same, 27 broader/narrower, 8 different, 13 unresolved), kappa 0.634 | [worksheet v2](../experiments/pivot-paraphrase-v1/WORKSHEET-v2-filled.md), [`fill/gold.json`](../experiments/pivot-paraphrase-v1/fill/gold.json) |
-| Parallel passages found by language-neutral anchors (numbers, dates, IDs) | top-1 0.817, matched/mismatched Jaccard 0.947 / 0.041 | [anchors](../experiments/parallel-document-v1/RESULTS-anchors.md) |
-
-**Why identities cannot match today:** the closed vocabulary (predicates, roles, negation, modality, kind) is already language-neutral, but open fillers stay in their source language: `police` and «αστυνομία» hash differently. The [concept layer](../decisions/0028-language-neutral-concept-layer.md) (ADR 0028, proposed) is the design for that.
-
-### Gap
-
-1. A way to carry open fillers across languages: a lexicon or concept IDs.
-2. Cross-language realization: target-language morphology for fillers that were not in a target source.
-3. A cross-language judge.
-
-### Milestones
-
-**C0. Structure agreement, free from B1 and B3.** Level (a) on pairs covered on both sides: B1's bar 2 (≥ 60% over ≥ 15 pairs) is already pre-registered. No new run.
-
-**C1. A filler lexicon, `lunum-lex` (R10).** A Rust crate built from `pivot-miner` output: EN ↔ EL phrase pairs with attestation counts from Europarl and OpenSubtitles, lemma-aware, deterministic lookup, pinned corpus hashes. Pre-registered against the 176-pair phrase gold, held out from its construction.
-
-| # | Measure | Bar |
-|---|---|---|
-| 1 | The gold Greek phrase is in the top 5 for an English phrase | ≥ 70% of "same" gold pairs |
-| 2 | False translations: a "different" gold pair in the top 1 | ≤ 5% |
-
-**C2. EN → Lunum → EL (R11).** Render an English record in Greek: closed vocabulary through `el-natural` glue, open fillers through `lunum-lex` (top-1, attested); a filler with no attested translation is kept in English and marked, never guessed.
-- **Data:** the English side of 200 fresh Tatoeba EN/EL pairs, with the human Greek as a reference for the judges.
-
-| # | Measure | Bar |
-|---|---|---|
-| 1 | Level (b): the Greek output states the English source's content | ≥ 70% by each judge (validated on Greek controls), agreement ≥ 75% |
-| 2 | Untranslated fillers | reported; ≤ 20% of fillers |
-| 3 | Literal retention across the language change (numbers, dates, IDs) | 100% |
-
-**C3. EL → Lunum → EN (R12).** The mirror of C2, with the same bars. Pro-drop is the extra risk here: the English output needs a pronoun the Greek never wrote, so B0's deixis rule is a precondition.
-
-**C4. Same meaning, same identity (level (c)), only after C2/C3 pass.** The concept layer of ADR 0028: grounded fillers hash a concept ID instead of the word, chosen by the extractor from a candidate list and verified by core. That is a new identity version (`lfp:2.2` or later) with goldens, migration notes and the Rust port in the same change.
-- **Data:** fresh Europarl and Tatoeba pairs.
-
-| # | Measure | Bar |
-|---|---|---|
-| 1 | EN and EL record of a translation pair get the same identity | ≥ 50% over ≥ 20 pairs covered on both sides (clc-v1: 0 of 5) |
-| 2 | False merges of different meanings | 0 |
-| 3 | English-only identity movement | only as declared in the migration note |
-
-### Risks
-
-- **Morphology, now unavoidable.** An English filler translated into Greek must take the right case and gender in its new sentence; C2's realizer will get this wrong in places. Mitigation: prefer attested Greek phrases that carry their article and case («την αστυνομία»); report case errors separately; a model that only inflects, checked by the literal gate, is a possible later step, outside these bars.
-- **Polysemy.** 81 of 100 wordnet lookups failed on ambiguity, not missing data ([ADR 0028](../decisions/0028-language-neutral-concept-layer.md)). The lexicon must keep candidates, not force one sense.
-- **Corpus bias.** Europarl is parliamentary and OpenSubtitles conversational; Tatoeba is short everyday sentences and probably in model training data.
-- **Licences.** Europarl and OpenSubtitles text stays outside the repository; only hashes, handles, aggregates and derived counts are committed.
-
-### Estimate
-
-| Milestone | Work | Model cost (notional) |
-|---|---|---|
-| C0 | included in B1/B3 | $0 |
-| C1 | 2–3 sessions (CPU only) | $0 |
-| C2 | 2 sessions + 1 run of 200 | about $20 + judge hours |
-| C3 | 1–2 sessions + 1 run of 200 | about $20 + judge hours |
-| C4 | 4+ sessions (ADR, identity version, migration, Rust port) + 2 runs | about $60 |
+| P0 | 1 session (done) | about $0.05 (dev smoke test) |
+| P1 / P2 / P4 | 1 session + 160 Qwen and 160 Sonnet translations + about 160 + 250 Sonnet extractions | about $40 |
+| P3 | 2 sessions, after A2 + 1 run of about 200 | about $35, plus judge hours |
 
 ## Order of work and the owner's decisions
 
 | Order | Step | Depends on | Needs the owner |
 |---|---|---|---|
-| 1 | A0 abstention shapes; A1 Rust acceptance gates; B0 TypeScript part | — | no |
-| 2 | A2 English realizer; B1 Greek-frames change run | A1; B0 | B1 budget (about $10) |
-| 3 | A3 coverage change | A0 | budget (about $40), contract 0.21 under ADR 0025 |
-| 4 | A4 English round trip, closed | A2, A3 | budget (about $30) |
-| 5 | B2 Greek realizer; B3 Greek round trip | B0, B1, A2 | budget (about $45) |
-| 6 | C1 lexicon; C2/C3 cross-language | B2, A2 | budget (about $40) |
-| 7 | C4 concept-layer identity | C2, C3 | an identity version |
+| 1 | A0 (done); P0 (done); A1 Rust acceptance gates | — | no |
+| 2 | P1 / P2 / P4 run (pre-registered) | P0 | budget (about $40 notional) |
+| 3 | A2 English writer | A1 | no |
+| 4 | A3 coverage change (string `action`, questions, deictic subjects) | A0 | budget (about $40), contract 0.21 under ADR 0025 |
+| 5 | A4 English round trip, closed | A2, A3 | budget (about $30) |
+| 6 | P3 Greek round trip | A2, P1 | budget (about $35) |
 
-**Decisions for the owner before work starts:**
-1. **Extractor.** Sonnet on the subscription as the default (comparable with every 2026-10-17 baseline), with Sol as the second family when quota allows? Or Sol first?
-2. **Judges.** SuperGemma + Sol for level (b), Qwen as tie-breaker?
-3. **Calibration.** 20 minutes of native-speaker checking for a 40-item Greek calibration set would make every Greek level-(b) number stronger. The owner delegated Greek judgements to models on 2026-10-17; this asks for an exception, not a change of policy.
-4. **Greek-frames bar 1.** Run B1 as pre-registered, knowing its "at least 15 Greek sentences" clause will probably fail, and treat B3 as the real Greek test?
-5. **Contract 0.21.** Accept that A3 is a contract change under ADR 0025, with its own pre-registration?
+**Decisions for the owner:**
+1. **Run P1/P2/P4 now on the frozen contract (about $40 notional), or after A3?** Now gives the pivot's cost against today's English; after A3 both sides would cover more. Running now keeps A3 and P separable.
+2. **Second translator:** Sonnet (also the extractor, so the same vendor appears twice in the chain) or Sol when quota allows?
+3. **Judges for P3:** SuperGemma + Sol, Qwen as tie-breaker?
+4. **Calibration.** 20 minutes of native-speaker checking for a 40-item Greek judge-calibration set would make P3 stronger; the owner delegated Greek judgements to models on 2026-10-17, so this asks for an exception.
+5. **Contract 0.21.** Accept that A3 is a contract change under ADR 0025, with its own pre-registration, and that its first item is the string-`action` repair?
 
-**Total, if every step runs once:** about 25 to 30 agent sessions and about $225 notional (Max-plan usage, no API charge), plus judge time on the Ally and ChatGPT quota. Each step stops at its own verdict; a failed bar is published and the next step is re-planned, not forced.
+**Total, if every step runs once:** about 14 to 18 agent sessions and about $175 notional (Max-plan usage, no API charge), plus judge time on the Ally and ChatGPT quota. Each step stops at its own verdict; a failed bar is published and the next step is re-planned, not forced.

@@ -4,7 +4,7 @@ Start with the [README](../README.md), then [STATUS.md](../STATUS.md). Older des
 
 | Area | Documents |
 |---|---|
-| **Plan** | [PLAN-rust-engine-language-pairs.md](PLAN-rust-engine-language-pairs.md): EN → Lunum → EN, EL → Lunum → EL, then EN ↔ EL |
+| **Plan** | [PLAN-rust-engine-language-pairs.md](PLAN-rust-engine-language-pairs.md): EN → Lunum → EN, then Greek through an English pivot (translation adapters at the edges) |
 | **The language** | [SEMANTIC_CONTRACT.md](SEMANTIC_CONTRACT.md) (identity, Unicode pin), [ARCHITECTURE.md](ARCHITECTURE.md), [SOURCE_BOUND_CANDIDATE_USE.md](SOURCE_BOUND_CANDIDATE_USE.md), [FINGERPRINT_MIGRATION.md](FINGERPRINT_MIGRATION.md), [GROUNDING.md](GROUNDING.md), [GROUNDING_PROVIDERS.md](GROUNDING_PROVIDERS.md) |
 | **Evidence rules** | [EXPERIMENT_PROTOCOL.md](EXPERIMENT_PROTOCOL.md), [EVALUATION_PROTOCOL.md](EVALUATION_PROTOCOL.md), [LUNUM_READINESS.md](LUNUM_READINESS.md), [DATASET_POLICY.md](DATASET_POLICY.md), [REPRODUCING.md](REPRODUCING.md) |
 | **Working on the repository** | [REPOSITORY_OPERATING_MODEL.md](REPOSITORY_OPERATING_MODEL.md), [AGENT_OPERATING_MODEL.md](AGENT_OPERATING_MODEL.md), [LOCAL_MODEL_WORKERS.md](LOCAL_MODEL_WORKERS.md), [CLIENT_COMPATIBILITY.md](CLIENT_COMPATIBILITY.md), [schema-drift-migration.md](schema-drift-migration.md) |

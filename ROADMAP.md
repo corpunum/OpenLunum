@@ -1,6 +1,6 @@
 # Roadmap
 
-**The near-term plan is [docs/PLAN-rust-engine-language-pairs.md](docs/PLAN-rust-engine-language-pairs.md) (2026-10-22, for the owner's review).** The milestones below are the long-range outline.
+**The near-term plan is [docs/PLAN-rust-engine-language-pairs.md](docs/PLAN-rust-engine-language-pairs.md) (2026-10-22; English as the pivot, [ADR 0030](decisions/0030-english-pivot-translation-adapters.md)).** The milestones below are the long-range outline.
 
 ## Update — 2026-10-17
 
