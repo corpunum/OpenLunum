@@ -19,7 +19,7 @@ No open-source license was selected by the initial public-description correction
 
 ## Owner-authorized follow-up — 2026-09-14
 
-The owner subsequently explicitly authorized releasing code they own or control under Apache-2.0, including commercial reuse and its patent grant, while preserving third-party terms. [Issue #698](https://github.com/corpunum/OpenLunum/issues/698) records that scope. The complete license is now in [LICENSE](../LICENSE), with [NOTICE](../NOTICE), consistent workspace metadata, package-local copies and [licensing guidance](../LICENSE.md). Existing package versions/private flags, external dataset/model licenses and historical evidence remain unchanged.
+The owner subsequently explicitly authorized releasing code they own or control under Apache-2.0, including commercial reuse and its patent grant, while preserving third-party terms. [Issue #698](https://github.com/corpunum/OpenLunum/issues/698) records that scope. The complete license is now in [LICENSE](../../../LICENSE), with [NOTICE](../../../NOTICE), consistent workspace metadata, package-local copies and [licensing guidance](../../../LICENSE.md). Existing package versions/private flags, external dataset/model licenses and historical evidence remain unchanged.
 
 This resolves the missing rights grant for the covered original code; it does not establish adoption, semantic accuracy, token savings, or production readiness.
 
@@ -27,4 +27,4 @@ This resolves the missing rights grant for the covered original code; it does no
 
 The added `demo:core` is product-neutral but project-authored. It supplies Sem and demo-scoped IDs, tests identity distinctions and unpromoted natural fallback, and deliberately reports no token or task-quality result. It does not count as independent adoption or a new multilingual extraction benchmark.
 
-No V5-V8 artifact, human-review record, source-only acceptance criterion, schema, frame, fingerprint implementation or protected dataset was changed by this task. Current experimental limitations remain visible in [STATUS](../STATUS.md).
+No V5-V8 artifact, human-review record, source-only acceptance criterion, schema, frame, fingerprint implementation or protected dataset was changed by this task. Current experimental limitations remain visible in [STATUS](../../../STATUS.md).

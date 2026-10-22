@@ -20,7 +20,7 @@ The realization engine converts Lunum-Semantic content to natural language in fo
 ### Greek (`el`)
 - Template-based realization
 - Greek alphabet support
-- Greek question marks (¿)
+- Greek question mark written as `;` (as in `packages/eval/src/realization.ts`)
 
 ### Spanish (`es`)
 - Template-based realization

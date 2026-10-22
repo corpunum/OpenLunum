@@ -28,3 +28,10 @@ reports/orchestrator/NEEDS_CLOUD
 reports/experiments/smoke-test/environment.json
 reports/nightly/
 packages/tmp/
+# OpenUnum session-wiki files that an agent session can write into its working directory
+/CONTEXT.md
+/INDEX.md
+/index.json
+/manifest.md
+/children/
+/artifacts/

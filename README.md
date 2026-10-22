@@ -76,7 +76,7 @@ Core cannot tell whether a proposal is *right*. It can refuse proposals that are
 
 `lfp:2.1` depends on Unicode 17.0 casefold/NFKC, so Node is pinned in `.nvmrc` (22.22.2); a Unicode bump is a deliberate, reviewed change ([contract](docs/SEMANTIC_CONTRACT.md)).
 
-Details are in [STATUS.md](STATUS.md). The working plan for the next session is in [HANDOFF.md](HANDOFF.md).
+Details are in [STATUS.md](STATUS.md). The working plan for the next session is in [HANDOFF.md](research/archive/handoffs/HANDOFF-2026-10-16.md).
 
 ## Try it
 
