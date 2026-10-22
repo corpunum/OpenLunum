@@ -1,0 +1,402 @@
+{
+ "seed": "pivot-el-en-v1:calibration:2026-10-22",
+ "eligible": 11037,
+ "excludedHeldoutOrDev": 7,
+ "excludedSeenElsewhere": 20,
+ "normal": [
+  {
+   "en": "What did you do when those men attacked you?",
+   "el": "Τι έκανες όταν αυτοί οι άνδρες σου επιτέθηκαν;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10668592 (CK) & #10670299 (amoeba)",
+   "feature": null,
+   "cand": "N1"
+  },
+  {
+   "en": "Don't go to Boston.",
+   "el": "Μην πας στη Βοστώνη.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2270435 (CK) & #5618970 (Zeus)",
+   "feature": null,
+   "cand": "N2"
+  },
+  {
+   "en": "I asked Tom to open the window.",
+   "el": "Ζήτησα απ' τον Τομ ν' ανοίξει το παράθυρο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #255284 (CK) & #5528583 (Zeus)",
+   "feature": null,
+   "cand": "N3"
+  },
+  {
+   "en": "Is your car black?",
+   "el": "Είναι μαύρο τ' αμάξι σου;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2055348 (Dejo) & #5485838 (Zeus)",
+   "feature": null,
+   "cand": "N4"
+  },
+  {
+   "en": "I've already spoken to Tom about that.",
+   "el": "Έχω ήδη μιλήσει στον Τομ γι' αυτό.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5386968 (CK) & #5389244 (Zeus)",
+   "feature": null,
+   "cand": "N5"
+  },
+  {
+   "en": "Tom should've bought the more expensive one.",
+   "el": "Ο Θωμάς έπρεπε να είχε αγοράσει το ακρυβότερο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10668696 (CK) & #10669966 (amoeba)",
+   "feature": null,
+   "cand": "N6"
+  },
+  {
+   "en": "Tell me about your son.",
+   "el": "Πείτε μου για τον γιο σας.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2646011 (CK) & #5470294 (Zeus)",
+   "feature": null,
+   "cand": "N7"
+  },
+  {
+   "en": "Close the window before you leave.",
+   "el": "Κλείσε το παράθυρο πριν βγεις έξω.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1415923 (enteka) & #1415914 (enteka)",
+   "feature": null,
+   "cand": "N8"
+  },
+  {
+   "en": "He sleeps during the day and works at night.",
+   "el": "Κοιμάται τη μέρα και δουλεύει τη νύχτα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1211531 (alec) & #2998197 (mululatv)",
+   "feature": null,
+   "cand": "N9"
+  },
+  {
+   "en": "January is the first month of the year.",
+   "el": "Ο Ιανουάριος είναι ο πρώτος μήνας του χρόνου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #27821 (CK) & #1412501 (enteka)",
+   "feature": null,
+   "cand": "N10"
+  },
+  {
+   "en": "Did Tom send you?",
+   "el": "Ο Τομ σας έστειλε;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2261196 (CK) & #5410053 (Zeus)",
+   "feature": null,
+   "cand": "N11"
+  },
+  {
+   "en": "Are you sure you don't remember?",
+   "el": "Είσαι σίγουρη ότι δε θυμάσαι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3738384 (CK) & #5581947 (Zeus)",
+   "feature": null,
+   "cand": "N12"
+  },
+  {
+   "en": "I want to be alone for a bit.",
+   "el": "Θέλω να μείνω λίγο μόνος μου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #8981463 (Nylez) & #1415445 (enteka)",
+   "feature": null,
+   "cand": "N13"
+  },
+  {
+   "en": "Tom was one of them.",
+   "el": "Ο Τομ ήταν ένα απ' αυτά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3724769 (CM) & #5410340 (Zeus)",
+   "feature": null,
+   "cand": "N14"
+  },
+  {
+   "en": "It's easy for them.",
+   "el": "Είναι εύκολο γι' αυτούς.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5386502 (CK) & #5386597 (Zeus)",
+   "feature": null,
+   "cand": "N15"
+  },
+  {
+   "en": "The food was really good the last time I was here.",
+   "el": "Το φαγητό ήταν πολύ καλό τη τελευταία φορά που ήμουν εδώ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10657461 (sundown) & #10674376 (amoeba)",
+   "feature": null,
+   "cand": "N16"
+  },
+  {
+   "en": "Tom had three dogs.",
+   "el": "Ο Τομ είχε τρεις σκύλους.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3735840 (CK) & #5496202 (Zeus)",
+   "feature": null,
+   "cand": "N17"
+  },
+  {
+   "en": "Do you have any plans for next Monday?",
+   "el": "Είσαι κλεισμένος για την άλλη Δευτέρα;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7784921 (CK) & #7785015 (eypros)",
+   "feature": null,
+   "cand": "N18"
+  },
+  {
+   "en": "Tom kissed Mary and left.",
+   "el": "Ο Τομ φίλησε τη Μαίρη κι έφυγε.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1868105 (CK) & #5454486 (Zeus)",
+   "feature": null,
+   "cand": "N19"
+  },
+  {
+   "en": "I owe Tom money.",
+   "el": "Χρωστάω λεφτά στον Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2389596 (CK) & #5413295 (Zeus)",
+   "feature": null,
+   "cand": "N20"
+  },
+  {
+   "en": "Where are you going over Christmas?",
+   "el": "Πού θα πας τα Χριστούγεννα;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10659933 (CK) & #10679319 (amoeba)",
+   "feature": null,
+   "cand": "N21"
+  },
+  {
+   "en": "What would you do if you were in my position?",
+   "el": "Τι θα κάνατε, αν ήσαστε στη θέση μου;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5509205 (mailohilohi) & #5515051 (Zeus)",
+   "feature": null,
+   "cand": "N22"
+  },
+  {
+   "en": "Who are your parents?",
+   "el": "Ποιοί είναι οι γονείς σου;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2749206 (CK) & #2455132 (mululatv)",
+   "feature": null,
+   "cand": "N23"
+  },
+  {
+   "en": "I told them to send me another ticket.",
+   "el": "Τους είπα να μου στείλουν ένα άλλο εισητήριο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1313 (Zifre) & #7854095 (janMiso)",
+   "feature": null,
+   "cand": "N24"
+  },
+  {
+   "en": "We were both very thirsty.",
+   "el": "Διψούσαμε και οι δύο πολύ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5464649 (CK) & #5466100 (Zeus)",
+   "feature": null,
+   "cand": "N25"
+  },
+  {
+   "en": "What are your strong points?",
+   "el": "Ποιά είναι τα ισχυρά σου σημεία;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #70461 (CK) & #716055 (anmaretto)",
+   "feature": null,
+   "cand": "N26"
+  },
+  {
+   "en": "What would you like for breakfast?",
+   "el": "Τι θα ήθελες για πρωινό;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #277744 (CK) & #5615680 (Zeus)",
+   "feature": null,
+   "cand": "N27"
+  },
+  {
+   "en": "I'm brushing my hair.",
+   "el": "Χτενίζω τα μαλλιά μου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #6873234 (CK) & #7579681 (amoeba)",
+   "feature": null,
+   "cand": "N28"
+  },
+  {
+   "en": "I was too exhausted to think, let alone study.",
+   "el": "Είμαι πολύ εξαντλημένη να σκεφτώ, πόσο μάλλον να διαβάσω.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #317788 (CK) & #7810553 (eypros)",
+   "feature": null,
+   "cand": "N29"
+  },
+  {
+   "en": "Tom will be ready.",
+   "el": "Ο Τομ θα είναι έτοιμος.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2215639 (CK) & #5607168 (Zeus)",
+   "feature": null,
+   "cand": "N30"
+  },
+  {
+   "en": "I'll see you later.",
+   "el": "Θα σας δω αργότερα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #32706 (CK) & #5612962 (Zeus)",
+   "feature": null,
+   "cand": "N31"
+  },
+  {
+   "en": "Give me the pen.",
+   "el": "Δώσ' μου τον στυλό.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5576749 (CK) & #5579251 (Zeus)",
+   "feature": null,
+   "cand": "N32"
+  },
+  {
+   "en": "One of Tom's kids lives in Australia now.",
+   "el": "Ένα από τα παιδιά του Τομ μένει στην Αυστραλία τώρα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7782588 (CK) & #7782698 (eypros)",
+   "feature": null,
+   "cand": "N33"
+  },
+  {
+   "en": "I think Tom is tall.",
+   "el": "Νομίζω πως ο Τομ είναι ψηλός.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3183873 (CK) & #5557324 (Zeus)",
+   "feature": null,
+   "cand": "N34"
+  },
+  {
+   "en": "The prime minister will make an announcement tomorrow.",
+   "el": "Ο πρωθυπουργός θα κάνει αύριο μιά ανακοίνωση.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1243645 (yuya) & #3000508 (mululatv)",
+   "feature": null,
+   "cand": "N35"
+  },
+  {
+   "en": "Tom brought Mary a coffee.",
+   "el": "Ο Τομ έφερε έναν καφέ στη Μαίρη.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2544606 (CK) & #5454517 (Zeus)",
+   "feature": null,
+   "cand": "N36"
+  }
+ ],
+ "control": [
+  {
+   "en": "There has to be a reason.",
+   "el": "Πρέπει να υπάρχει λόγος.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2883977 (CK) & #7583427 (amoeba)",
+   "feature": "mod",
+   "cand": "C1"
+  },
+  {
+   "en": "She is not only intelligent but beautiful.",
+   "el": "Δεν είναι μόνο έξυπνη αλλά και όμορφη.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #315537 (CK) & #2448948 (mululatv)",
+   "feature": "neg",
+   "cand": "C2"
+  },
+  {
+   "en": "No matter what you say, I won't give up.",
+   "el": "Δεν έχει σημασία τι λες, δε θα τα παρατήσω.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2412287 (CK) & #4704539 (chrysaarabatzi)",
+   "feature": "neg",
+   "cand": "C3"
+  },
+  {
+   "en": "Tom didn't know where his umbrella was.",
+   "el": "Ο Θωμάς δεν ήξερε πού είναι η ομπρέλα του.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3449266 (CK) & #3450486 (Zeus)",
+   "feature": "neg",
+   "cand": "C4"
+  },
+  {
+   "en": "I didn't say it was easy.",
+   "el": "Δεν είπα ότι ήταν εύκολο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2290440 (CK) & #5611516 (Zeus)",
+   "feature": "neg",
+   "cand": "C5"
+  },
+  {
+   "en": "I can get that book for you.",
+   "el": "Μπορώ να πάρω αυτό το βιβλίο για σένα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7794648 (CK) & #7795357 (janMiso)",
+   "feature": "mod",
+   "cand": "C6"
+  },
+  {
+   "en": "I didn't do it on purpose.",
+   "el": "Δεν το έκανα επίτηδες.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #436507 (lukaszpp) & #2456720 (mululatv)",
+   "feature": "neg",
+   "cand": "C7"
+  },
+  {
+   "en": "Didn't Tom tell you to go home?",
+   "el": "Δεν σου είπε ο Θωμάς να πας σπίτι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10674859 (CK) & #10677931 (amoeba)",
+   "feature": "neg",
+   "cand": "C8"
+  },
+  {
+   "en": "I don't know, nor do I want to know.",
+   "el": "Δεν το ξέρω και ούτε και θέλω να το μάθω.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #9328187 (Nylez) & #2413578 (mululatv)",
+   "feature": "neg",
+   "cand": "C9"
+  },
+  {
+   "en": "I told you it wouldn't work.",
+   "el": "Σου το είχα πει πως δεν θα δούλευε.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #716476 (CM) & #4421927 (dora98)",
+   "feature": "neg",
+   "cand": "C10"
+  },
+  {
+   "en": "Are you sure Tom isn't busy?",
+   "el": "Είστε σίγουρος ότι ο Τομ δεν είναι απασχολημένος;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3359968 (CK) & #5611168 (Zeus)",
+   "feature": "neg",
+   "cand": "C11"
+  },
+  {
+   "en": "Can I stay in the car?",
+   "el": "Μπορώ να μείνω στ' αμάξι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5404500 (CK) & #5425015 (Zeus)",
+   "feature": "mod",
+   "cand": "C12"
+  },
+  {
+   "en": "I can't get anything done if you keep bothering me.",
+   "el": "Δε μπορώ να τελειώσω τίποτε αν συνεχίσεις να με ενοχλείς.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7791451 (CK) & #7791757 (eypros)",
+   "feature": "mod",
+   "cand": "C13"
+  },
+  {
+   "en": "Call Tom up at 2:30.",
+   "el": "Πάρε τηλέφωνο τον Τομ στις 2:30.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7771657 (CK) & #7771839 (eypros)",
+   "feature": "num",
+   "cand": "C14"
+  },
+  {
+   "en": "Tom woke up at 2:30.",
+   "el": "Ο Τομ ξύπνησε στις 2:30.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5103467 (CK) & #5584910 (Zeus)",
+   "feature": "num",
+   "cand": "C15"
+  },
+  {
+   "en": "Please come before 2:30.",
+   "el": "Παρακαλώ, ελάτε πριν από τις 2:30.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3130453 (CK) & #5653281 (Zeus)",
+   "feature": "num",
+   "cand": "C16"
+  },
+  {
+   "en": "You must help your friends.",
+   "el": "Πρέπει να βοηθήσεις τους φίλους σου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5425034 (mailohilohi) & #5425178 (Zeus)",
+   "feature": "mod",
+   "cand": "C17"
+  },
+  {
+   "en": "You'll have to believe me.",
+   "el": "Θα πρέπει να με πιστέψεις.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #9560983 (Nylez) & #2003052 (glavkos)",
+   "feature": "mod",
+   "cand": "C18"
+  },
+  {
+   "en": "Can you find it?",
+   "el": "Μπορείτε να τον βρείτε;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #239285 (adjusting) & #5634266 (Zeus)",
+   "feature": "mod",
+   "cand": "C19"
+  },
+  {
+   "en": "I owe you 3,000 yen.",
+   "el": "Σου χρωστάω 3.000 γιεν.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #257060 (CK) & #5606996 (Zeus)",
+   "feature": "num",
+   "cand": "C20"
+  }
+ ]
+}
