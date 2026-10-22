@@ -15,11 +15,11 @@ const rt = Object.fromEntries(fs.readFileSync(here + 'roundtrip-raw.jsonl', 'utf
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const EDITS = {
   negation_flip: (g) => { const m = /(^|\s)([Δδ]εν)\s+/u.exec(g); if (!m) return null; const before = g.slice(0, m.index + m[1].length); let after = g.slice(m.index + m[0].length); if (before.trim() === '' ) after = cap(after); return before + after; },
-  may_to_must: (g) => { const r = /μπορ(ώ|είς|εί|ούμε|είτε|ούν)\s+να/u; return r.test(g) && !/(^|\s)[Δδ]εν\s/u.test(g) ? g.replace(r, 'πρέπει να') : null; },
-  must_to_may: (g) => { const r = /πρέπει να/u; return r.test(g) && !/(^|\s)[Δδ]εν\s/u.test(g) ? g.replace(r, 'μπορεί να') : null; },
+  may_to_must: (g) => { const r = /μπορ(ώ|είς|εί|ούμε|είτε|ούν)\s+να/iu; return r.test(g) && !/(^|\s)[Δδ]εν\s/u.test(g) ? g.replace(r, (m) => (m[0] === 'Μ' ? 'Πρέπει να' : 'πρέπει να')) : null; },
+  must_to_may: (g) => { const r = /πρέπει να/iu; return r.test(g) && !/(^|\s)[Δδ]εν\s/u.test(g) ? g.replace(r, (m) => (m[0] === 'Π' ? 'Μπορεί να' : 'μπορεί να')) : null; },
   number_change: (g) => { const m = /\d+/.exec(g); if (!m) return null; const n = Number(m[0]); return g.replace(m[0], String(n === 1 ? 3 : n + 2)); },
 };
-const KIND_ORDER = ['negation_flip', 'may_to_must', 'negation_flip', 'must_to_may', 'negation_flip', 'number_change', 'negation_flip', 'may_to_must', 'negation_flip', 'must_to_may'];
+const KIND_ORDER = ['negation_flip', 'may_to_must', 'must_to_may', 'number_change', 'negation_flip', 'may_to_must', 'must_to_may', 'negation_flip'];
 const used = new Set(); const controls = [];
 for (const kind of KIND_ORDER) {
   if (controls.length === 8) break;

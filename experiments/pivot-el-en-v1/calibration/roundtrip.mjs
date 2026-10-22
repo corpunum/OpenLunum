@@ -12,9 +12,10 @@ const SYSTEM = 'You are a careful translator inside a meaning-checking system. F
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const busy = () => { const m = new Date().getUTCMinutes(); return m < 10 || (m >= 30 && m < 40); };
 const t = TRANSLATORS.qwen;
-async function wait() { for (;;) { if (!busy()) { try { const h = await (await fetch(t.health, { signal: AbortSignal.timeout(5000) })).json(); if ((h.in_flight ?? 0) <= 1 && (h.queued ?? 0) === 0) return; } catch {} } await sleep(30000); } }
+async function wait() { for (;;) { if (!busy()) { try { const h = await (await fetch(t.health, { signal: AbortSignal.timeout(5000) })).json(); if ((h.in_flight ?? 0) <= 2 && (h.queued ?? 0) === 0) return; } catch {} } await sleep(30000); } }
 let calls = 0;
-async function ask(prompt) {
+async function ask(prompt) { for (let a = 0; ; a++) { try { return await ask1(prompt); } catch (e) { if (a >= 5) throw e; console.log('retry after', String(e.cause?.code ?? e.message)); await sleep(30000); } } }
+async function ask1(prompt) {
   await wait(); calls++;
   const res = await fetch(t.url, { method: 'POST', headers: { 'content-type': 'application/json' }, signal: AbortSignal.timeout(600000),
     body: JSON.stringify({ model: t.model, temperature: 0, max_tokens: 4096, reasoning_effort: 'low', messages: [{ role: 'system', content: SYSTEM }, { role: 'user', content: prompt }],
@@ -23,7 +24,7 @@ async function ask(prompt) {
 }
 const c = JSON.parse(fs.readFileSync(here + 'candidates.json', 'utf8'));
 const done = new Set(fs.existsSync(out) ? fs.readFileSync(out, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l).cand) : []);
-for (const it of [...c.normal.slice(0, 32), ...c.control.slice(0, 12)]) {
+for (const it of [...c.normal, ...c.control]) {
   if (done.has(it.cand)) continue;
   const r1 = parsePivotTranslation(await ask(buildPivotPrompt(it.el, 'el')));
   let row = { cand: it.cand, el: it.el, promptVersion: PIVOT_PROMPT_VERSION, model: t.model, hop1: r1.ok ? r1.value : null, hop1Errors: r1.ok ? [] : r1.errors, hop1Guards: r1.ok ? checkPivotGuards(it.el, 'el', r1.value, 'en') : null, hop2: null, hop2Errors: [], hop2Guards: null };
