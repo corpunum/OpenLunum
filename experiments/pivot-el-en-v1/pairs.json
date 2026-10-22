@@ -1,0 +1,1823 @@
+{
+ "package": "experiments/natural-development-v8/extraction/public-instruction-package-v25.json",
+ "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+ "eligiblePairs": 13016,
+ "exclusionFilesScanned": 7972,
+ "stats": {
+  "heldout": {
+   "seed": "pivot-el-en-v1:heldout:2026-10-22",
+   "n": 160,
+   "excludedBecauseSeenElsewhere": 11
+  },
+  "dev": {
+   "seed": "pivot-el-en-v1:dev:2026-10-22",
+   "n": 20,
+   "excludedBecauseSeenElsewhere": 2
+  }
+ },
+ "requestsEnHumanSha256": "70e2bb08bfc28eed321c7ae25472ded0352de8848e888f72ea1f7e3622c89d5a",
+ "heldout": [
+  {
+   "pair": "P1",
+   "en": "How many donuts did Tom eat?",
+   "el": "Πόσους λουκουμάδες έφαγε ο Θωμάς;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10666413 (CK) & #10670349 (amoeba)",
+   "enHandle": "pv1-en-ef0c65581fae2324",
+   "elHandle": "pv1-el-3de08cd8149d3411",
+   "enSha256": "e471e7b6cd62db952ca16a80af5c92a61c014cfa8a38c815cc03e99d5082baf7",
+   "elSha256": "89e854f0065aa07ab3ba14dca7ff6935059d3b3b25ecba456549443dfec36a18"
+  },
+  {
+   "pair": "P2",
+   "en": "How will I find it?",
+   "el": "Πώς θα το βρω;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3439535 (CK) & #5371703 (Zeus)",
+   "enHandle": "pv1-en-997347495cc6e58f",
+   "elHandle": "pv1-el-c32196fd638acef0",
+   "enSha256": "5b1444ea6d6cca29611a1bb69b3b73c4e08ef30506f5d76b96895f99bc033400",
+   "elSha256": "6af59db8fb06d395fac0646a9190a037374b7bdb5aacd2dd9d8cbce1607c2c6f"
+  },
+  {
+   "pair": "P3",
+   "en": "I received your letter yesterday.",
+   "el": "Έλαβα χτες το γράμμα σας.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #17073 (CK) & #2422419 (mululatv)",
+   "enHandle": "pv1-en-f536e27001a17c8e",
+   "elHandle": "pv1-el-a2c1f5252ec405b9",
+   "enSha256": "dce8dddc5338702e476a720541f70e48ebed20fc32a7c19a68838de8a0df2fb5",
+   "elSha256": "cfc73059f1844186322c73f7d17461b60373c684235290a97fa6b11d34c4df97"
+  },
+  {
+   "pair": "P4",
+   "en": "Did Tom threaten you?",
+   "el": "Σε απείλησε ο Τομ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1886166 (CK) & #5410137 (Zeus)",
+   "enHandle": "pv1-en-2250c5b4e10bfd59",
+   "elHandle": "pv1-el-4dc3998243c86a8b",
+   "enSha256": "3b3d0dea2d9e554ed0c2980d1c3bed5a6f220b9c475b822ef049c7b38201cc7a",
+   "elSha256": "0c038c5923323199cf2b7e9c175c04c5fd4135b62f3917296ff8d4720be3a3ce"
+  },
+  {
+   "pair": "P5",
+   "en": "Tom is an adult.",
+   "el": "Ο Τομ είναι ενήλικος.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2272937 (CK) & #5413203 (Zeus)",
+   "enHandle": "pv1-en-bd2407f35f0c1b9d",
+   "elHandle": "pv1-el-1296bdd96b1a9c65",
+   "enSha256": "cde1f48a92973aae39a4251dcfd651e3c2f0c68a58a0418109ecf164e38417c8",
+   "elSha256": "61ee153f17ef772c1c2ce01f01a1e120e0c6c21927b3c6ba3bea6eaf0bd616d8"
+  },
+  {
+   "pair": "P6",
+   "en": "I shook my head.",
+   "el": "Κούνησα το κεφάλι μου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #258479 (CK) & #5605685 (Zeus)",
+   "enHandle": "pv1-en-3ccc902098a52c2a",
+   "elHandle": "pv1-el-193946a87a4b5d3c",
+   "enSha256": "b3679f6433a09f79fc243adb2760a16f6fa50a9f55daa0a90322a198909b28e5",
+   "elSha256": "47366fafa1020c0f7bc2a06781b84ad5aaf6c0e771cab137fc6f5d341c2ff3cf"
+  },
+  {
+   "pair": "P7",
+   "en": "I thought that we could stay here all day.",
+   "el": "Σκέφτηκα ότι μπορεί να μέναμε εδώ όλη μέρα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7173406 (CK) & #7766619 (eypros)",
+   "enHandle": "pv1-en-776355f388d3ea06",
+   "elHandle": "pv1-el-6f0c4c1fc07b7439",
+   "enSha256": "40bc0f7f2ef9091132ac9dc59badc967674ca8d09cae08c83ae94460bda671ec",
+   "elSha256": "89f4a00f4ce1cede65ec37293aa989397d99fb1dc192f397566d7df630ed57dc"
+  },
+  {
+   "pair": "P8",
+   "en": "Do you remember me?",
+   "el": "Με θυμάσαι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #250327 (CK) & #1402249 (enteka)",
+   "enHandle": "pv1-en-6bea7768fc40e67a",
+   "elHandle": "pv1-el-8719914de6322991",
+   "enSha256": "ae34544112fcbcc654708325980b9ddc4ed62a75b46178d4dcd026a8dadc2599",
+   "elSha256": "a9c44e68020de162720b110f38f6e1121768a889db5000321da8b2119e8ecf37"
+  },
+  {
+   "pair": "P9",
+   "en": "We supported each other.",
+   "el": "Υποστηρίζαμε η μία την άλλη.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4502424 (CK) & #5517403 (Zeus)",
+   "enHandle": "pv1-en-e3e7ecac1597bb69",
+   "elHandle": "pv1-el-d4d38e82b26bb613",
+   "enSha256": "4f943e740ad6f436cd9157cfd4d63ac675849225b13c93fe1cdc1b154edc9285",
+   "elSha256": "4f46e0472fbf6905357fd660da40278d5bac840e5644fec3fc43a5e3cf7ad5f6"
+  },
+  {
+   "pair": "P10",
+   "en": "We watch television every evening.",
+   "el": "Κάθε βράδυ βλέπουμε τηλεόραση.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #263284 (CK) & #2368254 (mululatv)",
+   "enHandle": "pv1-en-836c64ad9b15b500",
+   "elHandle": "pv1-el-e731f0d13483a46f",
+   "enSha256": "9220f43d7437a253f805ea89b00d40159126b4cf3ae4de18f79dbb1147b6bbe8",
+   "elSha256": "b688fbafd42de24420e9732df6c0808055392b1e841a39dccb371d7ea6bf38d4"
+  },
+  {
+   "pair": "P11",
+   "en": "Tom has expensive tastes.",
+   "el": "Ο Τομ έχει ακριβά γούστα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5438412 (CK) & #5531530 (Zeus)",
+   "enHandle": "pv1-en-b3e8941858b6fe30",
+   "elHandle": "pv1-el-7f64de44c0df03fa",
+   "enSha256": "6a5e17d64a6f7bffc3fec6a17fb3e8f99796483cdb7ea1f11006cc4b8a62ff82",
+   "elSha256": "62fc097001caf19a56fc3f4c78f1e3cbe0ad1c565cef83cd4b9033c64940102a"
+  },
+  {
+   "pair": "P12",
+   "en": "Is Tom learning French?",
+   "el": "Ο Τομ μαθαίνει Γαλλικά;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2953023 (CK) & #5618223 (Zeus)",
+   "enHandle": "pv1-en-8e94790189b92bfe",
+   "elHandle": "pv1-el-676cd90f11dc118f",
+   "enSha256": "8b3a05b4cac32c86d7ffe3891f95636590ab0de78bf60b98ddb23f5d441558f7",
+   "elSha256": "fad91d0f02d703a7e612bd545c989b77ec3173ba12deb41fdd7fae451f2475e0"
+  },
+  {
+   "pair": "P13",
+   "en": "Tom is shy and doesn't talk much.",
+   "el": "Ο Τομ είναι ντροπαλός και δε μιλάει πολύ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3181843 (CK) & #5557368 (Zeus)",
+   "enHandle": "pv1-en-3a20b33eec942872",
+   "elHandle": "pv1-el-7290697e56c1396e",
+   "enSha256": "8661ccc814c2c5e83df2cedf106934a7bcae8bcb3657722d124a0ff4893e3970",
+   "elSha256": "38d7c44d3ae73e2ccd1cbf73a07066770a8121797fc64b214f70b9a079b5e7fe"
+  },
+  {
+   "pair": "P14",
+   "en": "If I weren't broke, I'd buy it.",
+   "el": "Άμα δεν ήμουν ταπί, θα την αγόραζα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5320778 (mailohilohi) & #5491530 (Zeus)",
+   "enHandle": "pv1-en-c7c5254dc855f740",
+   "elHandle": "pv1-el-045956511d9a2281",
+   "enSha256": "d50a7d74cc5f2c016792e7c74524651457dacfb77a1ccf567e94fe947c9d43ac",
+   "elSha256": "91debe5f011d062b2c0bb094bb19a4aa74fec4435fcb306b22dacf3c540916cc"
+  },
+  {
+   "pair": "P15",
+   "en": "This is my current address.",
+   "el": "Αυτή είναι η τωρινή μου διεύθυνση.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #9272231 (Nylez) & #2902099 (glavkos)",
+   "enHandle": "pv1-en-bf669db7ae915d3c",
+   "elHandle": "pv1-el-7236dc7bd1857d02",
+   "enSha256": "bf95b5116498e8e98908074f8fbb36faef6d70dba6e11b1ac4ecaf966b034743",
+   "elSha256": "40da7a4ef146f064f36a309c69f9164e5f711c224de1946294a4aec3c9068781"
+  },
+  {
+   "pair": "P16",
+   "en": "Tom is married to a Canadian.",
+   "el": "Ο Τομ είναι παντρεμένος με μια Καναδή.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3422124 (CK) & #5603854 (Zeus)",
+   "enHandle": "pv1-en-8273c87a7a1a3ba0",
+   "elHandle": "pv1-el-c4a1f01203892313",
+   "enSha256": "333f91eaf0ec05ed8ff0823cc523ba0843bd3391e2178c588e1d4419ded68060",
+   "elSha256": "590a147f65c8d27c7cfa3ff33862e329339e43cc741e5424fa71db412ed18e72"
+  },
+  {
+   "pair": "P17",
+   "en": "This page was intentionally left blank.",
+   "el": "Αυτή η σελίδα εσκεμμένα αφέθηκε λευκή.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7334684 (AlanF_US) & #7336914 (eypros)",
+   "enHandle": "pv1-en-f8036ebe85e88866",
+   "elHandle": "pv1-el-ac7f098bdc83e350",
+   "enSha256": "5c078a36af8af4e04cde8c29005fe7be96ac0c73785cc6e92f3c77ee9fc820c8",
+   "elSha256": "14fc290ea18a16411e5599c899e422aa0801936871321498d5f5f802bbafe1e7"
+  },
+  {
+   "pair": "P18",
+   "en": "Do you ever sleep?",
+   "el": "Κοιμάσαι ποτέ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3177996 (CK) & #5557420 (Zeus)",
+   "enHandle": "pv1-en-dc6a30c53f58759e",
+   "elHandle": "pv1-el-1badeed8aeb0abde",
+   "enSha256": "fc9a2eb8fbad4925e5d5bb3ed68bee8b78569e90a88751994b0250e7fb2fe9fe",
+   "elSha256": "2e6f9e543474404db44e47f4785d239a4ae5458fb78bcd1c3f7523c2aac12970"
+  },
+  {
+   "pair": "P19",
+   "en": "We leave in half an hour.",
+   "el": "Φεύγουμε σε μισή ώρα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5455509 (CK) & #5456686 (Zeus)",
+   "enHandle": "pv1-en-f2c9cbfa33964ca9",
+   "elHandle": "pv1-el-9d5295809a879547",
+   "enSha256": "556d0d9b2d01cb89dce33a58759bed9432f76f7eb255361620ca0cff7e321fe3",
+   "elSha256": "54edc96466e853e033ad79213241935d9d683db41a08aea92f5d9d29efab19bb"
+  },
+  {
+   "pair": "P20",
+   "en": "Police arrested three suspects.",
+   "el": "Η αστυνομία συνέλαβε τρεις υπόπτους.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4495724 (CK) & #5511832 (Zeus)",
+   "enHandle": "pv1-en-c7e056ef33afb840",
+   "elHandle": "pv1-el-a6268048758c0185",
+   "enSha256": "ab12659c023c6f3aed66b0da36fa91e437adf926ebdb153ee47c97ae7e6d34f1",
+   "elSha256": "0af2de0bec2a1f4982bf18225f731ffac32be166e9eec242de8171dc99369142"
+  },
+  {
+   "pair": "P21",
+   "en": "I have nothing to wear.",
+   "el": "Δεν έχω τίποτα για να φορέσω.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2360170 (CK) & #2398874 (mululatv)",
+   "enHandle": "pv1-en-8bfe1889bc4c0f97",
+   "elHandle": "pv1-el-c73ba39c7cca2d1c",
+   "enSha256": "e6033f663acf089cd751ecfe1d8d32fda608f318ae36f20822d154ccd8c37cfe",
+   "elSha256": "db739ab56700cf9de46eac7631a672bd21907a46fab7408e4b78503045ace149"
+  },
+  {
+   "pair": "P22",
+   "en": "This book has many beautiful pictures.",
+   "el": "Αυτό το βιβλίο έχει πολλές ωραίες εικόνες.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #57082 (CK) & #2417598 (mululatv)",
+   "enHandle": "pv1-en-918b71c134ba2892",
+   "elHandle": "pv1-el-8d5ec55161dee545",
+   "enSha256": "30d10c001d76e797607bdc051c0939a2b03e899c681d1d8b5e9db93496ec599a",
+   "elSha256": "86aa72f81e2ebbb4b9ee4393522fdd13bf3ba730856363f8161e419aab4ce5a3"
+  },
+  {
+   "pair": "P23",
+   "en": "I didn't vote for you.",
+   "el": "Δε σας ψήφισα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3917149 (CK) & #5483334 (Zeus)",
+   "enHandle": "pv1-en-ac73a892f44e3748",
+   "elHandle": "pv1-el-82368d7c7f054421",
+   "enSha256": "b4e40491ec017ac1573c49e64a93b109b4e4ebedd82eb9985f60e0d598e26f27",
+   "elSha256": "4b915f3fb0b2c4e191b67d16b37e01ae1a3acf3abd580da8b0b11ed3d605a079"
+  },
+  {
+   "pair": "P24",
+   "en": "You are in my way.",
+   "el": "Με εμποδίζεις.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1296 (CK) & #7795386 (janMiso)",
+   "enHandle": "pv1-en-db85f7763f41e104",
+   "elHandle": "pv1-el-fa90c52a8aa291ef",
+   "enSha256": "0e4e4cc0f5e98c3f80a467cfee0f67008f939afba737fff0f4b64013ce4be47c",
+   "elSha256": "2c217d35d64663ebae39d2abb15c0fb454c0ed825e11da84de8a8c3917fed065"
+  },
+  {
+   "pair": "P25",
+   "en": "I just arrived now.",
+   "el": "Μόλις έφτασα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #257520 (CK) & #1413566 (enteka)",
+   "enHandle": "pv1-en-5b8fa44483edb7c4",
+   "elHandle": "pv1-el-4910bdad4f9d0684",
+   "enSha256": "6b693656287d87948c05a93f380136076a1426007b547cd95a75fc720e57b9a9",
+   "elSha256": "bcf755b5a6f234f4e4026281d472d33ed07b7e90de7a4f1cca2811b8da6566d1"
+  },
+  {
+   "pair": "P26",
+   "en": "Tom ran out of gas.",
+   "el": "Ο Τομ έμεινε από βενζίνη.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1164285 (CK) & #3043931 (glavkos)",
+   "enHandle": "pv1-en-9b508670e5bad9cd",
+   "elHandle": "pv1-el-f74585f4b100a79c",
+   "enSha256": "71b870d4095adf7a0d38586e627303272cde8a179227088e4224bbc505845d4b",
+   "elSha256": "32cfbf4de09ba461f67408db4aa7cb06d9ea7dbda2450fd8c306435810afb68a"
+  },
+  {
+   "pair": "P27",
+   "en": "Tom is from Harvard.",
+   "el": "Ο Τομ είναι απ' το Χάρβαρντ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5583082 (CK) & #5583168 (Zeus)",
+   "enHandle": "pv1-en-542830c1ff57794f",
+   "elHandle": "pv1-el-f2898a9f66ef8809",
+   "enSha256": "d7825efcec02eddbe966107f8e13e18c7b9f1447abf63046a64402abfcc23867",
+   "elSha256": "3e183131474748e328179b79fa92b416d216e6e22f09e23cceeada7ac6f1bee6"
+  },
+  {
+   "pair": "P28",
+   "en": "I was on the bus.",
+   "el": "Ήμουν στο λεωφορείο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4500119 (CK) & #5516669 (Zeus)",
+   "enHandle": "pv1-en-3deb7ed62d903199",
+   "elHandle": "pv1-el-f789b178d29c86f6",
+   "enSha256": "521e9b36a27c475c75b16e3dc7ddb780b770a93bcf3d713832b46b88f66148b0",
+   "elSha256": "6bef7f7986b475af7bb7ac72d085cafcef482b4928cf7e9d102bbd74859e952a"
+  },
+  {
+   "pair": "P29",
+   "en": "I asked Tom where he wanted to go.",
+   "el": "Ρώτησα τον Τομ πού ήθελε να πάει.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5516999 (CK) & #5517006 (Zeus)",
+   "enHandle": "pv1-en-c634ef5897712d78",
+   "elHandle": "pv1-el-7888b604f5914f3b",
+   "enSha256": "cba835396dc024f6d2fff38a1f61e098ba7b2c788d6d19a8938b0e044e9b4239",
+   "elSha256": "55395a76675883ff9e9a6ec0677c96bb326f10eae92855c7b18f222c2bbc05f8"
+  },
+  {
+   "pair": "P30",
+   "en": "I know you're talented.",
+   "el": "Το ξέρω πως είστε ταλαντούχοι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5471366 (CK) & #5522040 (Zeus)",
+   "enHandle": "pv1-en-af1368914360c3b8",
+   "elHandle": "pv1-el-3fbc303628ee039c",
+   "enSha256": "12fa3dad940974113391c5d775d61fd960c371b575f0982fe82a883c639fdd30",
+   "elSha256": "54abc8995d28b2da0cb40f1766b2fc376cf6b46e809cbd6fb34e874de41426c4"
+  },
+  {
+   "pair": "P31",
+   "en": "Don't forget to put out the fire.",
+   "el": "Μην ξεχάσεις να σβήσεις τη φωτιά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #23860 (CK) & #7797192 (janMiso)",
+   "enHandle": "pv1-en-28e7bc90a6f31ffc",
+   "elHandle": "pv1-el-a874501faf7bc13a",
+   "enSha256": "39d4bc1072de5ce77ba99831d09f9e2b3a28a6448fd2cc6f4550c0e4967f52c9",
+   "elSha256": "3a21623c6639a4a24a05634d205245ec480703923c964c662e945bf4b329e729"
+  },
+  {
+   "pair": "P32",
+   "en": "Tom is buying some bananas.",
+   "el": "Ο Τομ αγοράζει μερικές μπανάνες.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5450183 (CK) & #5450256 (Zeus)",
+   "enHandle": "pv1-en-51af8c03cee3198e",
+   "elHandle": "pv1-el-7c86cf2e8abc4814",
+   "enSha256": "f9caa5df9f71fb6d28b5f911f947d885cad30aa78fe31c7086c8cb506fd5f59b",
+   "elSha256": "ee2f804aa1c31434c21b5e0bfcfc1d120913871e8e88cdc05cbf1b2ee5f90ae0"
+  },
+  {
+   "pair": "P33",
+   "en": "That wasn't my intention.",
+   "el": "Δεν ήταν πρόθεσή μου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1402 (CK) & #1319498 (enteka)",
+   "enHandle": "pv1-en-d7a653a3e247c755",
+   "elHandle": "pv1-el-af6338da0e9cc98f",
+   "enSha256": "ce86d1e1e542f32ccdb98b7163e650e04c001c61b0efb0089dc2255f77aa4f8a",
+   "elSha256": "9d857203fdf2d9200b0b1ee49d56b463b3270b38119ddfc2dfdd0b816fdaf955"
+  },
+  {
+   "pair": "P34",
+   "en": "Tom has good eyesight.",
+   "el": "Ο Τομ έχει καλή όραση.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1025384 (CK) & #5488367 (Zeus)",
+   "enHandle": "pv1-en-7d5498b4e39bc062",
+   "elHandle": "pv1-el-22e56b6f3ab0edb5",
+   "enSha256": "60f7ca996f18c4c16675071be951f73f9ff6de6f5e549cdd03a1302f3049c697",
+   "elSha256": "14f9967a1972df116b6840083cbfa6f129fcb6471e541b9b6bcc86f86f012ab8"
+  },
+  {
+   "pair": "P35",
+   "en": "Where was Tom born?",
+   "el": "Πού γεννήθηκε ο Τομ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #37234 (CK) & #1321404 (enteka)",
+   "enHandle": "pv1-en-fcbf3738c3ad9d88",
+   "elHandle": "pv1-el-f943560268776a23",
+   "enSha256": "c5d67a498062464eeeebe4a1962a26e724c4f936b3aa673917655277c9d9f8b3",
+   "elSha256": "295e43d16c4c99358c6552d8105e55e36aadd30493db2d4856cc578fcac6c056"
+  },
+  {
+   "pair": "P36",
+   "en": "What would you do, if you were me?",
+   "el": "Τι θα έκανες, αν ήσουν στη θέση μου;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5509207 (mailohilohi) & #5515047 (Zeus)",
+   "enHandle": "pv1-en-33757195f556793d",
+   "elHandle": "pv1-el-fdf3b056585f09d8",
+   "enSha256": "407267caeee2447b932943c4cb91e674f884abc16ced93cdf30017c88248f787",
+   "elSha256": "2fb450147709061a3c2e790230d29359d550e2b19ca956292ee2761285376389"
+  },
+  {
+   "pair": "P37",
+   "en": "Tom caught a fish.",
+   "el": "Ο Τομ έπιασε ένα ψάρι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2549013 (CK) & #5506939 (Zeus)",
+   "enHandle": "pv1-en-6dcebc70f37e4512",
+   "elHandle": "pv1-el-f88892356b8bb2a5",
+   "enSha256": "b9fc2761114d2daf4d572a281c23d5e20c62ff22a94b807a14b2da28f992969d",
+   "elSha256": "8abbb6e9acd2fcc960eb8dd9a68af4b628ddb27da619288e236464535173f354"
+  },
+  {
+   "pair": "P38",
+   "en": "Listen, I need to see you.",
+   "el": "Άκου· έχω ανάγκη να σε δω.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4011515 (CK) & #5300817 (Zeus)",
+   "enHandle": "pv1-en-d8b654013ba263e4",
+   "elHandle": "pv1-el-d14c7a92d905205d",
+   "enSha256": "ef803bb3c13df21be8f060caba79c2b1056403ac0349dc3443e7ded2a12a188a",
+   "elSha256": "8946e01fad21bd10e5dd9f28261570a0f8f0184f2f3246ded8fce0c7f56a1ff6"
+  },
+  {
+   "pair": "P39",
+   "en": "Mary is 36 weeks pregnant.",
+   "el": "Η Μαίρη είναι 36 εβδομάδων έγκυος.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #681781 (Source_VOA) & #1299852 (enteka)",
+   "enHandle": "pv1-en-e0a258880dc005be",
+   "elHandle": "pv1-el-c7e351d1855aed25",
+   "enSha256": "09605a908a9290a2d66ce56891712804bd26bc47be46897fbfce3e8fc0bcf937",
+   "elSha256": "8475a145e3dbeb970b2b450d740310afddab20053bfa7ee3932bb96451e1f365"
+  },
+  {
+   "pair": "P40",
+   "en": "Take as many as you want.",
+   "el": "Πάρε όσα θέλεις.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #71298 (CK) & #1319495 (enteka)",
+   "enHandle": "pv1-en-36b77ad98ac82c3e",
+   "elHandle": "pv1-el-1cf75dbf1d5b7f1c",
+   "enSha256": "579c13260409ab3ec7b69675647d9e529b053d935325a6dc4a088aacbe89fdf9",
+   "elSha256": "006327da709be2ebb7c560391ce9e78de574cc96c3bef1c1e5e705470b0b5010"
+  },
+  {
+   "pair": "P41",
+   "en": "You don't need to convince me.",
+   "el": "Δε χρειάζεται να με πείσετε.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5391828 (Hybrid) & #5391960 (Zeus)",
+   "enHandle": "pv1-en-704975fe69a93b51",
+   "elHandle": "pv1-el-57d895eaae690b06",
+   "enSha256": "c2b34f60f17ad5f7d59d4853e25371b92b6a08391b20de6982244570e86d5431",
+   "elSha256": "0e85bc5156bd4961444852c49da0c03fad8a163e5ef0ca6b29ae9dd8cd0a5411"
+  },
+  {
+   "pair": "P42",
+   "en": "I've got three tickets.",
+   "el": "Έχω τρία εισιτήρια.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10657381 (sundown) & #5632710 (Zeus)",
+   "enHandle": "pv1-en-45efc3f5896dc78f",
+   "elHandle": "pv1-el-40c7970b24cc52ee",
+   "enSha256": "b59db93f6e20b59232433f29532583ee63fefa81d3ad033efbc454e62b330d9f",
+   "elSha256": "62df217d6adbdc7f989d4d0f9cafb41f2227b27968e8b62ffbb40a499522f367"
+  },
+  {
+   "pair": "P43",
+   "en": "There are many words that I don't understand.",
+   "el": "Υπάρχουν πολλές λέξεις που δεν καταλαβαίνω.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1414 (CK) & #7854123 (janMiso)",
+   "enHandle": "pv1-en-3cf8a7538f5b7564",
+   "elHandle": "pv1-el-e491d7a0c7aaa15a",
+   "enSha256": "ab14f12b77110a0f105a8812b1191914250ba140fd4195ee55ea096b7f4183c3",
+   "elSha256": "17147e0031e6e721193a5d871d5f24f257645de1149a1883df2a09dfa156b1a7"
+  },
+  {
+   "pair": "P44",
+   "en": "I'll find another job.",
+   "el": "Θα βρω μια άλλη δουλειά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2799006 (Hybrid) & #3114742 (Zeus)",
+   "enHandle": "pv1-en-c57d5ec9f8487e9d",
+   "elHandle": "pv1-el-0cfa4d5271f9b43e",
+   "enSha256": "f3ad4229106dd5a2972a4d0104a4d62988e5d2ca5c9d369b71603e51c1ed5a70",
+   "elSha256": "e9779cc26eeb8462c0974c0172a30e1b064f13e8b68236ddc9f2229226394523"
+  },
+  {
+   "pair": "P45",
+   "en": "I like coffee hot.",
+   "el": "Μου αρέσει ο καφές μου να είναι ζεστός.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #62235 (CK) & #1415160 (enteka)",
+   "enHandle": "pv1-en-e84f6c6b716fa1d3",
+   "elHandle": "pv1-el-05354971e5a5d215",
+   "enSha256": "c48ae8393ebaf9fcbca32fd620376554ac48b8999b27ac47286a32627f55bfc9",
+   "elSha256": "198169f54c1655a684df4cc80a6f513e8b2729909c5f29ef174d285c8d69e880"
+  },
+  {
+   "pair": "P46",
+   "en": "She works in a bank.",
+   "el": "Δουλεύει σε τράπεζα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #313334 (CK) & #1287201 (enteka)",
+   "enHandle": "pv1-en-259dfa23259ad6a6",
+   "elHandle": "pv1-el-55353bab25076603",
+   "enSha256": "6fc73617b789d9d977f51de6c6d88f7cf94b0707e8ef59f8650e372fe6df44b6",
+   "elSha256": "ad414a1a203c30d07cc943d816e743b71a0b7a0e0464c32fa4b7c53859c16dc3"
+  },
+  {
+   "pair": "P47",
+   "en": "Do you have the tickets?",
+   "el": "Έχεις τα εισιτήρια;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2265777 (_undertoad) & #5365765 (Zeus)",
+   "enHandle": "pv1-en-08caa411fc04e502",
+   "elHandle": "pv1-el-ceb14e5dc5adaa6c",
+   "enSha256": "bedecc0ddf188dcd1ab4fc346f93525c49294e5cb274e6aa86617068048ef965",
+   "elSha256": "857b69bf4d739868a973ec82c873317e3580d68acb7ab69a338e789e0e0cac9b"
+  },
+  {
+   "pair": "P48",
+   "en": "What part of Australia are you from?",
+   "el": "Από ποιο μέρος της Αυστραλίας είστε;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2641400 (CK) & #5593580 (Zeus)",
+   "enHandle": "pv1-en-d64fa25ab2a425a8",
+   "elHandle": "pv1-el-9a591658d237d814",
+   "enSha256": "99f8f34c8b03486e94395f628d8c7739ee8670e1ba6be01ac5818174e930f6b1",
+   "elSha256": "1e0579332d4775291d867b43e57a3e85f8c988b85fe3fb921aa5f63c17f4fee6"
+  },
+  {
+   "pair": "P49",
+   "en": "I bet you know French.",
+   "el": "Πάω στοίχημα ότι ξέρεις Γαλλικά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2294107 (CK) & #5506881 (Zeus)",
+   "enHandle": "pv1-en-60a3005a784d5493",
+   "elHandle": "pv1-el-a99d326eb6168f2b",
+   "enSha256": "4b625f857deb114740b468797aa5e76824ea929d56a05e2d834babe0fe1c7991",
+   "elSha256": "f6de9a19e14cd465f338ce9359d148691ff7c073f4b531fef073094976bcdb0f"
+  },
+  {
+   "pair": "P50",
+   "en": "Mary is blackmailing Tom.",
+   "el": "Η Μαίρη εκβιάζει τον Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1030077 (CK) & #5454368 (Zeus)",
+   "enHandle": "pv1-en-80271f638da57cc6",
+   "elHandle": "pv1-el-4f9e71b0a887afc6",
+   "enSha256": "4dbc609b1ee97ea2bda49d1884c02472399ffeeecffcf2b13d01db59277e2fb8",
+   "elSha256": "bc4d0ed5202ccbd8f8eef8b877969544797d83880cad00c06d208103959d6cd1"
+  },
+  {
+   "pair": "P51",
+   "en": "The wine was excellent.",
+   "el": "Το κρασί ήταν εξαιρετικό.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2928721 (CM) & #5478851 (Zeus)",
+   "enHandle": "pv1-en-e816ab31e2dd9cb2",
+   "elHandle": "pv1-el-363643252c4a0a92",
+   "enSha256": "71dfba75db7b4e1050c3dea56d989b968d3a76d74db90ec81c7cd9e4afe29dec",
+   "elSha256": "79642a08865a251f006b6358447b1bfa344c6d806b017cc00138c6b756250572"
+  },
+  {
+   "pair": "P52",
+   "en": "You must come with me.",
+   "el": "Πρέπει να έρθετε μαζί μου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2679584 (Gulo_Luscus) & #5483561 (Zeus)",
+   "enHandle": "pv1-en-db461b97cbca64d4",
+   "elHandle": "pv1-el-0362d37f8c1eadad",
+   "enSha256": "c150422e885aad8358f3f6addbb155d21efc58f8bda1cbe560f9c9a1fe0e79da",
+   "elSha256": "1461c5549bc392c5e3765979c0560d4129c80cfa6b0f5f855b9a1554a04b82ca"
+  },
+  {
+   "pair": "P53",
+   "en": "Tom writes me every day.",
+   "el": "Ο Τομ μου γράφει κάθε μέρα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5559616 (CK) & #5561027 (Zeus)",
+   "enHandle": "pv1-en-dc8142cff1248b23",
+   "elHandle": "pv1-el-581a343675bf7876",
+   "enSha256": "2207f0fb4f57e15eeea8669f2a8cf3c57916c25ad84d85c0a43c3db229bec74f",
+   "elSha256": "9e850a53234e0ac52b5b6c10dbc4321c3c8f2d7a7426722024c185ee31ae4baf"
+  },
+  {
+   "pair": "P54",
+   "en": "I'll never marry Tom.",
+   "el": "Δε θα παντρευτώ ποτέ τον Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3921436 (CK) & #5562106 (Zeus)",
+   "enHandle": "pv1-en-803f767ec56bb115",
+   "elHandle": "pv1-el-79ff5d35451c52a1",
+   "enSha256": "a1e6bd945d7d3be8a4b0c266df3e2c495a9e861b8134163c21d38e52de68893b",
+   "elSha256": "54c20aaa0aedc9c98b07a9f9291977c13f2dd125f82c75e0b0dcd93edc1da167"
+  },
+  {
+   "pair": "P55",
+   "en": "I wonder which way is faster.",
+   "el": "Αναρωτιέμαι ποιος τρόπος είναι ταχύτερος.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7798805 (CK) & #7798899 (eypros)",
+   "enHandle": "pv1-en-0aa9f61200169a51",
+   "elHandle": "pv1-el-ec5bc6736937f1a3",
+   "enSha256": "34893191fdc38ea7236430646eb659e4f977bcdb4406b4115c671c559684ebc5",
+   "elSha256": "df152634847e5d3634ab3a484aa00eea33942346e2b7d2712e0e9e2d72e42a2e"
+  },
+  {
+   "pair": "P56",
+   "en": "The knife on the table wasn't sharp enough to cut the meat, so I used my pocket knife.",
+   "el": "Το μαχαίρι στο τραπέζι δεν ήταν αρκετά αιχμηρό για να κόψει το κρέας και έτσι χρησιμοποίησα το σουγιά μου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7774433 (CK) & #7774514 (eypros)",
+   "enHandle": "pv1-en-59fa38c7cba52f8e",
+   "elHandle": "pv1-el-af69f0bb4ed9579d",
+   "enSha256": "8f4c6c6dd66e9af79afb912d56570925f237148c4fb98038b578c89dca211a2b",
+   "elSha256": "2bf508a0cf1d863522385f58d59e53d3865a972d3006331901c2a4d1279943b6"
+  },
+  {
+   "pair": "P57",
+   "en": "I heard you singing.",
+   "el": "Σε άκουσα να τραγουδάς.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5497713 (Hybrid) & #5565334 (Zeus)",
+   "enHandle": "pv1-en-c6ae833db8ed7add",
+   "elHandle": "pv1-el-dd48cf35cb4687d8",
+   "enSha256": "fd5090097e2581b066914a950a54f34cfc6bb76b39f7a305b809ac91a73e53d4",
+   "elSha256": "ec87ff0a7c048e35ea0c58a6d88cff7e78fdf86b384d58a3d6e37255e8b3ec86"
+  },
+  {
+   "pair": "P58",
+   "en": "This is my new car.",
+   "el": "Αυτό είναι το καινούριο μου αμάξι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3264677 (CK) & #5496199 (Zeus)",
+   "enHandle": "pv1-en-2d70c7d7cfe919d7",
+   "elHandle": "pv1-el-5446f0ff08658f11",
+   "enSha256": "a27a1a088b75168de292999ff8bec879f0b54eba65198bc341dcbd35e21b4eb2",
+   "elSha256": "cac447aef34fca558b8ef0b368b43bee87d966c8b5cf38f4358c880d5ecfe83f"
+  },
+  {
+   "pair": "P59",
+   "en": "You suggested it yourself.",
+   "el": "Εσύ το πρότεινες.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2821459 (CK) & #6157454 (pinkmpnster)",
+   "enHandle": "pv1-en-ba2eda2dbb0e3819",
+   "elHandle": "pv1-el-cc31be17d5d2b64d",
+   "enSha256": "609f360095ca59918476f67d7fe383a68d214510d10d2f8500d7a72116e0ba97",
+   "elSha256": "d1d5a166564e159b4a3a6a670aee780572ebec2fa32a7accaedecd2271fd253d"
+  },
+  {
+   "pair": "P60",
+   "en": "Tom has friends in Boston.",
+   "el": "Ο Τομ έχει φίλους στη Βοστώνη.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4493626 (CK) & #5618987 (Zeus)",
+   "enHandle": "pv1-en-79c88c6250b62a09",
+   "elHandle": "pv1-el-0567ed86a8c02802",
+   "enSha256": "4a4d1753dab2bd4aa69628681604491d70b23fb02dbf98861c76d0b27193e430",
+   "elSha256": "764a94e0d125a5d572d546afa6b5943013fa576dbfa366a80c3cc0cb3acab4a5"
+  },
+  {
+   "pair": "P61",
+   "en": "Tom knows some French.",
+   "el": "Ο Τομ μιλά λίγα Γαλλικά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1024616 (CK) & #2969382 (glavkos)",
+   "enHandle": "pv1-en-a5da87224d546bcc",
+   "elHandle": "pv1-el-5103e1c3e06ba4f1",
+   "enSha256": "0abdb30a7b208be93dff5d2a09d76939361a3a0c1ff8ea9a9e31df3be45ffd26",
+   "elSha256": "82a57e76dc899bad876175c69c527f4b32dd1e9e96dfae83aa098f44478bb337"
+  },
+  {
+   "pair": "P62",
+   "en": "Tom, would you leave us alone for a moment?",
+   "el": "Τομ, μας αφήνεις μόνους για μια στιγμή;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2208735 (CK) & #4357298 (Tensai)",
+   "enHandle": "pv1-en-8760d8c1aa6f3c5e",
+   "elHandle": "pv1-el-d085bfc157ebf165",
+   "enSha256": "3108424381658c5899b9107bb6ae80b38c687499ca315b53d2fb322c05d15f20",
+   "elSha256": "9d347bec602cff50975430a543941d2d8722bfdc3f094d297e1ef076f8b0b6f9"
+  },
+  {
+   "pair": "P63",
+   "en": "Tom never would've done that.",
+   "el": "Ποτέ δε θα το είχε κάνει αυτό ο Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5538633 (CK) & #5541098 (Zeus)",
+   "enHandle": "pv1-en-33f9b0ccaa5bc326",
+   "elHandle": "pv1-el-5f11e3fb9ab84772",
+   "enSha256": "7b2797894c1d9bbb8458c6c790da11b9c1fa7a2ac833a703f2a23863db2d8f88",
+   "elSha256": "4015e114ec29d0790b6b626243b4956da0fa5a443684ae9c459d5389bdb48b6a"
+  },
+  {
+   "pair": "P64",
+   "en": "You won't be alone.",
+   "el": "Δε θα είσαι μόνος.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2208374 (CK) & #5633604 (Zeus)",
+   "enHandle": "pv1-en-5588926914e72bbf",
+   "elHandle": "pv1-el-306a93a34f6e08b6",
+   "enSha256": "a61b5ade120ea6c16fd656f2dad87c1f7abd61e1c2bb290263c9cf6b329cad72",
+   "elSha256": "4350d8078e7afc16962e5ba45a5af7e796352275ce3f3145397276193397a594"
+  },
+  {
+   "pair": "P65",
+   "en": "Tom is still in his room, isn't he?",
+   "el": "Ο Τομ είναι ακόμα στο δωμάτιό του, έτσι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7782649 (CK) & #7782684 (eypros)",
+   "enHandle": "pv1-en-419dcdfd38fa4927",
+   "elHandle": "pv1-el-0e37df04e110be83",
+   "enSha256": "0eef0b9501a36a8e1e6dcae723a76daf6cec3fa8f7d40241ed9c62cf6452379f",
+   "elSha256": "a9bf78f39845c983b63471302d1f8b8c01bcf839e1bf49612ff02c4eedaf17df"
+  },
+  {
+   "pair": "P66",
+   "en": "Tom learned French in school.",
+   "el": "Ο Τομ έμαθε στο σχολείο Γαλλικά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2835695 (CK) & #5618732 (Zeus)",
+   "enHandle": "pv1-en-f72745c3a6f30244",
+   "elHandle": "pv1-el-8e6799e98a48d6c6",
+   "enSha256": "f11533e812f1d0b57c370df6ac97131e3df70cceefa7e27878fa445333502c24",
+   "elSha256": "88d6fecd38e6a6d5bc1bfa359ec86971c71e9d62c5648daa62b6c3f736c6b3fc"
+  },
+  {
+   "pair": "P67",
+   "en": "I've been to more than ten foreign countries so far.",
+   "el": "Έχω πάει σε δέκα ξένες χώρες μέχρι τώρα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7780533 (CK) & #7781596 (eypros)",
+   "enHandle": "pv1-en-92a5573c7794b1bc",
+   "elHandle": "pv1-el-776f34cdd70d7fdb",
+   "enSha256": "fe37d2e29fe64646147839cab56a21e744ab727bf74961ee0055796d5bddfe2b",
+   "elSha256": "6f34e44c458435532b0a5263e396b331a13bbe07788d71d2828d0b7571ca5cab"
+  },
+  {
+   "pair": "P68",
+   "en": "How is it going?",
+   "el": "Πώς πάει;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #38308 (CK) & #5398566 (Zeus)",
+   "enHandle": "pv1-en-8666718ea7adbce0",
+   "elHandle": "pv1-el-1c3b653aa5e32232",
+   "enSha256": "d69fc8e2881dff9abfcd7277c6b927f6df2e2d073da5abd24467a600f80980c6",
+   "elSha256": "9148bae1b6cf2c442c89ef426ea4dd0709b2be8e2c78d07c452a90365af8e1cb"
+  },
+  {
+   "pair": "P69",
+   "en": "We've got problems, Tom.",
+   "el": "Έχουμε προβλήματα, Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3309971 (CK) & #5579292 (Zeus)",
+   "enHandle": "pv1-en-44e0bb24111e253d",
+   "elHandle": "pv1-el-55448c64e32bd2ea",
+   "enSha256": "45c716ae4efa265d69c32cea8c7d4e8accf7779e284ce6eff42d372e15987846",
+   "elSha256": "3bdce18e1f3451edcdfa6dc232ad811ddf6c0e228b45552ab6f15b7a7ae759af"
+  },
+  {
+   "pair": "P70",
+   "en": "France is to the south of England.",
+   "el": "Η Γαλλία είναι στα νότια της Αγγλίας.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #34176 (CK) & #5405333 (Zeus)",
+   "enHandle": "pv1-en-7f4c39b305d775bb",
+   "elHandle": "pv1-el-88c4a1e35aec7fe5",
+   "enSha256": "bd48757a4d7dc994d5270455ee92a662fbfdc9c55c510413b58b02488628cfbf",
+   "elSha256": "236f8a95238e56fb8456099760ac2625917a752b3da029323cf7a64925b4ff71"
+  },
+  {
+   "pair": "P71",
+   "en": "How many lawyers does Tom have?",
+   "el": "Πόσους δικηγόρους έχει ο Τομ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2912064 (CK) & #5611212 (Zeus)",
+   "enHandle": "pv1-en-6b4f3a6c92a10489",
+   "elHandle": "pv1-el-0374addd3d6fc7d2",
+   "enSha256": "8cdca3285e178941ee80885139aed41cc9815100ae720c281ef087dfd9d69ee5",
+   "elSha256": "1450e6436f1da7a1e4e59ae5b9f4ac94fdcf010529a8d78856908442aad2bbf0"
+  },
+  {
+   "pair": "P72",
+   "en": "I'd like your help.",
+   "el": "Θα 'θελα τη βοήθειά σου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3951620 (gone2bacolod) & #5516686 (Zeus)",
+   "enHandle": "pv1-en-7a906f7c9190ee4f",
+   "elHandle": "pv1-el-d337efce6fbdff93",
+   "enSha256": "408508413916a0f0d5e0999d65b7a5ab61d4f830bb0e476e4d7b88dc6589b6bc",
+   "elSha256": "5f1d5367370bcbb9697f2b3692d337fa7bd4ef0c39e27372443b2593017ac685"
+  },
+  {
+   "pair": "P73",
+   "en": "I want to buy a book.",
+   "el": "Θέλω ν' αγοράσω ένα βιβλίο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3180912 (CK) & #5557410 (Zeus)",
+   "enHandle": "pv1-en-44064977c1212383",
+   "elHandle": "pv1-el-0bc987d648ff24c4",
+   "enSha256": "f7b3c13d283100358448390d0cd02119aaa33a9e54ce3dcfbc32c38bd02b6899",
+   "elSha256": "7f35a48a4801cfb1bc26a02d58768432fe5e8c0179b4c7bc872337754cb4623d"
+  },
+  {
+   "pair": "P74",
+   "en": "This is not true.",
+   "el": "Αυτό δεν είν' αλήθεια.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #370573 (saeb) & #5410034 (Zeus)",
+   "enHandle": "pv1-en-b2d31db4e95d7f01",
+   "elHandle": "pv1-el-58ebb0406e8ff829",
+   "enSha256": "ca49cad6c73fd333e9179f8486ea089a1f1b96cc57a538d1970d424e8ffdab00",
+   "elSha256": "565c0abdaf05cf307976f8eaffc8b236a5ff8b2d3cd80246d9ed7bb01fa7d9a9"
+  },
+  {
+   "pair": "P75",
+   "en": "I don't want Tom to find me.",
+   "el": "Δε θέλω να με βρει ο Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2012944 (CK) & #5506919 (Zeus)",
+   "enHandle": "pv1-en-754b8f5962baf005",
+   "elHandle": "pv1-el-f5548b57c83026bf",
+   "enSha256": "89a29078b3f4ec4d44babcd5bcedcc1b490abbe7144f118803244365c20f6493",
+   "elSha256": "e2fd0006fe181e1b4b18cbfae63f404884385482efebff679278b874ee7e0caf"
+  },
+  {
+   "pair": "P76",
+   "en": "Where is the money, Tom?",
+   "el": "Πού είναι τα λεφτά, Τομ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3344211 (Hybrid) & #5371624 (Zeus)",
+   "enHandle": "pv1-en-73c0f82eb09d4050",
+   "elHandle": "pv1-el-80a982944ee8e868",
+   "enSha256": "8ad84ef9f74e1d351280d899718679b06540d8490df8c5089179217efe311697",
+   "elSha256": "0c4984612ea05328012497658228b5cfc0fb3123f187dfcdd64ef28a030f31fe"
+  },
+  {
+   "pair": "P77",
+   "en": "Which did you eat, fish or meat?",
+   "el": "Τι έχετε φάει; Ψάρι ή κρέας;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1412059 (CK) & #2404539 (mululatv)",
+   "enHandle": "pv1-en-c5d4bb70a4a9d3ad",
+   "elHandle": "pv1-el-889bc578b2db8389",
+   "enSha256": "ecf59673e4be9e169f997948be49c48e6e0c83031e08d7072fb05bc57e1372cb",
+   "elSha256": "c87d978e72deb54b382ea58df527a268a26db8e075451f843d354cd26abec455"
+  },
+  {
+   "pair": "P78",
+   "en": "Wait. I want to tell you something.",
+   "el": "Περίμενε. Θέλω να σου πω κάτι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2016970 (CK) & #5433403 (Zeus)",
+   "enHandle": "pv1-en-a39b760152ce5b25",
+   "elHandle": "pv1-el-93fc37c82e564c92",
+   "enSha256": "07e750c15191366cb0eb264da08b6e945a34170b165f01c19515951c0ac0398d",
+   "elSha256": "d1f2514eba1a41a77d8fab8545a8702ae5654050a62f00a0c7884e0cb011bf4e"
+  },
+  {
+   "pair": "P79",
+   "en": "My tea is too sweet.",
+   "el": "Το τσάι μου είναι πολύ γλυκό.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1987392 (CM) & #2631909 (Zeus)",
+   "enHandle": "pv1-en-155a5a468fe3160c",
+   "elHandle": "pv1-el-d1cf75bd43c1149e",
+   "enSha256": "201154f7d00edd3744717dbe35b5f800a0a36628cbcba705586dadaa91f55387",
+   "elSha256": "290650bb4222d74bc00d0f58ddafc0e0aaa8bf2b071c0707d977ea848229fac1"
+  },
+  {
+   "pair": "P80",
+   "en": "I met an old student of mine in London.",
+   "el": "Συνάντησα μια παλιά μου φοιτήτρια στο Λονδίνο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #29307 (CK) & #5564424 (Zeus)",
+   "enHandle": "pv1-en-158cba0790c1cf2b",
+   "elHandle": "pv1-el-a0d5ab9163e6afa4",
+   "enSha256": "0c32dbece6d26507e1e9d2fd848334fd96f7546264bf34fb6a8bdeefda2add40",
+   "elSha256": "8876db7f5c07ed5785d08bc704d6d039dd7839268a3dfecba70d606247a803f9"
+  },
+  {
+   "pair": "P81",
+   "en": "He drank it in one gulp.",
+   "el": "Το ήπιε με μια γουλιά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2266217 (_undertoad) & #4357348 (Tensai)",
+   "enHandle": "pv1-en-e235f0aa874f2a08",
+   "elHandle": "pv1-el-23009835ac5190b2",
+   "enSha256": "ab46fc7679992a5b529ae1043e32645a3879046c52556c43cfbba3acbe7310f5",
+   "elSha256": "1afd5b877427773b73bfd8f9e739daa6d2fab3397dd991557f66a1cd0f7d986e"
+  },
+  {
+   "pair": "P82",
+   "en": "Have a good time.",
+   "el": "Καλή διασκέδαση.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #21269 (CK) & #1319422 (enteka)",
+   "enHandle": "pv1-en-f0f0e055127adc5f",
+   "elHandle": "pv1-el-505dd0c9df76784e",
+   "enSha256": "c03aa1b8edd053295d472be2389974650cbb003b9466318d1fc122cea7cf6c69",
+   "elSha256": "ca217a8eac3a25b4ea76fbd442c9cbcc7762fcd94cc3b8b56d68d9b37157ac22"
+  },
+  {
+   "pair": "P83",
+   "en": "Who did you give that to?",
+   "el": "Σε ποιόν το έδωσες αυτό;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5506964 (CK) & #4366744 (glavkos)",
+   "enHandle": "pv1-en-ee06563baa6dca17",
+   "elHandle": "pv1-el-1dc82585d6e0747c",
+   "enSha256": "a0e57983ab1e430c99078103d101389a5aa1f053ebe62553087ee1d25b7e2750",
+   "elSha256": "944668a489bd77697e1d32018776d56e4be30ee574513429b226566f1d1621e9"
+  },
+  {
+   "pair": "P84",
+   "en": "Patience is a virtue.",
+   "el": "Όποιος έχει υπομονή βλέπει όσα επιθυμεί.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #815249 (McDutchie) & #5412596 (NIKOLAS)",
+   "enHandle": "pv1-en-d9309931e8dc0c5f",
+   "elHandle": "pv1-el-2f689beeb266baec",
+   "enSha256": "af13ef2682ee442a7021625f3a9267a61a42909d0f611d39647b2a8b9c6faa70",
+   "elSha256": "d358f040585eeb1d65e422c19243eb0736303d8eadfa09f06113239308556d04"
+  },
+  {
+   "pair": "P85",
+   "en": "Tom started washing his car.",
+   "el": "Ο Τομ άρχισε να πλένει τ' αυτοκίνητό του.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5542787 (CK) & #5544735 (Zeus)",
+   "enHandle": "pv1-en-4081bd9dd15404e8",
+   "elHandle": "pv1-el-6afbcc27dee192d6",
+   "enSha256": "b795cc58cc1d8d6a487b3109d40df5256f90ec99bbb853b2e48ac9f960c7c9f8",
+   "elSha256": "36b0fbf662e2be9c5cb85e8eb6583eb7225d7191f9ee3516fbbb5c6bafd2d1ae"
+  },
+  {
+   "pair": "P86",
+   "en": "I admit that I made a mistake.",
+   "el": "Έκανα λάθος, το παραδέχομαι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3445334 (AlanF_US) & #1387445 (enteka)",
+   "enHandle": "pv1-en-915aee4a74dff0ff",
+   "elHandle": "pv1-el-4f84a8ddba74f8e4",
+   "enSha256": "b498e1a84b85f861633d96e781334779f6f5a9bc82a33f29822907849a16f985",
+   "elSha256": "9da2931a10f93bb45d02890fb2aba51c667e8c7dab22233e8a701fac60448c47"
+  },
+  {
+   "pair": "P87",
+   "en": "They're Canadians, aren't they?",
+   "el": "Είναι Καναδοί· έτσι δεν είναι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5182614 (CK) & #5604109 (Zeus)",
+   "enHandle": "pv1-en-13ca05a842867c25",
+   "elHandle": "pv1-el-c0f5adc37dd9b2c5",
+   "enSha256": "21ff53ea8dc524fdfb96fd044b4d39a31fa96b329838cb263321839bd932244f",
+   "elSha256": "940f316d38905cd63f6e1587006ff0ae931f25cf688f0b79065d532dcbc967c9"
+  },
+  {
+   "pair": "P88",
+   "en": "I have no kids.",
+   "el": "Δεν έχω παιδιά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4397642 (CK) & #2858195 (glavkos)",
+   "enHandle": "pv1-en-2bbfa76a6900122e",
+   "elHandle": "pv1-el-27de0de303e55269",
+   "enSha256": "f6b2c9a94709eece2fbae82c5118a162c31962f9b47ea895921b48b2091fea2e",
+   "elSha256": "dc19a561af03b90a4b0f6db94943e964586c26bd538ac73b6b673550c9853f0c"
+  },
+  {
+   "pair": "P89",
+   "en": "It seems to me we need to talk to Tom.",
+   "el": "Μου φαίνεται ότι χρειάζεται να μιλήσουμε στον Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3181989 (CK) & #5557358 (Zeus)",
+   "enHandle": "pv1-en-7d1810a2a12d410e",
+   "elHandle": "pv1-el-d529313d18f6478f",
+   "enSha256": "02b1144cb34d1c0eca9769f12ec7e7f98e152b380146f45e00312513bf650a9d",
+   "elSha256": "a52ac19c3cb7415b6340c26e2960d3a715932df416b206c8f5bc9ad6165d6168"
+  },
+  {
+   "pair": "P90",
+   "en": "Tom must find work.",
+   "el": "Ο Τομ πρέπει να βρει δουλειά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5443087 (CK) & #5534693 (Zeus)",
+   "enHandle": "pv1-en-3936f2792bfac277",
+   "elHandle": "pv1-el-220252d151d6c6ad",
+   "enSha256": "5890f1867318b4dde73aeaeeee93499ce40f4f2a315a1bd3b45b40c27e69e59b",
+   "elSha256": "252ca3d3fdd352ae02219a7b42d145bce815d5541586e26c01fc2aef6e8aaffa"
+  },
+  {
+   "pair": "P91",
+   "en": "Tom graduated from Harvard.",
+   "el": "Ο Τομ αποφοίτησε απ' το Χάρβαρντ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3023842 (CK) & #5593634 (Zeus)",
+   "enHandle": "pv1-en-1df6c7ab7cdc3a1e",
+   "elHandle": "pv1-el-42c7e2fa232a8af3",
+   "enSha256": "bfd2212f140ba864cb0920f9af4a6694b34920b320ec9e57536a0ad947b66711",
+   "elSha256": "bc9283150256c271e8077332186030c87b61d7e2137b4baf600cdf33783dd86c"
+  },
+  {
+   "pair": "P92",
+   "en": "Tom has not yet returned.",
+   "el": "Ο Τομ δεν έχει επιστρέψει ακόμα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2835748 (CK) & #5565138 (Zeus)",
+   "enHandle": "pv1-en-7038b7dbcc9ebf51",
+   "elHandle": "pv1-el-89f81872811cc951",
+   "enSha256": "cace301bda09cce120d2dd1df7c80773ad58a4e89d8947984759dbe5b67b9784",
+   "elSha256": "1f7eefbfb617fc73bc8a456d453fe067438d766f3974736e8fc124375e722138"
+  },
+  {
+   "pair": "P93",
+   "en": "Can you help me find a good job?",
+   "el": "Μπορείς να με βουθήσεις να βρω μια καλή δουλειά;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4641807 (CK) & #4653476 (pinkmpnster)",
+   "enHandle": "pv1-en-5493cea0eeca80c1",
+   "elHandle": "pv1-el-9d9c1ad06a6245b9",
+   "enSha256": "908a6d21ff20a715cdf4a4fcebe8ddf49fc7d8722d58395ab620ad70c15e9813",
+   "elSha256": "a33c8a0aab1d7e6e4f4599f5243694ab3a898acca11be8c9e8f138380d98ab26"
+  },
+  {
+   "pair": "P94",
+   "en": "Where is your friend from?",
+   "el": "Από πού είναι ο φίλος σας;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1174869 (CK) & #5593022 (Zeus)",
+   "enHandle": "pv1-en-e3b341f5d6dae35c",
+   "elHandle": "pv1-el-ceff5407111b720a",
+   "enSha256": "15d32e0e93d99b4df103cf6bc79e5a44a950a3aaad324da0b061c917ab8d8ee5",
+   "elSha256": "27816a1d505a51abce429fa57f232ac66c49118f8d90186e49e2d7cf75942cc2"
+  },
+  {
+   "pair": "P95",
+   "en": "I like these two.",
+   "el": "Μ' αρέσουν αυτές οι δυο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2377481 (CK) & #5609857 (Zeus)",
+   "enHandle": "pv1-en-10a464e31fad778c",
+   "elHandle": "pv1-el-797d845a94014ce3",
+   "enSha256": "b7ac53d9e7081ee322d6232ff76db7da4f0b253eba67f1b190466ab068ef792a",
+   "elSha256": "7f93dd42d52e54854715610358dbf9ac1d51a35a724747bcec886d7a64fda5a5"
+  },
+  {
+   "pair": "P96",
+   "en": "I don't do drugs.",
+   "el": "Δεν παίρνω ναρκωτικά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2271831 (CK) & #5605754 (Zeus)",
+   "enHandle": "pv1-en-de3f26da0f5049b2",
+   "elHandle": "pv1-el-b8844dd75e18de50",
+   "enSha256": "81be03d6e563292064e84af913c5513ddc1eb35589bfd65a51b7193701debf4e",
+   "elSha256": "bbd662db73efde5d093e28bc071138fdc34366735a06d55dab9ad8f42006ede3"
+  },
+  {
+   "pair": "P97",
+   "en": "They must be brothers.",
+   "el": "Πρέπει να 'ναι αδέρφια.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4494582 (CK) & #5523371 (Zeus)",
+   "enHandle": "pv1-en-f2698565e9124093",
+   "elHandle": "pv1-el-26d1b43ff9c6b5c3",
+   "enSha256": "df61ba5b4fb0af4ca3406ea5520cc6c959d163eba9e9e5227116a23a1a8025b1",
+   "elSha256": "5cee5fd396e0fcbd4d7968e1ccb6caedf5b1ed51945066eba432199b61c74177"
+  },
+  {
+   "pair": "P98",
+   "en": "This lake is deep.",
+   "el": "Αυτή η λίμνη είναι βαθιά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #59351 (CK) & #5605531 (Zeus)",
+   "enHandle": "pv1-en-45f64bb6345f86ab",
+   "elHandle": "pv1-el-a2463ad039d339f4",
+   "enSha256": "1ffc7172ac72dfe71921252fe4a8d0ffa34db925787cda714852fde38dd4dc58",
+   "elSha256": "13e79aa13fc40808a2b28ec9c4e49b923055ef0a9d059ac3578e3ad29b0e5e83"
+  },
+  {
+   "pair": "P99",
+   "en": "Do you want to go to Harvard or not?",
+   "el": "Θέλετε να πάτε στο Χάρβαρντ ή όχι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2018754 (CK) & #5593619 (Zeus)",
+   "enHandle": "pv1-en-188b0f0a75a26981",
+   "elHandle": "pv1-el-5dd01f90ad119a36",
+   "enSha256": "3650cd3b33dc615441280b662f2fa343167117093e4db28c2769eee2f260ff3d",
+   "elSha256": "b3f56a0072e335a8c15631b543f9e51aa934b60258dfe308b9f2f45d3d71b4de"
+  },
+  {
+   "pair": "P100",
+   "en": "I lost my car key.",
+   "el": "Έχασα το κλειδί του αυτοκινήτου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2760952 (verdulo) & #4513648 (glavkos)",
+   "enHandle": "pv1-en-9bcf52e8568d84b4",
+   "elHandle": "pv1-el-40df4591b982d162",
+   "enSha256": "292eb44b1f96e5a5e2299b7de20e0975508a1f0e8ca9a4f7f235b52e17ad0ecd",
+   "elSha256": "7122c32960f3347786dd98cd23f2624e3b3137af14471bd8915bef46b2b53450"
+  },
+  {
+   "pair": "P101",
+   "en": "I was very hungry.",
+   "el": "Ήμουν πολύ πεινασμένος.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #37858 (CK) & #5607111 (Zeus)",
+   "enHandle": "pv1-en-52dba4aba89db39f",
+   "elHandle": "pv1-el-d373ac5ec6f4d231",
+   "enSha256": "3c341271f708248aaad75fe7300f96e528a300943013e2489dd9a0270074e39a",
+   "elSha256": "f83e25356e5552eb8f6b06352391863bc161ab3932d99a1881d50acb847a2269"
+  },
+  {
+   "pair": "P102",
+   "en": "I got it for my birthday.",
+   "el": "Την έλαβα για τα γενέθλιά μου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2329616 (CK) & #2428151 (mululatv)",
+   "enHandle": "pv1-en-d2aa4dc9faa04d67",
+   "elHandle": "pv1-el-fa0a858421e0b7b3",
+   "enSha256": "9a18e05c05eb4ba44dd6e795c777efaac2edf085792c9285d88dd80707c9109b",
+   "elSha256": "a2de55b8956854fdd44deb0cbbbf76c41f36bbbc5e9fdd8fbe8deaccfeb817d6"
+  },
+  {
+   "pair": "P103",
+   "en": "French is a difficult language.",
+   "el": "Είναι δύσκολη γλώσσα τα Γαλλικά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2857324 (AlanF_US) & #5607129 (Zeus)",
+   "enHandle": "pv1-en-5acc10357a630ace",
+   "elHandle": "pv1-el-39476f9bca9b525b",
+   "enSha256": "62cbff350ab5945fc0fba096708e8003888ca75a0f9107c5a21d7c9acd4987db",
+   "elSha256": "05b2adc7edf3ea0e167028851d267a1cf84bc6c06b962f2ca9352aeec7479982"
+  },
+  {
+   "pair": "P104",
+   "en": "We have to finish our homework first.",
+   "el": "Πρέπει πρώτα να τελειώσουμε τη εργασία μας για το σπίτι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7805240 (CK) & #7806202 (eypros)",
+   "enHandle": "pv1-en-d5cb7e2d573d1915",
+   "elHandle": "pv1-el-8b520735d15edfe6",
+   "enSha256": "d8411c593e74871c3b1fc4730c9e1bcb27c99e034496d629a4e492bab375aa07",
+   "elSha256": "1588f51dab347bd9a16510eff8c372b8a0b90c32e533bdf6b37911a31f7fe003"
+  },
+  {
+   "pair": "P105",
+   "en": "Tom sent me there.",
+   "el": "Ο Θωμάς με έστειλε εκεί.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2262278 (CK) & #4357279 (Tensai)",
+   "enHandle": "pv1-en-23dad5879e274a46",
+   "elHandle": "pv1-el-25f988bcc8b72408",
+   "enSha256": "1987e1156b2bb2725a3c97c176ab09f8aca883cd3ee54fc3d937d27e5855a901",
+   "elSha256": "82505193c6539d80dade4f19b95486e999cef3cf637f21324eed22da97a774da"
+  },
+  {
+   "pair": "P106",
+   "en": "Why is everyone looking at me?",
+   "el": "Γιατί με κοιτάνε όλοι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2235471 (Hybrid) & #5348716 (Zeus)",
+   "enHandle": "pv1-en-fbf9886bd0fe02bd",
+   "elHandle": "pv1-el-16c8beabf8eb952c",
+   "enSha256": "d3eba62895fc7228249ec736d0f0cff507f42b8e0d84b13cd9eff48eaf93833a",
+   "elSha256": "f420be13ff220075b6f843bbc78f3dcafd76438dbefb474fcf7116bc51fdf0e5"
+  },
+  {
+   "pair": "P107",
+   "en": "I have more money than you.",
+   "el": "Έχω περισσότερα χρήματα από σένα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3907754 (CK) & #5565504 (Zeus)",
+   "enHandle": "pv1-en-ebf3f8b3006ddc6d",
+   "elHandle": "pv1-el-83b90ae428043816",
+   "enSha256": "d6f28c49a737a86ffba9b268375d8be9d5cedbd84ac3281b580b56acf8bd9808",
+   "elSha256": "69faa79b68479c5f937156c8b337d0cebe3ac16be5dcf93eda13372c1bf5af4d"
+  },
+  {
+   "pair": "P108",
+   "en": "Who taught you how to play tennis?",
+   "el": "Ποιός σου έμαθε να παίζεις αντισφαίριση;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10663655 (CK) & #10670395 (amoeba)",
+   "enHandle": "pv1-en-22a379472e89a652",
+   "elHandle": "pv1-el-df9fdc3240656818",
+   "enSha256": "7261801a2ac50690b89cbf67bea72b2d19bb6eb845166380422971efbcab9086",
+   "elSha256": "32e6d6b0afbcd8bae48ae726b86ebd640fae95d31ef7884c74f0525fe188eeb5"
+  },
+  {
+   "pair": "P109",
+   "en": "Are you sleeping, Tom?",
+   "el": "Κοιμάσαι, Τομ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #322721 (CK) & #5528597 (Zeus)",
+   "enHandle": "pv1-en-d62236ccfc79a03a",
+   "elHandle": "pv1-el-6c3ec4bc0c23a85d",
+   "enSha256": "9625edafad72b11557d15ef12930e93ad6ea9cfb0a997b39aa5e453d08785b13",
+   "elSha256": "1ddb658d82dd80188d8abb17cfe03908f14915b19557204ae2be5c2e8323d43a"
+  },
+  {
+   "pair": "P110",
+   "en": "This won't happen again.",
+   "el": "Αυτό δε θα ξανασυμβεί.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3129917 (CK) & #5469712 (Zeus)",
+   "enHandle": "pv1-en-9643b6a6f8474679",
+   "elHandle": "pv1-el-88f1c65997a731f6",
+   "enSha256": "c1a16cac36f48c6c3be87ffbf65a5bbbc56c82b8558342db85c911c45f26f581",
+   "elSha256": "7df8eb383e03c7f4e5f0c16ecbd05dbc3160704ca7dc4bf62957cc2166cc8b9b"
+  },
+  {
+   "pair": "P111",
+   "en": "According to the newspaper, she committed suicide.",
+   "el": "Σύμφωνα με την εφημερίδα, αυτοκτόνησε.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2061902 (Eldad) & #2410010 (mululatv)",
+   "enHandle": "pv1-en-df205d4661c44da2",
+   "elHandle": "pv1-el-db8e72f482835a1b",
+   "enSha256": "e50e9ad056e1e61ad43db877ceaa6f0925863830775d03e0a792aeebaead8978",
+   "elSha256": "80afe53eda22dca43a5ceb637f034c48b22009e1661d9d990e70b267024939b7"
+  },
+  {
+   "pair": "P112",
+   "en": "I think you know who I am.",
+   "el": "Νομίζω πως γνωρίζεις ποιος είμαι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3734417 (CK) & #5530491 (Zeus)",
+   "enHandle": "pv1-en-93b5b8599928f7f2",
+   "elHandle": "pv1-el-544fe642d9dff9eb",
+   "enSha256": "c9c2d6a304cfbc17d6009804c42f8cd175cfea64f269c318272710b3a7e76b30",
+   "elSha256": "91711fb5ada479cb90a8c3c995b8662765c43b0c07a37ef2d7689dac85f991b5"
+  },
+  {
+   "pair": "P113",
+   "en": "Whose house is this?",
+   "el": "Ποιανού είν' αυτό το σπίτι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3738498 (CK) & #5506721 (Zeus)",
+   "enHandle": "pv1-en-ecf6abd9e82cfb17",
+   "elHandle": "pv1-el-d08ce374f93289f1",
+   "enSha256": "52490574b751d59a85e8806eac9d9ece405ba74f91df03d7fd6226cac509b8b6",
+   "elSha256": "a8a8ad8b0e5d0ce01f2c8d0db6b8925db621e014799696f79156cd3724acf20e"
+  },
+  {
+   "pair": "P114",
+   "en": "Can you speak my language?",
+   "el": "Μπορείς και μιλάς τη γλώσσα μου;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1192038 (Eldad) & #5518518 (Zeus)",
+   "enHandle": "pv1-en-5272af6a05316c77",
+   "elHandle": "pv1-el-613ae8df12714f0b",
+   "enSha256": "20391e8bb52f5650c44415b5f9a07dde1fe79db466551875e5a53be4ec88e247",
+   "elSha256": "46a2d77ca707e904ce0373541235ff85e832f8f424ac0284bf062d5bd0a22cc3"
+  },
+  {
+   "pair": "P115",
+   "en": "Where can I find a gas station?",
+   "el": "Πού μπορώ να βρώ ένα βενζινάδικο;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #9025258 (Nylez) & #1391677 (enteka)",
+   "enHandle": "pv1-en-18e5196676108b53",
+   "elHandle": "pv1-el-a55b98b21042dee4",
+   "enSha256": "236e4938d490727d2c3af678141a208614fe4d31c5d8e82d5b57d9187fdcbcd9",
+   "elSha256": "d23fc9a5b70f1c4ea3cad3ea4bdc17b15768c1448752eed856071c31bc332330"
+  },
+  {
+   "pair": "P116",
+   "en": "I'd buy it if I weren't broke.",
+   "el": "Άμα δεν ήμουν ταπί, θα τον αγόραζα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5320777 (mailohilohi) & #5491527 (Zeus)",
+   "enHandle": "pv1-en-69d69812bb914855",
+   "elHandle": "pv1-el-c57401ae5bc83a27",
+   "enSha256": "a3cc45828f7fa19fcc2eb96fa1234f7907c64fe60ed9c0705deacb5c2c17760d",
+   "elSha256": "e80bbf53bdf1d6e9131333781e183e3aaa7f8380a656501cd609295e9b0d01a0"
+  },
+  {
+   "pair": "P117",
+   "en": "Tom will be home by midnight.",
+   "el": "Ο Τομ θα επιστρέψει σπίτι τα μεσάνυχτα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2542758 (CK) & #7765328 (eypros)",
+   "enHandle": "pv1-en-e85924e67525c97a",
+   "elHandle": "pv1-el-184a2142c900a39f",
+   "enSha256": "d30c6248b2407b5641b2c015ff55d2c0512c256e7298e6b5d48ff5052e99f1ff",
+   "elSha256": "39a66254b2ccbe43f5261705b6c4dd6e6af5678ddf37e98b2452d7406ceeb6e8"
+  },
+  {
+   "pair": "P118",
+   "en": "I think I'm gonna go to sleep.",
+   "el": "Νομίζω ότι θα πάω για ύπνο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1645 (CM) & #7796311 (janMiso)",
+   "enHandle": "pv1-en-49b6c65af5e9b944",
+   "elHandle": "pv1-el-c3dace0dd32f4d84",
+   "enSha256": "eaebfd1aba16394b9fdf77678f0dd095de0c7f22ec6cdd4e2f60b60900ab5bdf",
+   "elSha256": "39d8fe52f0fd331b819c94842638248011cb6e7f9410c9c3970daac5ca49ca77"
+  },
+  {
+   "pair": "P119",
+   "en": "The next time I'm in Boston, I'll try to visit you.",
+   "el": "Την επόμενη φορά που θα ΄μαι στη Βοστώνη, θα προσπαθήσω να σε επισκεφτώ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5364160 (CK) & #5364948 (Zeus)",
+   "enHandle": "pv1-en-d5db952b0bfd1fd9",
+   "elHandle": "pv1-el-f02cc81e551701cb",
+   "enSha256": "3f6b905f225c5c9c45a548d705d5ae714f5eb96fdf60bbadca24168c8342dc50",
+   "elSha256": "3c0e59eef7b62df8ffafd634e85149657017f2edb175c149bf64d271397d08bb"
+  },
+  {
+   "pair": "P120",
+   "en": "I have two children.",
+   "el": "Έχω δύο παιδιά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1431363 (marcelostockle) & #2466873 (Zeus)",
+   "enHandle": "pv1-en-b08503453f9b6954",
+   "elHandle": "pv1-el-fc485e3c00b02b10",
+   "enSha256": "f7fa30b8db693628ecb3f0d2992c1a1c4bb73e56d3acdd4bad10453df0560dfd",
+   "elSha256": "d28d4c04531c9e6e34d2bef5cf4f72eaba75f72f4ec5247051f9ab15da225d34"
+  },
+  {
+   "pair": "P121",
+   "en": "Will you lend me your dictionary?",
+   "el": "Θα μου δανείσεις το λεξικό σου;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #17095 (CK) & #1533820 (glavkos)",
+   "enHandle": "pv1-en-357a603a2d4531dd",
+   "elHandle": "pv1-el-9303dd1d5af73668",
+   "enSha256": "8007e494cf5505022a09fff6062befe3196957014fc5ba19663944ed3e80c4f5",
+   "elSha256": "1351a7750bb3a4e6060a28d91424f487b893cc3d356241a824b6cd31e491d225"
+  },
+  {
+   "pair": "P122",
+   "en": "Are you planning to buy this car?",
+   "el": "Έχεις σκοπό να αγοράσεις αυτό το αυτοκίνητο;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #9302852 (Nylez) & #1503191 (glavkos)",
+   "enHandle": "pv1-en-3a1d394b4340bbf1",
+   "elHandle": "pv1-el-ab99314b116079ef",
+   "enSha256": "5ac8f9606f51ac95bb900a6157dc068727cd38680478f3dd132056dea10c4577",
+   "elSha256": "0d3b8fd70239aa70b35b293df142c0a8f4a8d86318da5ed71128f9ace83f2b6c"
+  },
+  {
+   "pair": "P123",
+   "en": "I'm not very busy right now.",
+   "el": "Δεν είμαι και πολύ απασχολημένος αυτή τη στιγμή.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2643730 (CK) & #5482546 (Zeus)",
+   "enHandle": "pv1-en-634e47bd47e48b03",
+   "elHandle": "pv1-el-d8bf894f44ce5f90",
+   "enSha256": "a482faf4f274f3f086af75b2f41dc0b240facad58c29b3fdf1fcd3aa6c1a8489",
+   "elSha256": "4bfa01c456c0d6bfaa62ef1a926105e707da8e18aa3d5271f256bd676c785301"
+  },
+  {
+   "pair": "P124",
+   "en": "The bottle is empty.",
+   "el": "Το μπουκάλι είναι άδειο.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2002556 (bichodebola) & #3228894 (Zeus)",
+   "enHandle": "pv1-en-4a010e4bcdbc5fe4",
+   "elHandle": "pv1-el-ba64370864c0f061",
+   "enSha256": "9b768ebfa8bd217fab61460edb4d09618ca76cc1104a009b4db4aad18d976622",
+   "elSha256": "a251e3c0f1ff9fd2e85c802a1e623fab47a6a6104f616e7432ceac2e9c13b4f7"
+  },
+  {
+   "pair": "P125",
+   "en": "Who did Tom save?",
+   "el": "Ποιον έσωσε ο Τομ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5422338 (CK) & #5422418 (Zeus)",
+   "enHandle": "pv1-en-43170a1284e860c8",
+   "elHandle": "pv1-el-ee1e3e1adce149c8",
+   "enSha256": "025b689cee44087ce29587f1ebc867cb2b1ba390f70a5560612e06a4ca946942",
+   "elSha256": "cd7228eb1b00a5dc6e63e12670ed700b236d8cd0441deafa85fd0f649d9dad88"
+  },
+  {
+   "pair": "P126",
+   "en": "I'm sure we'll see Tom again.",
+   "el": "Είμαι σίγουρος ότι θα ξαναδούμε τον Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5444089 (CK) & #5531499 (Zeus)",
+   "enHandle": "pv1-en-259eac5c5751aa72",
+   "elHandle": "pv1-el-204717e286ee0293",
+   "enSha256": "49679016d034490fb6c929244e99a0a00e738e8dc7fe22bfc2fea278b3fae909",
+   "elSha256": "1af26b14c9adda643ee86981387c73b0ceef1a3ab1f0466beae0c43a20c91c4e"
+  },
+  {
+   "pair": "P127",
+   "en": "Do you like Tom?",
+   "el": "Σ' αρέσει ο Τομ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1886078 (CK) & #5410175 (Zeus)",
+   "enHandle": "pv1-en-492ce2a2620025dc",
+   "elHandle": "pv1-el-7f5be3e7d6c6a412",
+   "enSha256": "bf01b9154e3b95baa2cde84cffd2f1d50f05c330ec438aa9c61bd7d409fa77cb",
+   "elSha256": "a1e57caf773e2e8d53b6c77a0423bebfbd00a54253189a16c5b48bb25121f99e"
+  },
+  {
+   "pair": "P128",
+   "en": "I'm still trying to get in touch with Tom.",
+   "el": "Εξακολουθώ να προσπαθώ να βρω τον Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7789687 (CK) & #7790637 (eypros)",
+   "enHandle": "pv1-en-425bb9d2b6941ad3",
+   "elHandle": "pv1-el-4c5d994c33cb2f4d",
+   "enSha256": "9abf79931230a73a3b2eb7a6f6a94ecd49dd7e55795f7783e31858ed5f43b6d1",
+   "elSha256": "29bcf1b8f6d759e9d63d8d0a5152c3a10281ed3b7dc16316fda9d4711eefeb39"
+  },
+  {
+   "pair": "P129",
+   "en": "Tom is wearing a strange-looking hat today.",
+   "el": "Ο Τομ φοράει ένα περίεργο καπέλο σήμερα",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #6125712 (CK) & #10257040 (woowoonaki)",
+   "enHandle": "pv1-en-29f5bfc799600555",
+   "elHandle": "pv1-el-b778349ecf93bb2d",
+   "enSha256": "0fcca67a887768524e3936c7dfd1a88cb2f0ef7314b272d5de12d096ad5f018c",
+   "elSha256": "cb84eb39d37c33e7172d4a81dc13382e2a988ea04a85bf45f9294a410c02bc6e"
+  },
+  {
+   "pair": "P130",
+   "en": "Don't open this box.",
+   "el": "Μην ανοίξετε αυτό το κουτί.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3826054 (CK) & #5562977 (Zeus)",
+   "enHandle": "pv1-en-6e6b13b48a50b0d4",
+   "elHandle": "pv1-el-21bf3415bd80bfba",
+   "enSha256": "5ea5e70047e83740ac7cea97890d224bbe621eee8f2d90fce9fa0e9d1aa9467c",
+   "elSha256": "4dc0f3a574999b571ddd2f2764843d16f06cc2823c44cf1657e6e2a5b5e8222e"
+  },
+  {
+   "pair": "P131",
+   "en": "I wrote a letter.",
+   "el": "Έγραψα ένα γράμμα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #258457 (CK) & #7802763 (janMiso)",
+   "enHandle": "pv1-en-077035b467e24bea",
+   "elHandle": "pv1-el-2b1051b49516ea95",
+   "enSha256": "0eccf7fe8482be556c4bf202fbafd68536ecc3a1e8267dede69041a1835f342e",
+   "elSha256": "8ac6ba94f4a482a32466de6669c1ccf49f36894ea9d78c49f31cb4c56aad247d"
+  },
+  {
+   "pair": "P132",
+   "en": "I'll never forget our first date.",
+   "el": "Δεν θα ξεχάσω ποτέ το πρώτο μας ραντεβού.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4649630 (Hybrid) & #4651463 (pinkmpnster)",
+   "enHandle": "pv1-en-2310d80617b9b5fd",
+   "elHandle": "pv1-el-8dac757f5511b101",
+   "enSha256": "658805c39efbc5724bd03c43b0271af7ab869729de1495f3d379878047b483de",
+   "elSha256": "f9fb9938a8be92c89b15ad7e9b55088e64927cc08fb9411941c2fb1b3d5176a4"
+  },
+  {
+   "pair": "P133",
+   "en": "I was right about you.",
+   "el": "Είχα δίκιο για σένα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3920771 (CK) & #5483341 (Zeus)",
+   "enHandle": "pv1-en-e4244e39d9ea4e70",
+   "elHandle": "pv1-el-b51553cf63892836",
+   "enSha256": "90d990a8948fa24f3cd5a36d8dec4850585cb4052798e21b9c095d2eef272745",
+   "elSha256": "e538500d6c7774b9b75e6b1fe6a3714e7c7716638cb81ccfb16dc5b2ad234b1c"
+  },
+  {
+   "pair": "P134",
+   "en": "Tom is scared, too.",
+   "el": "Και ο Τομ φοβάται.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7794643 (CK) & #7795348 (janMiso)",
+   "enHandle": "pv1-en-9022a19359f83a2f",
+   "elHandle": "pv1-el-542eee458e5642b5",
+   "enSha256": "d9e28a5f0a7e4b390563e4512cc5512268dc492e2d14a1df85978dbaf3ba11aa",
+   "elSha256": "8610441a8de43b3355647ed47ee5c6788a12590e2818c344a5ac284bdd98af6b"
+  },
+  {
+   "pair": "P135",
+   "en": "I often eat apples.",
+   "el": "Τρώω συχνά μήλα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5101597 (TaTu) & #5530464 (Zeus)",
+   "enHandle": "pv1-en-3ac71d504d16c93a",
+   "elHandle": "pv1-el-a56105d0aabf6528",
+   "enSha256": "05c9483479def6f896cbb906f8a089366d47e20aec10f0c0828a7a4e17ca8982",
+   "elSha256": "2ca9abca60e385ddaf1524c1072b078c19b7169a16566802ae2f5424defb6b94"
+  },
+  {
+   "pair": "P136",
+   "en": "The helicopter took off.",
+   "el": "Το ελικόπτερο απογειώθηκε.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5355717 (CK) & #5358362 (Zeus)",
+   "enHandle": "pv1-en-b9834b8f3e1c0398",
+   "elHandle": "pv1-el-8824a4f0e8b435ed",
+   "enSha256": "0771d560d100f1665bb142a7efefea4b8b483cb4b4c76715bfad4cb47fd3f1fe",
+   "elSha256": "0e6b07921cdf77f4c95c18174654232caaef94510d80bf4275a07a95bbeb5897"
+  },
+  {
+   "pair": "P137",
+   "en": "How lucky I am to meet you here!",
+   "el": "Πόσο τυχερός που είμαι που σε συνάντησα εδώ!",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #61902 (CM) & #10675150 (amoeba)",
+   "enHandle": "pv1-en-88d04d41277664a8",
+   "elHandle": "pv1-el-f19aa11f855ed78d",
+   "enSha256": "dcac3b4ec42bf20a6e3f047127bf6b8e8af24ffe49cdd34483267752d75079fe",
+   "elSha256": "c85ce6e6f9669f3295d9821b593bdcede35f661bb2ec18695255f37dd3cb0615"
+  },
+  {
+   "pair": "P138",
+   "en": "I want you to come.",
+   "el": "Θέλω να 'ρθειτε.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2011431 (CK) & #5615652 (Zeus)",
+   "enHandle": "pv1-en-dd7c6975f49dd275",
+   "elHandle": "pv1-el-8f1f111174470ae5",
+   "enSha256": "3f56916e18ff8bdd8827f98df4a869b3ff0ad88df21e5117cf90d17bc9b1274b",
+   "elSha256": "ff36a6f527fd82c9a73a2a342a83afb2efc0c727e4f490e8da29b8248299d66b"
+  },
+  {
+   "pair": "P139",
+   "en": "They were watching television.",
+   "el": "Παρακολουθούσαν τηλεόραση.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #317686 (CK) & #5443768 (Zeus)",
+   "enHandle": "pv1-en-7170753416436124",
+   "elHandle": "pv1-el-cb85bc03d84f524a",
+   "enSha256": "6552166dffe5361add5b5ae7e2e76ade36b6c8110289c8e8da8bf3112ae886a9",
+   "elSha256": "8c77b3262d84249a4d5adced470d6ade535a5072ee116e24600718217122cdb2"
+  },
+  {
+   "pair": "P140",
+   "en": "The news made me happy.",
+   "el": "Με χαροποίησαν τα νέα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #50107 (CK) & #5656942 (Zeus)",
+   "enHandle": "pv1-en-4475927d47a8fb55",
+   "elHandle": "pv1-el-455289442ef02e87",
+   "enSha256": "f61f71749e35c0f3e33d9ac482f964ec05dbb93b653011130508060452d38c22",
+   "elSha256": "74a4526f5dc930375b8ff2912e4767a9936ef88c41a441b5d8e9fa94316738fd"
+  },
+  {
+   "pair": "P141",
+   "en": "Is Tom from Boston?",
+   "el": "Από τη Βοστώνη είναι ο Τομ;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4815368 (CK) & #5631877 (Zeus)",
+   "enHandle": "pv1-en-f8970a334bb3a831",
+   "elHandle": "pv1-el-dbc9fe7f35d3b486",
+   "enSha256": "53cb8780b0ab0372a85ad936013971f284bdc6013afb0d95f199bb71dcf80cec",
+   "elSha256": "1b7aa0adb639cf7026df7038a0b8527f52d0d53a71be2cb3a75e484fba7c39ec"
+  },
+  {
+   "pair": "P142",
+   "en": "He's shorter than his father.",
+   "el": "Είναι πιο κοντός από τον πατέρα του.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #435072 (lukaszpp) & #3558220 (Zeus)",
+   "enHandle": "pv1-en-dfe2b3b9592c7c0b",
+   "elHandle": "pv1-el-b8921f36ca3d65c8",
+   "enSha256": "c1da358828c472794bb57fd0354b4805eb63f0127659cca9136ff85e3293ba98",
+   "elSha256": "a6a3127bc3391fb3b5941ca71053754d13bf4c0d14ddf5566185a3805a9befd3"
+  },
+  {
+   "pair": "P143",
+   "en": "May I have some water?",
+   "el": "Μπορώ να έχω λίγο νερό;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5282482 (CK) & #5522007 (Zeus)",
+   "enHandle": "pv1-en-c693c096d3e2188b",
+   "elHandle": "pv1-el-711d0ed06fb07dfa",
+   "enSha256": "774a6f02256a8f1201b9c3b541046e0ec0b623c7da1acae898c4ea97164eac40",
+   "elSha256": "6dc6b5498097e8e3b93468df3c09a43e417e71cce1b13421aa653a9f9e875c62"
+  },
+  {
+   "pair": "P144",
+   "en": "Don't let Tom take it.",
+   "el": "Μην αφήσεις τον Τομ να το πάρει.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7770656 (CK) & #7771945 (eypros)",
+   "enHandle": "pv1-en-633cdf9473af27c3",
+   "elHandle": "pv1-el-f5b94e52659ca143",
+   "enSha256": "0d96db6bf426e06e6b787b0241a4fe9478881ad39494c183fd7ecef9cd739a87",
+   "elSha256": "1845009b3e8e675c605116bf748cb73cdb26d4dbcb5d8abc48660a34d36dd35d"
+  },
+  {
+   "pair": "P145",
+   "en": "Tom heard Mary scream.",
+   "el": "Ο Τομ άκουσε τη Μαίρη να ουρλιάζει.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1028678 (CK) & #5545956 (Zeus)",
+   "enHandle": "pv1-en-f31224f92d2a2955",
+   "elHandle": "pv1-el-6b0286c5b032e6ae",
+   "enSha256": "10e578b61cd6b2303f07a3fd21bd7d063e438588a3adb9ac39934f0a0b4f1dee",
+   "elSha256": "cf19f2e3a659ffa05595f8ab6a8ac451d678c694973007b823822b02ab036091"
+  },
+  {
+   "pair": "P146",
+   "en": "The train is made up of fifteen cars.",
+   "el": "Το τρένο αποτελείται από 15 βαγόνια.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #326192 (CK) & #1365804 (enteka)",
+   "enHandle": "pv1-en-dd92cc41eb898d8b",
+   "elHandle": "pv1-el-849e235137fbff00",
+   "enSha256": "38dd1e80c359dc8d2eb53b9571e8426a0a47ab0558c511a625e56fa18d7c2e03",
+   "elSha256": "fbf65fe5c63cd7a21a9deaa4bc19944b964d8e11072d124ee9ed2ed014317aa0"
+  },
+  {
+   "pair": "P147",
+   "en": "Tom ignored Mary's advice.",
+   "el": "Ο Τομ αγνόησε τη συμβουλή της Μαίρης.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1028625 (CK) & #5443071 (Zeus)",
+   "enHandle": "pv1-en-3dddf731d43e6fcb",
+   "elHandle": "pv1-el-0e3bdc943cab55e6",
+   "enSha256": "c388ddf8a07a7c3bee136f7630ebb32bb3c304d1f26efa086ff6ba4ecce2a40c",
+   "elSha256": "8689db242950a56710e8ec927f4ccd685021affdccf6170e75cb4dd6f508e9c0"
+  },
+  {
+   "pair": "P148",
+   "en": "She is working night and day.",
+   "el": "Αυτή εργάζεται μέρα-νύχτα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #315808 (CK) & #7347820 (amoeba)",
+   "enHandle": "pv1-en-5c12dad70b7280f1",
+   "elHandle": "pv1-el-1fb1a6a286ff2d1b",
+   "enSha256": "f9e4a4630cde6df52614a415ba43b84585015840c5b22547f0fc1bd3aeb5b271",
+   "elSha256": "d6b90165a05befac863b387487a5532f65130a11912d6907a4fc1bf1b9a7172e"
+  },
+  {
+   "pair": "P149",
+   "en": "When did you get a haircut?",
+   "el": "Πότε κουρεύτηκες;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #9307472 (Nylez) & #1342941 (enteka)",
+   "enHandle": "pv1-en-fb802882c7e58c06",
+   "elHandle": "pv1-el-ab8ee71d7db2597b",
+   "enSha256": "b0a31aac7dbd0c5d1efcffc9bfd8bc2359b0848f42b3f12929b575b150f00ca6",
+   "elSha256": "cd9f92e3352cbcf6d41b2d0c8a6366f52d2d36b53162468857579807dffd84d0"
+  },
+  {
+   "pair": "P150",
+   "en": "Tom is a Canadian.",
+   "el": "Ο Τομ είναι Καναδέζος.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4667197 (CK) & #5602481 (Zeus)",
+   "enHandle": "pv1-en-f0087312ec6ab052",
+   "elHandle": "pv1-el-05c1865254e04258",
+   "enSha256": "f8b0a3b4af943399ac3b33845dcd88a2528105df097eb938e9b189cadef383c6",
+   "elSha256": "7fcc5d65344780cb7e5526940f668f43c58d523eb90701a9641550b1279841ea"
+  },
+  {
+   "pair": "P151",
+   "en": "Tom would never do for me what I did for him.",
+   "el": "Ο Θωμάς δεν θα έκανε ποτέ για έμενα αυτό που έκανα για αυτόν.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10664770 (Ergulis) & #10675112 (amoeba)",
+   "enHandle": "pv1-en-066ae6a517f9e2fd",
+   "elHandle": "pv1-el-a30916531bf2848f",
+   "enSha256": "580e5586eb5d27b09f6c6c53e8bc2ab6cbe51fa48c02adf25e839874ccd15f37",
+   "elSha256": "393cbeeb32b20ae442bd4f324889ecb50e91b37271490e8b5bad0493dd66cbbd"
+  },
+  {
+   "pair": "P152",
+   "en": "Do you know how to sew?",
+   "el": "Ξέρεις να ράβεις;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3022637 (sharptoothed) & #5550997 (Zeus)",
+   "enHandle": "pv1-en-8e401acf2f400764",
+   "elHandle": "pv1-el-21cfa5999d1155f8",
+   "enSha256": "80fa393204de9aa8384a2abb45ff89a1f4c1b159de0621e2bbe8b5d3ad867eaf",
+   "elSha256": "b9e2734c6029cdbfc823cb74a4fe67020856970d0833e64b08f6150c8d89c6ee"
+  },
+  {
+   "pair": "P153",
+   "en": "Do whatever you want.",
+   "el": "Κάντε ό,τι θέλετε.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #70894 (CK) & #5562853 (Zeus)",
+   "enHandle": "pv1-en-19dc41d345412a46",
+   "elHandle": "pv1-el-37a45aafa44abbd9",
+   "enSha256": "015ed717825bbca1ca40a242b9b37f65ec3da1f2374ed0a72576ab732617c86f",
+   "elSha256": "06dee5f84d083ebf7237dffa1308d90b2502d3d62332545a5df0b0730dccc124"
+  },
+  {
+   "pair": "P154",
+   "en": "What will you do?",
+   "el": "Τι θα κάνεις;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #533171 (darinmex) & #1317107 (enteka)",
+   "enHandle": "pv1-en-c47483d28a6d1a14",
+   "elHandle": "pv1-el-233986e2849e4334",
+   "enSha256": "e570aa3a6406876d00f5e115f0d2f377df79cf4f13e4cb538fb582137fc80548",
+   "elSha256": "9cf55021184f715b3083afbde2d7abd7ba72f335a9b9268d300aac5b2b99b5a9"
+  },
+  {
+   "pair": "P155",
+   "en": "Tom tried to poison Mary's dog.",
+   "el": "Ο Τομ προσπάθησε να δηλητηριάσει τον σκύλο της Μαίρης.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5524831 (CK) & #5525094 (Zeus)",
+   "enHandle": "pv1-en-bac86c0084920e31",
+   "elHandle": "pv1-el-6fff7145d5780e43",
+   "enSha256": "0c3798957bc07e712585d6d5d9ec4574aa050021cda0f4e67e9048613719c4f9",
+   "elSha256": "13f7acd0755515d7e85b17bf55689abaf4a9088c57d154b241e1e3771d5dab6d"
+  },
+  {
+   "pair": "P156",
+   "en": "Tom let me drive his car.",
+   "el": "Ο Τομ μ' άφησε να οδηγήσω τ' αυτοκίνητό του.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5441784 (CK) & #5442892 (Zeus)",
+   "enHandle": "pv1-en-27f822f74d5a0916",
+   "elHandle": "pv1-el-94d52707a999d3af",
+   "enSha256": "f81e302e62388da028b7301cfbbcc89c8bcbbf80b3dc3a8c101a596ebb08c2ce",
+   "elSha256": "ef9a4e6187835bc066d53f8d1a6c3581ec92f422c45f52c1075273bf42e5fc1e"
+  },
+  {
+   "pair": "P157",
+   "en": "You're twisting the truth.",
+   "el": "Διαστρεβλώνετε την αλήθεια.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2955074 (CK) & #5506677 (Zeus)",
+   "enHandle": "pv1-en-414de23235339bd6",
+   "elHandle": "pv1-el-2ade357d981d4dff",
+   "enSha256": "51cb7ace196571aae538de733ef92a376e2fe1a4b467c1820c5ba4d915f78400",
+   "elSha256": "1ad157342d267058529da35cf138f078de4d7115f5cea1c504a4db557680e155"
+  },
+  {
+   "pair": "P158",
+   "en": "There's always someone talking.",
+   "el": "Πάντα κάποιος μιλάει.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #910696 (CK) & #939775 (Gaidouraki)",
+   "enHandle": "pv1-en-e01a6779e06a32c9",
+   "elHandle": "pv1-el-857ada0270d2c8db",
+   "enSha256": "14e8bfcc1e1ad7f79b0b8d6d778b3184cf60bd010c60654c764fa47463b454bf",
+   "elSha256": "a4d58130e4d7523084af628480b8a4dd8869c1355c2861509815ad53b4d85170"
+  },
+  {
+   "pair": "P159",
+   "en": "We're heading up north.",
+   "el": "Κινούμαστε προς τα βόρεια.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7465980 (megamanenm) & #7763224 (eypros)",
+   "enHandle": "pv1-en-a0021bfce66fb8de",
+   "elHandle": "pv1-el-b59d7dbacb0d745a",
+   "enSha256": "27f03d476cfafdf262cf8f4a6251742957a76da982645ed021397e64269854ec",
+   "elSha256": "5ff0b19cad9babc25bfcc4129b8fc819f8f484a1441483573e8aac42255f4b55"
+  },
+  {
+   "pair": "P160",
+   "en": "We must finish everything before Monday morning.",
+   "el": "Πρέπει να τα τελειώσουμε όλα μέχρι τη Δευτέρα το πρωί.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7819767 (CK) & #7819804 (eypros)",
+   "enHandle": "pv1-en-ddb94d36d867f5c0",
+   "elHandle": "pv1-el-d92532534a88be50",
+   "enSha256": "463316dc168b50fcf9990e6f3531071c8574ab1fbd2361f169dbff6ee1b1668c",
+   "elSha256": "e51405381f6cedc29e74d96230ee7fc1963e9dd226540bd07f6afd3f640427e5"
+  }
+ ],
+ "dev": [
+  {
+   "pair": "D1",
+   "en": "I need your car.",
+   "el": "Χρειάζομαι τ' αμάξι σου.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2387833 (CK) & #5413212 (Zeus)",
+   "enHandle": "pv1-en-020e1bcf8b9a26ab",
+   "elHandle": "pv1-el-2936bb0d6ee3d188",
+   "enSha256": "606bc811f5cdeb1e2d40f9d20c161a694e5cc47deaea2539b0adf21d7d747a89",
+   "elSha256": "077d964570f0667f641c6d4ef3369d6c9709a72abc268c7c016c06e4bd811b0e"
+  },
+  {
+   "pair": "D2",
+   "en": "I bought Tom a toy car.",
+   "el": "Αγόρασα στον Τομ ένα αυτοκινητάκι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #5369036 (CK) & #5371068 (Zeus)",
+   "enHandle": "pv1-en-a5f4ae0100c3c561",
+   "elHandle": "pv1-el-8b8cda065d48191e",
+   "enSha256": "a6afa4427bc0e25a17ce28b9a5779297fa9b2d09235ffcae1bc206ddbb9f5334",
+   "elSha256": "8923f049a8632dc34f9190277ff8148700448127932fc376530b0a1376e758bc"
+  },
+  {
+   "pair": "D3",
+   "en": "I wasn't sure I'd find you here.",
+   "el": "Δεν ήμουν σίγουρος ότι θα σε έβρισκα εδώ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10669783 (CK) & #10673026 (amoeba)",
+   "enHandle": "pv1-en-128672ab869fa029",
+   "elHandle": "pv1-el-5ea6b29b1ec636f9",
+   "enSha256": "0db1e091023928c58d36605692ecd8c4e064e5abd3251dd4811b83d7d59caf26",
+   "elSha256": "426a5337325382f3c0c11eea7c9f9a31c3c265350acb224ec02c4924ce218d10"
+  },
+  {
+   "pair": "D4",
+   "en": "You forgot to turn off the light.",
+   "el": "Ξέχασες να σβήσεις το φως.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1823855 (Amastan) & #2410084 (mululatv)",
+   "enHandle": "pv1-en-f8e0271e3f4d12e6",
+   "elHandle": "pv1-el-75e35ffd946af10b",
+   "enSha256": "71f959e19f934becd62ebb521fc53d3d77a84eecdac37975ced18c97658aa7ad",
+   "elSha256": "f0a4c9269bf396dfa0da0fc5f8b4c2a66357a711a910e0f667c1887230d277cf"
+  },
+  {
+   "pair": "D5",
+   "en": "If you have something to say, say it.",
+   "el": "Αν έχετε κάτι να πείτε, πέστε το.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2063220 (CK) & #5636092 (Zeus)",
+   "enHandle": "pv1-en-469ab9b6c8475dfe",
+   "elHandle": "pv1-el-8068b9f53924285b",
+   "enSha256": "7437170f1e640fa43188a701cfe64aa71c5049e0ef76414193f5673ee4a99a52",
+   "elSha256": "963345c5a87bf02c0c732d83b95e8c7334779814fb45d15300c7d121c00074e8"
+  },
+  {
+   "pair": "D6",
+   "en": "Are you in a relationship?",
+   "el": "Έχεις σχέση;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4501703 (CK) & #5434087 (Zeus)",
+   "enHandle": "pv1-en-7d15abbeba91760b",
+   "elHandle": "pv1-el-d0939016395afb60",
+   "enSha256": "f606b1deb073f1692f0fe188763e1c570fa8e97adbddfc105258fafc55d3a5c2",
+   "elSha256": "8f56fa48ddd6497f176d78533217e9a655f4304e14e0d82e453b89d6709cdb95"
+  },
+  {
+   "pair": "D7",
+   "en": "Did Tom do that for free?",
+   "el": "Το έκανα για τζάμπα αυτό ο Θωμάς;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10674856 (CK) & #10677934 (amoeba)",
+   "enHandle": "pv1-en-f2a5657156ce2c4e",
+   "elHandle": "pv1-el-f449be0c348bfc21",
+   "enSha256": "526245a0f590d288caef59118a5a94587e69599df07412ac9bc2bedabf7f4cc9",
+   "elSha256": "625ebff224b5c9f338a547b0a8f4e6d52ec74a14b4f33542eb9e15829f45024f"
+  },
+  {
+   "pair": "D8",
+   "en": "I pretended to be sleeping.",
+   "el": "Προσποιήθηκα την κοιμισμένη.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7780244 (CK) & #7780556 (eypros)",
+   "enHandle": "pv1-en-23757f3fa2adb3b1",
+   "elHandle": "pv1-el-3b666367bf2acf9e",
+   "enSha256": "5fcef8a61398e8543adf942b81a77546482532bbe46d697bc6f6d91bdf297c79",
+   "elSha256": "b46c3cdaf03bf1001089928b15661c363ada024646d3590b999f2ddf202161d4"
+  },
+  {
+   "pair": "D9",
+   "en": "That book is written in French.",
+   "el": "Εκείνο το βιβλίο είναι γραμμένο στα Γαλλικά.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4665056 (CK) & #5618942 (Zeus)",
+   "enHandle": "pv1-en-db43a4ea27468210",
+   "elHandle": "pv1-el-57f4913d3614ee11",
+   "enSha256": "2705e0e025f0ec85343e3bf3be831f64a36b1c8ca1e7a0f33cb7e5232948b2af",
+   "elSha256": "afc13996d18f821eb42942656b5d18f1a94feb7a92399b3cfe294f8d90e97ef6"
+  },
+  {
+   "pair": "D10",
+   "en": "It was an accident.",
+   "el": "Ήταν ατύχημα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1897727 (CK) & #3365174 (Zeus)",
+   "enHandle": "pv1-en-16711c0843882253",
+   "elHandle": "pv1-el-79ad43c95218e86a",
+   "enSha256": "2ba73e56201800621a67ce6685afd7bca096ffd594bef00f34fb7e2f8e776932",
+   "elSha256": "76ba8b0d8ec46a0ff7200c73b742359734707a317b3a2be9bb5e2797d2dec4dc"
+  },
+  {
+   "pair": "D11",
+   "en": "They forgot to lock the door.",
+   "el": "Ξέχασαν να κλειδώσουν την πόρτα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #6050 (CK) & #5519039 (Zeus)",
+   "enHandle": "pv1-en-c092e078d63056de",
+   "elHandle": "pv1-el-571e48977d22f8b8",
+   "enSha256": "3f47a8807bed40464f55e8640d4d96a0caeec0d17566af9ee488b84c330de230",
+   "elSha256": "d2befb6db75e3e5b29ea48cfd68383ec01f55d971ed65a55000ac79c50fb3805"
+  },
+  {
+   "pair": "D12",
+   "en": "Tom is the night janitor, isn't he?",
+   "el": "Ο Τομ είναι ο νυχτερινός επιστάτης, έτσι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7799489 (CK) & #7800705 (eypros)",
+   "enHandle": "pv1-en-c0d74b7cbead9305",
+   "elHandle": "pv1-el-b786a18b4f976d90",
+   "enSha256": "920a0e2d86b22895b2142ed3c5003271ef7ffddf030b585466a4741e11b16d45",
+   "elSha256": "5c0fd8dfface1bc5aaded91ba09a7de2fe5130a71bd6b747d2323ea782fca4cc"
+  },
+  {
+   "pair": "D13",
+   "en": "You're Canadian, aren't you?",
+   "el": "Είστε Καναδός· έτσι δεν είναι;",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4494024 (CK) & #5603883 (Zeus)",
+   "enHandle": "pv1-en-c2f73cffbd3438ad",
+   "elHandle": "pv1-el-ac74c8881fabbc22",
+   "enSha256": "1aa3da1068f16ce13f0215cafd46fbce70a34472a60f0ccc38a5b6cb359e26ac",
+   "elSha256": "f97f988e7084057f3b6a28dc1a7984e376ca4f0d78a7e669871526ed300a9e08"
+  },
+  {
+   "pair": "D14",
+   "en": "I'm pretty upset right now.",
+   "el": "Είμαι πολύ νευριασμένη τώρα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #7784864 (CK) & #7785042 (eypros)",
+   "enHandle": "pv1-en-696114a9eb17378a",
+   "elHandle": "pv1-el-330ef253c0b96c5d",
+   "enSha256": "62fc80240b80a8c9c306b31c450f082fa6b3fe29cfc66e2636d73f6f6961f375",
+   "elSha256": "4bc12b784475dedd3b5dc551fccc08d177eae02db5cca87480cd973db0b91f8a"
+  },
+  {
+   "pair": "D15",
+   "en": "Tom will help you.",
+   "el": "Θα σας βοηθήσει ο Τομ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2215690 (CK) & #5612636 (Zeus)",
+   "enHandle": "pv1-en-e6a0b9314e575500",
+   "elHandle": "pv1-el-8fe8a842da5da912",
+   "enSha256": "7e9ca8d614067592788b0237f33a1d867d6a6229ce40df8195a64223f721ef52",
+   "elSha256": "52d8f984c0182d03186fe0b5fbff251f07cc8cbbf3fcfb95dff1b78d3a786771"
+  },
+  {
+   "pair": "D16",
+   "en": "The snow is melting.",
+   "el": "Το χιόνι λιώνει.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4501023 (CK) & #2898753 (glavkos)",
+   "enHandle": "pv1-en-0a1568f28b7de23c",
+   "elHandle": "pv1-el-5e73708fa8a951a5",
+   "enSha256": "b20410281204797fa94e761f4501ba4797b3f3a5a6a5225d4879b2206771f4b4",
+   "elSha256": "a7ef18a81eb4fbd999e5ef88d6e475c3799fe7feecca807c63f07c843ef551a5"
+  },
+  {
+   "pair": "D17",
+   "en": "Please water the flowers.",
+   "el": "Σε παρακαλώ, πότισε τα λουλούδια.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #507184 (CM) & #5483269 (Zeus)",
+   "enHandle": "pv1-en-0c865cbc51ffcdfd",
+   "elHandle": "pv1-el-96b6ddce2b63587b",
+   "enSha256": "4913adbe8950ced204d4e28cfaed31b3951b10ffb52640e4fb993b8cda27b70d",
+   "elSha256": "0636333c1ae877b75c3f688434a68b02826be7082a55878ce50c6eac27c52dc3"
+  },
+  {
+   "pair": "D18",
+   "en": "Don't sign the contract with a pencil.",
+   "el": "Μην υπογράψεις το συμβόλαιο με μολύβι.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3893932 (CK) & #5309243 (pinkmpnster)",
+   "enHandle": "pv1-en-d37f96aa84bff26d",
+   "elHandle": "pv1-el-bdedddc486a6f20a",
+   "enSha256": "7cf3aea5daf2f5bc279868d1539478e7d2954d1b25aa8ea34d754b02a2b97a36",
+   "elSha256": "5c73e2e7cf80df487bcc00d869a58783034bf8c2732305e0fea891bc31189d1d"
+  },
+  {
+   "pair": "D19",
+   "en": "I'm delighted to meet you.",
+   "el": "Είμαι ευτυχής που σας συναντώ.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2544804 (CK) & #2429667 (mululatv)",
+   "enHandle": "pv1-en-e61a845423f38ddd",
+   "elHandle": "pv1-el-0dfda36c67f5d868",
+   "enSha256": "444f3e79e6d6495a22bf45dd52693e45bd28aa6b4b332a1805b7d91cecc5720f",
+   "elSha256": "13bacf523e7462531cce6b5d521da0f0e64bcb567075d74c704783b26300661a"
+  },
+  {
+   "pair": "D20",
+   "en": "Tom tried to convince Mary to dye her hair red.",
+   "el": "Ο Τομ προσπάθησε να πείσει τη Μαίρη να βάψει τα μαλλιά της κόκκινα.",
+   "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #4533388 (CK) & #5599243 (Zeus)",
+   "enHandle": "pv1-en-c67522bf23ff3b5a",
+   "elHandle": "pv1-el-61fce39c71776262",
+   "enSha256": "9bb845edfba7d52093a21650cd9c2fd1e3b60f45e4e57c485a13aa905556b6ae",
+   "elSha256": "9c9430936f7e0570a1b2a02dd1d223814af135b025ab00bb43365f5efa622ae6"
+  }
+ ]
+}
