@@ -2,7 +2,7 @@ import type { LunumClause, LunumSem, LunumTerm } from './types.js';
 import { basicIdentifier, SEMANTIC_PROTOCOL_REGISTRY } from './semantic-registry.js';
 import { isCopulaOnly } from './source-bound.js';
 
-export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.8' as const;
+export const SEMANTIC_FRAME_REGISTRY_VERSION = 'lunum-frame/0.9' as const;
 
 export interface FrameRoleRequirement {
   name: string;
@@ -43,7 +43,7 @@ export function canonicalFramePromptBlock(): string {
       ...frame.roles.flatMap((role) => role.allowedTermTypes?.length ? [`${role.name}: ${role.allowedTermTypes.join('|')}`] : []),
       ...frame.roles.flatMap((role) => role.vocabulary === 'predicate' ? [`${role.name}: a registered predicate`] : []),
       ...frame.roles.flatMap((role) => role.list ? [`${role.name}: an array of at least two terms`] : []),
-      ...frame.roles.flatMap((role) => role.lexicalVerb ? [`${role.name}: the verb phrase as written, not only is/are`] : [])
+      ...frame.roles.flatMap((role) => role.lexicalVerb ? [`${role.name}: the verb phrase as written, not only is/are, as a text term (lunum_build_candidate writes a plain string as one)`] : [])
     ];
     return `${frame.predicate}(${required.length ? required.join(', ') : 'no required roles'}${extras.length ? `; ${extras.join('; ')}` : ''}) — ${frame.description}`;
   }).join('\n');
@@ -457,7 +457,8 @@ export const CANONICAL_SEMANTIC_FRAMES: Readonly<Record<string, PredicateFrameDe
     roles: Object.freeze([
       { name: 'subject', required: true }
     ]),
-    description: 'The unit only names a subject, shows a bare value or poses a question without asserting anything: a heading, label, title, menu item, caption, number or date shown on its own, or question ("Memory and Recall", "Install", "2026-10-10", "Why does it matter?").'
+    // 0.9 (lunum-agent/0.21, A3 step 2): questions left topic; they take a general frame with kind `question`.
+    description: 'The unit only names a subject or shows a bare value without asserting anything: a heading, label, title, menu item, caption, or number or date shown on its own ("Memory and Recall", "Install", "2026-10-10"). A whole question is not a topic: it takes the general frame its words have, with kind question.'
   })
 });
 

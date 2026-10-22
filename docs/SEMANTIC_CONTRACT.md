@@ -96,7 +96,13 @@ mean `ALLOW(X)`. A negative deontic modality must not be duplicated with
 Surface evidence such as a pronoun token, source language, or provider-added
 reference type remains in the Sem/source artifact but is excluded from exact
 semantic identity. An ungrounded reference cannot establish exact identity.
-Agent contract 0.19 retains 0.13's actual wire-schema enforcement before normalization;
+Agent contract 0.21 (A3, [experiments/coverage-a3-v1](../experiments/coverage-a3-v1/PREREGISTRATION.md); a candidate until its pre-registered bars are scored) changes three things:
+- `lunum_build_candidate` writes a plain string on `assert.action` as a text term (underscores read as spaces);
+- a whole question takes the general frame its words have, with kind `question` (protocol 0.7), and is no longer accepted as a `topic` (frames 0.9);
+- `I`, `you` and `we` as written are valid fillers of a general frame (the rule against filling `agent` with "you" stays for operational frames).
+
+No identity accepted under 0.19 moves.
+Agent contract 0.21, like 0.19, retains 0.13's actual wire-schema enforcement before normalization;
 the structural checker alone is not transport validation. Rejections retain
 source evidence and diagnostics, and no normalized identity is issued.
 Its source-retention floor separates unambiguous full calendar dates from

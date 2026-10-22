@@ -9,7 +9,7 @@ import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeMan
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
-const packagePath = path.join(packageDirectory, 'public-instruction-package-v25.json');
+const packagePath = path.join(packageDirectory, 'public-instruction-package-v27.json');
 const pkg = JSON.parse(fs.readFileSync(packagePath));
 const legacyPackagePath = path.join(packageDirectory, 'public-instruction-package-v14.json');
 const legacyPkg = JSON.parse(fs.readFileSync(legacyPackagePath));
@@ -35,9 +35,13 @@ const RUNTIME_DRIFT_0024 = [
   // v23: the contract tool returns compact JSON (Claude Code persisted-output limit).
   'served_runtime_changed:packages/mcp/dist/src/tools.js',
 ];
+// Served modules changed by contract lunum-agent/0.21 (A3, experiments/coverage-a3-v1) relative to v25.
+const RUNTIME_DRIFT_A3 = ['served_runtime_changed:packages/core/dist/src/agent-builder.js', 'served_runtime_changed:packages/core/dist/src/agent-native.js', 'served_runtime_changed:packages/core/dist/src/frame-registry.js', 'served_runtime_changed:packages/core/dist/src/semantic-registry.js', 'served_runtime_changed:packages/core/dist/src/source-bound.js'];
+const DRIFT_KEYS_A3 = ['builderArtifactSha256', 'coreArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256'];
+const CONTRACT_MISMATCHES_A3 = ['coreContractHash', 'coreContractJsonSerializationSha256', 'coreContractVersion', 'frameRegistryHash', 'frameRegistryVersion', 'instructionHash', 'protocolRegistryHash', 'protocolVersion'];
 const gitScratch = spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: root, encoding: 'utf8' }).stdout.trim() || path.join(root, '.git');
 
-test('v25 binds every current artifact, dependency and served runtime manifest', () => {
+test('v27 binds every current artifact, dependency and served runtime manifest', () => {
   const result = binding();
   assert.equal(result.match, true);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
@@ -454,30 +458,42 @@ test('only binding failures with known cost let a run continue', () => {
   assert.equal(stopsFurtherLaunches({ evidenceValid: false, evidenceFailures: [] }), true, 'invalid without a stated reason stops');
 });
 
-test('v23 remains frozen historical binding; the proto-key validateSem change and the renderer fix drift its served runtime', () => {
+test('v23 remains frozen historical binding; validateSem, the renderer fix and contract 0.21 drift it', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v23.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
   const result = artifactBinding(root, historicalPath, profile, historical);
   assert.equal(result.match, false);
-  const drifted = result.checks.filter(check => !check.match).map(check => check.key);
-  assert.deepEqual(drifted, ['servedRuntimeManifestSha256']);
+  assert.deepEqual(result.checks.filter(check => !check.match).map(check => check.key).sort(), DRIFT_KEYS_A3);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
-  assert.deepEqual(runtimeCheck.runtime.errors, ['served_runtime_changed:packages/core/dist/src/canonicalize.js', 'served_runtime_changed:packages/core/dist/src/render.js']);
-  // The contract text is unchanged, so v23 still certifies the served contract.
-  assert.equal(checkServedContract(contract, historical).match, true);
+  assert.deepEqual(runtimeCheck.runtime.errors.sort(), [...RUNTIME_DRIFT_A3, 'served_runtime_changed:packages/core/dist/src/canonicalize.js', 'served_runtime_changed:packages/core/dist/src/render.js'].sort());
+  assert.deepEqual(checkServedContract(contract, historical).mismatches.sort(), CONTRACT_MISMATCHES_A3);
 });
 
-test('v24 remains frozen historical binding; only the renderer fix drifts its served runtime', () => {
+test('v24 remains frozen historical binding; the renderer fix and contract 0.21 drift it', () => {
   const historicalPath = path.join(packageDirectory, 'public-instruction-package-v24.json');
   const historical = JSON.parse(fs.readFileSync(historicalPath));
   const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
   const result = artifactBinding(root, historicalPath, profile, historical);
   assert.equal(result.match, false);
-  assert.deepEqual(result.checks.filter(check => !check.match).map(check => check.key), ['servedRuntimeManifestSha256']);
+  assert.deepEqual(result.checks.filter(check => !check.match).map(check => check.key).sort(), DRIFT_KEYS_A3);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
-  assert.deepEqual(runtimeCheck.runtime.errors, ['served_runtime_changed:packages/core/dist/src/render.js']);
-  assert.equal(checkServedContract(contract, historical).match, true);
+  assert.deepEqual(runtimeCheck.runtime.errors.sort(), [...RUNTIME_DRIFT_A3, 'served_runtime_changed:packages/core/dist/src/render.js'].sort());
+  assert.deepEqual(checkServedContract(contract, historical).mismatches.sort(), CONTRACT_MISMATCHES_A3);
+});
+
+test('v25 remains frozen historical binding (contract 0.19); exactly the 0.21 modules and contract fields drift', () => {
+  const historicalPath = path.join(packageDirectory, 'public-instruction-package-v25.json');
+  const historical = JSON.parse(fs.readFileSync(historicalPath));
+  const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
+  const result = artifactBinding(root, historicalPath, profile, historical);
+  assert.equal(result.match, false);
+  assert.deepEqual(result.checks.filter(check => !check.match).map(check => check.key).sort(), DRIFT_KEYS_A3);
+  const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
+  assert.deepEqual(runtimeCheck.runtime.errors.sort(), [...RUNTIME_DRIFT_A3].sort());
+  // The transport schema and instruction version are unchanged; the contract text, protocol and frame registries moved.
+  assert.deepEqual(checkServedContract(contract, historical).mismatches.sort(), CONTRACT_MISMATCHES_A3);
+  assert.equal(checkServedContract(contract, pkg).match, true);
 });
 
 test('contract retry: only a lone CONTRACT_UNBOUND with no submission and item budget left', () => {

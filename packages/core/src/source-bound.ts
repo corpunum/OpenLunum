@@ -46,6 +46,11 @@ export interface SourceBoundResult {
   pronounFillers: string[];
   /** A topic frame whose subject is a whole sentence (more than TOPIC_FRAGMENT_MAX_WORDS words, or any subject pronoun or finite auxiliary, ending the source sentence with . ! or ;) or longer than TOPIC_MAX_WORDS. */
   notALabel: string[];
+  /**
+   * lunum-agent/0.21 (A3 step 2): a topic frame whose subject is a whole question (the same test, on a source that ends
+   * with ?). A question gets the general frame its words have, with kind `question`; topic keeps headings and labels.
+   */
+  questionAsTopic: string[];
 }
 
 /** A topic names a heading, label or title; longer text is a statement. */
@@ -115,8 +120,8 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
     for (const term of Object.values(clause.roles ?? {})) fillerStrings(term, fillers);
     fillerStrings(clause.time, fillers);
   });
-  if (!general) return { applies: false, bound: true, unsourced: [], uncovered: [], pronounFillers: [], notALabel: [] };
-  if (language && !/^en([-_]|$)/iu.test(language)) return { applies: true, bound: false, unsourced: [], uncovered: ['language_unsupported'], pronounFillers: [], notALabel: [] };
+  if (!general) return { applies: false, bound: true, unsourced: [], uncovered: [], pronounFillers: [], notALabel: [], questionAsTopic: [] };
+  if (language && !/^en([-_]|$)/iu.test(language)) return { applies: true, bound: false, unsourced: [], uncovered: ['language_unsupported'], pronounFillers: [], notALabel: [], questionAsTopic: [] };
 
   const source = wordTokens(sourceText);
   const covered = new Array<boolean>(source.length).fill(false);
@@ -134,10 +139,14 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
   const notALabel: string[] = [];
   const closing = String(sourceText ?? '').replace(/[\s"'\u201d\u2019)\]*_`]+$/u, '').slice(-1);
   const declarative = closing === '.' || closing === '!' || closing === ';';
+  const interrogative = closing === '?';
+  const questionAsTopic: string[] = [];
   for (const subject of topicSubjects) {
     const words = wordTokens(subject);
     if (words.length > TOPIC_MAX_WORDS) { notALabel.push(subject); continue; }
-    if (declarative && (words.length > TOPIC_FRAGMENT_MAX_WORDS || words.some((word) => FINITE_MARKERS.has(word))) && occurrences(source, words).some((start) => start + words.length === source.length)) notALabel.push(subject);
+    const sentenceLike = (words.length > TOPIC_FRAGMENT_MAX_WORDS || words.some((word) => FINITE_MARKERS.has(word))) && occurrences(source, words).some((start) => start + words.length === source.length);
+    if (declarative && sentenceLike) notALabel.push(subject);
+    else if (interrogative && sentenceLike) questionAsTopic.push(subject);
   }
   const uncovered: string[] = [];
   // A legacy frame names its verb by predicate, not by a source filler, so the
@@ -151,7 +160,7 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
     if (modal && MODALS.has(word)) return;
     uncovered.push(word);
   });
-  return { applies: true, bound: !unsourced.length && !uncovered.length && !pronounFillers.length && !notALabel.length, unsourced, uncovered: [...new Set(uncovered)], pronounFillers, notALabel };
+  return { applies: true, bound: !unsourced.length && !uncovered.length && !pronounFillers.length && !notALabel.length && !questionAsTopic.length, unsourced, uncovered: [...new Set(uncovered)], pronounFillers, notALabel, questionAsTopic };
 }
 
 /** True when a lexical slot is nothing but a copula (use define/describe/relate instead). */

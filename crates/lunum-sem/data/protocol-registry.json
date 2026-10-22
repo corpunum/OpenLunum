@@ -1,5 +1,5 @@
 {
-  "version": "lunum-protocol/0.6",
+  "version": "lunum-protocol/0.7",
   "worlds": [
     "real",
     "fiction",
@@ -24,7 +24,8 @@
     "safety_constraint",
     "project_state",
     "tool_event",
-    "conditional_instruction"
+    "conditional_instruction",
+    "question"
   ],
   "predicates": [
     "prefer",

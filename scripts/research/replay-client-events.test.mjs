@@ -195,14 +195,28 @@ test('public instruction package exposes frozen scoring conventions without gold
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
   assert.equal(hash('packages/mcp/dist/src/tools.js'), v23.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
-  assert.equal(hash('packages/core/dist/src/agent-native.js'), v22.freeze.coreArtifactSha256);
+  // v27 (lunum-agent/0.21, A3): the contract, builder, frame and protocol registries and source-bound check change;
+  // v22's hashes of those modules are history from here on.
+  const v27 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v27.json', 'utf8'));
+  assert.equal(v27.supersedes.path, 'public-instruction-package-v25.json');
+  assert.equal(v27.freeze.coreContractVersion, 'lunum-agent/0.21');
+  assert.equal(v27.freeze.protocolVersion, 'lunum-protocol/0.7');
+  assert.equal(v27.freeze.frameRegistryVersion, 'lunum-frame/0.9');
+  const v25 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v25.json', 'utf8'));
+  for (const key of ['schemaHash', 'instructionVersion', 'taskProfileSha256', 'literalRetentionArtifactSha256', 'toolImplementationSha256', 'mcpArtifactSha256', 'transportValidatorArtifactSha256', 'transportSchemaArtifactSha256', 'transportValidatorDependency']) {
+    assert.deepEqual(v27.freeze[key], v25.freeze[key], `${key} unchanged by 0.21`);
+  }
+  for (const key of ['coreContractHash', 'instructionHash', 'protocolRegistryHash', 'frameRegistryHash', 'coreArtifactSha256', 'builderArtifactSha256', 'frameValidatorArtifactSha256', 'servedRuntimeManifestSha256']) {
+    assert.notEqual(v27.freeze[key], v25.freeze[key], `${key} changed in v27`);
+  }
+  assert.equal(hash('packages/core/dist/src/agent-native.js'), v27.freeze.coreArtifactSha256);
   // frame-registry.js was unchanged from v14 to v18; decisions/0022 changes it in v19, 0023 in v20, 0024 in v22.
   assert.equal(current.freeze.frameValidatorArtifactSha256, next.freeze.frameValidatorArtifactSha256);
-  assert.equal(hash('packages/core/dist/src/frame-registry.js'), v22.freeze.frameValidatorArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/frame-registry.js'), v27.freeze.frameValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/literal-retention.js'), v22.freeze.literalRetentionArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport.js'), next.freeze.transportValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport-schema.js'), next.freeze.transportSchemaArtifactSha256);
-  assert.equal(hash('packages/core/dist/src/agent-builder.js'), v22.freeze.builderArtifactSha256);
+  assert.equal(hash('packages/core/dist/src/agent-builder.js'), v27.freeze.builderArtifactSha256);
   assert.equal(hash('experiments/natural-development-v8/extraction/public-task-profile-iteration6.json'), next.freeze.taskProfileSha256);
   assert.equal(Object.hasOwn(next, 'gold'), false);
 });

@@ -1,5 +1,5 @@
 {
-  "version": "lunum-frame/0.8",
+  "version": "lunum-frame/0.9",
   "frames": {
     "prefer": {
       "predicate": "prefer",
@@ -1180,7 +1180,7 @@
           "required": true
         }
       ],
-      "description": "The unit only names a subject, shows a bare value or poses a question without asserting anything: a heading, label, title, menu item, caption, number or date shown on its own, or question (\"Memory and Recall\", \"Install\", \"2026-10-10\", \"Why does it matter?\")."
+      "description": "The unit only names a subject or shows a bare value without asserting anything: a heading, label, title, menu item, caption, or number or date shown on its own (\"Memory and Recall\", \"Install\", \"2026-10-10\"). A whole question is not a topic: it takes the general frame its words have, with kind question."
     }
   }
 }

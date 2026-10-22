@@ -30,10 +30,10 @@ const refused = (sourceText: string, sem: unknown, failure: string, sourceLangua
 };
 
 test('versions and the prompt block list the seven general frames', () => {
-  assert.equal(SEMANTIC_PROTOCOL_VERSION, 'lunum-protocol/0.6');
-  assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.8');
+  assert.equal(SEMANTIC_PROTOCOL_VERSION, 'lunum-protocol/0.7');
+  assert.equal(SEMANTIC_FRAME_REGISTRY_VERSION, 'lunum-frame/0.9');
   const contract = getExtractionContract();
-  assert.equal(contract.contractVersion, 'lunum-agent/0.19');
+  assert.equal(contract.contractVersion, 'lunum-agent/0.21');
   for (const name of ['define', 'describe', 'assert', 'relate', 'enumerate', 'quantify', 'topic']) {
     assert.ok(contract.frames.framedPredicates.includes(name), name);
     assert.ok(contract.protocol.registry.predicates.includes(name), name);
@@ -113,11 +113,13 @@ test('words that change meaning cannot hide outside a filler', () => {
 
 test('a topic is a label, not a sentence in disguise', () => {
   const topicOf = (value: string) => build({ predicate: 'topic', roles: { subject: text(value) } });
-  accepted('Why does it matter?', topicOf('Why does it matter?'));
+  // lunum-agent/0.21 (A3 step 2): a whole question is not a topic.
+  const q = refused('Why does it matter?', topicOf('Why does it matter?'), 'unbound_source_content');
+  assert.deepEqual(q.sourceBound?.questionAsTopic, ['Why does it matter?']);
+  accepted('Why?', topicOf('Why')); // a one-word question is still a label
   accepted('The Counter: I introduced a counter.', build({ predicate: 'topic', roles: { subject: text('The Counter') }, also: [{ predicate: 'assert', roles: { subject: text('I'), action: text('introduced'), object: text('a counter') } }] }));
   accepted('Your models.', topicOf('Your models')); // a tagline may end with a full stop
   refused('Grounding: It grounds my autonomy in reality.', topicOf('Grounding: It grounds my autonomy in reality'), 'unbound_source_content');
-  accepted('Why does it matter?', topicOf('Why does it matter?')); // a question is not declarative
   accepted('2026-10-10', topicOf('2026-10-10')); // a bare date or number shown on its own
   refused('2026-10-10', topicOf('2026-10-11'), 'unretained_source_literal');
   const text15 = 'Teams ship fewer bugs because tests catch regressions before real users ever see them in production.';

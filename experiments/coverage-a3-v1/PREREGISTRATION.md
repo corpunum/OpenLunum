@@ -65,3 +65,27 @@ node scripts/research/run-claude-code-source-only.mjs reports/independent-evalua
 node experiments/coverage-a3-v1/score.mjs --requests experiments/coverage-a3-v1/requests.jsonl \
   --baseline reports/independent-evaluation/2026-10-22-a3c1-baseline-haiku --change reports/independent-evaluation/2026-10-XX-a3c1-change-haiku --out experiments/coverage-a3-v1/score.json
 ```
+
+## Amendment 1 (2026-10-22, before the change run): step 2 needs a registered kind
+
+**Committed with the 0.21 code and before any model call under 0.21.** The only model calls on these 200 sentences so far are the baseline run. The bars, data, extractor and scorer are unchanged.
+
+Step 2 says "`kind` carries interrogative mood". Protocol 0.6 has no interrogative kind: its 16 kinds are all declarative or directive. An `x-` kind is not protocol-canonical and gets no identity. "Protocol 0.6 unchanged" and step 2 therefore cannot both hold. The change resolves this in favour of step 2:
+
+| | Pre-registration | As built |
+|---|---|---|
+| Protocol | `lunum-protocol/0.6` | **`lunum-protocol/0.7`**: one kind added, `question`. The change is additive. The identity projection tag stays `lunum-protocol/0.1`, so no existing identity moves (replay below) |
+| Frames | `lunum-frame/0.8` | **`lunum-frame/0.9`**: only the `topic` description changes ("…or question" is removed; a whole question is not a topic). Roles and requirements are unchanged |
+| `lfp:2.1`, instruction version | unchanged | unchanged |
+
+Step 2 has two parts:
+- **Contract text.** A question uses the general frame its words have, with kind `question`. The question word goes, as written, in the role it asks about. do/does/did may be left out.
+- **Source-bound check.** A `topic` whose subject is a whole question that ends the source (the existing "sentence in disguise" test, now also on sources ending with "?") is refused (`questionAsTopic`). The refusal message names the fix. A one-word question ("Why?") stays a valid label.
+
+Step 3 is one contract sentence, as pre-registered. The operational-frame rule ("never fill an agent with you") is unchanged. Core already accepted `I`, `you` and `we` as fillers.
+
+**Bar 3, checked before the run** (offline, on the committed code):
+- **Builder rebuild** ([`rebuild-check.mjs`](rebuild-check.mjs)): 818 recorded inputs, 0 missing, **0 moved** without a string action, 215 of 222 string-action inputs now build.
+- **Identity replay** ([`scripts/replay-lfp21-identity.mjs`](../../scripts/replay-lfp21-identity.mjs), 0.19 dist against 0.21 dist): 11,731 distinct recorded Sems. **All 3,186 identities accepted under 0.19 are unchanged.** 0 Sems went from accepted to rejected. 2 Sems moved the other way: golden mutants with `kind: "question"` that 0.19 rejected as an unknown kind now get an identity. They are new identities, not moved ones.
+- **Rust parity:** `lunum-sem`, `lunum-render` and `lunum-store` tests pass against the regenerated registry data and goldens.
+- **Merges in the adversarial, collision and contrast suites:** checked by `pnpm verify` (`eval:smoke` and the core suites) at the freeze commit.

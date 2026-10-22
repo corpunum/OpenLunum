@@ -3,8 +3,8 @@
 //   node_modules/.bin/tsc -p packages/core/tsconfig.json && node scripts/generate-lfp21-golden.mjs
 // Outputs:
 //   eval-results/golden-vectors/lfp21-golden.json          {meta, entries[]}
-//   crates/lunum-sem/data/protocol-registry.json           SEMANTIC_PROTOCOL_REGISTRY (lunum-protocol/0.6)
-//   crates/lunum-sem/data/frame-registry.json              CANONICAL_SEMANTIC_FRAMES (lunum-frame/0.8)
+//   crates/lunum-sem/data/protocol-registry.json           SEMANTIC_PROTOCOL_REGISTRY (lunum-protocol/0.7)
+//   crates/lunum-sem/data/frame-registry.json              CANONICAL_SEMANTIC_FRAMES (lunum-frame/0.9)
 //   crates/lunum-sem/src/unicode_tables.rs                 L/N ranges + lowercase/NFKC single-code-point tables from Node's ICU
 import fs from 'node:fs';
 import path from 'node:path';

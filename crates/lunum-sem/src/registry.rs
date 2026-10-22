@@ -1,4 +1,4 @@
-//! Protocol 0.6 vocabulary/aliases and frame registry 0.8, loaded from JSON that
+//! Protocol 0.7 vocabulary/aliases and frame registry 0.9, loaded from JSON that
 //! `scripts/generate-lfp21-golden.mjs` exports from the TypeScript source (never hand-copied).
 
 use crate::value::{js, parse_json, JStr, Value};

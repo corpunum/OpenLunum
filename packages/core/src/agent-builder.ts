@@ -162,9 +162,15 @@ function buildClause(input: CandidateBuilderClause, label: string): { clause: Lu
     if (typeof rawRole !== 'string') throw new TypeError('builder_role_string_required');
     const normalizedRole = SEMANTIC_PROTOCOL_REGISTRY.aliases.role[basicIdentifier(rawRole)] ?? basicIdentifier(rawRole);
     if (roles[normalizedRole] !== undefined) throw new TypeError(`role_collision:${rawRole}->${normalizedRole}`);
-    roles[normalizedRole] = normalizedRole === 'action' && typeof term === 'string'
-      ? (SEMANTIC_PROTOCOL_REGISTRY.aliases.predicate[basicIdentifier(term)] ?? basicIdentifier(term)) as LunumTerm
-      : term;
+    // lunum-agent/0.21 (A3 step 1): a string on a lexical-verb role (assert.action) is the verb phrase as written, so it
+    // becomes a text term, underscores read as spaces; it is never read as a predicate symbol. A string on a
+    // predicate-vocabulary action role (allow, prohibit) still names a registered predicate.
+    const lexicalVerb = frame.roles.some((role) => role.name === normalizedRole && role.lexicalVerb);
+    roles[normalizedRole] = lexicalVerb && typeof term === 'string'
+      ? { type: 'text', value: term.replace(/_/gu, ' ').trim() } as LunumTerm
+      : normalizedRole === 'action' && typeof term === 'string'
+        ? (SEMANTIC_PROTOCOL_REGISTRY.aliases.predicate[basicIdentifier(term)] ?? basicIdentifier(term)) as LunumTerm
+        : term;
   }
   const allowedRoles = frame.roles.map((role) => role.name);
   const unexpected = Object.keys(roles).filter((role) => !allowedRoles.includes(basicIdentifier(role)));

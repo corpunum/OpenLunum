@@ -1,0 +1,92 @@
+{
+  "format": "openlunum-public-extraction-package/0.2",
+  "status": "frozen-for-next-source-only-run",
+  "supersedes": {
+    "path": "public-instruction-package-v25.json",
+    "reason": "contract lunum-agent/0.21 (A3, experiments/coverage-a3-v1): bare-string assert.action is a text term; questions take a general frame with kind question (protocol 0.7, frames 0.9); I / you / we are valid general-frame fillers. v26 is reserved for decisions/0029"
+  },
+  "freeze": {
+    "sourceSha": null,
+    "builtWith": "pnpm --filter @corpunum/lunum-mcp... build (or node scripts/lunum-mcp-launch.mjs)",
+    "mcpEntrypoint": "packages/mcp/dist/bin/lunum-mcp.js",
+    "coreArtifactSha256": "bc0ad0651e225ea418cd74c661f62922c2c2ae37dd787285ed29ea89ab4f6cd1",
+    "mcpArtifactSha256": "a53c190742c84762480f34df948598cc8fe6833f8bd9ed2f6015c8c85d9cf758",
+    "toolImplementationSha256": "0e28bb75eabdd05ca57ccbe586585df7b5b6bf555c7e537f97a765b96502635a",
+    "coreContractVersion": "lunum-agent/0.21",
+    "coreContractHash": "cd2559d45347e0b6f27d3014e84f6f8dfcb189479bd954bd742999ec29ac11e7",
+    "coreContractHashAlgorithm": "sha256(stableStringify(contract)) using @corpunum/lunum canonicalization",
+    "coreContractJsonSerializationSha256": "6b44dfcf65e0b1b2b3ed24e1faa22ff197ebe711cc693f3ae3a26081ecde131b",
+    "instructionVersion": "agent-extraction-instructions/0.9",
+    "instructionHash": "4159ef3f18c3e0535fec2c90ecdafce602ada68c0cfd835fba55c93279d4b84d",
+    "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+    "frameRegistryHash": "aaeb5878f17dd43b282be650bb46c1d40326a3073b85884bad1225ccf85b8af7",
+    "protocolRegistryHash": "27c1d781fe329e57e3b7083be46d03ec03b703b79a3ad39df506364635bc1cc6",
+    "taskContractPath": "../task-contract.json",
+    "taskContractSha256": "84ea2a1e003c2cf49fd8a2d304bfd311bbc5268a017f3e6b3d11ec6c256d62fd",
+    "scorerPath": "../../../scripts/research/score-natural-source-only-extraction.mjs",
+    "scorerSha256": "85c74b132ce5b1a0a98a8a68e869cfd87a9564f1f08fbaceec17988589b60aec",
+    "sourceBinding": "The commit that added this file (git log --diff-filter=A -- <this file>). The artifact hashes below are the binding.",
+    "launcher": "scripts/lunum-mcp-launch.mjs",
+    "launcherSha256": "9b35bc921abe05369432aa57fa454045b1a8a5c0e2df29d33c5aafc1a424a69d",
+    "frameValidatorArtifactSha256": "38383cdbfbd65229dc67834b788f33b855e55bbbcd8d7827af7355c96234732e",
+    "taskProfilePath": "public-task-profile-iteration6.json",
+    "taskProfileSha256": "50a819180c6689eb69cd0f85a477486f9477b23dc19e83cd6a8d2db52e77fa0d",
+    "frameRegistryVersion": "lunum-frame/0.9",
+    "protocolVersion": "lunum-protocol/0.7",
+    "literalRetentionArtifactSha256": "d8423b0d8787e7f63829bf3666b097be2ff970db949168053af9298ea252c0fe",
+    "builderArtifactSha256": "46d0dcd05a148b85c7c6c08d0780d08f8675cb5005e9db1eefe6a23559fbdfd3",
+    "transportValidatorArtifactSha256": "0cdf36bf73684519c95db1fc91630c479341da75331da0a91373c4990597f476",
+    "transportSchemaArtifactSha256": "5f2c755aa82ba519af6152b463862731d4df6f3ad6bdaeeed4de294cc4383fcf",
+    "transportValidatorDependency": {
+      "name": "ajv",
+      "version": "8.20.0",
+      "lockfileSha256": "3ed55af175910d96445670f9bff73d59ba6c797f2a96525d2607d2ed7e1676b4"
+    },
+    "servedRuntimeManifestPath": "public-served-runtime-v27.json",
+    "servedRuntimeManifestSha256": "d2649aec3d33c3bddf779df67c29c16d597264b2a78ee06350c0e6c26583ee3a"
+  },
+  "input": [
+    "opaque handle",
+    "source text",
+    "source language",
+    "task contract",
+    "core extraction contract"
+  ],
+  "forbidden": [
+    "gold targets",
+    "reviews",
+    "semantic groups",
+    "contrast labels",
+    "private map",
+    "prior candidates"
+  ],
+  "conventions": {
+    "kind": "Use the task-declared kind only when source evidence supports it; parcel/document/object distinctions are typed semantic choices, not aliases.",
+    "conditional": [
+      "root is the primary action",
+      "additional coordinated actions are consequences",
+      "repeat the named agent",
+      "repeat explicitly stated modality on coordinated actions"
+    ],
+    "roles": [
+      "send(agent, object, recipient); recipient is not destination",
+      "publish uses audience",
+      "retry and restart preserve count and date when stated",
+      "below/above (strict) and at_most/at_least (inclusive) use subject and value; a threshold that restricts a role (invoices under 5,000 euros) is such a condition, not a reason to abstain; inclusive bounds (up to, at most, no more than, έως / at least, τουλάχιστον) are at_most/at_least, never below/above",
+      "enable uses theme",
+      "allow/prohibit: theme is the object or resource; action is the permitted/forbidden action as a registered predicate; at least one of them; abstain if neither is stated or no registered predicate expresses the action",
+      "imperatives: the addressee is the implicit agent; leave agent out (deploy, rotate, restart, enable, delete), never fill it with you or the reader; deploy takes theme (what is deployed) and/or destination. This is for operational frames only: in a general frame, I, you and we as written are valid fillers",
+      "questions: a whole question takes the general frame its words have with kind question; the question word goes as written in the role it asks about; topic is only for headings and labels"
+    ],
+    "modality": "Obligation and permission are distinct; lexical negation uses negated and is never rewritten as an antonym. \"X is permitted to Y\" with no stated permitter is modality permission on Y; allow/prohibit need a stated permitter and a different recipient.",
+    "quantityAndTime": "Preserve finite numeric value and ISO date at clause time; normalize units per the task profile (% -> percent). Full dates compare independently from quantity values; source dates written with an English or Greek month name, an explicit day and a four-digit year (14 January 2027, 14 Ιανουαρίου 2027) are full dates, encode them as ISO; year-less dates (15 March, 31 Δεκεμβρίου) are not and their numbers must be carried. Never satisfy a quantity with date components or rescue missing Sem content with source/evidence fields. Cardinal number words are numbers (seven times = 7, επτά φορές = 7); one/once and articles are not. Relative times (Friday, tomorrow, next week, end of day, την Παρασκευή, αύριο) are literals: carry them as written in a semantic value, never drop them or resolve them to a calendar date.",
+    "identity": "Exact identity only for source-visible stable names, identifiers, literals, dates, and task-typed roles; never infer private handles.",
+    "abstention": "Explicitly abstain for unsupported, ambiguous, or unresolved meaning, and when the source does not state a role the frame requires; never fill a role with its type name or the verb. Retain source and provenance. If the builder rejects a filler with placeholder_role or missing_required_role, abstain rather than re-typing or re-wording it."
+  },
+  "delivery": {
+    "requiredBeforeExtraction": true,
+    "receiptMustIncludeArtifactHashes": true,
+    "preflight": "Call lunum_get_extraction_contract through the built stdio MCP server and require the returned contractVersion, instructionHash, schemaHash, and frameRegistryHash to match freeze; compute sha256(stableStringify(contract)) with @corpunum/lunum canonicalization and require it to match freeze.coreContractHash. JSON.stringify bytes are a separate serialization hash. Also require the complete servedRuntimeManifest inventory and all bytes to match before and after the run; reject missing, added, changed or symlinked served JavaScript.",
+    "historicalDelivery": "unverified"
+  }
+}
