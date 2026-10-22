@@ -1,0 +1,248 @@
+{
+  "handle": "pv1-en-94a0bb1270ec8a45",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "simple_fact",
+    "clauses": [
+      {
+        "predicate": "describe",
+        "roles": {
+          "subject": {
+            "type": "actor",
+            "value": "Tom"
+          },
+          "attribute": {
+            "type": "text",
+            "value": "wearing a strange hat"
+          }
+        },
+        "time": {
+          "type": "time",
+          "value": "today"
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01Da5J7cfcz8wkdfP9HvZbwG",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "value": "Tom"
+              },
+              "attribute": {
+                "type": "text",
+                "value": "wearing a strange hat"
+              }
+            },
+            "time": {
+              "type": "time",
+              "value": "today"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom is wearing a strange hat today.",
+            "language": "en",
+            "sha256": "1f194af6279e5a31d7ddf41a915b9295b903fbfc29de5f68bdddb391884d6060"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "1f194af6279e5a31d7ddf41a915b9295b903fbfc29de5f68bdddb391884d6060",
+            "timestamp": "2026-10-22T15:29:23.236Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:ea43c20bf6f01d0ccc2e7e9a1453c887",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "value": "Tom"
+                  },
+                  "attribute": {
+                    "type": "text",
+                    "value": "wearing a strange hat"
+                  }
+                },
+                "time": {
+                  "type": "time",
+                  "value": "today"
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [
+              "day:today"
+            ],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": true,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Tom is wearing a strange hat today."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 22309,
+    "cache_read_input_tokens": 215879,
+    "output_tokens": 1141,
+    "output_tokens_details": {
+      "thinking_tokens": 577
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22309,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 11,
+        "cache_read_input_tokens": 50882,
+        "cache_creation_input_tokens": 1431,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1431
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.00719209,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/pv1-en-94a0bb1270ec8a45.jsonl",
+  "rawStreamSha256": "157f1b596c051f85d073a525085441b62cc12f45bfdd136921d617648b93befc",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

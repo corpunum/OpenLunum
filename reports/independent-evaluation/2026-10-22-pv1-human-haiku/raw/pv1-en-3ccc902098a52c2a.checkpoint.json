@@ -1,0 +1,94 @@
+{
+  "handle": "pv1-en-3ccc902098a52c2a",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 19426,
+    "cache_read_input_tokens": 66246,
+    "output_tokens": 892,
+    "output_tokens_details": {
+      "thinking_tokens": 827
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 19426,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 776,
+        "cache_read_input_tokens": 36242,
+        "cache_creation_input_tokens": 13188,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 13188
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.00499406,
+  "numTurns": 2,
+  "abstentionSubmitted": false,
+  "lastSubmission": null,
+  "rawStream": "raw/pv1-en-3ccc902098a52c2a.jsonl",
+  "rawStreamSha256": "78ceeee84ebf247998cc6b41ecfa83a66a99a251d6226e4e2c9e300af8b14523",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

@@ -1,0 +1,247 @@
+{
+  "handle": "pv1-en-0151c5e19ea84d99",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "event",
+    "clauses": [
+      {
+        "predicate": "assert",
+        "roles": {
+          "subject": {
+            "type": "actor",
+            "value": "Tom"
+          },
+          "action": {
+            "type": "text",
+            "value": "started to wash"
+          },
+          "object": {
+            "type": "object",
+            "value": "his car"
+          }
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01Jc4DpNBotVF4BVqq3tetGw",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "value": "Tom"
+              },
+              "action": {
+                "type": "text",
+                "value": "started to wash"
+              },
+              "object": {
+                "type": "object",
+                "value": "his car"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom started to wash his car.",
+            "language": "en",
+            "sha256": "0e4b24491fac183cada25714fca20bcf1d4fce7aed804b7fdd589518b317d2a5"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "0e4b24491fac183cada25714fca20bcf1d4fce7aed804b7fdd589518b317d2a5",
+            "timestamp": "2026-10-22T15:20:56.663Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:e71082484b9a6acbf6acb5d8960fa5b1",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "category_not_auto_promotable:event",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "value": "Tom"
+                  },
+                  "action": {
+                    "type": "text",
+                    "value": "started to wash"
+                  },
+                  "object": {
+                    "type": "object",
+                    "value": "his car"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": true,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Tom started to wash his car."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 22571,
+    "cache_read_input_tokens": 166778,
+    "output_tokens": 1172,
+    "output_tokens_details": {
+      "thinking_tokens": 657
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22571,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 11,
+        "cache_read_input_tokens": 51167,
+        "cache_creation_input_tokens": 1408,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1408
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.00676878,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/pv1-en-0151c5e19ea84d99.jsonl",
+  "rawStreamSha256": "fca1fd26573f3c2c37779145b0bb4503c5225872aac3f29904230306501702e5",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

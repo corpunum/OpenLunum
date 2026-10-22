@@ -1,0 +1,257 @@
+{
+  "handle": "pv1-en-bd2052f6f0d5b15f",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01SYwYtQ91bEMgnRPRQH9JbU",
+      "agentAction": "explicit-null",
+      "proposedCandidateSem": null,
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Do not open this box.",
+            "language": "en",
+            "sha256": "e55c1ab040c1c7d03d896ddc1bb142f7fe1884ce5a865da8862036d9cd6af051"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "e55c1ab040c1c7d03d896ddc1bb142f7fe1884ce5a865da8862036d9cd6af051",
+            "timestamp": "2026-10-22T15:29:36.500Z"
+          },
+          "transportValid": false,
+          "structuralValid": false,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": false,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+            ]
+          },
+          "failureClass": "transport_or_structural_invalid",
+          "diagnostics": [
+            "transport:/:type:{\"type\":\"object\"}: must be object"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "not-reached",
+      "sourceText": "Do not open this box."
+    },
+    {
+      "eventId": "toolu_01M5y37GCJERfwK3nmB3rZDf",
+      "agentAction": "explicit-null",
+      "proposedCandidateSem": null,
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Do not open this box.",
+            "language": "en",
+            "sha256": "e55c1ab040c1c7d03d896ddc1bb142f7fe1884ce5a865da8862036d9cd6af051"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "e55c1ab040c1c7d03d896ddc1bb142f7fe1884ce5a865da8862036d9cd6af051",
+            "timestamp": "2026-10-22T15:29:38.452Z"
+          },
+          "transportValid": false,
+          "structuralValid": false,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": false,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+            ]
+          },
+          "failureClass": "transport_or_structural_invalid",
+          "diagnostics": [
+            "transport:/:type:{\"type\":\"object\"}: must be object"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "not-reached",
+      "sourceText": "Do not open this box."
+    },
+    {
+      "eventId": "toolu_01DRrr4mokvzSysVUy9m9uK5",
+      "agentAction": "explicit-null",
+      "proposedCandidateSem": null,
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Do not open this box.",
+            "language": "en",
+            "sha256": "e55c1ab040c1c7d03d896ddc1bb142f7fe1884ce5a865da8862036d9cd6af051"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "e55c1ab040c1c7d03d896ddc1bb142f7fe1884ce5a865da8862036d9cd6af051",
+            "timestamp": "2026-10-22T15:29:40.786Z"
+          },
+          "transportValid": false,
+          "structuralValid": false,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": false,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "invalid_sem:transport:/:type:{\"type\":\"object\"}: must be object"
+            ]
+          },
+          "failureClass": "transport_or_structural_invalid",
+          "diagnostics": [
+            "transport:/:type:{\"type\":\"object\"}: must be object"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "not-reached",
+      "sourceText": "Do not open this box."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 22401,
+    "cache_read_input_tokens": 217467,
+    "output_tokens": 1211,
+    "output_tokens_details": {
+      "thinking_tokens": 510
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22401,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 349,
+        "cache_read_input_tokens": 51402,
+        "cache_creation_input_tokens": 1003,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1003
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.00726137,
+  "numTurns": 5,
+  "abstentionSubmitted": true,
+  "lastSubmission": null,
+  "rawStream": "raw/pv1-en-bd2052f6f0d5b15f.jsonl",
+  "rawStreamSha256": "04394f91ac29f8270c5872cde294b26a96460edba0b636f7d13fb7ecd1363b4b",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

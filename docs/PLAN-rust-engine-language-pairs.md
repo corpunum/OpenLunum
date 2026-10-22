@@ -175,6 +175,8 @@ Pre-registered on R4's 49 covered records (in-sample for the templates, so this 
 - The guards stay in TypeScript at the edge, next to the runners; porting them to Rust is not on the critical path (A1 ports the acceptance gates, which decide identity).
 - Translator runner [`translate.mjs`](../experiments/pivot-el-en-v1/translate.mjs) (Qwen through Halogen's OpenAI-compatible endpoint with schema-constrained output; Sonnet through `claude -p` with `--json-schema`), smoke-tested on dev pairs only.
 
+**Run 2026-10-22 ([results](../experiments/pivot-el-en-v1/RESULTS.md); Haiku extractor, Qwen + Luna-low translators): P1 FAIL (25 vs 41 human-covered, 0.61 ×), P2 PASS (18 / 24 = 75%, all through memoised identical strings), P4 PASS (25 / 25).**
+
 **P1. Coverage through the pivot.** Greek via the pivot gets records about as often as the human English side of the same Tatoeba pairs. **P2. Identity agreement.** The Greek sentence lands on the same identity as its human English translation. **P4. Literals.** Every literal survives into the stored record. One run measures all three; pre-registered in [`experiments/pivot-el-en-v1/PREREGISTRATION.md`](../experiments/pivot-el-en-v1/PREREGISTRATION.md).
 - **Data:** 160 held-out Tatoeba EN–EL pairs (seeded, neither side found anywhere else in the repository), plus 20 disjoint dev pairs for smoke tests.
 

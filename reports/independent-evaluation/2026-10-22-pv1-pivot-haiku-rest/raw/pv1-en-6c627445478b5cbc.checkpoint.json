@@ -1,0 +1,267 @@
+{
+  "handle": "pv1-en-6c627445478b5cbc",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01XhC29VpDkqBq7F8qcLhHge",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "value": "Tom"
+              },
+              "action": "will_return",
+              "location": {
+                "type": "place",
+                "value": "home"
+              }
+            },
+            "time": {
+              "type": "time",
+              "value": "at midnight"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom will return home at midnight.",
+            "language": "en",
+            "sha256": "d9f946ca48257b4681b23f09392353a1d63e90c92ec394c4ba799cd1e52593f3"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "d9f946ca48257b4681b23f09392353a1d63e90c92ec394c4ba799cd1e52593f3",
+            "timestamp": "2026-10-22T15:25:48.727Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'will_return' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "Tom will return home at midnight."
+    },
+    {
+      "eventId": "toolu_01J7A3bdqMRL1Yethi1HcQsM",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "value": "Tom"
+              },
+              "action": "return",
+              "location": {
+                "type": "place",
+                "value": "home"
+              }
+            },
+            "modality": "intention",
+            "time": {
+              "type": "time",
+              "value": "at midnight"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom will return home at midnight.",
+            "language": "en",
+            "sha256": "d9f946ca48257b4681b23f09392353a1d63e90c92ec394c4ba799cd1e52593f3"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "d9f946ca48257b4681b23f09392353a1d63e90c92ec394c4ba799cd1e52593f3",
+            "timestamp": "2026-10-22T15:25:55.622Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'return' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "Tom will return home at midnight."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 24686,
+    "cache_read_input_tokens": 272106,
+    "output_tokens": 2662,
+    "output_tokens_details": {
+      "thinking_tokens": 1407
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 24686,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 642,
+        "cache_read_input_tokens": 53690,
+        "cache_creation_input_tokens": 1000,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1000
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.008990459999999999,
+  "numTurns": 6,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": false,
+    "candidateIdentityAvailable": false,
+    "failureClass": "protocol_noncanonical",
+    "diagnostics": [
+      "predicate 'return' is not registered and remains unresolved"
+    ]
+  },
+  "rawStream": "raw/pv1-en-6c627445478b5cbc.jsonl",
+  "rawStreamSha256": "97a33a4dbdfa4944f3cb3095d5309b33ca114e61c5df00186076169ca356e092",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

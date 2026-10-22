@@ -1,0 +1,354 @@
+{
+  "handle": "pv1-en-7d5498b4e39bc062",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "simple_fact",
+    "clauses": [
+      {
+        "predicate": "describe",
+        "roles": {
+          "subject": {
+            "type": "actor",
+            "id": "Tom"
+          },
+          "attribute": {
+            "type": "text",
+            "value": "has good eyesight"
+          }
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_012zSz4Kxe3yxTCQHFYCVPZY",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "id": "Tom"
+              },
+              "attribute": {
+                "type": "text",
+                "value": "good eyesight"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom has good eyesight.",
+            "language": "en",
+            "sha256": "60f7ca996f18c4c16675071be951f73f9ff6de6f5e549cdd03a1302f3049c697"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "60f7ca996f18c4c16675071be951f73f9ff6de6f5e549cdd03a1302f3049c697",
+            "timestamp": "2026-10-22T10:23:24.081Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": "unbound_source_content",
+          "diagnostics": [
+            "unbound_source_content: the candidate leaves out: has; copy the source words into the fillers or abstain"
+          ],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "id": "Tom"
+                  },
+                  "attribute": {
+                    "type": "text",
+                    "value": "good eyesight"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": false,
+            "unsourced": [],
+            "uncovered": [
+              "has"
+            ],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Tom has good eyesight."
+    },
+    {
+      "eventId": "toolu_01GK4MSp7HjVQAfnCj3YzArx",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "id": "Tom"
+              },
+              "attribute": {
+                "type": "text",
+                "value": "has good eyesight"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom has good eyesight.",
+            "language": "en",
+            "sha256": "60f7ca996f18c4c16675071be951f73f9ff6de6f5e549cdd03a1302f3049c697"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "60f7ca996f18c4c16675071be951f73f9ff6de6f5e549cdd03a1302f3049c697",
+            "timestamp": "2026-10-22T10:23:29.252Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:74cf50ca043a7413996cd67db3dfff00",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "id": "Tom"
+                  },
+                  "attribute": {
+                    "type": "text",
+                    "value": "has good eyesight"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": true,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Tom has good eyesight."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 24607,
+    "cache_read_input_tokens": 271492,
+    "output_tokens": 1683,
+    "output_tokens_details": {
+      "thinking_tokens": 698
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 24607,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 11,
+        "cache_read_input_tokens": 53251,
+        "cache_creation_input_tokens": 1360,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1360
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.00847902,
+  "numTurns": 6,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/pv1-en-7d5498b4e39bc062.jsonl",
+  "rawStreamSha256": "ecf4bed24efd249d7c27bac48f4fe904afd0cd0c9c8e85e023a07badb099f87e",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

@@ -1,0 +1,246 @@
+{
+  "handle": "pv1-en-7f4c39b305d775bb",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "simple_fact",
+    "clauses": [
+      {
+        "predicate": "relate",
+        "roles": {
+          "subject": {
+            "type": "place",
+            "id": "France"
+          },
+          "relation": {
+            "type": "text",
+            "value": "is to the south of"
+          },
+          "object": {
+            "type": "place",
+            "id": "England"
+          }
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01DHUC4XNFnCXiCg37cAYbDs",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "relate",
+            "roles": {
+              "subject": {
+                "type": "place",
+                "id": "France"
+              },
+              "relation": {
+                "type": "text",
+                "value": "is to the south of"
+              },
+              "object": {
+                "type": "place",
+                "id": "England"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "France is to the south of England.",
+            "language": "en",
+            "sha256": "bd48757a4d7dc994d5270455ee92a662fbfdc9c55c510413b58b02488628cfbf"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "bd48757a4d7dc994d5270455ee92a662fbfdc9c55c510413b58b02488628cfbf",
+            "timestamp": "2026-10-22T10:29:20.536Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:416e36ba4abdeea36b923f31f6dbb6c6",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "relate",
+                "roles": {
+                  "subject": {
+                    "type": "place",
+                    "id": "France"
+                  },
+                  "relation": {
+                    "type": "text",
+                    "value": "is to the south of"
+                  },
+                  "object": {
+                    "type": "place",
+                    "id": "England"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": true,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "France is to the south of England."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 22120,
+    "cache_read_input_tokens": 166343,
+    "output_tokens": 1055,
+    "output_tokens_details": {
+      "thinking_tokens": 448
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22120,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 101,
+        "cache_read_input_tokens": 50732,
+        "cache_creation_input_tokens": 1392,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1392
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.006615730000000001,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/pv1-en-7f4c39b305d775bb.jsonl",
+  "rawStreamSha256": "5322cd56b9223e724df5ae65708e2411f84c4d8452e12f9d9cf5ae6dc1df449d",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

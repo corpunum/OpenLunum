@@ -1,0 +1,393 @@
+{
+  "handle": "pv1-en-1df6c7ab7cdc3a1e",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "simple_fact",
+    "clauses": [
+      {
+        "predicate": "relate",
+        "roles": {
+          "subject": {
+            "type": "actor",
+            "id": "Tom"
+          },
+          "relation": "graduated from",
+          "object": {
+            "type": "entity",
+            "id": "Harvard"
+          }
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01VzEP2NUsce6NT5NDJdRGJM",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "id": "Tom"
+              },
+              "action": "graduated_from",
+              "object": {
+                "type": "entity",
+                "id": "Harvard"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom graduated from Harvard.",
+            "language": "en",
+            "sha256": "bfd2212f140ba864cb0920f9af4a6694b34920b320ec9e57536a0ad947b66711"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "bfd2212f140ba864cb0920f9af4a6694b34920b320ec9e57536a0ad947b66711",
+            "timestamp": "2026-10-22T10:36:13.364Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'graduated_from' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "Tom graduated from Harvard."
+    },
+    {
+      "eventId": "toolu_016rkuKDrMVLCky8PebPqrH9",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "id": "Tom"
+              },
+              "action": "graduated",
+              "object": {
+                "type": "entity",
+                "id": "Harvard"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom graduated from Harvard.",
+            "language": "en",
+            "sha256": "bfd2212f140ba864cb0920f9af4a6694b34920b320ec9e57536a0ad947b66711"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "bfd2212f140ba864cb0920f9af4a6694b34920b320ec9e57536a0ad947b66711",
+            "timestamp": "2026-10-22T10:36:17.831Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'graduated' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "Tom graduated from Harvard."
+    },
+    {
+      "eventId": "toolu_01XjwfZGECRNrmUhp4LtfiQx",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "relate",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "id": "Tom"
+              },
+              "relation": "graduated from",
+              "object": {
+                "type": "entity",
+                "id": "Harvard"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom graduated from Harvard.",
+            "language": "en",
+            "sha256": "bfd2212f140ba864cb0920f9af4a6694b34920b320ec9e57536a0ad947b66711"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "bfd2212f140ba864cb0920f9af4a6694b34920b320ec9e57536a0ad947b66711",
+            "timestamp": "2026-10-22T10:36:23.387Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:31b35d766ac1a4cb57e87509d27cf08d",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "relate",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "id": "Tom"
+                  },
+                  "relation": "graduated from",
+                  "object": {
+                    "type": "entity",
+                    "id": "Harvard"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": true,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [],
+            "notALabel": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Tom graduated from Harvard."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 26792,
+    "cache_read_input_tokens": 381468,
+    "output_tokens": 2489,
+    "output_tokens_details": {
+      "thinking_tokens": 911
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 26792,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 148,
+        "cache_read_input_tokens": 55419,
+        "cache_creation_input_tokens": 1377,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1377
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.01041918,
+  "numTurns": 8,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/pv1-en-1df6c7ab7cdc3a1e.jsonl",
+  "rawStreamSha256": "77d08ab640f212d61227367c80666c8966705fcd279467ac71ec82de3e91cd7d",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

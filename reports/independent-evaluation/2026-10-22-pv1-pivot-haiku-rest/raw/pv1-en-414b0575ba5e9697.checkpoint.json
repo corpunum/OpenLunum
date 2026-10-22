@@ -1,0 +1,179 @@
+{
+  "handle": "pv1-en-414b0575ba5e9697",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01WFaoGshoNor4uevq5Q1KcZ",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "action": "finish",
+              "object": {
+                "type": "task",
+                "value": "our homework"
+              },
+              "manner": "first"
+            },
+            "negated": false,
+            "modality": "obligation"
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "We must finish our homework first.",
+            "language": "en",
+            "sha256": "8fcba8364b12c0f00c2b00f794de5f2e729b541d62ce180948fccc76b13cbf28"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "8fcba8364b12c0f00c2b00f794de5f2e729b541d62ce180948fccc76b13cbf28",
+            "timestamp": "2026-10-22T15:24:20.139Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'finish' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "We must finish our homework first."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 22584,
+    "cache_read_input_tokens": 167175,
+    "output_tokens": 2117,
+    "output_tokens_details": {
+      "thinking_tokens": 1501
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22584,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 485,
+        "cache_read_input_tokens": 51572,
+        "cache_creation_input_tokens": 1016,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1016
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.00724785,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": false,
+    "candidateIdentityAvailable": false,
+    "failureClass": "protocol_noncanonical",
+    "diagnostics": [
+      "predicate 'finish' is not registered and remains unresolved"
+    ]
+  },
+  "rawStream": "raw/pv1-en-414b0575ba5e9697.jsonl",
+  "rawStreamSha256": "dbc34f135cb3f4e50536bfb0ab8889758ac0661dd6fa8bb02f83f350835173aa",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

@@ -1,0 +1,178 @@
+{
+  "handle": "pv1-en-6e6b13b48a50b0d4",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.19",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "unsupported"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01TYeRdeJAtXAP5BrPiP4sw9",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "instruction",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "action": "open",
+              "object": {
+                "type": "object",
+                "value": "this box"
+              }
+            },
+            "negated": true,
+            "modality": "obligation"
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Don't open this box.",
+            "language": "en",
+            "sha256": "5ea5e70047e83740ac7cea97890d224bbe621eee8f2d90fce9fa0e9d1aa9467c"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.19",
+            "contractHash": "b6fdda4c95b849b0397e06ab597d28f5982d3015daa7bdbbe3c8bc8816ef3ab6",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "74cb58f3196a16dcd4183d290f6c0ccc0498f3d3fd8b0efe7c75ad655ea9ab81",
+            "sourceHash": "5ea5e70047e83740ac7cea97890d224bbe621eee8f2d90fce9fa0e9d1aa9467c",
+            "timestamp": "2026-10-22T10:43:26.118Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": false,
+          "frameValid": false,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "abstained",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "missing_sem"
+            ]
+          },
+          "failureClass": "protocol_noncanonical",
+          "diagnostics": [
+            "predicate 'open' is not registered and remains unresolved"
+          ],
+          "sem": null,
+          "literalRetention": null,
+          "sourceBound": null
+        }
+      },
+      "validation": "rejected",
+      "sourceText": "Don't open this box."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 22118,
+    "cache_read_input_tokens": 166760,
+    "output_tokens": 1571,
+    "output_tokens_details": {
+      "thinking_tokens": 888
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22118,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 417,
+        "cache_read_input_tokens": 51151,
+        "cache_creation_input_tokens": 971,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 971
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.006877500000000001,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": false,
+    "candidateIdentityAvailable": false,
+    "failureClass": "protocol_noncanonical",
+    "diagnostics": [
+      "predicate 'open' is not registered and remains unresolved"
+    ]
+  },
+  "rawStream": "raw/pv1-en-6e6b13b48a50b0d4.jsonl",
+  "rawStreamSha256": "3d9bb3dc4cb9c7c342bd580034815b4f0f404ae5dfb4e3d539c219fbbcf09169",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}
