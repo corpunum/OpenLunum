@@ -118,7 +118,7 @@ accuracy or trust. Historical 0.13 pilot/reviews remain historical.
 
 ## Next, in order
 
-**The current plan and the state for the next session are in [HANDOFF.md](research/archive/handoffs/HANDOFF-2026-10-16.md) (2026-10-16).** It supersedes the list below where they differ.
+**The proposed plan is [docs/PLAN-rust-engine-language-pairs.md](docs/PLAN-rust-engine-language-pairs.md) (2026-10-22, awaiting the owner's review):** English → Lunum → English, then Greek → Lunum → Greek, then English ↔ Greek, on the Rust engine. The 2026-10-16 handoff it builds on is [archived](research/archive/handoffs/HANDOFF-2026-10-16.md). The list below is older.
 
 1. **Owner review (in progress).** [Worksheet](experiments/owner-greek-review-v1/README.md):
    - Part A resolves the 14 unscorable targets;

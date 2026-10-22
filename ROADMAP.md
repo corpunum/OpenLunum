@@ -1,5 +1,7 @@
 # Roadmap
 
+**The near-term plan is [docs/PLAN-rust-engine-language-pairs.md](docs/PLAN-rust-engine-language-pairs.md) (2026-10-22, for the owner's review).** The milestones below are the long-range outline.
+
 ## Update — 2026-10-17
 
 - A Rust reproduction of `lfp:2.1` (`crates/lunum-sem`) now matches the TypeScript fingerprint on all 7,089 golden entries, and Node and Unicode are pinned (17.0).
