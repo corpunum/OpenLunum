@@ -1,0 +1,4142 @@
+{
+ "summary": {
+  "run": "reports/independent-evaluation/2026-10-17-rt1-sonnet",
+  "tally": {
+   "items": 200,
+   "ran": 200,
+   "parse": 78,
+   "abstain": 122,
+   "invalid": 1,
+   "copy": 29,
+   "covered": 49
+  },
+  "notCovered": 151,
+  "abstainOrInvalid": 122,
+  "sentenceCopies": 29,
+  "primaryCause": {
+   "first- or second-person subject (I, you, we): no speaker/addressee term in the contract": 42,
+   "assert.action written as a bare string; identity once written as a text term": 37,
+   "question parsed as a topic label (a sentence copy)": 29,
+   "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out": 25,
+   "question (abstained)": 4,
+   "other: imperative": 4,
+   "other: multi-clause (subordinate, relative or coordinated clause)": 4,
+   "other: existential (there is)": 2,
+   "other: simple clause + modal or future": 2,
+   "other: verb + verb complement (want to X, asked Y to X, saw Y go)": 1,
+   "other: simple action clause (subject + verb + object/adjuncts)": 1
+  },
+  "declaredReason": {
+   "unsupported": 75,
+   "unresolved": 45,
+   "ambiguous": 2
+  },
+  "attemptsBeforeAbstaining": {
+   "0": 81,
+   "1": 27,
+   "2": 14
+  },
+  "lastAttemptFailure": {
+   "no attempt (abstained after reading the contract)": 81,
+   "assert.action written as a bare string (read as an unregistered predicate symbol)": 39,
+   "unbound_source_content": 2
+  },
+  "recoverableByTextAction": {
+   "items": 37,
+   "ofTriedWithStringAction": 40
+  },
+  "replayFailuresAfterTextAction": {
+   "unbound_source_content": 3
+  },
+  "shapeOfAbstains": {
+   "simple action clause (subject + verb + object/adjuncts)": 46,
+   "simple clause + modal or future": 20,
+   "multi-clause (subordinate, relative or coordinated clause)": 14,
+   "copula clause (be + adjective or prepositional phrase)": 13,
+   "verb + verb complement (want to X, asked Y to X, saw Y go)": 12,
+   "imperative": 7,
+   "possession (have / has)": 4,
+   "question": 4,
+   "existential (there is)": 2
+  },
+  "shapeOfAbstainsNoAttempt": {
+   "simple action clause (subject + verb + object/adjuncts)": 23,
+   "simple clause + modal or future": 13,
+   "copula clause (be + adjective or prepositional phrase)": 12,
+   "multi-clause (subordinate, relative or coordinated clause)": 11,
+   "verb + verb complement (want to X, asked Y to X, saw Y go)": 8,
+   "imperative": 5,
+   "question": 4,
+   "possession (have / has)": 3,
+   "existential (there is)": 2
+  },
+  "shapeOfCopies": {
+   "question": 29
+  },
+  "copyPredicates": {
+   "topic": 29
+  },
+  "featuresOfAbstains": {
+   "deicticSubject": 55,
+   "deicticSubjectNoAttempt": 47,
+   "pronounArgument": 30,
+   "pronounArgumentNoAttempt": 26,
+   "negated": 34,
+   "modal": 27,
+   "question": 4,
+   "multiClause": 15
+  },
+  "crossCheckOtherSonnetRuns": {
+   "reports/independent-evaluation/2026-10-17-idg1-sonnet": {
+    "rows": 240,
+    "abstain": 137,
+    "noAttempt": 103,
+    "stringAction": 33,
+    "other": 1
+   },
+   "reports/independent-evaluation/2026-10-17-idg2-sonnet": {
+    "rows": 267,
+    "abstain": 139,
+    "noAttempt": 96,
+    "stringAction": 41,
+    "other": 2
+   }
+  }
+ },
+ "items": [
+  {
+   "handle": "rt1-1b3a573e5954b863",
+   "sourceText": "I want you to dance with me.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-017050538bae438a",
+   "sourceText": "What is your dream?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-d745b6d3c4eb8778",
+   "sourceText": "Tom listened to Mary.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"listened_to\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'listened_to' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:1131c681f66528fdafa99222b1c33efa",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-26d3237eab731fcb",
+   "sourceText": "I never go to bed before midnight.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-55553b77b13faefb",
+   "sourceText": "Where do you work?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-17496db2f2496986",
+   "sourceText": "We have three kids.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "possession (have / has)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-6de44c2049c9ca0a",
+   "sourceText": "I got up very early.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-67e16a4dff9a21ee",
+   "sourceText": "Have you already said hi to Tom?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-d2f40ca6c2abdba6",
+   "sourceText": "Tom slept without a pillow.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"slept\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'slept' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:f463c4929b274d58325168b45b93b75e",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-88c512d20706fef6",
+   "sourceText": "I listened to the news on the radio.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"listened_to\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'listened_to' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:cad4a435c71661418447a7224fb5542e",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-cb9b532c6cc104b2",
+   "sourceText": "Tom played cards with Mary.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"played\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'played' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:ede80c2845f53ca8bb686098d7be548e",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-00f960e586be756f",
+   "sourceText": "I asked you not to go there.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-4da5de5030814577",
+   "sourceText": "Who are you working for?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-57506f1e6e3901df",
+   "sourceText": "I ate way too much.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-e5861ae9ca0a8314",
+   "sourceText": "I'm ready to leave.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-466c7c0d9768706d",
+   "sourceText": "You'll be safe with Tom.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-5b69f40aa41efc02",
+   "sourceText": "Tom asked Mary to not resign.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: verb + verb complement (want to X, asked Y to X, saw Y go)"
+  },
+  {
+   "handle": "rt1-10c569e93e474503",
+   "sourceText": "Can I have some soda, please?",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question (abstained)"
+  },
+  {
+   "handle": "rt1-cece9b6690f000bf",
+   "sourceText": "It's so nice here.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-47c2845c57c7771c",
+   "sourceText": "Take a book and read it.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"take\"",
+      "read"
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'take' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:bd4213c5032cdcc9401edb1932c9fe10",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "imperative",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-57d7f48ba6255c3e",
+   "sourceText": "As far as I know, he is not married.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-21b74ebeb5075949",
+   "sourceText": "Please tell me your name.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "imperative",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: imperative"
+  },
+  {
+   "handle": "rt1-9bbed46de0420550",
+   "sourceText": "She went with him.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-baa482633bbe338d",
+   "sourceText": "What would you like?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-38d6022d1030720e",
+   "sourceText": "You say one thing, but you do exactly the opposite.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-433321163cde340d",
+   "sourceText": "I often play football after school.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-0702bfcc570615eb",
+   "sourceText": "Tom didn't help the poor.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"help\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'help' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:3e8714352866c22e74437e588b830f2f",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-5a4511af4c8d3e9f",
+   "sourceText": "We're not going to buy anything today.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"going_to_buy\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'going_to_buy' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:9e1f1fb8dcb61a898535c7045f76d6d8",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"buy\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'buy' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: the candidate leaves out: going; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-7b5829124034d390",
+   "sourceText": "What is your name?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-ab4d3181d132f22a",
+   "sourceText": "He arrived safe and sound.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-2be78afc9558e1a6",
+   "sourceText": "Tom didn't want to leave.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"want_to_leave\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'want_to_leave' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:9af2972fe4874aae0f42626d480c9199",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-3973c688aaaa3367",
+   "sourceText": "I was a bit unlucky.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-3d71eeec1efc75b9",
+   "sourceText": "Tom refused to listen to me.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"refused_to_listen_to_me\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'refused_to_listen_to_me' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:4e573aa416acfdb2cb32666f33606b6e",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-db438ea3a8da7f40",
+   "sourceText": "Tom will never let that happen.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "other: multi-clause (subordinate, relative or coordinated clause)"
+  },
+  {
+   "handle": "rt1-0de280f00858ed4d",
+   "sourceText": "Please make me a cup of coffee.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "imperative",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: imperative"
+  },
+  {
+   "handle": "rt1-9a617bdeea934d06",
+   "sourceText": "He is not scared of snakes at all.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-2046efa249dbbcb5",
+   "sourceText": "Where do you usually park?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-a2c1f8a41df1f273",
+   "sourceText": "You're not paying attention.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-6c39254af770038d",
+   "sourceText": "We know what we have to do.",
+   "outcome": "abstain",
+   "declaredReason": "ambiguous",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-95c25e128f965e2c",
+   "sourceText": "Tom and Mary met in Boston three years ago.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"met\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'met' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:b09283de0541f97c6ce55d4d58724d33",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-a6ed509e57c95e49",
+   "sourceText": "I have no horse.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "describe"
+     ],
+     "failureClass": "unbound_source_content",
+     "diagnostics": [
+      "unbound_source_content: the candidate leaves out: have; copy the source words into the fillers or abstain"
+     ]
+    },
+    {
+     "predicates": [
+      "assert/action=\"have\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'have' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:17acd4791a33633d574ac86522436140",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "possession (have / has)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-2b47b046c6e9c093",
+   "sourceText": "Tom heard Mary singing.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"heard\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'heard' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:8098f18a5beb3d2d828c86fd6c0d4334",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-f91bb9ee3f52efc3",
+   "sourceText": "You can protect me.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-ec6bfa28b7c9e70a",
+   "sourceText": "There is no solution.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "existential (there is)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: existential (there is)"
+  },
+  {
+   "handle": "rt1-f938acb34301735a",
+   "sourceText": "Tom was born in Boston, but all his brothers were born in Chicago.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"was_born\"",
+      "assert/action=\"were_born\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'was_born' is not registered and remains unresolved",
+      "predicate 'were_born' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:a97d297c80bbb1ed641634f20c09d250",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-9bcc6d363008180b",
+   "sourceText": "Have you seen my passport?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-f2ef30acb82308e4",
+   "sourceText": "Who ate the bread?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-08bee0a9e026b5eb",
+   "sourceText": "We have everything we want.",
+   "outcome": "abstain",
+   "declaredReason": "ambiguous",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "possession (have / has)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-1233d0a9931eea83",
+   "sourceText": "What did you do?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-c4862313fd3e73bf",
+   "sourceText": "Tom bought a drink for Mary.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"bought\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'bought' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:46b1b5283782b0c183dbd8c7667e17b9",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-1dde1c74f09574b2",
+   "sourceText": "Tom put on his socks.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"put_on\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'put_on' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:412ffca406b600edbff90ea70a58272c",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-e0f9d96fba643e5f",
+   "sourceText": "Mary protected her husband.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"protected\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'protected' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:5f8d455ed937e7f15b15954651fd86eb",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-b1103698f1d457ca",
+   "sourceText": "Do you like summer?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-689c7365ee206eef",
+   "sourceText": "Tom arrived at the hotel.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"arrived\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'arrived' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:72c57d7ed8e5d9b6675413c7896f3a13",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"arrived at\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'arrived_at' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:33cb0496decdf3d3704a612f9d313db3",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-9ef10080540cdc1e",
+   "sourceText": "I can't swim well.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"swim\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'swim' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:ddc99f7ad40437116c4c371b79682a0a",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-a8372e333214f260",
+   "sourceText": "What does not kill me, makes me stronger.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "other: multi-clause (subordinate, relative or coordinated clause)"
+  },
+  {
+   "handle": "rt1-d3cd28cd43312c17",
+   "sourceText": "I thought you could help me.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-f642aaf125192767",
+   "sourceText": "Can you give me a better explanation?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-6cd56a8a3d4f2f7f",
+   "sourceText": "I saw him go out.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-fa42aba57d20cd25",
+   "sourceText": "Tom is teaching us French.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"teaching\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'teaching' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:02c568ec46ff760d0ba98466886a27b7",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"is teaching\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'is_teaching' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:f5f90034da3e9f762d20933d1b807cf9",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-bfc0eac94741aa6f",
+   "sourceText": "Be careful not to trip over this rock.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "imperative",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: imperative"
+  },
+  {
+   "handle": "rt1-9d085676e30fc3d4",
+   "sourceText": "If there's something you don't understand, ask.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "other: multi-clause (subordinate, relative or coordinated clause)"
+  },
+  {
+   "handle": "rt1-3e51c1c7a0689ca9",
+   "sourceText": "It's a weight off my shoulders.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-c3e0ed19f6939397",
+   "sourceText": "I helped my father yesterday.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-634fe8d133706784",
+   "sourceText": "Tom didn't yet know what he had to do.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"yet_know\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'yet_know' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:314cb9aafbfd92b3075eef6187353904",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"know\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'know' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:be2fe59926349b5ed1094fd34257c48a",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-94f53fd79f9dc902",
+   "sourceText": "Tom said that he wanted to learn French.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"said\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'said' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:00995c4be0fc02ac47537780791c1bb1",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"state\""
+     ],
+     "failureClass": "unbound_source_content",
+     "diagnostics": [
+      "unbound_source_content: filler \"state\" is not words of the source; the candidate leaves out: said; copy the source words into the fillers or abstain"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: filler \"state\" is not words of the source; the candidate leaves out: said; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-93f06265b4c1990a",
+   "sourceText": "Tom asked me to wake him at six-thirty.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-0ad2753d9a62a956",
+   "sourceText": "Tom caught the ball.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"caught\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'caught' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:b31ec1d5ac366aff6dea4dc49ced4109",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"caught\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'caught' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:641d0bd1b0751db010f9336379c8d9ab",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-f3336133de6abd29",
+   "sourceText": "Are you sure you're not cold?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-c2d8c0c27b1fbdb0",
+   "sourceText": "I really loved my job.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-f86d2853bb973598",
+   "sourceText": "I'm happy I could help.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-ec9a64417aa063cd",
+   "sourceText": "I don't want them.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": true,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-a31a8507f96098cd",
+   "sourceText": "Tom said he had to go somewhere.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-910bb6605967e614",
+   "sourceText": "She sat next to him.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-d15516f07402ff51",
+   "sourceText": "Would you rather play tennis or golf?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-051ac5000e1403e1",
+   "sourceText": "Tom took his son John to a baseball game.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"took\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'took' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:0b5783da2d1d51b9387c4668015aec8c",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-e03db8e058d377e5",
+   "sourceText": "Tell him we're busy.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "imperative",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-f72f312be41f7554",
+   "sourceText": "Who teaches you French?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-19533e9566153d51",
+   "sourceText": "I read his book.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-3c630e21faf53d65",
+   "sourceText": "The snow will soon disappear.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"disappear\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'disappear' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: the candidate leaves out: will; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: simple clause + modal or future"
+  },
+  {
+   "handle": "rt1-bf51a3b0d0791b9c",
+   "sourceText": "I expect your help.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-d566c92ae9725191",
+   "sourceText": "Tom died in October.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"died\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'died' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:0abd3a2c3a7b206f090f9737364bc76b",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-010ee3f97943fd46",
+   "sourceText": "I lost my dog.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-86a3a1dc39087a27",
+   "sourceText": "Why are you sleeping?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-73cb241e46a89029",
+   "sourceText": "I agreed to do it.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-ed25bf769f8277f3",
+   "sourceText": "See you in Boston.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "imperative",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: imperative"
+  },
+  {
+   "handle": "rt1-5dbdf083550ba7d6",
+   "sourceText": "You must talk to Tom in person.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"talk\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'talk' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: the candidate leaves out: you; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-40236257e7b0b5c3",
+   "sourceText": "We weren't talking about Tom.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"talking_about\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'talking_about' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:be5fd4b13014d97fff0a7f15a0d16283",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"talking\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'talking' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:f09d980fb77523793c63080a495b79f9",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-636383f774e38f26",
+   "sourceText": "Tom met Mary on the way to school.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"met\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'met' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:5636078070d1cf1b4f56c993c720fa24",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-20bf0d43a893068b",
+   "sourceText": "You can trust them.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-e8f597f518664b95",
+   "sourceText": "I don't have a car.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "possession (have / has)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-9fc5e33d8306fc86",
+   "sourceText": "I'm good at giving advice.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-eadae72b8890b6bb",
+   "sourceText": "Do you really want to help?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-d57c2f5f813c7226",
+   "sourceText": "You could be a little nicer to your brother.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-c91a052495d57054",
+   "sourceText": "The traffic light changed to red.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"changed_to_red\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'changed_to_red' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:086949d0b33b795b918bde212909f5e5",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"changed\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'changed' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:8ed3f233699ee8966554e2e205f0f920",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-9b4f3a34bd38be3a",
+   "sourceText": "What do you think about it?",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question (abstained)"
+  },
+  {
+   "handle": "rt1-a3ab7587b2fae144",
+   "sourceText": "I'm not going to marry you.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-5be844cab15586e2",
+   "sourceText": "I've brought you something.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-44c0b3706ab17faf",
+   "sourceText": "Tom helped Mary escape.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"helped\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'helped' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:c9a391410127fd0481ab6fe80f206e64",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-61f888fc8e067b5c",
+   "sourceText": "I can't leave with you.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-8aff931b778a0758",
+   "sourceText": "Tom is going to be working this afternoon.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"going_to_be_working\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'going_to_be_working' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:082fd7adf4ec4e06101807447f6ea46b",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-4cd2c7847aa4b852",
+   "sourceText": "I'm disappointed with you.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-670fcba988212ee9",
+   "sourceText": "I should've bought a pencil.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-02b760124815dd5e",
+   "sourceText": "It's easier to blame someone else than to blame yourself.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "relate"
+     ],
+     "failureClass": "unbound_source_content",
+     "diagnostics": [
+      "unbound_source_content: filler \"easier than\" is not words of the source; the candidate leaves out: it, easier, than; copy the source words into the fillers or abstain"
+     ]
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-5241fce62506732d",
+   "sourceText": "Do you believe that people are capable of change?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-4bfbf8495df9aa9a",
+   "sourceText": "There is a cure.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "existential (there is)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: existential (there is)"
+  },
+  {
+   "handle": "rt1-e5f82af91ac74c09",
+   "sourceText": "If anyone can do it, it's you.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-9e0a13e7d10b4d9f",
+   "sourceText": "How old are your brothers?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-57e5b99f1271cdc9",
+   "sourceText": "I'll be in the car.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-4e948a69cd0b19c9",
+   "sourceText": "I'd be happy, if Tom succeeded.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-58588a89361888e2",
+   "sourceText": "I want you to stay.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-98e86bebb3a03c01",
+   "sourceText": "It appears that you're all mistaken.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-82c61fa5322209c0",
+   "sourceText": "Tom isn't too young, is he?",
+   "outcome": "invalid",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": true,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question (abstained)"
+  },
+  {
+   "handle": "rt1-e41fc3cb2b845a37",
+   "sourceText": "I didn't even know about it.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": true,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-bc52010e02e40c76",
+   "sourceText": "Where are we going, Tom?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-6e91326a11bf3d60",
+   "sourceText": "Tom came to Boston in 2013.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"came\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'came' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:897459f0e7cadf107ba749cade23d27a",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"come\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'come' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: filler \"come\" is not words of the source; the candidate leaves out: came; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-1cb48f8725fd82b7",
+   "sourceText": "He wants to go to America.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "verb + verb complement (want to X, asked Y to X, saw Y go)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-e3ae4cbdecf209cb",
+   "sourceText": "What is your favorite time of year?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-d4dd6c52f76615da",
+   "sourceText": "We don't know her.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-40e0378ca7ca2fc5",
+   "sourceText": "He died last night.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-b9437568914ee74e",
+   "sourceText": "What's your home address?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-7bfab79215977d57",
+   "sourceText": "This won't cost you anything.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: simple clause + modal or future"
+  },
+  {
+   "handle": "rt1-938dc6931253ef71",
+   "sourceText": "Do you find Mary attractive?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-9c6265bf84a3eba8",
+   "sourceText": "They came here yesterday.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-7b59b32595af2524",
+   "sourceText": "I'm proud of my son.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-b7ea5deca656f53c",
+   "sourceText": "Do you play soccer or rugby?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-5c24f029109a13ec",
+   "sourceText": "Don't worry so much about Tom.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"worry\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'worry' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:3414363fc1f2b3285996834537a26cd2",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "imperative",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-b0b44c1c725b4f7a",
+   "sourceText": "No one loves you as much as I do.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "other: simple action clause (subject + verb + object/adjuncts)"
+  },
+  {
+   "handle": "rt1-a0c2dcebd8aea798",
+   "sourceText": "Tom eats chocolate almost every day.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"eats\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'eats' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:2313a01ae06f64db68f56b0acc885781",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"eat\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'eat' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: filler \"eat\" is not words of the source; the candidate leaves out: eats; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-1b679dfb65cec50f",
+   "sourceText": "She's at a meeting.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-619f280d52571f3c",
+   "sourceText": "I must leave on Monday.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"leave\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'leave' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:12bb39e34a71814af95cff4fec1c094b",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-cd9aedd987e67213",
+   "sourceText": "It's your turn tonight.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-7f6103131e24267c",
+   "sourceText": "Do you like these earrings?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-0ec4050e371fa07c",
+   "sourceText": "I don't know what to do for dinner.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-fe661aff5698331f",
+   "sourceText": "We need more coffee.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-b96656be3138e895",
+   "sourceText": "Tom complains all the time.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"complains\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'complains' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:352c7c8dd3bb72c019570b126a121fbe",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"complain\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'complain' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: filler \"complain\" is not words of the source; the candidate leaves out: complains; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-903d7c5a572ad9f2",
+   "sourceText": "I was playing tennis all day.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"playing\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'playing' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: the candidate leaves out: i; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-1df80a5b1e7a8df9",
+   "sourceText": "Tom isn't going to sing.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"going_to_sing\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'going_to_sing' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:839273e2efe048ca95675af2a8879893",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"sing\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'sing' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": null,
+      "failureClass": "unbound_source_content",
+      "diagnostics": [
+       "unbound_source_content: the candidate leaves out: going; copy the source words into the fillers or abstain"
+      ],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-8f96544ba12be604",
+   "sourceText": "Tom wanted a bicycle.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"wanted\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'wanted' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:652abfdf39bffaf5a2fefdd359581a5e",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-003f0e38dfbd09ba",
+   "sourceText": "You don't trust me, do you?",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question (abstained)"
+  },
+  {
+   "handle": "rt1-2a787419e18aa8bd",
+   "sourceText": "How many letters did you send to Tom?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": true
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-7b0f85a192411ae1",
+   "sourceText": "They all speak French.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-52cbfabce0ef9fee",
+   "sourceText": "Do you plan to go abroad?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-1b62e07191186d7f",
+   "sourceText": "I helped my mother wash the dishes.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-f158516edcb6e0c9",
+   "sourceText": "Can you wait a few weeks?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-e02f800d527cce61",
+   "sourceText": "We'll never do it.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple clause + modal or future",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": true,
+    "negated": true,
+    "modal": true,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "third-person pronoun as a whole argument (he, she, they, him, them, it): refused filler, cannot be left out"
+  },
+  {
+   "handle": "rt1-54a107fb3b86f4b4",
+   "sourceText": "Tom would get angry if I did that.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "multi-clause (subordinate, relative or coordinated clause)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": true,
+    "question": false,
+    "multiClause": true
+   },
+   "primaryCause": "other: multi-clause (subordinate, relative or coordinated clause)"
+  },
+  {
+   "handle": "rt1-d003ca3931d86284",
+   "sourceText": "I haven't forgiven you.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  },
+  {
+   "handle": "rt1-3bcf7ac0a0478965",
+   "sourceText": "Do you want to give it a try?",
+   "outcome": "sentence_copy",
+   "declaredReason": null,
+   "copyPredicates": [
+    "topic"
+   ],
+   "attempts": [
+    {
+     "predicates": [
+      "topic"
+     ],
+     "failureClass": null,
+     "diagnostics": []
+    }
+   ],
+   "recoverableByTextAction": false,
+   "shape": "question",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": true,
+    "negated": false,
+    "modal": false,
+    "question": true,
+    "multiClause": false
+   },
+   "primaryCause": "question parsed as a topic label (a sentence copy)"
+  },
+  {
+   "handle": "rt1-62567a9b53a822f5",
+   "sourceText": "Tom ate the last one.",
+   "outcome": "abstain",
+   "declaredReason": "unsupported",
+   "copyPredicates": null,
+   "attempts": [
+    {
+     "predicates": [
+      "assert/action=\"ate\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'ate' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:1f5e24298a7f4c1b585ae622cbec4773",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    },
+    {
+     "predicates": [
+      "assert/action=\"ate\""
+     ],
+     "failureClass": "protocol_noncanonical",
+     "diagnostics": [
+      "predicate 'ate' is not registered and remains unresolved"
+     ],
+     "replayTextAction": {
+      "identity": "lfp:2.1:sha256:1f5e24298a7f4c1b585ae622cbec4773",
+      "failureClass": null,
+      "diagnostics": [],
+      "copy": false
+     }
+    }
+   ],
+   "recoverableByTextAction": true,
+   "shape": "simple action clause (subject + verb + object/adjuncts)",
+   "features": {
+    "deicticSubject": false,
+    "pronounArgument": false,
+    "negated": false,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "assert.action written as a bare string; identity once written as a text term"
+  },
+  {
+   "handle": "rt1-6bceb2e2b89e2093",
+   "sourceText": "I'm not satisfied with this.",
+   "outcome": "abstain",
+   "declaredReason": "unresolved",
+   "copyPredicates": null,
+   "attempts": [],
+   "recoverableByTextAction": false,
+   "shape": "copula clause (be + adjective or prepositional phrase)",
+   "features": {
+    "deicticSubject": true,
+    "pronounArgument": false,
+    "negated": true,
+    "modal": false,
+    "question": false,
+    "multiClause": false
+   },
+   "primaryCause": "first- or second-person subject (I, you, we): no speaker/addressee term in the contract"
+  }
+ ]
+}
