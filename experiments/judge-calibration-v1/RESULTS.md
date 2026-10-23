@@ -13,10 +13,20 @@ Owner labels: 31 labelled non-control Greek items (29 equivalent, 2 different; 1
 | DeepSeek v4.1 flash (NIM) | DeepSeek | **0.783** | 96.8 % | 0.839 | 1 (#1, owner "mostly same") | 0 | 0 / 8 | 0 / 20 | **PASS** |
 | GLM 5.3 (NIM) | Zhipu | **1.000** | 100 % | 0.635 | 0 | 0 | 0 / 8 | 0 / 20 | **PASS** |
 | Qwen 3.8 flash (Halogen, tie-break) | Alibaba | **0.635** | 93.5 % | 0.713 | 2 | 0 | 0 / 8 | 0 / 20 | PASS (reported only) |
+| Luna `gpt-6-luna`, low effort (Codex CLI) — added 2026-10-23, see below | OpenAI | **0.652** | 96.8 % | 0.367 | 0 | 1 (#35, name change) | 0 / 8 | 0 / 20 | **PASS** |
+| DeepSeek v4.1 flash (opencode free) — added 2026-10-23 | DeepSeek | — | — | — | 2 of 32 seen | 0 | 0 / 8 | — | **unreachable**: stopped answering after 45 of 60 items; not calibrated, not used |
 | Kimi k2.6 (NIM) | Moonshot | — | — | — | — | — | — | — | **not available** (HTTP 404 for this account; no reply) |
 | Mistral Large 2 (NIM) | Mistral | — | — | — | — | — | — | — | **not available** (HTTP 404; stopped after 12 calls) |
 
 **Selection (pre-registered rule):** SuperGemma failed, so the two scoring judges are the first two passing candidates of the list after it, from different vendors: **DeepSeek v4.1 flash and GLM 5.3.** Nemotron failed. Qwen passed but is the tie-breaker, reported only.
+
+## Added after the pre-registration (2026-10-23)
+
+When bar 2 was being judged, NIM stopped answering for hours. DeepSeek had returned 1 of 159 bar-2 judgements, GLM 28. With the owner's approval, two more candidates were calibrated on the same 60 items with the same prompts before they judged anything:
+- the same DeepSeek model through **opencode's free tier**: it stopped after 45 items, so it was not calibrated;
+- **Luna** at low effort through the Codex CLI: **PASS**, kappa 0.652.
+
+Both run at the host's default temperature, not 0, and use the CLI retry rule in `judges.mjs`. These are deviations from this pre-registration, which listed NIM models only. The owner also used **Nemotron** for bar 2 although it failed here; that override is recorded in [coverage-a3-v2/RESULTS.md](../coverage-a3-v2/RESULTS.md).
 
 ## What the failures were
 
@@ -32,4 +42,4 @@ Owner labels: 31 labelled non-control Greek items (29 equivalent, 2 different; 1
 
 ## Cost
 
-No money: NIM free tier, the Ally and Halogen. Wall time: Nemotron 22 min, SuperGemma 25 min, Qwen 39 min (rig protocol), DeepSeek 2 h 52 min (median 164 s per call), GLM 4 h 14 min (median 204 s per call).
+No money: NIM and opencode free tiers, the Ally and Halogen; Luna 60 Codex calls on the ChatGPT quota. Wall time: Luna about 5 min, Nemotron 22 min, SuperGemma 25 min, Qwen 39 min (rig protocol), DeepSeek 2 h 52 min (median 164 s per call), GLM 4 h 14 min (median 204 s per call).

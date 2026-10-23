@@ -6,6 +6,10 @@
 - **Contract `lunum-agent/0.22`** ([ADR 0031](decisions/0031-mood-renderer-and-imperative-frames.md), an unreleased candidate like 0.21): imperatives take kind `instruction`, no subject, the imperative verb alone in `action` and what it governs whole in `object`. A refusal for an inserted "you" in an imperative names the fix. Instructions 0.10; package **v28** frozen (v27 stays the A3 binding). Scoring manifest v10 and source review v9 rebind unchanged bytes. No identity moves.
 - **Pivot guards `pivot-guards/0.3`**: Greek weekday and month names are not undeclared names when the English has the matching word; a mid-sentence "May" is the month, not a modal.
 
+### Results
+- [judge-calibration-v1](experiments/judge-calibration-v1/RESULTS.md): SuperGemma (kappa 0.382) and Nemotron 3 Ultra (0.271) fail calibration against the owner's Greek labels; DeepSeek, GLM, Luna and Qwen pass.
+- [coverage-a3-v2](experiments/coverage-a3-v2/RESULTS.md) on 200 fresh sentences: bar 1 PASS (69.5 %), bar 3 PASS, **bar 2 FAIL** (Luna 56 %, Nemotron 32 % by owner override, agreement 58 %; NIM judges unreachable, deviations listed). 0.21 + 0.22 stay unreleased candidates.
+
 ### Added
 - **Renderer profile `generic-en-pivot/0.3`** (TS and Rust, byte parity on 12,030 golden inputs): 0.2 plus mood, `R question: …?` and `R imperative [to you]: …`. `lunum-render --profile`.
 

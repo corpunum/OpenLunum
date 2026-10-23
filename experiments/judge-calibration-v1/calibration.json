@@ -114,6 +114,31 @@
       "pass": true
     },
     {
+      "judge": "luna",
+      "label": "gpt-6-luna, low reasoning effort (Codex CLI)",
+      "vendor": "openai",
+      "greekLabelled": 31,
+      "cantTellDropped": 1,
+      "agreement": 0.967741935483871,
+      "kappa": 0.6516853932584276,
+      "kappaStrict": 0.3673469387755102,
+      "confusion": {
+        "eqEq": 29,
+        "eqNot": 0,
+        "notEq": 1,
+        "notNot": 1
+      },
+      "greekControlsMissed": 0,
+      "greekControls": 8,
+      "a3ControlsMissed": 0,
+      "a3Controls": 20,
+      "unparseable": 0,
+      "judgeSaysNotOn": [
+        "el-25:different"
+      ],
+      "pass": true
+    },
+    {
       "judge": "qwen",
       "label": "qwen3.8-flash (Halogen, temperature 0, rig protocol)",
       "vendor": "alibaba",

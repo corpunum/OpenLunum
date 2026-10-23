@@ -32,7 +32,9 @@ async function main() {
   if (arg('--agreement')) { console.log(JSON.stringify(agreement(arg('--agreement').split(',')), null, 2)); return; }
   const name = arg('--judge'); const j = JUDGES[name]; if (!j) throw new Error('unknown judge');
   const cal = JSON.parse(fs.readFileSync(path.join(here, '../judge-calibration-v1/calibration.json'), 'utf8')).judges.find((x) => x.judge === name);
-  if (!cal?.pass) throw new Error(`judge_not_calibrated:${name}`);
+  // --deviation "<reason>": owner-approved use of a judge that did not pass calibration; recorded in the output and must be reported as a deviation.
+  const deviation = arg('--deviation');
+  if (!cal?.pass && !deviation) throw new Error(`judge_not_calibrated:${name}`);
   const text = new Map(J(arg('--requests')).map((r) => [r.handle, r.sourceText]));
   const result = JSON.parse(fs.readFileSync(arg('--result'), 'utf8'));
   if (!result.parity?.pass) throw new Error('rust_ts_render_parity_not_established');
@@ -57,6 +59,8 @@ async function main() {
     controls: ctl.length, controlsFalseYes: ctl.filter((r) => r.states === true).length };
   summary.rate = own.length ? summary.states / own.length : null;
   summary.judgeValid = ctl.length >= 20 && summary.controlsFalseYes <= 2;
+  summary.calibrated = !!cal?.pass;
+  if (deviation) summary.deviation = { reason: deviation, calibrationKappa: cal?.kappa ?? null };
   fs.writeFileSync(arg('--out'), JSON.stringify({ summary, results }, null, 1) + '\n');
   console.log(JSON.stringify(summary, null, 2));
 }

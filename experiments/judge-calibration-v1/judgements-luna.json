@@ -1,0 +1,569 @@
+{
+ "summary": {
+  "judge": "luna",
+  "label": "gpt-6-luna, low reasoning effort (Codex CLI)",
+  "vendor": "openai",
+  "greekLabelled": 31,
+  "cantTellDropped": 1,
+  "agreement": 0.967741935483871,
+  "kappa": 0.6516853932584276,
+  "kappaStrict": 0.3673469387755102,
+  "confusion": {
+   "eqEq": 29,
+   "eqNot": 0,
+   "notEq": 1,
+   "notNot": 1
+  },
+  "greekControlsMissed": 0,
+  "greekControls": 8,
+  "a3ControlsMissed": 0,
+  "a3Controls": 20,
+  "unparseable": 0,
+  "judgeSaysNotOn": [
+   "el-25:different"
+  ],
+  "pass": true
+ },
+ "results": [
+  {
+   "set": "greek",
+   "id": "el-1",
+   "promptSha256": "1b3ef1d6207e8ff743a27e7b81c1ccc55c2508766c55f3078977ee79b4118cc4",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 7497,
+   "at": "2026-10-23T10:38:16.428Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-2",
+   "promptSha256": "67af835c6f53754e7850f41345e5180421698ca2bffea616376122d1d434c34b",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4031,
+   "at": "2026-10-23T10:38:21.460Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-3",
+   "promptSha256": "5f70adb33e7e3ff5582d119d1338bb7dd682d99051b231b5c11c05637ca4a778",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4601,
+   "at": "2026-10-23T10:38:27.062Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-4",
+   "promptSha256": "840a1c6375590c6cf161f328b00d1fa38de0a14002f2d18163071ca0ca8bd304",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3506,
+   "at": "2026-10-23T10:38:31.569Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-5",
+   "promptSha256": "ca3926bd4760ee38e6cde3da15ee70d881d0c47f26c0f4c51641bc22cad9d088",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4075,
+   "at": "2026-10-23T10:38:36.646Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-6",
+   "promptSha256": "9696a0b2d306843f38c02fac549b4bbd2d2dac07ceb2e5e966d73feb40d14b8a",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3495,
+   "at": "2026-10-23T10:38:41.142Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-7",
+   "promptSha256": "c2484f56553d6a4afd055bc163fddfe42b523536e60868c391c5ff5cd5a81820",
+   "verdict": false,
+   "reply": "{\"same\": false}\n",
+   "ms": 4269,
+   "at": "2026-10-23T10:38:46.412Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-8",
+   "promptSha256": "5bd7b4d58b0f2a20193ec417a1467e69ab7d236a89f1b4750109e79188544f5e",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3550,
+   "at": "2026-10-23T10:38:50.964Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-9",
+   "promptSha256": "dc6908b4fd4f8718f5557ad75a2a68ff88892bfab0bbe2943302313c7163ea48",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4025,
+   "at": "2026-10-23T10:38:55.991Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-10",
+   "promptSha256": "ed6a938df3eec431572d1684fdacea6ffa67681884a0db901dff53cecbee6d13",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4395,
+   "at": "2026-10-23T10:39:01.388Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-11",
+   "promptSha256": "7daa52859efc24a4651860518459dec0a39a58e44136024f7d75ee1110e6e981",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3467,
+   "at": "2026-10-23T10:39:05.857Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-12",
+   "promptSha256": "f57861a03f69ab98350ebdb1b78c7ed261729d1a43272211c73fd09892975c0e",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3861,
+   "at": "2026-10-23T10:39:10.719Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-13",
+   "promptSha256": "5fb6a08a690490875311fc6ca50f0a8ef25dcde7fceea3c36c2d1ea5cf45c880",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 6831,
+   "at": "2026-10-23T10:39:18.551Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-14",
+   "promptSha256": "51f39da168b7976f02225dfcda9846928935b983b8e38cea93531b9da414cca8",
+   "verdict": false,
+   "reply": "{\"same\": false}\n",
+   "ms": 3685,
+   "at": "2026-10-23T10:39:23.238Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-15",
+   "promptSha256": "d3c9bbce3f2e84be227e990f4931d4569a87a2369e41c52230559fc0ae8f94d6",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4036,
+   "at": "2026-10-23T10:39:28.276Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-16",
+   "promptSha256": "e0887152b0897383c8347bf60912b419bd6134924a3cb8720ecc2da7870a398b",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3820,
+   "at": "2026-10-23T10:39:33.098Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-17",
+   "promptSha256": "e2583eb59535340b6746b599b324ad36cab7783092c445f83eba88c5445c5bd6",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3943,
+   "at": "2026-10-23T10:39:38.043Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-18",
+   "promptSha256": "c510d7b5839d70884c9623ded31c574ddff464f09a8ec53dfb9a47a53b520416",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4465,
+   "at": "2026-10-23T10:39:43.509Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-19",
+   "promptSha256": "337a26ffad503e7c2631f1e11a477f97987916b8fb56acdde7e0a6fccf385db4",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3881,
+   "at": "2026-10-23T10:39:48.392Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-20",
+   "promptSha256": "b8a75747b768c4e4f16113d536c8c979bec5e8dd58af1c7ae044f1977277e76a",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4101,
+   "at": "2026-10-23T10:39:53.495Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-21",
+   "promptSha256": "068991ca7a28b39379069795af826c87914b5298906e9b5856111d08ecb6025f",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4249,
+   "at": "2026-10-23T10:39:58.746Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-22",
+   "promptSha256": "23708388bbf35f4540c3fb6af73b254f09d8d8055b5b63857404448188d7e025",
+   "verdict": false,
+   "reply": "{\"same\": false}\n",
+   "ms": 4449,
+   "at": "2026-10-23T10:40:04.197Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-23",
+   "promptSha256": "c87123f16c36a960c421151b6bcb260c047c376f6be8f2b4c2fd0464f22caec1",
+   "verdict": true,
+   "reply": "{\"same\":true}\n",
+   "ms": 4419,
+   "at": "2026-10-23T10:40:09.618Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-24",
+   "promptSha256": "58b6e4c5e502298b5ab860e812803578cf987936eab1ba0fc6d6b87bc337dde8",
+   "verdict": false,
+   "reply": "{\"same\":false}\n",
+   "ms": 4913,
+   "at": "2026-10-23T10:40:15.533Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-25",
+   "promptSha256": "68a65f744f9b5dae82a01704c3270fb1da4bfe23e93b1cc8abd77f7d6734e329",
+   "verdict": false,
+   "reply": "{\"same\": false}\n",
+   "ms": 4511,
+   "at": "2026-10-23T10:40:21.045Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-26",
+   "promptSha256": "7b0096f4b50b7c2acea250ee0033071921b37dd2cfb8fa3d46e4c9a6e8fc4d10",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3857,
+   "at": "2026-10-23T10:40:25.904Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-27",
+   "promptSha256": "4fc364fedcc8f54cddf822fadb4383a51ef599cb883ad5555b69901005acfb10",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3992,
+   "at": "2026-10-23T10:40:30.897Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-28",
+   "promptSha256": "8baeb15404649e8ac3d7e3e349654d5680ef278799cd698930c5e564f99e7812",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4486,
+   "at": "2026-10-23T10:40:36.385Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-29",
+   "promptSha256": "58f2087836ab780a136dd7594e97a8c6db8beb5117aedb56b82b5ddbd7bf1cc6",
+   "verdict": false,
+   "reply": "{\"same\": false}\n",
+   "ms": 4095,
+   "at": "2026-10-23T10:40:41.480Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-30",
+   "promptSha256": "1318b95dd898f4c5c39e03c2bfe422561097c51eae9fc771e47d6c0465ec4370",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 5616,
+   "at": "2026-10-23T10:40:48.098Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-31",
+   "promptSha256": "ebc10641553b3444e2c3753bec9a509fab3d607b90d6902dc30160fc6d3e0b99",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4152,
+   "at": "2026-10-23T10:40:53.251Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-32",
+   "promptSha256": "9d5e6c6a4287429814a3d013490c01133ccfeebdf1aff38e8bad3c50cfb623ca",
+   "verdict": false,
+   "reply": "{\"same\": false}\n",
+   "ms": 3804,
+   "at": "2026-10-23T10:40:58.056Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-33",
+   "promptSha256": "7f5a80e910628d0f99fc915f3ca6059188db66287290b65a2e044f75a8adeedf",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3932,
+   "at": "2026-10-23T10:41:02.989Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-34",
+   "promptSha256": "935cffb255ecedc7134acea7e2226d40bfb21f9584ab83ec8c91ce3a9283e109",
+   "verdict": false,
+   "reply": "{\"same\": false}\n",
+   "ms": 3897,
+   "at": "2026-10-23T10:41:07.888Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-35",
+   "promptSha256": "2d8979e852b9217d0920abe6e9d304016ac7628db970bb70a1785aa134628841",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4654,
+   "at": "2026-10-23T10:41:13.543Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-36",
+   "promptSha256": "b540026147ba166efcfca417026bcdce567ba9c41e1ddcae197cd69e391ed8e3",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4394,
+   "at": "2026-10-23T10:41:18.939Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-37",
+   "promptSha256": "f2ef8c9344ebe336dafae88ff154d3c37ae5dec397cd6c9df29e67c7cac16ca2",
+   "verdict": false,
+   "reply": "{\"same\": false}\n",
+   "ms": 4944,
+   "at": "2026-10-23T10:41:24.884Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-38",
+   "promptSha256": "2a0d2340644cad437316fd77b834c4e4b4733384cbe4c90b10a93d12914146af",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 3888,
+   "at": "2026-10-23T10:41:29.774Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-39",
+   "promptSha256": "79ca8c47307b1698e2d13e23d2aa8e71c198a96f514d5c34af4214de3c6c31f5",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 4026,
+   "at": "2026-10-23T10:41:34.801Z"
+  },
+  {
+   "set": "greek",
+   "id": "el-40",
+   "promptSha256": "ffeab448668b425f1357722210dbfdaa5e32a11b14038798331edd3d9a1325a0",
+   "verdict": true,
+   "reply": "{\"same\": true}\n",
+   "ms": 5362,
+   "at": "2026-10-23T10:41:41.165Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-8bfb09246411262b~a3c1-807b27f9b0dc17c9",
+   "promptSha256": "e47fc87ede965e13e21c497d900c5e014b42d3483259bbc737d2d805268e0d07",
+   "verdict": false,
+   "reply": "{\"states\":false}\n",
+   "ms": 4260,
+   "at": "2026-10-23T10:41:46.426Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-807b27f9b0dc17c9~a3c1-62cf55d6af39f8c0",
+   "promptSha256": "e892061ccfb61138ef8761e5917a5e8fd732fc55c34f9ca06d9307fb5f0c8df3",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4611,
+   "at": "2026-10-23T10:41:52.039Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-62cf55d6af39f8c0~a3c1-740611a303b03756",
+   "promptSha256": "b0bf0485dc4a06f021c8df0c61916820b6145742f52c54a6ee3e066663fde1a6",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4156,
+   "at": "2026-10-23T10:41:57.197Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-740611a303b03756~a3c1-3f59535ba217aacf",
+   "promptSha256": "a8da3a12e85bc236873cdbfe5e0f14dae93ddd41f02c103bf327e9769de56306",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 3942,
+   "at": "2026-10-23T10:42:02.141Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-3f59535ba217aacf~a3c1-4e2356ce463141b4",
+   "promptSha256": "dd212eec6b79772f0d07ad7eab378cba95b3ad802fd280cea9450d9968883504",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4100,
+   "at": "2026-10-23T10:42:07.243Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-4e2356ce463141b4~a3c1-77d2ee208618c856",
+   "promptSha256": "7f75260fbab23b9b5373d56ec6055df975f0fd6b2a0772461b454354323ef84c",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 3902,
+   "at": "2026-10-23T10:42:12.147Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-77d2ee208618c856~a3c1-e2f40075ff3c2a5e",
+   "promptSha256": "05ab89a21d7413930ff0e5fc80bc10e73bafab19d1f6c91713377b81f262b1bc",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4075,
+   "at": "2026-10-23T10:42:17.222Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-e2f40075ff3c2a5e~a3c1-b69ae38a60059919",
+   "promptSha256": "dd642e7d796aaf9db0eaa9b181ff6fbdb3eea350558469d74540b76f5c6a4c44",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4579,
+   "at": "2026-10-23T10:42:22.802Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-b69ae38a60059919~a3c1-0b0aba38f9f5bd6e",
+   "promptSha256": "6360350dea3e3e818746d8c1fc18dd02331e951b231c9eff13f1c19ca8a7f5e1",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4135,
+   "at": "2026-10-23T10:42:27.938Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-0b0aba38f9f5bd6e~a3c1-a4e51c783d4bd089",
+   "promptSha256": "5d2d78743ba63d508dc79d10b41bf2aa71d9540ac63485607f2d4f4960347232",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 3923,
+   "at": "2026-10-23T10:42:32.862Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-a4e51c783d4bd089~a3c1-482cc0820bebd15a",
+   "promptSha256": "c594b8a9de70bf4fadce069478e4cb78721871768b258326e0c09cc25ebdefed",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 5676,
+   "at": "2026-10-23T10:42:39.539Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-482cc0820bebd15a~a3c1-47ba41dfebe0bc12",
+   "promptSha256": "517853471b6e112531c6d0e549c7d9573e83dbb6ce95ed59ce602d74b1505872",
+   "verdict": false,
+   "reply": "{\"states\":false}\n",
+   "ms": 5127,
+   "at": "2026-10-23T10:42:45.667Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-47ba41dfebe0bc12~a3c1-28a1a96c3f319962",
+   "promptSha256": "08da5d8cbd65c29298a9ffec1ab30d902608a1f321366aa99e308bb814fcab7f",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 5589,
+   "at": "2026-10-23T10:42:52.258Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-28a1a96c3f319962~a3c1-325f86ec04c89735",
+   "promptSha256": "c58453e7a5b45bd102fd58ebe90957d1fa989e09639fd2290bbfb572f559c926",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 5150,
+   "at": "2026-10-23T10:42:58.409Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-325f86ec04c89735~a3c1-19bc7305ecc9872c",
+   "promptSha256": "811d45b249d8996ddda4a2b0804f9f99f6c28fa87ea49481bff61bf1cc064791",
+   "verdict": false,
+   "reply": "{\"states\":false}\n",
+   "ms": 4187,
+   "at": "2026-10-23T10:43:03.598Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-19bc7305ecc9872c~a3c1-2fe5b07ec78baf88",
+   "promptSha256": "757aa5c9659462ecc23e2b70989a16e22179ff8f94c8eba74267b89268d4bf3f",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4113,
+   "at": "2026-10-23T10:43:08.713Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-2fe5b07ec78baf88~a3c1-1c66a6a595cbf7d3",
+   "promptSha256": "e0e32dc777b0f0b156ea3bd91f3d562a5aaee28507844e4f83f065737e3eaff1",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 3741,
+   "at": "2026-10-23T10:43:13.454Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-1c66a6a595cbf7d3~a3c1-b0c9d77d97d9fab6",
+   "promptSha256": "c7c1d4c07e5c1e69f12ce165a073dff48b620f4e065679f2de515f380736fc3e",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4309,
+   "at": "2026-10-23T10:43:18.764Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-b0c9d77d97d9fab6~a3c1-c8ab7f07a49c29e0",
+   "promptSha256": "07c76cc841c122c40b9226c03e5ccbadee6c751010b09a3dc99ea10f956dcfaf",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4235,
+   "at": "2026-10-23T10:43:24.001Z"
+  },
+  {
+   "set": "a3-control",
+   "id": "a3c1-c8ab7f07a49c29e0~a3c1-535d6cde87f695de",
+   "promptSha256": "1f1d1f14a4504a4de901f2ceaca98a2d71f884c342258e3ac344e221d42350cb",
+   "verdict": false,
+   "reply": "{\"states\": false}\n",
+   "ms": 4101,
+   "at": "2026-10-23T10:43:29.104Z"
+  }
+ ]
+}

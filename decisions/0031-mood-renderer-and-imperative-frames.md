@@ -1,6 +1,6 @@
 # ADR 0031: Mood in the English renderer (generic-en-pivot/0.3), imperatives in contract 0.22, weekday/month guards
 
-**Status:** Implemented 2026-10-23 as an **unreleased candidate**, with contract 0.21, under [ADR 0025](0025-contract-freeze-pending-held-out-evidence.md). Self-reviewed by the Claude Code agent (`claude-opus-5-5`). It is released only if the pre-registered bar-2 re-run ([experiments/coverage-a3-v2](../experiments/coverage-a3-v2/PREREGISTRATION.md)) and A3's other bars hold, and the orchestrator agrees.
+**Status:** Implemented 2026-10-23 as an **unreleased candidate**, with contract 0.21, under [ADR 0025](0025-contract-freeze-pending-held-out-evidence.md). Self-reviewed by the Claude Code agent (`claude-opus-5-5`). It is released only if the pre-registered bar-2 re-run ([experiments/coverage-a3-v2](../experiments/coverage-a3-v2/PREREGISTRATION.md)) and A3's other bars hold, and the orchestrator agrees. **2026-10-23: bar 2 failed again** ([results](../experiments/coverage-a3-v2/RESULTS.md)), so this stays unreleased.
 
 | Component | Version |
 | --- | --- |
