@@ -1,0 +1,332 @@
+{
+  "handle": "a3c2-530a2b976c0ebcf5",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.22",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "simple_fact",
+    "clauses": [
+      {
+        "predicate": "describe",
+        "roles": {
+          "subject": "Tom",
+          "attribute": "generous with his money"
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01FBWbksRBakUKNWD13j1Mp5",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "ref": "Tom"
+              },
+              "attribute": "generous with his money"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom is generous with his money.",
+            "language": "en",
+            "sha256": "1e089ecd0944588c635eaba8ff9e94ec6374b21b1f1c22419d985ab6dd35503c"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.22",
+            "contractHash": "831405181f3ec34659c3a3e68af2617a6a16f2a87b1e7bcaa2ba6f9e05aaa04a",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "aaeb5878f17dd43b282be650bb46c1d40326a3073b85884bad1225ccf85b8af7",
+            "sourceHash": "1e089ecd0944588c635eaba8ff9e94ec6374b21b1f1c22419d985ab6dd35503c",
+            "timestamp": "2026-10-22T21:12:58.101Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": "unbound_source_content",
+          "diagnostics": [
+            "unbound_source_content: the candidate leaves out: tom; copy the source words into the fillers or abstain"
+          ],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "ref": "Tom"
+                  },
+                  "attribute": "generous with his money"
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": false,
+            "unsourced": [],
+            "uncovered": [
+              "tom"
+            ],
+            "pronounFillers": [],
+            "notALabel": [],
+            "questionAsTopic": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Tom is generous with his money."
+    },
+    {
+      "eventId": "toolu_016vgWb1ooK44Ckjcfi33aHs",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": "Tom",
+              "attribute": "generous with his money"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Tom is generous with his money.",
+            "language": "en",
+            "sha256": "1e089ecd0944588c635eaba8ff9e94ec6374b21b1f1c22419d985ab6dd35503c"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.22",
+            "contractHash": "831405181f3ec34659c3a3e68af2617a6a16f2a87b1e7bcaa2ba6f9e05aaa04a",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "aaeb5878f17dd43b282be650bb46c1d40326a3073b85884bad1225ccf85b8af7",
+            "sourceHash": "1e089ecd0944588c635eaba8ff9e94ec6374b21b1f1c22419d985ab6dd35503c",
+            "timestamp": "2026-10-22T21:13:04.620Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:a17f84d34a653ca74a77d1b62347ced1",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": "Tom",
+                  "attribute": "generous with his money"
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": true,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [],
+            "notALabel": [],
+            "questionAsTopic": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Tom is generous with his money."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 24945,
+    "cache_read_input_tokens": 274177,
+    "output_tokens": 1235,
+    "output_tokens_details": {
+      "thinking_tokens": 310
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 24945,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 11,
+        "cache_read_input_tokens": 53645,
+        "cache_creation_input_tokens": 1307,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1307
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.00834947,
+  "numTurns": 6,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/a3c2-530a2b976c0ebcf5.jsonl",
+  "rawStreamSha256": "b4c1b1808f096295352a7c776f1977fac8ec7305fccfcfa7fc8897f9c0914573",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

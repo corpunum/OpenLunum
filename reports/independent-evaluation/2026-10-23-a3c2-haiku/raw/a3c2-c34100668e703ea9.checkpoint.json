@@ -1,0 +1,248 @@
+{
+  "handle": "a3c2-c34100668e703ea9",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.22",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "event",
+    "clauses": [
+      {
+        "predicate": "assert",
+        "roles": {
+          "subject": {
+            "type": "actor",
+            "value": "My uncle"
+          },
+          "action": {
+            "type": "text",
+            "value": "came"
+          },
+          "purpose": {
+            "type": "concept",
+            "value": "to see me"
+          }
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01JR5qyquNDq61Qa8KmQugiu",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "event",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "value": "My uncle"
+              },
+              "action": {
+                "type": "text",
+                "value": "came"
+              },
+              "purpose": {
+                "type": "concept",
+                "value": "to see me"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "My uncle came to see me.",
+            "language": "en",
+            "sha256": "f861d4cc80018f3374aece177c9ce75d63ef04fab15b42317f5ea9cf8bb52d7c"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.22",
+            "contractHash": "831405181f3ec34659c3a3e68af2617a6a16f2a87b1e7bcaa2ba6f9e05aaa04a",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "aaeb5878f17dd43b282be650bb46c1d40326a3073b85884bad1225ccf85b8af7",
+            "sourceHash": "f861d4cc80018f3374aece177c9ce75d63ef04fab15b42317f5ea9cf8bb52d7c",
+            "timestamp": "2026-10-22T22:00:19.013Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:5d93cf5aba24be256497953af2abcdd8",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "category_not_auto_promotable:event",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "event",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "value": "My uncle"
+                  },
+                  "action": {
+                    "type": "text",
+                    "value": "came"
+                  },
+                  "purpose": {
+                    "type": "concept",
+                    "value": "to see me"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": true,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [],
+            "notALabel": [],
+            "questionAsTopic": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "My uncle came to see me."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 23181,
+    "cache_read_input_tokens": 168439,
+    "output_tokens": 1020,
+    "output_tokens_details": {
+      "thinking_tokens": 391
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 23181,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 134,
+        "cache_read_input_tokens": 51769,
+        "cache_creation_input_tokens": 1419,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1419
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.006831390000000001,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/a3c2-c34100668e703ea9.jsonl",
+  "rawStreamSha256": "6f37127acafc62f90eeaaeb8481bad32c691c421241c66650e4f9f9d80b0c977",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

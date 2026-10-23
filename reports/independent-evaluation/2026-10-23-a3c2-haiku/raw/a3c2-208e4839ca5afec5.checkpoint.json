@@ -1,0 +1,266 @@
+{
+  "handle": "a3c2-208e4839ca5afec5",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.22",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "parse",
+  "candidateSem": {
+    "schema": "lunum-sem/0.1-draft",
+    "world": "real",
+    "kind": "simple_fact",
+    "clauses": [
+      {
+        "predicate": "assert",
+        "roles": {
+          "subject": {
+            "type": "actor",
+            "value": "I"
+          },
+          "action": {
+            "type": "text",
+            "value": "help"
+          },
+          "recipient": {
+            "type": "actor",
+            "value": "you"
+          }
+        },
+        "negated": true,
+        "modality": "ability",
+        "time": {
+          "type": "time",
+          "value": "this week"
+        }
+      }
+    ]
+  },
+  "declared": {
+    "status": "parse"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_01SrrZiZdnvxNKTu3Fc8Kgjp",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "simple_fact",
+        "clauses": [
+          {
+            "predicate": "assert",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "value": "I"
+              },
+              "action": {
+                "type": "text",
+                "value": "help"
+              },
+              "recipient": {
+                "type": "actor",
+                "value": "you"
+              }
+            },
+            "negated": true,
+            "modality": "ability",
+            "time": {
+              "type": "time",
+              "value": "this week"
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "I can't help you this week.",
+            "language": "en",
+            "sha256": "36f007a71e365fddbea422485b1c058a52dd9a67ac433c37833d91f47a526e97"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.22",
+            "contractHash": "831405181f3ec34659c3a3e68af2617a6a16f2a87b1e7bcaa2ba6f9e05aaa04a",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "aaeb5878f17dd43b282be650bb46c1d40326a3073b85884bad1225ccf85b8af7",
+            "sourceHash": "36f007a71e365fddbea422485b1c058a52dd9a67ac433c37833d91f47a526e97",
+            "timestamp": "2026-10-22T21:12:19.556Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": true,
+          "semanticFingerprint": "lfp:2.1:sha256:c49cba3677dee055587289ab655ef4e9",
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": null,
+          "diagnostics": [],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "simple_fact",
+            "clauses": [
+              {
+                "predicate": "assert",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "value": "I"
+                  },
+                  "action": {
+                    "type": "text",
+                    "value": "help"
+                  },
+                  "recipient": {
+                    "type": "actor",
+                    "value": "you"
+                  }
+                },
+                "negated": true,
+                "modality": "ability",
+                "time": {
+                  "type": "time",
+                  "value": "this week"
+                }
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [
+              "period:this-week"
+            ],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": true,
+            "unsourced": [],
+            "uncovered": [],
+            "pronounFillers": [],
+            "notALabel": [],
+            "questionAsTopic": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "I can't help you this week."
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 23496,
+    "cache_read_input_tokens": 168704,
+    "output_tokens": 1164,
+    "output_tokens_details": {
+      "thinking_tokens": 527
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 23496,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 11,
+        "cache_read_input_tokens": 52034,
+        "cache_creation_input_tokens": 1469,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1469
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.006969040000000001,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": true,
+    "failureClass": null,
+    "diagnostics": []
+  },
+  "rawStream": "raw/a3c2-208e4839ca5afec5.jsonl",
+  "rawStreamSha256": "7e3503786ff07796dd2134a0fcade0ce5eeca5ddcf4d95c45f29e5840bc263b6",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

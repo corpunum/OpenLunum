@@ -1,0 +1,227 @@
+{
+  "handle": "a3c2-60195d6e10f341c9",
+  "sourceLanguage": "en",
+  "exitCode": 0,
+  "failure": null,
+  "observedContractVersion": "lunum-agent/0.22",
+  "observedContractMatchesPackage": true,
+  "observedContractBinding": {
+    "match": true,
+    "mismatches": []
+  },
+  "sessionIntegrity": {
+    "match": true,
+    "mismatches": []
+  },
+  "status": "abstain",
+  "candidateSem": null,
+  "declared": {
+    "status": "abstain",
+    "reason": "ambiguous"
+  },
+  "submissionAttempts": [
+    {
+      "eventId": "toolu_0149YkufqnTF6jp3UqphyUC9",
+      "agentAction": "non-null-submission",
+      "proposedCandidateSem": {
+        "schema": "lunum-sem/0.1-draft",
+        "world": "real",
+        "kind": "question",
+        "clauses": [
+          {
+            "predicate": "describe",
+            "roles": {
+              "subject": {
+                "type": "actor",
+                "value": "you, Tom"
+              },
+              "attribute": {
+                "type": "text",
+                "value": "sure"
+              }
+            }
+          }
+        ]
+      },
+      "response": {
+        "success": true,
+        "submission": {
+          "source": {
+            "text": "Are you sure, Tom?",
+            "language": "en",
+            "sha256": "b66ebeb5be1c2627957b4ffc58455ad9746acfbfd4cf292c6cf2b578db5d150b"
+          },
+          "provenance": {
+            "extractorType": "agent",
+            "contractVersion": "lunum-agent/0.22",
+            "contractHash": "831405181f3ec34659c3a3e68af2617a6a16f2a87b1e7bcaa2ba6f9e05aaa04a",
+            "schemaHash": "8aef5fdfa6feccd1b8bc22ec41df64d0c363b537df3df7b03e61a8e7663ed593",
+            "frameRegistryHash": "aaeb5878f17dd43b282be650bb46c1d40326a3073b85884bad1225ccf85b8af7",
+            "sourceHash": "b66ebeb5be1c2627957b4ffc58455ad9746acfbfd4cf292c6cf2b578db5d150b",
+            "timestamp": "2026-10-22T21:42:44.712Z"
+          },
+          "transportValid": true,
+          "structuralValid": true,
+          "protocolCanonical": true,
+          "frameValid": true,
+          "grounded": true,
+          "candidateIdentityAvailable": false,
+          "semanticFingerprint": null,
+          "promotable": false,
+          "trust": {
+            "status": "candidate",
+            "confidence": 0,
+            "promoted": false,
+            "requiresHumanReview": true,
+            "reasons": [
+              "evidence_confidence_below_0.90",
+              "insufficient_confidence_evidence",
+              "missing_classification_evidence",
+              "risk_unknown",
+              "category_not_auto_promotable:question",
+              "missing_independent_verification"
+            ]
+          },
+          "failureClass": "unbound_source_content",
+          "diagnostics": [
+            "unbound_source_content: filler \"you, Tom\" is not words of the source; the candidate leaves out: you, tom; copy the source words into the fillers or abstain"
+          ],
+          "sem": {
+            "schema": "lunum-sem/0.1-draft",
+            "world": "real",
+            "kind": "question",
+            "clauses": [
+              {
+                "predicate": "describe",
+                "roles": {
+                  "subject": {
+                    "type": "actor",
+                    "value": "you, Tom"
+                  },
+                  "attribute": {
+                    "type": "text",
+                    "value": "sure"
+                  }
+                },
+                "negated": false
+              }
+            ]
+          },
+          "literalRetention": {
+            "retained": true,
+            "sourceNumbers": [],
+            "sourceIdentifiers": [],
+            "sourceDates": [],
+            "sourceRelativeTimes": [],
+            "missingNumbers": [],
+            "missingIdentifiers": [],
+            "missingDates": [],
+            "missingRelativeTimes": []
+          },
+          "sourceBound": {
+            "applies": true,
+            "bound": false,
+            "unsourced": [
+              "you, Tom"
+            ],
+            "uncovered": [
+              "you",
+              "tom"
+            ],
+            "pronounFillers": [],
+            "notALabel": [],
+            "questionAsTopic": []
+          }
+        }
+      },
+      "validation": "accepted",
+      "sourceText": "Are you sure, Tom?"
+    }
+  ],
+  "model": {
+    "requested": "claude-haiku-5-5",
+    "reported": [
+      "claude-haiku-5-5"
+    ],
+    "initModel": "claude-haiku-5-5"
+  },
+  "mcpServers": [
+    {
+      "name": "lunum",
+      "status": "connected",
+      "source": "dynamic"
+    }
+  ],
+  "toolsOffered": [
+    "mcp__lunum__lunum_build_candidate",
+    "mcp__lunum__lunum_get_extraction_contract",
+    "mcp__lunum__lunum_submit_candidate",
+    "mcp__lunum__lunum_validate"
+  ],
+  "calls": [
+    {
+      "name": "lunum_get_extraction_contract",
+      "isError": false
+    },
+    {
+      "name": "lunum_build_candidate",
+      "isError": false
+    },
+    {
+      "name": "lunum_submit_candidate",
+      "isError": false
+    }
+  ],
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 23373,
+    "cache_read_input_tokens": 168615,
+    "output_tokens": 1623,
+    "output_tokens_details": {
+      "thinking_tokens": 1010
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 23373,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 313,
+        "cache_read_input_tokens": 51943,
+        "cache_creation_input_tokens": 1437,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1437
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "costUsd": 0.007173049999999999,
+  "numTurns": 4,
+  "abstentionSubmitted": false,
+  "lastSubmission": {
+    "frameValid": true,
+    "candidateIdentityAvailable": false,
+    "failureClass": "unbound_source_content",
+    "diagnostics": [
+      "unbound_source_content: filler \"you, Tom\" is not words of the source; the candidate leaves out: you, tom; copy the source words into the fillers or abstain"
+    ]
+  },
+  "rawStream": "raw/a3c2-60195d6e10f341c9.jsonl",
+  "rawStreamSha256": "4fa5642e739579c503826336db27e9805efa14b0d22ce5e0087f00e9896a6ba6",
+  "timedOut": false,
+  "interrupted": false,
+  "signal": null,
+  "evidenceFailures": [],
+  "evidenceValid": true
+}

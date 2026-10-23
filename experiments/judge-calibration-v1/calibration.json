@@ -1,0 +1,145 @@
+{
+  "itemsSha256": "56f786f30b51fdfd17ef44b1cc8bbfe1ab643a16f0396a4891b0c4f90b64fb31",
+  "judges": [
+    {
+      "judge": "gemma",
+      "label": "supergemma4-Q5_K_M (ROG Ally via ssh tunnel, temperature 0)",
+      "vendor": "google",
+      "greekLabelled": 31,
+      "cantTellDropped": 1,
+      "agreement": 0.8387096774193549,
+      "kappa": 0.3824701195219128,
+      "kappaStrict": 0.4561403508771931,
+      "confusion": {
+        "eqEq": 24,
+        "eqNot": 5,
+        "notEq": 0,
+        "notNot": 2
+      },
+      "greekControlsMissed": 0,
+      "greekControls": 8,
+      "a3ControlsMissed": 0,
+      "a3Controls": 20,
+      "unparseable": 0,
+      "judgeSaysNotOn": [
+        "el-5:same",
+        "el-9:same",
+        "el-15:same",
+        "el-19:same",
+        "el-20:mostly_same",
+        "el-25:different",
+        "el-35:different"
+      ],
+      "pass": false
+    },
+    {
+      "judge": "nemotron",
+      "label": "nvidia/nemotron-3-ultra-550b-a55b (NVIDIA NIM free tier, temperature 0)",
+      "vendor": "nvidia",
+      "greekLabelled": 31,
+      "cantTellDropped": 1,
+      "agreement": 0.8709677419354839,
+      "kappa": 0.27058823529411763,
+      "kappaStrict": 0.42592592592592615,
+      "confusion": {
+        "eqEq": 26,
+        "eqNot": 3,
+        "notEq": 1,
+        "notNot": 1
+      },
+      "greekControlsMissed": 0,
+      "greekControls": 8,
+      "a3ControlsMissed": 0,
+      "a3Controls": 20,
+      "unparseable": 0,
+      "judgeSaysNotOn": [
+        "el-19:same",
+        "el-20:mostly_same",
+        "el-25:different",
+        "el-40:same"
+      ],
+      "pass": false
+    },
+    {
+      "judge": "deepseek",
+      "label": "deepseek-ai/deepseek-v4.1-flash (NVIDIA NIM free tier, temperature 0)",
+      "vendor": "deepseek",
+      "greekLabelled": 31,
+      "cantTellDropped": 1,
+      "agreement": 0.967741935483871,
+      "kappa": 0.7832167832167833,
+      "kappaStrict": 0.8393782383419691,
+      "confusion": {
+        "eqEq": 28,
+        "eqNot": 1,
+        "notEq": 0,
+        "notNot": 2
+      },
+      "greekControlsMissed": 0,
+      "greekControls": 8,
+      "a3ControlsMissed": 0,
+      "a3Controls": 20,
+      "unparseable": 0,
+      "judgeSaysNotOn": [
+        "el-1:mostly_same",
+        "el-25:different",
+        "el-35:different"
+      ],
+      "pass": true
+    },
+    {
+      "judge": "glm",
+      "label": "z-ai/glm-5.3 (NVIDIA NIM free tier, temperature 0)",
+      "vendor": "zhipu",
+      "greekLabelled": 31,
+      "cantTellDropped": 1,
+      "agreement": 1,
+      "kappa": 1,
+      "kappaStrict": 0.6352941176470585,
+      "confusion": {
+        "eqEq": 29,
+        "eqNot": 0,
+        "notEq": 0,
+        "notNot": 2
+      },
+      "greekControlsMissed": 0,
+      "greekControls": 8,
+      "a3ControlsMissed": 0,
+      "a3Controls": 20,
+      "unparseable": 0,
+      "judgeSaysNotOn": [
+        "el-25:different",
+        "el-35:different"
+      ],
+      "pass": true
+    },
+    {
+      "judge": "qwen",
+      "label": "qwen3.8-flash (Halogen, temperature 0, rig protocol)",
+      "vendor": "alibaba",
+      "greekLabelled": 31,
+      "cantTellDropped": 1,
+      "agreement": 0.9354838709677419,
+      "kappa": 0.6352941176470585,
+      "kappaStrict": 0.7129629629629628,
+      "confusion": {
+        "eqEq": 27,
+        "eqNot": 2,
+        "notEq": 0,
+        "notNot": 2
+      },
+      "greekControlsMissed": 0,
+      "greekControls": 8,
+      "a3ControlsMissed": 0,
+      "a3Controls": 20,
+      "unparseable": 0,
+      "judgeSaysNotOn": [
+        "el-20:mostly_same",
+        "el-25:different",
+        "el-35:different",
+        "el-38:same"
+      ],
+      "pass": true
+    }
+  ]
+}

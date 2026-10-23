@@ -1,0 +1,139 @@
+{"handle":"a3c2-59455f028420dcd9","code":"R relate(subject=tom, object=harvard, relation=is studying at)"}
+{"handle":"a3c2-556abff4e855542d","code":"R assert(subject=tom, object=that Mary was tired, action=knew)"}
+{"handle":"a3c2-426a750b982c4bdb","code":"R assert(subject=I, object=two foreign languages, action=learning)"}
+{"handle":"a3c2-b70ef70c78b6b13a","code":"R assert(subject=Tom, object=French, manner=fluently, action=speaks)"}
+{"handle":"a3c2-c199856dfa47f636","code":"R assert(subject=I, object=my life, action=love)"}
+{"handle":"a3c2-3dbb2ace8b5066e6","code":"R describe(subject=The system, attribute=working well)"}
+{"handle":"a3c2-208e4839ca5afec5","code":"R not ability assert(subject=I, recipient=you, action=help) @this week"}
+{"handle":"a3c2-05d461fc763b58f7","code":"R assert(subject=Tom, object=his fists, action=clenched)"}
+{"handle":"a3c2-530a2b976c0ebcf5","code":"R describe(subject=Tom, attribute=generous with his money)"}
+{"handle":"a3c2-bbf8a1ef8be5a5df","code":"R question: describe(subject=all swans, attribute=white)?"}
+{"handle":"a3c2-ae0553a773c2fc6f","code":"R intention assert(subject=Tom, location=in Boston, action=going to stay, duration=for a while)"}
+{"handle":"a3c2-d0aca94fb459745b","code":"R assert(subject=I, object=you understand me, action=believe)"}
+{"handle":"a3c2-513914cf9d361dd6","code":"R question: relate(subject=this bus, object=the art museum, relation=go to)?"}
+{"handle":"a3c2-4c896d9c6864e9b7","code":"R intention assert(subject=I, recipient=Tom, object=a letter, action=write)"}
+{"handle":"a3c2-bca8511b0f3522c0","code":"R assert(subject=I, action=cut myself, condition=while shaving)"}
+{"handle":"a3c2-d8301fa7bb21b9bd","code":"R assert(subject=I, object=correction, action=made)"}
+{"handle":"a3c2-9db4afdf0d67488a","code":"R relate(subject=Four times two, object=eight, relation=makes)"}
+{"handle":"a3c2-975b1a37e7a8da48","code":"R certainty assert(subject=Tom, object=you, action=stay with)"}
+{"handle":"a3c2-c18d9279ee9e6824","code":"R assert(subject=Tom, object=the document, source=from French, destination=into English, action=translated)"}
+{"handle":"a3c2-cbf1dcc4b75c49f4","code":"R question: assert(subject=you, reason=Why, action=running)?"}
+{"handle":"a3c2-1c3b61826fc562de","code":"R intention assert(subject=I, location=to Boston, action=intend to go back)"}
+{"handle":"a3c2-38acd275fee742f2","code":"R assert(subject=I, manner=as fast as I could, action=came)"}
+{"handle":"a3c2-ab5ba21d8979ef6f","code":"R describe(subject=We, attribute=ready to help)"}
+{"handle":"a3c2-ee6315f95491585e","code":"R describe(subject=Life, attribute=full of secrets)"}
+{"handle":"a3c2-443bde1fd1bbc6c9","code":"R must assert(subject=You, recipient=tom, manner=in person, action=talk)"}
+{"handle":"a3c2-369b3e5e18367bf4","code":"M relate(subject=Life and death, object=the same coin, relation=are two sides of)"}
+{"handle":"a3c2-505c3286715eb1cf","code":"R assert(subject=We, object=chess, manner=often, action=play)"}
+{"handle":"a3c2-80d66b619adaf6de","code":"R describe(subject=This movie, attribute=has French subtitles)"}
+{"handle":"a3c2-43dd64db4544b688","code":"R not assert(subject=I, manner=very well, action=swim)"}
+{"handle":"a3c2-aa69f02fd73d84b1","code":"R assert(subject=We all, object=that Tom is guilty, action=know)"}
+{"handle":"a3c2-3fba88145bbe9a2b","code":"R assert(subject=I, object=my disappointment, action=tried to hide)"}
+{"handle":"a3c2-4296961480650646","code":"R must assert(subject=We, object=some changes, action=have to make)"}
+{"handle":"a3c2-c051e929d2b136fd","code":"R describe(subject=We, attribute=rich) @at the time"}
+{"handle":"a3c2-43fe63ec70749ebd","code":"R ability assert(subject=I, object=a car, action=know how to drive)"}
+{"handle":"a3c2-fe9cda8721b5d457","code":"R assert(subject=the leaves, action=begin to fall) @In October"}
+{"handle":"a3c2-b91ac18306082dfa","code":"R assert(subject=I, action=have breakfast) @every morning"}
+{"handle":"a3c2-a4148505c55971b9","code":"R assert(subject=Tom, action=wants to become famous)"}
+{"handle":"a3c2-4c2df34da9fa65e5","code":"R describe(subject=We, attribute=both very tired)"}
+{"handle":"a3c2-1e7b22e9dc937123","code":"R relate(subject=Nothing, object=health, relation=is more important than)"}
+{"handle":"a3c2-697e8f161e8c9d4c","code":"R question: assert(subject=What, action=makes you happy)?"}
+{"handle":"a3c2-ea73178a5fdfa3bd","code":"R describe(subject=I, attribute=an only child)"}
+{"handle":"a3c2-0f10056dd2abdffe","code":"R not assert(subject=You, recipient=me, object=the truth, action=telling)"}
+{"handle":"a3c2-f9d1984c0b729adb","code":"R question: assert(subject=What, action=happened) @October?"}
+{"handle":"a3c2-a25107cf83c000cb","code":"R assert(subject=I, object=my T-shirt, action=washed)"}
+{"handle":"a3c2-2ef1b7767b4e4bb9","code":"R relate(subject=tom, object=me, relation=is at least a head taller than)"}
+{"handle":"a3c2-8dabdfe2d20eefe8","code":"R describe(subject=Pink roses, attribute=beautiful)"}
+{"handle":"a3c2-7a01e0b8cd148e81","code":"R assert(subject=Many citizens, object=the army, action=joined)"}
+{"handle":"a3c2-e2dff6ce3c721e0c","code":"R relate(subject=Tom, object=Boston, relation=is staying in)"}
+{"handle":"a3c2-d557a93033d27061","code":"R not describe(subject=tom, attribute=good at French)"}
+{"handle":"a3c2-36c1afb6eafbf270","code":"R not assert(subject=I, object=her name, action=remember) @anymore"}
+{"handle":"a3c2-5d9ea696b26493f3","code":"R not assert(subject=We, object=strangers, action=trust)"}
+{"handle":"a3c2-f4f11b7c984dcb20","code":"R question: assert(subject=you, object=the key, location=Where, action=find)?"}
+{"handle":"a3c2-8788192db7ef6e51","code":"R define(subject=tom, definition=a student)"}
+{"handle":"a3c2-f3e9c6e5f288c53b","code":"R assert(subject=We, object=a lot of changes, action=made)"}
+{"handle":"a3c2-20b43e2ace992d86","code":"R intention assert(subject=I, recipient=you, action=help, condition=if possible)"}
+{"handle":"a3c2-0a7359f0fca686f8","code":"R not assert(subject=I, object=German, action=understand)"}
+{"handle":"a3c2-83b41a9eab7478de","code":"R define(subject=Tom's father, definition=a diplomat)"}
+{"handle":"a3c2-19613bb7a88b84b1","code":"R question: assert(subject=you, reason=Why, action=lie)?"}
+{"handle":"a3c2-3e344b837c82111d","code":"R must assert(subject=You, object=that bad habit, action=get rid of)"}
+{"handle":"a3c2-8ecc746c172707e0","code":"R assert(subject=Tom, object=one year of probation, action=sentenced)"}
+{"handle":"a3c2-2888d1f6a785666f","code":"R describe(subject=Tom, attribute=so upset)"}
+{"handle":"a3c2-822395b1af7e1d00","code":"R prefer(experiencer=tom, theme=October)"}
+{"handle":"a3c2-9b934ac33a89d73d","code":"R imperative to you: notify(recipient=tom, theme=that I won't come)"}
+{"handle":"a3c2-ed6f710f9a5656e7","code":"R imperative to you: assert(object=eat some chocolate cake, action=Come)"}
+{"handle":"a3c2-cbdf2df68f3b953b","code":"R not request(agent=Tom, recipient=me, theme=do that)"}
+{"handle":"a3c2-ca9c303019fcc6ec","code":"R must assert(subject=I, recipient=you, object=the truth, action=tell)"}
+{"handle":"a3c2-821624280b789d4a","code":"R question: not assert(subject=we, reason=Why, action=sit)?"}
+{"handle":"a3c2-a9c96dbb47f4b0c6","code":"R assert(subject=tom, object=the city, action=has left)"}
+{"handle":"a3c2-080c35fc2dfa49b9","code":"R describe(subject=The dog, attribute=dead)"}
+{"handle":"a3c2-25e9da202b29d21b","code":"R intention assert(subject=We, action=want to help) ; not ability assert(subject=we, connective=but, action=help)"}
+{"handle":"a3c2-eae6f72ca3e3216a","code":"R question: assert(subject=Who, object=this land, action=owns)?"}
+{"handle":"a3c2-093e5b3969ad3956","code":"R ability assert(subject=No one, object=me, action=stop)"}
+{"handle":"a3c2-6a49d322640a39b0","code":"R define(subject=The capital of Japan, definition=Tokyo)"}
+{"handle":"a3c2-71dd64eba7bda398","code":"R describe(subject=Tom, attribute=the only one who offered to help)"}
+{"handle":"a3c2-b9409936ba45b90d","code":"R not certainty assert(subject=Tom, action=understand)"}
+{"handle":"a3c2-c1b5513a264ed139","code":"R question: describe(subject=Australia, attribute=have four seasons)?"}
+{"handle":"a3c2-aa7655e969cf4fdf","code":"R question: describe(subject=you, attribute=have your own room)?"}
+{"handle":"a3c2-be6189b2001d2ca4","code":"R describe(subject=The room, attribute=very dirty)"}
+{"handle":"a3c2-22e4460417aa0e22","code":"R assert(subject=Tom, object=letter, manner=quickly, action=opened)"}
+{"handle":"a3c2-3c2debb5e3e2be04","code":"R question: ability assert(subject=we, object=you, location=Where, action=find)?"}
+{"handle":"a3c2-67a3c74c6eb5b9d8","code":"R question: assert(subject=you, object=What, action=do, purpose=a living)?"}
+{"handle":"a3c2-2201fb7db72b1094","code":"R assert(subject=Tom, destination=to Harvard, action=went)"}
+{"handle":"a3c2-a14f0c4de159b31b","code":"R relate(subject=Most of the participants, object=Australia, relation=are from)"}
+{"handle":"a3c2-70a99787c354b592","code":"R assert(subject=Tom, action=leaned over, purpose=to kiss Mary)"}
+{"handle":"a3c2-3a8038446f653082","code":"R question: assert(subject=you, object=an apple, action=want)?"}
+{"handle":"a3c2-c760754f94e60f82","code":"R question: assert(subject=you, object=playing volleyball, action=like)?"}
+{"handle":"a3c2-427b3b3897338b31","code":"R opinion assert(subject=I, object=the furniture in this room is ugly, action=think)"}
+{"handle":"a3c2-b0d39904436d2bc2","code":"R assert(subject=We, object=what happened, action=want to know)"}
+{"handle":"a3c2-2c18b1c42516e9df","code":"R assert(subject=I, object=Tom standing, location=over there, action=saw) @a moment ago"}
+{"handle":"a3c2-c9d6aa2ac64e10a2","code":"R assert(subject=I, object=Tom kiss Mary, action=saw)"}
+{"handle":"a3c2-7bdb71eeceecdf6f","code":"R describe(subject=This armchair, attribute=comfortable)"}
+{"handle":"a3c2-1782542230b34b02","code":"R assert(subject=I, object=your letter, manner=just, action=got) @yesterday"}
+{"handle":"a3c2-f4faa8a0bce79dcb","code":"R assert(subject=I, recipient=you, object=not to buy this house, action=advised)"}
+{"handle":"a3c2-3ff88e9a08297cbc","code":"R question: describe(subject=your name, manner=again, attribute=What)?"}
+{"handle":"a3c2-20603104efeca5cd","code":"R question: assert(subject=you, object=what you were looking for, action=find)?"}
+{"handle":"a3c2-7b20c837c8363afa","code":"R assert(subject=I, object=you, Tom, action=love)"}
+{"handle":"a3c2-0e29397a8bca8988","code":"R define(subject=tom, definition=spy)"}
+{"handle":"a3c2-c06d80bc331cd91c","code":"R prefer(experiencer=I, theme=painting with watercolors)"}
+{"handle":"a3c2-e5c9c9cbd3c55c99","code":"R assert(subject=We, object=a breakdown, action=had)"}
+{"handle":"a3c2-e8a89a63bf837da0","code":"R not assert(subject=tom, object=when Mary will be here, action=know)"}
+{"handle":"a3c2-82373561ac1c50d7","code":"R question: assert(subject=the book, action=written) @When?"}
+{"handle":"a3c2-952ff79eb13bbb39","code":"R assert(subject=tom, object=firewood, action=chopped, duration=all afternoon)"}
+{"handle":"a3c2-a80d029734605a57","code":"R assert(subject=Tom, recipient=me, object=that I should be more careful, action=told)"}
+{"handle":"a3c2-c34100668e703ea9","code":"R assert(subject=My uncle, action=came, purpose=to see me)"}
+{"handle":"a3c2-5b5eeed14defcd00","code":"R before(subject=Tom died, object=Mary was born)"}
+{"handle":"a3c2-0b0d0de58b56f5bf","code":"R describe(subject=This book, attribute=very good)"}
+{"handle":"a3c2-f46c1a5808f8a930","code":"R imperative to you: assert(object=Tom, action=Let's go see)"}
+{"handle":"a3c2-f04b4b8106390548","code":"R question: describe(subject=you, attribute=married) @now?"}
+{"handle":"a3c2-94f233ab880fce33","code":"R assert(subject=I, object=a minute, action=need)"}
+{"handle":"a3c2-9f0f1a34677c55fc","code":"R assert(subject=Tom and Mary, object=TV, action=watching)"}
+{"handle":"a3c2-0069feb7e799ba86","code":"R assert(subject=Tom, object=a lot, location=the party, action=drank)"}
+{"handle":"a3c2-24e3b2b559fce605","code":"R question: ability assert(subject=you, recipient=me, object=what happened, action=tell)?"}
+{"handle":"a3c2-190dd2412e583480","code":"R assert(subject=My girlfriend, object=me, action=dumped)"}
+{"handle":"a3c2-e2b521de582e1cf1","code":"R assert(subject=I, object=sports, action=play) @almost every day"}
+{"handle":"a3c2-d23d69b67b06dd89","code":"R relate(subject=Tom, object=Mary's money, relation=is after)"}
+{"handle":"a3c2-160d12263ddeb236","code":"R not assert(subject=tom, object=tea, manner=usually, action=drink)"}
+{"handle":"a3c2-98c068abfc0904b5","code":"R not ability assert(subject=Tom, object=tennis, action=play)"}
+{"handle":"a3c2-37d86194b803d3e6","code":"R define(subject=Tom, definition=ophthalmologist)"}
+{"handle":"a3c2-d82d93893435d4f6","code":"R assert(subject=We, action=waited, duration=till 2:30)"}
+{"handle":"a3c2-54285afd564a0cdd","code":"R define(subject=Europe, definition=a continent)"}
+{"handle":"a3c2-094bed2cd4654e3b","code":"R request(agent=tom, recipient=me, theme=stay)"}
+{"handle":"a3c2-31a7129b6cffaaec","code":"R assert(subject=We, action=trying to win)"}
+{"handle":"a3c2-a262f890a576e9f8","code":"R not assert(subject=I, object=why I did it, action=know)"}
+{"handle":"a3c2-146208c39afda805","code":"R question: intention assert(subject=you, object=that tree, location=Where, action=going to plant)?"}
+{"handle":"a3c2-c95fb9a70b3b8899","code":"R assert(subject=Tom, object=Mary, action=went to see)"}
+{"handle":"a3c2-a3dd3b72916a59c8","code":"R assert(subject=Tom, object=his speech, manner=with a beautiful song, action=closed)"}
+{"handle":"a3c2-f58a646b61d76eb7","code":"R assert(subject=tom, action=left) @five minutes ago"}
+{"handle":"a3c2-69ca672e3b1f4e2f","code":"R question: assert(subject=you, object=What, action=cooking)?"}
+{"handle":"a3c2-5cf2e1a0fd93522b","code":"R not ability assert(subject=I, reason=with all this noise, action=concentrate)"}
+{"handle":"a3c2-b708f923d01034b5","code":"R describe(subject=I, attribute=afraid of you)"}
+{"handle":"a3c2-72f3e5f5ad609653","code":"R describe(subject=I, attribute=trying to be happy)"}
+{"handle":"a3c2-6d3ad176144e83e1","code":"R not describe(subject=tom, attribute=wearing gloves)"}
+{"handle":"a3c2-228e41ba98797a7f","code":"R assert(subject=Tom, object=something isn't right, action=knows)"}
+{"handle":"a3c2-11ca6163c0341536","code":"R assert(subject=Tom, object=not to answer the question, action=decided)"}
+{"handle":"a3c2-c5f2e6fc55479f29","code":"R assert(subject=Tom, source=Boston, action=has returned)"}
+{"handle":"a3c2-1330bc8426955b22","code":"R assert(subject=I, object=toast, action=ate) @breakfast"}
+{"handle":"a3c2-7a90a960838affa8","code":"R question: define(subject=Tom, definition=really a Canadian)?"}
+{"handle":"a3c2-e04ea5f641001255","code":"R assert(subject=You, object=you wouldn't drink today, action=promised)"}
+{"handle":"a3c2-fbd72483af800f4d","code":"R imperative to you: assert(object=your teeth, action=Brush) @after meals"}

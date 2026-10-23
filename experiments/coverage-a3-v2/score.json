@@ -1,0 +1,872 @@
+{
+ "profile": "generic-en-pivot/0.3",
+ "tally": {
+  "items": 200,
+  "ran": 200,
+  "parse": 142,
+  "abstain": 58,
+  "failed": 0,
+  "invalid": 1,
+  "copy": 3,
+  "covered": 139
+ },
+ "bar1": {
+  "coverage": 0.695,
+  "copiesOfParses": 0.02112676056338028,
+  "pass": true,
+  "a3BaselineCoverage": 0.27,
+  "gainOverA3BaselinePp": 42.49999999999999
+ },
+ "parity": {
+  "covered": 139,
+  "equal": 139,
+  "pass": true,
+  "mismatches": []
+ },
+ "verdictPossible": true,
+ "reported": {
+  "questionsInSet": 35,
+  "questionsCovered": 23,
+  "questionsCoveredWithKindQuestion": 23,
+  "instructionRecords": 4,
+  "instructionRecordsWithSubject": 0,
+  "deicticSentencesInSet": 110,
+  "deicticSentencesCovered": 76
+ },
+ "renders": [
+  {
+   "handle": "a3c2-59455f028420dcd9",
+   "lfp": "lfp:2.1:sha256:9b8937f882a03a54814a8c94afe50187",
+   "kind": "simple_fact",
+   "code": "R relate(subject=tom, object=harvard, relation=is studying at)"
+  },
+  {
+   "handle": "a3c2-556abff4e855542d",
+   "lfp": "lfp:2.1:sha256:6c69b21443ca66f2b7405c8bfc993608",
+   "kind": "simple_fact",
+   "code": "R assert(subject=tom, object=that Mary was tired, action=knew)"
+  },
+  {
+   "handle": "a3c2-426a750b982c4bdb",
+   "lfp": "lfp:2.1:sha256:78bfce399c8b10a45ab54774d3d3d931",
+   "kind": "event",
+   "code": "R assert(subject=I, object=two foreign languages, action=learning)"
+  },
+  {
+   "handle": "a3c2-b70ef70c78b6b13a",
+   "lfp": "lfp:2.1:sha256:9c6cae92b3b01b4faa9102a224283df2",
+   "kind": "simple_fact",
+   "code": "R assert(subject=Tom, object=French, manner=fluently, action=speaks)"
+  },
+  {
+   "handle": "a3c2-c199856dfa47f636",
+   "lfp": "lfp:2.1:sha256:ceb77ee27db1e96b01cb38b5c59bb3c7",
+   "kind": "event",
+   "code": "R assert(subject=I, object=my life, action=love)"
+  },
+  {
+   "handle": "a3c2-3dbb2ace8b5066e6",
+   "lfp": "lfp:2.1:sha256:ec98710ec821df4d9168fd58a3d232c8",
+   "kind": "simple_fact",
+   "code": "R describe(subject=The system, attribute=working well)"
+  },
+  {
+   "handle": "a3c2-208e4839ca5afec5",
+   "lfp": "lfp:2.1:sha256:c49cba3677dee055587289ab655ef4e9",
+   "kind": "simple_fact",
+   "code": "R not ability assert(subject=I, recipient=you, action=help) @this week"
+  },
+  {
+   "handle": "a3c2-05d461fc763b58f7",
+   "lfp": "lfp:2.1:sha256:adb22400c57aaafc8f1a13e1ec1a2a91",
+   "kind": "event",
+   "code": "R assert(subject=Tom, object=his fists, action=clenched)"
+  },
+  {
+   "handle": "a3c2-530a2b976c0ebcf5",
+   "lfp": "lfp:2.1:sha256:a17f84d34a653ca74a77d1b62347ced1",
+   "kind": "simple_fact",
+   "code": "R describe(subject=Tom, attribute=generous with his money)"
+  },
+  {
+   "handle": "a3c2-bbf8a1ef8be5a5df",
+   "lfp": "lfp:2.1:sha256:a44db7eb67edc07da3ed4bad6157b740",
+   "kind": "question",
+   "code": "R question: describe(subject=all swans, attribute=white)?"
+  },
+  {
+   "handle": "a3c2-ae0553a773c2fc6f",
+   "lfp": "lfp:2.1:sha256:2baba62eb02d5d454102f94c34d23ab2",
+   "kind": "event",
+   "code": "R intention assert(subject=Tom, location=in Boston, action=going to stay, duration=for a while)"
+  },
+  {
+   "handle": "a3c2-d0aca94fb459745b",
+   "lfp": "lfp:2.1:sha256:7c1c86d56219b12d5d14ab246b5de297",
+   "kind": "event",
+   "code": "R assert(subject=I, object=you understand me, action=believe)"
+  },
+  {
+   "handle": "a3c2-513914cf9d361dd6",
+   "lfp": "lfp:2.1:sha256:d6859980e83efd2eb4859cd660d1ab1b",
+   "kind": "question",
+   "code": "R question: relate(subject=this bus, object=the art museum, relation=go to)?"
+  },
+  {
+   "handle": "a3c2-4c896d9c6864e9b7",
+   "lfp": "lfp:2.1:sha256:0a1dc42ae3b27634727faa2d5c6c8705",
+   "kind": "event",
+   "code": "R intention assert(subject=I, recipient=Tom, object=a letter, action=write)"
+  },
+  {
+   "handle": "a3c2-bca8511b0f3522c0",
+   "lfp": "lfp:2.1:sha256:cd235dd4bff759bfbaf7bbd21ae51783",
+   "kind": "event",
+   "code": "R assert(subject=I, action=cut myself, condition=while shaving)"
+  },
+  {
+   "handle": "a3c2-d8301fa7bb21b9bd",
+   "lfp": "lfp:2.1:sha256:aa44ab892f91e5382638408b751334b2",
+   "kind": "event",
+   "code": "R assert(subject=I, object=correction, action=made)"
+  },
+  {
+   "handle": "a3c2-9db4afdf0d67488a",
+   "lfp": "lfp:2.1:sha256:487a31096584fc874790b37b33f3e587",
+   "kind": "simple_fact",
+   "code": "R relate(subject=Four times two, object=eight, relation=makes)"
+  },
+  {
+   "handle": "a3c2-975b1a37e7a8da48",
+   "lfp": "lfp:2.1:sha256:f84a996692754ca81611bb8749e9ee6b",
+   "kind": "simple_fact",
+   "code": "R certainty assert(subject=Tom, object=you, action=stay with)"
+  },
+  {
+   "handle": "a3c2-c18d9279ee9e6824",
+   "lfp": "lfp:2.1:sha256:a70c57d2f410aa5e159680e5852d84db",
+   "kind": "event",
+   "code": "R assert(subject=Tom, object=the document, source=from French, destination=into English, action=translated)"
+  },
+  {
+   "handle": "a3c2-cbf1dcc4b75c49f4",
+   "lfp": "lfp:2.1:sha256:523630272e94ebfa0c605a3b10357ad9",
+   "kind": "question",
+   "code": "R question: assert(subject=you, reason=Why, action=running)?"
+  },
+  {
+   "handle": "a3c2-1c3b61826fc562de",
+   "lfp": "lfp:2.1:sha256:3e3291c9c96c99e1bc5f4d35b94b4476",
+   "kind": "event",
+   "code": "R intention assert(subject=I, location=to Boston, action=intend to go back)"
+  },
+  {
+   "handle": "a3c2-38acd275fee742f2",
+   "lfp": "lfp:2.1:sha256:fa44300d5177f11d0c7d4346ab5553c1",
+   "kind": "simple_fact",
+   "code": "R assert(subject=I, manner=as fast as I could, action=came)"
+  },
+  {
+   "handle": "a3c2-ab5ba21d8979ef6f",
+   "lfp": "lfp:2.1:sha256:2d463aff20ab054dcd095489ae2b47ad",
+   "kind": "simple_fact",
+   "code": "R describe(subject=We, attribute=ready to help)"
+  },
+  {
+   "handle": "a3c2-ee6315f95491585e",
+   "lfp": "lfp:2.1:sha256:f1aca47e8b238c8006147aea7d5f55b9",
+   "kind": "simple_fact",
+   "code": "R describe(subject=Life, attribute=full of secrets)"
+  },
+  {
+   "handle": "a3c2-443bde1fd1bbc6c9",
+   "lfp": "lfp:2.1:sha256:42296e5388caeadbc9db3e9553a8fa1a",
+   "kind": "event",
+   "code": "R must assert(subject=You, recipient=tom, manner=in person, action=talk)"
+  },
+  {
+   "handle": "a3c2-369b3e5e18367bf4",
+   "lfp": "lfp:2.1:sha256:5103e8487677b04a76c116272d3a0846",
+   "kind": "simple_fact",
+   "code": "M relate(subject=Life and death, object=the same coin, relation=are two sides of)"
+  },
+  {
+   "handle": "a3c2-505c3286715eb1cf",
+   "lfp": "lfp:2.1:sha256:f90fbfabdfea7cd23130d04623b49f63",
+   "kind": "event",
+   "code": "R assert(subject=We, object=chess, manner=often, action=play)"
+  },
+  {
+   "handle": "a3c2-80d66b619adaf6de",
+   "lfp": "lfp:2.1:sha256:a959df74966f1b4eea17deea14509405",
+   "kind": "simple_fact",
+   "code": "R describe(subject=This movie, attribute=has French subtitles)"
+  },
+  {
+   "handle": "a3c2-43dd64db4544b688",
+   "lfp": "lfp:2.1:sha256:03334bf96ea6db8ff8e7779fdb256293",
+   "kind": "simple_fact",
+   "code": "R not assert(subject=I, manner=very well, action=swim)"
+  },
+  {
+   "handle": "a3c2-aa69f02fd73d84b1",
+   "lfp": "lfp:2.1:sha256:e0491772a3b30ed853607ad9f2953d80",
+   "kind": "simple_fact",
+   "code": "R assert(subject=We all, object=that Tom is guilty, action=know)"
+  },
+  {
+   "handle": "a3c2-3fba88145bbe9a2b",
+   "lfp": "lfp:2.1:sha256:6b8bcd87fcc9cccd88174e44be2db2a1",
+   "kind": "simple_fact",
+   "code": "R assert(subject=I, object=my disappointment, action=tried to hide)"
+  },
+  {
+   "handle": "a3c2-4296961480650646",
+   "lfp": "lfp:2.1:sha256:2fb8f20ff408ad55e80d679f3303d97b",
+   "kind": "simple_fact",
+   "code": "R must assert(subject=We, object=some changes, action=have to make)"
+  },
+  {
+   "handle": "a3c2-c051e929d2b136fd",
+   "lfp": "lfp:2.1:sha256:208304560fa94eed83589f80684776dc",
+   "kind": "simple_fact",
+   "code": "R describe(subject=We, attribute=rich) @at the time"
+  },
+  {
+   "handle": "a3c2-43fe63ec70749ebd",
+   "lfp": "lfp:2.1:sha256:9d9440a92c8defc9642c58517080ee8d",
+   "kind": "event",
+   "code": "R ability assert(subject=I, object=a car, action=know how to drive)"
+  },
+  {
+   "handle": "a3c2-fe9cda8721b5d457",
+   "lfp": "lfp:2.1:sha256:27f767d5f226dc5cf7305b0b846ab17a",
+   "kind": "event",
+   "code": "R assert(subject=the leaves, action=begin to fall) @In October"
+  },
+  {
+   "handle": "a3c2-b91ac18306082dfa",
+   "lfp": "lfp:2.1:sha256:8da0ad3c7b4ced2ca7690ccbe189469f",
+   "kind": "event",
+   "code": "R assert(subject=I, action=have breakfast) @every morning"
+  },
+  {
+   "handle": "a3c2-a4148505c55971b9",
+   "lfp": "lfp:2.1:sha256:2d8187c54f05612ea479fdc1969fa481",
+   "kind": "event",
+   "code": "R assert(subject=Tom, action=wants to become famous)"
+  },
+  {
+   "handle": "a3c2-4c2df34da9fa65e5",
+   "lfp": "lfp:2.1:sha256:4d800852024a962e90b21d4a11c51d37",
+   "kind": "simple_fact",
+   "code": "R describe(subject=We, attribute=both very tired)"
+  },
+  {
+   "handle": "a3c2-1e7b22e9dc937123",
+   "lfp": "lfp:2.1:sha256:b891da3c130cc52fa48f951fbb40ab0f",
+   "kind": "simple_fact",
+   "code": "R relate(subject=Nothing, object=health, relation=is more important than)"
+  },
+  {
+   "handle": "a3c2-697e8f161e8c9d4c",
+   "lfp": "lfp:2.1:sha256:6dfdba3d7e33c939e22074ccef8c07e8",
+   "kind": "question",
+   "code": "R question: assert(subject=What, action=makes you happy)?"
+  },
+  {
+   "handle": "a3c2-ea73178a5fdfa3bd",
+   "lfp": "lfp:2.1:sha256:7c5d986830d49743cee667ee65483bb1",
+   "kind": "simple_fact",
+   "code": "R describe(subject=I, attribute=an only child)"
+  },
+  {
+   "handle": "a3c2-0f10056dd2abdffe",
+   "lfp": "lfp:2.1:sha256:ee0eb51de47a2a047f4fbf80011ed09a",
+   "kind": "simple_fact",
+   "code": "R not assert(subject=You, recipient=me, object=the truth, action=telling)"
+  },
+  {
+   "handle": "a3c2-f9d1984c0b729adb",
+   "lfp": "lfp:2.1:sha256:c595d812390563f2facb85b361ba1ec8",
+   "kind": "question",
+   "code": "R question: assert(subject=What, action=happened) @October?"
+  },
+  {
+   "handle": "a3c2-a25107cf83c000cb",
+   "lfp": "lfp:2.1:sha256:d9c1e36941e4b3e19e2f600744f07d74",
+   "kind": "event",
+   "code": "R assert(subject=I, object=my T-shirt, action=washed)"
+  },
+  {
+   "handle": "a3c2-2ef1b7767b4e4bb9",
+   "lfp": "lfp:2.1:sha256:dea62d4783b6028f0807e1d036b418a7",
+   "kind": "simple_fact",
+   "code": "R relate(subject=tom, object=me, relation=is at least a head taller than)"
+  },
+  {
+   "handle": "a3c2-8dabdfe2d20eefe8",
+   "lfp": "lfp:2.1:sha256:116f55b5a77f4b982bd5087c2b9e6cef",
+   "kind": "simple_fact",
+   "code": "R describe(subject=Pink roses, attribute=beautiful)"
+  },
+  {
+   "handle": "a3c2-7a01e0b8cd148e81",
+   "lfp": "lfp:2.1:sha256:0de14d60a0107eb6618177745baadc71",
+   "kind": "event",
+   "code": "R assert(subject=Many citizens, object=the army, action=joined)"
+  },
+  {
+   "handle": "a3c2-e2dff6ce3c721e0c",
+   "lfp": "lfp:2.1:sha256:7389ea78a7e9a87fe62961c6d8ea00c5",
+   "kind": "simple_fact",
+   "code": "R relate(subject=Tom, object=Boston, relation=is staying in)"
+  },
+  {
+   "handle": "a3c2-d557a93033d27061",
+   "lfp": "lfp:2.1:sha256:962e6ebb6884260620e720c8bb7bb4a8",
+   "kind": "simple_fact",
+   "code": "R not describe(subject=tom, attribute=good at French)"
+  },
+  {
+   "handle": "a3c2-36c1afb6eafbf270",
+   "lfp": "lfp:2.1:sha256:1638dbd28fde03cc710242b4a9e4e03c",
+   "kind": "event",
+   "code": "R not assert(subject=I, object=her name, action=remember) @anymore"
+  },
+  {
+   "handle": "a3c2-5d9ea696b26493f3",
+   "lfp": "lfp:2.1:sha256:b7375a19d0c62e17873da4c2c7f86461",
+   "kind": "event",
+   "code": "R not assert(subject=We, object=strangers, action=trust)"
+  },
+  {
+   "handle": "a3c2-f4f11b7c984dcb20",
+   "lfp": "lfp:2.1:sha256:2196e93ab2a7989e1528c6114836cf4f",
+   "kind": "question",
+   "code": "R question: assert(subject=you, object=the key, location=Where, action=find)?"
+  },
+  {
+   "handle": "a3c2-8788192db7ef6e51",
+   "lfp": "lfp:2.1:sha256:72c238de45c6b45578f08a64cc72ef29",
+   "kind": "simple_fact",
+   "code": "R define(subject=tom, definition=a student)"
+  },
+  {
+   "handle": "a3c2-f3e9c6e5f288c53b",
+   "lfp": "lfp:2.1:sha256:db6cb0c052fefa16302b4130dad25af0",
+   "kind": "event",
+   "code": "R assert(subject=We, object=a lot of changes, action=made)"
+  },
+  {
+   "handle": "a3c2-20b43e2ace992d86",
+   "lfp": "lfp:2.1:sha256:7b44058f1340aa168d326ed16f5c1633",
+   "kind": "event",
+   "code": "R intention assert(subject=I, recipient=you, action=help, condition=if possible)"
+  },
+  {
+   "handle": "a3c2-0a7359f0fca686f8",
+   "lfp": "lfp:2.1:sha256:b765a1afc566edcc0d4431fb3ec0beda",
+   "kind": "simple_fact",
+   "code": "R not assert(subject=I, object=German, action=understand)"
+  },
+  {
+   "handle": "a3c2-83b41a9eab7478de",
+   "lfp": "lfp:2.1:sha256:ab25b99af557867bf270149a5501bc24",
+   "kind": "simple_fact",
+   "code": "R define(subject=Tom's father, definition=a diplomat)"
+  },
+  {
+   "handle": "a3c2-19613bb7a88b84b1",
+   "lfp": "lfp:2.1:sha256:a7b828b9c9a527f667d3e8e375c431f8",
+   "kind": "question",
+   "code": "R question: assert(subject=you, reason=Why, action=lie)?"
+  },
+  {
+   "handle": "a3c2-3e344b837c82111d",
+   "lfp": "lfp:2.1:sha256:c7b6822f8518668a66a70cac38cdf8a8",
+   "kind": "event",
+   "code": "R must assert(subject=You, object=that bad habit, action=get rid of)"
+  },
+  {
+   "handle": "a3c2-8ecc746c172707e0",
+   "lfp": "lfp:2.1:sha256:047b9e45a7c6725370e9c21257c7b3e6",
+   "kind": "event",
+   "code": "R assert(subject=Tom, object=one year of probation, action=sentenced)"
+  },
+  {
+   "handle": "a3c2-2888d1f6a785666f",
+   "lfp": "lfp:2.1:sha256:1d2a510591d7f9c17f53028e8c47c21e",
+   "kind": "simple_fact",
+   "code": "R describe(subject=Tom, attribute=so upset)"
+  },
+  {
+   "handle": "a3c2-822395b1af7e1d00",
+   "lfp": "lfp:2.1:sha256:56f7afe44ef1e8fc37e0b28d3ee48f4b",
+   "kind": "preference",
+   "code": "R prefer(experiencer=tom, theme=October)"
+  },
+  {
+   "handle": "a3c2-9b934ac33a89d73d",
+   "lfp": "lfp:2.1:sha256:d49ebd2ea2a54e696d5fe7f6e569feb7",
+   "kind": "instruction",
+   "code": "R imperative to you: notify(recipient=tom, theme=that I won't come)"
+  },
+  {
+   "handle": "a3c2-ed6f710f9a5656e7",
+   "lfp": "lfp:2.1:sha256:c93b6542b5ef53e790266ae5d3aa2b70",
+   "kind": "instruction",
+   "code": "R imperative to you: assert(object=eat some chocolate cake, action=Come)"
+  },
+  {
+   "handle": "a3c2-cbdf2df68f3b953b",
+   "lfp": "lfp:2.1:sha256:44016d9750a97ab62d3244b799443a53",
+   "kind": "event",
+   "code": "R not request(agent=Tom, recipient=me, theme=do that)"
+  },
+  {
+   "handle": "a3c2-ca9c303019fcc6ec",
+   "lfp": "lfp:2.1:sha256:526c29ed3fbb7e63dd8f3e626a117318",
+   "kind": "event",
+   "code": "R must assert(subject=I, recipient=you, object=the truth, action=tell)"
+  },
+  {
+   "handle": "a3c2-821624280b789d4a",
+   "lfp": "lfp:2.1:sha256:d2fd7fe8aa368bc2f72b7db878a88dcd",
+   "kind": "question",
+   "code": "R question: not assert(subject=we, reason=Why, action=sit)?"
+  },
+  {
+   "handle": "a3c2-a9c96dbb47f4b0c6",
+   "lfp": "lfp:2.1:sha256:0c9baaf50a50ac345058bdc26460ca19",
+   "kind": "event",
+   "code": "R assert(subject=tom, object=the city, action=has left)"
+  },
+  {
+   "handle": "a3c2-080c35fc2dfa49b9",
+   "lfp": "lfp:2.1:sha256:c61b112656e31fa9c66c6353ae335c4e",
+   "kind": "simple_fact",
+   "code": "R describe(subject=The dog, attribute=dead)"
+  },
+  {
+   "handle": "a3c2-25e9da202b29d21b",
+   "lfp": "lfp:2.1:sha256:3154debd9e73a3c4671881de3b23f71e",
+   "kind": "simple_fact",
+   "code": "R intention assert(subject=We, action=want to help) ; not ability assert(subject=we, connective=but, action=help)"
+  },
+  {
+   "handle": "a3c2-eae6f72ca3e3216a",
+   "lfp": "lfp:2.1:sha256:c6c9c1f4e0cd52c5772e59773aadb4c4",
+   "kind": "question",
+   "code": "R question: assert(subject=Who, object=this land, action=owns)?"
+  },
+  {
+   "handle": "a3c2-093e5b3969ad3956",
+   "lfp": "lfp:2.1:sha256:6d362cbd40bf3ff45673ecb7c4a54ba8",
+   "kind": "simple_fact",
+   "code": "R ability assert(subject=No one, object=me, action=stop)"
+  },
+  {
+   "handle": "a3c2-6a49d322640a39b0",
+   "lfp": "lfp:2.1:sha256:77d44bbcbc40b480bae80c0407e0c4d7",
+   "kind": "simple_fact",
+   "code": "R define(subject=The capital of Japan, definition=Tokyo)"
+  },
+  {
+   "handle": "a3c2-71dd64eba7bda398",
+   "lfp": "lfp:2.1:sha256:7298cd0ac05ae3c1912f97d4edede5cc",
+   "kind": "simple_fact",
+   "code": "R describe(subject=Tom, attribute=the only one who offered to help)"
+  },
+  {
+   "handle": "a3c2-b9409936ba45b90d",
+   "lfp": "lfp:2.1:sha256:3f9448bc561056a43f41a42d0bcf9cf4",
+   "kind": "event",
+   "code": "R not certainty assert(subject=Tom, action=understand)"
+  },
+  {
+   "handle": "a3c2-c1b5513a264ed139",
+   "lfp": "lfp:2.1:sha256:e4fac25f98ad97af40150e80c2a11020",
+   "kind": "question",
+   "code": "R question: describe(subject=Australia, attribute=have four seasons)?"
+  },
+  {
+   "handle": "a3c2-aa7655e969cf4fdf",
+   "lfp": "lfp:2.1:sha256:2aea5276a6d5c4846c7f1e82718532f1",
+   "kind": "question",
+   "code": "R question: describe(subject=you, attribute=have your own room)?"
+  },
+  {
+   "handle": "a3c2-be6189b2001d2ca4",
+   "lfp": "lfp:2.1:sha256:2866f10e6fb5574d7d5a7c9e90aba845",
+   "kind": "simple_fact",
+   "code": "R describe(subject=The room, attribute=very dirty)"
+  },
+  {
+   "handle": "a3c2-22e4460417aa0e22",
+   "lfp": "lfp:2.1:sha256:84b0133202155428ebe08e7f1e28a670",
+   "kind": "event",
+   "code": "R assert(subject=Tom, object=letter, manner=quickly, action=opened)"
+  },
+  {
+   "handle": "a3c2-3c2debb5e3e2be04",
+   "lfp": "lfp:2.1:sha256:af90b8fec522a9b44ed498d2a965d255",
+   "kind": "question",
+   "code": "R question: ability assert(subject=we, object=you, location=Where, action=find)?"
+  },
+  {
+   "handle": "a3c2-67a3c74c6eb5b9d8",
+   "lfp": "lfp:2.1:sha256:27142aadc94aa8cc33351ad9f2590a17",
+   "kind": "question",
+   "code": "R question: assert(subject=you, object=What, action=do, purpose=a living)?"
+  },
+  {
+   "handle": "a3c2-2201fb7db72b1094",
+   "lfp": "lfp:2.1:sha256:3c97e26687614dba82bc7482ec615f38",
+   "kind": "event",
+   "code": "R assert(subject=Tom, destination=to Harvard, action=went)"
+  },
+  {
+   "handle": "a3c2-a14f0c4de159b31b",
+   "lfp": "lfp:2.1:sha256:c259fe821a8b4f2f376a801ae3f6042b",
+   "kind": "simple_fact",
+   "code": "R relate(subject=Most of the participants, object=Australia, relation=are from)"
+  },
+  {
+   "handle": "a3c2-70a99787c354b592",
+   "lfp": "lfp:2.1:sha256:ef009796142819ff355fccdecc8111c0",
+   "kind": "event",
+   "code": "R assert(subject=Tom, action=leaned over, purpose=to kiss Mary)"
+  },
+  {
+   "handle": "a3c2-3a8038446f653082",
+   "lfp": "lfp:2.1:sha256:f98d303696de12da7bc97d2c8f836aef",
+   "kind": "question",
+   "code": "R question: assert(subject=you, object=an apple, action=want)?"
+  },
+  {
+   "handle": "a3c2-c760754f94e60f82",
+   "lfp": "lfp:2.1:sha256:c91c6aacae2ea203276a83d8b094270b",
+   "kind": "question",
+   "code": "R question: assert(subject=you, object=playing volleyball, action=like)?"
+  },
+  {
+   "handle": "a3c2-427b3b3897338b31",
+   "lfp": "lfp:2.1:sha256:351074a765e84a247fa22f24d333c7c6",
+   "kind": "event",
+   "code": "R opinion assert(subject=I, object=the furniture in this room is ugly, action=think)"
+  },
+  {
+   "handle": "a3c2-b0d39904436d2bc2",
+   "lfp": "lfp:2.1:sha256:936410c02361361695d7e044b1d01bd1",
+   "kind": "simple_fact",
+   "code": "R assert(subject=We, object=what happened, action=want to know)"
+  },
+  {
+   "handle": "a3c2-2c18b1c42516e9df",
+   "lfp": "lfp:2.1:sha256:ef7b3812c4b21e8be68438587d32de44",
+   "kind": "event",
+   "code": "R assert(subject=I, object=Tom standing, location=over there, action=saw) @a moment ago"
+  },
+  {
+   "handle": "a3c2-c9d6aa2ac64e10a2",
+   "lfp": "lfp:2.1:sha256:079067481b3dfe2b2e7fc4f39223ccaf",
+   "kind": "simple_fact",
+   "code": "R assert(subject=I, object=Tom kiss Mary, action=saw)"
+  },
+  {
+   "handle": "a3c2-7bdb71eeceecdf6f",
+   "lfp": "lfp:2.1:sha256:bbafa72240e508fa28a410bd25fb65f5",
+   "kind": "simple_fact",
+   "code": "R describe(subject=This armchair, attribute=comfortable)"
+  },
+  {
+   "handle": "a3c2-1782542230b34b02",
+   "lfp": "lfp:2.1:sha256:d715c206ad76655967310f9a64e91719",
+   "kind": "event",
+   "code": "R assert(subject=I, object=your letter, manner=just, action=got) @yesterday"
+  },
+  {
+   "handle": "a3c2-f4faa8a0bce79dcb",
+   "lfp": "lfp:2.1:sha256:0495cb7c1bd1ba9438f156f77e2c8dc1",
+   "kind": "event",
+   "code": "R assert(subject=I, recipient=you, object=not to buy this house, action=advised)"
+  },
+  {
+   "handle": "a3c2-3ff88e9a08297cbc",
+   "lfp": "lfp:2.1:sha256:14fb266e273df8658f8a8b55b8edbeeb",
+   "kind": "question",
+   "code": "R question: describe(subject=your name, manner=again, attribute=What)?"
+  },
+  {
+   "handle": "a3c2-20603104efeca5cd",
+   "lfp": "lfp:2.1:sha256:e3c02c6c3c7706a9af0817fd5cadd4b5",
+   "kind": "question",
+   "code": "R question: assert(subject=you, object=what you were looking for, action=find)?"
+  },
+  {
+   "handle": "a3c2-7b20c837c8363afa",
+   "lfp": "lfp:2.1:sha256:e7ea5d3a05fdb4a41990584956f340f3",
+   "kind": "event",
+   "code": "R assert(subject=I, object=you, Tom, action=love)"
+  },
+  {
+   "handle": "a3c2-0e29397a8bca8988",
+   "lfp": "lfp:2.1:sha256:b2f1c5a89301b01c0f64cb67fa071774",
+   "kind": "simple_fact",
+   "code": "R define(subject=tom, definition=spy)"
+  },
+  {
+   "handle": "a3c2-c06d80bc331cd91c",
+   "lfp": "lfp:2.1:sha256:caa4a4ab03f1fec5287fe0e0c72b04c4",
+   "kind": "preference",
+   "code": "R prefer(experiencer=I, theme=painting with watercolors)"
+  },
+  {
+   "handle": "a3c2-e5c9c9cbd3c55c99",
+   "lfp": "lfp:2.1:sha256:0deec30f98a3cb87b4cba35b20b4e3c3",
+   "kind": "event",
+   "code": "R assert(subject=We, object=a breakdown, action=had)"
+  },
+  {
+   "handle": "a3c2-e8a89a63bf837da0",
+   "lfp": "lfp:2.1:sha256:c4db6912d33fafe73bf290483b522eee",
+   "kind": "simple_fact",
+   "code": "R not assert(subject=tom, object=when Mary will be here, action=know)"
+  },
+  {
+   "handle": "a3c2-82373561ac1c50d7",
+   "lfp": "lfp:2.1:sha256:2165bb2f52906aac6c0f2f503e9cb2f9",
+   "kind": "question",
+   "code": "R question: assert(subject=the book, action=written) @When?"
+  },
+  {
+   "handle": "a3c2-952ff79eb13bbb39",
+   "lfp": "lfp:2.1:sha256:76b6a5fe35a169303197fe932f9d3037",
+   "kind": "event",
+   "code": "R assert(subject=tom, object=firewood, action=chopped, duration=all afternoon)"
+  },
+  {
+   "handle": "a3c2-a80d029734605a57",
+   "lfp": "lfp:2.1:sha256:af3b3640f93fec2dee82241284abf652",
+   "kind": "simple_fact",
+   "code": "R assert(subject=Tom, recipient=me, object=that I should be more careful, action=told)"
+  },
+  {
+   "handle": "a3c2-c34100668e703ea9",
+   "lfp": "lfp:2.1:sha256:5d93cf5aba24be256497953af2abcdd8",
+   "kind": "event",
+   "code": "R assert(subject=My uncle, action=came, purpose=to see me)"
+  },
+  {
+   "handle": "a3c2-5b5eeed14defcd00",
+   "lfp": "lfp:2.1:sha256:560e84cb7d429d3c08e76e77aca8e446",
+   "kind": "simple_fact",
+   "code": "R before(subject=Tom died, object=Mary was born)"
+  },
+  {
+   "handle": "a3c2-0b0d0de58b56f5bf",
+   "lfp": "lfp:2.1:sha256:29ea0e017a56f13eec09f39472aeb809",
+   "kind": "simple_fact",
+   "code": "R describe(subject=This book, attribute=very good)"
+  },
+  {
+   "handle": "a3c2-f46c1a5808f8a930",
+   "lfp": "lfp:2.1:sha256:b4c9048e2d0db5961d62560b05dbfddf",
+   "kind": "instruction",
+   "code": "R imperative to you: assert(object=Tom, action=Let's go see)"
+  },
+  {
+   "handle": "a3c2-f04b4b8106390548",
+   "lfp": "lfp:2.1:sha256:0fe16a54a5122c75852dc83af07c1a4b",
+   "kind": "question",
+   "code": "R question: describe(subject=you, attribute=married) @now?"
+  },
+  {
+   "handle": "a3c2-94f233ab880fce33",
+   "lfp": "lfp:2.1:sha256:51e56eab677e60e3b2bb854c008668c9",
+   "kind": "event",
+   "code": "R assert(subject=I, object=a minute, action=need)"
+  },
+  {
+   "handle": "a3c2-9f0f1a34677c55fc",
+   "lfp": "lfp:2.1:sha256:f8831f11ad11be3f812d117c3597c308",
+   "kind": "event",
+   "code": "R assert(subject=Tom and Mary, object=TV, action=watching)"
+  },
+  {
+   "handle": "a3c2-0069feb7e799ba86",
+   "lfp": "lfp:2.1:sha256:d698a4897e09d1b736ab4434bada49e4",
+   "kind": "event",
+   "code": "R assert(subject=Tom, object=a lot, location=the party, action=drank)"
+  },
+  {
+   "handle": "a3c2-24e3b2b559fce605",
+   "lfp": "lfp:2.1:sha256:df9baeb4f7fee6d8790c57db31dfc2a6",
+   "kind": "question",
+   "code": "R question: ability assert(subject=you, recipient=me, object=what happened, action=tell)?"
+  },
+  {
+   "handle": "a3c2-190dd2412e583480",
+   "lfp": "lfp:2.1:sha256:ee848dbaa572e0a0d1e684e233380cbb",
+   "kind": "event",
+   "code": "R assert(subject=My girlfriend, object=me, action=dumped)"
+  },
+  {
+   "handle": "a3c2-e2b521de582e1cf1",
+   "lfp": "lfp:2.1:sha256:5ac8dcff5b20a7d9700d931e1e61d001",
+   "kind": "event",
+   "code": "R assert(subject=I, object=sports, action=play) @almost every day"
+  },
+  {
+   "handle": "a3c2-d23d69b67b06dd89",
+   "lfp": "lfp:2.1:sha256:ecca62645adc48cd31121437406c41b8",
+   "kind": "simple_fact",
+   "code": "R relate(subject=Tom, object=Mary's money, relation=is after)"
+  },
+  {
+   "handle": "a3c2-160d12263ddeb236",
+   "lfp": "lfp:2.1:sha256:58abf303278bdcbac7b37150b7de2648",
+   "kind": "event",
+   "code": "R not assert(subject=tom, object=tea, manner=usually, action=drink)"
+  },
+  {
+   "handle": "a3c2-98c068abfc0904b5",
+   "lfp": "lfp:2.1:sha256:33b6c595ac3b70248d60209bc30f7bba",
+   "kind": "event",
+   "code": "R not ability assert(subject=Tom, object=tennis, action=play)"
+  },
+  {
+   "handle": "a3c2-37d86194b803d3e6",
+   "lfp": "lfp:2.1:sha256:26d0fa394f06f18a78b17745f4ddcb18",
+   "kind": "simple_fact",
+   "code": "R define(subject=Tom, definition=ophthalmologist)"
+  },
+  {
+   "handle": "a3c2-d82d93893435d4f6",
+   "lfp": "lfp:2.1:sha256:4d3c8a10e54a897565844168e4af6de3",
+   "kind": "event",
+   "code": "R assert(subject=We, action=waited, duration=till 2:30)"
+  },
+  {
+   "handle": "a3c2-54285afd564a0cdd",
+   "lfp": "lfp:2.1:sha256:5876ae4a2166169100fcd9c58baf5ea5",
+   "kind": "simple_fact",
+   "code": "R define(subject=Europe, definition=a continent)"
+  },
+  {
+   "handle": "a3c2-094bed2cd4654e3b",
+   "lfp": "lfp:2.1:sha256:19e3622429f0c3fd039e7555f95f9eed",
+   "kind": "event",
+   "code": "R request(agent=tom, recipient=me, theme=stay)"
+  },
+  {
+   "handle": "a3c2-31a7129b6cffaaec",
+   "lfp": "lfp:2.1:sha256:83cbc6e2606e362dfc97ef38f81f7916",
+   "kind": "event",
+   "code": "R assert(subject=We, action=trying to win)"
+  },
+  {
+   "handle": "a3c2-a262f890a576e9f8",
+   "lfp": "lfp:2.1:sha256:b5bdb815f343912370622d7aafc84759",
+   "kind": "simple_fact",
+   "code": "R not assert(subject=I, object=why I did it, action=know)"
+  },
+  {
+   "handle": "a3c2-146208c39afda805",
+   "lfp": "lfp:2.1:sha256:d76276fffa9e5e887649f0b4e1fadb1d",
+   "kind": "question",
+   "code": "R question: intention assert(subject=you, object=that tree, location=Where, action=going to plant)?"
+  },
+  {
+   "handle": "a3c2-c95fb9a70b3b8899",
+   "lfp": "lfp:2.1:sha256:c8fa3335653950efe34b18c6dca04fb0",
+   "kind": "event",
+   "code": "R assert(subject=Tom, object=Mary, action=went to see)"
+  },
+  {
+   "handle": "a3c2-a3dd3b72916a59c8",
+   "lfp": "lfp:2.1:sha256:8225ab9b7748ec36c7fad40ada9b6538",
+   "kind": "event",
+   "code": "R assert(subject=Tom, object=his speech, manner=with a beautiful song, action=closed)"
+  },
+  {
+   "handle": "a3c2-f58a646b61d76eb7",
+   "lfp": "lfp:2.1:sha256:f5c21eab65491a7715b5ed98893a723d",
+   "kind": "event",
+   "code": "R assert(subject=tom, action=left) @five minutes ago"
+  },
+  {
+   "handle": "a3c2-69ca672e3b1f4e2f",
+   "lfp": "lfp:2.1:sha256:1bb93c25b560289a74c4cc49cad42ecf",
+   "kind": "question",
+   "code": "R question: assert(subject=you, object=What, action=cooking)?"
+  },
+  {
+   "handle": "a3c2-5cf2e1a0fd93522b",
+   "lfp": "lfp:2.1:sha256:11004b3be55fb1c0f61bb8e88271b658",
+   "kind": "event",
+   "code": "R not ability assert(subject=I, reason=with all this noise, action=concentrate)"
+  },
+  {
+   "handle": "a3c2-b708f923d01034b5",
+   "lfp": "lfp:2.1:sha256:959ff6fbcba38a48429300f965ae7a35",
+   "kind": "simple_fact",
+   "code": "R describe(subject=I, attribute=afraid of you)"
+  },
+  {
+   "handle": "a3c2-72f3e5f5ad609653",
+   "lfp": "lfp:2.1:sha256:89b71e2f7b6ce7ecd32dfbf2ff3188db",
+   "kind": "simple_fact",
+   "code": "R describe(subject=I, attribute=trying to be happy)"
+  },
+  {
+   "handle": "a3c2-6d3ad176144e83e1",
+   "lfp": "lfp:2.1:sha256:bef1608493557ac64b27914946d9e71f",
+   "kind": "simple_fact",
+   "code": "R not describe(subject=tom, attribute=wearing gloves)"
+  },
+  {
+   "handle": "a3c2-228e41ba98797a7f",
+   "lfp": "lfp:2.1:sha256:9f665037642cb011ecc1b44040ffda97",
+   "kind": "simple_fact",
+   "code": "R assert(subject=Tom, object=something isn't right, action=knows)"
+  },
+  {
+   "handle": "a3c2-11ca6163c0341536",
+   "lfp": "lfp:2.1:sha256:c1a76206d0487690696e717dd9886fc0",
+   "kind": "event",
+   "code": "R assert(subject=Tom, object=not to answer the question, action=decided)"
+  },
+  {
+   "handle": "a3c2-c5f2e6fc55479f29",
+   "lfp": "lfp:2.1:sha256:63c9ba5d839740ab74e159fffdfa0fe6",
+   "kind": "simple_fact",
+   "code": "R assert(subject=Tom, source=Boston, action=has returned)"
+  },
+  {
+   "handle": "a3c2-1330bc8426955b22",
+   "lfp": "lfp:2.1:sha256:9712ec2fece27f3ca3800ef39aeb8c69",
+   "kind": "event",
+   "code": "R assert(subject=I, object=toast, action=ate) @breakfast"
+  },
+  {
+   "handle": "a3c2-7a90a960838affa8",
+   "lfp": "lfp:2.1:sha256:399bde61bde6cc7bc467c88fb74ec17e",
+   "kind": "question",
+   "code": "R question: define(subject=Tom, definition=really a Canadian)?"
+  },
+  {
+   "handle": "a3c2-e04ea5f641001255",
+   "lfp": "lfp:2.1:sha256:fc252d595d648974b0ddacb20dc20513",
+   "kind": "event",
+   "code": "R assert(subject=You, object=you wouldn't drink today, action=promised)"
+  },
+  {
+   "handle": "a3c2-fbd72483af800f4d",
+   "lfp": "lfp:2.1:sha256:c60081f5b5c40d40c75b85216ce0a985",
+   "kind": "instruction",
+   "code": "R imperative to you: assert(object=your teeth, action=Brush) @after meals"
+  }
+ ]
+}
