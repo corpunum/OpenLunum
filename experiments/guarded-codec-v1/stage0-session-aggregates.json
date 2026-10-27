@@ -1,0 +1,31 @@
+{
+  "format": "guarded-codec-stage0/0.1",
+  "note": "offline, no model calls; characters not tokens; private transcript, aggregates only",
+  "unguarded": {
+    "units": 782,
+    "charsSaved": 0.2413,
+    "unitsViolating": 177,
+    "shareViolating": 0.2263,
+    "violationsByKind": {
+      "marker_changed:negation": 116,
+      "marker_changed:possibility": 40,
+      "marker_changed:necessity": 22,
+      "marker_changed:future": 13
+    }
+  },
+  "guarded": {
+    "units": 782,
+    "charsSaved": 0.2283,
+    "unitsViolating": 8,
+    "shareViolating": 0.0102,
+    "violationsByKind": {
+      "marker_changed:necessity": 8
+    }
+  },
+  "guardedWithFallback": {
+    "units": 782,
+    "charsSaved": 0.2253,
+    "unitsFallenBack": 8,
+    "unitsViolating": 0
+  }
+}
