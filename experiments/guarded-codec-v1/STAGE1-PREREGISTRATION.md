@@ -73,3 +73,20 @@ shared :8080 Halogen slot is not used. Runner implementation by a Luna-low worke
 
 One answering model, one sample, agent-generated questions, deterministic containment grading (a correct paraphrase can
 be marked wrong; it applies to every condition), self-reviewed.
+
+## Amendment 1 (2026-10-29, before any model call)
+
+1. **Points.** The dump has 85 points but only 19 carry fact-recall items; a uniform draw over all points would leave
+   most without questions. Points are therefore drawn by OpenUnum's `lunum-graded-qa.mjs --stage questions` sampler
+   unchanged: among points with at least one item and both prompts <= 150k estimated tokens, its own seed `20261008`
+   (not `20261028`), 12 points, up to 8 items each, its fragment filter and its mechanical question check.
+2. **Runner.** `stage1/run.mjs` and `stage1/prune.py` (rewritten after review; the first worker draft did not call
+   `verifyCompaction`/`expandCompaction` and re-decoded subwords). Answer prompt and grading are copied unchanged from
+   `lunum-graded-qa.mjs`; the answer stage records `usage` input tokens (input + cache creation + cache read).
+3. **Compression details** (fixed now, not tuned): units are `segmentDiscourse` units; `sentence`, `list_item`,
+   `heading` and `table_row` units are compressible, everything else (code, tool output blocks) stays verbatim, as do
+   the last 4 messages. LLMLingua-2 keeps the top 50% of a unit's words by mean token "preserve" probability; the view
+   joins the kept original words with single spaces. An empty view is an omission: the text shows `[omitted <ref>]`
+   and the unit carries a SHA-256 pointer. Language per unit: Greek if it contains Greek letters, else English.
+   Condition 3 is verified only for counting (no fallback); conditions 4 and 5 fall back to the verbatim unit on any
+   violation.
