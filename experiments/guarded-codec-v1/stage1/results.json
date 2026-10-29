@@ -1,0 +1,84 @@
+{
+ "format": "guarded-codec-stage1/1.0",
+ "aggregatesOnly": true,
+ "points": 12,
+ "questions": {
+  "generated": 44,
+  "rejected": 0
+ },
+ "conditions": {
+  "verbatim": {
+   "tokens": 223138,
+   "n": 44,
+   "correct": 2,
+   "accuracy": 0.0455,
+   "chars": 424636
+  },
+  "discourse": {
+   "tokens": 123161,
+   "n": 44,
+   "correct": 5,
+   "accuracy": 0.1136,
+   "chars": 181516
+  },
+  "pruned": {
+   "tokens": 146826,
+   "n": 44,
+   "correct": 2,
+   "accuracy": 0.0455,
+   "chars": 242534
+  },
+  "guarded": {
+   "tokens": 214760,
+   "n": 44,
+   "correct": 2,
+   "accuracy": 0.0455,
+   "chars": 400797
+  },
+  "discourse_guarded": {
+   "tokens": 121322,
+   "n": 44,
+   "correct": 6,
+   "accuracy": 0.1364,
+   "chars": 176291
+  }
+ },
+ "prunedUnguarded": {
+  "violations": 1629,
+  "byKind": {
+   "literal_dropped": 1536,
+   "marker_changed": 93
+  }
+ },
+ "guardedFallbacks": {
+  "guarded": 1566,
+  "discourse_guarded": 241
+ },
+ "bars": {
+  "savings": {
+   "rule": "discourse_guarded input tokens <= 0.8 x discourse",
+   "value": 0.0149,
+   "pass": false
+  },
+  "nonInferiority": {
+   "rule": "accuracy(discourse_guarded) >= accuracy(verbatim) - 0.02",
+   "value": 0.1364,
+   "verbatim": 0.0455,
+   "pass": true
+  },
+  "invariants": {
+   "rule": "violations(guarded) + violations(discourse_guarded) == 0",
+   "value": 0,
+   "pass": true
+  },
+  "expansion": {
+   "rule": "expansion exact for guarded and discourse_guarded",
+   "pass": true
+  }
+ },
+ "pass": false,
+ "costUsd": {
+  "questions": 0.012455380000000002,
+  "answers": 0.1691
+ }
+}
