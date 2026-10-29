@@ -75,3 +75,11 @@ construction. Changes, all still exact-by-pointer and deterministic:
    otherwise the result is reported as "fails bar 1 by estimate" and the experiment stops at $0.
 
 The pass bars, budget and everything else are unchanged.
+
+## Result of the dry-estimate gate (2026-10-29)
+
+`estimate.mjs` on the 12 frozen discourse views: **5.7% estimated savings** (transform 6, two long shell outputs;
+transforms 8-9 touched nothing — the discourse views hold no repeated or superseded file reads), 0 invariant violations,
+100% exact expansion. Below the 25% gate, so **the experiment stops here at $0: tool-output compaction does not clear
+bar 1 on real OpenUnum traffic after discourse compaction.** Discourse compaction already captures most of what is
+safely removable; further gains would need lossy (model) summaries of code, which this line of work excludes.
