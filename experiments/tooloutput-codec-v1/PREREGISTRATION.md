@@ -56,3 +56,22 @@ Use the same points and frozen question set for all conditions:
 ## Budget, limits, stopping rule
 
 Total Haiku spend capped at **$5** for question generation and all answer calls. Stop before exceeding the cap; incomplete results are reported as incomplete, never extrapolated. One model, one sample, synthetic agent-generated questions, and deterministic containment grading may undercount correct paraphrases. The new target set improves coverage but does not establish broad real-world accuracy. The measurement classifier is heuristic and initial baseline subtype counts are not validated labels. The codec has no model-based transformations, no external pointers, and no claim of deployment readiness. No runner is included in this pre-registration; implement it only after owner/Claude review.
+
+## Amendment 1 (2026-10-29, before any model call) — review by Claude
+
+The measurement above shows the non-prose share is dominated by **code (~70%)**, mostly file contents read by tools;
+shell output (~16–19%) and JSON (~11–13%) are minor and logs/stack traces/diffs/listings are 0%. With transforms 1–6
+alone, even a perfect result on shell+JSON cannot reach bar 1 (~10% at most), so the run as written would fail by
+construction. Changes, all still exact-by-pointer and deterministic:
+
+1. **Transform 8 — cross-message code dedupe:** an identical code block (byte-exact, >= 400 bytes) that already
+   appeared earlier in the conversation is replaced by a pointer to its first occurrence plus its line count.
+2. **Transform 9 — superseded file reads:** when the same file path is read again later in the conversation, every
+   earlier read of that path older than the last 4 messages is replaced by a pointer ("superseded by the read at
+   message N"); the latest read stays verbatim.
+3. **Dry estimate gate (no model calls):** before question generation, a deterministic script applies all transforms
+   to the 12 frozen discourse views and reports the estimated input-token savings vs discourse (same estimator as
+   stage 1). **The Haiku run happens only if the estimate is >= 25%** (a margin over the 20% bar for estimator error);
+   otherwise the result is reported as "fails bar 1 by estimate" and the experiment stops at $0.
+
+The pass bars, budget and everything else are unchanged.
