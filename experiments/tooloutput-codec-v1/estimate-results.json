@@ -1,0 +1,85 @@
+{
+  "source": "12 frozen stage-1 discourse views; aggregates only",
+  "views": 12,
+  "tokenMethod": "same deterministic Unicode word/punctuation estimator as measure.mjs; estimate, not Haiku tokens",
+  "tokenBaseline": 50488,
+  "tokenEstimated": 47605,
+  "estimatedTokensSaved": 2883,
+  "estimatedSavingsPct": 5.7103,
+  "transforms": [
+    {
+      "id": 1,
+      "touched": 0,
+      "savedTokens": 0,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 0
+    },
+    {
+      "id": 2,
+      "touched": 0,
+      "savedTokens": 0,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 0
+    },
+    {
+      "id": 3,
+      "touched": 0,
+      "savedTokens": 0,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 0
+    },
+    {
+      "id": 4,
+      "touched": 0,
+      "savedTokens": 0,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 0
+    },
+    {
+      "id": 5,
+      "touched": 0,
+      "savedTokens": 0,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 0
+    },
+    {
+      "id": 6,
+      "touched": 2,
+      "savedTokens": 2883,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 5.7103
+    },
+    {
+      "id": 7,
+      "touched": 0,
+      "savedTokens": 0,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 0
+    },
+    {
+      "id": 8,
+      "touched": 0,
+      "savedTokens": 0,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 0
+    },
+    {
+      "id": 9,
+      "touched": 0,
+      "savedTokens": 0,
+      "expandedExact": true,
+      "invariantViolations": 0,
+      "savingsPctOfBaseline": 0
+    }
+  ],
+  "exactExpansion": true,
+  "invariantViolations": 0
+}
