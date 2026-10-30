@@ -1,6 +1,31 @@
 # Project status
 
-**As of 2026-10-17.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+**As of 2026-10-30.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+
+## Since 2026-10-22
+
+- **English pivot ([ADR 0030](decisions/0030-english-pivot-translation-adapters.md)).** Lunum and the Rust engine handle English only; Greek and other languages connect through model translation with deterministic guards. The plan is [docs/PLAN-rust-engine-language-pairs.md](docs/PLAN-rust-engine-language-pairs.md). The old HANDOFF.md is archived at [research/archive/handoffs/HANDOFF-2026-10-16.md](research/archive/handoffs/HANDOFF-2026-10-16.md).
+  - [pivot-el-en-v1](experiments/pivot-el-en-v1/RESULTS.md): P1 **FAIL** (pivot coverage 0.61× human English); P2 and P4 pass.
+  - [pivot-el-en-v2](experiments/pivot-el-en-v2/RESULTS.md): P1 **PASS** (1.00×); P2 passes only through memoised strings; P4 passes, 41/41 literals.
+- **Coverage (A3) under candidate contracts 0.21 / 0.22,** unreleased under ADR 0025.
+  - [v1](experiments/coverage-a3-v1/RESULTS.md): 60.5% coverage, bar 2 **FAIL**.
+  - [v2](experiments/coverage-a3-v2/RESULTS.md): **69.5%** coverage (bar 1 pass), but judged meaning **56%** (bar 2 **FAIL**).
+  - Coverage went up, faithfulness did not keep up. **Contract 0.19 stays the frozen one.**
+- **[ADR 0031](decisions/0031-mood-renderer-and-imperative-frames.md):** mood in the renderer and contract-0.22 imperatives. Frozen instruction package **v28**, carrying the 0.22 candidate contract; the frozen 0.19 contract is not replaced.
+- **Compression line, closed for now.**
+  - [guarded-codec-v1](experiments/guarded-codec-v1/PLAN.md): a deterministic verifier for lossy compressors (literals and negation/modality markers kept, SHA-256 pointers, exact expansion).
+    - Stage 0 found that unguarded stopword pruning flips meaning in 22.6% of sentences; guarded with fallback, 0.
+    - [Stage 1](experiments/guarded-codec-v1/STAGE1-RESULTS.md) on the owner's data: **FAIL**, 1.5% extra savings after discourse compaction (bar 20%).
+  - [tooloutput-codec-v1](experiments/tooloutput-codec-v1/PREREGISTRATION.md): stopped at its dry-estimate gate (5.7% < 25%), $0.
+  - Safe extra compression on real agent traffic is small. The bigger loss is facts cut from context.
+- **[Recall on demand v1](experiments/recall-on-demand-v1/RESULTS.md): FAIL by one question.**
+  - A 30,000-character view answered 0/40 questions about facts cut from it.
+  - The same view plus an exact `recall` tool answered **23/40 (57.5%)**, the same as an oracle given the source excerpt. The bar was 60%.
+  - Recall cost 4.7× the input tokens (1.9× the money). Haiku, $0.13, self-reviewed.
+- **CI:** two pushes on 2026-10-29 failed one `packages/eval` unit test once each and passed on re-run.
+  - 15 local runs of the eval suite were clean.
+  - The test's name is not known: the log tool returns only the last 5,000 lines, and the full log host is blocked from the cloud session.
+  - It is an open intermittent failure, not a fixed one.
 
 ## Since 2026-10-17
 
@@ -117,6 +142,8 @@ accuracy or trust. Historical 0.13 pilot/reviews remain historical.
 - A trained semantic compiler.
 
 ## Next, in order
+
+The numbered list below predates 2026-10-22 and is partly done (the owner review returned; the cross-language test ran). The plan document above governs.
 
 **The plan is [docs/PLAN-rust-engine-language-pairs.md](docs/PLAN-rust-engine-language-pairs.md) (2026-10-22; English-pivot revision approved the same day):** English → Lunum → English on the Rust engine, then Greek through an English pivot: translation adapters at the edges ([ADR 0030](decisions/0030-english-pivot-translation-adapters.md)). A0 (why English abstains) is [done](experiments/abstention-shapes-v1/RESULTS.md). The 2026-10-16 handoff it builds on is [archived](research/archive/handoffs/HANDOFF-2026-10-16.md). The list below is older.
 

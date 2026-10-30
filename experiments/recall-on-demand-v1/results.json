@@ -1,0 +1,71 @@
+{
+ "format": "recall-on-demand-v1/1.0",
+ "aggregatesOnly": true,
+ "transcriptSha256Prefix": "092628136d922c54",
+ "points": 10,
+ "itemsSelected": 40,
+ "questions": {
+  "generated": 40,
+  "rejected": 0
+ },
+ "budgetChars": 30000,
+ "conditions": {
+  "A": {
+   "questions": 40,
+   "correct": 0,
+   "accuracy": 0,
+   "calls": 10,
+   "inputTokens": 163571,
+   "meanInputTokensPerCall": 16357,
+   "turns": 10,
+   "unparsedCalls": 0,
+   "models": [
+    "claude-haiku-5-5"
+   ]
+  },
+  "B": {
+   "questions": 40,
+   "correct": 23,
+   "accuracy": 0.575,
+   "calls": 10,
+   "inputTokens": 774849,
+   "meanInputTokensPerCall": 77485,
+   "turns": 70,
+   "unparsedCalls": 0,
+   "models": [
+    "claude-haiku-5-5"
+   ]
+  },
+  "C": {
+   "questions": 40,
+   "correct": 23,
+   "accuracy": 0.575,
+   "calls": 10,
+   "inputTokens": 172292,
+   "meanInputTokensPerCall": 17229,
+   "turns": 10,
+   "unparsedCalls": 0,
+   "models": [
+    "claude-haiku-5-5"
+   ]
+  }
+ },
+ "bars": {
+  "bar1": {
+   "rule": "accuracy B >= accuracy A + 0.30",
+   "value": 0.575,
+   "pass": true
+  },
+  "bar2": {
+   "rule": "accuracy B >= 0.60",
+   "value": 0.575,
+   "pass": false
+  }
+ },
+ "pass": false,
+ "costUsd": {
+  "questions": 0.0079,
+  "answers": 0.1208,
+  "total": 0.1287
+ }
+}
