@@ -2,6 +2,11 @@
 
 **As of 2026-10-30.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
 
+## 2026-11-06: revival check
+
+- **Clean-checkout `pnpm verify` passes on `main` (1aaea645).** Fresh worktree, Node 22.22.2, pnpm 10.13.1, `pnpm install --offline --frozen-lockfile`, then `pnpm verify` (typecheck + tests + eval smoke): **4,591 tests passed, 0 failed**, eval smoke dataset of 16 items in 4 groups, about 75 s wall time.
+- This is step 4 of the revival checklist after three weeks without commits. The project stays research-only; no automation was turned back on.
+
 ## Since 2026-10-22
 
 - **English pivot ([ADR 0030](decisions/0030-english-pivot-translation-adapters.md)).** Lunum and the Rust engine handle English only; Greek and other languages connect through model translation with deterministic guards. The plan is [docs/PLAN-rust-engine-language-pairs.md](docs/PLAN-rust-engine-language-pairs.md). The old HANDOFF.md is archived at [research/archive/handoffs/HANDOFF-2026-10-16.md](research/archive/handoffs/HANDOFF-2026-10-16.md).
