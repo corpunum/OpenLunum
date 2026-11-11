@@ -1,0 +1,12 @@
+{
+  "calibrationNatural": 32,
+  "calibrationControls": 8,
+  "barControls": 20,
+  "calibrationEligible": 121,
+  "rejectedOverlapWithCoverageA3v2": 0,
+  "renderer": "generic-en-pivot/0.3",
+  "seeds": {
+    "calibration": "coverage-a3-v3-calibration:2026-11-11",
+    "bar": "coverage-a3-v3-judge:2026-11-11"
+  }
+}
