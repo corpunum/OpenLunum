@@ -1,7 +1,7 @@
 /**
  * Lunum Extension for Pi/Agy
  *
- * Registers 4 Lunum tools via Pi's native defineTool API.
+ * Registers 7 Lunum tools via Pi's native defineTool API.
  * Imports @corpunum/lunum directly (no MCP roundtrip).
  *
  * Install: symlink or copy to ~/.pi/agent/extensions/openlunum-lunum.ts
@@ -12,7 +12,9 @@ import { defineTool, type ExtensionAPI } from "@earendil-works/pi-coding-agent";
 // Absolute path import — Pi extensions load outside the pnpm workspace,
 // so the @corpunum/lunum package alias doesn't resolve. This path points
 // to the built dist of the core package in the OpenLunum repo.
-const LUNUM_CORE = "/home/corpunum/OpenLunum/packages/core/dist/src/index.js";
+// Override with LUNUM_CORE_PATH when the checkout lives elsewhere.
+const LUNUM_CORE =
+  process.env.LUNUM_CORE_PATH ?? "/home/corpunum/OpenLunum/packages/core/dist/src/index.js";
 const lunum = await import(LUNUM_CORE);
 const {
   deriveLunumSidecar,
@@ -27,7 +29,12 @@ type LunumSem = any;
 type ContextMode = "natural" | "lunum" | "mixed" | "shadow_mixed";
 
 const ok = (text: string) => ({ content: [{ type: "text" as const, text }] });
-const err = (text: string) => ({ content: [{ type: "text" as const, text }], isError: true });
+// Pi marks a tool call as failed only when execute throws; a returned
+// { isError: true } is reported to the model as a success (Pi extensions docs,
+// "Signaling errors"; observed with pi 0.84.0 on 2026-11-11).
+const err = (text: string): never => {
+  throw new Error(text);
+};
 
 const lunumDerive = defineTool({
   name: "lunum_derive",

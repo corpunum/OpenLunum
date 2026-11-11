@@ -8,6 +8,7 @@ import {
   runLoadTest,
   runConcurrencyTest,
   runSoakTest,
+  soakLatencyDriftPct,
   runActualConcurrentLoad,
   validateLoadTestResult,
   validateSoakTestResult,
@@ -157,6 +158,15 @@ describe('concurrency test: fingerprint', () => {
     const result = runConcurrencyTest('fingerprint', 10, 100);
     assert.strictEqual(result.totalRequests, 1000);
     assert.strictEqual(result.errorCount, 0);
+  });
+});
+
+describe('soak latency drift', () => {
+  it('uses unrounded means: sub-microsecond intervals do not read as -100%', () => {
+    // 0.0006 ms and 0.0004 ms round to 0.001 and 0.000 at 1 µs resolution.
+    assert.ok(Math.abs(soakLatencyDriftPct([0.0006, 0.0004]) - -33.33) < 0.01);
+    assert.ok(Math.abs(soakLatencyDriftPct([0.0008, 0.0008, 0.0008])) < 1e-9);
+    assert.strictEqual(soakLatencyDriftPct([]), 0);
   });
 });
 

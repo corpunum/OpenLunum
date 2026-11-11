@@ -9,7 +9,7 @@ Living document for the next agent. Update it in the same commit as the work it 
 - `main` is green: the last CI run and a clean-checkout `pnpm verify` both pass.
 - Frozen: protocol 0.6, frames 0.8, contract `lunum-agent/0.19`, identity `lfp:2.1` ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)). Contracts 0.21 and 0.22 on `main` are unreleased candidates: coverage rose to 69.5% but judged meaning stayed at 56% ([coverage-a3-v2](experiments/coverage-a3-v2/RESULTS.md)).
 - Trunk-based, single agent ([AGENTS.md](AGENTS.md)). The local worker, reviewer, merge and watchdog loops were stopped on 2026-10-06 and are still off; nothing in this repository runs unattended. The owner approved an Ally-only daytime lane on 2026-11-06; it has not been started, and its tunnel to the Ally is down.
-- Open intermittent failure: one `packages/eval` unit test failed once on each of two pushes on 2026-10-29 and passed on re-run; its name is not known (see STATUS.md).
+- The intermittent `packages/eval` failure is diagnosed and fixed (2026-11-11 evening, below). CI now keeps the full `pnpm verify` log as an artifact, and the failing test names go into the job summary.
 
 ## What the 2026-11-11 session did
 
@@ -18,12 +18,29 @@ Living document for the next agent. Update it in the same commit as the work it 
 3. **Finding: the pressure is inside turns, not in chat history.** The view fired 82 times in five weeks; OpenUnum's per-request prompt cap acted 1,850 times in nine days and sent 1,057 requests to a hosted model because recent tool output did not fit. OpenUnum now logs, for each such request, what the view would have produced (measure-only).
 4. **OpenUnum's vendored core moved from `433a70d8` to `5f6570bf`,** the newest commit that still carries contract 0.19. It gains the forbidden-key rejection (#723) and the #729 renderer fix. It deliberately does not take 0.21/0.22.
 
+## What the 2026-11-11 evening session (s-openlunum) did
+
+1. **Intermittent `packages/eval` failure: three causes found and fixed.** I ran the suite 30 times as two concurrent copies plus 6 CPU burners: 35 of 60 runs failed before the fixes, 10 of 60 after.
+   - `runSoakTest` computed latency drift from interval means already rounded to 1 µs. `validate` takes about 0.8 µs per call, so a mean rounded to 0 gave exactly −100% drift. Drift now uses unrounded means (`soakLatencyDriftPct`, with a regression test).
+   - The first soak interval (JIT warm-up) is left out of the drift and heap-stability measures when there are at least 3 intervals.
+   - Three `retrieval.test.ts` tests wrote broken fixtures into the committed fixtures directory, and concurrent readers saw them. They now use a private copy (`isolatedFixtureRoot`).
+   - What still fails under that load: negative drift (−52% to −77%), the compare throughput floor, and one `ENOTEMPTY` on `packages/eval/scratch/` that only two copies sharing one tree can cause. I left those alone on purpose: they are artefacts of load much heavier than CI.
+2. **Client integrations on the local model.** Evidence is in `docs/CLIENT_COMPATIBILITY.md`, section "2026-11-11 local-model runs".
+   - OpenCode 1.18.33: PASS.
+   - Pi 0.84.0: PASS, error path included.
+   - OpenClaw 2026.11.3: discovery only. Execution timed out on a 57k-token prefill while the main model was being stopped for another session's heavy job; the retry is pending.
+   - Fixes along the way: the Pi extension throws on failure and takes `LUNUM_CORE_PATH`; the OpenCode guide's config key is corrected. MCP tool annotations (`readOnlyHint` etc.) were written and tested but held back: they change `packages/mcp/dist`, which the v28 instruction package binds (`scripts/research/source-only-run-gates.test.mjs`). Patch: `~/openlunum-archive/worktrees-20261111/mcp-tool-annotations.patch`.
+3. **Housekeeping.**
+   - Removed six stale `~/openlunum-workers` worktrees from September. Their unlanded commits are kept as `refs/archive/{check-f4,scorer-685,codec-s1-base}`, and the codec-s1 uncommitted diff is in `~/openlunum-archive/worktrees-20261111/`.
+   - The September `reports/experiments` output is gitignored.
+   - The rig's `openclaw` launcher now runs the npm release on a private Node 24 (`~/.local/lib/node24`), because the system Node is 22.
+
 ## Next steps, in order
 
 1. **Read the prompt-cap shadow after a week of traffic** (OpenUnum: `node scripts/lunum-live-gate.mjs --since <deploy date>`; fields `promptCap.shadow.wouldFitPct`, `reroutedWouldFit`). If a useful share of reroutes would fit, pre-register `discourse-prompt-cap-v1` here before applying anything: bar on reroutes avoided **and** on recall over tool output, where a compacted result has no `session_read` pointer. The view's handling of tool results (`tool-result fields` in `packages/core/src/discourse.ts`) has only been measured on stored chat rows.
-2. **Find the intermittent `packages/eval` test.** 15 local runs were clean. Run the suite in a loop under CPU contention, or add a CI step that uploads the full test log as an artifact on failure (the 5,000-line log tail is what hid the name).
+2. **Watch CI for any further `packages/eval` failure.** The full log is now uploaded as `verify-log-<run>`. Before changing a bound, check whether the failure is one of the load artefacts listed above.
 3. **Decide the 0.21/0.22 candidates.** They stay unreleased until judged meaning clears bar 2. OpenUnum will not re-vendor before that.
-4. **Client integrations** ([integrations/README.md](integrations/README.md)): Claude Code and Codex CLI have versioned evidence; OpenClaw, OpenCode and Pi are marked working without a recorded tested version; Gemini CLI is design only. Each guide needs the tested product version, permissions, limits and removal path before promotion.
+4. **Client integrations** ([integrations/README.md](integrations/README.md)): Claude Code, Codex CLI, OpenCode and Pi have versioned evidence. OpenClaw needs one execution run on the local model, with provider `timeoutSeconds` above the prefill time. Gemini CLI is design only.
 
 ## How to measure on OpenUnum traffic without leaking it
 

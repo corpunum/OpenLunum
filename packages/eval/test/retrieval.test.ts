@@ -2,13 +2,27 @@ import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import { runRetrievalExperiment, type RetrievalManifest, type RetrievalFixture } from '../src/retrieval-runner.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
+
+const FIXTURES_REL = path.join('packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+
+// Tests that add a broken fixture use a private copy of the fixture tree.
+// Writing into the committed fixtures directory raced with every other reader
+// running in parallel (node --test runs files concurrently): they saw the
+// broken file and reported status 'error'.
+async function isolatedFixtureRoot(): Promise<{ root: string; fixturesDir: string }> {
+  const root = createTempDir();
+  const fixturesDir = path.join(root, FIXTURES_REL);
+  await mkdir(path.dirname(fixturesDir), { recursive: true });
+  await cp(path.join(WORKSPACE_ROOT, FIXTURES_REL), fixturesDir, { recursive: true });
+  return { root, fixturesDir };
+}
 
 // Track temp dirs for cleanup
 const tempDirs = new Set<string>();
@@ -135,7 +149,7 @@ test('retrieval runner rejects invalid k', async () => {
 
 test('retrieval runner rejects duplicate IDs in candidates', async () => {
   const testDir = createTempDir();
-  const stdFixturesDir = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+  const { root: fixtureRoot, fixturesDir: stdFixturesDir } = await isolatedFixtureRoot();
   const dupFixturePath = path.join(stdFixturesDir, 'test-dup-candidates.json');
 
   // Write a fixture with duplicate candidate IDs to the standard fixtures dir
@@ -164,7 +178,7 @@ test('retrieval runner rejects duplicate IDs in candidates', async () => {
     };
 
     // The runner catches the error per-fixture and returns error result
-    const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir);
+    const results = await runRetrievalExperiment(manifest, fixtureRoot, testDir);
     const errorResult = results.find(r => r.id === 'test-dup-candidates');
     assert.ok(errorResult, 'Should have error result for duplicate fixture');
     assert.strictEqual(errorResult!.status, 'error', 'Error result status should be error');
@@ -180,7 +194,7 @@ test('retrieval runner rejects duplicate IDs in candidates', async () => {
 
 test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
   const testDir = createTempDir();
-  const stdFixturesDir = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+  const { root: fixtureRoot, fixturesDir: stdFixturesDir } = await isolatedFixtureRoot();
   const dupFixturePath = path.join(stdFixturesDir, 'test-dup-expected.json');
 
   // Write a fixture with duplicate expectedRelevant IDs to the standard fixtures dir
@@ -209,7 +223,7 @@ test('retrieval runner rejects duplicate IDs in expectedRelevant', async () => {
     };
 
     // The runner catches the error per-fixture and returns error result
-    const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir);
+    const results = await runRetrievalExperiment(manifest, fixtureRoot, testDir);
     const errorResult = results.find(r => r.id === 'test-dup-expected');
     assert.ok(errorResult, 'Should have error result for duplicate fixture');
     assert.strictEqual(errorResult!.status, 'error', 'Error result status should be error');
@@ -320,7 +334,7 @@ test('retrieval runner computes aggregate MRR', async () => {
 
 test('retrieval runner produces evidence bundle when malformed fixture aborts', async () => {
   const testDir = createTempDir();
-  const stdFixturesDir = path.join(WORKSPACE_ROOT, 'packages', 'eval', 'test-fixtures', 'retrieval', 'fixtures');
+  const { root: fixtureRoot, fixturesDir: stdFixturesDir } = await isolatedFixtureRoot();
   const malformedFixturePath = path.join(stdFixturesDir, 'test-malformed.json');
 
   // Write a malformed fixture (missing queryId)
@@ -348,7 +362,7 @@ test('retrieval runner produces evidence bundle when malformed fixture aborts', 
     };
 
     // Runner should NOT throw — it should catch the error per-fixture
-    const results = await runRetrievalExperiment(manifest, WORKSPACE_ROOT, testDir);
+    const results = await runRetrievalExperiment(manifest, fixtureRoot, testDir);
 
     // Evidence bundle should exist
     const resultsPath = path.join(testDir, 'retrieval-results.json');

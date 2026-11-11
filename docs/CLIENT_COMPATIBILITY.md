@@ -66,6 +66,9 @@ invariant. Malformed and forged provenance must be rejected by the server.
 | Claude Code | 2.1.270 | claude-sonnet-4-6 | claude-sonnet-4-6, first-party, Claude.ai Pro | PASS | PASS | MCP_PASS |
 | AGY | 1.2.2 standalone | claude-sonnet-4-6 | claude-sonnet-4-6 reported by init | PASS | NOT_RUN | headless MCP permission denied |
 | Gemini CLI | 0.45.1 | none | none | PASS | NOT_RUN | Code Assist individual tier unsupported |
+| OpenCode | 1.18.33 | local qwen3.8-flash-next | same, local OpenAI-compatible endpoint | PASS | PASS | MCP_PASS (2026-11-11) |
+| OpenClaw | 2026.11.3 | local qwen3.8-flash-next | none (client timeout) | PASS | NOT_RUN | 12 tools probed; execution pending (2026-11-11) |
+| Pi | 0.84.0 | local qwen3.8-flash-next | same, local OpenAI-compatible endpoint | n/a (native extension) | PASS | EXTENSION_PASS (2026-11-11) |
 
 agy is a distinct standalone ELF executable, not an alias to gemini. Model
 catalog access is not quota proof. No tested client exposed a reliable quota
@@ -141,6 +144,55 @@ reorder independent calls. The preserved native Claude stream contains no
 malformed `lunum_submit_candidate` tool-use event, so the older manifest's
 `malformedRejected=false` is `NOT_TESTED`, not a server acceptance or a
 proven client failure. The run proves this named version and model only.
+
+## 2026-11-11 local-model runs (OpenCode, OpenClaw, Pi)
+
+All three ran on the rig against the local main model (`qwen3.8-flash-next`)
+through its OpenAI-compatible endpoint, with no hosted model. Every client used
+an isolated configuration (`OPENCODE_CONFIG`, `openclaw --profile`,
+`PI_CODING_AGENT_DIR`), so no user configuration changed. The prompt was the
+same synthetic sentence for every client:
+
+    Call the tool lunum_derive exactly once with text "Maria prefers quiet mode."
+    Then reply with only the fingerprint value from the result.
+
+The deterministic server returned `lsf:0.1:sha256:971bd28ee0ac1884287885ec`.
+The OpenCode and Pi replies carried that value unchanged. The server was
+`packages/mcp` and `packages/core` built at `35a19146`; this section's commit
+does not change either package.
+
+### OpenCode
+
+`opencode mcp list` reported `lunum connected`. `opencode run --format json`
+emitted one tool part `lunum_lunum_derive`; OpenCode prefixes tool names with
+the server name. One call took 2 min 24 s wall-clock. The earlier guide's
+`mcpServers` key is not read by OpenCode; the key is `mcp`, with
+`type: "local"` and a `command` array.
+
+### OpenClaw
+
+The rig's `openclaw` launcher pointed at a removed source checkout. It now runs
+the npm release 2026.11.3 on a private Node 24.22.3, because the 2026.11.x
+releases require Node `>=24.16`. `openclaw mcp probe` listed 12 tools and
+warned that "tools have no safety annotations". Prompting postures therefore
+ask for approval on every call. Adding read-only/idempotent annotations was
+tried and passed the MCP tests, but it changes the served runtime that the
+frozen instruction packages bind, so it is not in this commit.
+
+An `openclaw agent --local` turn sent a 57,393-token prompt. The local engine
+took 125 s to prefill it, and OpenClaw abandoned the request at about 100 s.
+Execution is therefore NOT_RUN for this version. A retry with a longer provider
+`timeoutSeconds` is pending.
+
+### Pi
+
+`pi -p -ne -e integrations/pi/lunum-extension.ts --no-builtin-tools --mode json`
+called `lunum_derive` (PASS). A second run with an invalid Sem exercised the
+error path. Pi showed `isError: false` for the failed call until the extension
+was changed to throw, as Pi's extension API requires; it now shows
+`isError: true`. Two client traps came up. `pi -p` blocks on an open stdin. The
+local Qwen template rejects the `developer` role unless the provider sets
+`compat.supportsDeveloperRole: false`.
 
 ## AGY
 

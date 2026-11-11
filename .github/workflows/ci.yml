@@ -32,7 +32,30 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
-      - run: pnpm verify
+      # Keep the full log: the 5,000-line tail in the UI hid the name of an
+      # intermittent packages/eval failure (HANDOVER.md, next step 2).
+      - name: pnpm verify (full log kept)
+        shell: bash
+        run: |
+          set -o pipefail
+          pnpm verify 2>&1 | tee verify.log
+      - name: Name failing tests
+        if: failure()
+        shell: bash
+        run: |
+          {
+            echo '### Failing tests'
+            echo '```'
+            grep -nE '^\s*not ok |^✖ |# fail [1-9]' verify.log | head -50 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload full verify log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verify-log-${{ github.run_id }}-${{ github.run_attempt }}
+          path: verify.log
+          retention-days: 14
 
   schema-drift:
     if: github.event_name == 'push' || github.event.pull_request.draft == false

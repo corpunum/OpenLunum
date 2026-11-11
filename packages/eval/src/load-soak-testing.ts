@@ -312,10 +312,28 @@ export function runConcurrencyTest(endpoint: EndpointId, concurrency: number, re
   };
 }
 
+/**
+ * Percent change of mean latency from the first half of the soak intervals to
+ * the second half. Takes unrounded per-interval means: rounding first makes
+ * sub-microsecond endpoints report -100% or +100%.
+ */
+export function soakLatencyDriftPct(intervalMeansMs: readonly number[]): number {
+  const half = Math.floor(intervalMeansMs.length / 2);
+  const mean = (xs: readonly number[]) => (xs.length > 0 ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
+  const firstMean = mean(intervalMeansMs.slice(0, half));
+  const secondMean = mean(intervalMeansMs.slice(half));
+  return firstMean > 0 ? ((secondMean - firstMean) / firstMean) * 100 : 0;
+}
+
 export function runSoakTest(endpoint: EndpointId, durationMs: number, intervalMs: number): SoakTestResult {
   const fn = getEndpointFn(endpoint);
   const startTimestamp = new Date().toISOString();
   const intervals: SoakInterval[] = [];
+  // Unrounded per-interval means. The reported meanLatencyMs is rounded to
+  // 1 µs, and sub-microsecond endpoints (validate) round to 0 or 0.001, which
+  // turned drift into an artefact of rounding: -100% or +100% (the
+  // intermittent packages/eval failure, HANDOVER.md next step 2).
+  const rawIntervalMeans: number[] = [];
   const allLatencies: number[] = [];
   let totalErrors = 0;
   let intervalIndex = 0;
@@ -343,6 +361,7 @@ export function runSoakTest(endpoint: EndpointId, durationMs: number, intervalMs
     const iDuration = performance.now() - intervalStart;
     const iSorted = [...iLatencies].sort((a, b) => a - b);
     const iMean = iLatencies.length > 0 ? iLatencies.reduce((a, b) => a + b, 0) / iLatencies.length : 0;
+    rawIntervalMeans.push(iMean);
 
     intervals.push({
       intervalIndex,
@@ -367,13 +386,13 @@ export function runSoakTest(endpoint: EndpointId, durationMs: number, intervalMs
   const sorted = [...allLatencies].sort((a, b) => a - b);
   const overallMean = allLatencies.length > 0 ? allLatencies.reduce((a, b) => a + b, 0) / allLatencies.length : 0;
 
-  const firstHalf = intervals.slice(0, Math.floor(intervals.length / 2));
-  const secondHalf = intervals.slice(Math.floor(intervals.length / 2));
-  const firstMean = firstHalf.length > 0 ? firstHalf.reduce((a, b) => a + b.meanLatencyMs, 0) / firstHalf.length : 0;
-  const secondMean = secondHalf.length > 0 ? secondHalf.reduce((a, b) => a + b.meanLatencyMs, 0) / secondHalf.length : 0;
-  const latencyDrift = firstMean > 0 ? ((secondMean - firstMean) / firstMean) * 100 : 0;
+  // The first interval carries JIT and inline-cache warm-up; with at least
+  // three intervals it is left out of the drift and heap-stability measures
+  // (it read as -50% "drift" and as the heap minimum under CPU contention).
+  const warmup = intervals.length >= 3 ? 1 : 0;
+  const latencyDrift = soakLatencyDriftPct(rawIntervalMeans.slice(warmup));
 
-  const heapValues = intervals.map(i => i.heapUsedKb);
+  const heapValues = intervals.slice(warmup).map(i => i.heapUsedKb);
   const heapRange = heapValues.length > 0 ? (Math.max(...heapValues) - Math.min(...heapValues)) : 0;
   const heapMin = heapValues.length > 0 ? Math.min(...heapValues) : 1;
   // GC jitter in short soaks produces wide heap swings; use generous threshold

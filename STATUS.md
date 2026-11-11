@@ -38,9 +38,9 @@
   - The same view plus an exact `recall` tool answered **23/40 (57.5%)**, the same as an oracle given the source excerpt. The bar was 60%.
   - Recall cost 4.7× the input tokens (1.9× the money). Haiku, $0.13, self-reviewed.
 - **CI:** two pushes on 2026-10-29 failed one `packages/eval` unit test once each and passed on re-run.
-  - 15 local runs of the eval suite were clean.
-  - The test's name is not known: the log tool returns only the last 5,000 lines, and the full log host is blocked from the cloud session.
-  - It is an open intermittent failure, not a fixed one.
+  - Diagnosed on 2026-11-11 under deliberate CPU contention: 35 of 60 runs failed before the fixes, 10 of 60 after. The remaining failures are load artefacts much heavier than CI (see HANDOVER.md).
+  - The causes were soak-test drift computed from means rounded to 1 µs (it read −100%), JIT warm-up counted as drift, and retrieval tests writing broken fixtures into the shared fixtures directory.
+  - CI now uploads the full `pnpm verify` log on failure.
 
 ## Since 2026-10-17
 

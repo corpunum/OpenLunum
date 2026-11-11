@@ -35,3 +35,8 @@ packages/tmp/
 /manifest.md
 /children/
 /artifacts/
+
+# Local experiment output from Sept 2026 (never committed)
+reports/experiments/protected-fresh-v1-20260905/
+reports/experiments/threshold-sweep/2026-09-01T10-10-20-599Z/
+reports/experiments/threshold-sweep/stage2-extracted-2026-09-01T10-10-11-587Z/
