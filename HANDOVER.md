@@ -28,7 +28,7 @@ Living document for the next agent. Update it in the same commit as the work it 
 2. **Client integrations on the local model.** Evidence is in `docs/CLIENT_COMPATIBILITY.md`, section "2026-11-11 local-model runs".
    - OpenCode 1.18.33: PASS.
    - Pi 0.84.0: PASS, error path included.
-   - OpenClaw 2026.11.3: discovery only. Execution timed out on a 57k-token prefill while the main model was being stopped for another session's heavy job; the retry is pending.
+   - OpenClaw 2026.11.3: PASS on the retry, with provider `timeoutSeconds` 600. The first attempt timed out on a 57k-token first-turn prefill.
    - Fixes along the way: the Pi extension throws on failure and takes `LUNUM_CORE_PATH`; the OpenCode guide's config key is corrected. MCP tool annotations (`readOnlyHint` etc.) were written and tested but held back: they change `packages/mcp/dist`, which the v28 instruction package binds (`scripts/research/source-only-run-gates.test.mjs`). Patch: `~/openlunum-archive/worktrees-20261111/mcp-tool-annotations.patch`.
 3. **Housekeeping.**
    - Removed six stale `~/openlunum-workers` worktrees from September. Their unlanded commits are kept as `refs/archive/{check-f4,scorer-685,codec-s1-base}`, and the codec-s1 uncommitted diff is in `~/openlunum-archive/worktrees-20261111/`.
@@ -39,8 +39,8 @@ Living document for the next agent. Update it in the same commit as the work it 
 
 1. **Read the prompt-cap shadow after a week of traffic** (OpenUnum: `node scripts/lunum-live-gate.mjs --since <deploy date>`; fields `promptCap.shadow.wouldFitPct`, `reroutedWouldFit`). If a useful share of reroutes would fit, pre-register `discourse-prompt-cap-v1` here before applying anything: bar on reroutes avoided **and** on recall over tool output, where a compacted result has no `session_read` pointer. The view's handling of tool results (`tool-result fields` in `packages/core/src/discourse.ts`) has only been measured on stored chat rows.
 2. **Watch CI for any further `packages/eval` failure.** The full log is now uploaded as `verify-log-<run>`. Before changing a bound, check whether the failure is one of the load artefacts listed above.
-3. **Decide the 0.21/0.22 candidates.** They stay unreleased until judged meaning clears bar 2. OpenUnum will not re-vendor before that.
-4. **Client integrations** ([integrations/README.md](integrations/README.md)): Claude Code, Codex CLI, OpenCode and Pi have versioned evidence. OpenClaw needs one execution run on the local model, with provider `timeoutSeconds` above the prefill time. Gemini CLI is design only.
+3. **0.21/0.22 candidates: [coverage-a3-v3](experiments/coverage-a3-v3/PREREGISTRATION.md) is pre-registered** (orchestrator, option a). It re-judges the existing 139 records with a verb-first judging render and judges calibrated on owner-labelled English records. Next: `render-verb-first.mjs` and `prepare.mjs` (a worker can write them), then the owner's 32-item worksheet as a guided form. A pass is not a release: 80% on fresh sentences needs fixes A, B and C together (coverage-a3-v4). OpenUnum does not re-vendor.
+4. **Client integrations** ([integrations/README.md](integrations/README.md)): Claude Code, Codex CLI, OpenCode, OpenClaw and Pi have versioned evidence. Gemini CLI is design only.
 
 ## How to measure on OpenUnum traffic without leaking it
 

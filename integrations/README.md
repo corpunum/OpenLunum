@@ -13,7 +13,7 @@ Status labels:
 | OpenUnum | package dependency + product adapter | Verified-current-state / Reference plan | Detailed gap analysis against current private repo |
 | Claude Code | MCP server over stdio via `.mcp.json` | **Versioned evidence** | Claude Code 2.1.270: ten tools discovered and exercised with supplied Sem; see `docs/CLIENT_COMPATIBILITY.md` |
 | Codex CLI | Native MCP via `codex mcp add` | **Versioned evidence** | Codex CLI 0.154.0 direct stdio MCP; supplied-Sem execution passed |
-| OpenClaw | Native MCP via `openclaw mcp add` | **Discovery evidence** | OpenClaw 2026.11.3 on Node 24: `mcp probe` lists 12 tools; execution on the local model not yet recorded (client timed out on a 57k-token prefill) |
+| OpenClaw | Native MCP via `openclaw mcp add` | **Versioned evidence** | OpenClaw 2026.11.3 on Node 24 with local Qwen: 12 tools probed, `lunum_derive` execution passed (provider timeout ≥ 300 s) |
 | OpenCode | Native MCP, `mcp` key in `opencode.jsonc` | **Versioned evidence** | OpenCode 1.18.33 with local Qwen: discovery and `lunum_derive` execution passed |
 | Pi | Native `defineTool` extension | **Versioned evidence** | pi 0.84.0 with local Qwen: 7-tool extension, execution and error path passed |
 | AGY | Native MCP | **Discovery evidence** | AGY 1.2.2 discovered Lunum schemas; headless MCP execution was permission-blocked |

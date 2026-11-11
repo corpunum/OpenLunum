@@ -67,7 +67,7 @@ invariant. Malformed and forged provenance must be rejected by the server.
 | AGY | 1.2.2 standalone | claude-sonnet-4-6 | claude-sonnet-4-6 reported by init | PASS | NOT_RUN | headless MCP permission denied |
 | Gemini CLI | 0.45.1 | none | none | PASS | NOT_RUN | Code Assist individual tier unsupported |
 | OpenCode | 1.18.33 | local qwen3.8-flash-next | same, local OpenAI-compatible endpoint | PASS | PASS | MCP_PASS (2026-11-11) |
-| OpenClaw | 2026.11.3 | local qwen3.8-flash-next | none (client timeout) | PASS | NOT_RUN | 12 tools probed; execution pending (2026-11-11) |
+| OpenClaw | 2026.11.3 | local qwen3.8-flash-next | same, local OpenAI-compatible endpoint | PASS | PASS | MCP_PASS (2026-11-11) |
 | Pi | 0.84.0 | local qwen3.8-flash-next | same, local OpenAI-compatible endpoint | n/a (native extension) | PASS | EXTENSION_PASS (2026-11-11) |
 
 agy is a distinct standalone ELF executable, not an alias to gemini. Model
@@ -157,7 +157,7 @@ same synthetic sentence for every client:
     Then reply with only the fingerprint value from the result.
 
 The deterministic server returned `lsf:0.1:sha256:971bd28ee0ac1884287885ec`.
-The OpenCode and Pi replies carried that value unchanged. The server was
+The OpenCode, OpenClaw and Pi replies carried that value unchanged. The server was
 `packages/mcp` and `packages/core` built at `35a19146`; this section's commit
 does not change either package.
 
@@ -181,8 +181,11 @@ frozen instruction packages bind, so it is not in this commit.
 
 An `openclaw agent --local` turn sent a 57,393-token prompt. The local engine
 took 125 s to prefill it, and OpenClaw abandoned the request at about 100 s.
-Execution is therefore NOT_RUN for this version. A retry with a longer provider
-`timeoutSeconds` is pending.
+A retry with provider `timeoutSeconds: 600` (`openclaw agent --local --json`)
+passed. `toolSummary` records 3 calls and 0 failures: `tool_search` (OpenClaw
+loads MCP tools lazily), `lunum__lunum_derive` and `dispatch_action`. The reply
+was the fingerprint above. That run took 51 s with 15–17k-token prompts; the
+57k prompt was the first turn of a fresh profile.
 
 ### Pi
 
