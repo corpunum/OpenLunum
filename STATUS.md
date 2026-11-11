@@ -1,6 +1,16 @@
 # Project status
 
-**As of 2026-10-30.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+**As of 2026-11-11.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+
+## 2026-11-11: held-out gate for the discourse view
+
+- **[discourse-live-gate-v1](experiments/discourse-live-gate-v1/RESULTS.md): PASS on all three bars.** The discourse view OpenUnum has used live since 2026-10-08 was re-measured on 83 sessions that started after it was enabled (292 compaction points), with the bar committed first.
+  - Prompt tokens at compaction points: **0.56x** of the head/tail cut (bar: at most 0.80x). The in-sample figure of 2026-10-08 was 0.30x.
+  - Exact-match fact recall, pooled: **20.3% to 37.1%**; per point 62.6% to 73.5%; 0 of 180 points worse.
+  - Semantic identities used: 0. The saving is structural (duplicate and narrative units), as before.
+- **Where the tokens are.** The view fired 82 times in five weeks. OpenUnum's per-request prompt cap acted 1,850 times in nine days, and 1,057 of those requests went to a hosted model because recent tool output did not fit. Whether the view would bring them under the cap is not measured yet; OpenUnum now logs a measure-only shadow for it.
+- **OpenUnum's vendored core** is pinned to `5f6570bf`, the newest commit with the frozen contract 0.19. The 0.21/0.22 candidates are not vendored.
+- Working state and next steps are in [HANDOVER.md](HANDOVER.md).
 
 ## 2026-11-06: revival check
 

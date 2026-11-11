@@ -1,0 +1,15 @@
+{
+  "format": "openlunum-discourse-live-gate/0.1",
+  "measuredAt": "2026-11-11",
+  "harness": { "repository": "corpunum/openunum (private)", "commit": "3af6e7b5", "script": "scripts/lunum-discourse-measure.mjs", "contextLimit": 65536, "pointsPerSession": 4, "modelCalls": 0 },
+  "selection": { "firstMessageAfter": "2026-10-08T05:20:00Z", "minStoredChars": 200000, "sessions": 83, "messages": 23469, "sessionsReachingTrigger": 78, "points": 292, "pointsOffFitsContext": 289 },
+  "off": { "meanPromptTokens": 13833, "meanPromptTokensOffFits": 10458, "qaItems": 15949, "qaHitsPrompt": 3243, "qaRecallPrompt": 0.2033, "qaRecallWithWiki": 0.2829, "qaPointMeanRecallPrompt": 0.6259, "qaPointMeanRecallWithWiki": 0.7189, "literalRecall": 0.4235, "pointsOverContext": 3, "meanMs": 27.5, "p95Ms": 94.7 },
+  "on": { "meanPromptTokens": 7766, "meanPromptTokensOffFits": 6366, "qaItems": 15949, "qaHitsPrompt": 5924, "qaRecallPrompt": 0.3714, "qaRecallWithWiki": 0.4427, "qaPointMeanRecallPrompt": 0.7347, "qaPointMeanRecallWithWiki": 0.8214, "literalRecall": 0.5064, "pointsOverContext": 2, "meanMs": 177.8, "p95Ms": 520.2, "compactedMessages": 1463, "unitDispositions": { "kept": 11739, "record": 4, "clipped": 1350, "duplicate": 140569, "superseded": 1089, "omitted": 55447 }, "unitSemanticIdentities": 0 },
+  "comparison": { "tokenRatioAllPoints": 0.561, "tokenRatioOffFits": 0.609, "medianPointRatio": 0.44, "pointsLarger": 56, "pointsEqual": 36, "qaPoints": 180, "qaPointsWorse": 0, "qaPointsBetter": 61, "qaPointsSame": 119 },
+  "bars": { "tokens": "pass", "recallPooled": "pass", "recallPerPoint": "pass" },
+  "liveTelemetry": {
+    "window": ["2026-10-08", "2026-11-11"],
+    "discourse": { "events": 82, "sessions": 22, "failed": 0, "hardLimited": 0, "preTokens": 8167420, "postTokens": 826330, "msMean": 379.3, "msP95": 1241, "semanticIdentities": 0, "dispositions": { "kept": 4357, "record": 0, "clipped": 805, "duplicate": 61288, "superseded": 840, "omitted": 32857 } },
+    "promptCap": { "window": ["2026-11-02", "2026-11-11"], "cap": 32768, "events": 1850, "sessions": 238, "compacted": { "events": 643, "medianBefore": 35238, "medianAfter": 29454 }, "rerouted": { "events": 1057, "medianBefore": 42879, "medianAfter": 36347 }, "overCapNoFallback": { "events": 150, "medianBefore": 44736.5, "medianAfter": 43926 }, "neededReduction": { "overCapMatched": 1127, "medianShareOfMessageTokens": 0.128, "fitWith20Pct": 0.596, "fitWith40Pct": 0.706, "toolSchemasOver20k": 125 } }
+  }
+}
