@@ -39,3 +39,11 @@ Recorded as they happen, before the step they affect. RESULTS.md repeats them.
 **Not affected:** Luna goes through the Codex CLI path, which did not change. Its run uses the module as it was loaded, and its rows have no status field.
 
 **Historical runs:** judge-calibration-v1 and coverage-a3-v2 share this file. Their committed results were produced with the old parser and stand as recorded. A rerun of either would use the hardened path, and that would have to be recorded there.
+
+## D3. GLM 5.3 retired by NVIDIA NIM; no replacement judge (2026-11-12, before any GLM row)
+
+GLM's preflight (D2) failed at once with `judge_unreachable:http_410`: NIM has retired `z-ai/glm-5.3`. No rows were written.
+
+- GLM is recorded as **unavailable**, not failed. A different GLM model id would be a judge the pre-registration did not name, so no substitute is used.
+- The pre-registered order then continues as written: DeepSeek, then Qwen (only with a rig slot from the coordinator), then Nemotron.
+- Kimi and the other NIM models in `judges.mjs` are **not** candidates, because the pre-registration does not list them.
