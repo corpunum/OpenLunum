@@ -233,7 +233,15 @@ test('public instruction package exposes frozen scoring conventions without gold
   // frame-registry.js was unchanged from v14 to v18; decisions/0022 changes it in v19, 0023 in v20, 0024 in v22.
   assert.equal(current.freeze.frameValidatorArtifactSha256, next.freeze.frameValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/frame-registry.js'), v27.freeze.frameValidatorArtifactSha256);
-  assert.equal(hash('packages/core/dist/src/literal-retention.js'), v22.freeze.literalRetentionArtifactSha256);
+  // v30 (maintenance, contract lunum-agent/0.22 unchanged): the literal-retention fix ("one" inside number compounds)
+  // moves literal-retention.js and the served-runtime manifest; nothing else changes. v22's literal-retention hash is history from here on.
+  const v30 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v30.json', 'utf8'));
+  assert.equal(v30.supersedes.path, 'public-instruction-package-v29.json');
+  for (const key of Object.keys(v29.freeze)) {
+    if (['literalRetentionArtifactSha256', 'servedRuntimeManifestPath', 'servedRuntimeManifestSha256'].includes(key)) assert.notDeepEqual(v30.freeze[key], v29.freeze[key], `${key} changed in v30`);
+    else assert.deepEqual(v30.freeze[key], v29.freeze[key], `${key} unchanged in v30`);
+  }
+  assert.equal(hash('packages/core/dist/src/literal-retention.js'), v30.freeze.literalRetentionArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport.js'), next.freeze.transportValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport-schema.js'), next.freeze.transportSchemaArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-builder.js'), v27.freeze.builderArtifactSha256);

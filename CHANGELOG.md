@@ -1,5 +1,13 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-11-12 (v30 maintenance freeze: literal retention reads number compounds)
+
+### Fixed
+- v30 maintenance freeze (2026-11-12): literal retention reads 'one' inside number compounds (twenty-one, a hundred and one, one hundred); same contract 0.22. Found by the cross-vendor review (experiments/cross-vendor-review-v1).
+
+### Changed
+- Instruction package **v30** (`scripts/research/freeze-v30.mjs`): only the literal-retention module and the served-runtime manifest bindings move. v29 stays a historical binding. The source-only runner defaults to v30.
+
 ## Unreleased — 2026-11-12 (v29 maintenance freeze: dependency security update, MCP tool annotations)
 
 ### Security
