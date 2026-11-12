@@ -11,7 +11,18 @@ Living document for the next agent. Update it in the same commit as the work it 
 - Trunk-based, single agent ([AGENTS.md](AGENTS.md)). The local worker, reviewer, merge and watchdog loops were stopped on 2026-10-06 and are still off; nothing in this repository runs unattended. The owner approved an Ally-only daytime lane on 2026-11-06; it has not been started, and its tunnel to the Ally is down.
 - The intermittent `packages/eval` failure is diagnosed and fixed (2026-11-11 evening, below). CI now keeps the full `pnpm verify` log as an artifact, and the failing test names go into the job summary.
 
-## Session state at 2026-11-12 10:43 EET (written before a context compaction)
+## Session state at 2026-11-12 17:22 EET: PAUSED (savings mode) until Thu 2026-11-19 10:00 EET
+
+s-openlunum is paused by corpunum-82 (ONBOARDING "SAVINGS MODE"). **One exception: the anchorAtTail A/B report after 2026-11-13 21:04Z.** The commands are under item 2 below. Do nothing else until 11-19 10:00 EET or a message from corpunum-82. Main model: Opus 5.5 at medium effort.
+
+**Done since 10:43 EET (all on `main`, pushed):**
+- Cross-vendor review by gpt-6-luna, unedited, with its fact check (`experiments/cross-vendor-review-v1/`).
+- Owner decision ADR 0032: the 0.21 / 0.22 line is stopped and 0.19 stays frozen.
+- Literal retention reads "twenty-one" correctly (v30 freeze, `2e5d246d`).
+- [gate-blindspots-v1](experiments/gate-blindspots-v1/RESULTS.md): meaning-changing edits still get identities. Then the negation-cue gate (v31 freeze, `f555cb1b`): added negations went from 123/123 issued to 12/123.
+- README and showcase facts corrected with s-showcase (`de080de8`, `2472e703`).
+- In OpenUnum, both reviewed by s-openunum: `a7be7390` (A/B report one-sided buckets) ships 11-12 evening; `1b663c10` (`--provider` filter) is held until the 11-13 evening release.
+- s-openunum has the literal-retention fix for its next re-vendor. It should cherry-pick that one file and keep the 0.19 pin. The v31 negation gate is not sent yet: offer it at the same time.
 
 **Open, in order:**
 1. **coverage-a3-v3 is final: no verdict** (hub U-877763bb). DeepSeek never answered on either attempt (07:54 and 10:15 EET; the retry was stopped at 10:50 EET) and is recorded as unavailable (D4). `RESULTS.md` is final. `calibrate.mjs` has a client-side deadline (`--preflight-minutes`, default 5; `--max-minutes`) for any later run.
