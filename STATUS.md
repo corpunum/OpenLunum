@@ -11,7 +11,7 @@ A cross-vendor review ([gpt-6-luna](experiments/cross-vendor-review-v1/gpt-6-lun
 - a literal placed in the wrong role;
 - "twice … twice" carried as a single 2.
 
-So a fingerprint is a hash of a validated, source-anchored structure, not evidence of preserved meaning. Before any claim of faithfulness, a pre-registered, blind, adversarial audit of issued records is needed, for example the review's experiment 1. The only gate defect found, "twenty-one" read as 20, is fixed on `main`.
+So a fingerprint is a hash of a validated, source-anchored structure, not evidence of preserved meaning. Before any claim of faithfulness, a pre-registered, blind, adversarial audit of issued records is needed, for example the review's experiment 1. The only gate defect found, "twenty-one" read as 20, is fixed on `main` (v30 maintenance freeze, `2e5d246d`). OpenUnum gets the fix at its next re-vendor.
 
 ## 2026-11-12: candidate contracts end without a verdict; prompt-cache work moves to OpenUnum
 
@@ -19,7 +19,7 @@ So a fingerprint is a hash of a validated, source-anchored structure, not eviden
   - The 32 calibration labels are **model-rated** (owner decision 34bf87fd, a blind Claude rater). All 32 came back "states", so the pre-registered kappa is undefined and no judge can pass ([DEVIATIONS](experiments/coverage-a3-v3/DEVIATIONS.md) D1, D5).
   - Under the looser 40-item reading (8 injected controls as negatives) only Luna passes. GLM 5.3 is retired on NIM, Nemotron fails, DeepSeek never answered. Two judges are needed.
   - Luna accepts 59.7% of the records under the 0.3 render and 58.3% verb-first (bar 80%), and disagrees with itself on 19% of byte-identical prompts. That retest noise is the main methods lesson.
-  - **Recommendation, not a verdict:** stop the 0.21 / 0.22 line, keep 0.19 frozen, and do not pre-register coverage-a3-v4 on this design. The owner decides.
+  - **Owner decision, 2026-11-12 ([ADR 0032](decisions/0032-stop-candidate-contracts-0-21-0-22.md)):** the 0.21 / 0.22 line is stopped, 0.19 stays frozen, and coverage-a3-v4 is not pre-registered on this design.
 - **[cache-aware-compaction-v1](experiments/cache-aware-compaction-v1/RESULTS.md): pilot negative, window not opened.** Compressing tool results as they are appended saves 0.98x net prefill under llama.cpp's prefix cache (bar 0.80x). The prefill is in cache misses, not in tool output: see [AB-EXPECTATIONS](experiments/cache-aware-compaction-v1/AB-EXPECTATIONS.md). The fixes (anchor at tail, slot scheduling) are OpenUnum and engine changes, measured there with a before/after harness.
 - **v29 maintenance freeze:** dependency security update (MCP SDK 1.32.2, zod 4.6.7 and transitive patches) and MCP tool annotations, same contract. All 35 Dependabot alerts closed. The live Claude Code MCP runs `5f6570bf` (contract 0.19) with the same dependency update.
 
