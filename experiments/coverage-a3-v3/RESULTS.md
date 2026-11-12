@@ -2,7 +2,7 @@
 
 **Verdict: NO VERDICT** (strict pre-registered reading; corpunum-82, 2026-11-12). Contracts 0.21 and 0.22 stay unreleased candidates, and OpenUnum is not re-vendored.
 
-- **Why no verdict:** the pre-registration measures each judge's kappa against the labels of the 32 natural calibration items. All 32 were labelled "states", so that kappa is undefined and no judge can pass.
+- **Why no verdict:** the pre-registration measures each judge's kappa against the labels of the 32 natural calibration items. All 32 were labelled "states", so that kappa is undefined and no judge can pass. Only one judge answered and passed the looser reading below, so the selection rule (two passing judges) gives no verdict as well.
 - **Beside it, an interpretation, not the verdict:** with the 8 injected controls counted as negatives (40 items, stated in D1 before any judge call), Luna passes and Nemotron fails. Under that reading bar 1 cannot be met either: Luna accepts 58.3% of the records under R1, and the bar is 80% for each judge.
 - **Recommendation, not a verdict:** stop the 0.21 / 0.22 line, keep 0.19 frozen, and do not pre-register coverage-a3-v4 on this design.
 - All calibration here is a **model-rated calibration** (D1): the labels come from rater `claude-blind`, not the owner.
@@ -20,28 +20,28 @@ From [DEVIATIONS.md](DEVIATIONS.md):
 - **D1:** the labels are model-rated, and the natural items contain no negatives, so kappa rests on the 8 controls.
 - **D2:** a dead endpoint made the first GLM run write silent nulls. Those rows were discarded, and the call path was hardened with a preflight check.
 - **D3:** NIM has retired GLM 5.3 (HTTP 410). No substitute was used.
-- **D4:** DeepSeek was unreachable on its first attempt. It gets one retry before selection.
+- **D4:** DeepSeek was unreachable on both attempts (2026-11-12, 07:54 and 10:15 EET) and is recorded as unavailable.
 - **Not in the pre-registration:** the one multi-clause record (`A ; B`) gets R1 applied clause by clause (`render-verb-first.mjs`).
 
-## Both cases: calibration (40 items + 20 bar controls per arm; pass = kappa ≥ 0.4, ≤ 1/8 and ≤ 1/20 controls yes)
+## Calibration (40 items + 20 bar controls per arm; pass = kappa ≥ 0.4, ≤ 1/8 and ≤ 1/20 controls yes)
 
 | Judge | R0 kappa | R1 kappa | Controls yes (cal / bar) | Natural yes-rate R0 / R1 | Pass R0 / R1 | Mostly-as-no sensitivity (R1) |
 |---|---|---|---|---|---|---|
 | Luna (gpt-6-luna, low, Codex CLI) | 0.433 | 0.468 | 0/8, 0/20 | 66% / 69% | yes / yes | 0.375, **would fail** |
 | GLM 5.3 (NIM) | – | – | – | – | unavailable (D3) | – |
-| DeepSeek v4.1 flash (NIM) | *retry running since 10:15 EET, no reply yet; row to be filled* | | | | | |
+| DeepSeek v4.1 flash (NIM) | – | – | – | – | unavailable (D4): two attempts, no reply | – |
 | Qwen (local) | – | – | – | – | no rig slot today | – |
 | Nemotron 3 Ultra (NIM) | 0.135 | 0.101 | 0/8, 0/20 | 28% / 22% | **no / no** | 0.17, fails |
 
 **Flag (D1), sensitivity:** Luna's R1 pass depends on how the 4 "mostly" items are scored. Scored as "does not", its R1 kappa is 0.375 and it would fail.
 
 **Flag (review 2026-11-12), how kappa was computed.** The pre-registration says "kappa ≥ 0.4 against the owner", and the owner step labels only the 32 natural items.
-- All 32 labels came back "states", so kappa over the natural items alone is undefined: there is no negative label to agree on. Under that strict reading **no judge can pass and the result is no verdict, whatever DeepSeek does**.
+- All 32 labels came back "states", so kappa over the natural items alone is undefined: there is no negative label to agree on. Under that strict reading **no judge can pass and the result is no verdict**.
 - `calibrate.mjs` computes kappa over all 40 items, with the 8 controls as "does not". D1 said so before any judge call. Under that reading Luna passes, but the kappa only shows that it separates real records from mismatched pairs.
 - On the 32 natural items alone, Luna agrees with the rater on 21 (R0) and 22 (R1): 66% and 69%.
 - Both readings are reported. **Neither supports calling Luna a validated judge of subtle record errors.**
 
-## Both cases: Luna scoring on the 139 records (reported for every case)
+## Luna scoring on the 139 records (reported, not a bar result)
 
 | Arm | States the content | Controls yes |
 |---|---|---|
@@ -72,9 +72,9 @@ By mood, under R0 and then R1:
 - questions: 10 / 23, then 7 / 23;
 - imperatives: 0 / 4, then 1 / 4.
 
-## Case 1: DeepSeek unavailable or fails calibration → **no verdict**
+## Selection: fewer than two judges → **no verdict**
 
-Fewer than two judges pass on R1, so under the pre-registration ("Selection") the result is **no verdict**. (Under the strict kappa reading above it is no verdict in every case.)
+DeepSeek never answered (D4), GLM is retired (D3) and Nemotron failed calibration. Fewer than two judges pass on R1, so under the pre-registration ("Selection") the result is **no verdict**. Under the strict kappa reading above it is no verdict whichever judges answer.
 
 What the data still says, without a bar:
 - R1 gave **no lift** with the only passing judge: −1.4 points, inside its own run-to-run noise.
@@ -87,13 +87,6 @@ Proposal to the orchestrator, following the pre-registration's "fail with no lif
 - keep 0.19 frozen;
 - do not pre-register coverage-a3-v4 on this design.
 
-## Case 2: DeepSeek passes calibration → it is scored, then the verdict
+0.21 and 0.22 stay unreleased candidates, and OpenUnum is not re-vendored.
 
-- **Selection:** the two passing judges with the highest R1 kappa. With Nemotron failed, that is Luna and DeepSeek.
-- **Then:** `node score.mjs --judge deepseek --out bar/score-deepseek.json`, then `node score.mjs --verdict bar/score-luna.json,bar/score-deepseek.json --categories bar/categories-v2.json --out bar/verdict.json`.
-- **Bar 1** under the 40-item kappa reading is already decided: Luna's R1 rate is 58.3%, below 80%, so bar 1 **fails**. Under the strict reading it is **no verdict**. The recommendation is the same either way. DeepSeek's scores still report agreement, its own lift, and the C + D check.
-- **Reading:**
-  - If DeepSeek's R1 lift is also under 10 points, this is "a fail with no lift". The recommendation is to drop 0.21 / 0.22 and stay on 0.19.
-  - If DeepSeek lifts by 10 points or more, that is "lift for one judge only", which is not the pre-registered "lift for both". It is reported as such, and the recommendation is the same.
-
-**Either case:** 0.21 and 0.22 stay unreleased candidates, and OpenUnum is not re-vendored.
+A later run with a second judge would be a new attempt under D4's record, not a continuation: `calibrate.mjs` now stops a hung provider (`--preflight-minutes`, `--max-minutes`).

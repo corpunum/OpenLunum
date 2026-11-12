@@ -56,6 +56,10 @@ GLM's preflight (D2) failed at once with `judge_unreachable:http_410`: NIM has r
 - If that retry is also unreachable, DeepSeek is recorded as unavailable and selection uses the judges that answered.
 - Scoring with Luna started before selection, because Luna passed. If Luna is not among the two selected judges, its scoring rows are reported but not used for bar 1.
 
+**Outcome (2026-11-12, 10:50 EET).** The retry started at 10:15 EET and was stopped by corpunum-82 at 10:50 EET. In 35 minutes the preflight call never returned: the log is empty and no row was written. DeepSeek is recorded as **unavailable** (attempts at 07:54 and 10:15 EET). Selection uses the judges that answered: Luna passes the 40-item reading, Nemotron fails, so fewer than two judges pass and the result is no verdict.
+
+`ask()` can wait about an hour on one call (6 attempts, 10-minute timeout each). `calibrate.mjs` now has a client-side deadline: the preflight must return within `--preflight-minutes` (default 5) and the whole run within `--max-minutes` (default none), or the process exits with code 3. Rows already written stay in the partial file.
+
 ## D5. Review findings (2026-11-12, after Luna's scoring, before the DeepSeek retry result)
 
 A fresh-eyes review by s-openlunum (requested by corpunum-82) found three things. None changes a number; all change what the numbers can support.

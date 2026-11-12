@@ -4,7 +4,8 @@
 // states, no = does not, can't tell dropped; the 8 controls count as "no"), <= 1/8 calibration controls answered
 // yes, and <= 1/20 bar controls answered yes. Prompt: judge-calibration-v1's englishPrompt, unchanged.
 // Labels: calibration/labels.json (rater claude-blind; DEVIATIONS.md D1: model-rated calibration).
-// Resumable (<out>.partial.jsonl). One call at a time.
+// Resumable (<out>.partial.jsonl). One call at a time. --preflight-minutes (default 5) and --max-minutes (default
+// none) stop a hung provider with exit code 3.
 //   node calibrate.mjs --judge luna --out calibration/judge-luna.json
 import fs from 'node:fs';
 import path from 'node:path';
@@ -81,9 +82,14 @@ async function main() {
   const all = calibrationItems({ items, controls, labels });
   const out = arg('--out');
   const partial = `${out}.partial.jsonl`;
+  // Client-side deadline (DEVIATIONS D4): a provider that never answers must not stall the run. Exit code 3.
+  const deadline = (minutes, what) => (minutes > 0 ? setTimeout(() => { console.error(`deadline_exceeded:${what}:${minutes}min`); process.exit(3); }, minutes * 60000) : null);
+  const total = deadline(Number(arg('--max-minutes') ?? 0), 'run');
+  const pf = deadline(Number(arg('--preflight-minutes') ?? 5), 'preflight');
   // Preflight (DEVIATIONS D2): one synthetic call that must parse to a verdict, or the run does not start. A dead
   // endpoint or a reply the parser cannot read must stop the run, not fill it with nulls. The result is not used.
   const pre = await ask(j, englishPrompt(PREFLIGHT.sentence, PREFLIGHT.code), 'states');
+  clearTimeout(pf);
   console.log(JSON.stringify({ preflight: { verdict: pre.verdict, status: pre.status ?? null, finishReason: pre.finishReason ?? null, fromReasoning: pre.fromReasoning ?? false } }));
   if (typeof pre.verdict !== 'boolean') throw new Error(`preflight_failed:${name}:${JSON.stringify({ status: pre.status ?? null, finishReason: pre.finishReason ?? null, reply: String(pre.reply ?? '').slice(-120) })}`);
   const done = new Map(J(partial).map((r) => [`${r.arm}|${r.set}|${r.id}`, r]));
@@ -102,6 +108,7 @@ async function main() {
   const summary = { judge: name, label: j.label, rater: labels.rater, modelRatedCalibration: true, arms: summarize(rows), sensitivityMostlyAsNo: summarize(rows, { mostlyAsNo: true }) };
   fs.writeFileSync(out, JSON.stringify({ summary, results: rows }, null, 1) + '\n');
   console.log(JSON.stringify(summary, null, 2));
+  clearTimeout(total);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) await main();
