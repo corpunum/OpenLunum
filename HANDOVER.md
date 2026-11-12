@@ -15,7 +15,7 @@ Living document for the next agent. Update it in the same commit as the work it 
 
 **Open, in order:**
 1. **coverage-a3-v3 is final: no verdict** (hub U-877763bb). DeepSeek never answered on either attempt (07:54 and 10:15 EET; the retry was stopped at 10:50 EET) and is recorded as unavailable (D4). `RESULTS.md` is final. `calibrate.mjs` has a client-side deadline (`--preflight-minutes`, default 5; `--max-minutes`) for any later run.
-2. **Prompt-cache A/B reports** (hub U-87d0f342). The harness is OpenUnum `scripts/lunum-prefill-measure.mjs`; its A/B mode is queued in unumship as openunum `99381e2a` (worktree `~/OpenUnum-wt/lunum-prefill-ab`; remove it once shipped).
+2. **Prompt-cache A/B reports** (hub U-87d0f342). The harness is OpenUnum `scripts/lunum-prefill-measure.mjs`; its A/B mode is live in OpenUnum `30b20f0b` (as `22c1e66d` and `8dd89006`); the worktree is removed, so run it from a fresh detached worktree or read-only from the deployed checkout.
    - **anchorAtTail (s-openunum, U-03a474a7):** A = 2026-11-12 09:20Z to 19:00Z, flag off (OpenUnum restarted 09:09:52Z on 30b20f0b; no further restart planned). `--since 2026-11-12T09:20:00Z --until 2026-11-12T19:00:00Z`. B = 2026-11-13 09:20Z to 19:00Z, flag on (flip at 11-12 19:00Z). At least 300 local foreground requests per window, else extend both. Report after 11-13 19:00Z with `--base-only` twice, then `--compare`.
    - **UNUM_SCHED (s-engine, U-b666e316):** 2026-11-14 07:00–19:00Z off against 2026-11-15 on.
    - Reports go to s-openunum, s-engine and corpunum-82: aggregates only, with both days' request counts and kind mix.
