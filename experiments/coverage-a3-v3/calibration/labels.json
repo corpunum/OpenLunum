@@ -1,0 +1,238 @@
+{
+  "format": "coverage-a3-v3-calibration-labels/0.1",
+  "rater": "claude-blind",
+  "raterModel": "claude-opus-5-5 (fresh subagent, no tools, no file access)",
+  "delegation": "owner, hub decision 34bf87fd (\"You do them\"), relayed by corpunum-82 2026-11-12",
+  "labelledAt": "2026-11-12",
+  "modelRatedCalibration": true,
+  "distribution": {
+    "yes": 28,
+    "mostly": 4
+  },
+  "labels": [
+    {
+      "n": 1,
+      "id": "a3c1-27a9620007b9bf0b",
+      "label": "yes",
+      "binary": "states",
+      "note": "Question, subject, action and time question all captured"
+    },
+    {
+      "n": 2,
+      "id": "a3c1-1e8cd050104d14ba",
+      "label": "yes",
+      "binary": "states",
+      "note": "Comparison relation between both activities preserved"
+    },
+    {
+      "n": 3,
+      "id": "a3c1-62940b3e5d758a85",
+      "label": "yes",
+      "binary": "states",
+      "note": "Question with buyer, object and action correct"
+    },
+    {
+      "n": 4,
+      "id": "a3c1-5a4b07b8e80910f3",
+      "label": "yes",
+      "binary": "states",
+      "note": "Negation and attribute about company preserved"
+    },
+    {
+      "n": 5,
+      "id": "a3c1-a3f5a2a56dbba2a6",
+      "label": "yes",
+      "binary": "states",
+      "note": "Subject and property correct"
+    },
+    {
+      "n": 6,
+      "id": "a3c1-5002f0223d84ebc7",
+      "label": "mostly",
+      "binary": "states",
+      "note": "Object and beneficiary packed into action string, not roles"
+    },
+    {
+      "n": 7,
+      "id": "a3c1-430ff7bdc2e29ac3",
+      "label": "mostly",
+      "binary": "states",
+      "note": "Obligation captured, but 'have to' duplicated in action"
+    },
+    {
+      "n": 8,
+      "id": "a3c1-b0c9d77d97d9fab6",
+      "label": "yes",
+      "binary": "states",
+      "note": "Imperative, recipient, object and politeness all present"
+    },
+    {
+      "n": 9,
+      "id": "a3c1-1c66a6a595cbf7d3",
+      "label": "yes",
+      "binary": "states",
+      "note": "Classification of Tom as good coach correct"
+    },
+    {
+      "n": 10,
+      "id": "a3c1-f4a313c977404118",
+      "label": "mostly",
+      "binary": "states",
+      "note": "Time point mislabelled as duration; content present"
+    },
+    {
+      "n": 11,
+      "id": "a3c1-416ce2d591ef5051",
+      "label": "yes",
+      "binary": "states",
+      "note": "Question, causer, affected person and lateness all present"
+    },
+    {
+      "n": 12,
+      "id": "a3c1-8496a1cd3d9f15e5",
+      "label": "yes",
+      "binary": "states",
+      "note": "All elements present; article dropped trivially"
+    },
+    {
+      "n": 13,
+      "id": "a3c1-87123fe7d53eaa61",
+      "label": "yes",
+      "binary": "states",
+      "note": "Future intention, helper, helped and duration correct"
+    },
+    {
+      "n": 14,
+      "id": "a3c1-8362c02716df23c5",
+      "label": "yes",
+      "binary": "states",
+      "note": "Subject, action and location correct"
+    },
+    {
+      "n": 15,
+      "id": "a3c1-4c4602b595517a9c",
+      "label": "yes",
+      "binary": "states",
+      "note": "Subject, action and source correct"
+    },
+    {
+      "n": 16,
+      "id": "a3c1-283ddea2c38aa334",
+      "label": "mostly",
+      "binary": "states",
+      "note": "Negation kept; possession awkwardly framed as attribute"
+    },
+    {
+      "n": 17,
+      "id": "a3c1-4caa4cfc62c7970c",
+      "label": "yes",
+      "binary": "states",
+      "note": "Why-question, subject, attribute and time captured"
+    },
+    {
+      "n": 18,
+      "id": "a3c1-efbd0768367be460",
+      "label": "yes",
+      "binary": "states",
+      "note": "Belief with possibility kept inside theme"
+    },
+    {
+      "n": 19,
+      "id": "a3c1-f55d0eb411d77e9e",
+      "label": "yes",
+      "binary": "states",
+      "note": "Intention, action and duration correct"
+    },
+    {
+      "n": 20,
+      "id": "a3c1-7c393be342e7ea8c",
+      "label": "yes",
+      "binary": "states",
+      "note": "Liking for swimming correctly captured"
+    },
+    {
+      "n": 21,
+      "id": "a3c1-77d2ee208618c856",
+      "label": "yes",
+      "binary": "states",
+      "note": "Negation, subject, action and condition preserved"
+    },
+    {
+      "n": 22,
+      "id": "a3c1-f337534b74a30dd5",
+      "label": "yes",
+      "binary": "states",
+      "note": "Waiting for mother captured correctly"
+    },
+    {
+      "n": 23,
+      "id": "a3c1-303bd9a1835b0e7c",
+      "label": "yes",
+      "binary": "states",
+      "note": "Subject, action, recurring time correct"
+    },
+    {
+      "n": 24,
+      "id": "a3c1-a7eea7af0c29c681",
+      "label": "yes",
+      "binary": "states",
+      "note": "Negation and attribute preserved"
+    },
+    {
+      "n": 25,
+      "id": "a3c1-c30b00261ec8e7e9",
+      "label": "yes",
+      "binary": "states",
+      "note": "Location state of speaker captured"
+    },
+    {
+      "n": 26,
+      "id": "a3c1-90a0604ccc7a9641",
+      "label": "yes",
+      "binary": "states",
+      "note": "Giver, recipient, object correct"
+    },
+    {
+      "n": 27,
+      "id": "a3c1-28a1a96c3f319962",
+      "label": "yes",
+      "binary": "states",
+      "note": "Identity statement correct"
+    },
+    {
+      "n": 28,
+      "id": "a3c1-7ae8937235d3bd6b",
+      "label": "yes",
+      "binary": "states",
+      "note": "Yes/no question with 'at all' preserved"
+    },
+    {
+      "n": 29,
+      "id": "a3c1-67216a65d8b15c6f",
+      "label": "yes",
+      "binary": "states",
+      "note": "Negated property 'known' preserved"
+    },
+    {
+      "n": 30,
+      "id": "a3c1-4d26d21c93682bcf",
+      "label": "yes",
+      "binary": "states",
+      "note": "Obligation, agent, object correct"
+    },
+    {
+      "n": 31,
+      "id": "a3c1-d51399cd4b1660f0",
+      "label": "yes",
+      "binary": "states",
+      "note": "Identity relation correct"
+    },
+    {
+      "n": 32,
+      "id": "a3c1-8f8fc3ba6fe888a8",
+      "label": "yes",
+      "binary": "states",
+      "note": "Negation, subject and 'enough' preserved"
+    }
+  ]
+}
