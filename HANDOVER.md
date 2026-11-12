@@ -2,7 +2,7 @@
 
 Living document for the next agent. Update it in the same commit as the work it describes. [STATUS.md](STATUS.md) is the evidence summary; this file is the working state. The older hand-off is archived at [research/archive/handoffs/HANDOFF-2026-10-16.md](research/archive/handoffs/HANDOFF-2026-10-16.md).
 
-**Updated 2026-11-12.**
+**Updated 2026-11-13.**
 
 ## State of the repository
 
@@ -13,7 +13,7 @@ Living document for the next agent. Update it in the same commit as the work it 
 
 ## Session state at 2026-11-12 17:22 EET: PAUSED (savings mode) until Thu 2026-11-19 10:00 EET
 
-s-openlunum is paused by corpunum-82 (ONBOARDING "SAVINGS MODE"). **Exceptions: the prompt-cache A/B reports, after 2026-11-15 19:00Z (anchorAtTail, D1 vs D2) and 2026-11-16 19:00Z (UNUM_SCHED, D2 vs D3).** The windows changed on 11-12 evening and are now fixed in [AB-PREREGISTRATION.md](experiments/cache-aware-compaction-v1/AB-PREREGISTRATION.md): D1 11-14, D2 11-15, D3 11-16, 07:00–19:00Z each. That file supersedes the window lines under item 2 below. The report commands there still apply, with the new dates; the old exclusions apply only to the 11-12 pre-window. Do nothing else until 11-19 10:00 EET or a message from corpunum-82. Main model: Opus 5.5 at medium effort.
+s-openlunum is paused by corpunum-82 (ONBOARDING "SAVINGS MODE"). **Exception: the anchorAtTail live hash50 A/B only (open item 2).** On 2026-11-13 the owner cancelled the D1–D3 live-day chain and the deploy freeze, so the 11-14/15/16 windows in [AB-PREREGISTRATION.md](experiments/cache-aware-compaction-v1/AB-PREREGISTRATION.md) no longer apply. Do nothing else until 11-19 10:00 EET or a message from corpunum-82. Main model: Opus 5.5 at medium effort.
 
 **Done since 10:43 EET (all on `main`, pushed):**
 - Cross-vendor review by gpt-6-luna, unedited, with its fact check (`experiments/cross-vendor-review-v1/`).
@@ -26,18 +26,11 @@ s-openlunum is paused by corpunum-82 (ONBOARDING "SAVINGS MODE"). **Exceptions: 
 
 **Open, in order:**
 1. **coverage-a3-v3 is final: no verdict** (hub U-877763bb). DeepSeek never answered on either attempt (07:54 and 10:15 EET; the retry was stopped at 10:50 EET) and is recorded as unavailable (D4). `RESULTS.md` is final. `calibrate.mjs` has a client-side deadline (`--preflight-minutes`, default 5; `--max-minutes`) for any later run.
-2. **Prompt-cache A/B reports** (hub U-87d0f342). The harness is OpenUnum `scripts/lunum-prefill-measure.mjs`; its A/B mode is live in OpenUnum `30b20f0b` (as `22c1e66d` and `8dd89006`); the worktree is removed, so run it from a fresh detached worktree or read-only from the deployed checkout.
-   - **anchorAtTail (s-openunum, U-03a474a7):** OpenUnum restarted 2026-11-12 10:53:53Z on 9095b4ff (no prompt-assembly change). **A = 2026-11-12 11:03:53Z to 21:03:53Z**, flag off (or until at least 300 local foreground requests, if later). **B = 2026-11-13 11:04Z to 21:04Z**, flag on, confirmed by corpunum-82, no restart inside; the flip is armed for 21:04:30Z on 11-12. The evening release (with `a7be7390`) deploys at 21:11Z, after A ends. 09:20Z–10:53:53Z on 11-12 is the partial pre-window (`prewindow-20261112.json`), reported separately. **Exclusion (both windows, same clock span):** 11:31:16Z to 11:41:24Z, because OpenUnum was killed and restarted at 11:31:16Z on 11-12 (another session's `pkill -x node`; same revision, nothing deployed). A second span, 12:18:12Z to 12:19:46Z, is excluded too: an OpenUnum test run wrote fake rows into the live log, and two of them (provider `p`, model `m`) pass the harness's local-request rule; no real local foreground request falls in that span. So A runs with `--exclude 2026-11-12T11:31:16Z,2026-11-12T11:41:24Z --exclude 2026-11-12T12:18:12Z,2026-11-12T12:19:46Z` and B with the same two spans on 2026-11-13. Before each report, list the provider and model of every counted request: real local traffic is `openai-compatible` with the Qwen model, and anything else is excluded and reported. A counts if it has at least 300 local foreground requests outside the exclusion by 21:03:53Z; otherwise both windows are re-run. The report states the restart and gives the kind mix before and after it. Any further restart inside a window is excluded the same way. Then `--base-only` twice and `--compare`.
-   - **anchorAtTail report commands** (after 2026-11-13 21:04Z; run from `~/.local/share/lunum-prefill/`, with the harness at OpenUnum `1b663c10` or later, from a worktree until it ships). Both windows are computed with the same harness version, so the provider filter added on 11-12 does not change the definition between A and B.
-     ```
-     H=<worktree>/scripts/lunum-prefill-measure.mjs
-     node $H --base-only --provider openai-compatible --since 2026-11-12T11:03:53Z --until 2026-11-12T21:03:53Z --exclude 2026-11-12T11:31:16Z,2026-11-12T11:41:24Z --exclude 2026-11-12T12:18:12Z,2026-11-12T12:19:46Z --out ab-anchor-A.json
-     node $H --base-only --provider openai-compatible --since 2026-11-13T11:04:00Z --until 2026-11-13T21:04:00Z --exclude 2026-11-13T11:31:16Z,2026-11-13T11:41:24Z --exclude 2026-11-13T12:18:12Z,2026-11-13T12:19:46Z --out ab-anchor-B.json
-     node $H --compare ab-anchor-A.json,ab-anchor-B.json --title "anchorAtTail A/B" --out ab-anchor.md
-     ```
-     Check the `Counted provider / model` line (only the Qwen model) and `providerExcluded` before sending. State the 11:31Z kill and the kind mix.
- 2026-11-14 07:00–19:00Z off against 2026-11-15 on.
-   - Reports go to s-openunum, s-engine and corpunum-82: aggregates only, with both days' request counts and kind mix.
+2. **anchorAtTail live hash50 split (2026-11-13: D1–D3 cancelled).** The owner cancelled the live-day D1–D3 chain (11-14/15/16) and the deploy freeze. The anchorAtTail flip timer is cancelled. UNUM_SCHED moves to s-engine's replay and is not ours. anchorAtTail is now a live session-hash split (corpunum-82 decision), pre-registered at OpenLunum `f590ee5e` in [AB-SPLIT-PREREGISTRATION.md](experiments/cache-aware-compaction-v1/AB-SPLIT-PREREGISTRATION.md). That file replaces the window plan in AB-PREREGISTRATION.md.
+   - **Flag:** OpenUnum `runtime.localPromptCache.anchorAtTailSplit` "off"|"hash50" is on local branch `lunum/anchor-split` (worktree `~/OpenUnum-wt/anchor-split`; commits `f0a13885` and `354b12fa`; 49/49 tests). It is handed to s-openunum for a release after the 11-13 WebUI ship. The OpenUnum repo is at `~/main`. The harness is OpenUnum `scripts/lunum-prefill-measure.mjs`.
+   - **Next:** (a) add an `anchorArm` filter to `scripts/lunum-prefill-measure.mjs`, with no change to the measures; (b) when s-openunum reports the deploy and sha, the 72h window starts at the first `inference_complete` row with `anchorSplit`; (c) report aggregates to s-openunum, s-engine and corpunum-82. The replay harness is a fallback only.
+   - **Tier and model:** un-paused for this A/B only (corpunum-82, 11-13). Model: Opus.
+   - **Worktree:** `~/OpenUnum-wt/lunum-prefill-oneside` stays until the anchorAtTail report is sent.
 3. **Dependabot: closed.** The open-alert count on corpunum/OpenLunum is 0 (checked 2026-11-12 10:51 EET), so the v29 bumps cleared all 35.
 4. **A/B report fix queued** (openunum `a7be7390`, 2026-11-12 12:31 EET, worktree `~/OpenUnum-wt/lunum-prefill-oneside`). `compareBaselines` dropped buckets present in one window only, which blanked the `at_tail` and `mid_prompt` rows. It ships in the 11-12 evening release. The provider filter on top of it, `1b663c10`, is reviewed but held by s-openunum until the 11-13 evening release, after window B. **Keep that worktree until the anchorAtTail report is sent;** run both windows from it (`H=~/OpenUnum-wt/lunum-prefill-oneside/scripts/lunum-prefill-measure.mjs`), then remove it with `git -C ~/main worktree remove`.
 5. **Partial pre-window, 2026-11-12 09:20Z–10:28Z on OpenUnum 30b20f0b** (133 local foreground requests, anchor off; small sample at low concurrency). 125 of 128 tool iterations were append-only with one history miss and 915 prefilled tokens per request. Three in-turn history trims (message count 56→25, 64→26, 97→26) re-prefilled about 17.5k tokens each: 2% of requests, 22% of prefilled tokens. Five turn starts, all full misses, 31%. Aggregates are in `~/.local/share/lunum-prefill/` (`prewindow-20261112.json`, `pilot-base.json`). Sent to s-openunum.
