@@ -2,6 +2,17 @@
 
 **As of 2026-11-12.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
 
+## Top open research point (2026-11-12): the gates check presence, not role or scope
+
+A cross-vendor review ([gpt-6-luna](experiments/cross-vendor-review-v1/gpt-6-luna-2026-11-12.md), [fact check](experiments/cross-vendor-review-v1/gpt-6-luna-2026-11-12-CHECK.md)) found what no Claude review had stated. The deterministic gates check that every source word and literal *appears* in a candidate. They do not check that it sits in the right role, under the right modality or negation, or as often as in the source. Each of these gets an identity today:
+- subject and object swapped ("Alice pays Bob" with payer Bob);
+- "may not" encoded as possibility + negated;
+- `may` moved into `manner`;
+- a literal placed in the wrong role;
+- "twice … twice" carried as a single 2.
+
+So a fingerprint is a hash of a validated, source-anchored structure, not evidence of preserved meaning. Before any claim of faithfulness, a pre-registered, blind, adversarial audit of issued records is needed, for example the review's experiment 1. The only gate defect found, "twenty-one" read as 20, is fixed on `main`.
+
 ## 2026-11-12: candidate contracts end without a verdict; prompt-cache work moves to OpenUnum
 
 - **[coverage-a3-v3](experiments/coverage-a3-v3/RESULTS.md): no verdict.** It re-judged the 139 coverage-a3-v2 records under the 0.3 render and a verb-first render, with calibrated judges.
