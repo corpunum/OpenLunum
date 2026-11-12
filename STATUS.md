@@ -1,6 +1,16 @@
 # Project status
 
-**As of 2026-11-11.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+**As of 2026-11-12.** This is an experimental research and reference implementation, not a qualified production dependency. Current code and versioned evidence outrank this summary. [GitHub issues](https://github.com/corpunum/OpenLunum/issues) track open questions.
+
+## 2026-11-12: candidate contracts end without a verdict; prompt-cache work moves to OpenUnum
+
+- **[coverage-a3-v3](experiments/coverage-a3-v3/RESULTS.md): no verdict.** It re-judged the 139 coverage-a3-v2 records under the 0.3 render and a verb-first render, with calibrated judges.
+  - The 32 calibration labels are **model-rated** (owner decision 34bf87fd, a blind Claude rater). All 32 came back "states", so the pre-registered kappa is undefined and no judge can pass ([DEVIATIONS](experiments/coverage-a3-v3/DEVIATIONS.md) D1, D5).
+  - Under the looser 40-item reading (8 injected controls as negatives) only Luna passes. GLM 5.3 is retired on NIM, Nemotron fails, DeepSeek never answered. Two judges are needed.
+  - Luna accepts 59.7% of the records under the 0.3 render and 58.3% verb-first (bar 80%), and disagrees with itself on 19% of byte-identical prompts. That retest noise is the main methods lesson.
+  - **Recommendation, not a verdict:** stop the 0.21 / 0.22 line, keep 0.19 frozen, and do not pre-register coverage-a3-v4 on this design. The owner decides.
+- **[cache-aware-compaction-v1](experiments/cache-aware-compaction-v1/RESULTS.md): pilot negative, window not opened.** Compressing tool results as they are appended saves 0.98x net prefill under llama.cpp's prefix cache (bar 0.80x). The prefill is in cache misses, not in tool output: see [AB-EXPECTATIONS](experiments/cache-aware-compaction-v1/AB-EXPECTATIONS.md). The fixes (anchor at tail, slot scheduling) are OpenUnum and engine changes, measured there with a before/after harness.
+- **v29 maintenance freeze:** dependency security update (MCP SDK 1.32.2, zod 4.6.7 and transitive patches) and MCP tool annotations, same contract. All 35 Dependabot alerts closed. The live Claude Code MCP runs `5f6570bf` (contract 0.19) with the same dependency update.
 
 ## 2026-11-11: held-out gate for the discourse view
 
