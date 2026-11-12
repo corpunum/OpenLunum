@@ -218,7 +218,7 @@ test('public instruction package exposes frozen scoring conventions without gold
     if (['coreArtifactSha256', 'coreContractVersion', 'coreContractHash', 'coreContractJsonSerializationSha256', 'instructionVersion', 'instructionHash', 'servedRuntimeManifestPath', 'servedRuntimeManifestSha256'].includes(key)) assert.notDeepEqual(v28.freeze[key], v27.freeze[key], `${key} changed in v28`);
     else assert.deepEqual(v28.freeze[key], v27.freeze[key], `${key} unchanged in v28`);
   }
-  assert.equal(hash('packages/core/dist/src/agent-native.js'), v28.freeze.coreArtifactSha256);
+  // agent-native.js held v28's coreArtifactSha256 until v31 (negation-cue diagnostic); v28's hash is history from there on.
   // v29 (maintenance, contract lunum-agent/0.22 unchanged): the dependency security update moves the lockfile hash and
   // the MCP tool annotations move tools.js and the served-runtime manifest; nothing else changes.
   const v29 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v29.json', 'utf8'));
@@ -242,6 +242,15 @@ test('public instruction package exposes frozen scoring conventions without gold
     else assert.deepEqual(v30.freeze[key], v29.freeze[key], `${key} unchanged in v30`);
   }
   assert.equal(hash('packages/core/dist/src/literal-retention.js'), v30.freeze.literalRetentionArtifactSha256);
+  // v31 (maintenance, contract lunum-agent/0.22 unchanged): negated clauses need a stated negation in the source
+  // (source-bound check 3, experiments/gate-blindspots-v1) moves agent-native.js, source-bound.js and the served-runtime manifest.
+  const v31 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v31.json', 'utf8'));
+  assert.equal(v31.supersedes.path, 'public-instruction-package-v30.json');
+  for (const key of Object.keys(v30.freeze)) {
+    if (['coreArtifactSha256', 'servedRuntimeManifestPath', 'servedRuntimeManifestSha256'].includes(key)) assert.notDeepEqual(v31.freeze[key], v30.freeze[key], `${key} changed in v31`);
+    else assert.deepEqual(v31.freeze[key], v30.freeze[key], `${key} unchanged in v31`);
+  }
+  assert.equal(hash('packages/core/dist/src/agent-native.js'), v31.freeze.coreArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport.js'), next.freeze.transportValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport-schema.js'), next.freeze.transportSchemaArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-builder.js'), v27.freeze.builderArtifactSha256);

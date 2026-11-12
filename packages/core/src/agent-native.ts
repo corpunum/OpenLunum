@@ -320,6 +320,7 @@ export function submitCandidate(input: SubmitCandidateInput): CandidateSubmissio
       ...sourceBound.notALabel.map((x) => `topic "${x}" is a whole sentence or longer than a label; use define, describe, assert, relate or abstain`),
       ...sourceBound.questionAsTopic.map((x) => `topic "${x}" is a whole question; give it the general frame its words have (define, describe, assert, relate) with kind "question", the question word in the role it asks about`),
       ...(sourceBound.uncovered.length ? [`the candidate leaves out: ${sourceBound.uncovered.join(', ')}`] : []),
+      ...(sourceBound.unstatedNegation ? ['a clause is negated but the source states no negation (not, never, no, none, nothing, without ...); set negated only for a negation the source states'] : []),
     ].join('; ')}; copy the source words into the fillers or abstain`);
   }
   if (sem && protocolCanonical && frameValid && grounded && literalsRetained && sourceBoundOk) {

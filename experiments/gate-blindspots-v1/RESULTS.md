@@ -40,3 +40,23 @@ All 139 originals get an identity and are mutated. Every issued mutant has a fin
 - The mutations are mechanical, so they bound the gates' sensitivity, not how often a real extractor makes these errors.
 - The sources are 139 short English sentences; only one record has two clauses.
 - M3 and M4 change fields the source might leave open (for example a modal the source implies without a word). The issued rate is still the gate's behaviour on a meaning change.
+
+## Re-score with the negation-cue gate (v31, 2026-11-12)
+
+**The gate:** source binding check 3 refuses a negated clause when the English source states no negation: not, n't, never, no, none, nobody, nothing, nowhere, neither, nor, without, cannot. It was built under the orchestrator's decision (option 1) as the v31 maintenance freeze, with contract 0.22 unchanged. Output: [results-v31.json](results-v31.json).
+
+**Targets set before the gate was built:** add-direction issued 0%, and originals still 139/139.
+
+| | Before (v30) | After (v31) |
+|---|---|---|
+| Originals with an identity | 139 / 139 | **139 / 139** |
+| M2 flip negation, issued | 124 / 139 (89.2%) | **13 / 139 (9.4%)** |
+| of which: negation added on general frames | 118 / 118 | **7 / 118** |
+| of which: negation added on legacy-only records | 5 / 5 | 5 / 5 (not source-bound) |
+| of which: stated negation removed | 1 / 16 | 1 / 16 (a legacy record) |
+| M1, M3, M4 | 100% each | 100% each (unchanged, as expected) |
+| C1, C2 (controls) | 1.4%, 4.3% | 1.4%, 4.3% |
+
+- **The 0% target was not met: 7 of 118 added negations still pass.** In each of those 7, the source already contains a negation word ("not" five times, "nothing", "cannot") that the original encoded somewhere else, for example inside an object phrase. A per-source cue cannot tell which clause the negation belongs to. That would need the negation word to be tied to the clause, a scope check, which is out of reach for a deterministic word list.
+- **Legacy-only records stay unchecked:** this gate lives in source binding, which does not apply to them.
+- **Not covered:** Greek negation (δεν, μη, όχι) is a recorded gap for the owner's Greek work (ADR 0030). Greek sources already fail closed in source binding.

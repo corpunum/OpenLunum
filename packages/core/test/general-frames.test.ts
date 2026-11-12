@@ -226,3 +226,21 @@ const GOLDEN: Record<string, string> = {
   quantify: 'lfp:2.1:sha256:0195c88b8ef0c88233f2a0679193d6e3',
   topic: 'lfp:2.1:sha256:f57453e99dc2137cafb14f2d0e1a2c00',
 };
+
+test('a negated clause needs a negation in its source (gate-blindspots-v1, check 3)', () => {
+  const describeSem = (negated: boolean) => ({ schema: 'lunum-sem/0.1-draft', world: 'real', kind: 'simple_fact',
+    clauses: [{ predicate: 'describe', roles: { subject: text('The cache'), attribute: text('fast') }, negated }] });
+  // A negation the source never states: refused, with its own diagnostic.
+  const added = submitCandidate({ sourceText: 'The cache is fast.', candidateSem: describeSem(true), provenance });
+  assert.equal(added.semanticFingerprint, null);
+  assert.equal(added.failureClass, 'unbound_source_content');
+  assert.match(added.diagnostics.join(' '), /source states no negation/);
+  assert.equal(checkSourceBound('The cache is fast.', describeSem(true) as never).unstatedNegation, true);
+  // Stated negations, including contractions and negative pronouns, still pass.
+  for (const source of ['The cache is not fast.', "The cache isn't fast.", 'The cache is never fast.']) {
+    assert.ok(submitCandidate({ sourceText: source, candidateSem: describeSem(true), provenance }).semanticFingerprint, source);
+  }
+  assert.equal(checkSourceBound('Nothing is fast.', describeSem(true) as never).unstatedNegation, false);
+  // Unnegated candidates are unaffected.
+  assert.ok(submitCandidate({ sourceText: 'The cache is fast.', candidateSem: describeSem(false), provenance }).semanticFingerprint);
+});

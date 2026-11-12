@@ -18,6 +18,12 @@ import type { LunumClause, LunumSem, LunumTerm } from './types.js';
  *     a digit token (literal retention owns numbers), a negation when the
  *     clause is negated, or a modal when the clause has a modality. Anything
  *     else is content the candidate dropped: no identity.
+ *  3. A negated clause needs a negation in the source (2026-11-12,
+ *     experiments/gate-blindspots-v1). Check 2 lets an uncovered "not" pass when
+ *     the clause is negated, so dropping a stated negation is caught. Nothing
+ *     caught a negation the source never states, and 123 of 123 such edits got an
+ *     identity. The cue list is English; Greek δεν/μη/όχι are a recorded gap for
+ *     the owner's Greek work (ADR 0030).
  *
  * It applies when the Sem has at least one general-frame clause. Check 1 covers
  * every clause; check 2 only when every clause is a general frame (a legacy
@@ -33,6 +39,8 @@ const AUX = ['do', 'does', 'did'];
 const PREPOSITIONS = ['of', 'in', 'on', 'at', 'by', 'for', 'from', 'to', 'with', 'as'];
 const FREE_WORDS: ReadonlySet<string> = new Set([...ARTICLES, ...COPULAS, ...AUX, ...PREPOSITIONS, 'and']);
 const NEGATIONS: ReadonlySet<string> = new Set(['not', 'no', 'never', 'cannot', 'nor', 'without']);
+/** Words that state a negation (check 3). A superset of NEGATIONS, which only lists words a frame may leave uncovered. */
+const NEGATION_CUES: ReadonlySet<string> = new Set([...NEGATIONS, 'none', 'nobody', 'nothing', 'nowhere', 'neither', 'noone', 'nope']);
 const MODALS: ReadonlySet<string> = new Set(['can', 'could', 'may', 'might', 'must', 'shall', 'should', 'will', 'would', 'need', 'needs']);
 /** Fillers that are only a pronoun refer to something outside the unit. */
 const PRONOUNS: ReadonlySet<string> = new Set(['it', 'its', 'this', 'that', 'these', 'those', 'they', 'them', 'their', 'he', 'she', 'him', 'her', 'his', 'one', 'there', 'here']);
@@ -51,6 +59,8 @@ export interface SourceBoundResult {
    * with ?). A question gets the general frame its words have, with kind `question`; topic keeps headings and labels.
    */
   questionAsTopic: string[];
+  /** Check 3: a clause is negated but the source states no negation (gate-blindspots-v1). */
+  unstatedNegation: boolean;
 }
 
 /** A topic names a heading, label or title; longer text is a statement. */
@@ -120,8 +130,8 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
     for (const term of Object.values(clause.roles ?? {})) fillerStrings(term, fillers);
     fillerStrings(clause.time, fillers);
   });
-  if (!general) return { applies: false, bound: true, unsourced: [], uncovered: [], pronounFillers: [], notALabel: [], questionAsTopic: [] };
-  if (language && !/^en([-_]|$)/iu.test(language)) return { applies: true, bound: false, unsourced: [], uncovered: ['language_unsupported'], pronounFillers: [], notALabel: [], questionAsTopic: [] };
+  if (!general) return { applies: false, bound: true, unsourced: [], uncovered: [], pronounFillers: [], notALabel: [], questionAsTopic: [], unstatedNegation: false };
+  if (language && !/^en([-_]|$)/iu.test(language)) return { applies: true, bound: false, unsourced: [], uncovered: ['language_unsupported'], pronounFillers: [], notALabel: [], questionAsTopic: [], unstatedNegation: false };
 
   const source = wordTokens(sourceText);
   const covered = new Array<boolean>(source.length).fill(false);
@@ -160,7 +170,8 @@ export function checkSourceBound(sourceText: string, sem: LunumSem, language: st
     if (modal && MODALS.has(word)) return;
     uncovered.push(word);
   });
-  return { applies: true, bound: !unsourced.length && !uncovered.length && !pronounFillers.length && !notALabel.length && !questionAsTopic.length, unsourced, uncovered: [...new Set(uncovered)], pronounFillers, notALabel, questionAsTopic };
+  const unstatedNegation = negated && !source.some((word) => NEGATION_CUES.has(word));
+  return { applies: true, bound: !unsourced.length && !uncovered.length && !pronounFillers.length && !notALabel.length && !questionAsTopic.length && !unstatedNegation, unsourced, uncovered: [...new Set(uncovered)], pronounFillers, notALabel, questionAsTopic, unstatedNegation };
 }
 
 /** True when a lexical slot is nothing but a copula (use define/describe/relate instead). */

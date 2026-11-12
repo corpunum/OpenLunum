@@ -1,5 +1,13 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-11-12 (v31 maintenance freeze: source binding checks stated negation)
+
+### Fixed
+- v31 maintenance freeze (2026-11-12): source binding refuses a negated clause when the English source states no negation (gate-blindspots-v1: added negations went from 123/123 issued to 12/123); same contract 0.22. Greek negation is a recorded gap (ADR 0030).
+
+### Changed
+- Instruction package **v31** (`scripts/research/freeze-v31.mjs`): only the source-bound and agent-native modules and the served-runtime manifest bindings move. v30 stays a historical binding. The source-only runner defaults to v31.
+
 ## Unreleased — 2026-11-12 (v30 maintenance freeze: literal retention reads number compounds)
 
 ### Fixed
