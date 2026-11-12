@@ -1,8 +1,18 @@
-# coverage-a3-v3: results (DRAFT, 2026-11-12, waiting on the DeepSeek retry at 10:15 EET)
+# coverage-a3-v3: results
 
-**Draft. Not final until DeepSeek's retry has run.** It has two endings: case 1 if DeepSeek is unavailable or fails calibration, case 2 if it passes. Everything below "Both cases" is final data.
+**Verdict: NO VERDICT** (strict pre-registered reading; corpunum-82, 2026-11-12). Contracts 0.21 and 0.22 stay unreleased candidates, and OpenUnum is not re-vendored.
 
-All judge calibration here is a **model-rated calibration**: the labels come from rater `claude-blind`, not the owner (D1).
+- **Why no verdict:** the pre-registration measures each judge's kappa against the labels of the 32 natural calibration items. All 32 were labelled "states", so that kappa is undefined and no judge can pass.
+- **Beside it, an interpretation, not the verdict:** with the 8 injected controls counted as negatives (40 items, stated in D1 before any judge call), Luna passes and Nemotron fails. Under that reading bar 1 cannot be met either: Luna accepts 58.3% of the records under R1, and the bar is 80% for each judge.
+- **Recommendation, not a verdict:** stop the 0.21 / 0.22 line, keep 0.19 frozen, and do not pre-register coverage-a3-v4 on this design.
+- All calibration here is a **model-rated calibration** (D1): the labels come from rater `claude-blind`, not the owner.
+
+## Methods lessons (the main findings of this experiment)
+
+1. **The judge is not stable.** Luna, asked the byte-identical 139 prompts of coverage-a3-v2 again, changed its answer on 27 of them (19%). On the 45 records whose R1 text equals the R0 text, it changed on 9 (20%). Differences of a few points between arms or runs are inside that noise. This also puts coverage-a3-v2's 56% in doubt as a point estimate.
+2. **Rule for every future judge experiment:** pre-register a **retest-stability check first** (the same prompts twice; a stated maximum disagreement), before calibration. A judge that fails it is used only with repeated calls and a majority vote, or not at all.
+3. **Rule for calibration sets:** pre-register a **minimum label variance**. A set whose labels are all "states" cannot calibrate anything. Draw the natural items so that known-bad records are included (for example the jointly rejected C and D kinds), and check the label distribution before any judge is called.
+4. **Agreement on easy controls is not validation.** Both judges answered "no" on all 28 mismatched pairs, and that is all the 40-item kappa measures.
 
 ## Deviations
 
@@ -19,7 +29,7 @@ From [DEVIATIONS.md](DEVIATIONS.md):
 |---|---|---|---|---|---|---|
 | Luna (gpt-6-luna, low, Codex CLI) | 0.433 | 0.468 | 0/8, 0/20 | 66% / 69% | yes / yes | 0.375, **would fail** |
 | GLM 5.3 (NIM) | – | – | – | – | unavailable (D3) | – |
-| DeepSeek v4.1 flash (NIM) | *retry pending* | | | | | |
+| DeepSeek v4.1 flash (NIM) | *retry running since 10:15 EET, no reply yet; row to be filled* | | | | | |
 | Qwen (local) | – | – | – | – | no rig slot today | – |
 | Nemotron 3 Ultra (NIM) | 0.135 | 0.101 | 0/8, 0/20 | 28% / 22% | **no / no** | 0.17, fails |
 
