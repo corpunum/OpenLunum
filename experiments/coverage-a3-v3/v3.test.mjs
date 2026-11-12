@@ -80,3 +80,24 @@ test('prepare.mjs: counts, no overlap, worksheet has only the 32 natural items, 
     fs.rmSync(b, { recursive: true, force: true });
   }
 });
+
+test('calibrate: kappa, item set and per-arm pass rule', async () => {
+  const { kappa, calibrationItems, summarize } = await import('./calibrate.mjs');
+  assert.equal(kappa([[true, true], [false, false]]), 1);
+  assert.equal(kappa([[true, false], [false, true]]), -1);
+  const items = JSON.parse('[' + fs.readFileSync(new URL('./calibration/items.jsonl', import.meta.url), 'utf8').trim().split('\n').join(',') + ']');
+  const controls = JSON.parse('[' + fs.readFileSync(new URL('./bar/controls.jsonl', import.meta.url), 'utf8').trim().split('\n').join(',') + ']');
+  const labels = JSON.parse(fs.readFileSync(new URL('./calibration/labels.json', import.meta.url), 'utf8'));
+  const all = calibrationItems({ items, controls, labels });
+  assert.equal(all.length, 2 * (40 + 20));
+  assert.equal(all.filter((x) => x.set === 'natural' && x.arm === 'r0').length, 32);
+  // A judge that says yes to every real record and no to every control passes both arms.
+  const ideal = all.map((x) => ({ ...x, states: x.set === 'natural' }));
+  const s = summarize(ideal);
+  assert.equal(s.r0.pass, true); assert.equal(s.r1.pass, true); assert.equal(s.r0.kappa, 1);
+  // Two yes answers on bar controls fail the arm.
+  const leaky = ideal.map((x, i) => (x.arm === 'r1' && x.set === 'barControl' && i % 2 === 0 ? { ...x, states: true } : x));
+  assert.equal(summarize(leaky).r1.pass, false);
+  // The D1 sensitivity check treats mostly as does-not.
+  assert.ok(summarize(ideal, { mostlyAsNo: true }).r0.kappa < 1);
+});
