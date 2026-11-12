@@ -1,6 +1,6 @@
 # Prompt-cache A/B: where the prefill is before the windows open
 
-Written 2026-11-12 10:40Z, before either A/B window (anchorAtTail, UNUM_SCHED) has run. It fixes what each change can save at most, so the A/B reports are read against a number stated in advance. Aggregates only, from the OpenUnum log, 2026-11-11 16:00Z to 2026-11-12 10:35Z (after the prompt-cap change; the last 75 minutes are on OpenUnum 30b20f0b). Scripts are private (`~/.local/share/lunum-prefill/`): `trim-facts.py`, `turnstart-facts.py`.
+Written 2026-11-12 10:36Z, before either A/B window (anchorAtTail, UNUM_SCHED) has run. It fixes what each change can save at most, so the A/B reports are read against a number stated in advance. Aggregates only, from the OpenUnum log, 2026-11-11 16:00Z to 2026-11-12 10:35Z (after the prompt-cap change; OpenUnum runs 30b20f0b from 09:10Z). Scripts are private (`~/.local/share/lunum-prefill/`): `trim-facts.py`, `turnstart-facts.py`.
 
 This is not a pre-registration of a bar. The A/B reports have no pass rule; they report B against A.
 
