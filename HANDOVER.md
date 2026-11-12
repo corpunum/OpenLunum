@@ -22,7 +22,7 @@ s-openlunum is paused by corpunum-82 (ONBOARDING "SAVINGS MODE"). **Exceptions: 
 - [gate-blindspots-v1](experiments/gate-blindspots-v1/RESULTS.md): meaning-changing edits still get identities. Then the negation-cue gate (v31 freeze, `f555cb1b`): added negations went from 123/123 issued to 12/123.
 - README and showcase facts corrected with s-showcase (`de080de8`, `2472e703`).
 - In OpenUnum, both reviewed by s-openunum: `a7be7390` (A/B report one-sided buckets) ships 11-12 evening; `1b663c10` (`--provider` filter) is held until the 11-13 evening release.
-- s-openunum has the literal-retention fix for its next re-vendor. It should cherry-pick that one file and keep the 0.19 pin. The v31 negation gate is not sent yet: offer it at the same time.
+- **After the pause (from 11-19), for s-openunum (decided 11-12):** push branch `vendor/openunum-20261112`: `5f6570bf` plus only `packages/core/src/literal-retention.ts` and `packages/core/test/relative-time-number-word-retention.test.ts` from `2e5d246d`. Run the core build and tests at that tree under the lease, then send s-openunum the sha. It runs `lunum-sync-check --update` from a clean checkout. Leave out the v31 negation gate; it gets its own pass later.
 
 **Open, in order:**
 1. **coverage-a3-v3 is final: no verdict** (hub U-877763bb). DeepSeek never answered on either attempt (07:54 and 10:15 EET; the retry was stopped at 10:50 EET) and is recorded as unavailable (D4). `RESULTS.md` is final. `calibrate.mjs` has a client-side deadline (`--preflight-minutes`, default 5; `--max-minutes`) for any later run.
