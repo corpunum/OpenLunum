@@ -46,12 +46,28 @@
       "method": "discourse-live-gate-v1",
       "date": "2026-11-11",
       "evidence": "experiments/discourse-live-gate-v1/RESULTS.md"
+    },
+    {
+      "metric": "English sentences that get a record (Sonnet, frozen contract)",
+      "value": "18%",
+      "sample": "9 of 50 held-out English sentences",
+      "method": "greek-frames-heldout-v1 baseline",
+      "date": "2026-10-17",
+      "evidence": "experiments/greek-frames-heldout-v1/RESULTS-baseline.md"
+    },
+    {
+      "metric": "English sentences that get a record (Sonnet, frozen contract)",
+      "value": "24.5%",
+      "sample": "49 of 200 plain English sentences",
+      "method": "roundtrip-en-v1 (R4)",
+      "date": "2026-10-17",
+      "evidence": "experiments/roundtrip-en-v1/RESULTS.md"
     }
   ],
   "constants": [
     {
-      "value": "18 / 22",
-      "what": "same sentence, two runs, same identity under a canonical projection: short of its pre-registered 90% bar (identity-heldout-v2)"
+      "value": "90%",
+      "what": "pre-registered stability bar of identity-heldout-v2, not met: 18 / 22"
     }
   ],
   "links": [

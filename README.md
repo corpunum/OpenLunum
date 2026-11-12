@@ -113,7 +113,7 @@ echo '{"handle":"tom","sem":{"schema":"lunum-sem/0.1-draft","world":"real","kind
 
 - **Pre-1.0 research, not a dependency.** The extraction contract is frozen at `lunum-agent/0.19`
   until held-out evidence justifies a change ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
-- **Coverage is the main limit:** 18–25% of plain English sentences get a record with Sonnet
+- **Coverage is the main limit:** 18–24.5% of plain English sentences get a record with Sonnet
   (9 of 50 in [greek-frames-heldout-v1](experiments/greek-frames-heldout-v1/RESULTS-baseline.md), 49 of 200 in [R4](experiments/roundtrip-en-v1/RESULTS.md)), and
   it depends strongly on the model (1, 4 and 11 of 16 English sentences for three models,
   [Stage 0](experiments/parallel-document-v1/RESULTS-stage0.md)).
