@@ -123,3 +123,101 @@ test('judges.ask: a 4xx is a dead judge, an empty content falls back to reasonin
     await assert.rejects(() => ask(url('/404'), 'q', 'states'), /judge_unreachable:http_404/);
   } finally { srv.close(); }
 });
+
+test('score: mood from the render prefix, item set for both arms (139 + 20 each), R1 = verbFirst', async () => {
+  const { moodOf, scoreItems } = await import('./score.mjs');
+  assert.equal(moodOf('R question: relate(subject=x, relation=y)?'), 'question');
+  assert.equal(moodOf('R imperative to you: assert(action=go)'), 'imperative');
+  assert.equal(moodOf('R not ability assert(subject=I, action=help)'), 'statement');
+  const score = JSON.parse(fs.readFileSync(path.join(here, '../coverage-a3-v2/score.json'), 'utf8'));
+  const text = new Map(J(path.join(here, '../coverage-a3-v2/requests.jsonl')).map((r) => [r.handle, r.sourceText]));
+  const controls = J(path.join(here, 'bar/controls.jsonl'));
+  const items = scoreItems({ renders: score.renders, text, controls });
+  assert.equal(items.length, 2 * (139 + 20));
+  const own = (arm) => items.filter((x) => x.arm === arm && x.kind === 'own');
+  assert.equal(own('r0').length, 139);
+  for (const [i, it] of own('r1').entries()) { assert.equal(it.code, verbFirst(own('r0')[i].code)); assert.equal(it.mood, own('r0')[i].mood); }
+  const moods = own('r0').reduce((m, x) => ({ ...m, [x.mood]: (m[x.mood] || 0) + 1 }), {});
+  assert.deepEqual(moods, { statement: 112, question: 23, imperative: 4 });
+  assert.deepEqual(items.filter((x) => x.arm === 'r1' && x.kind === 'control').map((x) => x.code), controls.map((c) => c.r1));
+  assert.throws(() => scoreItems({ renders: [{ handle: 'h', code: 'R assert(subject=a, action=b)' }], text: new Map(), controls: [] }), /sentence_missing/);
+});
+
+// Synthetic score files: n records (ids h0..), 20 controls; yes(arm, i) decides each record.
+function synth(judge, n, yes, ctlYes = 0, mood = () => 'statement') {
+  const results = [];
+  for (const arm of ['r0', 'r1']) {
+    for (let i = 0; i < n; i += 1) results.push({ arm, kind: 'own', id: `h${i}`, mood: mood(i), promptSha256: `${arm}${i}`, states: yes(arm, i) });
+    for (let i = 0; i < 20; i += 1) results.push({ arm, kind: 'control', id: `c${i}`, promptSha256: `${arm}c${i}`, states: i < ctlYes });
+  }
+  return { summary: { judge }, results };
+}
+
+test('score.verdict: bar 1 on R1, agreement, controls, lift, moods, categories and the C+D credibility check', async () => {
+  const { verdict, checkCategories, CALIBRATION_LABEL } = await import('./score.mjs');
+  // 139 records; R1: judge a rejects h0..h19 (85.6 %), judge b rejects h10..h29; R0: both reject h0..h59.
+  const a = synth('a', 139, (arm, i) => (arm === 'r1' ? i >= 20 : i >= 60), 2, (i) => (i < 23 ? 'question' : 'statement'));
+  const b = synth('b', 139, (arm, i) => (arm === 'r1' ? i < 10 || i >= 30 : i >= 60), 0);
+  let v = verdict([a, b]);
+  assert.equal(v.calibration, CALIBRATION_LABEL);
+  assert.equal(v.calibration, 'model-rated calibration');
+  assert.equal(v.arms.r1.each[0].rate, Number((119 / 139).toFixed(4)));
+  assert.equal(v.arms.r1.agree, 139 - 20);
+  assert.equal(v.arms.r1.bothReject.length, 10);
+  assert.equal(v.bar1.verdictPossible, true);
+  assert.equal(v.bar1.pass, true);
+  assert.equal(v.bar1.credible, null);
+  assert.equal(v.bar1.reported, 'pass, credibility not computed');
+  assert.equal(v.attribution.renderEffect[0].lift, Number((119 / 139 - 79 / 139).toFixed(4)));
+  assert.equal(v.attribution.liftAtLeast10PointsBoth, true);
+  assert.deepEqual(v.arms.r1.each[0].byMood.question, { n: 23, states: 3 });
+  // Three control yes answers fail bar 1.
+  assert.equal(verdict([synth('a', 139, () => true, 3), b]).bar1.pass, false);
+  // An incomplete file is no verdict.
+  assert.equal(verdict([synth('a', 100, () => true), b]).bar1.pass, null);
+  assert.equal(verdict([synth('a', 100, () => true), b]).bar1.reported, 'no verdict');
+  // Categories for 48 synthetic jointly rejected records h0..h47: A h0-23, B h24-35, C h36-44, D h45-47.
+  const cat = (i) => (i < 24 ? 'A' : i < 36 ? 'B' : i < 45 ? 'C' : 'D');
+  const categories = Object.fromEntries(Array.from({ length: 48 }, (_, i) => [`h${i}`, cat(i)]));
+  const ids = Object.keys(categories);
+  assert.equal(checkCategories(categories, ids), categories);
+  assert.throws(() => checkCategories({ ...categories, h0: 'B' }, ids), /category_count:A/);
+  assert.throws(() => checkCategories(categories, ids.slice(1)), /jointly_rejected/);
+  v = verdict([a, b], { categories });
+  assert.deepEqual(v.arms.r1.each[0].byCategory.A, { n: 24, states: 4 });
+  assert.deepEqual(v.arms.r1.each[0].cdAccepted, { n: 12, states: 12 });
+  assert.equal(v.bar1.credible, false);
+  assert.equal(v.bar1.reported, 'pass, not credible');
+  // Judges that reject 6 or more of C+D keep bar 1 credible: accept exactly 6 of h36..h47.
+  const careful = (j) => synth(j, 139, (arm, i) => arm === 'r0' || i < 36 || i >= 42, 0);
+  v = verdict([careful('a'), careful('b')], { categories });
+  assert.deepEqual(v.arms.r1.each[1].cdAccepted, { n: 12, states: 6 });
+  assert.equal(v.bar1.credible, true);
+  // Selection check and judging effect.
+  v = verdict([a, b], { v2LunaRate: 78 / 139, calibration: [{ judge: 'a', r1: { pass: true, kappa: 0.9 } }, { judge: 'c', r1: { pass: true, kappa: 0.5 } }, { judge: 'b', r1: { pass: true, kappa: 0.7 } }, { judge: 'd', r1: { pass: false, kappa: 1 } }] });
+  assert.deepEqual(v.selection.topTwo, ['a', 'b']);
+  assert.equal(v.selection.scoredAreTopTwo, true);
+  assert.ok(Math.abs(v.attribution.judgingEffect[0].diff - 1 / 139) < 2e-4);
+  // Different prompts for the same item are refused.
+  const bad = synth('b', 139, () => true); bad.results[0].promptSha256 = 'x';
+  assert.throws(() => verdict([a, bad]), /prompt_mismatch/);
+  assert.throws(() => verdict([a, a]), /same_judge_twice/);
+});
+
+test('score.summarizeJudge: unparseable counts as no', async () => {
+  const { summarizeJudge } = await import('./score.mjs');
+  const s = summarizeJudge([{ arm: 'r1', kind: 'own', states: true }, { arm: 'r1', kind: 'own', states: null }, { arm: 'r1', kind: 'control', states: false }]);
+  assert.deepEqual(s.r1, { records: 2, states: 1, rate: 0.5, controls: 1, controlsYes: 0, unparseable: 1 });
+});
+
+test('categories: bar/categories-v2.json is exactly what build-categories.mjs derives from coverage-a3-v2 (24/12/9/3)', async () => {
+  const { buildCategories } = await import('./build-categories.mjs');
+  const v2 = new URL('../coverage-a3-v2/', import.meta.url);
+  const J = (f) => JSON.parse(fs.readFileSync(new URL(f, v2), 'utf8'));
+  const requests = fs.readFileSync(new URL('requests.jsonl', v2), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
+  const built = buildCategories({ md: fs.readFileSync(new URL('RESULTS.md', v2), 'utf8'), judgements: [J('bar2/judgements-luna.json'), J('bar2/judgements-nemotron.json')], requests });
+  const committed = JSON.parse(fs.readFileSync(new URL('./bar/categories-v2.json', import.meta.url), 'utf8'));
+  assert.deepEqual(committed, built);
+  const counts = {}; for (const c of Object.values(built)) counts[c] = (counts[c] || 0) + 1;
+  assert.deepEqual(counts, { A: 24, B: 12, C: 9, D: 3 });
+});
