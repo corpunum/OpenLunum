@@ -11,6 +11,28 @@ Living document for the next agent. Update it in the same commit as the work it 
 - Trunk-based, single agent ([AGENTS.md](AGENTS.md)). The local worker, reviewer, merge and watchdog loops were stopped on 2026-10-06 and are still off; nothing in this repository runs unattended. The owner approved an Ally-only daytime lane on 2026-11-06; it has not been started, and its tunnel to the Ally is down.
 - The intermittent `packages/eval` failure is diagnosed and fixed (2026-11-11 evening, below). CI now keeps the full `pnpm verify` log as an artifact, and the failing test names go into the job summary.
 
+## Session state at 2026-11-12 10:43 EET (written before a context compaction)
+
+**Open, in order:**
+1. **coverage-a3-v3 `RESULTS.md` needs its DeepSeek row** (hub U-877763bb). The verdict is already fixed as **no verdict** (corpunum-82, option 1).
+   - The retry runs as the systemd user unit `openlunum-deepseek-retry.service` (corpunum-82's timer, started 10:15 EET). It writes `experiments/coverage-a3-v3/calibration/judge-deepseek.json` on success and logs to `calibration/run-deepseek-retry.log` (not committed).
+   - When it ends: fill the DeepSeek row in the calibration table; delete the "Case 1 / Case 2" sections and state which applied; commit `judge-deepseek.json` if it exists (delete its `.partial.jsonl`); report to corpunum-82. If it is unreachable again, record DeepSeek as unavailable (D4).
+   - If DeepSeek passes the 40-item reading, `score.mjs --judge deepseek` may be run for the record (corpunum-82 runs it: NIM key). It does not change the verdict.
+2. **Prompt-cache A/B reports** (hub U-87d0f342). The harness is OpenUnum `scripts/lunum-prefill-measure.mjs`; its A/B mode is queued in unumship as openunum `99381e2a` (worktree `~/OpenUnum-wt/lunum-prefill-ab`; remove it once shipped).
+   - **anchorAtTail (s-openunum, U-03a474a7):** A = 2026-11-12 from (the ~11:10 EET deploy restart + 10 min; s-openunum sends the exact time) to 19:00Z, flag off. B = 2026-11-13, the same clock hours, flag on (flip at 11-12 19:00Z). At least 300 local foreground requests per window, else extend both. Report after 11-13 19:00Z with `--base-only` twice, then `--compare`.
+   - **UNUM_SCHED (s-engine, U-b666e316):** 2026-11-14 07:00–19:00Z off against 2026-11-15 on.
+   - Reports go to s-openunum, s-engine and corpunum-82: aggregates only, with both days' request counts and kind mix.
+3. **Dependabot:** the 35 alerts had not auto-closed at last check, although GitHub's dependency graph shows the patched versions. Recheck; if still open, tell corpunum-82.
+
+**Timers and background jobs that live only in this session:** one background shell wait on the DeepSeek result (it ends by itself; nothing depends on it). No crons, no OpenUnum workers, no leases held.
+
+**Rules that arrived on 2026-11-12** (full text in `~/UnumOrchestrator/sessions/ONBOARDING.md`):
+- Messages start `[report|ask|decision|alert|ack] U-key: summary`, with evidence as links.
+- Every written time comes from `date` at that moment.
+- Full suites and builds run under `~/UnumOrchestrator/scripts/lease.sh run heavy-cpu -- <cmd>`.
+- Fable orchestrates and delegates bulk work to subagents with an explicit model (Haiku routine, Sonnet builders, Opus reviews), and verifies their claims.
+- This session never reads `~/.openunum/secrets*`; NIM judge runs go through corpunum-82.
+
 ## What the 2026-11-11 session did
 
 1. **[discourse-live-gate-v1](experiments/discourse-live-gate-v1/RESULTS.md): PASS.** The discourse view ([ADR 0021](decisions/0021-discourse-records.md)) that OpenUnum has used live since 2026-10-08 was re-measured on 83 sessions that started after it was enabled, bar fixed first: 0.56x prompt tokens at compaction points, exact-match fact recall 20.3% to 37.1%, no point worse. The in-sample figure was 0.30x, so the real saving is about half of what was first reported.
