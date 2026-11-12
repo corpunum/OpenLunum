@@ -193,7 +193,6 @@ test('public instruction package exposes frozen scoring conventions without gold
   }
   assert.deepEqual(v23.conventions, v22.conventions);
   assert.match(next.freeze.launcherSha256, /^[0-9a-f]{64}$/u);
-  assert.equal(hash('packages/mcp/dist/src/tools.js'), v23.freeze.toolImplementationSha256);
   assert.equal(hash('packages/mcp/dist/bin/lunum-mcp.js'), next.freeze.mcpArtifactSha256);
   // v27 (lunum-agent/0.21, A3): the contract, builder, frame and protocol registries and source-bound check change;
   // v22's hashes of those modules are history from here on.
@@ -220,6 +219,17 @@ test('public instruction package exposes frozen scoring conventions without gold
     else assert.deepEqual(v28.freeze[key], v27.freeze[key], `${key} unchanged in v28`);
   }
   assert.equal(hash('packages/core/dist/src/agent-native.js'), v28.freeze.coreArtifactSha256);
+  // v29 (maintenance, contract lunum-agent/0.22 unchanged): the dependency security update moves the lockfile hash and
+  // the MCP tool annotations move tools.js and the served-runtime manifest; nothing else changes.
+  const v29 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v29.json', 'utf8'));
+  assert.equal(v29.supersedes.path, 'public-instruction-package-v28.json');
+  for (const key of Object.keys(v28.freeze)) {
+    if (['toolImplementationSha256', 'transportValidatorDependency', 'servedRuntimeManifestPath', 'servedRuntimeManifestSha256'].includes(key)) assert.notDeepEqual(v29.freeze[key], v28.freeze[key], `${key} changed in v29`);
+    else assert.deepEqual(v29.freeze[key], v28.freeze[key], `${key} unchanged in v29`);
+  }
+  assert.deepEqual({ name: v29.freeze.transportValidatorDependency.name, version: v29.freeze.transportValidatorDependency.version }, { name: 'ajv', version: '8.20.0' });
+  // tools.js held v23's hash until v29 (MCP tool annotations); v23's hash is history from there on.
+  assert.equal(hash('packages/mcp/dist/src/tools.js'), v29.freeze.toolImplementationSha256);
   // frame-registry.js was unchanged from v14 to v18; decisions/0022 changes it in v19, 0023 in v20, 0024 in v22.
   assert.equal(current.freeze.frameValidatorArtifactSha256, next.freeze.frameValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/frame-registry.js'), v27.freeze.frameValidatorArtifactSha256);

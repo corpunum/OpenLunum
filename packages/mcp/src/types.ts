@@ -39,9 +39,32 @@ export interface LunumToolDefinition {
     required?: string[];
     additionalProperties?: boolean;
   };
+  /** MCP behaviour hints; tools without them get PURE_TOOL_ANNOTATIONS. */
+  annotations?: LunumToolAnnotations;
   /** Handler function */
   handler: (input: Record<string, unknown>) => Promise<McpToolResponse>;
 }
+
+/** MCP tool annotations (hints for clients; they are not a security boundary). */
+export interface LunumToolAnnotations {
+  readOnlyHint?: boolean;
+  destructiveHint?: boolean;
+  idempotentHint?: boolean;
+  openWorldHint?: boolean;
+}
+
+/**
+ * The public Lunum tools are deterministic functions of their input: no
+ * file, network or session writes. Without these hints clients in a
+ * prompting posture ask for approval on every call (OpenClaw 2026.11.3
+ * `mcp probe`: "tools have no safety annotations").
+ */
+export const PURE_TOOL_ANNOTATIONS: Readonly<LunumToolAnnotations> = Object.freeze({
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: false,
+});
 
 export interface McpToolResponse {
   /** Response content */

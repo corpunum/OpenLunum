@@ -1,6 +1,7 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import type { LunumToolDefinition } from './types.js';
+import { PURE_TOOL_ANNOTATIONS } from './types.js';
 import { lunumTools } from './tools.js';
 
 export function createLunumMcpServer(tools?: LunumToolDefinition[]): Server {
@@ -17,6 +18,7 @@ export function createLunumMcpServer(tools?: LunumToolDefinition[]): Server {
       name: t.name,
       description: t.description,
       inputSchema: t.inputSchema,
+      annotations: { ...(t.annotations ?? PURE_TOOL_ANNOTATIONS) },
     })),
   }));
 

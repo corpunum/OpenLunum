@@ -249,6 +249,8 @@ export function createBlindEvaluationTools(session: BlindEvaluationSurface): Lun
     {
       name: 'lunum_eval_next',
       description: 'Return the next blind evaluation source item and extraction-contract binding. Gold and scoring metadata are never exposed.',
+      // Advances the private evaluator's queue.
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
       inputSchema: { type: 'object', properties: {} },
         handler: async (): Promise<McpToolResponse> => {
           try { return ok({ success: true, item: sourceOnlyNext() }); } catch (error) { return err((error as Error).message); }
@@ -257,6 +259,8 @@ export function createBlindEvaluationTools(session: BlindEvaluationSurface): Lun
     {
       name: 'lunum_eval_submit',
       description: 'Submit an untrusted candidate to a privately configured blind evaluator for deterministic scoring.',
+      // Records a scored submission in the private evaluator.
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
       inputSchema: {
         type: 'object',
         properties: {

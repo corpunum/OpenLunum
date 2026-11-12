@@ -1,5 +1,16 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-11-12 (v29 maintenance freeze: dependency security update, MCP tool annotations)
+
+### Security
+- `@modelcontextprotocol/sdk` 1.30.0 → 1.32.2, `zod` 4.4.3 → 4.6.7 (now declared directly, as the SDK's required peer), `fast-uri` 3.1.9, `hono` 4.13.18, `@hono/node-server` 2.1.7, `qs` 6.17.1, `ip-address` 10.7.6, `body-parser` 2.4.0, `proxy-addr` 2.0.8: every open Dependabot alert. The stdio server never loaded the HTTP stack (express, hono), so exposure was low.
+
+### Added
+- MCP tool annotations: the pure Lunum tools declare `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false` (OpenClaw's `mcp probe` reported "tools have no safety annotations"); the blind `eval_next`/`eval_submit` tools declare themselves not read-only, not idempotent and open-world. Hints for clients, not a security boundary.
+
+### Changed
+- Instruction package **v29** (`scripts/research/freeze-v29.mjs`): a maintenance freeze of the same contract `lunum-agent/0.22`. Only the lockfile, `tools.js` and the served-runtime manifest bindings move; instructions, schema, frames, protocol and the core artifact are unchanged. v28 stays a historical binding, and earlier packages' expected drift gains these two keys. The source-only runner defaults to v29.
+
 ## Unreleased — 2026-10-23 (A3 bar-2 fixes: contract 0.22 candidate, renderer 0.3, guards 0.3)
 
 ### Changed

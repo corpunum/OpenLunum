@@ -26,7 +26,7 @@
   - [v1](experiments/coverage-a3-v1/RESULTS.md): 60.5% coverage, bar 2 **FAIL**.
   - [v2](experiments/coverage-a3-v2/RESULTS.md): **69.5%** coverage (bar 1 pass), but judged meaning **56%** (bar 2 **FAIL**).
   - Coverage went up, faithfulness did not keep up. **Contract 0.19 stays the frozen one.**
-- **[ADR 0031](decisions/0031-mood-renderer-and-imperative-frames.md):** mood in the renderer and contract-0.22 imperatives. Frozen instruction package **v28**, carrying the 0.22 candidate contract; the frozen 0.19 contract is not replaced.
+- **[ADR 0031](decisions/0031-mood-renderer-and-imperative-frames.md):** mood in the renderer and contract-0.22 imperatives. Frozen instruction package **v28**, carrying the 0.22 candidate contract (re-frozen as **v29** on 2026-11-12 for the dependency security update and MCP tool annotations, same contract); the frozen 0.19 contract is not replaced.
 - **Compression line, closed for now.**
   - [guarded-codec-v1](experiments/guarded-codec-v1/PLAN.md): a deterministic verifier for lossy compressors (literals and negation/modality markers kept, SHA-256 pointers, exact expansion).
     - Stage 0 found that unguarded stopword pruning flips meaning in 22.6% of sentences; guarded with fallback, 0.

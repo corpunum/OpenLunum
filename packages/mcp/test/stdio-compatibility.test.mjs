@@ -94,6 +94,8 @@ test('real stdio MCP handshake, discovery, fixture calls, and fail-closed checks
     ]);
     for (const tool of tools) {
       assert.equal(tool.inputSchema?.type, 'object', `${tool.name} has no object-root schema`);
+      // Pure tools: clients may run them without a per-call approval prompt.
+      assert.deepEqual(tool.annotations, { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }, `${tool.name} annotations`);
     }
     // What a client that ignores oneOf actually sees over the wire.
     const builder = tools.find((tool) => tool.name === 'lunum_build_candidate');
