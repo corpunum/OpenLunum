@@ -10,7 +10,7 @@ Recorded as they happen, before the step they affect. RESULTS.md repeats them.
 - They were given by rater **`claude-blind`**: a fresh Claude Opus 5.5 subagent with no tools and no file access.
 - It saw only the worksheet's instructions, a notation key for the record format, the four-point scale and the 32 sentence/record pairs in R0 form.
 - It did not see R1, the controls, any judge output, any score or any of the experiment's notes.
-- Labels: `calibration/labels.json` and the ticked worksheet.
+- Labels: `calibration/labels.json` and the ticked worksheet. The exact prompt, including a notation key that is not on the worksheet, is in `calibration/RATER_PROMPT.md` (added in review, 2026-11-12).
 
 **Distribution:** 28 yes, 4 mostly (items 6, 7, 10, 16), 0 no, 0 can't tell. Binary: 32 of 32 natural items "states".
 
@@ -55,3 +55,11 @@ GLM's preflight (D2) failed at once with `judge_unreachable:http_410`: NIM has r
 - **The pre-registration selects the two passing judges with the highest R1 kappa, not the first two that pass.** So DeepSeek is retried once when NIM is quieter (after 10:00 EET), before selection, whatever Nemotron's result.
 - If that retry is also unreachable, DeepSeek is recorded as unavailable and selection uses the judges that answered.
 - Scoring with Luna started before selection, because Luna passed. If Luna is not among the two selected judges, its scoring rows are reported but not used for bar 1.
+
+## D5. Review findings (2026-11-12, after Luna's scoring, before the DeepSeek retry result)
+
+A fresh-eyes review by s-openlunum (requested by corpunum-82) found three things. None changes a number; all change what the numbers can support.
+
+- **Kappa reading.** The pre-registration's "kappa against the owner" covers the 32 labelled natural items. With all 32 labelled "states", that kappa is undefined, so under the strict reading no judge can pass and the result is no verdict. D1's 40-item kappa (controls as "does not") is an interpretation that makes a pass possible. RESULTS reports both readings.
+- **The "judging effect" is retest noise.** R0 uses byte-identical prompts to coverage-a3-v2's Luna run, and Luna's answers differ on 27 of 139 records (19%). On the 45 records whose R1 text equals the R0 text, it differs on 9 (20%). The pre-registration assumed the R0 comparison would measure a change of judges; with Luna selected again, it measures Luna against itself.
+- **The rater saw a notation key** that is not on the worksheet. It is now committed (`calibration/RATER_PROMPT.md`).

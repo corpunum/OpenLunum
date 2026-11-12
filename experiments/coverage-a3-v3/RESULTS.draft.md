@@ -23,7 +23,13 @@ From [DEVIATIONS.md](DEVIATIONS.md):
 | Qwen (local) | – | – | – | – | no rig slot today | – |
 | Nemotron 3 Ultra (NIM) | 0.135 | 0.101 | 0/8, 0/20 | 28% / 22% | **no / no** | 0.17, fails |
 
-**Flag (D1):** Luna's R1 pass depends on how the 4 "mostly" items are scored. Scored as "does not", its R1 kappa is 0.375 and it would fail.
+**Flag (D1), sensitivity:** Luna's R1 pass depends on how the 4 "mostly" items are scored. Scored as "does not", its R1 kappa is 0.375 and it would fail.
+
+**Flag (review 2026-11-12), how kappa was computed.** The pre-registration says "kappa ≥ 0.4 against the owner", and the owner step labels only the 32 natural items.
+- All 32 labels came back "states", so kappa over the natural items alone is undefined: there is no negative label to agree on. Under that strict reading **no judge can pass and the result is no verdict, whatever DeepSeek does**.
+- `calibrate.mjs` computes kappa over all 40 items, with the 8 controls as "does not". D1 said so before any judge call. Under that reading Luna passes, but the kappa only shows that it separates real records from mismatched pairs.
+- On the 32 natural items alone, Luna agrees with the rater on 21 (R0) and 22 (R1): 66% and 69%.
+- Both readings are reported. **Neither supports calling Luna a validated judge of subtle record errors.**
 
 ## Both cases: Luna scoring on the 139 records (reported for every case)
 
@@ -32,9 +38,12 @@ From [DEVIATIONS.md](DEVIATIONS.md):
 | R0 (0.3 render) | 83 / 139 (59.7%) | 0 / 20 |
 | R1 (verb-first) | 81 / 139 (58.3%) | 0 / 20 |
 
-- **Render effect (R1 − R0):** −1.4 points.
-- **Judge noise is larger than the effect:** 12 records went from rejected to accepted between arms and 14 the other way. That is 26 of 139, or 19%. The Codex route runs at the host's default temperature.
-- **Judging effect** (R0 against coverage-a3-v2's Luna, 78 / 139): +3.6 points.
+- **Render effect (R1 − R0):** −1.4 points. It cannot be told apart from noise (next point).
+- **Luna does not agree with itself.** Two checks on byte-identical prompts (the Codex route runs at the host's default temperature):
+  - R0 here uses exactly the prompts of coverage-a3-v2's Luna run (139 of 139 prompt hashes match). The answers differ on 27 of 139 records (19%): 16 rejected then, accepted now; 11 the other way. The totals moved from 78 to 83.
+  - For 45 records the R1 text is identical to the R0 text. Luna answered differently on 9 of those 45 (20%).
+- So the pre-registered "judging effect" (R0 against v2's Luna, +3.6 points) is **test-retest noise of one judge**, not an effect: same judge, same prompt, same text.
+- With about 19% retest disagreement, a single Luna pass cannot resolve differences of a few points. Any future bar with this judge needs repeated calls and a majority vote.
 
 The 48 records both v2 judges rejected, by category (`bar/categories-v2.json`), accepted by Luna:
 
@@ -55,7 +64,7 @@ By mood, under R0 and then R1:
 
 ## Case 1: DeepSeek unavailable or fails calibration → **no verdict**
 
-Fewer than two judges pass on R1, so under the pre-registration ("Selection") the result is **no verdict**.
+Fewer than two judges pass on R1, so under the pre-registration ("Selection") the result is **no verdict**. (Under the strict kappa reading above it is no verdict in every case.)
 
 What the data still says, without a bar:
 - R1 gave **no lift** with the only passing judge: −1.4 points, inside its own run-to-run noise.
@@ -72,7 +81,7 @@ Proposal to the orchestrator, following the pre-registration's "fail with no lif
 
 - **Selection:** the two passing judges with the highest R1 kappa. With Nemotron failed, that is Luna and DeepSeek.
 - **Then:** `node score.mjs --judge deepseek --out bar/score-deepseek.json`, then `node score.mjs --verdict bar/score-luna.json,bar/score-deepseek.json --categories bar/categories-v2.json --out bar/verdict.json`.
-- **Bar 1** is already decided: Luna's R1 rate is 58.3%, below 80%, so bar 1 **fails**. DeepSeek's scores still report agreement, its own lift, and the C + D check.
+- **Bar 1** under the 40-item kappa reading is already decided: Luna's R1 rate is 58.3%, below 80%, so bar 1 **fails**. Under the strict reading it is **no verdict**. The recommendation is the same either way. DeepSeek's scores still report agreement, its own lift, and the C + D check.
 - **Reading:**
   - If DeepSeek's R1 lift is also under 10 points, this is "a fail with no lift". The recommendation is to drop 0.21 / 0.22 and stay on 0.19.
   - If DeepSeek lifts by 10 points or more, that is "lift for one judge only", which is not the pre-registered "lift for both". It is reported as such, and the recommendation is the same.
