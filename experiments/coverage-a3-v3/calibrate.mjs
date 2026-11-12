@@ -16,6 +16,8 @@ const sha = (s) => createHash('sha256').update(s).digest('hex');
 const arg = (k) => (process.argv.includes(k) ? process.argv[process.argv.indexOf(k) + 1] : null);
 const J = (f) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
 export const ARMS = ['r0', 'r1'];
+// Synthetic, not in any item set: a plain statement and its obviously right record.
+export const PREFLIGHT = { sentence: 'The cat sleeps.', code: 'R assert(subject=The cat, action=sleeps)' };
 
 /** Cohen's kappa for two binary raters over paired booleans. */
 export function kappa(pairs) {
@@ -79,13 +81,18 @@ async function main() {
   const all = calibrationItems({ items, controls, labels });
   const out = arg('--out');
   const partial = `${out}.partial.jsonl`;
+  // Preflight (DEVIATIONS D2): one synthetic call that must parse to a verdict, or the run does not start. A dead
+  // endpoint or a reply the parser cannot read must stop the run, not fill it with nulls. The result is not used.
+  const pre = await ask(j, englishPrompt(PREFLIGHT.sentence, PREFLIGHT.code), 'states');
+  console.log(JSON.stringify({ preflight: { verdict: pre.verdict, status: pre.status ?? null, finishReason: pre.finishReason ?? null, fromReasoning: pre.fromReasoning ?? false } }));
+  if (typeof pre.verdict !== 'boolean') throw new Error(`preflight_failed:${name}:${JSON.stringify({ status: pre.status ?? null, finishReason: pre.finishReason ?? null, reply: String(pre.reply ?? '').slice(-120) })}`);
   const done = new Map(J(partial).map((r) => [`${r.arm}|${r.set}|${r.id}`, r]));
   for (const it of all) {
     const key = `${it.arm}|${it.set}|${it.id}`;
     if (done.has(key)) continue;
     const p = englishPrompt(it.sentence, it.code);
-    const { verdict, reply } = await ask(j, p, 'states');
-    const row = { arm: it.arm, set: it.set, id: it.id, label: it.label, promptSha256: sha(p), states: verdict, reply };
+    const { verdict, reply, status = null, finishReason = null, fromReasoning } = await ask(j, p, 'states');
+    const row = { arm: it.arm, set: it.set, id: it.id, label: it.label, promptSha256: sha(p), states: verdict, reply, status, finishReason, ...(fromReasoning ? { fromReasoning } : {}) };
     fs.appendFileSync(partial, JSON.stringify(row) + '\n');
     done.set(key, row);
     console.log(JSON.stringify({ arm: row.arm, set: row.set, n: done.size, states: verdict }));

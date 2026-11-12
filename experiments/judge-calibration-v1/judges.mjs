@@ -81,11 +81,24 @@ export async function ask(j, prompt, field) {
       const res = await fetch(j.url, { method: 'POST', headers, signal: AbortSignal.timeout(600000),
         body: JSON.stringify({ model: j.model, messages: [{ role: 'user', content: prompt }], temperature: 0, max_tokens: j.max }) });
       if (res.status === 429 || res.status >= 500) { await sleep(60000); continue; } // no reply: re-ask later
+      // 2026-11-12 (coverage-a3-v3, DEVIATIONS D2): any other non-2xx (401/403/404 for a retired model id) is a dead
+      // judge, not a reply. Before this, it parsed as content '' and was silently recorded as an unparseable "no".
+      if (!res.ok) throw Object.assign(new Error(`judge_unreachable:http_${res.status}`), { fatal: true });
       const body = await res.json();
-      const c = body.choices?.[0]?.message?.content ?? '';
-      try { const v = JSON.parse(c.slice(c.indexOf('{'), c.lastIndexOf('}') + 1)); return { verdict: typeof v[field] === 'boolean' ? v[field] : null, reply: c.slice(0, 200) }; }
-      catch { return { verdict: null, reply: c.slice(0, 200) }; }
-    } catch { await sleep(60000); } // network failure: no reply, re-ask later
+      const choice = body.choices?.[0] ?? {};
+      const msg = choice.message ?? {};
+      // A reasoning model may leave content empty and put the answer in reasoning_content (or reasoning).
+      const content = typeof msg.content === 'string' && msg.content.trim() ? msg.content : '';
+      const c = content || (typeof msg.reasoning_content === 'string' ? msg.reasoning_content : '') || (typeof msg.reasoning === 'string' ? msg.reasoning : '');
+      const meta = { status: res.status, finishReason: choice.finish_reason ?? null, ...(content ? {} : { fromReasoning: Boolean(c) }) };
+      // The last JSON object, so a reasoning trace that quotes the format earlier does not win.
+      const lastObj = c.slice(c.lastIndexOf('{'), c.lastIndexOf('}') + 1);
+      try { const v = JSON.parse(lastObj); return { verdict: typeof v[field] === 'boolean' ? v[field] : null, reply: c.slice(-200), ...meta }; }
+      catch { return { verdict: null, reply: c.slice(-200), ...meta }; }
+    } catch (err) {
+      if (err?.fatal) throw err;
+      await sleep(60000); // network failure: no reply, re-ask later
+    }
   }
   throw new Error('judge_unreachable');
 }

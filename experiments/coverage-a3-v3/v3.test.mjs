@@ -101,3 +101,25 @@ test('calibrate: kappa, item set and per-arm pass rule', async () => {
   // The D1 sensitivity check treats mostly as does-not.
   assert.ok(summarize(ideal, { mostlyAsNo: true }).r0.kappa < 1);
 });
+
+test('judges.ask: a 4xx is a dead judge, an empty content falls back to reasoning, status and finish reason are kept (D2)', async () => {
+  const { ask } = await import('../judge-calibration-v1/judges.mjs');
+  const http = await import('node:http');
+  const srv = http.createServer((q, r) => {
+    q.resume();
+    q.on('end', () => {
+      if (q.url === '/404') { r.writeHead(404); r.end('{}'); return; }
+      r.writeHead(200, { 'content-type': 'application/json' });
+      if (q.url === '/reason') r.end(JSON.stringify({ choices: [{ finish_reason: 'stop', message: { content: '', reasoning_content: 'format {"states": false}, so {"states": true}' } }] }));
+      else r.end(JSON.stringify({ choices: [{ finish_reason: 'length', message: { content: '{"states": false}' } }] }));
+    });
+  });
+  await new Promise((ok) => srv.listen(0, '127.0.0.1', ok));
+  const url = (p) => ({ url: `http://127.0.0.1:${srv.address().port}${p}`, model: 'x', max: 10 });
+  try {
+    assert.deepEqual(await ask(url('/ok'), 'q', 'states'), { verdict: false, reply: '{"states": false}', status: 200, finishReason: 'length' });
+    const r = await ask(url('/reason'), 'q', 'states');
+    assert.equal(r.verdict, true); assert.equal(r.fromReasoning, true);
+    await assert.rejects(() => ask(url('/404'), 'q', 'states'), /judge_unreachable:http_404/);
+  } finally { srv.close(); }
+});
