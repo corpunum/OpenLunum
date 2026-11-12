@@ -47,3 +47,11 @@ GLM's preflight (D2) failed at once with `judge_unreachable:http_410`: NIM has r
 - GLM is recorded as **unavailable**, not failed. A different GLM model id would be a judge the pre-registration did not name, so no substitute is used.
 - The pre-registered order then continues as written: DeepSeek, then Qwen (only with a rig slot from the coordinator), then Nemotron.
 - Kimi and the other NIM models in `judges.mjs` are **not** candidates, because the pre-registration does not list them.
+
+## D4. DeepSeek unreachable on the first attempt (2026-11-12, about 08:00 EET)
+
+- DeepSeek v4.1 flash on NIM was `judge_unreachable`: 6 retries spent on 429, 5xx or network errors. No HTTP status was ever returned, so this is most likely rate limiting or an outage. No rows were written.
+- corpunum-82 moved on to the next pre-registered judge, Nemotron.
+- **The pre-registration selects the two passing judges with the highest R1 kappa, not the first two that pass.** So DeepSeek is retried once when NIM is quieter (after 10:00 EET), before selection, whatever Nemotron's result.
+- If that retry is also unreachable, DeepSeek is recorded as unavailable and selection uses the judges that answered.
+- Scoring with Luna started before selection, because Luna passed. If Luna is not among the two selected judges, its scoring rows are reported but not used for bar 1.
