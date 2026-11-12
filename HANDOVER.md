@@ -47,7 +47,12 @@ Living document for the next agent. Update it in the same commit as the work it 
    - **Then:** `score.mjs --judge <each of the two highest-kappa R1 passers>`, followed by `score.mjs --verdict a,b --categories bar/categories-v2.json`. The categories file is derived mechanically from coverage-a3-v2 (`build-categories.mjs`).
    - **RESULTS.md must record:** D1–D3, plus the per-clause R1 of the one multi-clause record.
    - **What a pass means:** a pass is not a release. Release needs A, B and C together (coverage-a3-v4). OpenUnum does not re-vendor.
-4. **Live Claude Code MCP is stale (hub U-bc29b0bf, proposal):** `~/.local/share/lunum-mcp` is still at 539c7086 (contract 0.17, SDK 1.30.0). Redeploying it changes every session's tools, so it waits for corpunum-82's decision. Rollback: check out 539c7086 again.
+4. **Live Claude Code MCP redeployed (2026-11-12, corpunum-82, hub U-bc29b0bf).**
+   - `~/.local/share/lunum-mcp`, the global `lunum` and `lunum-locator` servers for every Claude Code session, now runs local deploy commit **`475cdf2a`**. It is never pushed.
+   - That commit is `5f6570bf` (contract `lunum-agent/0.19`, the same pin as OpenUnum) plus the dependency security update: MCP SDK 1.32.2, zod 4.6.7, fast-uri 3.1.9, hono 4.13.18, qs 6.17.1, ip-address 10.7.6, body-parser 2.4.0 and proxy-addr 2.0.8.
+   - Smoke-tested over stdio before and after the switch: 12 tools, `lunum_compile_context` without error, contract 0.19, and the locator serving `lunum_ground`.
+   - Sessions pick it up on their next MCP restart.
+   - **Rollback:** `mv ~/.local/share/lunum-mcp ~/.local/share/lunum-mcp-475cdf2a && mv ~/.local/share/lunum-mcp-539c7086 ~/.local/share/lunum-mcp` restores the previous checkout (539c7086, contract 0.17).
 5. **Client integrations** ([integrations/README.md](integrations/README.md)): Claude Code, Codex CLI, OpenCode, OpenClaw and Pi have versioned evidence. Gemini CLI is design only.
 
 ## How to measure on OpenUnum traffic without leaking it
