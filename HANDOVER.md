@@ -13,7 +13,7 @@ Living document for the next agent. Update it in the same commit as the work it 
 
 ## Session state at 2026-11-12 17:22 EET: PAUSED (savings mode) until Thu 2026-11-19 10:00 EET
 
-s-openlunum is paused by corpunum-82 (ONBOARDING "SAVINGS MODE"). **One exception: the anchorAtTail A/B report after 2026-11-13 21:04Z.** The commands are under item 2 below. Do nothing else until 11-19 10:00 EET or a message from corpunum-82. Main model: Opus 5.5 at medium effort.
+s-openlunum is paused by corpunum-82 (ONBOARDING "SAVINGS MODE"). **Exceptions: the prompt-cache A/B reports, after 2026-11-15 19:00Z (anchorAtTail, D1 vs D2) and 2026-11-16 19:00Z (UNUM_SCHED, D2 vs D3).** The windows changed on 11-12 evening and are now fixed in [AB-PREREGISTRATION.md](experiments/cache-aware-compaction-v1/AB-PREREGISTRATION.md): D1 11-14, D2 11-15, D3 11-16, 07:00–19:00Z each. That file supersedes the window lines under item 2 below. The report commands there still apply, with the new dates; the old exclusions apply only to the 11-12 pre-window. Do nothing else until 11-19 10:00 EET or a message from corpunum-82. Main model: Opus 5.5 at medium effort.
 
 **Done since 10:43 EET (all on `main`, pushed):**
 - Cross-vendor review by gpt-6-luna, unedited, with its fact check (`experiments/cross-vendor-review-v1/`).
