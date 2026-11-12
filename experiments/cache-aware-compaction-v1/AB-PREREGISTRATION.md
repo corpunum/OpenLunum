@@ -13,7 +13,7 @@
 - **anchorAtTail effect:** D1 against D2. **UNUM_SCHED effect:** D2 against D3. Each comparison changes exactly one flag.
 - **Freeze:** no OpenUnum deploy and no engine change from 2026-11-14 07:00Z to 2026-11-16 19:00Z, nightly gaps included (corpunum-82). The only planned changes are the two flips.
 - **Not measured:** 2026-11-13, which has a release and an engine promotion.
-- **Pre-window:** 2026-11-12 from 11:03:53Z to the security-release restart, on the old build. It is reported separately as context and is never part of a comparison.
+- **Pre-window:** 2026-11-12 from 11:03:53Z to 16:26:25Z, when OpenUnum restarted on `1ce50aa9`. It ran on the old build (`9095b4ff`), with 11:31:16Z–11:41:24Z and 12:18:12Z–12:19:46Z excluded. It is reported separately as context and is never part of a comparison.
 
 ## Rules
 
