@@ -55,7 +55,7 @@ cannot say a sentence faithfully, the right answer is to **abstain**.
 | ❌ **Greek** | **0 / 50** Greek sentences get a record (English 9 / 50 on the same pairs): today's contract refuses Greek general frames by design. Next: Greek through an English pivot, not native Greek frames | [baseline](experiments/greek-frames-heldout-v1/RESULTS-baseline.md), [ADR 0030](decisions/0030-english-pivot-translation-adapters.md) |
 | ❌ **Same meaning in English and Greek → same identity** | **0 of 5** pairs; the structure alone agrees in 3 of 5. Open words stay in their language: `police` ≠ «αστυνομία» | [clc-v1](experiments/cross-language-convergence-v1/RESULTS.md) |
 | ❌ **Same sentence, two runs → same identity** | **9 / 22**; a canonical projection reached 18 / 22, short of its 90% bar | [identity gate v2](experiments/identity-heldout-v2/RESULTS.md) |
-| ✅ **Discourse view under context pressure** | On 83 held-out sessions of real agent traffic: **0.56x** the prompt tokens of a head/tail cut, exact-match fact recall **20.3% → 37.1%**, no compaction point worse. Surface records only, no identities; it runs only when a chat is near its context limit | [discourse-live-gate-v1](experiments/discourse-live-gate-v1/RESULTS.md) |
+| ✅ **Discourse view under context pressure** | On 83 held-out sessions of real agent traffic: **0.561x** the prompt tokens of a head/tail cut, exact-match fact recall **20.3% → 37.1%**, no compaction point worse. Surface records only, no identities; it runs only when a chat is near its context limit | [discourse-live-gate-v1](experiments/discourse-live-gate-v1/RESULTS.md) |
 | ❌ **Identities on real agent memory** | **0** over 21,291 units of the owner's sessions: work logs and instructions do not fit the frames | [discourse-unit-identity-v1](experiments/discourse-unit-identity-v1/RESULTS.md) |
 | ❌ **Compressed views of real context** | both versions failed their pre-registered bars; not shipped | [ambient v1](experiments/ambient-discourse-v1/RESULTS.md), [v2](experiments/ambient-discourse-v2/RESULTS.md) |
 
@@ -113,7 +113,8 @@ echo '{"handle":"tom","sem":{"schema":"lunum-sem/0.1-draft","world":"real","kind
 
 - **Pre-1.0 research, not a dependency.** The extraction contract is frozen at `lunum-agent/0.19`
   until held-out evidence justifies a change ([ADR 0025](decisions/0025-contract-freeze-pending-held-out-evidence.md)).
-- **Coverage is the main limit:** 18–25% of plain English sentences get a record with Sonnet, and
+- **Coverage is the main limit:** 18–25% of plain English sentences get a record with Sonnet
+  (9 of 50 in [greek-frames-heldout-v1](experiments/greek-frames-heldout-v1/RESULTS-baseline.md), 49 of 200 in [R4](experiments/roundtrip-en-v1/RESULTS.md)), and
   it depends strongly on the model (1, 4 and 11 of 16 English sentences for three models,
   [Stage 0](experiments/parallel-document-v1/RESULTS-stage0.md)).
 - **The validator checks form, not truth.** In R4 it accepted "Tom never saw Mary" as
@@ -166,6 +167,14 @@ is short. The most useful help right now:
   in [VISION.md](VISION.md): a goal, not a result.
 
 </details>
+
+<!-- -->
+
+## Learn more
+
+- [Decisions](decisions/README.md)
+- [Docs](docs/README.md)
+- [Contributing](CONTRIBUTING.md)
 
 ---
 

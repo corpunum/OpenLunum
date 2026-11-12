@@ -1,0 +1,71 @@
+{
+  "name": "OpenLunum",
+  "repo": "corpunum/OpenLunum",
+  "oneLiner": "Record what an English sentence states as a small structure a machine can check against its source words, for exact recall and compaction of agent memory.",
+  "license": "Apache-2.0",
+  "version": "main",
+  "updated": "2026-11-12",
+  "measured": [
+    {
+      "metric": "Characters removed by compacting a real agent work log",
+      "value": "35%",
+      "sample": "one agent session transcript, mean over 24 owner-turn boundaries; compacted / source = 0.649",
+      "method": "session-transcript-compaction-v1",
+      "date": "2026-10-16",
+      "evidence": "experiments/session-transcript-compaction-v1/README.md"
+    },
+    {
+      "metric": "Literal recall, whole history",
+      "value": "96.4%",
+      "sample": "mean over 24 points; 98.0% of 3,658 literals at the last point",
+      "method": "session-transcript-compaction-v1",
+      "date": "2026-10-16",
+      "evidence": "experiments/session-transcript-compaction-v1/README.md"
+    },
+    {
+      "metric": "Mean prompt tokens of the discourse view vs a head/tail cut",
+      "value": "0.561x",
+      "sample": "83 held-out sessions, all 292 compaction points",
+      "method": "discourse-live-gate-v1",
+      "date": "2026-11-11",
+      "evidence": "experiments/discourse-live-gate-v1/RESULTS.md"
+    },
+    {
+      "metric": "Fact-recall QA, pooled, prompt only, head/tail cut",
+      "value": "20.3%",
+      "sample": "83 held-out sessions, 15,949 questions",
+      "method": "discourse-live-gate-v1",
+      "date": "2026-11-11",
+      "evidence": "experiments/discourse-live-gate-v1/RESULTS.md"
+    },
+    {
+      "metric": "Fact-recall QA, pooled, prompt only, discourse view",
+      "value": "37.1%",
+      "baseline": "20.3%",
+      "sample": "83 held-out sessions, 15,949 questions",
+      "method": "discourse-live-gate-v1",
+      "date": "2026-11-11",
+      "evidence": "experiments/discourse-live-gate-v1/RESULTS.md"
+    }
+  ],
+  "constants": [
+    {
+      "value": "18 / 22",
+      "what": "same sentence, two runs, same identity under a canonical projection: short of its pre-registered 90% bar (identity-heldout-v2)"
+    }
+  ],
+  "links": [
+    {
+      "label": "Decisions",
+      "url": "decisions/README.md"
+    },
+    {
+      "label": "Docs",
+      "url": "docs/README.md"
+    },
+    {
+      "label": "Contributing",
+      "url": "CONTRIBUTING.md"
+    }
+  ]
+}
