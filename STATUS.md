@@ -11,7 +11,7 @@ A cross-vendor review ([gpt-6-luna](experiments/cross-vendor-review-v1/gpt-6-lun
 - a literal placed in the wrong role;
 - "twice … twice" carried as a single 2.
 
-So a fingerprint is a hash of a validated, source-anchored structure, not evidence of preserved meaning. Before any claim of faithfulness, a pre-registered, blind, adversarial audit of issued records is needed, for example the review's experiment 1. The only gate defect found, "twenty-one" read as 20, is fixed on `main` (v30 maintenance freeze, `2e5d246d`). OpenUnum gets the fix at its next re-vendor.
+So a fingerprint is a hash of a validated, source-anchored structure, not evidence of preserved meaning. **Measured:** [gate-blindspots-v1](experiments/gate-blindspots-v1/RESULTS.md) mutated the 139 covered coverage-a3-v2 records. Swapped roles, changed modality and statement-to-question each get an identity 100% of the time, and a flipped negation 89% of the time. Only removing a stated negation is caught; adding one never is. Dropping a role or inserting a foreign word is refused 96–99% of the time. Before any claim of faithfulness, a pre-registered, blind, adversarial audit of issued records is needed, for example the review's experiment 1. The only gate defect found, "twenty-one" read as 20, is fixed on `main` (v30 maintenance freeze, `2e5d246d`). OpenUnum gets the fix at its next re-vendor.
 
 ## 2026-11-12: candidate contracts end without a verdict; prompt-cache work moves to OpenUnum
 

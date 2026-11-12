@@ -1,0 +1,59 @@
+{
+ "records": 139,
+ "joined": 139,
+ "originalsIssued": 139,
+ "originalRefusals": {},
+ "mutations": {
+  "M1": {
+   "applicable": 139,
+   "issued": 139,
+   "sameFingerprint": 0,
+   "refusals": {},
+   "issuedRate": 1
+  },
+  "M2": {
+   "applicable": 139,
+   "issued": 124,
+   "sameFingerprint": 0,
+   "refusals": {
+    "unbound_source_content:unbound_source_content": 15
+   },
+   "issuedRate": 0.8921
+  },
+  "M3": {
+   "applicable": 139,
+   "issued": 139,
+   "sameFingerprint": 0,
+   "refusals": {},
+   "issuedRate": 1
+  },
+  "M4": {
+   "applicable": 139,
+   "issued": 139,
+   "sameFingerprint": 0,
+   "refusals": {},
+   "issuedRate": 1
+  },
+  "C1": {
+   "applicable": 139,
+   "issued": 2,
+   "sameFingerprint": 0,
+   "refusals": {
+    "frame_noncanonical:Predicate": 56,
+    "unbound_source_content:unbound_source_content": 78,
+    "unretained_source_literal:unretained_source_literal": 3
+   },
+   "issuedRate": 0.0144
+  },
+  "C2": {
+   "applicable": 139,
+   "issued": 6,
+   "sameFingerprint": 0,
+   "refusals": {
+    "unbound_source_content:unbound_source_content": 132,
+    "unretained_source_literal:unretained_source_literal": 1
+   },
+   "issuedRate": 0.0432
+  }
+ }
+}
