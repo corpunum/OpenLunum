@@ -52,6 +52,19 @@ The definitions are in [src/tools.ts](src/tools.ts), and the metadata in [src/mc
 | `identity_dedup` | Source text, with later messages that carry the same core-issued identity dropped | About −60% tokens on a self-built memory QA set. Sonnet 20/20; Haiku 1 error in 5 of 9 runs (decisions/0012, 0013) |
 | `lunum`, `mixed`, `shadow_mixed` | Lunum-Code rendering, all or partly | The default renderer 0.1 loses answers (decisions/0009). Not recommended. |
 
+## Handoff appendix (`lunum-handoff-appendix`)
+
+Headless command that turns a transcript into a facts appendix of at most 3.5k tokens (hard cap, 4 bytes per token, so 14,000 bytes) to sit beside a hand-written handoff index. No MCP transport, no prompts, no network, no model calls.
+
+```bash
+node dist/bin/lunum-handoff-appendix.js --in session.jsonl --out appendix.md [--max-tokens 3500]
+```
+
+- Input: a Claude Code `.jsonl` transcript (user and assistant text only; tool calls, tool results, attachments and system reminders are skipped) or a JSON messages array `[{role, content}]`.
+- Output: a 3-line header (source, generated time in Z, token estimate), then bullets under Decisions, Open items, Numbers and ids, Paths and Pending. Selection is regex-based and deterministic; it keeps the most recent and most specific lines and drops prose. It is a heuristic and can miss facts or keep noise.
+- Redaction of API-key-like strings, bearer and JWT tokens, `key=value` secrets, URL credentials, long opaque tokens and email addresses is built in.
+- Exit code 0 on success, 1 on any error (message on stderr). On success one JSON stats line goes to stdout.
+
 ## Test
 
 ```bash
