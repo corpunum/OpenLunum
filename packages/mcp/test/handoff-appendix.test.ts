@@ -116,3 +116,36 @@ test('exit code 1 on bad usage, missing file, empty input, no prompts', () => {
   assert.strictEqual(r.stdout, '');
   assert.ok(r.stderr.includes('lunum-handoff-appendix'));
 });
+
+test('short tool results keep high-value facts; secrets inside them are redacted; long ones are dropped', () => {
+  const { dir, out } = setup();
+  const bodies = [
+    'Scheduled recurring task c0ffee12 (13 */2 * * *). Next run: Nov 19 10:13am.',
+    'tmux session marlin-worker-7 started; pane pid 48213',
+    'wrote /opt/marlin/bin/start.sh (mode 755)',
+    'Rule stored: report after each tide import, apply now for schema fixes.',
+    'deployed commit 4be91d07c2 to staging, listening on port 8431',
+    'queued job id=ab12cd34ef for queue tide-import',
+    `auth ok token=${FAKE_GH} user ${FAKE_EMAIL}; started worker pid 5150 key ${FAKE_KEY}`,
+    'long noise '.repeat(60) + 'deployed commit deadbeef99 port 7777',
+    'just chatter with nothing useful in it at all',
+  ];
+  const rows: unknown[] = [{ type: 'user', message: { role: 'user', content: 'Start the Marlin import worker.' } }];
+  bodies.forEach((b, i) => {
+    rows.push({ type: 'assistant', message: { role: 'assistant', content: [{ type: 'tool_use', id: `t${i}`, name: 'Bash', input: {} }] } });
+    rows.push({ type: 'user', message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: `t${i}`, content: i % 2 ? [{ type: 'text', text: b }] : b }] } });
+  });
+  const input = join(dir, 'tools.jsonl');
+  writeFileSync(input, rows.map((r) => JSON.stringify(r)).join('\n') + '\n');
+  const r = run(['--in', input, '--out', out]);
+  assert.strictEqual(r.status, 0, r.stderr);
+  const stats = JSON.parse(r.stdout);
+  assert.strictEqual(stats.toolResults, 8);
+  const text = readFileSync(out, 'utf8');
+  for (const fact of ['c0ffee12', '13 */2 * * *', 'marlin-worker-7', '48213', '/opt/marlin/bin/start.sh', 'report after', 'apply now', '4be91d07c2', '8431', 'ab12cd34ef', '5150']) {
+    assert.ok(text.includes(fact), `missing tool fact: ${fact}`);
+  }
+  for (const gone of [FAKE_GH, FAKE_EMAIL, FAKE_KEY, 'deadbeef99', '7777', 'chatter']) assert.ok(!text.includes(gone), `unexpected: ${gone.slice(0, 8)}`);
+  assert.ok(stats.redactions >= 3);
+  assert.ok(Buffer.byteLength(text, 'utf8') <= 14000);
+});

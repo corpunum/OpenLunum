@@ -4,12 +4,12 @@
 export interface AppendixMessage { role: string; content: string }
 export interface AppendixResult {
   text: string;
-  stats: { source: string; messages: number; lines: number; bullets: Record<string, number>; chars: number; tokens: number; maxTokens: number; redactions: number };
+  stats: { source: string; messages: number; toolResults: number; lines: number; bullets: Record<string, number>; chars: number; tokens: number; maxTokens: number; redactions: number };
 }
 
-const SECTIONS = ['Decisions', 'Open items', 'Numbers and ids', 'Paths', 'Pending'] as const;
+const SECTIONS = ['Decisions', 'Open items', 'Numbers and ids', 'Paths', 'Pending', 'Tool facts'] as const;
 type Section = (typeof SECTIONS)[number];
-const QUOTA: Record<Section, number> = { Decisions: 0.30, 'Open items': 0.22, 'Numbers and ids': 0.20, Paths: 0.10, Pending: 0.18 };
+const QUOTA: Record<Section, number> = { Decisions: 0.24, 'Open items': 0.18, 'Numbers and ids': 0.16, Paths: 0.08, Pending: 0.14, 'Tool facts': 0.20 };
 
 const SECRET_PATTERNS: RegExp[] = [
   /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?(?:-----END [A-Z ]*PRIVATE KEY-----|$)/g,
@@ -39,10 +39,24 @@ export function redact(input: string): { text: string; count: number } {
   return { text, count };
 }
 
+const TOOL_RESULT_MAX = 400;
+
 function blockText(content: unknown): string {
   if (typeof content === 'string') return content;
   if (!Array.isArray(content)) return '';
   return content.map((b) => (b && typeof b === 'object' && (b as { type?: string }).type === 'text' ? String((b as { text?: unknown }).text ?? '') : '')).filter(Boolean).join('\n');
+}
+
+/** Bodies of short tool_result blocks (<= 400 chars); longer ones are dropped. */
+function toolResultBodies(content: unknown): string[] {
+  if (!Array.isArray(content)) return [];
+  const out: string[] = [];
+  for (const b of content) {
+    if (!b || typeof b !== 'object' || (b as { type?: string }).type !== 'tool_result') continue;
+    const body = blockText((b as { content?: unknown }).content).trim();
+    if (body && body.length <= TOOL_RESULT_MAX) out.push(body);
+  }
+  return out;
 }
 
 /** Parse Claude Code jsonl or a JSON messages array (or {messages:[...]}). */
@@ -75,6 +89,7 @@ export function parseTranscript(raw: string): AppendixMessage[] {
       .replace(/<(command-[a-z-]+|local-command-[a-z-]+)>[\s\S]*?<\/\1>/g, '');
     text = text.trim();
     if (text) out.push({ role, content: text });
+    if (role === 'user') for (const body of toolResultBodies(m.content)) out.push({ role: 'tool', content: body });
   }
   return out;
 }
@@ -83,6 +98,18 @@ const PENDING = /\b(cancel(?:l?ed|l?ing)?|scheduled?|reminder|deadline|due (?:on
 const DECISION = /\b(decided|decision|agreed|approved|chose|chosen|going with|we(?:'ll| will) (?:use|go|ship|keep|drop|use)|switch(?:ed|ing)? to|settled on|confirmed|owner (?:said|wants|asked|confirmed|approved)|rule:|policy:|root cause|fixed by|resolved|approved|rejected|dropped|keep|owner (?:rule|order))\b/i;
 const OPEN = /\b(todo|to-do|open (?:question|item|issue)|still (?:need|to|open|missing)|need(?:s)? to|next step|follow[- ]?up|remaining|not yet|unresolved|please (?:do|check|send|confirm|make|add|run|fix|write|review)|can you|could you|should we|action item|must be done)\b/i;
 const ID_RE = /\b(?:[a-z][a-z0-9]{1,}-\d{1,6}|\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}(?::\d{2})?Z?)?|\d{1,2}:\d{2}(?::\d{2})?\s?(?:Z|UTC|EET|EEST)?|#\d{1,6}|v\d+\.\d+(?:\.\d+)?|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|\d[\d,.]*\s?(?:%|ms|s|min|mins|h|hours?|k|M|MB|GB|KB|tokens?|chars?|files?|tests?|msgs?|messages?|workers?|sessions?|commits?|lines?|bytes))\b/gi;
+// High-value facts inside short tool results: cron/job/queue ids, tmux, pids, scripts, rules, deploy shas, ports.
+const TOOL_FACT_PATTERNS: RegExp[] = [
+  /\b(?:cron|scheduled (?:one-shot |recurring )?(?:task|job)|next run|wake)\b/i,
+  /\b\d{1,2}(?:,\d{1,2})?(?:\/\d+)? [\d*/,]+ [\d*/,]+ [\d*/,]+ [\d*/,]+\b/,
+  /\btmux\b/i,
+  /\bpids?\b[ =:#]*\d+|\b\d{3,7}\s+(?:claude|node|bash|sh|python3?)\b/i,
+  /[\w~./-]+\.(?:sh|mjs|py)\b/,
+  /\b(?:report after|apply now|apply immediately|report only|apply after|do not apply)\b/i,
+  /\b(?:commit|deploy(?:ed)?|sha|revision|rev|tip|head)\b.*\b[0-9a-f]{7,40}\b|\b[0-9a-f]{7,40}\b.*\b(?:commit|deploy(?:ed)?|sha|revision)\b/i,
+  /\bport\b[ =:]*\d{2,5}|(?:localhost|127\.0\.0\.1|0\.0\.0\.0):\d{2,5}|\blistening on\b/i,
+  /\b(?:job|queue[d]?|task|worker|run|chain|card|mission)[ _-]?(?:id)?[ =:#]*[0-9a-f]{6,}\b|\b[A-Z]{1,3}-[0-9a-f]{6,}\b/i,
+];
 const HASH_RE = /\b[0-9a-f]{7,40}\b/g;
 const PATH_RE = /(?<![\w:/.-])(?:~|\.{1,2})?(?:\/[\w.@+=-]+){2,}\/?/g;
 const HAS_PATH = /(?<![\w:/.-])(?:~|\.{1,2})?(?:\/[\w.@+=-]+){2,}/;
@@ -110,6 +137,8 @@ export function buildAppendix(messages: AppendixMessage[], opts: { source: strin
   const pathCount = new Map<string, { n: number; last: number }>();
   const seen = new Set<string>();
   let lineCount = 0;
+  let toolCount = 0;
+  const convoCount = messages.filter((m) => m.role !== 'tool').length;
   let order = 0;
 
   messages.forEach((msg, mi) => {
@@ -117,6 +146,18 @@ export function buildAppendix(messages: AppendixMessage[], opts: { source: strin
     redactions += red.count;
     const recency = messages.length > 1 ? mi / (messages.length - 1) : 1;
     let fence = false;
+    if (msg.role === 'tool') {
+      toolCount++;
+      for (const raw of red.text.split('\n')) {
+        const t = cleanLine(raw);
+        if (t.length < 8 || !(TOOL_FACT_PATTERNS.some((re) => re.test(t)) || (hasHash(t) && /\b(?:commit|deploy|sha)/i.test(t)))) continue;
+        const k = key(t);
+        if (!k || seen.has(k)) continue;
+        seen.add(k);
+        cands.push({ section: 'Tool facts', text: clip(t, 200), score: 3 + recency * 2 - t.length / 400, order: order++ });
+      }
+      return;
+    }
     for (const rawLine of red.text.split('\n')) {
       if (/^\s*```/.test(rawLine)) { fence = !fence; continue; }
       if (fence) continue;
@@ -158,7 +199,7 @@ export function buildAppendix(messages: AppendixMessage[], opts: { source: strin
   }
 
   const render = (picked: Cand[], tokens: number): string => {
-    const head = [`source: ${opts.source} (${messages.length} messages)`, `generated: ${(opts.now ?? new Date()).toISOString().replace(/\.\d+Z$/, 'Z')}`, `tokens: ~${tokens} (cap ${maxTokens})`];
+    const head = [`source: ${opts.source} (${convoCount} messages)`, `generated: ${(opts.now ?? new Date()).toISOString().replace(/\.\d+Z$/, 'Z')}`, `tokens: ~${tokens} (cap ${maxTokens})`];
     const body: string[] = [];
     for (const s of SECTIONS) {
       const items = picked.filter((c) => c.section === s).sort((a, b) => a.order - b.order);
@@ -199,5 +240,5 @@ export function buildAppendix(messages: AppendixMessage[], opts: { source: strin
   while (bytes(text) > maxChars) text = text.slice(0, -1);
   const bullets: Record<string, number> = {};
   for (const s of SECTIONS) bullets[s] = picked.filter((c) => c.section === s).length;
-  return { text, stats: { source: opts.source, messages: messages.length, lines: lineCount, bullets, chars: bytes(text), tokens: Math.ceil(bytes(text) / 4), maxTokens, redactions } };
+  return { text, stats: { source: opts.source, messages: convoCount, toolResults: toolCount, lines: lineCount, bullets, chars: bytes(text), tokens: Math.ceil(bytes(text) / 4), maxTokens, redactions } };
 }
