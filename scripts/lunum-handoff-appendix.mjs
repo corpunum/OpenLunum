@@ -137,6 +137,32 @@ function hasHash(s) {
 function cleanLine(l) {
     return l.replace(/^[\s>*#\-+•]+(\[[ xX]\]\s*)?/, '').replace(/\*\*|__|`/g, '').replace(/\s+/g, ' ').trim();
 }
+// Repeated facts of the same kind: the LAST value wins and is marked "(latest of N, was: <previous>)".
+// Slots are keyed so that concurrent distinct things stay apart (cron by schedule, percentages by the words before them).
+function detectSlot(text, idToSched) {
+    let m;
+    if ((m = /\b(?:cancel(?:l?ed|l?ing)?|deleted?|removed?)\s+(?:cron\s+|job\s+|task\s+|one-shot\s+)*([0-9a-f]{8})\b/i.exec(text))) {
+        const sched = idToSched.get(m[1]);
+        return { key: sched ? `cron:${sched}` : `cron:id:${m[1]}`, value: `cancelled ${m[1]}`, id: m[1], text: sched ? `Cancelled job ${m[1]} (${sched})` : undefined };
+    }
+    if ((m = /\b(?:scheduled|created)\b.*?\b(?:job|task|cron)\s+([0-9a-f]{8})\s*\(([^)]{3,60})\)/i.exec(text))) {
+        idToSched.set(m[1], m[2]);
+        return { key: `cron:${m[2]}`, value: `${m[1]} (${m[2]})`, id: m[1] };
+    }
+    if (/\btmux\b/i.test(text) && (m = /(?:-s|-t|session(?: named)?)\s+['"]?([A-Za-z][\w.]*[-_\d][\w.-]*)/.exec(text)))
+        return { key: 'tmux', value: m[1], id: m[1] };
+    if ((m = /\b(?:unpause[sd]?|paused|resume[sd]?|throttle[d]?)\b.*?\b(?:until|at|to)\s+(\d{1,2}:\d{2}|\d{4}-\d{2}-\d{2})/i.exec(text)))
+        return { key: 'pause', value: m[1], id: m[1] };
+    if (/\b(?:deploy(?:ed)?|shipped|live revision|tip)\b/i.test(text) && (m = text.match(HASH_RE)?.find((h) => /\d/.test(h) && /[a-f]/.test(h))))
+        return { key: 'sha:deploy', value: m, id: m };
+    if ((m = /\bpids?\b[ =:#]*(\d{2,7})/i.exec(text)))
+        return { key: 'pid', value: m[1], id: m[1] };
+    if ((m = /\bport\b[ =:]*(\d{2,5})|(?:localhost|127\.0\.0\.1|0\.0\.0\.0):(\d{2,5})/i.exec(text)))
+        return { key: 'port', value: m[1] ?? m[2], id: m[1] ?? m[2] };
+    if ((m = /((?:[A-Za-z][\w-]*\s+){1,2})(?:at |is |was |now |of )?(\d{1,3}(?:\.\d+)?)%/.exec(text)))
+        return { key: `pct:${m[1].toLowerCase().replace(/[^a-z]+/g, ' ').trim()}`, value: `${m[2]}%`, id: `${m[2]}%` };
+    return null;
+}
 function clip(s, n) { return s.length <= n ? s : s.slice(0, n - 3).trimEnd() + '...'; }
 function key(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().slice(0, 90); }
 export function buildAppendix(messages, opts) {
@@ -150,6 +176,10 @@ export function buildAppendix(messages, opts) {
     let toolCount = 0;
     const convoCount = messages.filter((m) => m.role !== 'tool').length;
     let order = 0;
+    // Message index (1-based, in the user/assistant sequence the header counts); a tool result takes the index of the message it follows.
+    const msgIdx = [];
+    { let c = 0; for (const m of messages) { if (m.role !== 'tool') c++; msgIdx.push(Math.max(c, 1)); } }
+    const idToSched = new Map();
     messages.forEach((msg, mi) => {
         const red = redact(msg.content);
         redactions += red.count;
@@ -161,11 +191,12 @@ export function buildAppendix(messages, opts) {
                 const t = cleanLine(raw);
                 if (t.length < 8 || !(TOOL_FACT_PATTERNS.some((re) => re.test(t)) || (hasHash(t) && /\b(?:commit|deploy|sha)/i.test(t))))
                     continue;
+                const slot = detectSlot(t, idToSched);
                 const k = key(t);
-                if (!k || seen.has(k))
+                if (!k || (!slot && seen.has(k)))
                     continue;
                 seen.add(k);
-                cands.push({ section: 'Tool facts', text: clip(t, 200), score: 3 + recency * 2 - t.length / 400, order: order++ });
+                cands.push({ section: 'Tool facts', text: slot?.text ?? clip(t, 200), score: 3 + recency * 2 - t.length / 400, order: order++, msg: msgIdx[mi], slot });
             }
             return;
         }
@@ -189,7 +220,7 @@ export function buildAppendix(messages, opts) {
                     continue;
                 const e = pathCount.get(pp) ?? { n: 0, last: 0 };
                 e.n++;
-                e.last = mi;
+                e.last = msgIdx[mi];
                 pathCount.set(pp, e);
             }
             for (const sentence of line.length > 260 ? line.split(/(?<=[.!?])\s+(?=[A-Z0-9])/) : [line]) {
@@ -217,20 +248,45 @@ export function buildAppendix(messages, opts) {
                 }
                 if (!section)
                     continue;
+                const slot = detectSlot(s, idToSched);
                 const k = key(s);
-                if (!k || seen.has(k))
+                if (!k || (!slot && seen.has(k)))
                     continue;
                 seen.add(k);
                 const score = w + (section === 'Decisions' && idHits === 0 && !HAS_PATH.test(s) ? -1.5 : 0) + Math.min(idHits, 4) * 0.6 + recency * 2 + (msg.role === 'user' ? 1 : 0) - s.length / 400;
-                cands.push({ section, text: clip(s, 220), score, order: order++ });
+                cands.push({ section, text: slot?.text ?? clip(s, 220), score, order: order++, msg: msgIdx[mi], slot });
             }
         }
     });
+    // Collapse repeated slots to the last value; keep one 'was:' hint.
+    const lastBySlot = new Map();
+    const countBySlot = new Map();
+    for (const c of cands) {
+        if (!c.slot)
+            continue;
+        const prev = lastBySlot.get(c.slot.key);
+        countBySlot.set(c.slot.key, (countBySlot.get(c.slot.key) ?? 0) + 1);
+        if (prev && prev.slot.id !== c.slot.id)
+            c.slot.was = prev.slot.was && prev.slot.wasId === prev.slot.id ? prev.slot.was : prev.slot.value;
+        else if (prev && prev.slot.was)
+            c.slot.was = prev.slot.was;
+        lastBySlot.set(c.slot.key, c);
+    }
+    const collapsed = cands.filter((c) => !c.slot || lastBySlot.get(c.slot.key) === c);
+    cands.length = 0;
+    for (const c of collapsed) {
+        const n = c.slot ? countBySlot.get(c.slot.key) : 1;
+        if (c.slot && n > 1 && (c.slot.was || !c.slot.value.startsWith('cancelled')))
+            c.text += ` (latest of ${n}${c.slot.was ? `, was: ${c.slot.was}` : ''})`;
+        c.text += ` [m${c.msg}]`;
+        c.score += c.slot && n > 1 ? 1 : 0;
+        cands.push(c);
+    }
     const allPaths = [...pathCount.keys()];
     for (const [p, e] of pathCount) {
         if (allPaths.some((q) => q !== p && q.endsWith(p)))
             continue; // suffix of a longer path
-        cands.push({ section: 'Paths', text: e.n > 1 ? `${p} (x${e.n})` : p, score: Math.min(e.n, 5) * 0.8 + (e.last / Math.max(messages.length, 1)) * 2, order: order++ });
+        cands.push({ section: 'Paths', text: (e.n > 1 ? `${p} (x${e.n})` : p) + ` [m${e.last}]`, score: Math.min(e.n, 5) * 0.8 + (e.last / Math.max(convoCount, 1)) * 2, order: e.last * 1e4 + order++ });
     }
     const render = (picked, tokens) => {
         const head = [`source: ${opts.source} (${convoCount} messages)`, `generated: ${(opts.now ?? new Date()).toISOString().replace(/\.\d+Z$/, 'Z')}`, `tokens: ~${tokens} (cap ${maxTokens})`];

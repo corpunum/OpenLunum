@@ -143,3 +143,74 @@ test('short tool results keep high-value facts; secrets inside them are redacted
     assert.ok(stats.redactions >= 3);
     assert.ok(Buffer.byteLength(text, 'utf8') <= 14000);
 });
+
+function writeJsonl(rows) {
+  const { dir, out } = setup();
+  const input = join(dir, 'rep.jsonl');
+  writeFileSync(input, rows.map((r) => JSON.stringify(r)).join('\n') + '\n');
+  return { input, out };
+}
+const turn = (role, text) => ({ type: role, message: { role, content: text } });
+const toolResult = (id, body) => ({ type: 'user', message: { role: 'user', content: [{ type: 'tool_result', tool_use_id: id, content: body }] } });
+
+test('repeated facts: last value wins, is marked, earlier ones are dropped (with a was: hint)', () => {
+  const { input, out } = writeJsonl([
+    turn('user', 'Start the Marlin worker and watch it.'),
+    turn('assistant', 'Starting worker.'),
+    toolResult('a', 'Scheduled recurring job aaaa1111 (Every 2 hours at :13). Next run: 10:13.'),
+    toolResult('b', 'started tmux new-session -d -s marlin-old-1\nworker pid 1111'),
+    toolResult('c', 'deployed commit 1a2b3c4d5e to staging on port 8001'),
+    turn('assistant', 'Decision: we hold work because the weekly limit is at 91%.'),
+    turn('user', 'Replace it.'),
+    turn('assistant', 'Replacing the worker now.'),
+    toolResult('d', 'Scheduled recurring job bbbb2222 (Every 2 hours at :13). Next run: 12:13.'),
+    toolResult('e', 'started tmux new-session -d -s marlin-new-2\nworker pid 2222'),
+    toolResult('f', 'deployed commit 9f8e7d6c5b to staging on port 8002'),
+    turn('assistant', 'Decision: we hold work because the weekly limit is at 97%.'),
+  ]);
+  const r = run(['--in', input, '--out', out]);
+  assert.strictEqual(r.status, 0, r.stderr);
+  const text = readFileSync(out, 'utf8');
+  for (const last of ['bbbb2222', 'marlin-new-2', '2222', '9f8e7d6c5b', '8002', '97%']) assert.ok(text.includes(last), `missing latest: ${last}`);
+  for (const first of ['aaaa1111', '1a2b3c4d5e', '8001', '91%']) assert.ok(!text.includes(first) || text.includes(`was: ${first}`) || text.includes(`was: ${first} `), `stale value kept without was: ${first}`);
+  assert.ok(!/marlin-old-1.*\n.*marlin-new-2|^- .*marlin-old-1.*$/m.test(text.replace(/\(latest[^)]*\)/g, '')), 'old tmux name must only appear inside a was: hint');
+  assert.ok(text.includes('latest of 2'), 'latest value is marked');
+  assert.ok(text.includes('was: marlin-old-1') && text.includes('was: 1111'));
+});
+
+test('index tags are present on every bullet and monotonic within each section', () => {
+  const { input, out } = setup();
+  assert.strictEqual(run(['--in', input, '--out', out]).status, 0);
+  const text = readFileSync(out, 'utf8');
+  let section = '';
+  let last = 0;
+  let bullets = 0;
+  for (const line of text.split('\n')) {
+    if (line.startsWith('## ')) { section = line; last = 0; continue; }
+    if (!line.startsWith('- ')) continue;
+    const m = /\[m(\d+)\]$/.exec(line);
+    assert.ok(m, `no [m<index>] tag: ${line.slice(0, 60)}`);
+    const idx = Number(m[1]);
+    assert.ok(idx >= 1 && idx <= 30, `index in range: ${idx}`);
+    assert.ok(idx >= last, `monotonic in ${section}: ${idx} < ${last}`);
+    last = idx;
+    bullets++;
+  }
+  assert.ok(bullets > 5);
+  assert.match(text, /MARLIN-42.*\[m[12]\]/);
+});
+
+test('cap holds with 400 messages of repeated facts, and secrets in tool results stay redacted', () => {
+  const rows = [];
+  for (let i = 0; i < 400; i++) {
+    rows.push(turn(i % 2 ? 'assistant' : 'user', `Turn ${i}: deployed commit ${(0x10000000 + i * 7919).toString(16)} to port ${8000 + i}; weekly limit at ${i % 100}%. TODO: confirm sign-off ${i} for /srv/marlin/r${i}/app.tar.`));
+    rows.push(toolResult(`t${i}`, `queued job id=${(0xabc00000 + i).toString(16)} token=${FAKE_GH} mail ${FAKE_EMAIL}`));
+  }
+  const { input, out } = writeJsonl(rows);
+  const r = run(['--in', input, '--out', out]);
+  assert.strictEqual(r.status, 0, r.stderr);
+  const text = readFileSync(out, 'utf8');
+  assert.ok(Buffer.byteLength(text, 'utf8') <= 14000);
+  for (const s of [FAKE_GH, FAKE_EMAIL]) assert.ok(!text.includes(s));
+  assert.ok(JSON.parse(r.stdout).redactions >= 400);
+});
