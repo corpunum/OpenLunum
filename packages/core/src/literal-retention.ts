@@ -159,6 +159,11 @@ export function numbersInText(text: string): number[] {
 // "one", "once" and the Greek ένα/μία/ένας are deliberately absent: they are
 // also articles and pronouns ("the one that failed", "ένα αρχείο"), and a
 // presence floor must not refuse ordinary prose. Ordinals are absent too.
+// English "one" still counts inside a compound, where it cannot be an article:
+// after a tens or hundreds word ("twenty-one", "a hundred and one") and, like
+// "a", before a multiplier ("one hundred", "a thousand"). Before 2026-11-12,
+// "twenty-one" read as 20 and "one hundred" as nothing (cross-vendor review).
+// The Greek ένα/μία are left as they are (ADR 0030: Greek is the owner's).
 const UNIT_WORDS: ReadonlyArray<readonly [number, readonly string[]]> = [
   [0, ['zero']],
   [2, ['two', 'twice', 'δυο']],
@@ -241,6 +246,8 @@ function numberWordPositions(text: string): Array<{ index: number; value: number
     || (current === 0 && total > 0 && unit < 1000); // three thousand two hundred
   // Words, with hyphens, whitespace and "and"/"και" as the only joiners inside a compound.
   const tokens = text.split(/(\p{L}[\p{L}\p{M}]*)/u);
+  // The next word, when only spaces or hyphens separate it from token i.
+  const nextWord = (i: number): string => (/^[\s-]*$/u.test(tokens[i + 1] ?? 'x') ? foldWord(tokens[i + 2] ?? '') : '');
   let previous = '';
   for (let i = 0; i < tokens.length; i += 1) {
     const token = tokens[i] ?? '';
@@ -254,6 +261,13 @@ function numberWordPositions(text: string): Array<{ index: number; value: number
     // "τοις εκατό" is "percent", not the number 100.
     if (key === 'εκατο' && previous === 'τοισ') { flush(); previous = key; continue; }
     previous = key;
+    if (key === 'one' || key === 'a') {
+      const beforeMultiplier = MULTIPLIER_WORD.has(nextWord(i));
+      if (key === 'one' && open && canJoin(1)) { current += 1; continue; } // twenty-one, a hundred and one
+      if (beforeMultiplier) { flush(); startIndex = at; current = 1; open = true; continue; } // one hundred, a thousand
+      flush();
+      continue;
+    }
     const unit = NUMBER_WORD.get(key);
     const multiplier = MULTIPLIER_WORD.get(key);
     if (unit !== undefined) {

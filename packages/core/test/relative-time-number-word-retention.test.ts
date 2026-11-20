@@ -51,6 +51,14 @@ test('EN and EL number words, compounds and the excluded article-like words', ()
   // "τοις εκατό" is "percent" (replay of recorded candidates, decisions/0020).
   assert.deepEqual(numbersInText('Αν η μπαταρία είναι κάτω από 20 τοις εκατό'), [20]);
   assert.deepEqual(numberWordsInText('εκατό αρχεία'), [100]);
+  // "one" inside a compound (2026-11-12): after tens or hundreds, and "one"/"a" before a multiplier.
+  assert.deepEqual(numberWordsInText('twenty-one servers, ninety one users, a hundred and one tries'), [21, 91, 101]);
+  assert.deepEqual(numberWordsInText('one hundred files, a thousand rows, one million users, two thousand one'), [100, 1000, 1000000, 2001]);
+  assert.deepEqual(numberWordsInText('one thousand two hundred'), [1200]);
+  // Still not a number: "one" on its own, "a" before anything but a multiplier, "one" after a non-compound word.
+  assert.deepEqual(numberWordsInText('pick one of a few, the one at twelve one-off jobs'), [12]);
+  assert.equal(checkLiteralRetention('Retry twenty-one times.', retry({ type: 'quantity', value: 21 })).retained, true);
+  assert.equal(checkLiteralRetention('Retry twenty-one times.', retry({ type: 'quantity', value: 20 })).retained, false);
   // Words that merely contain a number word are not numbers.
   assert.deepEqual(numberWordsInText('often, tension, nineteenth, someone'), []);
   // Same value in EN and EL: a Greek source is retained by a candidate written in English words or digits.
