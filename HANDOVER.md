@@ -2,7 +2,15 @@
 
 Living document for the next agent. Update it in the same commit as the work it describes. [STATUS.md](STATUS.md) is the evidence summary; this file is the working state. The older hand-off is archived at [research/archive/handoffs/HANDOFF-2026-10-16.md](research/archive/handoffs/HANDOFF-2026-10-16.md).
 
-**Updated 2026-11-13.**
+**Updated 2026-11-20.**
+
+## Session state at 2026-11-20 (s-openlunum restarted by corpunum-129)
+
+- **anchorAtTail hash50 A/B: report done, no benefit shown** ([AB-SPLIT-RESULTS](experiments/cache-aware-compaction-v1/AB-SPLIT-RESULTS.md); JSON `~/.local/share/lunum-prefill/ab-hash50-final-20261120.json`). Window 2026-11-13T00:18:07Z to 11-19T00:18:07Z, local rows only, 49 unum-serve windows from s-engine plus the listed OpenUnum restarts excluded. 112 on / 111 off sessions, sample-ratio p=0.947, kinds balanced. Prefill per request +1328 on (CI -924..+3862), +31.6% (CI spans zero); history-miss +1.1 points (CI spans zero). Direction opposite to expected, within noise; the gap sits in tool iterations (small exploratory pre-11-14 12:26Z stratum +47%, 24 sessions per arm). No pass bar existed. Deviations: s-engine said 62 cycles but listed 49; log rotation concatenated; bootstrap supplied by an analysis script outside the harness; later OpenUnum restarts not in this list were not checked.
+- **Open:** (1) send the aggregates to s-openunum, s-engine and the orchestrator; (2) decide with s-openunum whether to turn `anchorAtTailSplit` off again (it is still live as hash50 in `~/.openunum/openunum.json`); (3) remove worktree `~/OpenUnum-wt/lunum-prefill-oneside` after the report is sent (`git -C ~/main worktree remove`); (4) the 0.19 re-vendor `vendor/openunum-20261112` (see below) is still pending.
+- Latest finished work before this: recall compare on the corpunum-128 handoff, wiki 5.0 vs wiki+appendix 8.0 (`~/.cache/s-openlunum/live-cmp-128/scorecard.json`); handoff-appendix lives in `scripts/`.
+- Nothing runs in the background; no leases held.
+
 
 ## State of the repository
 
