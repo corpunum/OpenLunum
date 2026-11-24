@@ -1,5 +1,13 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-11-24 (v32 maintenance freeze: input-handling hardening)
+
+### Fixed
+- v32 maintenance freeze: input-handling hardening in agent-state tamper evidence, backup restore, opt-in registry, rollback; contract unchanged
+
+### Changed
+- Instruction package **v32** (`scripts/research/freeze-v32.mjs`): only those four modules and the served-runtime manifest bindings move. v31 stays a historical binding. The source-only runner defaults to v32.
+
 ## Unreleased — 2026-11-12 (v31 maintenance freeze: source binding checks stated negation)
 
 ### Fixed

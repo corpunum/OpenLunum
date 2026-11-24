@@ -250,7 +250,14 @@ test('public instruction package exposes frozen scoring conventions without gold
     if (['coreArtifactSha256', 'servedRuntimeManifestPath', 'servedRuntimeManifestSha256'].includes(key)) assert.notDeepEqual(v31.freeze[key], v30.freeze[key], `${key} changed in v31`);
     else assert.deepEqual(v31.freeze[key], v30.freeze[key], `${key} unchanged in v31`);
   }
-  assert.equal(hash('packages/core/dist/src/agent-native.js'), v31.freeze.coreArtifactSha256);
+  // v32 (maintenance, contract lunum-agent/0.22 unchanged): input-handling hardening moves only the served-runtime manifest.
+  const v32 = JSON.parse(fs.readFileSync('experiments/natural-development-v8/extraction/public-instruction-package-v32.json', 'utf8'));
+  assert.equal(v32.supersedes.path, 'public-instruction-package-v31.json');
+  for (const key of Object.keys(v31.freeze)) {
+    if (['servedRuntimeManifestPath', 'servedRuntimeManifestSha256'].includes(key)) assert.notDeepEqual(v32.freeze[key], v31.freeze[key], `${key} changed in v32`);
+    else assert.deepEqual(v32.freeze[key], v31.freeze[key], `${key} unchanged in v32`);
+  }
+  assert.equal(hash('packages/core/dist/src/agent-native.js'), v32.freeze.coreArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport.js'), next.freeze.transportValidatorArtifactSha256);
   assert.equal(hash('packages/core/dist/src/semantic-transport-schema.js'), next.freeze.transportSchemaArtifactSha256);
   assert.equal(hash('packages/core/dist/src/agent-builder.js'), v27.freeze.builderArtifactSha256);

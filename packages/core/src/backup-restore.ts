@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { readFile, writeFile, readdir, mkdir, cp, stat } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { join, relative, resolve, isAbsolute, sep } from 'node:path';
 
 export interface FileChecksum {
   path: string;
@@ -132,6 +132,16 @@ export async function createBackup(
   return manifest;
 }
 
+function contained(base: string, rel: string): string {
+  const root = resolve(base);
+  const full = resolve(root, String(rel));
+  const r = relative(root, full);
+  if (!r || r === '..' || r.startsWith('..' + sep) || isAbsolute(r)) {
+    throw new Error(`manifest path escapes base directory: ${rel}`);
+  }
+  return full;
+}
+
 export async function verifyBackup(
   manifest: BackupManifest,
   baseDir: string,
@@ -140,8 +150,8 @@ export async function verifyBackup(
   const missing: string[] = [];
 
   for (const entry of manifest.checksums) {
-    const filePath = join(baseDir, entry.path);
     try {
+      const filePath = contained(baseDir, entry.path);
       const content = await readFile(filePath);
       const hash = sha256(content);
       if (hash !== entry.sha256) {
@@ -165,12 +175,17 @@ export async function restoreFromBackup(
   backupDir: string,
   targetDir: string,
 ): Promise<RestoreResult> {
+  // validate every path before writing anything
+  for (const entry of manifest.checksums) {
+    contained(backupDir, entry.path);
+    contained(targetDir, entry.path);
+  }
   await mkdir(targetDir, { recursive: true });
 
   let restoredFiles = 0;
   for (const entry of manifest.checksums) {
-    const srcPath = join(backupDir, entry.path);
-    const destPath = join(targetDir, entry.path);
+    const srcPath = contained(backupDir, entry.path);
+    const destPath = contained(targetDir, entry.path);
     await mkdir(join(destPath, '..'), { recursive: true });
     const content = await readFile(srcPath);
     await writeFile(destPath, content);

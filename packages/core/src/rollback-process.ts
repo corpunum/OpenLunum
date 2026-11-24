@@ -186,7 +186,7 @@ export function rollbackToSource(
 
   // Fail closed: rollback succeeds if integrity is verified or absent (no fingerprint to check)
   // but fails if integrity check actually failed
-  const success = integrityStatus !== 'failed';
+  const success = integrityStatus !== 'failed' && provenanceStatus !== 'failed' && sourceStatus !== 'failed';
 
   return {
     success,

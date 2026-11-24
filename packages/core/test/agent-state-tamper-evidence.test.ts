@@ -69,7 +69,7 @@ describe('agent-state-tamper-evidence', () => {
       const hash2 = hashAgentState(state);
 
       assert.strictEqual(hash1, hash2);
-      assert.strictEqual(hash1.length, 64); // SHA-256 hex = 64 chars
+      assert.match(hash1, /^v2:[0-9a-f]{64}$/); // "v2:" + SHA-256 hex
     });
 
     it('produces different hash for different states', () => {
@@ -97,7 +97,7 @@ describe('agent-state-tamper-evidence', () => {
       const hash2 = hashAuditLogEntry(entry);
 
       assert.strictEqual(hash1, hash2);
-      assert.strictEqual(hash1.length, 64);
+      assert.match(hash1, /^v2:[0-9a-f]{64}$/);
     });
 
     it('hashes authorization context consistently', () => {
@@ -116,7 +116,7 @@ describe('agent-state-tamper-evidence', () => {
       const hash2 = hashAuthorizationContext(auth);
 
       assert.strictEqual(hash1, hash2);
-      assert.strictEqual(hash1.length, 64);
+      assert.match(hash1, /^v2:[0-9a-f]{64}$/);
     });
   });
 
