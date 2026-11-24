@@ -419,3 +419,22 @@ test('classifier: category field influences domain confidence', () => {
   const catMatch = resultWithCategory.domains.find((d) => d.domain === 'legal_advice');
   assert.ok(catMatch && catMatch.confidence >= 0.95, 'category should boost confidence');
 });
+
+test('opt-in registry: later changes to the caller object do not alter a stored opt-in', () => {
+  const registry = new DomainOptInRegistry();
+  const optIn: DomainOptIn = {
+    domain: 'legal_advice',
+    evidence: completeLegalEvidence(),
+    approvedBy: 'reviewer@example.com',
+    approvedAt: '2026-07-31T00:00:00Z',
+    justification: 'Domain-specific evidence collected per R6.4 process'
+  };
+  const result = registry.register(optIn);
+  assert.equal(result.ok, true);
+  optIn.approvedBy = 'changed';
+  optIn.evidence.length = 0;
+  (registry.getOptIns('legal_advice')[0] as DomainOptIn).approvedBy = 'changed-too';
+  const stored = registry.getOptIns('legal_advice')[0] as DomainOptIn;
+  assert.equal(stored.approvedBy, 'reviewer@example.com');
+  assert.ok(stored.evidence.length > 0);
+});

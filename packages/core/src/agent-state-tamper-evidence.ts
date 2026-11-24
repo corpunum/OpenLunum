@@ -168,29 +168,59 @@ export interface TamperEvidenceState {
   initializedAt: string;
 }
 
+const HASH_V2 = 'v2:';
+
+/** Stable serialisation of the whole value: object keys sorted at every depth. */
+function canonicalJson(value: unknown): string {
+  const norm = (v: unknown): unknown => {
+    if (Array.isArray(v)) return v.map((x) => norm(x === undefined ? null : x));
+    if (v && typeof v === 'object') {
+      const src = v as Record<string, unknown>;
+      const out: Record<string, unknown> = {};
+      for (const k of Object.keys(src).sort()) {
+        if (src[k] !== undefined) out[k] = norm(src[k]);
+      }
+      return out;
+    }
+    return v;
+  };
+  return JSON.stringify(norm(JSON.parse(JSON.stringify(value))));
+}
+
+/** Original scheme (top-level key list used as a filter, so nested fields were omitted). Verification of old hashes only. */
+function legacyHash(value: object): string {
+  return createHash('sha256').update(JSON.stringify(value, Object.keys(value).sort())).digest('hex');
+}
+
+function hashCanonical(value: unknown): string {
+  return HASH_V2 + createHash('sha256').update(canonicalJson(value)).digest('hex');
+}
+
+/** Hash of a value in the scheme the stored hash was written with (unprefixed = legacy). */
+function hashLike(value: object, stored: unknown): string {
+  return typeof stored === 'string' && stored.startsWith(HASH_V2) ? hashCanonical(value) : legacyHash(value);
+}
+
 /**
- * Compute SHA-256 hash of agent state.
+ * Compute SHA-256 hash of agent state (canonical, covers nested fields; "v2:" prefixed).
  * Used for hash chain validation.
  */
 export function hashAgentState(state: AgentState): string {
-  const canonicalized = JSON.stringify(state, Object.keys(state).sort());
-  return createHash('sha256').update(canonicalized).digest('hex');
+  return hashCanonical(state);
 }
 
 /**
  * Compute hash of an audit log entry.
  */
 export function hashAuditLogEntry(entry: Omit<AuditLogEntry, 'entryHash'>): string {
-  const data = JSON.stringify(entry, Object.keys(entry).sort());
-  return createHash('sha256').update(data).digest('hex');
+  return hashCanonical(entry);
 }
 
 /**
  * Compute hash of authorization context.
  */
 export function hashAuthorizationContext(auth: AuthorizationContext): string {
-  const data = JSON.stringify(auth, Object.keys(auth).sort());
-  return createHash('sha256').update(data).digest('hex');
+  return hashCanonical(auth);
 }
 
 /**
@@ -379,10 +409,11 @@ export function verifyIntegrity(
 
   // Verify hash chain
   let chainIntact = true;
-  let previousHash = hashAgentState(evidence.agentState);
+  let previousHash: string | null = null;
 
   for (let i = 0; i < evidence.stateTransitionHistory.length; i++) {
     const record = evidence.stateTransitionHistory[i]!;
+    if (previousHash === null) previousHash = hashLike(evidence.agentState, record.previousStateHash);
 
     if (record.previousStateHash !== previousHash) {
       errors.push(`hash chain broken at transition ${i}: previous hash mismatch`);
@@ -523,8 +554,9 @@ export function detectTampering(
   state: AgentState,
   expectedHash: string
 ): { tampered: boolean; currentHash: string; mismatch: boolean } {
-  const currentHash = hashAgentState(state);
-  const mismatch = currentHash !== expectedHash;
+  // compare in the scheme the expected hash was written with; report the canonical hash unless it matched
+  const mismatch = hashLike(state, expectedHash) !== expectedHash;
+  const currentHash = mismatch ? hashAgentState(state) : expectedHash;
 
   return {
     tampered: mismatch,

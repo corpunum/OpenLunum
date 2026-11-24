@@ -328,10 +328,12 @@ export class DomainOptInRegistry {
       };
     }
 
-    const existing = this.optIns.get(optIn.domain) ?? [];
-    existing.push(optIn);
-    this.optIns.set(optIn.domain, existing);
-    return { ok: true, optIn, validation };
+    // keep a private copy: later changes to the caller's object must not alter an authorization
+    const stored = structuredClone(optIn);
+    const existing = this.optIns.get(stored.domain) ?? [];
+    existing.push(stored);
+    this.optIns.set(stored.domain, existing);
+    return { ok: true, optIn: structuredClone(stored), validation };
   }
 
   /** True if the domain has at least one valid, registered opt-in. */
@@ -341,7 +343,7 @@ export class DomainOptInRegistry {
 
   /** All registered opt-ins for a domain, most-recent last. */
   getOptIns(domain: ProhibitedDomainId): DomainOptIn[] {
-    return [...(this.optIns.get(domain) ?? [])];
+    return (this.optIns.get(domain) ?? []).map((o) => structuredClone(o));
   }
 
   /** Remove all opt-ins for a domain, reinstating the hard block. */
