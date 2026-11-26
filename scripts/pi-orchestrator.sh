@@ -5,7 +5,7 @@ set -uo pipefail
 # Handles: health checks, STUCK auto-fix, stale PR cleanup, temp monitoring.
 # Escalates to NEEDS_CLOUD flag only when it can't self-resolve.
 
-REPO=/home/corpunum/OpenLunum
+REPO="${OPENLUNUM_REPO:-/home/corpunum/OpenLunum}"
 REPORTS="$REPO/reports"
 ORCH_LOG="$REPORTS/orchestrator/status.log"
 ORCH_DIR="$REPORTS/orchestrator"
@@ -74,8 +74,13 @@ if [[ -f "$LOOP_DIR/STUCK" ]]; then
 
     cd "$REPO" || exit 1
 
-    # Stash any dirty state
-    git checkout -- . 2>/dev/null || true
+    # Preserve any dirty tracked state in the stash (never discard it)
+    if ! git stash push -m "orchestrator-autofix-$(date +%s)" >/dev/null 2>&1; then
+      log "AUTO-FIX: could not stash dirty state — escalating"
+      echo "orchestrator-stash-failed $(date -Iseconds)" > "$NEEDS_CLOUD"
+      notify "STUCK auto-fix failed — could not preserve local edits"
+      exit 1
+    fi
 
     # Pull latest main
     if git pull --ff-only origin main 2>/dev/null; then

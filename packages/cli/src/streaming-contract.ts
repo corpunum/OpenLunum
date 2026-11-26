@@ -97,6 +97,11 @@ export function createStreamProcessor(config: StreamingConfig): StreamProcessor 
       if (shouldFlush()) {
         lastFlushTime = Date.now();
       }
+      // Hard bound: retain at most maxBufferSize events (oldest are dropped).
+      const cap = Math.max(1, config.maxBufferSize);
+      if (buffer.length > cap) {
+        buffer.splice(0, buffer.length - cap);
+      }
 
       return recordEvent;
     },

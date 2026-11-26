@@ -219,3 +219,11 @@ describe('Streaming Contract', () => {
     });
   });
 });
+
+describe('Streaming Contract: bounded buffer', () => {
+  it('never retains more than maxBufferSize events without flush', () => {
+    const p = createStreamProcessor({ maxBufferSize: 5, flushIntervalMs: 1000000 } as StreamingConfig);
+    for (let i = 0; i < 50; i++) p.process(JSON.stringify({ i }));
+    assert.ok(p.flush().length <= 5);
+  });
+});

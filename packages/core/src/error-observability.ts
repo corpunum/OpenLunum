@@ -122,6 +122,13 @@ export function isCircuitOpen(tracker: ObservabilityTracker, circuitName: string
   if (!circuit) return false;
   if (circuit.state === 'closed') return false;
   if (circuit.state === 'half-open') return false;
+  // Open: allow a probe once the configured timeout has elapsed.
+  const since = Date.parse(circuit.lastFailureAt ?? circuit.lastStateChangeAt);
+  if (Number.isFinite(since) && Date.now() - since >= circuit.timeout) {
+    circuit.state = 'half-open';
+    circuit.lastStateChangeAt = new Date().toISOString();
+    return false;
+  }
   return true;
 }
 

@@ -344,3 +344,14 @@ describe('agent-state-idempotency: applyIdempotentStepTransition', () => {
     assert.equal(s2.status, 'running');
   });
 });
+
+describe('agent-state-idempotency: nested content', () => {
+  it('distinct nested content yields distinct keys; key order is irrelevant', () => {
+    const a = deriveIdempotencyKey({ op: 'x', payload: { alpha: 1 } });
+    const b = deriveIdempotencyKey({ op: 'x', payload: { alpha: 2 } });
+    const c = deriveIdempotencyKey({ op: 'x', payload: { beta: 1 } });
+    assert.notEqual(a, b);
+    assert.notEqual(a, c);
+    assert.equal(a, deriveIdempotencyKey({ payload: { alpha: 1 }, op: 'x' }));
+  });
+});

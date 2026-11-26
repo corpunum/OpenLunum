@@ -254,3 +254,11 @@ test('per-clause — reason and confidence fields', () => {
   assert.ok('confidence' in c0);
   assert.equal(c0.confidence, 0.95);
 });
+
+test('selectContextModePerClause honours natural-only domain and human review gates', () => {
+  const clauses = [{}, {}] as never;
+  const domain = selectContextModePerClause(clauses, makeInput({ domainCategory: 'legal_advice' }));
+  assert.ok(domain.every((c) => c.mode === 'natural'));
+  const review = selectContextModePerClause(clauses, makeInput({ requiresHumanReview: true }));
+  assert.ok(review.every((c) => c.mode === 'natural'));
+});

@@ -207,3 +207,15 @@ describe('error-observability', () => {
     });
   });
 });
+
+describe('error-observability: open circuit recovery', () => {
+  it('allows a probe after the configured timeout elapses', () => {
+    const circuit = createCircuitBreaker('svc', { threshold: 1, timeout: 50 });
+    const tracker: ObservabilityTracker = { errors: [], circuits: { svc: circuit }, snapshots: [], maxErrors: 10 };
+    updateCircuitBreaker(tracker, 'svc', false);
+    assert.strictEqual(isCircuitOpen(tracker, 'svc'), true);
+    circuit.lastFailureAt = new Date(Date.now() - 1000).toISOString();
+    assert.strictEqual(isCircuitOpen(tracker, 'svc'), false);
+    assert.strictEqual(circuit.state, 'half-open');
+  });
+});

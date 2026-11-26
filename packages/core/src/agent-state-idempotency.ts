@@ -186,6 +186,19 @@ export function pruneIdempotencyStore<T>(store: IdempotencyStore<T>, now: number
   return pruned;
 }
 
+/** Recursively sort object keys so nested content is fully represented. */
+function canonicalize(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (value !== null && typeof value === 'object') {
+    const out: Record<string, unknown> = {};
+    for (const key of Object.keys(value as Record<string, unknown>).sort()) {
+      out[key] = canonicalize((value as Record<string, unknown>)[key]);
+    }
+    return out;
+  }
+  return value;
+}
+
 /**
  * Derive a deterministic idempotency key from the stable (non-volatile)
  * fields of an operation's content. Two logically identical requests
@@ -194,8 +207,7 @@ export function pruneIdempotencyStore<T>(store: IdempotencyStore<T>, now: number
  * caller does not supply an explicit key/nonce.
  */
 export function deriveIdempotencyKey(parts: Record<string, unknown>): string {
-  const sortedKeys = Object.keys(parts).sort();
-  const stable = JSON.stringify(parts, sortedKeys);
+  const stable = JSON.stringify(canonicalize(parts));
   return createHash('sha256').update(stable).digest('hex');
 }
 

@@ -222,3 +222,10 @@ test('support min version is 0.1', () => {
 test('support max version is 1.0', () => {
   assert.strictEqual(FP_SUPPORT_MAX_VERSION, '1.0');
 });
+
+test('current 1.0 version validates as supported', () => {
+  assert.strictEqual(validateFingerprintVersion('1.0'), true);
+  const status = getFingerprintDeprecationStatus('1.0');
+  assert.strictEqual(status.isSupported, true);
+  assert.strictEqual(status.state, 'supported');
+});

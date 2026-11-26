@@ -180,7 +180,7 @@ export const FP_MIGRATION_REQUIREMENTS: readonly MigrationRequirement[] = Object
  * at runtime during development.
  */
 
-const SUPPORTED_VERSIONS_ARRAY = Object.freeze(['0.1', '0.2'] as const);
+const SUPPORTED_VERSIONS_ARRAY = Object.freeze(['0.1', '0.2', '1.0'] as const);
 
 export const FINGERPRINT_SUPPORT_CONTRACT: FingerprintSupportContract = Object.freeze({
   version: '1.0.0',

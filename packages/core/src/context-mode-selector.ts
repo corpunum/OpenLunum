@@ -468,7 +468,22 @@ export function selectContextModePerClause(
   clauses: LunumClause[],
   input: ContextModeEligibility
 ): ClauseContextMode[] {
+  const dc = input.domainCategory;
+  const forcedNatural =
+    dc !== null && dc !== undefined && domainForcesNatural(dc)
+      ? `domain '${dc}' forces natural mode`
+      : input.requiresHumanReview === true
+        ? 'requires human review'
+        : null;
+
   return clauses.map((clause, index) => {
+    if (forcedNatural !== null) {
+      return {
+        clauseIndex: index,
+        mode: 'natural',
+        reason: `clause ${index} ${forcedNatural}`
+      };
+    }
     const clauseConfidence =
       input.clauseConfidences !== null &&
       input.clauseConfidences !== undefined &&

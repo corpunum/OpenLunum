@@ -15,7 +15,7 @@
     "test": "node scripts/ensure-git-history.mjs && pnpm build && pnpm -r --sort test:unit && pnpm test:merge-policy && pnpm test:quality-gate-runner && pnpm test:worker-dispatch && pnpm test:tier2-policy && pnpm test:nightly-window && pnpm test:verify-audit-endpoints && pnpm test:source-only-scoring && pnpm test:client-event-replay && pnpm test:qa-grader && pnpm test:readiness-gate-mutations && node --test examples/structured-record-demo.test.mjs && pnpm test:locator && pnpm test:license",
     "test:merge-policy": "node --test scripts/pi-merge-policy.test.mjs",
     "test:quality-gate-runner": "node --test scripts/run-quality-gates-ci.test.mjs",
-    "test:worker-dispatch": "node --test scripts/pi-dispatch-once.test.mjs",
+    "test:worker-dispatch": "node --test scripts/pi-dispatch-once.test.mjs scripts/pi-orchestrator.test.mjs",
     "test:tier2-policy": "node --test scripts/agent-eval/run-tier2-policy.test.mjs",
     "test:nightly-window": "node --test scripts/nightly-evidence-runner.test.mjs",
     "test:verify-audit-endpoints": "node --test scripts/verify-audit-endpoints.test.mjs scripts/verify-audit-json-get.test.mjs",
