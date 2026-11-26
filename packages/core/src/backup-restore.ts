@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readFile, writeFile, readdir, mkdir, cp, stat } from 'node:fs/promises';
+import { readFile, writeFile, readdir, mkdir, cp, stat, lstat } from 'node:fs/promises';
 import { join, relative, resolve, isAbsolute, sep } from 'node:path';
 
 export interface FileChecksum {
@@ -142,6 +142,25 @@ function contained(base: string, rel: string): string {
   return full;
 }
 
+async function assertNoSymlinkInPath(base: string, full: string): Promise<void> {
+  const root = resolve(base);
+  const segments = relative(root, full).split(sep);
+  let cur = root;
+  for (const seg of segments) {
+    cur = join(cur, seg);
+    let info;
+    try {
+      info = await lstat(cur);
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') return;
+      throw err;
+    }
+    if (info.isSymbolicLink()) {
+      throw new Error(`restore path traverses a symbolic link: ${seg}`);
+    }
+  }
+}
+
 export async function verifyBackup(
   manifest: BackupManifest,
   baseDir: string,
@@ -178,7 +197,7 @@ export async function restoreFromBackup(
   // validate every path before writing anything
   for (const entry of manifest.checksums) {
     contained(backupDir, entry.path);
-    contained(targetDir, entry.path);
+    await assertNoSymlinkInPath(targetDir, contained(targetDir, entry.path));
   }
   await mkdir(targetDir, { recursive: true });
 
@@ -186,6 +205,7 @@ export async function restoreFromBackup(
   for (const entry of manifest.checksums) {
     const srcPath = contained(backupDir, entry.path);
     const destPath = contained(targetDir, entry.path);
+    await assertNoSymlinkInPath(targetDir, destPath);
     await mkdir(join(destPath, '..'), { recursive: true });
     const content = await readFile(srcPath);
     await writeFile(destPath, content);

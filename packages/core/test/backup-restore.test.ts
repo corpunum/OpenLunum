@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, writeFile, readFile, mkdir, rm } from 'node:fs/promises';
+import { mkdtemp, writeFile, readFile, mkdir, rm, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -204,6 +204,23 @@ describe('backup-restore', () => {
       await rm(src, { recursive: true, force: true });
       await rm(backupDir, { recursive: true, force: true });
       await rm(restoreDir, { recursive: true, force: true });
+    });
+  });
+
+  describe('restore input handling', () => {
+    it('rejects malformed input', async () => {
+      const src = await setupSourceDir();
+      const backupDir = await makeTempDir('backup-h-bak-');
+      const target = await makeTempDir('backup-h-tgt-');
+      const outside = await makeTempDir('backup-h-out-');
+      const manifest = await createBackup([src], backupDir);
+      await mkdir(join(backupDir, 'sub'), { recursive: true });
+      await symlink(outside, join(target, 'sub'));
+
+      await assert.rejects(() => restoreFromBackup(manifest, backupDir, target));
+      await assert.rejects(() => readFile(join(outside, 'nested.txt')));
+
+      for (const d of [src, backupDir, target, outside]) await rm(d, { recursive: true, force: true });
     });
   });
 });
