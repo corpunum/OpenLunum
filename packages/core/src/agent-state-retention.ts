@@ -2,6 +2,7 @@
 // policies for agent state. Integrates with the agent-state-freeze module
 // (agent-state.ts) and exposes a unified public API.
 
+import { createHash, createHmac } from 'node:crypto';
 import {
   type AgentState,
   type AgentPlanStep,
@@ -363,6 +364,7 @@ export function redactForPrivacyClass(
     ...metadata,
     // Redact the handle and planId when target is stricter than record class.
     recordHandle: `***${metadata.recordHandle.slice(-8)}`,
+    planId: `***${metadata.planId.slice(-8)}`,
   };
 }
 
@@ -375,12 +377,10 @@ export function anonymizeAgentState(
   salt?: string
 ): AgentState {
   const hash = (input: string, s?: string): string => {
-    let h = 0;
-    const text = s ? `${s}:${input}` : input;
-    for (let i = 0; i < text.length; i++) {
-      h = ((h << 5) - h + text.charCodeAt(i)) | 0;
-    }
-    return `anon-${Math.abs(h).toString(16).padStart(8, '0')}`;
+    const digest = s
+      ? createHmac('sha256', s).update(input).digest('hex')
+      : createHash('sha256').update(input).digest('hex');
+    return `anon-${digest.slice(0, 32)}`;
   };
 
   return {

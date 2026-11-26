@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'assert';
+import { generateKeyPairSync } from 'crypto';
 import { 
   createReleaseManifest, 
   signReleaseManifest, 
@@ -47,4 +48,14 @@ test('signReleaseManifest and verifyReleaseManifest functions exist', () => {
   // For now, we just ensure the functions exist
   assert.ok(typeof signReleaseManifest === 'function');
   assert.ok(typeof verifyReleaseManifest === 'function');
+});
+test('signed manifest embeds the matching public key', () => {
+  const { privateKey, publicKey } = generateKeyPairSync('rsa', {
+    modulusLength: 2048,
+    privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
+    publicKeyEncoding: { type: 'spki', format: 'pem' },
+  });
+  const signed = signReleaseManifest(createReleaseManifest('1.0.0', 'abc123', ['a.txt']), privateKey);
+  assert.strictEqual(signed.publicKey, publicKey);
+  assert.strictEqual(verifyReleaseManifest(signed, signed.publicKey!), true);
 });

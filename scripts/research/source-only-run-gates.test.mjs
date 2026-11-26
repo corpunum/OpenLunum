@@ -35,10 +35,10 @@ const RUNTIME_DRIFT_0024 = [
   // v23: the contract tool returns compact JSON (Claude Code persisted-output limit).
   'served_runtime_changed:packages/mcp/dist/src/tools.js',
 ];
-// This tree's literal-retention change plus the maintenance hardening of four served core modules (contract unchanged) move only the literal-retention and served-runtime manifest bindings.
+// This tree's literal-retention change plus the maintenance hardening of served core modules (contract unchanged) move only the literal-retention and served-runtime manifest bindings.
 const DRIFT_KEYS_HARDENING = ['literalRetentionArtifactSha256', 'servedRuntimeManifestSha256'];
 const withHardeningDrift = (keys) => [...new Set([...keys, ...DRIFT_KEYS_HARDENING])].sort();
-const RUNTIME_DRIFT_HARDENING = ['agent-state-tamper-evidence', 'backup-restore', 'literal-retention', 'prohibited-domains', 'rollback-process'].map((m) => `served_runtime_changed:packages/core/dist/src/${m}.js`);
+const RUNTIME_DRIFT_HARDENING = ['agent-state-retention', 'agent-state-tamper-evidence', 'backup-restore', 'literal-retention', 'prohibited-domains', 'release-provenance', 'rollback-process'].map((m) => `served_runtime_changed:packages/core/dist/src/${m}.js`);
 const withHardeningRuntime = (errors) => [...new Set([...errors, ...RUNTIME_DRIFT_HARDENING])].sort();
 const gitScratch = spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: root, encoding: 'utf8' }).stdout.trim() || path.join(root, '.git');
 

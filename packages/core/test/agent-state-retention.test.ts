@@ -270,10 +270,20 @@ describe('agent-state-retention', () => {
       const redacted = redactForPrivacyClass(m, 'internal');
       assert.ok(redacted.recordHandle.startsWith('***'));
       assert.ok(redacted.recordHandle.endsWith('-123'));
+      assert.ok(redacted.planId.startsWith('***'));
+      assert.notStrictEqual(redacted.planId, m.planId);
     });
   });
 
   describe('anonymizeAgentState', () => {
+    it('uses a wide salted digest', () => {
+      const state = buildAgentState();
+      const a = anonymizeAgentState(state, 'salt-a').agentId;
+      const b = anonymizeAgentState(state, 'salt-b').agentId;
+      assert.notStrictEqual(a, b);
+      assert.match(a, /^anon-[0-9a-f]{32}$/);
+    });
+
     it('replaces agentId with hashed placeholder', () => {
       const state = buildAgentState({ agentId: 'my-agent-id' });
       const anonymized = anonymizeAgentState(state, 'salt');

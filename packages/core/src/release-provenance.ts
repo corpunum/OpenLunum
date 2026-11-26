@@ -6,7 +6,7 @@
  * and origin of released packages.
  */
 
-import { createHash, createSign, createVerify } from 'crypto';
+import { createHash, createPublicKey, createSign, createVerify } from 'crypto';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -150,9 +150,7 @@ export function verifyReleaseManifest(
  * @returns The public key
  */
 function extractPublicKey(privateKey: string): string {
-  // In a real implementation, this would extract the public key from the private key
-  // For now, we'll return a placeholder - in practice this should be implemented properly
-  return 'placeholder-public-key';
+  return createPublicKey(privateKey).export({ type: 'spki', format: 'pem' }).toString();
 }
 
 /**
