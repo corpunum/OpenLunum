@@ -399,6 +399,17 @@ describe('agent-state-tamper-evidence', () => {
       assert.strictEqual(verification.authorizationValid, true);
     });
 
+    it('rejects malformed input', () => {
+      const state = buildState();
+      const evidence = initializeTamperEvidence(state, 'auditor-1');
+      evidence.auditLog.push(
+        appendAuditLogEntry(evidence.auditLog, 'tool-call', 'original', 'agent-1', { a: 1 })
+      );
+      assert.strictEqual(verifyIntegrity(evidence, 'auditor-1').auditLogValid, true);
+      evidence.auditLog[evidence.auditLog.length - 1]!.description = 'changed';
+      assert.strictEqual(verifyIntegrity(evidence, 'auditor-1').auditLogValid, false);
+    });
+
     it('detects audit log tampering', () => {
       const state = buildState();
       let evidence = initializeTamperEvidence(state, 'auditor-1');

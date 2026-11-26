@@ -436,8 +436,15 @@ export function verifyIntegrity(
       auditLogValid = false;
     }
 
+    // Recompute the entry hash from its contents
+    const { entryHash: storedHash, ...body } = entry;
+    if (typeof storedHash !== 'string' || hashAuditLogEntry(body) !== storedHash) {
+      errors.push(`audit log entry ${i} hash does not match its contents`);
+      auditLogValid = false;
+    }
+
     // Check chain link
-    if (previousEntryHash && entry.previousEntryHash !== previousEntryHash) {
+    if (entry.previousEntryHash !== previousEntryHash) {
       errors.push(`audit log entry ${i} has broken chain link`);
       auditLogValid = false;
     }
