@@ -9,7 +9,7 @@ import { artifactBinding, captureServedRuntimeManifest, validateServedRuntimeMan
 
 const root = process.cwd();
 const packageDirectory = path.join(root, 'experiments/natural-development-v8/extraction');
-const packagePath = path.join(packageDirectory, 'public-instruction-package-v35.json');
+const packagePath = path.join(packageDirectory, 'public-instruction-package-v36.json');
 const pkg = JSON.parse(fs.readFileSync(packagePath));
 const legacyPackagePath = path.join(packageDirectory, 'public-instruction-package-v14.json');
 const legacyPkg = JSON.parse(fs.readFileSync(legacyPackagePath));
@@ -79,12 +79,15 @@ const DRIFT_KEYS_V34 = ['servedRuntimeManifestSha256'];
 // v35 (maintenance freeze, contract 0.22 unchanged): core hardening moves four served modules and the served-runtime manifest; coreArtifactSha256 does not move.
 const RUNTIME_DRIFT_V35 = ['agent-state-idempotency', 'context-mode-selector', 'error-observability', 'fingerprint-support-contract'].map((m) => `served_runtime_changed:packages/core/dist/src/${m}.js`);
 
+// v36 (maintenance freeze, contract 0.22 unchanged): core hardening moves three served modules and the served-runtime manifest; coreArtifactSha256 does not move.
+const RUNTIME_DRIFT_V36 = ['agent-state-tamper-evidence', 'retention-fallback-rollback', 'supply-chain'].map((m) => `served_runtime_changed:packages/core/dist/src/${m}.js`);
+
 const withV34Drift = (keys) => [...new Set([...keys, ...DRIFT_KEYS_V34])].sort();
 const RUNTIME_DRIFT_V34 = ['agent-state-retention', 'release-provenance'].map((m) => `served_runtime_changed:packages/core/dist/src/${m}.js`);
-const withV34Runtime = (errors) => [...new Set([...errors, ...RUNTIME_DRIFT_V34, ...RUNTIME_DRIFT_V35])].sort();
+const withV34Runtime = (errors) => [...new Set([...errors, ...RUNTIME_DRIFT_V34, ...RUNTIME_DRIFT_V35, ...RUNTIME_DRIFT_V36])].sort();
 const gitScratch = spawnSync('git', ['rev-parse', '--absolute-git-dir'], { cwd: root, encoding: 'utf8' }).stdout.trim() || path.join(root, '.git');
 
-test('v35 binds every current artifact, dependency and served runtime manifest', () => {
+test('v36 binds every current artifact, dependency and served runtime manifest', () => {
   const result = binding();
   assert.equal(result.match, true);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
@@ -650,6 +653,18 @@ test('v34 remains frozen historical binding (contract 0.22); only the v35 core h
   assert.equal(result.match, false);
   assert.deepEqual(result.checks.filter(check => !check.match).map(check => check.key).sort(), ['servedRuntimeManifestSha256']);
   const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
-  assert.deepEqual(runtimeCheck.runtime.errors.sort(), RUNTIME_DRIFT_V35);
+  assert.deepEqual(runtimeCheck.runtime.errors.sort(), [...new Set([...RUNTIME_DRIFT_V35, ...RUNTIME_DRIFT_V36])].sort());
+  assert.equal(checkServedContract(contract, historical).match, true);
+});
+
+test('v35 remains frozen historical binding (contract 0.22); only the v36 core hardening drifts it', () => {
+  const historicalPath = path.join(packageDirectory, 'public-instruction-package-v35.json');
+  const historical = JSON.parse(fs.readFileSync(historicalPath));
+  const profile = path.resolve(path.dirname(historicalPath), historical.freeze.taskProfilePath);
+  const result = artifactBinding(root, historicalPath, profile, historical);
+  assert.equal(result.match, false);
+  assert.deepEqual(result.checks.filter(check => !check.match).map(check => check.key).sort(), ['servedRuntimeManifestSha256']);
+  const runtimeCheck = result.checks.find(check => check.key === 'servedRuntimeManifestSha256');
+  assert.deepEqual(runtimeCheck.runtime.errors.sort(), RUNTIME_DRIFT_V36);
   assert.equal(checkServedContract(contract, historical).match, true);
 });

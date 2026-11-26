@@ -1,5 +1,13 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-11-26 (v36 maintenance freeze: core and eval hardening)
+
+### Fixed
+- v36 maintenance freeze: core and eval hardening (retention rollback, lockfile verification, tamper-evidence verification, round-trip scoring); contract unchanged
+
+### Changed
+- Instruction package **v36** (`scripts/research/freeze-v36.mjs`): only three core modules and the served-runtime manifest bindings move. v35 stays a historical binding. The source-only runner defaults to v36.
+
 ## Unreleased — 2026-11-26 (v35 maintenance freeze: core hardening)
 
 ### Fixed
