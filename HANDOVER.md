@@ -113,3 +113,5 @@ s-openlunum is paused by corpunum-82 (ONBOARDING "SAVINGS MODE"). **Exception: t
 - Stale `dist/` test files without a source counterpart break `pnpm verify` after switching commits; remove only those files, never a whole `dist/`.
 - The git hooks block commits and pushes to `main` unless `ALLOW_MAIN_COMMIT=1` / `ALLOW_MAIN_PUSH=1` is set; that is intended for the single orchestrating agent after `pnpm verify`.
 - Greek and multilingual intent work is the owner's; under [ADR 0030](decisions/0030-english-pivot-translation-adapters.md) the core is English-only with translation adapters.
+
+- 11-26 12:0x EET s-openlunum: lunum-core-0.19.3-sec cut = c40eb89f (tag + release/lunum-core-0.19; verify 0, gitleaks clean); s-openunum, s-kpi, corpunum-138 told. Pushed s-infra's a8613fa7 (pi-loop-ally pause flag). Queued after security batches (round-2 17 highs, 3 batches): prod A/B of compressed/discourse view vs 'natural' contextMode (corpunum-138 request from s-kpi RESULTS-tools.md: 1,555 shadow rows ratio 1.0). Needs napkin + PREREG first, with s-openunum; measure prefill tokens, wall time, task success.
