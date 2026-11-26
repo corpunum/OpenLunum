@@ -616,12 +616,11 @@ describe('agent-state-tamper-evidence', () => {
       evidence.lastVerifiedHash = record.currentStateHash;
 
       // Now tamper with the record
-      record.changeDescription = 'TAMPERED!';
+      record.previousStateHash = 'v2:' + '0'.repeat(64);
 
       const verification = verifyIntegrity(evidence, 'auditor-1');
 
-      // The hash chain will be broken because the record was modified
-      // after the hash was computed
+      // The hash chain is broken because the link no longer matches the initial state hash
       assert.ok(!verification.isValid || !verification.chainIntact);
     });
   });

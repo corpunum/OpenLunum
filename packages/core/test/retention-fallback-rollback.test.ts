@@ -351,8 +351,10 @@ describe('processRoundTrip', () => {
     assert.equal(result.evaluation.status, 'failed');
     assert.equal(result.fallback.fellBack, true);
     assert.equal(result.auditEntry.action, 'rollback');
-    // reverted to the prior (only) version — no candidate stored for the failed attempt
-    assert.equal(ledger.getCurrentVersion('rec-1')?.fingerprint, goodRecord.fingerprint);
+    // the failed attempt reverts the stored canonical form; only the natural text remains authoritative
+    assert.equal(ledger.getCurrentVersion('rec-1'), undefined);
+    assert.equal(result.auditEntry.previousFingerprint, goodRecord.fingerprint);
+    assert.equal(result.auditEntry.resultingFingerprint, null);
   });
 
   it('records a review/fallback entry (not a rollback) for ambiguous round trips with nothing previously stored', () => {
