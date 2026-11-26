@@ -214,3 +214,24 @@ test('cap holds with 400 messages of repeated facts, and secrets in tool results
   for (const s of [FAKE_GH, FAKE_EMAIL]) assert.ok(!text.includes(s));
   assert.ok(JSON.parse(r.stdout).redactions >= 400);
 });
+
+test('an ask answered later in the same session is dropped from Pending and the decision stays', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lunum-appendix-'));
+  const input = join(dir, 'messages.json');
+  writeFileSync(input, JSON.stringify([
+    { role: 'user', content: 'Start the harbor survey for project Marlin.' },
+    { role: 'assistant', content: 'I asked the cartographer to choose between the metric grid or the imperial grid for the harbor charts, and I am waiting for the cartographer.' },
+    { role: 'assistant', content: 'Still waiting on the quartermaster about the lantern budget for ticket MARLIN-77.' },
+    { role: 'user', content: 'The cartographer chose the metric grid for the harbor charts.' },
+  ]));
+  const out = join(dir, 'appendix.md');
+  const r = run(['--in', input, '--out', out]);
+  assert.strictEqual(r.status, 0, r.stderr);
+  const text = readFileSync(out, 'utf8');
+  const pending = (text.split('## Pending')[1] ?? '').split('\n## ')[0];
+  assert.ok(!/choose between the metric grid/.test(pending), 'answered ask must leave Pending');
+  assert.ok(!/choose between the metric grid/.test(text.split('## Decisions')[1]?.split('\n## ')[0] ?? ''), 'ask must not be in Decisions');
+  assert.match(text, /cartographer chose the metric grid/);
+  assert.match((text.split('## Decisions')[1] ?? '').split('\n## ')[0], /cartographer chose the metric grid/);
+  assert.match(pending, /quartermaster/); // unanswered ask is kept
+});

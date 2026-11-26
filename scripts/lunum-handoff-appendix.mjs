@@ -163,6 +163,20 @@ function detectSlot(text, idToSched) {
         return { key: `pct:${m[1].toLowerCase().replace(/[^a-z]+/g, ' ').trim()}`, value: `${m[2]}%`, id: `${m[2]}%` };
     return null;
 }
+const ASK_RE = /\b(?:waiting (?:for|on)|awaiting|asked|asking|which|whether|choose|pick|decide|should we|can you|could you)\b|\?\s*$/i;
+const STOP = new Set('that this with from have been will would should could which whether there their them then than into onto about after before still when what your yours only also just more most some such very were does done'.split(' '));
+function sigTokens(s) {
+    return new Set((s.toLowerCase().replace(/\[m\d+\]/g, " ").match(/[a-z0-9][a-z0-9_.-]*[a-z0-9]|[a-z0-9]/g) ?? []).filter((t) => t.length >= 4 && !STOP.has(t) || (/\d/.test(t) && t.length >= 3)));
+}
+/** A later decision answers an ask when they share an id-like token (has a digit) or >= 2 words covering >= 40% of the shorter side. */
+function answers(ask, decision) {
+    const a = sigTokens(ask);
+    const d = sigTokens(decision);
+    const shared = [...a].filter((t) => d.has(t));
+    if (shared.some((t) => /\d/.test(t) && t.length >= 5))
+        return true;
+    return shared.length >= 2 && shared.length / Math.min(a.size, d.size) >= 0.4;
+}
 function clip(s, n) { return s.length <= n ? s : s.slice(0, n - 3).trimEnd() + '...'; }
 function key(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().slice(0, 90); }
 export function buildAppendix(messages, opts) {
@@ -281,6 +295,13 @@ export function buildAppendix(messages, opts) {
         c.text += ` [m${c.msg}]`;
         c.score += c.slot && n > 1 ? 1 : 0;
         cands.push(c);
+    }
+    // Supersede: an ask (Pending / Open items) that a LATER Decisions bullet answers is dropped; the decision stays.
+    {
+        const decisions = cands.filter((c) => c.section === 'Decisions');
+        const keep = cands.filter((c) => !((c.section === 'Pending' || c.section === 'Open items') && !c.slot && ASK_RE.test(c.text) && decisions.some((d) => d.msg > c.msg && answers(c.text, d.text))));
+        cands.length = 0;
+        cands.push(...keep);
     }
     const allPaths = [...pathCount.keys()];
     for (const [p, e] of pathCount) {
