@@ -321,8 +321,10 @@ export async function auditDependencyControls(): Promise<DependencyAudit> {
 
     return {
       pnpmLockExists: true,
-      auditStatus: 'success',
-      auditMessage: 'pnpm-lock.yaml exists and dependency hashes are pinned',
+      // Presence of a lockfile does not establish a clean posture: no
+      // vulnerability data is consulted here, so never report 'success'.
+      auditStatus: 'warnings',
+      auditMessage: 'pnpm-lock.yaml exists; vulnerability audit not performed',
       lockfileTimestamp: stats.mtime.toISOString()
     };
   } catch (err) {

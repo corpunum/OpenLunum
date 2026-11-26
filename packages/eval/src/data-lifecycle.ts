@@ -6,6 +6,7 @@
  */
 
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 
 // ── Data Sensitivity ──────────────────────────────────────────────
 
@@ -88,6 +89,8 @@ export interface ExpiredFile {
   readonly policy: string;
   readonly ageDays: number;
   readonly retentionDays: number;
+  /** Optional precomputed sha256 of the file contents. */
+  readonly contentSha256?: string;
 }
 
 export interface RetentionComplianceResult {
@@ -146,6 +149,15 @@ export interface DeletionManifest {
   readonly approvedBy: string;
 }
 
+/** sha256 of file contents, or 'unavailable' when the file cannot be read. */
+function hashFileContents(filePath: string): string {
+  try {
+    return createHash('sha256').update(readFileSync(filePath)).digest('hex');
+  } catch {
+    return 'unavailable';
+  }
+}
+
 export function generateDeletionManifest(
   expiredFiles: readonly ExpiredFile[],
   reason: string,
@@ -153,7 +165,7 @@ export function generateDeletionManifest(
 ): DeletionManifest {
   const files: DeletionEntry[] = expiredFiles.map((ef) => ({
     path: ef.path,
-    sha256: createHash('sha256').update(ef.path).digest('hex'),
+    sha256: ef.contentSha256 ?? hashFileContents(ef.path),
     sensitivity: classifyDataSensitivity(ef.path),
     retentionPolicy: ef.policy,
   }));

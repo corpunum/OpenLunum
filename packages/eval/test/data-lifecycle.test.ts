@@ -104,6 +104,27 @@ describe('auditRetentionCompliance', () => {
 // ── generateDeletionManifest ──────────────────────────────────────
 
 describe('generateDeletionManifest', () => {
+  it('hashes file contents rather than the path', async () => {
+    const { mkdtempSync, writeFileSync, rmSync } = await import('node:fs');
+    const { tmpdir } = await import('node:os');
+    const { join } = await import('node:path');
+    const { createHash } = await import('node:crypto');
+    const dir = mkdtempSync(join(tmpdir(), 'dl-'));
+    try {
+      const f = join(dir, 'debug-logs-a.log');
+      const mk = () => generateDeletionManifest(
+        [{ path: f, policy: 'debug-logs', ageDays: 14, retentionDays: 7 }], 'r', 'a').files[0]!.sha256;
+      writeFileSync(f, 'one');
+      const h1 = mk();
+      writeFileSync(f, 'two');
+      const h2 = mk();
+      assert.notStrictEqual(h1, h2);
+      assert.strictEqual(h2, createHash('sha256').update('two').digest('hex'));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('produces manifest with all entries', () => {
     const expired: ExpiredFile[] = [
       { path: 'data/debug-logs/old.log', policy: 'debug-logs', ageDays: 14, retentionDays: 7 },
@@ -119,7 +140,7 @@ describe('generateDeletionManifest', () => {
     const first = manifest.files[0]!;
     assert.strictEqual(first.path, 'data/debug-logs/old.log');
     assert.strictEqual(first.retentionPolicy, 'debug-logs');
-    assert.strictEqual(first.sha256.length, 64); // hex sha256
+    assert.strictEqual(first.sha256, 'unavailable'); // unreadable fixture path
     assert.ok(['public', 'internal', 'sensitive', 'restricted'].includes(first.sensitivity));
 
     const second = manifest.files[1]!;

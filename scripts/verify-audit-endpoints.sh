@@ -57,15 +57,17 @@ parse_args() {
 # Extract a field from JSON using python3
 json_get() {
   local json="$1" field="$2" default="${3:-}"
-  python3 -c "
-import json, sys
+  # Data and field are passed via environment, never interpolated into code.
+  JG_JSON="$json" JG_FIELD="$field" JG_DEFAULT="$default" python3 -c '
+import json, os
+default = os.environ["JG_DEFAULT"]
 try:
-  data = json.loads('''$json''')
-  value = data.get('$field', '$default')
-  print(value if value else '$default')
-except:
-  print('$default')
-" 2>/dev/null || echo "$default"
+  data = json.loads(os.environ["JG_JSON"])
+  value = data.get(os.environ["JG_FIELD"], default)
+  print(value if value else default)
+except Exception:
+  print(default)
+' 2>/dev/null || echo "$default"
 }
 
 # ---- INI file parsing helper ----------------------------------------------

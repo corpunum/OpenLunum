@@ -164,7 +164,11 @@ test('auditDependencyControls() returns valid audit result', async () => {
 test('dependency audit detects pnpm-lock.yaml', async () => {
   const audit = await auditDependencyControls();
   assert.strictEqual(audit.pnpmLockExists, true);
-  assert.strictEqual(audit.auditStatus, 'success');
+});
+
+test('dependency audit does not report success without a vulnerability check', async () => {
+  const audit = await auditDependencyControls();
+  assert.notStrictEqual(audit.auditStatus, 'success');
 });
 
 test('dependency audit message is non-empty', async () => {
