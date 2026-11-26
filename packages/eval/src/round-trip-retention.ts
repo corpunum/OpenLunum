@@ -211,7 +211,7 @@ function scoreRoleMatch(goldSem: LunumSem, parsedBack: LunumSem): number {
   return totalRoles > 0 ? matchedRoles / totalRoles : 1;
 }
 
-function scoreLiteralPreservation(literals: string[], realizedText: string, parsedBackText: string): number {
+export function scoreLiteralPreservation(literals: string[], realizedText: string, parsedBackText: string): number {
   if (!literals.length) return 1;
 
   const combined = (realizedText + ' ' + parsedBackText).toLowerCase();
@@ -326,7 +326,7 @@ export async function runRoundTripRetentionExperiment(
           const comparison = compareSem(goldSem, parsedBack);
           const predicateMatch = comparison.featureRecall ?? 0;
           const roleMatch = scoreRoleMatch(goldSem, parsedBack);
-          const literalPreservation = scoreLiteralPreservation(literals, cleanRealizedText, sourceText);
+          const literalPreservation = scoreLiteralPreservation(literals, cleanRealizedText, JSON.stringify(parsedBack));
 
           // Pass threshold: predicate match >= 0.8, role match >= 0.7, literal preservation >= 0.6
           const retention = predicateMatch >= 0.8 && roleMatch >= 0.7 && literalPreservation >= 0.6;

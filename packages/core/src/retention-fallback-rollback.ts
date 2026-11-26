@@ -457,7 +457,7 @@ export function processRoundTrip(
   if (evaluation.status === 'success' && options.candidateRecord) {
     auditEntry = ledger.commit(options.key, options.candidateRecord, evaluation);
   } else if (evaluation.status === 'failed') {
-    auditEntry = ledger.recordRollbackDecision(options.key, evaluation);
+    auditEntry = ledger.rollback(options.key, evaluation);
   } else {
     // ambiguous, or success with no candidateRecord to store
     auditEntry = ledger.recordFallback(options.key, evaluation);

@@ -409,11 +409,16 @@ export function verifyIntegrity(
 
   // Verify hash chain
   let chainIntact = true;
-  let previousHash: string | null = null;
+  // Anchor the chain at the recorded initial state hash (first audit entry), not the current state.
+  const initialHash = evidence.auditLog[0]?.metadata?.['stateHash'];
+  let previousHash: string | null = typeof initialHash === 'string' ? initialHash : null;
 
   for (let i = 0; i < evidence.stateTransitionHistory.length; i++) {
     const record = evidence.stateTransitionHistory[i]!;
-    if (previousHash === null) previousHash = hashLike(evidence.agentState, record.previousStateHash);
+    if (previousHash === null) {
+      previousHash = record.previousStateHash;
+      warnings.push('no initial state hash recorded; first transition link is unanchored');
+    }
 
     if (record.previousStateHash !== previousHash) {
       errors.push(`hash chain broken at transition ${i}: previous hash mismatch`);
@@ -532,7 +537,7 @@ export function verifyHandoff(
     errors.push('handoff missing or invalid payload');
   }
 
-  const payloadHash = handoff.payload ? hashAgentState(handoff as unknown as AgentState) : '';
+  const payloadHash = handoff.payload ? hashCanonical(handoff.payload) : '';
 
   const isValid =
     errors.length === 0 &&

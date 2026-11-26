@@ -95,10 +95,12 @@ export interface LockfileVerificationResult {
   ok: boolean;
   lockfileExists: boolean;
   lockfileHash?: string;
+  /** True only when an expected hash was supplied and matched. */
+  hashVerified?: boolean;
   errors: string[];
 }
 
-export async function verifyLockfile(lockfilePath: string): Promise<LockfileVerificationResult> {
+export async function verifyLockfile(lockfilePath: string, expectedSha256?: string): Promise<LockfileVerificationResult> {
   const errors: string[] = [];
   try {
     await access(lockfilePath);
@@ -112,7 +114,12 @@ export async function verifyLockfile(lockfilePath: string): Promise<LockfileVeri
     if (content.length === 0) {
       errors.push('lockfile is empty');
     }
-    return { ok: errors.length === 0, lockfileExists: true, lockfileHash: hash, errors };
+    let hashVerified = false;
+    if (expectedSha256 !== undefined) {
+      if (hash === expectedSha256.trim().toLowerCase()) hashVerified = true;
+      else errors.push('lockfile hash does not match the expected hash');
+    }
+    return { ok: errors.length === 0, lockfileExists: true, lockfileHash: hash, hashVerified, errors };
   } catch (e) {
     errors.push(`failed to read lockfile: ${e instanceof Error ? e.message : String(e)}`);
     return { ok: false, lockfileExists: true, errors };
