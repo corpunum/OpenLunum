@@ -1,5 +1,13 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-11-26 (v35 maintenance freeze: core hardening)
+
+### Fixed
+- v35 maintenance freeze: core, cli and recovery-script hardening; contract unchanged
+
+### Changed
+- Instruction package **v35** (`scripts/research/freeze-v35.mjs`): only four core modules and the served-runtime manifest bindings move. v34 stays a historical binding. The source-only runner defaults to v35.
+
 ## Unreleased — 2026-11-27 (v34 maintenance freeze: further input-handling hardening)
 
 ### Fixed
