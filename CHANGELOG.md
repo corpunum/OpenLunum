@@ -1,5 +1,13 @@
 # OpenLunum Changelog
 
+## Unreleased — 2026-11-27 (v34 maintenance freeze: further input-handling hardening)
+
+### Fixed
+- v34 maintenance freeze: further input-handling hardening in core; contract unchanged
+
+### Changed
+- Instruction package **v34** (`scripts/research/freeze-v34.mjs`): only agent-state retention, release provenance and the served-runtime manifest bindings move. v33 stays a historical binding. The source-only runner defaults to v34.
+
 ## Unreleased — 2026-11-26 (v33 maintenance freeze: further input-handling hardening)
 
 ### Fixed
