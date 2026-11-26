@@ -297,19 +297,18 @@ interface RetentionResult {
 /**
  * Score predicate match by checking if realized text contains key predicates.
  */
-function scorePredicateMatch(sem: any, realizedText: string, sourceText: string): number {
+export function scorePredicateMatch(sem: any, realizedText: string, _sourceText: string): number {
   if (!sem?.clauses?.length) return 1;
 
   const predicates = sem.clauses.map((c: any) => c.predicate ?? '').filter(Boolean);
   if (!predicates.length) return 1;
 
   const lowerText = realizedText.toLowerCase();
-  const lowerSource = sourceText.toLowerCase();
 
   // Check if predicates appear as word stems in realized or source text
   const matched = predicates.filter((pred: string) => {
     const predLower = pred.toLowerCase();
-    return lowerText.includes(predLower) || lowerSource.includes(predLower);
+    return lowerText.includes(predLower);
   }).length;
 
   return matched / predicates.length;

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'url';
 import { readJson, sha256File, loadDataset, validateManifest, validateProfile } from '../src/io.js';
@@ -9,7 +10,16 @@ import type { ExperimentManifest, ModelProfile } from '../src/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const WORKSPACE_ROOT = path.resolve(__dirname, '..', '..', '..', '..');
+function findWorkspaceRoot(start: string): string {
+  let dir = start;
+  while (!existsSync(path.join(dir, 'pnpm-workspace.yaml'))) {
+    const parent = path.dirname(dir);
+    if (parent === dir) throw new Error('workspace root not found');
+    dir = parent;
+  }
+  return dir;
+}
+const WORKSPACE_ROOT = findWorkspaceRoot(__dirname);
 const MATRIX_DIR = path.join(WORKSPACE_ROOT, 'experiments', 'audit-321-freeze');
 
 const MODEL_SLUGS = ['qwen36-35b', 'qwen3-coder-30b'] as const;

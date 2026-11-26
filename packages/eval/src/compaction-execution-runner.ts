@@ -151,6 +151,10 @@ export function runCompactionBenchmark(
   tasks: readonly CompactionTask[] = COMPACTION_TASKS,
   config: CompactionRunConfig = DEFAULT_RUN_CONFIG,
 ): CompactionExecutionReport {
+  if (config.mode !== 'simulated') {
+    // No live endpoint is wired in; never return fabricated numbers for a live request.
+    throw new Error(`compaction benchmark mode '${config.mode}' is not supported; only 'simulated' is available`);
+  }
   const measurements = tasks.map(simulateCompactionMeasurement);
 
   const byMode: Record<ContextMode, CompactionModeSummary> = {

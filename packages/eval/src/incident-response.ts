@@ -7,7 +7,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 // ── Types ──────────────────────────────────────────────────────────
@@ -114,6 +114,11 @@ export async function quarantineEvidence(
       const quarantinePath = path.join(quarantineDir, basename);
 
       await copyFile(filePath, quarantinePath);
+      const copied = createHash('sha256').update(await readFile(quarantinePath)).digest('hex');
+      if (copied !== hash) {
+        throw new Error('quarantine copy hash mismatch');
+      }
+      await unlink(filePath);
 
       quarantined.push({
         originalPath: filePath,

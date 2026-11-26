@@ -90,7 +90,7 @@ export function simulateSecurityRegressionTest(
   const seed = hashSeed(`${control.name}:${check.name}`);
 
   const baselineScore = Math.round((check.baselineThreshold + seed * 0.08) * 1000) / 1000;
-  const currentScore = Math.round((baselineScore + (seed - 0.45) * check.regressionTolerance * 0.6) * 1000) / 1000;
+  const currentScore = Math.round((baselineScore + (seed - 0.45) * check.regressionTolerance * 3) * 1000) / 1000;
   const delta = Math.round((currentScore - baselineScore) * 1000) / 1000;
   const regressed = delta < -check.regressionTolerance;
 

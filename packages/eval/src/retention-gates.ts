@@ -311,7 +311,7 @@ const GATES: GateDefinition[] = [
     description: 'Protected text literals preserved in realized or round-trip text',
     threshold: 0.8,
     scorer: (gold, roundTrip, source, realized, literals) =>
-      scoreLiteralPreservation(literals, realized, source)
+      scoreLiteralPreservation(literals, realized, '')
   },
   {
     name: 'role-preservation',
