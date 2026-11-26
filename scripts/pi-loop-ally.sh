@@ -12,6 +12,12 @@ while true; do
     continue
   fi
 
+  # Ally SuperGemma (:18084) is paused on purpose while ~/.cache/ally-supergemma-off holds an unexpired ISO date on line 1: idle, don't dispatch.
+  if [[ -x "$HOME/rig-ops/bin/ally-supergemma-paused" ]] && "$HOME/rig-ops/bin/ally-supergemma-paused"; then
+    sleep "$POLL_INTERVAL"
+    continue
+  fi
+
   if [[ -f "$ASSIGNMENT_FILE" ]]; then
     "$(dirname "$0")/pi-dispatch-once.sh" "$WORKDIR" || true
   fi
