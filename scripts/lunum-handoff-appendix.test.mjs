@@ -235,3 +235,34 @@ test('an ask answered later in the same session is dropped from Pending and the 
   assert.match((text.split('## Decisions')[1] ?? '').split('\n## ')[0], /cartographer chose the metric grid/);
   assert.match(pending, /quartermaster/); // unanswered ask is kept
 });
+
+test('--index: contradicted pending lines move under Stale; others stay; no index is unchanged', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'lunum-appendix-'));
+  const input = join(dir, 'messages.json');
+  writeFileSync(input, JSON.stringify([
+    { role: 'user', content: 'Start the harbor survey for project Marlin.' },
+    { role: 'assistant', content: 'Waiting for the cartographer: booking R-0a1b2c3d4e5f must still be claimed and completed.' },
+    { role: 'assistant', content: 'Waiting for the surveyor: booking R-ffeeddccbbaa must still be claimed.' },
+    { role: 'assistant', content: 'The quiet hold for R-5566778899aa is scheduled at 03:15 on 2031-04-09, expiry 03:55.' },
+    { role: 'assistant', content: 'The quiet hold for R-1122334455ee is scheduled at 03:15 on 2031-04-30, expiry 03:55.' },
+    { role: 'assistant', content: 'Scheduled job marlin-import-0415 to run at the next tide.' },
+  ]));
+  const idx = join(dir, 'INDEX.md');
+  writeFileSync(idx, '# Marlin handoff 2031-04-10 09:00 EET\n- Booking R-0a1b2c3d4e5f done and closed.\n- Marlin import deployed.\n- Next: claim+complete R-ffeeddccbbaa.\n');
+  const pend = (t) => (t.split('## Pending')[1] ?? '').split('\n## ')[0];
+  const stale = (t) => (t.split('## Stale (contradicted by INDEX)')[1] ?? '').split('\n## ')[0];
+  const out = join(dir, 'a.md');
+  assert.strictEqual(run(['--in', input, '--out', out, '--index', idx]).status, 0);
+  const t = readFileSync(out, 'utf8');
+  assert.match(stale(t), /R-0a1b2c3d4e5f/); // id also in a completion line
+  assert.match(stale(t), /R-5566778899aa/); // quiet hold dated before the INDEX
+  assert.match(stale(t), /marlin-import-0415/); // named job, stems in a completion line
+  assert.ok(!/R-0a1b2c3d4e5f/.test(pend(t)));
+  assert.match(pend(t), /R-ffeeddccbbaa/); // 'claim+complete' is not a completion
+  assert.match(pend(t), /R-1122334455ee/); // hold dated after the INDEX stays
+  const plain = join(dir, 'b.md');
+  assert.strictEqual(run(['--in', input, '--out', plain]).status, 0);
+  const p = readFileSync(plain, 'utf8');
+  assert.ok(!/Stale/.test(p));
+  assert.match(pend(p), /R-0a1b2c3d4e5f/);
+});

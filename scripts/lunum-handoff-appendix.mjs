@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // lunum-handoff-appendix: transcript -> facts appendix (<= 3.5k tokens, hard cap). Dependency-free ESM, no model, no network.
 // Kept outside packages/*/dist so it is not part of the frozen served runtime (SERVED_RUNTIME_ROOTS).
-//   node scripts/lunum-handoff-appendix.mjs --in session.jsonl --out appendix.md [--max-tokens 3500]
+//   node scripts/lunum-handoff-appendix.mjs --in session.jsonl --out appendix.md [--max-tokens 3500] [--index INDEX.md]
 import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import { basename } from 'node:path';
 import { parseArgs } from 'node:util';
@@ -96,15 +96,16 @@ export function parseTranscript(raw) {
         const role = String(m.role ?? o.type ?? '');
         if (role !== 'user' && role !== 'assistant')
             continue;
+        const ts = typeof o.timestamp === 'string' ? o.timestamp : undefined;
         let text = blockText(m.content)
             .replace(/<system-reminder[^>]*>[\s\S]*?<\/system-reminder>/g, '')
             .replace(/<(command-[a-z-]+|local-command-[a-z-]+)>[\s\S]*?<\/\1>/g, '');
         text = text.trim();
         if (text)
-            out.push({ role, content: text });
+            out.push(ts ? { role, content: text, ts } : { role, content: text });
         if (role === 'user')
             for (const body of toolResultBodies(m.content))
-                out.push({ role: 'tool', content: body });
+                out.push(ts ? { role: 'tool', content: body, ts } : { role: 'tool', content: body });
     }
     return out;
 }
@@ -176,6 +177,47 @@ function answers(ask, decision) {
     if (shared.some((t) => /\d/.test(t) && t.length >= 5))
         return true;
     return shared.length >= 2 && shared.length / Math.min(a.size, d.size) >= 0.4;
+}
+// --index rule: conservative, deterministic. A Pending/Open items line is contradicted when (a) an id token (R-/U- id, hex commit, named job)
+// also occurs in an INDEX line with a completion word, or (b) it is a 'quiet hold'/'park' line whose date is earlier than the INDEX's own date/time.
+const STALE = 'Stale (contradicted by INDEX)';
+const DONE_RE = /\b(?:done|deployed|shipped|ended|closed|completed?|merged|released)\b/i;
+const NOT_DONE = /(?:[+/]|\b(?:to|will|not|then|and))\s*complete\b/gi; // imperative 'claim+complete X' is not a completion
+const ID_TOKEN = /\b[RU]-[0-9a-f]{4,}\b|\b[0-9a-f]{7,40}\b/gi;
+const JOB_TOKEN = /\b[a-z][a-z]+(?:-[a-z]+)+-\d{3,}\b/gi;
+function parseIndex(text) {
+    const done = text.split('\n').filter((l) => DONE_RE.test(l.replace(NOT_DONE, ' ')));
+    const m = /(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(text);
+    return { done: done.map((l) => l.toLowerCase()), when: m ? { date: `${m[1]}-${m[2]}-${m[3]}`, min: Number(m[4]) * 60 + Number(m[5]), year: m[1] } : null };
+}
+function stale(c, ix) {
+    const t = c.text.toLowerCase();
+    const ids = (t.match(ID_TOKEN) ?? []).filter((x) => /^[ru]-/.test(x) || (/\d/.test(x) && /[a-f]/.test(x)));
+    if (ids.some((id) => ix.done.some((l) => l.includes(id))))
+        return true;
+    for (const job of t.match(JOB_TOKEN) ?? []) {
+        const stems = job.split('-').slice(0, -1).filter((p) => p.length >= 3);
+        if (stems.length >= 2 && ix.done.some((l) => stems.every((st) => new RegExp(`\\b${st}`).test(l))))
+            return true;
+    }
+    if (ix.when && /\b(?:quiet[- ]hold|park)/.test(t)) {
+        let date = /\b(\d{4}-\d{2}-\d{2})\b/.exec(t)?.[1];
+        if (!date) {
+            const md = /\b(\d{2})-(\d{2})\b/.exec(t);
+            if (md)
+                date = `${ix.when.year}-${md[1]}-${md[2]}`;
+        }
+        const times = [...t.matchAll(/\b(\d{1,2}):(\d{2})\b/g)].map((x) => Number(x[1]) * 60 + Number(x[2]));
+        if (!date && (/\btoday\b/.test(t) || times.length) && c.ts)
+            date = c.ts.slice(0, 10);
+        if (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+            if (date < ix.when.date)
+                return true;
+            if (date === ix.when.date && times.length && Math.max(...times) < ix.when.min)
+                return true;
+        }
+    }
+    return false;
 }
 function clip(s, n) { return s.length <= n ? s : s.slice(0, n - 3).trimEnd() + '...'; }
 function key(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().slice(0, 90); }
@@ -303,6 +345,13 @@ export function buildAppendix(messages, opts) {
         cands.length = 0;
         cands.push(...keep);
     }
+    const SECS = opts.index === undefined ? SECTIONS : [...SECTIONS, STALE];
+    if (opts.index !== undefined) {
+        const ix = parseIndex(opts.index);
+        for (const c of cands)
+            if ((c.section === 'Pending' || c.section === 'Open items') && stale(c, ix))
+                c.section = STALE;
+    }
     const allPaths = [...pathCount.keys()];
     for (const [p, e] of pathCount) {
         if (allPaths.some((q) => q !== p && q.endsWith(p)))
@@ -312,7 +361,7 @@ export function buildAppendix(messages, opts) {
     const render = (picked, tokens) => {
         const head = [`source: ${opts.source} (${convoCount} messages)`, `generated: ${(opts.now ?? new Date()).toISOString().replace(/\.\d+Z$/, 'Z')}`, `tokens: ~${tokens} (cap ${maxTokens})`];
         const body = [];
-        for (const s of SECTIONS) {
+        for (const s of SECS) {
             const items = picked.filter((c) => c.section === s).sort((a, b) => a.order - b.order);
             if (!items.length)
                 continue;
@@ -321,18 +370,18 @@ export function buildAppendix(messages, opts) {
         return head.concat(body).join('\n') + '\n';
     };
     // Budget: reserve the header (generous token digits) plus section titles, then fill per quota, then spill.
-    const reserve = bytes(render([], 99999)) + SECTIONS.reduce((n, s) => n + s.length + 5, 0);
+    const reserve = bytes(render([], 99999)) + SECS.reduce((n, s) => n + s.length + 5, 0);
     const budget = Math.max(0, maxChars - reserve);
     const picked = [];
     const bySection = new Map();
-    for (const s of SECTIONS)
+    for (const s of SECS)
         bySection.set(s, cands.filter((c) => c.section === s).sort((a, b) => b.score - a.score));
     const used = {};
     let total = 0;
     const cost = (c) => bytes(c.text) + 3;
     const leftovers = [];
-    for (const s of SECTIONS) {
-        const cap = budget * QUOTA[s];
+    for (const s of SECS) {
+        const cap = budget * (QUOTA[s] ?? 0.1);
         used[s] = 0;
         for (const c of bySection.get(s)) {
             if (used[s] + cost(c) <= cap && total + cost(c) <= budget) {
@@ -359,7 +408,7 @@ export function buildAppendix(messages, opts) {
     while (bytes(text) > maxChars)
         text = text.slice(0, -1);
     const bullets = {};
-    for (const s of SECTIONS)
+    for (const s of SECS)
         bullets[s] = picked.filter((c) => c.section === s).length;
     return { text, stats: { source: opts.source, messages: convoCount, toolResults: toolCount, lines: lineCount, bullets, chars: bytes(text), tokens: Math.ceil(bytes(text) / 4), maxTokens, redactions } };
 }
@@ -372,13 +421,13 @@ function main() {
   }
   let values;
   try {
-      values = parseArgs({ options: { in: { type: 'string' }, out: { type: 'string' }, 'max-tokens': { type: 'string' } }, strict: true }).values;
+      values = parseArgs({ options: { in: { type: 'string' }, out: { type: 'string' }, 'max-tokens': { type: 'string' }, index: { type: 'string' } }, strict: true }).values;
   }
   catch (e) {
-      fail(`${e.message}\nusage: lunum-handoff-appendix --in <transcript.jsonl|messages.json> --out <appendix.md> [--max-tokens 3500]`);
+      fail(`${e.message}\nusage: lunum-handoff-appendix --in <transcript.jsonl|messages.json> --out <appendix.md> [--max-tokens 3500] [--index <INDEX.md>]`);
   }
   if (!values.in || !values.out)
-      fail('usage: lunum-handoff-appendix --in <transcript.jsonl|messages.json> --out <appendix.md> [--max-tokens 3500]');
+      fail('usage: lunum-handoff-appendix --in <transcript.jsonl|messages.json> --out <appendix.md> [--max-tokens 3500] [--index <INDEX.md>]');
   const maxTokens = values['max-tokens'] === undefined ? 3500 : Number(values['max-tokens']);
   if (!Number.isInteger(maxTokens) || maxTokens < 200)
       fail('--max-tokens must be an integer >= 200');
@@ -386,7 +435,7 @@ function main() {
       const messages = parseTranscript(readFileSync(values.in, 'utf8'));
       if (messages.length === 0)
           fail('no user/assistant messages found in input');
-      const { text, stats } = buildAppendix(messages, { source: basename(values.in), maxTokens });
+      const { text, stats } = buildAppendix(messages, { source: basename(values.in), maxTokens, index: values.index === undefined ? undefined : readFileSync(values.index, 'utf8') });
       writeFileSync(values.out, text);
       process.stdout.write(JSON.stringify({ ok: true, out: values.out, ...stats }) + '\n');
   }

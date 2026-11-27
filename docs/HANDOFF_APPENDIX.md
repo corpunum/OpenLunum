@@ -3,7 +3,7 @@
 Headless command that turns a transcript into a facts appendix of at most 3.5k tokens (hard cap, 4 bytes per token, so 14,000 bytes) to sit beside a hand-written handoff index. Dependency-free ESM; no MCP transport, no prompts, no network, no model calls. It lives in `scripts/` on purpose: it is not part of the served runtime that the source-only freeze binds.
 
 ```bash
-node scripts/lunum-handoff-appendix.mjs --in session.jsonl --out appendix.md [--max-tokens 3500]
+node scripts/lunum-handoff-appendix.mjs --in session.jsonl --out appendix.md [--max-tokens 3500] [--index INDEX.md]
 ```
 
 - Input: a Claude Code `.jsonl` transcript or a JSON messages array `[{role, content}]`. User and assistant text is read; tool calls, attachments and system reminders are skipped; tool results of 400 characters or less contribute only high-value facts (cron and job ids, tmux names, pids, script paths, report/apply rules, deploy shas, ports, queue ids); longer ones are dropped.
@@ -13,3 +13,5 @@ node scripts/lunum-handoff-appendix.mjs --in session.jsonl --out appendix.md [--
 - Redaction of API-key-like strings, bearer and JWT tokens, `key=value` secrets, URL credentials, long opaque tokens and email addresses is built in.
 - Exit code 0 on success, 1 on any error (message on stderr). On success one JSON stats line goes to stdout.
 - Test: `node --test scripts/lunum-handoff-appendix.test.mjs`.
+- Optional `--index <INDEX.md>` (the session's handoff index): a Pending or Open items line that the INDEX contradicts moves under `## Stale (contradicted by INDEX)` instead of being dropped, so nothing is lost. Rule, deterministic and conservative: the line carries an id (`R-`/`U-` id, hex commit of 7+ chars, or a named job like `name-part-1126`) that also appears in an INDEX line with a completion word (done, deployed, shipped, ended, closed, complete, merged, released), or it is a quiet hold / park line whose date (explicit, or "today"/clock time resolved to the message's transcript timestamp) is earlier than the INDEX's own date and time.
+- Without `--index` the output is unchanged.
