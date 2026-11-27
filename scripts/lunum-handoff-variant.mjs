@@ -10,8 +10,9 @@ import { fileURLToPath } from 'node:url';
 
 const APPENDIX = fileURLToPath(new URL('./lunum-handoff-appendix.mjs', import.meta.url));
 const MAX_PATHS = 40;
+const STOP = new Set(['ref', 'refs', 'id', 'session', 'see', 'peer', 'to', 'from', 'with']);
 const EXT = '(?:sh|py|mjs|js|json|md|toml)';
-const PATH_RE = new RegExp(String.raw`(?<![\w./~-])(?:~|/)?(?:[\w.-]+/)+[\w.-]*|(?<![\w./~-])[\w.-]+\.${EXT}(?![\w-])`, 'g');
+const PATH_RE = new RegExp(String.raw`(?<![\w./~-])(?:~/|/)?(?:[\w.-]+/)+[\w.-]*|(?<![\w./~-])[\w.-]+\.${EXT}(?![\w-])`, 'g');
 const REF_RE = /(?:([A-Za-z][\w-]*)\s+)?\[([0-9a-f]{6})\]/g;
 // Secret checks (names only, values never printed).
 export const SECRET_CHECKS = [
@@ -52,15 +53,19 @@ export function extractPaths(texts, repoRoot) {
             if (!isFile && !isAbs && !p.endsWith('/')) continue; // bare relative dirs are too ambiguous
             if (!isFile && p.length < 4) continue;
             if (/^\/\//.test(p) || p === '/' ) continue;
+            if (/^\/(?:usr|proc|dev)\//.test(p) || /site-packages|node_modules/.test(p)) continue; // system noise
             let ok = false;
-            const cands = isAbs ? [expand(p)] : [resolve(repoRoot ?? '.', p), resolve(p)];
-            for (const c of cands) { try { statSync(c); ok = true; break; } catch { /* absent */ } }
+            if (isAbs) { try { statSync(expand(p)); ok = true; } catch { /* absent */ } }
+            else if (repoRoot) { try { statSync(resolve(repoRoot, p)); ok = true; } catch { /* absent */ } }
+            else ok = null; // relative path, no repo to resolve against
             seen.set(p, ok);
         }
     }
+    // Cap: existing first, then unresolved, then absent; output keeps source order (INDEX, topics, appendix).
     const all = [...seen.entries()];
-    // Existing paths first (they are the useful ones), then absent, stable order within each.
-    return [...all.filter(([, e]) => e), ...all.filter(([, e]) => !e)].slice(0, MAX_PATHS);
+    const rank = (e) => (e === true ? 0 : e === null ? 1 : 2);
+    const keep = new Set([...all].sort((a, b) => rank(a[1]) - rank(b[1])).slice(0, MAX_PATHS).map(([p]) => p));
+    return all.filter(([p]) => keep.has(p));
 }
 
 export function extractRefs(texts) {
@@ -68,7 +73,7 @@ export function extractRefs(texts) {
     const byName = new Map();
     for (const t of texts) {
         for (const m of t.matchAll(REF_RE)) {
-            const name = m[1] || '';
+            const name = STOP.has((m[1] || '').toLowerCase()) ? '' : m[1] || '';
             const key = name ? `${name} [${m[2]}]` : `[${m[2]}]`;
             refs.set(key, true);
             if (name) { if (!byName.has(name)) byName.set(name, new Set()); byName.get(name).add(m[2]); }
@@ -86,7 +91,7 @@ export function build({ session, pilot, index, topics, appendix, repoHandover })
     out.push(`# Handoff ${session} (Lunum variant, pilot #${pilot})`, '',
         'At the end of your first report write: `pilot: reasks=N rereads=N`.', '', splitSections(index), '',
         '## Working files and peers', '', '### Files and paths (extracted, max 40)');
-    const lines = paths.map(([p, e]) => `- ${p} (${e ? 'exists' : 'not found on disk'})`);
+    const lines = paths.map(([p, e]) => `- ${p} (${e === null ? 'relative, unresolved' : e ? 'exists' : 'not found on disk'})`);
     if (repoHandover) lines.push(`- ${repoHandover.path} (HANDOVER.md of the named repo; ${repoHandover.exists ? 'exists' : 'not found on disk'})`);
     out.push(...(lines.length ? lines : ['- none found']), '', '### Peer and session refs (extracted)');
     const rl = refs.map((r) => {
