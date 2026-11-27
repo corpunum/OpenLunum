@@ -15,3 +15,11 @@ node scripts/lunum-handoff-appendix.mjs --in session.jsonl --out appendix.md [--
 - Test: `node --test scripts/lunum-handoff-appendix.test.mjs`.
 - Optional `--index <INDEX.md>` (the session's handoff index): a Pending or Open items line that the INDEX contradicts moves under `## Stale (contradicted by INDEX)` instead of being dropped, so nothing is lost. Rule, deterministic and conservative: the line carries an id (`R-`/`U-` id, hex commit of 7+ chars, or a named job like `name-part-1126`) that also appears in an INDEX line with a completion word (done, deployed, shipped, ended, closed, complete, merged, released), or it is a quiet hold / park line whose date (explicit, or "today"/clock time resolved to the message's transcript timestamp) is earlier than the INDEX's own date and time.
 - Without `--index` the output is unchanged.
+
+## Variant builder (`scripts/lunum-handoff-variant.mjs`)
+
+Deterministic, zero model tokens: `node scripts/lunum-handoff-variant.mjs --dir <handoff dir> --session <name> --transcript <jsonl> [--pilot N] [--redact-file <list>]`.
+- Runs the appendix builder with `--index <dir>/INDEX.md` (writes `<dir>/appendix.md`), then writes `<dir>/lunum/INDEX.md`: header, a pilot-report line, every INDEX section verbatim (title dropped), a generated `## Working files and peers` section, and the appendix.
+- The new section only extracts: file and dir paths (max 40, marked exists or not found), the HANDOVER.md of a repo the INDEX names, and `name [hex6]` / `[hex6]` peer refs; a name with two or more distinct refs is flagged `duplicate name: use the ref`.
+- `--redact-file` (one literal per line) is replaced by `[REDACTED]` in the variant only. A built-in secret check exits non-zero (3) listing variant line numbers, never values, and writes nothing. INDEX and topics are never modified.
+- Test: `node --test scripts/lunum-handoff-variant.test.mjs`.
