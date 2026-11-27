@@ -252,7 +252,7 @@ export function buildAppendix(messages, opts) {
                 if (!k || (!slot && seen.has(k)))
                     continue;
                 seen.add(k);
-                cands.push({ section: 'Tool facts', text: slot?.text ?? clip(t, 200), score: 3 + recency * 2 - t.length / 400, order: order++, msg: msgIdx[mi], slot });
+                cands.push({ section: 'Tool facts', text: slot?.text ?? clip(t, 200), score: 3 + recency * 2 - t.length / 400, order: order++, msg: msgIdx[mi], slot, ts: msg.ts });
             }
             return;
         }
@@ -310,7 +310,7 @@ export function buildAppendix(messages, opts) {
                     continue;
                 seen.add(k);
                 const score = w + (section === 'Decisions' && idHits === 0 && !HAS_PATH.test(s) ? -1.5 : 0) + Math.min(idHits, 4) * 0.6 + recency * 2 + (msg.role === 'user' ? 1 : 0) - s.length / 400;
-                cands.push({ section, text: slot?.text ?? clip(s, 220), score, order: order++, msg: msgIdx[mi], slot });
+                cands.push({ section, text: slot?.text ?? clip(s, 220), score, order: order++, msg: msgIdx[mi], slot, ts: msg.ts });
             }
         }
     });
@@ -350,7 +350,11 @@ export function buildAppendix(messages, opts) {
         const ix = parseIndex(opts.index);
         for (const c of cands)
             if ((c.section === 'Pending' || c.section === 'Open items') && stale(c, ix))
-                c.section = STALE;
+            {
+                c.section = STALE; // shortened so stale lines stay cheap under the cap
+                const tag = /\s\[m\d+\]$/.exec(c.text)?.[0] ?? '';
+                c.text = clip(tag ? c.text.slice(0, -tag.length) : c.text, 110) + tag;
+            }
     }
     const allPaths = [...pathCount.keys()];
     for (const [p, e] of pathCount) {
@@ -380,7 +384,7 @@ export function buildAppendix(messages, opts) {
     let total = 0;
     const cost = (c) => bytes(c.text) + 3;
     const leftovers = [];
-    for (const s of SECS) {
+    for (const s of opts.index === undefined ? SECS : [STALE, ...SECTIONS]) { // stale lines are picked first so the cap cannot silently lose them
         const cap = budget * (QUOTA[s] ?? 0.1);
         used[s] = 0;
         for (const c of bySection.get(s)) {
