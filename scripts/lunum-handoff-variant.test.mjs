@@ -64,3 +64,24 @@ test('redact-file replaces literals; secret pattern exits non-zero listing lines
     assert.match(r.stderr, /lines?:? .*\d/);
     assert.ok(!r.stderr.includes(fake));
 });
+
+test('INDEX already has Working files and peers: no generated section, only missing extras appended', () => {
+    const { root, D, tr, index } = setup('');
+    writeFileSync(join(D, 'INDEX.md'), index + `\n## Working files and peers\n- ${root}/run.sh already listed\n- peer alpha [aaaaaa]\n`);
+    writeFileSync(join(D, 'topics', 't.md'), `See ${root}/run.sh and ${root}/extra-file.md, peer gamma [eeeeee].\n`);
+    const r = run(D, tr);
+    assert.strictEqual(r.status, 0, r.stderr);
+    const out = readFileSync(join(D, 'lunum', 'INDEX.md'), 'utf8');
+    assert.strictEqual(out.split('\n').filter((l) => l === '## Working files and peers').length, 1);
+    assert.ok(!out.includes('### Files and paths'));
+    const extra = out.slice(out.indexOf('## Working files and peers (extra, extracted)')).split('\n\n')[1];
+    assert.ok(extra.includes(`${root}/extra-file.md`) && extra.includes('[eeeeee]'));
+    assert.ok(!extra.includes('run.sh') && !extra.includes('[aaaaaa]'));
+});
+
+test('INDEX section covers everything: no extra section', () => {
+    const { root, D, tr, index } = setup('');
+    writeFileSync(join(D, 'INDEX.md'), index + `\n## Working files and peers\n- ${root}/notes.md\n`);
+    assert.strictEqual(run(D, tr).status, 0);
+    assert.ok(!readFileSync(join(D, 'lunum', 'INDEX.md'), 'utf8').includes('(extra, extracted)'));
+});

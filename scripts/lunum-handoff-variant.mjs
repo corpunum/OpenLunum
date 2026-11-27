@@ -83,7 +83,30 @@ export function extractRefs(texts) {
     return { refs: [...refs.keys()], dups, byName };
 }
 
+// INDEX already carries the section verbatim: never generate our own; append only extras missing from it.
+function buildWithIndexSection({ session, pilot, index, topics, appendix, repoHandover, HEAD, hm }) {
+    const rest = index.slice(hm.index + hm[0].length);
+    const nx = rest.search(/^## /m);
+    const section = nx < 0 ? rest : rest.slice(0, nx);
+    const texts = [...topics, appendix];
+    const paths = extractPaths(texts, repoHandover?.root).filter(([p]) => !section.includes(p));
+    const { refs } = extractRefs(texts);
+    const extraRefs = refs.filter((r) => !section.includes(r.slice(r.lastIndexOf('[') + 1, -1)));
+    const out = [`# Handoff ${session} (Lunum variant, pilot #${pilot})`, '',
+        'At the end of your first report write: `pilot: reasks=N rereads=N`.', '', splitSections(index), ''];
+    if (paths.length || extraRefs.length) {
+        out.push(`${HEAD} (extra, extracted)`, '');
+        out.push(...paths.map(([p, e]) => `- ${p} (${e === null ? 'relative, unresolved' : e ? 'exists' : 'not found on disk'})`));
+        out.push(...extraRefs.map((r) => `- ${r}`), '');
+    }
+    out.push(appendix.replace(/\s+$/, ''), '');
+    return out.join('\n');
+}
+
 export function build({ session, pilot, index, topics, appendix, repoHandover }) {
+    const HEAD = '## Working files and peers';
+    const hm = index.match(/^## Working files and peers[ \t]*$/m);
+    if (hm) return buildWithIndexSection({ session, pilot, index, topics, appendix, repoHandover, HEAD, hm });
     const texts = [index, ...topics, appendix];
     const paths = extractPaths(texts, repoHandover?.root);
     const { refs, dups, byName } = extractRefs(texts);
